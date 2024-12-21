@@ -1,0 +1,76 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using static UnityEngine.ParticleSystem;
+
+public class VFXManager
+{
+
+    GameObject _vfx_Root;
+
+    public Transform VFX_Root
+    {
+        get
+        {
+            if (_vfx_Root == null)
+            {
+                _vfx_Root = new GameObject() { name = "VFX_ROOT" };
+            }
+            return _vfx_Root.transform;
+        }
+    }
+
+    public GameObject GenerateParticle(string path, Vector3 pos, float? duration = null)
+    {
+        GameObject particleObject = Managers.ResourceManager.Instantiate(path, VFX_Root);
+        particleObject.SetActive(false);
+        ParticleSystem particle = particleObject.GetComponent<ParticleSystem>();
+
+        float defaultDuration = particle.main.duration;
+        if (duration != null)
+        {
+            defaultDuration = duration.Value;
+        }
+
+        Managers.ManagersStartCoroutine(FadeOutOverDuration(defaultDuration, particle));
+
+        // 위치와 부모 설정
+        particleObject.transform.position = pos;
+        particleObject.transform.SetParent(VFX_Root);
+        particleObject.SetActive(true);
+        particle.Play();
+
+        Managers.ResourceManager.DestroyObject(particleObject, defaultDuration);
+        return particleObject;
+    }
+
+
+
+    IEnumerator FadeOutOverDuration(float duration, ParticleSystem particle)
+    {
+        float elasedTime = 0f;
+
+        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particle.main.maxParticles];
+
+        while (elasedTime < duration)
+        {
+            elasedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(1,0, elasedTime/duration);
+            int aliveParticleNum = particle.GetParticles(particles);
+
+            for (int i = 0;  i < aliveParticleNum; i++)
+            {
+                Color color = particles[i].startColor;
+                color.a = alpha;
+                particles[i].startColor = color;
+            }
+
+            particle.SetParticles(particles, aliveParticleNum);
+
+            yield return null;
+        }
+
+    }
+
+}
