@@ -5,11 +5,13 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MoveableController
+public class PlayerController_Legacy : MoveableController
 {
     InputManager _inputmanager;
     NavMeshAgent _agent;
     PlayerStats _stats;
+    public int comboIndex = 0;
+    public bool _isComboEnable = false;
 
     private PlayerInput _playerInput;
     private InputAction _moveAction;
@@ -18,13 +20,29 @@ public class PlayerController : MoveableController
     private InputAction _stopAction;
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
+
+    public Dictionary<int, int> comboAttackDict = new Dictionary<int, int>()
+    {
+        { 0, Player_Anim_Hash.Attack1 },
+        { 1, Player_Anim_Hash.Attack2 },
+        { 2, Player_Anim_Hash.Attack3 },
+    };
+
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
 
     protected override int Hash_Idle => Player_Anim_Hash.Idle;
 
     protected override int Hash_Move => Player_Anim_Hash.Run;
 
-    protected override int Hash_Attack => Player_Anim_Hash.Attack;
+    protected override int Hash_Attack
+    {
+        get
+        {
+            return comboAttackDict[comboIndex];
+        }
+
+    }
+
     protected override int Hash_Die => Player_Anim_Hash.Die;
 
     protected override void AwakeInit()
@@ -60,6 +78,12 @@ public class PlayerController : MoveableController
         _stats.PlayerDeadEvent -= PlayerDead;
         _stats.PlayerDeadEvent += PlayerDead;
     }
+
+    public void Close_Popup_Ui(InputAction.CallbackContext context)
+    {
+        Debug.Log("팝업창 닫는다");
+        Managers.UI_Manager.ClosePopupUI();
+    }
     private Vector3 MouseRightClickPosEvent(InputAction.CallbackContext context)
     {
         if (State == Define.State.Die)
@@ -77,14 +101,18 @@ public class PlayerController : MoveableController
         }
         return hit.point;
     }
+
     private void MouseRightClickEvent(InputAction.CallbackContext context)
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
+        InitailizeAttckData();//어택 데이터 초기화
         Vector3 clickPos = MouseRightClickPosEvent(context);
         _inputmanager.playerMouseClickPositionEvent?.Invoke(clickPos);
     }
+
+
 
     public void PlayerDead()
     {
@@ -93,13 +121,25 @@ public class PlayerController : MoveableController
 
     private void ComboAttack(InputAction.CallbackContext context)
     {
-        if (State == Define.State.Attack)
-            return;
+        if(_isComboEnable == false)
+        {
+            if (State == Define.State.Attack)
+                return;
 
-        State = Define.State.Attack;
+            State = Define.State.Attack;
+        }
+        else
+        {
+            _isComboEnable = false;
+            comboIndex++;
+            State = Define.State.Attack;
+            if (comboIndex >= 2)//인덱스 초기화
+                comboIndex = 0;
+        }
     }
     private void StopCommand(InputAction.CallbackContext context)
     {
+        comboIndex = 0;
         State = Define.State.Idle;
     }
 
@@ -107,6 +147,7 @@ public class PlayerController : MoveableController
     {
         if (State == Define.State.Die)
             return;
+        comboIndex = 0;
         Vector3 dir = new Vector3(_destPos.x, 0, _destPos.z) - new Vector3(transform.position.x, 0, transform.position.z);//높이에 대한 값을 빼야 근사값에 더 정확한 수치를 뽑을 수 있음.
         if (dir.magnitude < 0.01f)
         {
@@ -130,26 +171,34 @@ public class PlayerController : MoveableController
     }
     protected override void UpdateIdle()
     {
-
+       
     }
     protected override void UpdateAttack()
     {
-        ChangeStateToIdle();
-    }
-    private void ChangeStateToIdle()
-    {
-        AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
-        // Attack 스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
-        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 1.0f)
-        {
-            State = Define.State.Idle;
-        }
     }
 
-    #region AnimationClipMethod
+
+    private void InitailizeAttckData()
+    {
+        comboIndex = 0;
+        _isComboEnable = false;
+    }
+
+    #region AnimationMethod
+    public void ComboDisable() => _isComboEnable = false;
+    public void ComboEnable() => _isComboEnable = true;
+
     public void AttackEvent()
     {
         TargetInSight.AttackTargetInSector(_stats);
     }
+
+    public void EndAttackAnimation()
+    {
+        State = Define.State.Idle;
+        comboIndex = 0;
+        _isComboEnable = false;
+    }
     #endregion
+
 }

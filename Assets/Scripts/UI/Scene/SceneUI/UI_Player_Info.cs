@@ -36,8 +36,8 @@ public class UI_Player_Info : UI_Scene
     protected override void StartInit()
     {
         _stats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        _stats.Event_Hp -= SetHpUI;
-        _stats.Event_Hp += SetHpUI;
+        _stats.Event_StatsChanged -= SetHpUI;
+        _stats.Event_StatsChanged += SetHpUI;
 
         _stats.Event_StatsLoaded -= UpdateUIInfo;
         _stats.Event_StatsLoaded += UpdateUIInfo;
@@ -45,7 +45,7 @@ public class UI_Player_Info : UI_Scene
         _stats.Event_StatsLoaded.Invoke();
     }
 
-    public void SetHpUI(int damage)
+    public void SetHpUI()
     {
         _hpSlider.value = (float)_stats.Hp / (float)_stats.MaxHp;
         _hpText.text = $"{_stats.Hp}/{_stats.MaxHp}";

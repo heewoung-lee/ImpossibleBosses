@@ -11,13 +11,7 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
     private float _movespeed;
     private bool _isCheckDead = false;
 
-    public Action<int> Event_Hp;
-    public Action<int> Event_MaxHp;
-    public Action<int> Event_Attack;
-    public Action<int> Event_Defence;
     public Action<int> Event_Attacked;
-
-    public Action<float> Event_MoveSpeed;
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
 
@@ -26,7 +20,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         protected set{
             _hp = value;
             _hp = Mathf.Clamp(_hp,0,_maxHp);
-            Event_Hp?.Invoke(_hp);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -43,7 +36,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         {
             _maxHp = value;
             _maxHp = Mathf.Clamp(_maxHp, 0, int.MaxValue);
-            Event_MaxHp?.Invoke(_maxHp);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -61,7 +53,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         {
             _attack = value;
             _attack = Mathf.Clamp(_attack , 0, int.MaxValue);
-            Event_Attack?.Invoke(_attack);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -78,7 +69,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         {
             _defence = value;
             _defence = Mathf.Clamp(_defence, 0, int.MaxValue);
-            Event_Defence?.Invoke(_defence);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -95,7 +85,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         {
             _movespeed = value;
             _movespeed = Mathf.Clamp(_movespeed, 0, int.MaxValue);
-            Event_MoveSpeed?.Invoke(_movespeed);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -145,8 +134,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
             damage = attackerStats.Attack;
         else
             damage = spacialDamage.Value;
-
-
         damage = Mathf.Max(0, damage - Defence);
         Hp -= damage;
         Event_Attacked?.Invoke(damage);
@@ -156,11 +143,6 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
             OnDead(attackerStats);
             _isCheckDead = true;
         }
-    }
-
-    public void TestDamaged(int damege)
-    {
-        Hp -= damege;
     }
     //TODO:TEST메서드 사용후 지울 것
     protected abstract void OnDead(BaseStats attacker);
