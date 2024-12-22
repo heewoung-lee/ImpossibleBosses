@@ -69,7 +69,7 @@ public class UI_Button : UI_Scene
         Debug.Log($"플레이어 레벨{_playerStats.Level}");
 
         _playerStats.Gold += 5;
-        _playerStats.OnAttacked(_playerStats,80);
+        _playerStats.OnAttacked(_playerStats,1);
     }
 
 
