@@ -12,7 +12,6 @@ public class CameraController : MonoBehaviour
     private Vector3 _quarterViewPosition = Define.DEFAULT_QUARTERVIEW_POSITION;
     private GameObject _player;
     private CursorController _cursorController;
-
     private InputAction _scrollAction;
 
     void Start()
