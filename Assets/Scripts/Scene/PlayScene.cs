@@ -12,7 +12,6 @@ public class PlayScene : BaseScene
         base.StartInit();
 
         currentScene = Define.Scene.Game;
-        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Player");
         //Vector3 targetPosition = Managers.GameManagerEx.SpawnPoint.transform
         //    .GetChild(Random.Range(0, Managers.GameManagerEx.SpawnPoint.transform.childCount)).position;
 
@@ -30,6 +29,6 @@ public class PlayScene : BaseScene
 
     protected override void AwakeInit()
     {
-        
+        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Player");
     }
 }

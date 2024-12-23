@@ -117,23 +117,74 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Scroll"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""22331e88-402d-4382-84d9-d052051a65c8"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""Clamp(min=-0.1,max=0.1)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""0c1ba3bd-d762-4c38-b427-e1c64898269b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MouseScrollButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""6dd1ba7d-937a-4140-99bb-e77f5a4056f9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""92244f71-e528-4c7b-9dd9-9cf7dbad27b3"",
-                    ""path"": ""<Mouse>/scroll/y"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5278497-0391-4c73-8314-40800c913102"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=-100,y=100)"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""019ed0b8-625c-426f-8b83-0551952ab519"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13b255a8-67e1-4b00-b81a-daa1c064eefb"",
+                    ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Scroll"",
+                    ""action"": ""MouseScrollButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -147,7 +198,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Show_UI_Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""7b9aa023-efd0-433a-8c98-ea963530433a"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -183,7 +234,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Consumabar_GetKey4"",
                     ""type"": ""Button"",
                     ""id"": ""64168a9b-0ff6-41fc-8fbf-01876a1a7b99"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -340,6 +391,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
+        m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
+        m_Camera_MouseScrollButton = m_Camera.FindAction("MouseScrollButton", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Show_UI_Inventory = m_UI.FindAction("Show_UI_Inventory", throwIfNotFound: true);
@@ -487,11 +540,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Camera;
     private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
     private readonly InputAction m_Camera_Scroll;
+    private readonly InputAction m_Camera_Look;
+    private readonly InputAction m_Camera_MouseScrollButton;
     public struct CameraActions
     {
         private @GameInputActions m_Wrapper;
         public CameraActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Scroll => m_Wrapper.m_Camera_Scroll;
+        public InputAction @Look => m_Wrapper.m_Camera_Look;
+        public InputAction @MouseScrollButton => m_Wrapper.m_Camera_MouseScrollButton;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -504,6 +561,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Scroll.started += instance.OnScroll;
             @Scroll.performed += instance.OnScroll;
             @Scroll.canceled += instance.OnScroll;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @MouseScrollButton.started += instance.OnMouseScrollButton;
+            @MouseScrollButton.performed += instance.OnMouseScrollButton;
+            @MouseScrollButton.canceled += instance.OnMouseScrollButton;
         }
 
         private void UnregisterCallbacks(ICameraActions instance)
@@ -511,6 +574,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Scroll.started -= instance.OnScroll;
             @Scroll.performed -= instance.OnScroll;
             @Scroll.canceled -= instance.OnScroll;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @MouseScrollButton.started -= instance.OnMouseScrollButton;
+            @MouseScrollButton.performed -= instance.OnMouseScrollButton;
+            @MouseScrollButton.canceled -= instance.OnMouseScrollButton;
         }
 
         public void RemoveCallbacks(ICameraActions instance)
@@ -669,6 +738,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     public interface ICameraActions
     {
         void OnScroll(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
+        void OnMouseScrollButton(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

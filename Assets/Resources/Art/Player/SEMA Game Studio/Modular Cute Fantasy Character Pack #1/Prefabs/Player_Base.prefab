@@ -176,7 +176,6 @@ GameObject:
   - component: {fileID: -6098187673321945875}
   - component: {fileID: -7587406257340603790}
   - component: {fileID: -8994959554151067519}
-  - component: {fileID: 6174808942403997527}
   - component: {fileID: -8746295937563463238}
   - component: {fileID: 850154694049948795}
   - component: {fileID: 2813656340661799537}
@@ -190,7 +189,7 @@ GameObject:
   - component: {fileID: 7574922321927486665}
   - component: {fileID: -388476828865260582}
   m_Layer: 8
-  m_Name: Adventurer_Base
+  m_Name: Player_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,18 +334,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &6174808942403997527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94351885454998009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8984ceff6ffbf5498cca52acc444e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8746295937563463238
 MonoBehaviour:
   m_ObjectHideFlags: 0
