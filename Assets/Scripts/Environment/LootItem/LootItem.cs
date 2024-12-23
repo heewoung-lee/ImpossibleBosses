@@ -6,15 +6,16 @@ using Random = UnityEngine.Random;
 
 public class LootItem : MonoBehaviour,IInteraction
 {
+    private const float ADDFORCE_OFFSET = 5f;
+    private const float TORQUE_FORCE_OFFSET = 30f;
+    private const float DROPITEM_VERTICAL_OFFSET = 0.2f;
+    private const float DROPITEM_ROTATION_OFFSET = 40f;
 
     Transform _dropper;
     Rigidbody _rigidBody;
     GameObject _itemEffect;
     CapsuleCollider _collider;
-
     IItem _iteminfo;
-
-
 
     private void Awake()
     {
@@ -28,25 +29,24 @@ public class LootItem : MonoBehaviour,IInteraction
         //바닥에 닿으면 VFX효과를 킨다.
         //아이템을 회전시킨다.
         //상호작용을 하면
-        _rigidBody.AddForce(Vector3.up * 5f,ForceMode.Impulse);
+        _rigidBody.AddForce(Vector3.up * ADDFORCE_OFFSET, ForceMode.Impulse);
         // 임의의 회전을 위한 랜덤 값 생성
         Vector3 randomTorque = new Vector3(
             Random.Range(-1f, 1f),  // X축 회전
             Random.Range(-1f, 1f),  // Y축 회전
             Random.Range(-1f, 1f)   // Z축 회전
         );
-
         // 회전 힘 추가 (랜덤 값에 강도를 조절)
-        _rigidBody.AddTorque(randomTorque*0.3f, ForceMode.Impulse);
+        _rigidBody.AddTorque(randomTorque* TORQUE_FORCE_OFFSET, ForceMode.Impulse);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             _rigidBody.isKinematic = true;
             _rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-            transform.position += Vector3.up*0.2f;
+            transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
             transform.rotation = Quaternion.identity;
             StartCoroutine(RotationDropItem());
             CreateLootingItemEffect();
@@ -72,7 +72,7 @@ public class LootItem : MonoBehaviour,IInteraction
     {
         while (true)
         {
-            transform.Rotate(new Vector3(0, Time.deltaTime * 40f, 0));
+            transform.Rotate(new Vector3(0, Time.deltaTime * DROPITEM_ROTATION_OFFSET, 0));
             yield return null;
         }
     }

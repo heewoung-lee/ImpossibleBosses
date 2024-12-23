@@ -31,7 +31,10 @@ public class Module_Player_Interaction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        _interactionTarget.OutInteraction();
+        if(other.TryGetComponent(out IInteraction interaction))
+        {
+            interaction.OutInteraction();
+        }
         _IconUI.gameObject.SetActive(false);
         _interactionTarget = null;
     }
