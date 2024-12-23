@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6a9a2b1760a3853428e2c4b034a15bce
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 135101
+  packageName: Pick Up items pack
+  packageVersion: 3.0
+  assetPath: Assets/PickUp items pack/Materials/M_Shield.mat
+  uploadId: 650761

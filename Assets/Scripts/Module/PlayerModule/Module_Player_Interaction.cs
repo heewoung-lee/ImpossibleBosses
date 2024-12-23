@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Module_Player_Interaction : MonoBehaviour
 {
+    private const float Y_POSITION_OFFSET = 0.2f;
+
+
     private UI_Base _IconUI;
     private IInteraction _interactionTarget;
     void Start()
@@ -22,12 +25,13 @@ public class Module_Player_Interaction : MonoBehaviour
             _interactionTarget = interaction;
             _IconUI.transform.SetParent(other.transform);
             _IconUI.gameObject.SetActive(true);
-            _IconUI.transform.position = other.transform.position + Vector3.up * 1.5f;
+            _IconUI.transform.position = new Vector3(other.transform.position.x, other.GetComponent<Collider>().bounds.max.y+Y_POSITION_OFFSET, other.transform.position.z);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        _interactionTarget.OutInteraction();
         _IconUI.gameObject.SetActive(false);
         _interactionTarget = null;
     }

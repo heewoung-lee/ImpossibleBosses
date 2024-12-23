@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerFollowingCamera : MonoBehaviour
@@ -49,6 +50,8 @@ public class PlayerFollowingCamera : MonoBehaviour
 
     public void SetCameraHeight(InputAction.CallbackContext context)
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
         _cinemachineOrbitalFollow.VerticalAxis.Value += context.ReadValue<Vector2>().y;
         _cinemachineOrbitalFollow.VerticalAxis.Value = Mathf.Clamp(_cinemachineOrbitalFollow.VerticalAxis.Value, _cinemachineOrbitalFollow.VerticalAxis.Range.x, _cinemachineOrbitalFollow.VerticalAxis.Range.y);
     }

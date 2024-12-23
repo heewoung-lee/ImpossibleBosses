@@ -29,6 +29,9 @@ public class Managers : MonoBehaviour
 
     private ItemDataManager _itemDataManaer = new ItemDataManager();
     public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
+
+    private LootItemManager _lootItemManaer = new LootItemManager();
+    public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }
     
     private PoolManager _poolManager = new PoolManager();
     public static PoolManager PoolManager { get => Instance._poolManager; }

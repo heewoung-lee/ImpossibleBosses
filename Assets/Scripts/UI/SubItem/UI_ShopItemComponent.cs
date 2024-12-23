@@ -40,7 +40,8 @@ public class UI_ShopItemComponent : UI_ItemComponent
     public int ItemCount
     {
         get => _itemCount;
-        set{
+        set
+        {
             _itemCount = value;
             _itemCount_Text.text = _itemCount.ToString();
         }
@@ -87,6 +88,11 @@ public class UI_ShopItemComponent : UI_ItemComponent
 
     public override void ItemRightClick(PointerEventData eventdata)
     {
+        BuyItem();
+    }
+
+    private void BuyItem()
+    {
         if (_playerStats.Gold < _itemPrice)
             return;
 
@@ -94,8 +100,8 @@ public class UI_ShopItemComponent : UI_ItemComponent
         _iteminfo.MakeInventoryItemComponent();
 
         ItemCount--;
-        if(_itemCount <= 0)
-        Managers.ResourceManager.DestroyObject(gameObject);
+        if (_itemCount <= 0)
+            Managers.ResourceManager.DestroyObject(gameObject);
     }
 
     public override void GetDragEnd(PointerEventData eventData)
@@ -107,7 +113,10 @@ public class UI_ShopItemComponent : UI_ItemComponent
         EventSystem.current.RaycastAll(eventData, uiResults);
         foreach (RaycastResult uiResult in uiResults)
         {
-            Debug.Log(uiResult);
+            if (uiResult.gameObject.TryGetComponentInChildren(out InventoryContentCoordinate contextTr))
+            {
+                BuyItem();
+            }
         }
         DragImageIcon.gameObject.SetActive(false);
     }
@@ -115,11 +124,11 @@ public class UI_ShopItemComponent : UI_ItemComponent
     public void IntializeItem(IItem iteminfo, int count, int price)
     {
         base.IntializeItem(iteminfo);
-        if(iteminfo is ItemEquipment)
+        if (iteminfo is ItemEquipment)
         {
             _itemCount = 1;
         }
-        else if(iteminfo is ItemConsumable)
+        else if (iteminfo is ItemConsumable)
         {
             ItemCount += count;
         }

@@ -21,9 +21,9 @@ public class VFXManager
         }
     }
 
-    public GameObject GenerateParticle(string path, Vector3 pos, float? duration = null)
+    public GameObject GenerateParticle(string path, Vector3 pos = default, float? duration = null)
     {
-        GameObject particleObject = Managers.ResourceManager.Instantiate(path, VFX_Root);
+        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path, VFX_Root);
         particleObject.SetActive(false);
         ParticleSystem particle = particleObject.GetComponent<ParticleSystem>();
 
@@ -32,7 +32,6 @@ public class VFXManager
         {
             defaultDuration = duration.Value;
         }
-
         Managers.ManagersStartCoroutine(FadeOutOverDuration(defaultDuration, particle));
 
         // 위치와 부모 설정
@@ -40,8 +39,10 @@ public class VFXManager
         particleObject.transform.SetParent(VFX_Root);
         particleObject.SetActive(true);
         particle.Play();
-
-        Managers.ResourceManager.DestroyObject(particleObject, defaultDuration);
+        if (particle.main.loop == false)
+        {
+            Managers.ResourceManager.DestroyObject(particleObject, defaultDuration);
+        }
         return particleObject;
     }
 

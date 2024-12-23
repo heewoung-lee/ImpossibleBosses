@@ -19,7 +19,7 @@ public class UI_Button : UI_Scene
     }
     enum Texts
     {
-        ScoreText
+        ScoreText,
     }
     enum Images
     {
@@ -44,7 +44,6 @@ public class UI_Button : UI_Scene
         _scoreButton = GetButton((int)Buttons.ScoreButton);
         _scoreImage = GetImage((int)Images.ScoreImage);
         _scoreText = GetText((int)Texts.ScoreText);
-
     }
     protected override void StartInit()
     {
@@ -69,7 +68,7 @@ public class UI_Button : UI_Scene
         Debug.Log($"플레이어 레벨{_playerStats.Level}");
 
         _playerStats.Gold += 5;
-        _playerStats.OnAttacked(_playerStats,1);
+        _playerStats.OnAttacked(_playerStats,5);
     }
 
 

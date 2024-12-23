@@ -56,8 +56,27 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     {
         _isEquipped = isEquiped;
     }
+    public override void GetDragEnd(PointerEventData eventData)
+    {//아이템 드랍 구현
+        _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
+        _isDragging = false;
 
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 마우스 위치로부터 광선 생성
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")) // 바닥 오브젝트에 Tag 설정 필요
+            {
+                Debug.Log($"Dropped on ground at: {hit.point}");
 
+                //TODO:아이템 떨어뜨리기
+                GameObject lootItem =  Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword",Managers.LootItemManager.ItemRoot);
+                lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer,_iteminfo);
+                DragImageIcon.gameObject.SetActive(false);
+                return;
+            }
+        }
+
+    }
     protected void AttachItemToSlot(GameObject go, Transform slot)
     {
         go.transform.SetParent(slot);

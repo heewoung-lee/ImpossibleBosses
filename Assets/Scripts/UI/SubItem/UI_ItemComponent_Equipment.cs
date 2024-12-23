@@ -68,8 +68,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
 
     public override void GetDragEnd(PointerEventData eventData)
     {
-        _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
-        _isDragging = false;
+        base.GetDragEnd(eventData);
         //드래그 시 UI슬롯 근처로 드랍한다면 슬롯에 끼워지기
         //드래그 시 UI밖에 드랍을 한다면 아이템이 떨어지도록
         //드래그 시 그외지역에서 드랍한다면 다시 아이템창으로가기

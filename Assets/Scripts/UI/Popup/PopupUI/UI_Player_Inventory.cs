@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class UI_Player_Inventory : UI_Popup
 {
-
     private PlayerStats _stat;
     private TMP_Text _playerName;
     private TMP_Text _playerLevel;
@@ -26,15 +25,13 @@ public class UI_Player_Inventory : UI_Popup
     private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
     private Transform _itemInventoryTr;
 
-
     private GraphicRaycaster _ui_inventory_Raycaster;
     private EventSystem _eventSystem;
 
-    public Canvas InventoryCanvas => _inventoryCanvas;
     public Transform ItemInventoryTr => _itemInventoryTr;
-
     public GraphicRaycaster UI_Inventory_RayCaster=> _ui_inventory_Raycaster;
     public EventSystem EventSystem => _eventSystem;
+    public Transform InventoryOnwer => _stat.transform;
     enum Equipment_Go
     {
         Equipment
@@ -117,6 +114,7 @@ public class UI_Player_Inventory : UI_Popup
         }, Define.UI_Event.Drag);
         _stat = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         UpdateStats();
+        _stat.Event_StatsChanged += UpdateStats;
     }
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
