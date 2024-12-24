@@ -7,6 +7,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MoveableController
 {
+    enum PlayerState
+    {
+        Pickup
+    }
+
+
     InputManager _inputmanager;
     NavMeshAgent _agent;
     PlayerStats _stats;

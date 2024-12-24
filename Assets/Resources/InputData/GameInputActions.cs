@@ -62,6 +62,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""b45a50a6-ef88-4c48-865b-40deeead440e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -106,6 +115,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Stop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d94bb7cd-b1ac-4d56-a235-6dc52f607d1c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -388,6 +408,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_Pointer = m_Player.FindAction("Pointer", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Stop = m_Player.FindAction("Stop", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
@@ -473,6 +494,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Pointer;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Stop;
+    private readonly InputAction m_Player_Interaction;
     public struct PlayerActions
     {
         private @GameInputActions m_Wrapper;
@@ -481,6 +503,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @Pointer => m_Wrapper.m_Player_Pointer;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Stop => m_Wrapper.m_Player_Stop;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -502,6 +525,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Stop.started += instance.OnStop;
             @Stop.performed += instance.OnStop;
             @Stop.canceled += instance.OnStop;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -518,6 +544,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Stop.started -= instance.OnStop;
             @Stop.performed -= instance.OnStop;
             @Stop.canceled -= instance.OnStop;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -734,6 +763,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnPointer(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnStop(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

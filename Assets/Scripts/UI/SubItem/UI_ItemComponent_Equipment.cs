@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -84,9 +85,27 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
             {
                 GetComponentInParent<EquipMentSlot>().ItemUnEquip();
                 AttachItemToSlot(gameObject, contentTr.transform);
+
             }
         }
     }
 
-   
+    public override GameObject GetLootingItemObejct(IItem iteminfo)
+    {
+        switch ((iteminfo as ItemEquipment).Equipment_Slot)
+        {
+            case Equipment_Slot_Type.Helmet:
+            case Equipment_Slot_Type.Armor:
+                return Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+            case Equipment_Slot_Type.Weapon:
+                return Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+            default:
+                return Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+        }
+    }
+
+    protected override void RemoveItemFromInventory()
+    {
+        Managers.ResourceManager.DestroyObject(gameObject);
+    }
 }

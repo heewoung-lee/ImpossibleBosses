@@ -5,6 +5,13 @@ public class Module_NPC_SHOP_Interaction : MonoBehaviour, IInteraction
 {
     UI_Shop _ui_shop;
     CapsuleCollider _collider;
+
+    public bool CanInteraction => true;
+
+    public string InteractionName => "»óÀÎ";
+
+    public Color InteractionNameColor => Color.white;
+
     private void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();

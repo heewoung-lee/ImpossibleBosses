@@ -50,7 +50,7 @@ public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
         {
             { Item_Grade_Type.Normal, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_White") },
             { Item_Grade_Type.Magic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Green") },
-            { Item_Grade_Type.Rare, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Purple") },
+            { Item_Grade_Type.Rare, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Blue") },
             { Item_Grade_Type.Unique, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Red") },
             { Item_Grade_Type.Epic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Yellow") }
         };

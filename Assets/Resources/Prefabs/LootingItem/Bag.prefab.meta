@@ -1,14 +1,7 @@
 fileFormatVersion: 2
-guid: 54703209253561243b752ddf4e34d2df
+guid: 49ead2e936c8bc846b3c2fc6cc9fdd7a
 PrefabImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 135101
-  packageName: Pick Up items pack
-  packageVersion: 3.0
-  assetPath: Assets/PickUp items pack/Prefab/Bag.prefab
-  uploadId: 650761

@@ -1,14 +1,7 @@
 fileFormatVersion: 2
-guid: d809ebdb19660bc439f199ea52dcae8e
+guid: 6cc42b31f5c1ede4994d1f5d70db56d9
 PrefabImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 135101
-  packageName: Pick Up items pack
-  packageVersion: 3.0
-  assetPath: Assets/PickUp items pack/Prefab/Sword.prefab
-  uploadId: 650761

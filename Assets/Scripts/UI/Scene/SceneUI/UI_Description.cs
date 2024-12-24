@@ -73,7 +73,7 @@ public class UI_Description : UI_Scene
 
     public void SetValue(IItem iteminfo)
     {
-        _item_GradeColor = GetItemGradeColor(iteminfo.Item_Grade);
+        _item_GradeColor = Utill.GetItemGradeColor(iteminfo.Item_Grade);
         _itemImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
         _itemNameText.text = iteminfo.ItemName;
         _itemNameText.color = _itemNameText.SetGradeColor(_item_GradeColor);
@@ -90,23 +90,6 @@ public class UI_Description : UI_Scene
     public void SetDescription(string text)
     {
         _itemDescriptionText.text = text;
-    }
-    public Color GetItemGradeColor(Item_Grade_Type grade)
-    {
-        switch (grade)
-        {
-            case Item_Grade_Type.Normal:
-                return Color.white;
-            case Item_Grade_Type.Magic:
-                return Color.green;
-            case Item_Grade_Type.Rare:
-                return new Color(176 / 255f, 113 / 255f, 255 / 255f);//º¸¶ó»ö;
-            case Item_Grade_Type.Unique:
-                return Color.red;
-            case Item_Grade_Type.Epic:
-                return Color.yellow;
-        }
-        return Color.white;
     }
 
     public string GetItemType(IItem iteminfo)

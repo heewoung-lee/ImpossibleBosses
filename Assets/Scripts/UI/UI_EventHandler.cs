@@ -18,12 +18,10 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler,
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            Debug.Log("Left click detected on: " + gameObject.name);
             onLeftClickEvent?.Invoke(eventData);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            Debug.Log("Right click detected on: " + gameObject.name);
             onRightClickEvent?.Invoke(eventData);
         }
     }
@@ -33,7 +31,6 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler,
         if (eventData.button == PointerEventData.InputButton.Right)
             return;
 
-        Debug.Log("Begin drag detected on: " + gameObject.name);
         onBeginDragEvent?.Invoke(eventData);
     }
 
@@ -42,7 +39,6 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler,
         if (eventData.button == PointerEventData.InputButton.Right)
             return;
 
-        Debug.Log("Dragging detected on: " + gameObject.name);
         onDragEvent?.Invoke(eventData);
     }
 
@@ -51,19 +47,16 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler,
         if (eventData.button == PointerEventData.InputButton.Right)
             return;
 
-        Debug.Log("End drag detected on: " + gameObject.name);
         onEndDragEvent?.Invoke(eventData);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Pointer entered: " + gameObject.name);
         onPointerEnterEvent?.Invoke(eventData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("Pointer exited: " + gameObject.name);
         onPointerExitEvent?.Invoke(eventData);
     }
 

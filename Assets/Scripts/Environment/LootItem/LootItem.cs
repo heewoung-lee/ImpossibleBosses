@@ -17,6 +17,14 @@ public class LootItem : MonoBehaviour,IInteraction
     CapsuleCollider _collider;
     IItem _iteminfo;
 
+    public bool CanInteraction => _canInteraction;
+
+    public string InteractionName => _iteminfo.ItemName;
+
+    public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.Item_Grade);
+
+    private bool _canInteraction = false;
+
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
@@ -24,6 +32,7 @@ public class LootItem : MonoBehaviour,IInteraction
     }
     private void Start()
     {
+        _canInteraction = false;
         transform.position = _dropper.transform.position + Vector3.up*_dropper.GetComponent<Collider>().bounds.max.y;
         //튀어오르면서 로테이션을 돌린다.
         //바닥에 닿으면 VFX효과를 킨다.
@@ -45,11 +54,11 @@ public class LootItem : MonoBehaviour,IInteraction
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             _rigidBody.isKinematic = true;
-            _rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
-            transform.rotation = Quaternion.identity;
+            transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
             StartCoroutine(RotationDropItem());
             CreateLootingItemEffect();
+            _canInteraction = true;
         }
     }
 
@@ -58,6 +67,7 @@ public class LootItem : MonoBehaviour,IInteraction
     {
         _itemEffect = ItemGradeEffect(_iteminfo);
         _itemEffect.transform.position = transform.position;
+        _itemEffect.transform.SetParent(transform);
     }
 
 

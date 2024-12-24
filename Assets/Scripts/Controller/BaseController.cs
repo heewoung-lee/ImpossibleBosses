@@ -26,14 +26,6 @@ public abstract class BaseController : MonoBehaviour
     protected abstract int Hash_Move { get; }
     protected abstract int Hash_Attack { get; }
     protected abstract int Hash_Die { get; }
-
-
-    public int GetAttackHash => Hash_Attack;
-    public int GetDieHash => Hash_Die;
-    public int GetMoveHash => Hash_Move;
-    public int GetIdleHash => Hash_Idle;
-
-
     public float Transition_Idle { get => _transition_Idle; protected set => _transition_Idle = value; }
     public float Transition_Move { get => _transition_Move; protected set => _transition_Move = value; }
     public float Transition_Attack { get => _transition_Attack; protected set => _transition_Attack = value; }
@@ -42,7 +34,7 @@ public abstract class BaseController : MonoBehaviour
     public int AnimLayer { get => _animLayer; protected set => _animLayer = value; }
 
 
-    public Define.State State
+    public virtual Define.State State
     {
         get => _state;
         protected set

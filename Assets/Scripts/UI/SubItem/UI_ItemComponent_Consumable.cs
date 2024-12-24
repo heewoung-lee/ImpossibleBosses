@@ -164,6 +164,15 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         _duringbuff = (iteminfo as ItemConsumable).duration;
     }
 
-   
+    public override GameObject GetLootingItemObejct(IItem iteminfo)
+    {
+        return Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+    }
 
+    protected override void RemoveItemFromInventory()
+    {
+        ItemCount--;
+        if (ItemCount <= 0)
+            Managers.ResourceManager.DestroyObject(gameObject);
+    }
 }

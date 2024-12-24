@@ -14,7 +14,23 @@ public class Utill
         return component;
     }
 
-
+    public static Color GetItemGradeColor(Item_Grade_Type grade)
+    {
+        switch (grade)
+        {
+            case Item_Grade_Type.Normal:
+                return Color.white;
+            case Item_Grade_Type.Magic:
+                return Color.green;
+            case Item_Grade_Type.Rare:
+                return new Color(150 / 255f, 200 / 255f, 255 / 255f);//ÆÄ¶õ»ö;
+            case Item_Grade_Type.Unique:
+                return Color.red;
+            case Item_Grade_Type.Epic:
+                return Color.yellow;
+        }
+        return Color.white;
+    }
 
     public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
     {

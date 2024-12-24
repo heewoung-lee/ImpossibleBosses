@@ -29,6 +29,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
     public override RectTransform ItemRectTr => _itemRectTr;
+    public abstract GameObject GetLootingItemObejct(IItem iteminfo);
     protected override void AwakeInit()
     {
         Bind<Image>(typeof(Images));
@@ -77,22 +78,20 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     protected abstract void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult);
 
+    protected abstract void RemoveItemFromInventory();
+
     private bool IsPointerOverUI(PointerEventData eventData, out List<RaycastResult> uiraycastResult)
     {
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
         uiraycastResult = results;
-
-        foreach (var result in results)
-        {
-            Debug.Log(result.ToString());
-        }
         return results.Count > 0;
     }
 
     private void DropItemOnGround()
     {
-        GameObject lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+        RemoveItemFromInventory();
+        GameObject lootItem = GetLootingItemObejct(_iteminfo);
         lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
         return;
     }
