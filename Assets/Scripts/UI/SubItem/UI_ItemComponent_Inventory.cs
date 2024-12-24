@@ -56,27 +56,54 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     {
         _isEquipped = isEquiped;
     }
-    public override void GetDragEnd(PointerEventData eventData)
+    public sealed override void GetDragEnd(PointerEventData eventData)//다른 자식클래스들이 GetDragEnd를 직접적으로 상속받지못하게 막고 대신 DropItemOnUI 메서드를 상속받아 구현하도록
     {//아이템 드랍 구현
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
         _isDragging = false;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 마우스 위치로부터 광선 생성
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-        {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")) // 바닥 오브젝트에 Tag 설정 필요
-            {
-                Debug.Log($"Dropped on ground at: {hit.point}");
-
-                //TODO:아이템 떨어뜨리기
-                GameObject lootItem =  Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword",Managers.LootItemManager.ItemRoot);
-                lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer,_iteminfo);
-                DragImageIcon.gameObject.SetActive(false);
-                return;
-            }
-        }
-
+        DropItem(eventData);
+        OFFDragImage();
     }
+
+
+    private void DropItem(PointerEventData eventData)
+    {
+        if (IsPointerOverUI(eventData, out List<RaycastResult> uiraycastResult))//UI쪽에 닿으면 자식클래스에서 구현해 놓은 메서드를 호출하고 종료.
+        {
+            DropItemOnUI(eventData, uiraycastResult); // 자식 클래스의 구현 호출
+            return;
+        }
+        DropItemOnGround();
+    }
+
+    protected abstract void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult);
+
+    private bool IsPointerOverUI(PointerEventData eventData, out List<RaycastResult> uiraycastResult)
+    {
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        uiraycastResult = results;
+
+        foreach (var result in results)
+        {
+            Debug.Log(result.ToString());
+        }
+        return results.Count > 0;
+    }
+
+    private void DropItemOnGround()
+    {
+        GameObject lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+        lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
+        return;
+    }
+
+
+    private void OFFDragImage()
+    {
+        DragImageIcon.gameObject.SetActive(false);
+    }
+
+
     protected void AttachItemToSlot(GameObject go, Transform slot)
     {
         go.transform.SetParent(slot);

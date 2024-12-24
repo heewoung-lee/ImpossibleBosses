@@ -118,18 +118,13 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
 
     }
 
-    public override void GetDragEnd(PointerEventData eventData)
+    protected override void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult)
     {
-        base.GetDragEnd(eventData);
         //드래그 시 UI슬롯 근처로 드랍한다면 슬롯에 끼워지기
         //드래그 시 UI밖에 드랍을 한다면 아이템이 떨어지도록
         //드래그 시 그외지역에서 드랍한다면 다시 아이템창으로가기
 
-        // 1. UI 레이캐스트 시도
-        List<RaycastResult> uiResults = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, uiResults);//모든 UI에서 RayCast가 상호작용하도록 설정
-
-        foreach (RaycastResult uiResult in uiResults)
+        foreach (RaycastResult uiResult in uiraycastResult)
         {
             if (uiResult.gameObject.tag == "ConsumableSlot" && _iteminfo is ItemConsumable)
             {
@@ -160,7 +155,6 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
                 AttachItemToSlot(gameObject, contextTr.transform);
             }
         }
-        DragImageIcon.gameObject.SetActive(false);
     }
 
     public void IntializeItem(IItem iteminfo, int count)
