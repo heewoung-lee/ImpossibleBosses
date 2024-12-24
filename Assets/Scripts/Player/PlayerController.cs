@@ -1,3 +1,4 @@
+using BaseStates;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MoveableController
 {
-    enum PlayerState
-    {
-        Pickup
-    }
-
-
     InputManager _inputmanager;
     NavMeshAgent _agent;
     PlayerStats _stats;
@@ -68,7 +63,7 @@ public class PlayerController : MoveableController
     }
     private Vector3 MouseRightClickPosEvent(InputAction.CallbackContext context)
     {
-        if (State == Define.State.Die)
+        if (CurrentStateType == typeof(DieState))
             return Vector3.zero;
 
         Ray ray = Camera.main.ScreenPointToRay(_pointerAction.ReadValue<Vector2>());
@@ -78,8 +73,8 @@ public class PlayerController : MoveableController
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Ground")))
         {
             _destPos = hit.point;
-            if (State != Define.State.Move)
-                State = Define.State.Move;
+            if (CurrentStateType != typeof(MoveState))
+                CurrentStateType = typeof(MoveState);
         }
         return hit.point;
     }
@@ -94,36 +89,36 @@ public class PlayerController : MoveableController
 
     public void PlayerDead()
     {
-        State = Define.State.Die;
+        CurrentStateType = typeof(DieState);
     }
 
     private void ComboAttack(InputAction.CallbackContext context)
     {
-        if (State == Define.State.Attack)
+        if (CurrentStateType == typeof(AttackState))
             return;
 
-        State = Define.State.Attack;
+        CurrentStateType = typeof(AttackState);
     }
     private void StopCommand(InputAction.CallbackContext context)
     {
-        State = Define.State.Idle;
+        CurrentStateType = typeof(IDleState);
     }
 
-    protected override void UpdateMove()
+    public override void UpdateMove()
     {
-        if (State == Define.State.Die)
+        if (CurrentStateType == typeof(DieState))
             return;
         Vector3 dir = new Vector3(_destPos.x, 0, _destPos.z) - new Vector3(transform.position.x, 0, transform.position.z);//높이에 대한 값을 빼야 근사값에 더 정확한 수치를 뽑을 수 있음.
         if (dir.magnitude < 0.01f)
         {
-            State = Define.State.Idle;
+            CurrentStateType = typeof(IDleState);
         }
         else
         {
             Debug.DrawRay(transform.position + Vector3.up * 0.5f, dir, Color.green);
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
             {
-                State = Define.State.Idle;
+                CurrentStateType = typeof(IDleState);
                 return;
             }
             float moveTick = Mathf.Clamp(_stats.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
@@ -131,14 +126,14 @@ public class PlayerController : MoveableController
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         }
     }
-    protected override void UpdateDie()
+    public override void UpdateDie()
     {
     }
-    protected override void UpdateIdle()
+    public override void UpdateIdle()
     {
 
     }
-    protected override void UpdateAttack()
+    public override void UpdateAttack()
     {
         ChangeStateToIdle();
     }
@@ -148,7 +143,7 @@ public class PlayerController : MoveableController
         // Attack 스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
         if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 1.0f)
         {
-            State = Define.State.Idle;
+            CurrentStateType = typeof(IDleState);
         }
     }
 

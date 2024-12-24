@@ -10,33 +10,20 @@ public abstract class MoveableController : BaseController
     protected Vector3 _destPos;
     protected GameObject _target;
     PlayerController _player;
+    private IMoveableState _currentState;
 
     private void Update()
     {
-        //if (TryGetComponent(out GolemController controller))
-        //{
-        //   Debug.Log("현재 상태: " + State);
-        //}
-
-        switch (_state)
+        _currentState = CurrentStateType as IMoveableState;
+        if (_currentState != null)
         {
-            case Define.State.Die:
-                UpdateDie();
-                break;
-            case Define.State.Move:
-                UpdateMove();
-                break;
-            case Define.State.Idle:
-                UpdateIdle();
-                break;
-            case Define.State.Attack:
-                UpdateAttack();
-                break;
+            Debug.Log(_currentState.ToString());
+            _currentState.UpdateState(this);
         }
     }
 
-    protected abstract void UpdateAttack();
-    protected abstract void UpdateIdle();
-    protected abstract void UpdateMove();
-    protected abstract void UpdateDie();
+    public abstract void UpdateAttack();
+    public abstract void UpdateIdle();
+    public abstract void UpdateMove();
+    public abstract void UpdateDie();
 }

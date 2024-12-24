@@ -18,19 +18,19 @@ public class MonsterController : MoveableController
 
     NavMeshAgent _agent;
     
-    protected override void UpdateAttack()
+    public override void UpdateAttack()
     {
     }
 
-    protected override void UpdateDie()
+    public override void UpdateDie()
     {
     }
 
-    protected override void UpdateIdle()
+    public override void UpdateIdle()
     {
     }
 
-    protected override void UpdateMove()
+    public override void UpdateMove()
     {
     }
     
