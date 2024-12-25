@@ -49,7 +49,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
 
             SetDestination(Target());
-            if(controller.State != Define.State.Move)
+            if(controller.CurrentStateType != controller.Base_MoveState)
             {
                 moveEvent?.Invoke();
             }

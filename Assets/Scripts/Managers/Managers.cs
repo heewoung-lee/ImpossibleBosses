@@ -61,11 +61,6 @@ public class Managers : MonoBehaviour
         _instance.StopCoroutine(couroutine);
     }
 
-
-    private void Update()
-    {
-    }
-
     private static void Init()
     {
         if (_instance == null)

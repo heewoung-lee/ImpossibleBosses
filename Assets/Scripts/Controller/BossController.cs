@@ -20,40 +20,40 @@ public abstract class BossController<TAttackType> : BaseController where TAttack
 
     public void SetStateMove()
     {
-        if (State == Define.State.Die)
+        if (CurrentStateType == Base_DieState)
             return;
 
-        if (State != Define.State.Move)
+        if (CurrentStateType != Base_MoveState)
         {
-            State = Define.State.Move;
+            CurrentStateType = Base_MoveState;
         }
     }
 
     public void SetStateAttack()
     {
-        if (State == Define.State.Die)
+        if (CurrentStateType == Base_DieState)
             return;
 
-        if (State != Define.State.Attack)
+        if (CurrentStateType != Base_Attackstate)
         {
-            State = Define.State.Attack;
+            CurrentStateType = Base_Attackstate;
         }
     }
     public void SetStateIdle()
     {
-        if (State == Define.State.Die)
+        if (CurrentStateType == Base_DieState)
             return;
 
-        if (State != Define.State.Idle)
+        if (CurrentStateType != Base_IDleState)
         {
-            State = Define.State.Idle;
+            CurrentStateType = Base_IDleState;
         }
     }
     public void SetStateDie()
     {
-        if (State != Define.State.Die)
+        if (CurrentStateType == Base_DieState)
         {
-            State = Define.State.Die;
+            CurrentStateType = Base_DieState;
         }
     }
 

@@ -1,31 +1,53 @@
+using System;
+
 namespace BaseStates
 {
     public class AttackState : IMoveableState
     {
-        public void UpdateState(MoveableController controller)
+        public AttackState(Action attackMethod) 
         {
-            controller.UpdateAttack();
+            UpdateStateEvent += attackMethod;
+        }
+        public event Action UpdateStateEvent;
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
         }
     }
     public class DieState : IMoveableState
     {
-        public void UpdateState(MoveableController controller)
+        public DieState(Action dieMethod)
         {
-            controller.UpdateDie();
+            UpdateStateEvent += dieMethod;
+        }
+        public event Action UpdateStateEvent;
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
         }
     }
     public class IDleState : IMoveableState
     {
-        public void UpdateState(MoveableController controller)
+        public IDleState(Action iDleMethod)
         {
-            controller.UpdateIdle();
+            UpdateStateEvent += iDleMethod;
+        }
+        public event Action UpdateStateEvent;
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
         }
     }
     public class MoveState : IMoveableState
     {
-        public void UpdateState(MoveableController controller)
+        public MoveState(Action moveMethod)
         {
-           controller.UpdateMove();
+            UpdateStateEvent += moveMethod;
+        }
+        public event Action UpdateStateEvent;
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
         }
     }
 

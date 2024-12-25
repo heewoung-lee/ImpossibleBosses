@@ -10,7 +10,7 @@ public abstract class BaseController : MonoBehaviour
     public abstract Define.WorldObject WorldobjectType { get; protected set; }
     protected Define.State _state = Define.State.Idle;
 
-    private Type _currentStateType;
+    private IMoveableState _currentStateType;
     private const float DEFALUT_Transition_Idle = 0.3f;
     private const float DEFALUT_Transition_Move = 0.15f;
     private const float DEFALUT_Transition_Attack = 0.3f;
@@ -23,12 +23,20 @@ public abstract class BaseController : MonoBehaviour
     private float _transition_Die = DEFALUT_Transition_Die;
     private int _animLayer = 0;
 
-    private StateDictionary _stateDictionary = new StateDictionary();
+    private StateAnimationDict _stateAnimDict = new StateAnimationDict();
+
+    public StateAnimationDict StateAnumDict => _stateAnimDict;
 
     protected abstract int Hash_Idle { get; }
     protected abstract int Hash_Move { get; }
     protected abstract int Hash_Attack { get; }
     protected abstract int Hash_Die { get; }
+
+    public abstract AttackState Base_Attackstate { get;}
+    public abstract IDleState Base_IDleState { get; }
+    public abstract DieState Base_DieState { get; }
+    public abstract MoveState Base_MoveState { get; }
+
 
     public Animator Anim { get => _anim; protected set => _anim = value; }
     public float Transition_Idle { get => _transition_Idle; protected set => _transition_Idle = value; }
@@ -38,53 +46,54 @@ public abstract class BaseController : MonoBehaviour
     public int AnimLayer { get => _animLayer; protected set => _animLayer = value; }
 
 
-    public Type CurrentStateType
+    public IMoveableState CurrentStateType
     {
         get => _currentStateType;
         set
         {
             _currentStateType = value;
-            _stateDictionary.CallState(_currentStateType); // 현재 상태 호출
+            _stateAnimDict.CallState(_currentStateType); // 현재 상태 호출
         }
     }
 
-    public virtual Define.State State
-    {
-        get => _state;
-        protected set
-        {
-            _state = value;
+    //public virtual Define.State State
+    //{
+    //    get => _state;
+    //    protected set
+    //    {
+    //        _state = value;
 
-            switch (_state)
-            {
-                case Define.State.Idle:
-                    if (Hash_Idle == 0)
-                        return;
-                    _anim.CrossFade(Hash_Idle, Transition_Idle, AnimLayer, 0f);
-                    break;
-                case Define.State.Move:
-                    if (Hash_Move == 0)
-                        return;
-                    _anim.CrossFade(Hash_Move, Transition_Move, AnimLayer, 0f);
-                    break;
-                case Define.State.Attack:
-                    if (Hash_Attack == 0)
-                        return;
-                    _anim.CrossFade(Hash_Attack, Transition_Attack, AnimLayer, 0f);
-                    break;
-                case Define.State.Die:
-                    if (Hash_Die == 0)
-                        return;
-                    _anim.CrossFade(Hash_Die, Transition_Die, AnimLayer, 0f);
-                    break;
-            }
-        }
-    }
+    //        switch (_state)
+    //        {
+    //            case Define.State.Idle:
+    //                if (Hash_Idle == 0)
+    //                    return;
+    //                _anim.CrossFade(Hash_Idle, Transition_Idle, AnimLayer, 0f);
+    //                break;
+    //            case Define.State.Move:
+    //                if (Hash_Move == 0)
+    //                    return;
+    //                _anim.CrossFade(Hash_Move, Transition_Move, AnimLayer, 0f);
+    //                break;
+    //            case Define.State.Attack:
+    //                if (Hash_Attack == 0)
+    //                    return;
+    //                _anim.CrossFade(Hash_Attack, Transition_Attack, AnimLayer, 0f);
+    //                break;
+    //            case Define.State.Die:
+    //                if (Hash_Die == 0)
+    //                    return;
+    //                _anim.CrossFade(Hash_Die, Transition_Die, AnimLayer, 0f);
+    //                break;
+    //        }
+    //    }
+    //}
     private void Awake()
     {
         _anim = GetComponent<Animator>();
-        InitailizeStateDict();
         AwakeInit();
+        InitailizeStateDict(); //기본 스테이터스 초기화
+        CurrentStateType = Base_IDleState; //기본 스테이터스 지정
     }
 
     private void Start()
@@ -105,14 +114,14 @@ public abstract class BaseController : MonoBehaviour
 
     private void InitailizeStateDict()
     {
-        _stateDictionary.RegisterState<AttackState>(()=> _anim.CrossFade(Hash_Attack, Transition_Attack, AnimLayer, 0f));
-        _stateDictionary.RegisterState<DieState>(()=> _anim.CrossFade(Hash_Die, Transition_Die, AnimLayer, 0f));
-        _stateDictionary.RegisterState<IDleState>(()=> _anim.CrossFade(Hash_Idle, Transition_Idle, AnimLayer, 0f));
-        _stateDictionary.RegisterState<MoveState>(()=> _anim.CrossFade(Hash_Move, Transition_Move, AnimLayer, 0f));
+        _stateAnimDict.RegisterState(Base_Attackstate, ()=> _anim.CrossFade(Hash_Attack, Transition_Attack, AnimLayer, 0f));
+        _stateAnimDict.RegisterState(Base_DieState ,()=> _anim.CrossFade(Hash_Die, Transition_Die, AnimLayer, 0f));
+        _stateAnimDict.RegisterState(Base_IDleState, ()=> _anim.CrossFade(Hash_Idle, Transition_Idle, AnimLayer, 0f));
+        _stateAnimDict.RegisterState(Base_MoveState ,()=> _anim.CrossFade(Hash_Move, Transition_Move, AnimLayer, 0f));
     }
 
-    public void CallState(Type type)
+    public void CallState(IMoveableState moveablestate)
     {
-        _stateDictionary.CallState(type);
+        _stateAnimDict.CallState(moveablestate);
     }
 }

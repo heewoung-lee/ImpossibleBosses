@@ -1,4 +1,8 @@
+using System;
+
 public interface IMoveableState
 {
-    public void UpdateState(MoveableController controller);
+
+    public event Action UpdateStateEvent;
+    public void UpdateState();
 }

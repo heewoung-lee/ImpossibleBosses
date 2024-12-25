@@ -1,3 +1,4 @@
+using BaseStates;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +37,11 @@ public class BossGolemController : BossController<GolemAttackType>
     protected override int Hash_Move => Enemy_Anim_Hash.Golem_Walk;
     protected override int Hash_Attack => GetAnimHash(AttackType);
     protected override int Hash_Die => Enemy_Anim_Hash.Golem_Dead;
+
+    public override AttackState Base_Attackstate => throw new System.NotImplementedException();
+    public override IDleState Base_IDleState => throw new System.NotImplementedException();
+    public override DieState Base_DieState => throw new System.NotImplementedException();
+    public override MoveState Base_MoveState => throw new System.NotImplementedException();
 
     private int GetAnimHash(GolemAttackType attackType)
     {

@@ -1,3 +1,4 @@
+using BaseStates;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,15 @@ public class MonsterController : MoveableController
 
     protected override int Hash_Die => 0;
 
+    public override AttackState Base_Attackstate => _base_Attackstate;
+    public override IDleState Base_IDleState => _base_IDleState;
+    public override DieState Base_DieState => _base_DieState;
+    public override MoveState Base_MoveState => _base_MoveState;
 
+    private AttackState _base_Attackstate;
+    private IDleState _base_IDleState;
+    private DieState _base_DieState;
+    private MoveState _base_MoveState;
     NavMeshAgent _agent;
     
     public override void UpdateAttack()
@@ -35,14 +44,12 @@ public class MonsterController : MoveableController
     }
     
 
-    void Update()
-    {
-        
-    }
-
     protected override void AwakeInit()
     {
-        State = Define.State.Idle;
+        _base_Attackstate = new AttackState(UpdateAttack);
+        _base_MoveState = new MoveState(UpdateMove);
+        _base_DieState = new DieState(UpdateDie);
+        _base_IDleState = new IDleState(UpdateIdle);
     }
     protected override void StartInit()
     {
