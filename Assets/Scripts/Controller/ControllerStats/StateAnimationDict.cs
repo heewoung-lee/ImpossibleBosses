@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public class StateAnimationDict
 {
-    Dictionary<IMoveableState, Action> _stateDict = new Dictionary<IMoveableState, Action>();
+    Dictionary<IState, Action> _stateDict = new Dictionary<IState, Action>();
 
-    public void RegisterState(IMoveableState iMoveableState ,Action stateStrategy)
+    public void RegisterState(IState iMoveableState ,Action stateStrategy)
     {
         _stateDict[iMoveableState] = stateStrategy;
     }
-    public void CallState(IMoveableState iMoveableState)
+    public void CallState(IState iMoveableState)
     {
         if (_stateDict.TryGetValue(iMoveableState, out var strategy))
         {

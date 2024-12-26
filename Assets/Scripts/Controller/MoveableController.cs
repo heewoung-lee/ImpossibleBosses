@@ -14,9 +14,4 @@ public abstract class MoveableController : BaseController
     {
       CurrentStateType.UpdateState();
     }
-
-    public abstract void UpdateAttack();
-    public abstract void UpdateIdle();
-    public abstract void UpdateMove();
-    public abstract void UpdateDie();
 }

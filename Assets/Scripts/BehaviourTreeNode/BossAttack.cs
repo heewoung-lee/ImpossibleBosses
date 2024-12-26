@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.XR;
 
 public class BossAttack : Action
 {
-    private BossController<GolemAttackType> _controller;
+    private BossGolemController _controller;
     private float _elapsedTime = 0f;
     private float _animLength = 0f;
     private float _charging = 0f;
@@ -24,8 +24,8 @@ public class BossAttack : Action
     public override void OnStart()
     {
         base.OnStart();
-        _controller = Owner.GetComponent<BossController<GolemAttackType>>();
-        _controller.AttackType = GolemAttackType.NormalAttack;
+        _controller = Owner.GetComponent<BossGolemController>();
+        //_controller.AttackType = GolemAttackType.NormalAttack;
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();
@@ -37,22 +37,19 @@ public class BossAttack : Action
                _controller.GetComponent<IAttackRange>().ViewAngle,
                _controller.GetComponent<IAttackRange>().ViewDistance,
                Angle_Step, radius_Step);
-
-
-
     }
 
 
     public override TaskStatus OnUpdate()
     {
-        _controller.SetStateAttack();
+        _controller.UpdateAttack();
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
 
         _attackIndicator.Value.FillProgress = _charging;
         _attackIndicator.Value.UpdateProjectors();
 
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, GolemAttackType.NormalAttack);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate);
         if (_isAttackReady && _charging >= 1)
         {
             _controller.Anim.speed = 1;
@@ -61,7 +58,7 @@ public class BossAttack : Action
             {
                 foreach (Vector3 pos in _attackRangeParticlePos)
                 {
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
+                    Managers.VFX_Manager.GenerateParticle("Paticle/AttackEffect/Dust_Paticle", pos, 1f);
                 }
                 Managers.ResourceManager.DestroyObject(_attackIndicator.Value.gameObject);
                 TargetInSight.AttackTargetInSector(_stats);
@@ -69,7 +66,7 @@ public class BossAttack : Action
         }
         if (_elapsedTime >= _animLength)
         {
-            _controller.SetStateIdle();
+            _controller.UpdateIdle();
             return TaskStatus.Success;
         }
         return TaskStatus.Running;

@@ -11,7 +11,7 @@ public class BossSkill1 : Action
 {
     public SharedInt Damage;
 
-    private BossController<GolemAttackType> _controller;
+    private BossGolemController _controller;
     private BossStats _stats;
    
     private float _elapsedTime = 0f;
@@ -21,18 +21,18 @@ public class BossSkill1 : Action
     private bool _isAttackReady = false;
     private Collider[] allTargets;
 
-    public float AttackPreTime => _controller.AttackTypeDict[GolemAttackType.Skill1];
+    public float AttackPreTime => _controller.AttackTypeDict[_controller.BossSkill1State];
 
     public override void OnStart()
     {
         base.OnStart();
-        _controller = Owner.GetComponent<BossController<GolemAttackType>>();
+        _controller = Owner.GetComponent<BossGolemController>();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
         allTargets = Physics.OverlapSphere(Owner.transform.position,float.MaxValue,_stats.TarGetLayer);
-        _controller.AttackType = GolemAttackType.Skill1;
+        //_controller.AttackType = GolemAttackType.Skill1;
         _controller.SetTransition_Attack(0.1f);
-        _controller.SetStateAttack();
+        _controller.UpdateAttack();
     }
 
     public override TaskStatus OnUpdate()
@@ -53,7 +53,7 @@ public class BossSkill1 : Action
                 projector.StartCoroutine(startProjector(projector));
             }
         }
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, GolemAttackType.Skill1,0.8f);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, 0.8f);
         if (_isAttackReady)
         {
             return TaskStatus.Success;
@@ -85,6 +85,6 @@ public class BossSkill1 : Action
         _elapsedTime = 0;
         _controller.Anim.speed = 1f;
         _controller.SetDefalutTransition_Value();
-        _controller.SetStateIdle();
+        _controller.UpdateIdle();
     }
 }

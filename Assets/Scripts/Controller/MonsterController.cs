@@ -53,6 +53,11 @@ public class MonsterController : MoveableController
     }
     protected override void StartInit()
     {
+
+
     }
 
+    protected override void AddInitalizeStateDice()
+    {
+    }
 }

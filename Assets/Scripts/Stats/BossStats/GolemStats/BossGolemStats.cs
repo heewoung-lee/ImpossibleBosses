@@ -1,3 +1,4 @@
+using BaseStates;
 using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ public class BossGolemStats : BossStats
 
     protected override void OnDead(BaseStats attacker)
     {
-        _golemController.SetStateDie();
+        _golemController.CurrentStateType = _golemController.Base_DieState;
         _golemController.Anim.speed = 0.5f;
         GetComponent<BehaviorTree>().SendEvent("BossDeadEvent");
     }

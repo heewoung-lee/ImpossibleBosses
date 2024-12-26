@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.XR;
 
 public class BossSkill2 : Action
 {
-    private BossController<GolemAttackType> _controller;
+    private BossGolemController _controller;
 
     public SharedInt Damage;
     public float Attack_Range = 0f;
@@ -28,7 +28,7 @@ public class BossSkill2 : Action
     public override void OnStart()
     {
         base.OnStart();
-        _controller = Owner.GetComponent<BossController<GolemAttackType>>();
+        _controller = Owner.GetComponent<BossGolemController>();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
         _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();
@@ -47,19 +47,19 @@ public class BossSkill2 : Action
              Radius_Step, Angle_Step);
 
 
-        _controller.AttackType = GolemAttackType.Skill2;
+        //_controller.AttackType = GolemAttackType.Skill2;
     }
 
     public override TaskStatus OnUpdate()
     {
-        _controller.SetStateAttack();
+        _controller.UpdateAttack();
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
 
         _attackIndicator.Value.FillProgress = _charging;
         _attackIndicator.Value.UpdateProjectors();
 
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength,GolemAttackType.Skill2);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill2State);
         if (_isAttackReady && _charging >= 1)
         {
             _controller.Anim.speed = 1;
@@ -68,7 +68,7 @@ public class BossSkill2 : Action
             {
                 foreach (Vector3 pos in _attackRangeCirclePos)
                 {
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
+                    Managers.VFX_Manager.GenerateParticle("Paticle/AttackEffect/Dust_Paticle", pos, 1f);
                 }
                 Managers.ResourceManager.DestroyObject(_attackIndicator.Value.gameObject);
                 TargetInSight.AttackTargetInCircle(_stats, Attack_Range,Damage.Value);
@@ -89,7 +89,7 @@ public class BossSkill2 : Action
         _animLength = 0f;
         _isAttackReady = false;
         _attackRangeCirclePos = null;
-        _controller.SetStateIdle();
-        _controller.AttackType = GolemAttackType.NormalAttack;
+        _controller.UpdateIdle();
+        //_controller.AttackType = GolemAttackType.NormalAttack;
     }
 }

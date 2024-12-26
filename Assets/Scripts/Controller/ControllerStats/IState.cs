@@ -1,6 +1,6 @@
 using System;
 
-public interface IMoveableState
+public interface IState
 {
 
     public event Action UpdateStateEvent;

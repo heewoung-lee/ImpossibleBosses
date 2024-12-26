@@ -190,7 +190,10 @@ public class UI_Shop : UI_Popup
 
     public void RandomItemRespawn()
     {
-        for (int i = 0; i < 20; i++)
-            Managers.ItemDataManager.GetRandomItemFromAll().MakeShopItemComponent(Random.Range(10, 20), null, Random.Range(1, 5));
+        for (int i = 0; i < 10; i++)
+        {
+            Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeShopItemComponent(Random.Range(10, 20), null, Random.Range(1, 5));
+            Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeShopItemComponent(Random.Range(10, 20));
+        }
     }
 }

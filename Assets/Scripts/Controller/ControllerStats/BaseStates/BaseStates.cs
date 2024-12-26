@@ -2,19 +2,19 @@ using System;
 
 namespace BaseStates
 {
-    public class AttackState : IMoveableState
+    public class AttackState : IState
     {
+        public event Action UpdateStateEvent;
         public AttackState(Action attackMethod) 
         {
             UpdateStateEvent += attackMethod;
         }
-        public event Action UpdateStateEvent;
         public void UpdateState()
         {
             UpdateStateEvent?.Invoke();
         }
     }
-    public class DieState : IMoveableState
+    public class DieState : IState
     {
         public DieState(Action dieMethod)
         {
@@ -26,7 +26,7 @@ namespace BaseStates
             UpdateStateEvent?.Invoke();
         }
     }
-    public class IDleState : IMoveableState
+    public class IDleState : IState
     {
         public IDleState(Action iDleMethod)
         {
@@ -38,7 +38,7 @@ namespace BaseStates
             UpdateStateEvent?.Invoke();
         }
     }
-    public class MoveState : IMoveableState
+    public class MoveState : IState
     {
         public MoveState(Action moveMethod)
         {

@@ -19,12 +19,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("If target is null then use the target position")]
         [UnityEngine.Serialization.FormerlySerializedAs("targetPosition")]
         public SharedBool _hasArrived;
-        private BossController<GolemAttackType> _controller;
+        private BossGolemController _controller;
         public override void OnStart()
         {
             base.OnStart();
             _hasArrived.Value = false;
-            _controller = Owner.GetComponent<BossController<GolemAttackType>>();
+            _controller = Owner.GetComponent<BossGolemController>();
             Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, 10000f, LayerMask.GetMask("Player"));
             float findClosePlayer = float.MaxValue;
             foreach (Collider collider in checkedPlayer)
@@ -48,7 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
             SetDestination(Target());
-            _controller.SetStateMove();
+            _controller.UpdateMove();
             return TaskStatus.Running;
         }
 

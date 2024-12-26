@@ -20,11 +20,8 @@ public class PlayerController : MoveableController
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
-
     protected override int Hash_Idle => Player_Anim_Hash.Idle;
-
     protected override int Hash_Move => Player_Anim_Hash.Run;
-
     protected override int Hash_Attack => Player_Anim_Hash.Attack;
     protected override int Hash_Die => Player_Anim_Hash.Die;
 
@@ -166,6 +163,10 @@ public class PlayerController : MoveableController
     public void AttackEvent()
     {
         TargetInSight.AttackTargetInSector(_stats);
+    }
+
+    protected override void AddInitalizeStateDice()
+    {
     }
     #endregion
 }
