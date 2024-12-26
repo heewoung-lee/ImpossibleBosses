@@ -9,12 +9,6 @@ public class Player_Anim_Hash
     public static int Run { get; private set; } = Animator.StringToHash("Run");
     public static int Die { get; private set; } = Animator.StringToHash("Die");
     public static int Attack { get; private set; } = Animator.StringToHash("Attack");
-    public static int Attack1 { get; private set; } = Animator.StringToHash("Attack1");
-    public static int Attack2 { get; private set; } = Animator.StringToHash("Attack2");
-    public static int Attack3 { get; private set; } = Animator.StringToHash("Attack3");
-
-
-
 }
 public class Enemy_Anim_Hash
 {

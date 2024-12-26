@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MoveableController
 {
+    private const float DEFALUT_TRANSITION_PICKUP = 0.3f;
     InputManager _inputmanager;
     NavMeshAgent _agent;
     PlayerStats _stats;
@@ -24,16 +25,20 @@ public class PlayerController : MoveableController
     protected override int Hash_Move => Player_Anim_Hash.Run;
     protected override int Hash_Attack => Player_Anim_Hash.Attack;
     protected override int Hash_Die => Player_Anim_Hash.Die;
+    private int _hash_PickUp => Animator.StringToHash("Pickup");
 
     public override AttackState Base_Attackstate => _base_Attackstate;
     public override IDleState Base_IDleState => _base_IDleState;
     public override DieState Base_DieState => _base_DieState;
     public override MoveState Base_MoveState => _base_MoveState;
 
+    public PickUpState PickupState => _pickup_State;
+
     private AttackState _base_Attackstate;
     private IDleState _base_IDleState;
     private DieState _base_DieState;
     private MoveState _base_MoveState;
+    private PickUpState _pickup_State;
 
     protected override void AwakeInit()
     {
@@ -48,10 +53,12 @@ public class PlayerController : MoveableController
         _attackAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Attack");
         _stopAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Stop");
 
+
         _base_Attackstate = new AttackState(UpdateAttack);
         _base_MoveState = new MoveState(UpdateMove);
         _base_DieState = new DieState(UpdateDie);
         _base_IDleState = new IDleState(UpdateIdle);
+        _pickup_State = new PickUpState(UpdatePickup);
     }
 
     private void OnEnable()
@@ -138,6 +145,11 @@ public class PlayerController : MoveableController
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         }
     }
+
+    public void UpdatePickup()
+    {
+        ChangeStateToIdle("Pickup");
+    }
     public override void UpdateDie()
     {
     }
@@ -147,17 +159,24 @@ public class PlayerController : MoveableController
     }
     public override void UpdateAttack()
     {
-        ChangeStateToIdle();
+        ChangeStateToIdle("Attack");
     }
-    private void ChangeStateToIdle()
+    private void ChangeStateToIdle(string animName)
     {
         AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
         // Attack 스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
-        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName("Attack") && stateInfo.normalizedTime >= 1.0f)
+        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName(animName) && stateInfo.normalizedTime >= 1.0f)
         {
             CurrentStateType = _base_IDleState;
         }
     }
+    protected override void AddInitalizeStateDict()
+    {
+        StateAnimDict.RegisterState(_pickup_State, () => RunAnimation(_hash_PickUp, DEFALUT_TRANSITION_PICKUP));
+    }
+
+
+
 
     #region AnimationClipMethod
     public void AttackEvent()
@@ -165,8 +184,5 @@ public class PlayerController : MoveableController
         TargetInSight.AttackTargetInSector(_stats);
     }
 
-    protected override void AddInitalizeStateDice()
-    {
-    }
     #endregion
 }

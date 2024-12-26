@@ -104,7 +104,7 @@ public class BossGolemController : BossController
         }
     }
 
-    protected override void AddInitalizeStateDice()
+    protected override void AddInitalizeStateDict()
     {
         StateAnimDict.RegisterState(Base_Attackstate, () => RunAnimation(Hash_Attack, Transition_Attack));
         StateAnimDict.RegisterState(_bossSkill1State, () => RunAnimation(hash_golem_Skill1,Transition_Attack));

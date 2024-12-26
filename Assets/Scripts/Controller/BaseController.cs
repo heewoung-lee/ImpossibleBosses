@@ -54,7 +54,7 @@ public abstract class BaseController : MonoBehaviour
         set
         {
             _currentStateType = value;
-            _stateAnimDict.CallState(_currentStateType); // 현재 상태 호출
+            _stateAnimDict.CallState(_currentStateType); // 현재 상태의 루프문 실행
         }
     }
     private void Awake()
@@ -80,7 +80,7 @@ public abstract class BaseController : MonoBehaviour
         _transition_Die = DEFALUT_Transition_Die;
     }
 
-    protected abstract void AddInitalizeStateDice();
+    protected abstract void AddInitalizeStateDict();
 
     private void InitailizeStateDict()
     {
@@ -88,7 +88,7 @@ public abstract class BaseController : MonoBehaviour
         _stateAnimDict.RegisterState(Base_DieState ,()=> RunAnimation(Hash_Die, Transition_Die));
         _stateAnimDict.RegisterState(Base_IDleState, ()=> RunAnimation(Hash_Idle, Transition_Idle));
         _stateAnimDict.RegisterState(Base_MoveState ,()=> RunAnimation(Hash_Move, Transition_Move));
-        AddInitalizeStateDice();
+        AddInitalizeStateDict();
     }
 
 

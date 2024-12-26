@@ -56,6 +56,10 @@ public class VFXManager
 
         while (elasedTime < duration)
         {
+            if (particle == null || particle.gameObject == null)
+            {
+                yield break; // 파괴된 경우 코루틴 종료
+            }
             elasedTime += Time.deltaTime;
             float alpha = Mathf.Lerp(1,0, elasedTime/duration);
             int aliveParticleNum = particle.GetParticles(particles);

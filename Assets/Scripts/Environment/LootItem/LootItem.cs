@@ -25,6 +25,7 @@ public class LootItem : MonoBehaviour,IInteraction
 
     private bool _canInteraction = false;
 
+
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
@@ -77,6 +78,10 @@ public class LootItem : MonoBehaviour,IInteraction
         _iteminfo = iteminfo;
     }
 
+    public void SetIteminfo(IItem iteminfo)
+    {
+        _iteminfo = iteminfo;
+    }
 
     IEnumerator RotationDropItem()
     {
@@ -105,12 +110,18 @@ public class LootItem : MonoBehaviour,IInteraction
         return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
     }
 
-    public void Interaction()
+    public void Interaction(Transform caller)
     {
-        
+        PlayerController base_controller = caller.GetComponent<PlayerController>();
+        base_controller.CurrentStateType = base_controller.PickupState;
+        IInventoryItemMaker inventoryitem = _iteminfo as IInventoryItemMaker;
+        inventoryitem.MakeItemComponentInventory(Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>().ItemInventoryTr);
+        //TODO: 아이템 컴포넌트가 생성안됨
+        Managers.ResourceManager.DestroyObject(gameObject);
+        caller.GetComponent<Module_Player_Interaction>().DisEnable_Icon_UI();
     }
-
     public void OutInteraction()
     {
+
     }
 }

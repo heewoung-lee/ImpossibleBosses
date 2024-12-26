@@ -52,7 +52,7 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
         return descriptionText;
     }
 
-    public UI_ItemComponent_Inventory MakeItemComponent(Transform parent = null, int itemCount = 1, string name = null, string path = null)
+    public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1, string name = null, string path = null)
     {
         UI_ItemComponent_Equipment ui_Equipment_Component = Managers.UI_Manager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name, $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
         if (itemCount != 1)

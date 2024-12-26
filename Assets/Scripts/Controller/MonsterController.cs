@@ -57,7 +57,7 @@ public class MonsterController : MoveableController
 
     }
 
-    protected override void AddInitalizeStateDice()
+    protected override void AddInitalizeStateDict()
     {
     }
 }

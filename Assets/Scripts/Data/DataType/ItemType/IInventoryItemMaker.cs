@@ -3,5 +3,5 @@ using UnityEngine;
 
 public interface IInventoryItemMaker
 {
-    public UI_ItemComponent_Inventory MakeItemComponent(Transform parent = null, int itemCount = 1, string name = null, string path = null);
+    public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1, string name = null, string path = null);
 }

@@ -41,25 +41,32 @@ public class Module_Player_Interaction : MonoBehaviour
         if (other.TryGetComponent(out IInteraction interaction) && interaction.CanInteraction == true)
         {
             _interactionTarget = interaction;
-            _IconUI.transform.SetParent(other.transform);
+            _IconUI.transform.SetParent(Managers.UI_Manager.Root.transform);
             _IconUI.gameObject.SetActive(true);
             _IconUI.SetInteractionText(interaction.InteractionName, interaction.InteractionNameColor);
-            _IconUI.transform.position = new Vector3(other.transform.position.x, other.GetComponent<Collider>().bounds.max.y+Y_POSITION_OFFSET, other.transform.position.z);
+            _IconUI.transform.position = new Vector3(other.transform.position.x, other.GetComponent<Collider>().bounds.max.y + Y_POSITION_OFFSET, other.transform.position.z);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.TryGetComponent(out IInteraction interaction))
+        if (other.TryGetComponent(out IInteraction interaction))
         {
             interaction.OutInteraction();
+            DisEnable_Icon_UI();
         }
-        _IconUI.gameObject.SetActive(false);
-        _interactionTarget = null;
     }
     public void Interaction(InputAction.CallbackContext context)
     {
-        if(_interactionTarget != null)
-            _interactionTarget.Interaction();
+        if (_interactionTarget != null)
+        {
+            _interactionTarget.Interaction(transform);
+        }
+    }
+
+    public void DisEnable_Icon_UI()
+    {
+        _IconUI.gameObject.SetActive(false);
+        _interactionTarget = null;
     }
 }

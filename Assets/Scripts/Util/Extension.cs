@@ -117,7 +117,7 @@ public static class Extension
             parentTr = inventory.ItemInventoryTr;
 
         IInventoryItemMaker itemUIType = iteminfo as IInventoryItemMaker;
-        return itemUIType.MakeItemComponent(parentTr, itemCount, name, path);
+        return itemUIType.MakeItemComponentInventory(parentTr, itemCount, name, path);
     }
 
     public static UI_ShopItemComponent MakeShopItemComponent(this IItem iteminfo,int price,Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
