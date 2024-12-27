@@ -59,10 +59,8 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     }
     public sealed override void GetDragEnd(PointerEventData eventData)//다른 자식클래스들이 GetDragEnd를 직접적으로 상속받지못하게 막고 대신 DropItemOnUI 메서드를 상속받아 구현하도록
     {//아이템 드랍 구현
-        _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
-        _isDragging = false;
         DropItem(eventData);
-        OFFDragImage();
+        RevertImage();
     }
 
 
@@ -96,11 +94,6 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         return;
     }
 
-
-    private void OFFDragImage()
-    {
-        DragImageIcon.gameObject.SetActive(false);
-    }
 
 
     protected void AttachItemToSlot(GameObject go, Transform slot)

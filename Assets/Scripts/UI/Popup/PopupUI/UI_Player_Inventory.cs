@@ -24,6 +24,7 @@ public class UI_Player_Inventory : UI_Popup
     private Vector2 _initialMousePosition;
     private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
     private Transform _itemInventoryTr;
+    private Transform _lootitemStorage;
 
     private GraphicRaycaster _ui_inventory_Raycaster;
     private EventSystem _eventSystem;
@@ -32,6 +33,8 @@ public class UI_Player_Inventory : UI_Popup
     public GraphicRaycaster UI_Inventory_RayCaster=> _ui_inventory_Raycaster;
     public EventSystem EventSystem => _eventSystem;
     public Transform InventoryOnwer => _stat.transform;
+
+    
     enum Equipment_Go
     {
         Equipment
@@ -81,6 +84,8 @@ public class UI_Player_Inventory : UI_Popup
 
         _ui_inventory_Raycaster = GetComponent<GraphicRaycaster>();
         _eventSystem = FindAnyObjectByType<EventSystem>();
+
+        _lootitemStorage = Managers.LootItemManager.LootingItemRoot;
     }
     protected override void StartInit()
     {
@@ -118,6 +123,11 @@ public class UI_Player_Inventory : UI_Popup
     }
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
+        CloseDecriptionWindow();
+    }
+
+    public void CloseDecriptionWindow()
+    {
         UI_Description description = null;
         if (description = Managers.UI_Manager.Get_Scene_UI<UI_Description>())
         {
@@ -135,6 +145,7 @@ public class UI_Player_Inventory : UI_Popup
             _stat.Event_StatsChanged += UpdateStats;
             UpdateStats();
         }
+        LoadItemsFromLootStorage();
         _equipMent.transform.localPosition = _initialWindowPosition;
     }
     protected override void OnDisableInit()
@@ -145,7 +156,32 @@ public class UI_Player_Inventory : UI_Popup
         {
             _stat.Event_StatsChanged -= UpdateStats;
         }
+        CloseDecriptionWindow();
     }
+
+    private void LoadItemsFromLootStorage()
+    {
+        if (_lootitemStorage.childCount <= 0)
+            return;
+
+
+        for (int i = _lootitemStorage.childCount - 1; i >= 0; i--)
+        {
+            Transform child = _lootitemStorage.GetChild(i);
+            UI_ItemComponent_Inventory lootItem = child.GetComponent<UI_ItemComponent_Inventory>();
+            if (lootItem != null)
+            {
+                lootItem.transform.SetParent(_itemInventoryTr);
+
+                if (lootItem is UI_ItemComponent_Consumable)
+                {
+                    (lootItem as UI_ItemComponent_Consumable).CombineConsumableItems();
+                }
+            }
+        }
+    }
+
+
     public void UpdateStats()
     {
         _playerName.text = _stat.Name;

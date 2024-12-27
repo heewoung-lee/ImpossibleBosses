@@ -113,6 +113,8 @@ public class UI_Shop : UI_Popup
             Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged -= UpdateShopData;
         else
             _playerStats.Event_StatsChanged -= UpdateShopData;
+
+        CloseDecriptionWindow();
     }
     public void UpdateShopData()
     {
@@ -124,6 +126,10 @@ public class UI_Shop : UI_Popup
 
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
+        CloseDecriptionWindow();
+    }
+    public void CloseDecriptionWindow()
+    {
         UI_Description description = null;
         if (description = Managers.UI_Manager.Get_Scene_UI<UI_Description>())
         {
@@ -131,7 +137,6 @@ public class UI_Shop : UI_Popup
             description.SetdecriptionOriginPos();
         }
     }
-
 
     public void ClickToTab(PointerEventData eventData)
     {

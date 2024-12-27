@@ -88,6 +88,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
 
     public override void ItemRightClick(PointerEventData eventdata)
     {
+        base.ItemRightClick(eventdata);
         BuyItem();
     }
 

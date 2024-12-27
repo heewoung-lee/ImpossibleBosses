@@ -10,6 +10,7 @@ public class LootItem : MonoBehaviour,IInteraction
     private const float TORQUE_FORCE_OFFSET = 30f;
     private const float DROPITEM_VERTICAL_OFFSET = 0.2f;
     private const float DROPITEM_ROTATION_OFFSET = 40f;
+    private UI_Player_Inventory _ui_player_Inventory;
 
     Transform _dropper;
     Rigidbody _rigidBody;
@@ -18,9 +19,7 @@ public class LootItem : MonoBehaviour,IInteraction
     IItem _iteminfo;
 
     public bool CanInteraction => _canInteraction;
-
     public string InteractionName => _iteminfo.ItemName;
-
     public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.Item_Grade);
 
     private bool _canInteraction = false;
@@ -33,6 +32,7 @@ public class LootItem : MonoBehaviour,IInteraction
     }
     private void Start()
     {
+        _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
         transform.position = _dropper.transform.position + Vector3.up*_dropper.GetComponent<Collider>().bounds.max.y;
         //튀어오르면서 로테이션을 돌린다.
@@ -112,13 +112,25 @@ public class LootItem : MonoBehaviour,IInteraction
 
     public void Interaction(Transform caller)
     {
-        PlayerController base_controller = caller.GetComponent<PlayerController>();
-        base_controller.CurrentStateType = base_controller.PickupState;
-        IInventoryItemMaker inventoryitem = _iteminfo as IInventoryItemMaker;
-        inventoryitem.MakeItemComponentInventory(Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>().ItemInventoryTr);
-        //TODO: 아이템 컴포넌트가 생성안됨
+        PlayerPickup(caller);
+    }
+
+    public void PlayerPickup(Transform player)
+    {
+        PlayerController base_controller = player.GetComponent<PlayerController>();
+        base_controller.CurrentStateType = base_controller.PickupState;//픽업 애니메이션 실행
+        UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
+        if (_ui_player_Inventory.gameObject.activeSelf)//인벤토리가 열려있다면 바로 들어간다.
+        {
+            Transform inventory_content = _ui_player_Inventory.ItemInventoryTr;
+            inventory_item.transform.SetParent(inventory_content);
+        }
+        else//인벤토리가 꺼져있으면 LootingItem에 모아둔다음 열리면 집어넣는다.
+        {
+            inventory_item.transform.SetParent(Managers.LootItemManager.LootingItemRoot);
+        }
         Managers.ResourceManager.DestroyObject(gameObject);
-        caller.GetComponent<Module_Player_Interaction>().DisEnable_Icon_UI();
+        player.GetComponent<Module_Player_Interaction>().DisEnable_Icon_UI();//상호작용 아이콘 제거
     }
     public void OutInteraction()
     {

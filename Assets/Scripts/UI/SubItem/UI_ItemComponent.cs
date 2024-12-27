@@ -46,6 +46,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         }
 
     }
+
     protected override void StartInit()
     {
 
@@ -73,6 +74,21 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _decriptionObject.SetValue(_iteminfo);//여기에 부모클래스인 IITem이 나와야함
         _decriptionObject.SetDescription(_descriptionText);
     }
+
+    protected override void OnDisableInit()
+    {
+        base.OnDisableInit();
+        if (DragImageIcon.gameObject.activeSelf)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
+        {
+            RevertImage();
+        }
+    }
+    protected void RevertImage()
+    {
+        _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
+        _isDragging = false;
+        DragImageIcon.gameObject.SetActive(false);
+    }
     public void CloseDescription(PointerEventData eventdata)
     {
         CloseDescription();
@@ -84,7 +100,13 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _decriptionObject.SetdecriptionOriginPos();
     }
 
-    public abstract void ItemRightClick(PointerEventData eventdata);
+    public virtual void ItemRightClick(PointerEventData eventdata)
+    {
+        if (_decriptionObject.gameObject.activeSelf)
+        {
+            _decriptionObject.gameObject.SetActive(false);
+        }
+    }
 
     public void GetDragBegin(PointerEventData eventData)
     {

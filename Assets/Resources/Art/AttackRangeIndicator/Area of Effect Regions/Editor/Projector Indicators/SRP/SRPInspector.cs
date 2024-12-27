@@ -71,9 +71,9 @@ namespace DTT.AreaOfEffectRegions.Editor
                 cam.transform.Rotate(new Vector3(45,0,0));
                 cam.tag = "MainCamera";
             }
-            SRPLineRegionProjector[] srpLineRegionProjectors = FindObjectsOfType<SRPLineRegionProjector>();
-            SRPCircleRegionProjector[] srpCircleRegionProjectors = FindObjectsOfType<SRPCircleRegionProjector>();
-            SRPArcRegionProjector[] srpArcRegionProjectors = FindObjectsOfType<SRPArcRegionProjector>();
+            SRPLineRegionProjector[] srpLineRegionProjectors = FindObjectsByType<SRPLineRegionProjector>(FindObjectsSortMode.None);
+            SRPCircleRegionProjector[] srpCircleRegionProjectors = FindObjectsByType<SRPCircleRegionProjector>(FindObjectsSortMode.None);
+            SRPArcRegionProjector[] srpArcRegionProjectors = FindObjectsByType<SRPArcRegionProjector>(FindObjectsSortMode.None);
 
             foreach (var srpArcRegionProjector in srpArcRegionProjectors)
             {

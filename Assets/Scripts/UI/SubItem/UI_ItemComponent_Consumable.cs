@@ -48,7 +48,6 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         CombineConsumableItems();
     }
 
-
     public bool CombineConsumableItems(Transform parentTr = null)//소비 아이템 종류라면 같은 소비아이템을 추가 할때 이미 있는 물약이 있는 경우 추가하기.
     {
         Transform searchingTr = parentTr;
@@ -76,7 +75,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
     }
     public override void ItemRightClick(PointerEventData eventdata)
     {
-
+        base.ItemRightClick(eventdata);
         //장착중이 아니라면 슬롯에 넣고
         //장착중이라면 아이템창에 돌려놓고
         if (_isEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행

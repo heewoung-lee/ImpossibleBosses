@@ -23,6 +23,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
 
     public override void ItemRightClick(PointerEventData eventdata)
     {
+        base.ItemRightClick(eventdata);
         //장착중이 아니라면 슬롯에 넣고, 능력치 적용
         //장착중이라면 아이템창에 돌려놓고, 능력치 감소
         if (_isEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행
