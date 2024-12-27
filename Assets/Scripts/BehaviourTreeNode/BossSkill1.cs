@@ -21,7 +21,6 @@ public class BossSkill1 : Action
     private bool _isAttackReady = false;
     private Collider[] allTargets;
 
-    public float AttackPreTime => _controller.AttackTypeDict[_controller.BossSkill1State];
 
     public override void OnStart()
     {
@@ -30,9 +29,7 @@ public class BossSkill1 : Action
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
         allTargets = Physics.OverlapSphere(Owner.transform.position,float.MaxValue,_stats.TarGetLayer);
-        //_controller.AttackType = GolemAttackType.Skill1;
-        _controller.SetTransition_Attack(0.1f);
-        _controller.UpdateAttack();
+        _controller.CurrentStateType = _controller.BossSkill1State;
     }
 
     public override TaskStatus OnUpdate()

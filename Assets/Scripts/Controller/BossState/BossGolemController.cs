@@ -10,14 +10,15 @@ public enum GolemAttackType
 }
 public class BossGolemController : BossController
 {
-  
+
     private const float ATTACK_PRE_FRAME = 0.35f;
     private const float SKILL1_PRE_FRAME = 0.8f;
     private const float SKILL2_PRE_FRAME = 0.3f;
+    private const float SKILL1_Transition = 0.1f;
 
 
-    private Dictionary<IState, float> _attackTypeDict = new Dictionary<IState, float>();
-    public override Dictionary<IState,float> AttackTypeDict => _attackTypeDict;
+    private Dictionary<IState, float> _attackPreFrameDict = new Dictionary<IState, float>();
+    public override Dictionary<IState, float> AttackPreFrameDict => _attackPreFrameDict;
 
 
     private int[] _golem_Attacks = new int[2]
@@ -41,6 +42,7 @@ public class BossGolemController : BossController
     public BossSkill1State BossSkill1State => _bossSkill1State;
     public BossSkill2State BossSkill2State => _bossSkill2State;
 
+
     private AttackState _base_Attackstate;
     private IDleState _base_IDleState;
     private DieState _base_DieState;
@@ -59,19 +61,14 @@ public class BossGolemController : BossController
         _bossSkill1State = new BossSkill1State(UpdateAttack);
         _bossSkill2State = new BossSkill2State(UpdateAttack);
 
-        _attackTypeDict.Add(_base_Attackstate, Transition_Attack);
-        _attackTypeDict.Add(_bossSkill1State, Transition_Attack);
-        _attackTypeDict.Add(_bossSkill2State, Transition_Attack);
+        _attackPreFrameDict.Add(_base_Attackstate, ATTACK_PRE_FRAME);
+        _attackPreFrameDict.Add(_bossSkill1State, SKILL1_PRE_FRAME);
+        _attackPreFrameDict.Add(_bossSkill2State, SKILL2_PRE_FRAME);
     }
     public override void UpdateAttack()
     {
         if (CurrentStateType == Base_DieState)
             return;
-
-        if (CurrentStateType != Base_Attackstate)
-        {
-            CurrentStateType = Base_Attackstate;
-        }
     }
 
     public override void UpdateIdle()
@@ -106,9 +103,8 @@ public class BossGolemController : BossController
 
     protected override void AddInitalizeStateDict()
     {
-        StateAnimDict.RegisterState(Base_Attackstate, () => RunAnimation(Hash_Attack, Transition_Attack));
-        StateAnimDict.RegisterState(_bossSkill1State, () => RunAnimation(hash_golem_Skill1,Transition_Attack));
-        StateAnimDict.RegisterState(_bossSkill2State, () => RunAnimation(hash_golem_Skill2,Transition_Attack));
+        StateAnimDict.RegisterState(_bossSkill1State, () => RunAnimation(hash_golem_Skill1, SKILL1_Transition));
+        StateAnimDict.RegisterState(_bossSkill2State, () => RunAnimation(hash_golem_Skill2, Transition_Attack));
     }
 
     protected override void StartInit()

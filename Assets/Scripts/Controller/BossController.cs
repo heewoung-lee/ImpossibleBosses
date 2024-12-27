@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class BossController : BaseController
 {
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Boss;
-    public abstract Dictionary<IState, float> AttackTypeDict { get; }
+    public abstract Dictionary<IState, float> AttackPreFrameDict { get; }
 
     protected BehaviorTree tree;
 
@@ -15,14 +15,10 @@ public abstract class BossController : BaseController
     {
         tree = GetComponent<BehaviorTree>();
     }
-    public void SetTransition_Attack(float transitionValue)
-    {
-        Transition_Attack = transitionValue;
-    }
     public bool SetAnimationSpeed(float elapsedTime, float animLength, IState attackType,float startAnimSpeed = 1f)
     {
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
-        if (AttackTypeDict.TryGetValue(attackType, out float attackPreTime) == false)
+        if (AttackPreFrameDict.TryGetValue(attackType, out float attackPreTime) == false)
         {
             Debug.LogError($"Attack type {attackType} not found in AttackType dictionary.");
             return false;

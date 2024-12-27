@@ -25,7 +25,7 @@ public class BossAttack : Action
     {
         base.OnStart();
         _controller = Owner.GetComponent<BossGolemController>();
-        //_controller.AttackType = GolemAttackType.NormalAttack;
+        _controller.CurrentStateType = _controller.Base_Attackstate;
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();

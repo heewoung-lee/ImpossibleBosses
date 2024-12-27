@@ -22,8 +22,8 @@
 },
 {
 "level":"3",
-"hp":"300",
-"attack":"30",
+"hp":"30000",
+"attack":"300",
 "xpRequired":"30",
 "defence":"3",
 "speed":"10.0",

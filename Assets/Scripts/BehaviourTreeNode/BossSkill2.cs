@@ -47,7 +47,7 @@ public class BossSkill2 : Action
              Radius_Step, Angle_Step);
 
 
-        //_controller.AttackType = GolemAttackType.Skill2;
+        _controller.CurrentStateType = _controller.BossSkill2State;
     }
 
     public override TaskStatus OnUpdate()
@@ -90,6 +90,6 @@ public class BossSkill2 : Action
         _isAttackReady = false;
         _attackRangeCirclePos = null;
         _controller.UpdateIdle();
-        //_controller.AttackType = GolemAttackType.NormalAttack;
+        _controller.CurrentStateType = _controller.Base_Attackstate;
     }
 }
