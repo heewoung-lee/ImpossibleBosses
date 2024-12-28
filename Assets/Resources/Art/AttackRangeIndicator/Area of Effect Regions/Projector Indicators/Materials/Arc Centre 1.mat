@@ -75,7 +75,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Angle: 0.75
-    - _Arc: 0.6111111
+    - _Arc: 0.9444444
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DecalMeshBiasType: 0
@@ -84,7 +84,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DrawOrder: 0
     - _DstBlend: 10
-    - _FillProgress: 0.8
+    - _FillProgress: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -101,8 +101,21 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.5921569, g: 0.60784316, b: 0.61960787, a: 1}
+    - _Color: {r: 0.9796468, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 0.9058824, g: 0.34509805, b: 0.454902, a: 1}
+    - _FillColor: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!114 &4850649756031359613
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9

@@ -80,8 +80,9 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         base.OnDisableInit();
         if (DragImageIcon.gameObject.activeSelf)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
         {
-            RevertImage();
+            DragImageIcon.gameObject.SetActive(false);
         }
+        RevertImage();
     }
     protected void RevertImage()
     {
@@ -89,6 +90,8 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _isDragging = false;
         DragImageIcon.gameObject.SetActive(false);
     }
+
+
     public void CloseDescription(PointerEventData eventdata)
     {
         CloseDescription();
