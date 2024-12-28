@@ -15,8 +15,8 @@ public class BossSkill2 : Action
     public float Attack_Range = 0f;
     public int Radius_Step = 0;
     public int Angle_Step = 0;
-    public SharedArcRegionProjector _attackIndicator = null;
 
+    private SharedArcRegionProjector _attackIndicator = null;
     private float _elapsedTime = 0f;
     private float _charging = 0f;
     private float _animLength = 0f;
@@ -52,7 +52,7 @@ public class BossSkill2 : Action
 
     public override TaskStatus OnUpdate()
     {
-        _controller.UpdateAttack();
+
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
 
@@ -89,7 +89,5 @@ public class BossSkill2 : Action
         _animLength = 0f;
         _isAttackReady = false;
         _attackRangeCirclePos = null;
-        _controller.UpdateIdle();
-        _controller.CurrentStateType = _controller.Base_Attackstate;
     }
 }

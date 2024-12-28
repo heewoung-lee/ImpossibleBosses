@@ -25,7 +25,7 @@ public class BossAttack : Action
     {
         base.OnStart();
         _controller = Owner.GetComponent<BossGolemController>();
-        _controller.CurrentStateType = _controller.Base_Attackstate;
+        _controller.UpdateAttack();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();
@@ -42,7 +42,6 @@ public class BossAttack : Action
 
     public override TaskStatus OnUpdate()
     {
-        _controller.UpdateAttack();
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
 
@@ -66,7 +65,6 @@ public class BossAttack : Action
         }
         if (_elapsedTime >= _animLength)
         {
-            _controller.UpdateIdle();
             return TaskStatus.Success;
         }
         return TaskStatus.Running;

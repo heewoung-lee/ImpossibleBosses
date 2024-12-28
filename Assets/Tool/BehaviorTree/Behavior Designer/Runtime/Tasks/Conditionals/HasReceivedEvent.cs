@@ -35,7 +35,12 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            return eventReceived ? TaskStatus.Success : TaskStatus.Failure;
+            if (eventReceived)
+            {
+                Owner.EnableBehavior();
+                return TaskStatus.Success;
+            }
+            return TaskStatus.Failure;
         }
 
         public override void OnEnd()

@@ -41,6 +41,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
+            _controller.UpdateMove();
             _hasArrived.Value = HasArrived() && TargetInSight.IsTargetInSight(_controller.GetComponent<IAttackRange>(), m_Target.Value.transform, 0.2f);
             if (_hasArrived.Value)
             {
@@ -48,7 +49,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
             SetDestination(Target());
-            _controller.UpdateMove();
             return TaskStatus.Running;
         }
 

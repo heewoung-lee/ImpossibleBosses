@@ -73,28 +73,21 @@ public class BossGolemController : BossController
     {
         if (CurrentStateType == Base_DieState)
             return;
+
+        CurrentStateType = Base_Attackstate;
     }
 
     public override void UpdateIdle()
     {
-        if (CurrentStateType == Base_DieState)
-            return;
-
-        if (CurrentStateType != Base_IDleState)
-        {
-            CurrentStateType = Base_IDleState;
-        }
     }
 
     public override void UpdateMove()
     {
-        if (CurrentStateType == Base_DieState)
-            return;
-
-        if (CurrentStateType != Base_MoveState)
+        if(CurrentStateType != Base_MoveState)
         {
             CurrentStateType = Base_MoveState;
         }
+
     }
 
     public override void UpdateDie()

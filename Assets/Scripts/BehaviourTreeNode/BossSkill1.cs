@@ -81,7 +81,5 @@ public class BossSkill1 : Action
         base.OnEnd();
         _elapsedTime = 0;
         _controller.Anim.speed = 1f;
-        _controller.SetDefalutTransition_Value();
-        _controller.UpdateIdle();
     }
 }

@@ -3,11 +3,13 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using static BehaviorDesigner.Runtime.BehaviorManager;
 
 public class BossDead : Action
 {
     BaseController _ownerController;
     public SharedArcRegionProjector _projector;
+
     public override void OnStart()
     {
         base.OnStart();
