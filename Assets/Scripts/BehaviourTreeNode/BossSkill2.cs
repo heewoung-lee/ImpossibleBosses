@@ -16,7 +16,7 @@ public class BossSkill2 : Action
     public int Radius_Step = 0;
     public int Angle_Step = 0;
 
-    private SharedArcRegionProjector _attackIndicator = null;
+    public SharedProjector _attackIndicator = null;
     private float _elapsedTime = 0f;
     private float _charging = 0f;
     private float _animLength = 0f;
@@ -31,7 +31,7 @@ public class BossSkill2 : Action
         _controller = Owner.GetComponent<BossGolemController>();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
-        _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();
+        _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
         if (Attack_Range <= 0)
         {
             _controller.TryGetComponent(out BossStats stats);

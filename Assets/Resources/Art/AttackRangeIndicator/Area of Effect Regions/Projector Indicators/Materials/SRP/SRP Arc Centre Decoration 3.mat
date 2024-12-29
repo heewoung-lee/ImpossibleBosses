@@ -75,7 +75,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Angle: 0.75
-    - _Arc: 0.31666666
+    - _Arc: 0.9166667
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DecalMeshBiasType: 0
@@ -84,7 +84,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DrawOrder: 0
     - _DstBlend: 10
-    - _FillProgress: 1
+    - _FillProgress: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

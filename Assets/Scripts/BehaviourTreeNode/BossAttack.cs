@@ -13,7 +13,7 @@ public class BossAttack : Action
     private float _elapsedTime = 0f;
     private float _animLength = 0f;
     private float _charging = 0f;
-    public SharedArcRegionProjector _attackIndicator = null;
+    public SharedProjector _attackIndicator = null;
     private bool _isAttackReady = false;
     private List<Vector3> _attackRangeParticlePos;
     private BossStats _stats;
@@ -28,7 +28,7 @@ public class BossAttack : Action
         _controller.UpdateAttack();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
-        _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossAttack_Indicator").GetComponent<ArcRegionProjector>();
+        _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
         _attackIndicator.Value.SetValue(_stats.ViewDistance, _stats.ViewAngle);
         _attackIndicator.Value.transform.SetParent(_controller.transform, false);
         _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;

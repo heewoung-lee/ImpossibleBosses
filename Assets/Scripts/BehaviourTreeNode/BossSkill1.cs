@@ -42,7 +42,7 @@ public class BossSkill1 : Action
             _tickCounter = 0;
             foreach(Collider target in allTargets)
             {
-                ArcRegionProjector projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/BossSkill1_Indicator").GetComponent<ArcRegionProjector>();
+                Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
                 projector.transform.SetParent(Managers.VFX_Manager.VFX_Root,false);
                 projector.transform.position = target.transform.position;
                 projector.SetValue(2, 360);
@@ -58,7 +58,7 @@ public class BossSkill1 : Action
         return TaskStatus.Running;
     }
 
-    private IEnumerator startProjector(ArcRegionProjector projector)
+    private IEnumerator startProjector(Indicator_Controller projector)
     {
         float elaspedTime = 0f;
         GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");

@@ -50,11 +50,6 @@ public class BossGolemController : BossController
     private BossSkill1State _bossSkill1State;
     private BossSkill2State _bossSkill2State;
 
-    private void Update()
-    {
-        Debug.Log(CurrentStateType);
-    }
-
     protected override void AwakeInit()
     {
         _base_Attackstate = new AttackState(UpdateAttack);

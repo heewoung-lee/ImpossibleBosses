@@ -2,10 +2,10 @@ using BehaviorDesigner.Runtime;
 using DTT.AreaOfEffectRegions;
 
 [System.Serializable]
-public class SharedArcRegionProjector : SharedVariable<ArcRegionProjector>
+public class SharedProjector : SharedVariable<Indicator_Controller>
 {
-    public static implicit operator SharedArcRegionProjector(ArcRegionProjector value)
+    public static implicit operator SharedProjector(Indicator_Controller value)
     {
-        return new SharedArcRegionProjector { Value = value };
+        return new SharedProjector { Value = value };
     }
 }

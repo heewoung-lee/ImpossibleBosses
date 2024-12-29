@@ -8,7 +8,7 @@ using static BehaviorDesigner.Runtime.BehaviorManager;
 public class BossDead : Action
 {
     BaseController _ownerController;
-    public SharedArcRegionProjector _projector;
+    public SharedProjector _projector;
 
     public override void OnStart()
     {

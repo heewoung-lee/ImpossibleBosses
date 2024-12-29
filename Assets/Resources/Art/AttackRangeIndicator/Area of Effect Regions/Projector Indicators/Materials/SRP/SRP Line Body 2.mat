@@ -84,7 +84,7 @@ Material:
     - _DrawOrder: 0
     - _DstBlend: 10
     - _FadeAmount: 0.6
-    - _FillProgress: 1
+    - _FillProgress: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
