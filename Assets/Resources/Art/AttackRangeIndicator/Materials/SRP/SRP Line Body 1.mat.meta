@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1d66278ba55aa5f4eb822613da178d4d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/SRP/SRP Line Body
+    1.mat
+  uploadId: 552211

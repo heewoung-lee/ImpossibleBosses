@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 11465729e229380479b26a72da3a1a3f
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/DTT/Area of Effect Regions/Runtime/Projector Indicators/Shaders/SRP/SRP
+    Basic Projector.shadergraph
+  uploadId: 552211

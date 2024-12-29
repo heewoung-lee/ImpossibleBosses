@@ -32,7 +32,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 float distance = (transform.position - collider.transform.position).sqrMagnitude;
                 findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
                 if (findClosePlayer == distance)
+                {
                     m_Target = collider.transform.gameObject;
+                    break;
+                }
             }
             SetDestination(Target());
         }

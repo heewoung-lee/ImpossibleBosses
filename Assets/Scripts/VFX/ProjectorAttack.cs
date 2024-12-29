@@ -1,14 +1,13 @@
-using DTT.AreaOfEffectRegions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectorAttack : MonoBehaviour, IAttackRange
 {
-    ArcRegionProjector projector;
+    Indicator_Controller projector;
     private void Start()
     {
-        projector = GetComponent<ArcRegionProjector>();
+        projector = GetComponent<Indicator_Controller>();
     }
 
     public float ViewAngle => projector.Angle;

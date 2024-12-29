@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a171c25c45232a940b1c3aacea1bd5ea
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/Line Body 1.mat
+  uploadId: 552211

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 25dda185fdac0604bafc34fddbc3c51e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/SRP/SRP Arc Centre
+    Decoration 1.mat
+  uploadId: 552211

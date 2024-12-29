@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4b1a2eaffcbc76d49872ab2f2431c328
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/Arc Left 1.mat
+  uploadId: 552211

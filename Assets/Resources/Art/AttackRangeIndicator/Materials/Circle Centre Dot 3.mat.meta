@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7987fd9558161f74284288c9f223cc18
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/Circle Centre Dot
+    3.mat
+  uploadId: 552211

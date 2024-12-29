@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a7a3b1ce7a0669349bd596fcbe5b1bf1
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/DTT/Area of Effect Regions/Runtime/Projector Indicators/Shaders/VerticalFadeFillProjector.shader
+  uploadId: 552211

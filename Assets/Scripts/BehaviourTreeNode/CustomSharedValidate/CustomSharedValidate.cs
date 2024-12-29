@@ -1,5 +1,4 @@
 using BehaviorDesigner.Runtime;
-using DTT.AreaOfEffectRegions;
 
 [System.Serializable]
 public class SharedProjector : SharedVariable<Indicator_Controller>

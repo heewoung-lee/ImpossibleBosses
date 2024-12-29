@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: eb0cdc80d4eeba140af7cae50b7a9a78
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/DTT/Area of Effect Regions/Runtime/Projector Indicators/Shaders/BasicProjector.shader
+  uploadId: 552211

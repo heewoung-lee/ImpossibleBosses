@@ -1,11 +1,6 @@
-using DTT.Utils.Extensions;
-using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public abstract class UI_ItemComponent_Inventory : UI_ItemComponent

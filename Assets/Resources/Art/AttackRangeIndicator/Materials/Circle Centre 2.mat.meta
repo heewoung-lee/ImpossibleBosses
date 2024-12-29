@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 88f0f48ae839d5c4e991f5797f7f7b88
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221125
+  packageName: Skill & Attack Indicators
+  packageVersion: 1.4.0
+  assetPath: Assets/Resources/Art/AttackRangeIndicator/Materials/Circle Centre 2.mat
+  uploadId: 552211
