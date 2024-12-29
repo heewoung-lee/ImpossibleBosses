@@ -50,8 +50,9 @@ public class UI_Button : UI_Scene
         _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         _scoreButton.onClick.AddListener(() =>
         {
-            TestIteminInventort();
-            TestPlayerDamaged();
+            //TestIteminInventort();
+            //TestPlayerDamaged();
+            TestGenerateBossSkill1();
         });
 
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>
@@ -71,6 +72,12 @@ public class UI_Button : UI_Scene
         _playerStats.OnAttacked(_playerStats,5);
     }
 
+    public void TestGenerateBossSkill1()
+    {
+        GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        stone.transform.position = Managers.GameManagerEx.Player.transform.position + Vector3.up * 5f;
+    }
 
     public void TestIteminInventort()
     {
