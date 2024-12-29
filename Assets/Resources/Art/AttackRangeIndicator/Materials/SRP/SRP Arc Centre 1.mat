@@ -88,7 +88,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Angle: 0.75
-    - _Arc: 0.6666667
+    - _Arc: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DecalMeshBiasType: 0
@@ -97,7 +97,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DrawOrder: 0
     - _DstBlend: 10
-    - _FillProgress: 1
+    - _FillProgress: 0.39
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -114,8 +114,8 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+    - _Color: {r: 1, g: 0.9102428, b: 0, a: 0.5019608}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 0.90588236, g: 0.34509805, b: 0.45490196, a: 1}
+    - _FillColor: {r: 1, g: 0.27307755, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
