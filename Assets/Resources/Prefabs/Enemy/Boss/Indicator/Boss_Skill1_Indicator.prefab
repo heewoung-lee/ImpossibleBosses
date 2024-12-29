@@ -54,7 +54,7 @@ MonoBehaviour:
   m_DecalLayerMask: 2
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 10.65, y: 10.65, z: 10}
+  m_Size: {x: 10, y: 10, z: 10}
   m_FadeFactor: 1
 --- !u!1 &2045787460491325318
 GameObject:
@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d5d4458b74ab6499cfeff95acef22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 10.65
+  _radius: 5
   _angle: 0
-  _arc: 360
-  _fillProgress: 0.826
+  _arc: 30
+  _fillProgress: 0
   _depth: 10
 --- !u!114 &1873168904585742388
 MonoBehaviour:
@@ -187,5 +187,5 @@ MonoBehaviour:
   m_DecalLayerMask: 2
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 10.65, y: 10.65, z: 10}
+  m_Size: {x: 10, y: 10, z: 10}
   m_FadeFactor: 1

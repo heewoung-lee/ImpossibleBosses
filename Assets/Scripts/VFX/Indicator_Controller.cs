@@ -104,8 +104,8 @@ public class Indicator_Controller : MonoBehaviour
             return;
         
         Vector3 currentSize;
-        currentSize.x = _radius;
-        currentSize.y = _radius;
+        currentSize.x = _radius*2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+        currentSize.y = _radius*2;
         currentSize.z = Depth;
 
         decalProjector.size = currentSize;

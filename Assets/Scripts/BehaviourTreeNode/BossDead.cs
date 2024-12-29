@@ -1,14 +1,10 @@
-using BaseStates;
-using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using static BehaviorDesigner.Runtime.BehaviorManager;
 
 public class BossDead : Action
 {
     BaseController _ownerController;
-    public SharedProjector _projector;
+    [SerializeField]private SharedProjector _projector;
 
     public override void OnStart()
     {

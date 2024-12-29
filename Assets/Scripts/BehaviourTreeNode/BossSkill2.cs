@@ -12,7 +12,7 @@ public class BossSkill2 : Action
     public int Radius_Step = 0;
     public int Angle_Step = 0;
 
-    public SharedProjector _attackIndicator = null;
+    public SharedProjector _attackIndicator;
     private float _elapsedTime = 0f;
     private float _charging = 0f;
     private float _animLength = 0f;
@@ -24,6 +24,7 @@ public class BossSkill2 : Action
     public override void OnStart()
     {
         base.OnStart();
+
         _controller = Owner.GetComponent<BossGolemController>();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
