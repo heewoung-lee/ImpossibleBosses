@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 6ce92c6edcc2df647be90d324133f9ed
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/Materials/marker.mat
+  uploadId: 594162

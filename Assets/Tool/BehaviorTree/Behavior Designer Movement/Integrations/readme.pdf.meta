@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 77743219b71864543a56cd23646837b5
 DefaultImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/Integrations/readme.pdf
+  uploadId: 594162

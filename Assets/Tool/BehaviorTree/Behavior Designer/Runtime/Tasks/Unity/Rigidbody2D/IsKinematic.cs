@@ -27,8 +27,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
                 Debug.LogWarning("Rigidbody2D is null");
                 return TaskStatus.Failure;
             }
-
+#if UNITY_6000_0_OR_NEWER
+            return rigidbody2D.bodyType == RigidbodyType2D.Kinematic ? TaskStatus.Success : TaskStatus.Failure;
+#else
             return rigidbody2D.isKinematic ? TaskStatus.Success : TaskStatus.Failure;
+#endif
         }
 
         public override void OnReset()

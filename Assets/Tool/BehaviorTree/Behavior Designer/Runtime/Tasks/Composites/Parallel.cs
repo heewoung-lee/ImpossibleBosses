@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         private int currentChildIndex;
         // The task status of every child task.
         private TaskStatus[] executionStatus;
-        
+
         public override void OnAwake()
         {
             // Create a new task status array that will hold the execution status of all of the children tasks.

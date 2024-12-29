@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: dbcdee902c373ec4cbb9e693617708b9
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/Materials/ground.mat
+  uploadId: 594162

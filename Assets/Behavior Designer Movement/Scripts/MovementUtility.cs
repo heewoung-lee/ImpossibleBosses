@@ -44,21 +44,25 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public static GameObject WithinSight2D(Transform transform, Vector3 positionOffset, float fieldOfViewAngle, float viewDistance, Collider2D[] overlapColliders, LayerMask objectLayerMask, Vector3 targetOffset, float angleOffset2D, LayerMask ignoreLayerMask, bool drawDebugRay)
         {
             GameObject objectFound = null;
-            var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, viewDistance, overlapColliders, objectLayerMask);
-            if (hitCount > 0) {
+
+            overlapColliders = Physics2D.OverlapCircleAll(transform.position, viewDistance, objectLayerMask);
+            if(overlapColliders.Length > 0)
+            {
 #if UNITY_EDITOR
-                if (hitCount == overlapColliders.Length) {
-                    Debug.LogWarning("Warning: The hit count is equal to the max collider array size. This will cause objects to be missed. Consider increasing the max collision count size.");
-                }
 #endif
                 float minAngle = Mathf.Infinity;
-                for (int i = 0; i < hitCount; ++i) {
+
+
+                foreach(Collider2D overlapCollider in overlapColliders)
+                {
                     float angle;
                     GameObject obj;
                     // Call the 2D WithinSight function to determine if this specific object is within sight
-                    if ((obj = WithinSight(transform, positionOffset, fieldOfViewAngle, viewDistance, overlapColliders[i].gameObject, targetOffset, true, angleOffset2D, out angle, ignoreLayerMask, false, HumanBodyBones.Hips, drawDebugRay)) != null) {
+                    if ((obj = WithinSight(transform, positionOffset, fieldOfViewAngle, viewDistance, overlapCollider.gameObject, targetOffset, true, angleOffset2D, out angle, ignoreLayerMask, false, HumanBodyBones.Hips, drawDebugRay)) != null)
+                    {
                         // This object is within sight. Set it to the objectFound GameObject if the angle is less than any of the other objects
-                        if (angle < minAngle) {
+                        if (angle < minAngle)
+                        {
                             minAngle = angle;
                             objectFound = obj;
                         }
@@ -203,21 +207,23 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public static GameObject WithinHearingRange2D(Transform transform, Vector3 positionOffset, float audibilityThreshold, float hearingRadius, Collider2D[] overlapColliders, LayerMask objectLayerMask)
         {
             GameObject objectHeard = null;
-            var hitCount = Physics2D.OverlapCircleNonAlloc(transform.TransformPoint(positionOffset), hearingRadius, overlapColliders, objectLayerMask);
-            if (hitCount > 0) {
+
+            overlapColliders = Physics2D.OverlapCircleAll(transform.TransformPoint(positionOffset), hearingRadius, objectLayerMask);
+            if(overlapColliders.Length > 0)
+            {
 #if UNITY_EDITOR
-                if (hitCount == overlapColliders.Length) {
-                    Debug.LogWarning("Warning: The hit count is equal to the max collider array size. This will cause objects to be missed. Consider increasing the max collision count size.");
-                }
 #endif
                 float maxAudibility = 0;
-                for (int i = 0; i < hitCount; ++i) {
+
+                foreach(Collider2D overlapCollider in overlapColliders)
+                {
                     float audibility = 0;
                     GameObject obj;
-                    // Call the WithinHearingRange function to determine if this specific object is within hearing range
-                    if ((obj = WithinHearingRange(transform, positionOffset, audibilityThreshold, overlapColliders[i].gameObject, ref audibility)) != null) {
+                    if ((obj = WithinHearingRange(transform, positionOffset, audibilityThreshold, overlapCollider.gameObject, ref audibility)) != null)
+                    {
                         // This object is within hearing range. Set it to the objectHeard GameObject if the audibility is less than any of the other objects
-                        if (audibility > maxAudibility) {
+                        if (audibility > maxAudibility)
+                        {
                             maxAudibility = audibility;
                             objectHeard = obj;
                         }

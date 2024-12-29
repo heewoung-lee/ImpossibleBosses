@@ -1,8 +1,4 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
@@ -18,25 +14,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("If target is null then use the target position")]
         [UnityEngine.Serialization.FormerlySerializedAs("targetPosition")]
         public SharedVector3 m_TargetPosition;
-        private BaseStats _stats;
-        public SharedBool _hasArrived;
-        public SharedBool _ischecktimeOver;
 
-        public MoveableController controller;
-        public System.Action moveEvent;
         public override void OnStart()
         {
             base.OnStart();
-            controller = Owner.GetComponent<MoveableController>();
-            Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, 10000f, LayerMask.GetMask("Player"));
-            float findClosePlayer = float.MaxValue; 
-            foreach (Collider collider in checkedPlayer)
-            {
-                float distance = (transform.position - collider.transform.position).sqrMagnitude;
-                findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
-                if (findClosePlayer == distance)
-                    m_Target = collider.transform.gameObject;
-            }
 
             SetDestination(Target());
         }
@@ -45,14 +26,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
-            if (_hasArrived.Value = HasArrived())
+            if (HasArrived()) {
                 return TaskStatus.Success;
+            }
 
             SetDestination(Target());
-            if(controller.CurrentStateType != controller.Base_MoveState)
-            {
-                moveEvent?.Invoke();
-            }
+
             return TaskStatus.Running;
         }
         
@@ -70,14 +49,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             base.OnReset();
             m_Target = null;
             m_TargetPosition = Vector3.zero;
-            _hasArrived.Value = false;
-        }
-
-
-        public override void OnEnd()
-        {
-            base.OnEnd();
-            m_Target.Value = null;
         }
     }
 }

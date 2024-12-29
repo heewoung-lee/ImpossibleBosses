@@ -31,3 +31,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 15277
+  packageName: Behavior Designer - Behavior Trees for Everyone
+  packageVersion: 1.7.11
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer/Editor/BehaviorDesigner.Editor.dll
+  uploadId: 702801

@@ -33,3 +33,10 @@ TextureImporter:
   textureType: 2
   buildTargetSettings: []
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 15277
+  packageName: Behavior Designer - Behavior Trees for Everyone
+  packageVersion: 1.7.11
+  assetPath: Assets/Tool/BehaviorTree/Gizmos/Behavior Designer Hier Icon.png
+  uploadId: 702801

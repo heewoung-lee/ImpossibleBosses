@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: d49c5804b31faad4ca706eb999c87559
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/Animations/MarkerFlee.anim
+  uploadId: 594162

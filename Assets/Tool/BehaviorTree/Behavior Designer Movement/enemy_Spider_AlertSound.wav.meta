@@ -10,3 +10,10 @@ AudioImporter:
   useHardware: 0
   loopable: 0
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/enemy_Spider_AlertSound.wav
+  uploadId: 594162

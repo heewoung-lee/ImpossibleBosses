@@ -115,6 +115,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             return remainingDistance <= m_ArriveDistance.Value;
         }
+
         /// <summary>
         /// Stop pathfinding.
         /// </summary>

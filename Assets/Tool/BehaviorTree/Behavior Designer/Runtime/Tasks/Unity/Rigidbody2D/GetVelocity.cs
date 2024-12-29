@@ -1,3 +1,4 @@
+#if !UNITY_6000_0_OR_NEWER
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
@@ -31,7 +32,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
                 return TaskStatus.Failure;
             }
 
-            storeValue.Value = rigidbody2D.linearVelocity;
+            storeValue.Value = rigidbody2D.velocity;
 
             return TaskStatus.Success;
         }
@@ -43,3 +44,4 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
         }
     }
 }
+#endif

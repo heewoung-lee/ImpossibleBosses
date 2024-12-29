@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 79d071115d1ae784b83e51b648ec393c
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 16853
+  packageName: Behavior Designer - Movement Pack
+  packageVersion: 1.6.1
+  assetPath: Assets/Tool/BehaviorTree/Behavior Designer Movement/Animations/MarkerEvade.anim
+  uploadId: 594162

@@ -11,7 +11,6 @@ public class Indicator_Controller : MonoBehaviour
     DecalProjector _decal_CircleBorder_projector;
     GameObject _circle;
     GameObject _circleBoader;
-    float timevalue = 0f;
 
     [Header("Properties")]
     /// <summary>

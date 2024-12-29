@@ -96,12 +96,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     if (m_Overlap2DColliders == null) {
                         m_Overlap2DColliders = new Collider2D[m_MaxCollisionCount];
                     }
-                    var count = 
-                        Physics2D.OverlapCircleNonAlloc(transform.position, m_Magnitude.Value, m_Overlap2DColliders, m_TargetLayerMask.Value);
-                    for (int i = 0; i < count; ++i) {
-                        // All it takes is one object to be within distance.
-                        if (IsWithinDistance(m_Overlap2DColliders[i].gameObject)) {
-                            m_ReturnedObject.Value = m_Overlap2DColliders[i].gameObject;
+
+
+                    m_Overlap2DColliders = Physics2D.OverlapCircleAll(transform.position, m_Magnitude.Value, m_TargetLayerMask.Value);
+                    foreach(Collider2D Overlap2DCollider in m_Overlap2DColliders)
+                    {
+                        if (IsWithinDistance(Overlap2DCollider.gameObject))
+                        {
+                            m_ReturnedObject.Value = Overlap2DCollider.gameObject;
                             break;
                         }
                     }
