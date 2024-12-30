@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class BossSkill1 : Action
 {
-    public SharedInt Damage;
+    private const float MAX_HEIGHT = 3f; 
 
+    public SharedInt Damage;
+    
     private BossGolemController _controller;
     private BossStats _stats;
    
@@ -17,6 +19,7 @@ public class BossSkill1 : Action
     private bool _isAttackReady = false;
     private Collider[] allTargets;
 
+    private float _attackDelayTime = 1f;
 
     public override void OnStart()
     {
@@ -33,7 +36,7 @@ public class BossSkill1 : Action
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _tickCounter++;
 
-        if (_tickCounter >= 100)
+        if (_tickCounter >= 30)
         {
             _tickCounter = 0;
             foreach(Collider targetPlayer in allTargets)
@@ -43,7 +46,7 @@ public class BossSkill1 : Action
                 projector.transform.position = targetPlayer.transform.position;
                 projector.SetValue(2, 360);
                 projector.FillProgress = 0;
-                StartCoroutine(startProjector(projector));
+                StartCoroutine(startProjector(projector, targetPlayer));
             }
         }
         _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, 0.8f);
@@ -54,23 +57,65 @@ public class BossSkill1 : Action
         return TaskStatus.Running;
     }
 
-    private IEnumerator startProjector(Indicator_Controller projector)
+    private IEnumerator startProjector(Indicator_Controller projector, Collider targetPlayer)
     {
         float elaspedTime = 0f;
         GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
         stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
-        stone.transform.position = projector.transform.position + Vector3.up*5f;
-        while (projector.FillProgress < 1)
+        stone.transform.position = Owner.transform.position+ Vector3.up * Owner.GetComponent<Collider>().bounds.max.y;
+        stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
+        StartCoroutine(ThrowStoneParabola(stone.transform, targetPlayer, _attackDelayTime));
+
+        while (elaspedTime < _attackDelayTime)
         {
             elaspedTime += Time.deltaTime;
-            projector.FillProgress = elaspedTime;
+            float fillRatio = Mathf.Clamp01(elaspedTime / _attackDelayTime);
+
+            // 인디케이터 채우기
+            projector.FillProgress = fillRatio;
             projector.UpdateProjectors();
+
             yield return null;
         }
         TargetInSight.AttackTargetInCircle(projector.GetComponent<ProjectorAttack>(), projector.Radius, Damage.Value);
         Managers.ResourceManager.DestroyObject(projector.gameObject);
-        Managers.ResourceManager.DestroyObject(stone,2f);
     }
+
+    private IEnumerator ThrowStoneParabola(Transform projectile, Collider targetPlayer, float duration)
+    {
+        Vector3 startPoint = projectile.transform.position;
+        Vector3 targetPoint = targetPlayer.transform.position;
+
+        // 거리 기반 비행 시간 계산
+        float distance = Vector3.Distance(startPoint, targetPoint);
+        //float duration = distance/ flightSpeed;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // t: 진행 비율 (0~1)
+            float t = elapsedTime / duration;
+
+            // XZ 위치 보간
+            Vector3 currentXZ = Vector3.Lerp(startPoint, targetPoint, t);
+
+            // Y 값은 포물선 계산
+            float currentY = Mathf.Lerp(startPoint.y, targetPoint.y, t) +
+                             MAX_HEIGHT * Mathf.Sin(Mathf.PI * t);
+
+            // 최종 위치 설정
+            projectile.position = new Vector3(currentXZ.x, currentY, currentXZ.z);
+
+            yield return null;
+        }
+
+        // 포물선 이동 완료 후 파괴
+        Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
+    }
+
+
 
     public override void OnEnd()
     {
