@@ -85,7 +85,7 @@ public class UI_Player_Inventory : UI_Popup
         _ui_inventory_Raycaster = GetComponent<GraphicRaycaster>();
         _eventSystem = FindAnyObjectByType<EventSystem>();
 
-        _lootitemStorage = Managers.LootItemManager.LootingItemRoot;
+        _lootitemStorage = Managers.LootItemManager.TemporaryInventory;
     }
     protected override void StartInit()
     {

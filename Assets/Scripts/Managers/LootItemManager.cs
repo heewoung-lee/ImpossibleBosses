@@ -18,17 +18,17 @@ public class LootItemManager
     }
 
 
-    private GameObject _lootingItemRoot;
+    private GameObject _temporaryInventory;
 
-    public Transform LootingItemRoot
+    public Transform TemporaryInventory
     {
         get
         {
-            if(_lootingItemRoot == null)
+            if(_temporaryInventory == null)
             {
-                _lootingItemRoot = new GameObject("@LootItemRoot");
+                _temporaryInventory = new GameObject("@LootItemRoot");
             }
-            return _lootingItemRoot.transform;  
+            return _temporaryInventory.transform;  
         }
     }
 }

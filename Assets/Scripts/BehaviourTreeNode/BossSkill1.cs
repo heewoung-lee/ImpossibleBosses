@@ -33,17 +33,17 @@ public class BossSkill1 : Action
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _tickCounter++;
 
-        if (_tickCounter >= 20)
+        if (_tickCounter >= 100)
         {
             _tickCounter = 0;
-            foreach(Collider target in allTargets)
+            foreach(Collider targetPlayer in allTargets)
             {
                 Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
                 projector.transform.SetParent(Managers.VFX_Manager.VFX_Root,false);
-                projector.transform.position = target.transform.position;
+                projector.transform.position = targetPlayer.transform.position;
                 projector.SetValue(2, 360);
                 projector.FillProgress = 0;
-                projector.StartCoroutine(startProjector(projector));
+                StartCoroutine(startProjector(projector));
             }
         }
         _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, 0.8f);

@@ -50,9 +50,9 @@ public class UI_Button : UI_Scene
         _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         _scoreButton.onClick.AddListener(() =>
         {
-            //TestIteminInventort();
+            TestIteminInventort();
             //TestPlayerDamaged();
-            TestGenerateBossSkill1();
+            //TestGenerateBossSkill1();
         });
 
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>

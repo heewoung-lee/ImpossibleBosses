@@ -127,7 +127,7 @@ public class LootItem : MonoBehaviour,IInteraction
         }
         else//인벤토리가 꺼져있으면 LootingItem에 모아둔다음 열리면 집어넣는다.
         {
-            inventory_item.transform.SetParent(Managers.LootItemManager.LootingItemRoot);
+            inventory_item.transform.SetParent(Managers.LootItemManager.TemporaryInventory);
         }
         Managers.ResourceManager.DestroyObject(gameObject);
         player.GetComponent<Module_Player_Interaction>().DisEnable_Icon_UI();//상호작용 아이콘 제거
