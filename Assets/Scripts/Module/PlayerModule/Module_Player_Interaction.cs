@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-public class Module_Player_Interaction : MonoBehaviour
+/// <summary>
+/// 기존에는 데미지를 계산하는 콜라이어와 같은 위치에 배치를 했지만,
+/// 데미지를 계산하는 콜라이어와 겹쳐서 2배로 들어가는 문제가 발생했고
+/// 오브젝트를 나눔
+/// </summary>
+public class Module_Player_Interaction : MonoBehaviour 
 {
     private const float Y_POSITION_OFFSET = 0.2f;
 

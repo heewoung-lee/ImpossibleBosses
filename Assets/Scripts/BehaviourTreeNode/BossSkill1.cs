@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class BossSkill1 : Action
 {
-    private const float MAX_HEIGHT = 3f; 
+    private const float MAX_HEIGHT = 3f;
+    private const float START_SKILL1_ANIM_SPEED = 0.8f;
 
     public SharedInt Damage;
-    
+
     private BossGolemController _controller;
     private BossStats _stats;
-   
+
     private float _elapsedTime = 0f;
     private int _tickCounter = 0;
     private float _animLength = 0f;
@@ -27,7 +28,8 @@ public class BossSkill1 : Action
         _controller = Owner.GetComponent<BossGolemController>();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
-        allTargets = Physics.OverlapSphere(Owner.transform.position,float.MaxValue,_stats.TarGetLayer);
+        allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
+
         _controller.CurrentStateType = _controller.BossSkill1State;
     }
 
@@ -36,20 +38,15 @@ public class BossSkill1 : Action
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _tickCounter++;
 
-        if (_tickCounter >= 30)
+        if (_tickCounter >= 20)
         {
             _tickCounter = 0;
-            foreach(Collider targetPlayer in allTargets)
+            foreach (Collider targetPlayer in allTargets)
             {
-                Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
-                projector.transform.SetParent(Managers.VFX_Manager.VFX_Root,false);
-                projector.transform.position = targetPlayer.transform.position;
-                projector.SetValue(2, 360);
-                projector.FillProgress = 0;
-                StartCoroutine(startProjector(projector, targetPlayer));
+                SpawnProjector(targetPlayer);
             }
         }
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, 0.8f);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, START_SKILL1_ANIM_SPEED);
         if (_isAttackReady)
         {
             return TaskStatus.Success;
@@ -57,15 +54,25 @@ public class BossSkill1 : Action
         return TaskStatus.Running;
     }
 
+
+
+    private void SpawnProjector(Collider targetPlayer)
+    {
+        Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
+        projector.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        projector.transform.position = targetPlayer.transform.position;
+        projector.SetValue(2, 360);
+        projector.FillProgress = 0;
+        StartCoroutine(startProjector(projector, targetPlayer));
+    }
+
+
+
+
     private IEnumerator startProjector(Indicator_Controller projector, Collider targetPlayer)
     {
+        SpawnStone(targetPlayer);
         float elaspedTime = 0f;
-        GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
-        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
-        stone.transform.position = Owner.transform.position+ Vector3.up * Owner.GetComponent<Collider>().bounds.max.y;
-        stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
-        StartCoroutine(ThrowStoneParabola(stone.transform, targetPlayer, _attackDelayTime));
-
         while (elaspedTime < _attackDelayTime)
         {
             elaspedTime += Time.deltaTime;
@@ -81,14 +88,20 @@ public class BossSkill1 : Action
         Managers.ResourceManager.DestroyObject(projector.gameObject);
     }
 
+
+    private void SpawnStone(Collider targetPlayer)
+    {
+        GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        stone.transform.position = Owner.transform.position + Vector3.up * Owner.GetComponent<Collider>().bounds.max.y;
+        stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
+        StartCoroutine(ThrowStoneParabola(stone.transform, targetPlayer, _attackDelayTime));
+    }
+
     private IEnumerator ThrowStoneParabola(Transform projectile, Collider targetPlayer, float duration)
     {
         Vector3 startPoint = projectile.transform.position;
         Vector3 targetPoint = targetPlayer.transform.position;
-
-        // 거리 기반 비행 시간 계산
-        float distance = Vector3.Distance(startPoint, targetPoint);
-        //float duration = distance/ flightSpeed;
 
         float elapsedTime = 0f;
         while (elapsedTime < duration)
@@ -110,7 +123,6 @@ public class BossSkill1 : Action
 
             yield return null;
         }
-
         // 포물선 이동 완료 후 파괴
         Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
     }
