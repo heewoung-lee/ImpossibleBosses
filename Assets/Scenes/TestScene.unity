@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 22120623}
   - component: {fileID: 22120622}
   - component: {fileID: 22120626}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,10 +240,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fce1616d5d20684cb71f0207dd40132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
-  startPoint: {fileID: 0}
-  targetPoint: {fileID: 0}
-  firingAngle: 45
+  startTransform: {fileID: 0}
+  targetTransform: {fileID: 0}
+  projectilePrefab: {fileID: 5850001623458330267, guid: 6a1451c54ff252a49943256f8f8b6e1d, type: 3}
+  maxHeight: 5
+  flightSpeed: 5
 --- !u!1001 &603684000
 PrefabInstance:
   m_ObjectHideFlags: 0

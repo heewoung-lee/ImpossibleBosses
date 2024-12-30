@@ -1,36 +1,73 @@
 using System.Collections;
 using UnityEngine;
 
-public class CanonTest : MonoBehaviour
+public class CanonShooter : MonoBehaviour
 {
-    public Transform Target; // 목표 지점 (플레이어)
-    public Transform startPoint; // 발사 위치
-    public Transform targetPoint; // 목표 위치
-    public float firingAngle = 45.0f; // 발사 각도
+    public Transform startTransform;  // 시작 위치
+    public Transform targetTransform; // 목표 위치
+    public GameObject projectilePrefab; // 발사체 프리팹
+    public float maxHeight = 5f;    // 최대 높이
+    public float flightSpeed = 8f; // 비행 속도 (거리 기반)
 
-    private void Start()
+    private void Update()
     {
-        // 타겟과 시작점을 설정
-        Target = Managers.GameManagerEx.Player.transform;
-        startPoint = transform;
-    }
-
-    void Update()
-    {
-        // 스페이스 키를 눌렀을 때 발사
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            LaunchProjectile();
+            Launch();
         }
     }
 
-    void LaunchProjectile()
+    private void Start()
     {
+        startTransform = transform; 
+    }
+    public void Launch()
+    {
+        targetTransform = Managers.GameManagerEx.Player.transform;
+
         // 발사체 생성
         GameObject projectile = Managers.ResourceManager.InstantiatePrefab("Enemy/Boss/AttackPattren/BossSkill1");
-        projectile.transform.position = Target.position + Vector3.up * 5f;
 
+        projectile.transform.SetParent(Managers.VFX_Manager.VFX_Root);
+        projectile.transform.position += Vector3.up * GetComponent<Collider>().bounds.max.y;
+        projectile.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
 
-        Managers.ResourceManager.DestroyObject(projectile, 2f);
+        // 코루틴 시작
+        StartCoroutine(Parabola(projectile.transform));
+    }
+
+    private IEnumerator Parabola(Transform projectile)
+    {
+        Vector3 startPoint = startTransform.position + projectile.transform.position;
+        Vector3 targetPoint = targetTransform.position;
+
+        // 거리 기반 비행 시간 계산
+        float distance = Vector3.Distance(startPoint, targetPoint);
+        //float duration = distance/ flightSpeed;
+        float duration = 1f;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // t: 진행 비율 (0~1)
+            float t = elapsedTime / duration;
+
+            // XZ 위치 보간
+            Vector3 currentXZ = Vector3.Lerp(startPoint, targetPoint, t);
+
+            // Y 값은 포물선 계산
+            float currentY = Mathf.Lerp(startPoint.y, targetPoint.y, t) +
+                             maxHeight * Mathf.Sin(Mathf.PI * t);
+
+            // 최종 위치 설정
+            projectile.position = new Vector3(currentXZ.x, currentY, currentXZ.z);
+
+            yield return null;
+        }
+
+        // 포물선 이동 완료 후 파괴
+        Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
     }
 }

@@ -24,12 +24,19 @@ public class PoolableTransformResetter : MonoBehaviour
 
         for (int i = 0; i < _originPositions.Count; i++)
         {
-            Transform child = transform.GetChild(i);
-            child.position = _originPositions[i];
-            child.rotation = _originRotations[i];
-            child.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+            Transform childTR = transform.GetChild(i);
+            Rigidbody childRigidbody = childTR.GetComponent<Rigidbody>();
+            childTR.position = _originPositions[i];
+            childTR.rotation = _originRotations[i];
+
+            childRigidbody.isKinematic = false;
+            childRigidbody.useGravity = false;
+            childRigidbody.linearVelocity = Vector3.zero;
+            childRigidbody.angularVelocity = Vector3.zero;
         }
 
+
+        GetComponent<Collider>().enabled = true;
         
     }
 }
