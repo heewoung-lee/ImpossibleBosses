@@ -16,7 +16,7 @@ public class BufferManager:IManagerInitializable
 
     UI_BufferBar _ui_BufferBar;
 
-    UI_BufferBar UI_BufferBar
+    public UI_BufferBar UI_BufferBar
     {
         get
         {

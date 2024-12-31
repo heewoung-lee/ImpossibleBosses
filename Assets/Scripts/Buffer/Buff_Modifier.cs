@@ -1,3 +1,5 @@
+using Microsoft.Unity.VisualStudio.Editor;
+
 public abstract class Buff_Modifier
 {
     public abstract string Buffname { get; }
