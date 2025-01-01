@@ -21,7 +21,7 @@ public class Module_NPC_SHOP_Interaction : MonoBehaviour, IInteraction
         _ui_shop = Managers.UI_Manager.ShowUIPopupUI<UI_Shop>();
         Managers.UI_Manager.ClosePopupUI(_ui_shop);
     }
-    public void Interaction(Transform caller)
+    public void Interaction(Module_Player_Interaction caller)
     {
         Managers.UI_Manager.SwitchPopUpUI(_ui_shop);
     }
@@ -29,4 +29,5 @@ public class Module_NPC_SHOP_Interaction : MonoBehaviour, IInteraction
     {
         Managers.UI_Manager.ClosePopupUI(_ui_shop);
     }
+
 }

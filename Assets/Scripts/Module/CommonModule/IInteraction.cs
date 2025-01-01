@@ -9,7 +9,7 @@ public interface IInteraction
     public string InteractionName { get; }
     public Color InteractionNameColor { get; }
 
-    public void Interaction(Transform caller);
+    public void Interaction(Module_Player_Interaction caller);
 
     public void OutInteraction();
 }

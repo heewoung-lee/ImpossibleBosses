@@ -110,14 +110,14 @@ public class LootItem : MonoBehaviour,IInteraction
         return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
     }
 
-    public void Interaction(Transform caller)
+    public void Interaction(Module_Player_Interaction caller)
     {
         PlayerPickup(caller);
     }
 
-    public void PlayerPickup(Transform player)
+    public void PlayerPickup(Module_Player_Interaction player)
     {
-        PlayerController base_controller = player.GetComponent<PlayerController>();
+        PlayerController base_controller = player.PlayerController;
         base_controller.CurrentStateType = base_controller.PickupState;//픽업 애니메이션 실행
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
         if (_ui_player_Inventory.gameObject.activeSelf)//인벤토리가 열려있다면 바로 들어간다.
@@ -130,7 +130,7 @@ public class LootItem : MonoBehaviour,IInteraction
             inventory_item.transform.SetParent(Managers.LootItemManager.TemporaryInventory);
         }
         Managers.ResourceManager.DestroyObject(gameObject);
-        player.GetComponent<Module_Player_Interaction>().DisEnable_Icon_UI();//상호작용 아이콘 제거
+        player.DisEnable_Icon_UI();//상호작용 아이콘 제거
     }
     public void OutInteraction()
     {

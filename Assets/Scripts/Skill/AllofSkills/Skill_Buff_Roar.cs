@@ -6,6 +6,8 @@ public class Skill_Buff_Roar : Skill_Duration_Buff
 
     public override StatType StatType => StatType.Defence;
 
+    public override float CoolTime => throw new System.NotImplementedException();
+
     protected override string skillName => "절대방어";
 
     public override void ApplyStats(BaseStats stats, float value)

@@ -11,13 +11,16 @@ using UnityEngine.InputSystem;
 public class Module_Player_Interaction : MonoBehaviour 
 {
     private const float Y_POSITION_OFFSET = 0.2f;
-
     private InputAction _interactionInput;
     private UI_ShowInteraction_ICON _IconUI;
     private IInteraction _interactionTarget;
+    private PlayerController _playerController;
+
+    public PlayerController PlayerController => _playerController;
 
     private void Awake()
     {
+        _playerController = GetComponentInParent<PlayerController>();
         _interactionInput = Managers.InputManager.GetInputAction(Define.ControllerType.Player, "Interaction");
         _interactionInput.Enable();
     }
@@ -64,7 +67,7 @@ public class Module_Player_Interaction : MonoBehaviour
     {
         if (_interactionTarget != null)
         {
-            _interactionTarget.Interaction(transform);
+            _interactionTarget.Interaction(this);
         }
     }
 
