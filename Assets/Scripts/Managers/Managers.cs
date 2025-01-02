@@ -42,6 +42,9 @@ public class Managers : MonoBehaviour
     private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
     public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
 
+    private SkillManager _skillManager = new SkillManager();
+    public static SkillManager SkillManager { get => Instance._skillManager; }
+
     private SoundManager _soundManager = new SoundManager();
     public static SoundManager SoundManager { get => Instance._soundManager; }
 
@@ -80,6 +83,7 @@ public class Managers : MonoBehaviour
             _instance._gameManagerEx.Init();
             _instance._itemDataManaer.Init();
             _instance._bufferManager.Init();
+            _instance._skillManager.Init();
         }
 
     }

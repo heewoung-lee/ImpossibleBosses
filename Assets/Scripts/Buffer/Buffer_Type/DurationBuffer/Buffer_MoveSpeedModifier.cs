@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Buffer_MoveSpeedModifier : Duration_Buff
 {
-    public override Sprite IconImage => _iconImage;
+    public override Sprite BuffIconImage => _iconImage;
 
     public override string Buffname => "이동속도증가";
 

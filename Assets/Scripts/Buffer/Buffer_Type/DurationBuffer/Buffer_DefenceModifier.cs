@@ -8,7 +8,7 @@ public class Buffer_DefenceModifier : Duration_Buff
 
     private Sprite _iconImage => Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Shield");
 
-    public override Sprite IconImage => _iconImage;
+    public override Sprite BuffIconImage => _iconImage;
 
     public override void ApplyStats(BaseStats stats, float value)
     {

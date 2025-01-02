@@ -29,6 +29,6 @@ public class PlayScene : BaseScene
 
     protected override void AwakeInit()
     {
-        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Player");
+        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Fighter");
     }
 }

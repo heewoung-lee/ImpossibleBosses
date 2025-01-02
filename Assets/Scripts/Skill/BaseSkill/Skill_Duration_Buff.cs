@@ -6,4 +6,7 @@ public abstract class Skill_Duration_Buff : Duration_Buff, IBaseSkill
     public string SkillName => skillName;
     public override string Buffname => SkillName;
     public abstract float CoolTime { get; }
+    public abstract Define.PlayerClass PlayerClass { get; }
+    public abstract string DescriptionText { get; }
+    public abstract Sprite SkillconImage { get; }
 }

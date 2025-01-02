@@ -4,7 +4,7 @@ public class Buffer_HPModifier : Duration_Buff
 {
     public bool isImmediately => false;
     private Sprite _iconImage => null;
-    public override Sprite IconImage => _iconImage;
+    public override Sprite BuffIconImage => _iconImage;
 
     public StatType statType => StatType.CurrentHp;
     public override string Buffname => "체력증가";

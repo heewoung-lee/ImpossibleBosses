@@ -74,8 +74,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Angle: 0.75
-    - _Arc: 0
+    - _Angle: 0.7568056
+    - _Arc: 0.6611111
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DecalMeshBiasType: 0
@@ -84,7 +84,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DrawOrder: 0
     - _DstBlend: 10
-    - _FillProgress: 0.39
+    - _FillProgress: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

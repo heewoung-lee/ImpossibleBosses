@@ -33,20 +33,20 @@ public class BufferManager:IManagerInitializable
     }
 
     
-    public Buffer InitBuff(BaseStats targetStat, float duration,ItemEffect effect)
+    public BufferComponent InitBuff(BaseStats targetStat, float duration,ItemEffect effect)
     {
-        Buffer buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<Buffer>();
+        BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, effect);
         return buffer;
     }
-    public void RemoveBuffer(Buffer buffer)
+    public void RemoveBuffer(BufferComponent buffer)
     {
       Duration_Buff durationbuff = buffer.Modifier as Duration_Buff;
       durationbuff.RemoveStats(buffer.TarGetStat, buffer.Value);
       Managers.ResourceManager.DestroyObject(buffer.gameObject);
     }
 
-    public void ImmediatelyBuffStart(Buffer buffer)
+    public void ImmediatelyBuffStart(BufferComponent buffer)
     {
         buffer.Modifier.ApplyStats(buffer.TarGetStat,buffer.Value);
         Managers.ResourceManager.DestroyObject(buffer.gameObject);
