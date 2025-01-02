@@ -11,9 +11,9 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitStart()
     {
-        _playerSkill.Where(skill => skill.Value.PlayerClass == PlayerClass)
-            .ToDictionary(skill=> skill.Key, skill => skill.Value);
-
+        _playerSkill = Managers.SkillManager.AllSKillDict
+            .Where(skill => skill.Value.PlayerClass == PlayerClass)
+            .ToDictionary(skill => skill.Key, skill => skill.Value);
 
     }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class SkillManager : IManagerInitializable
 {
     Dictionary<string, IBaseSkill> _allSKillDict = new Dictionary<string, IBaseSkill>();
+    public Dictionary<string, IBaseSkill> AllSKillDict { get => _allSKillDict; }
 
     List<Type> _skillType = new List<Type>();
 
@@ -31,7 +32,7 @@ public class SkillManager : IManagerInitializable
 
             IBaseSkill skill = Activator.CreateInstance(type) as IBaseSkill;
 
-            _allSKillDict.Add(skill.SkillName, skill);
+            AllSKillDict.Add(skill.SkillName, skill);
         }
 
     }

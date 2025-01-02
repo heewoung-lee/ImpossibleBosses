@@ -34,10 +34,10 @@ public class UI_ConsumableBar : UI_Scene
 
     enum FrameCoordinate
     {
-        Frame1,
-        Frame2,
-        Frame3,
-        Frame4
+        ContextFrame1,
+        ContextFrame2,
+        ContextFrame3,
+        ContextFrame4
     }
 
     protected override void AwakeInit()
