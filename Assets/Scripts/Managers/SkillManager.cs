@@ -27,9 +27,7 @@ public class SkillManager : IManagerInitializable
         _skillType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
         foreach (Type type in _skillType)
         {
-            // Activator.CreateInstance로 인스턴스 생성 _requestType은 메타데이터 이므로 인스턴스가 아님
-            //따라서 Type 메타정보를 바탕으로 인스턴스를 생성해줘야함
-
+           
             IBaseSkill skill = Activator.CreateInstance(type) as IBaseSkill;
 
             AllSKillDict.Add(skill.SkillName, skill);

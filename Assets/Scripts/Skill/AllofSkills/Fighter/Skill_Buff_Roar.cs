@@ -16,7 +16,7 @@ public class Skill_Buff_Roar : Skill_Duration_Buff
 
     protected override string skillName => "ºÐ³ë";
 
-    public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Assets/Resources/Art/Player/SkillICon/WarriorSkill/Roar");
+    public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/Roar");
 
     Collider[] _players = null; 
 

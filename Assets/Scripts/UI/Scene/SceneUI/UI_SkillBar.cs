@@ -3,26 +3,41 @@ using UnityEngine.UI;
 
 public class UI_SkillBar : UI_Scene
 {
-    private Image[] _skillICon;
+    private Transform[] _skillContextFrames;
+
+    public Transform[] SkillContextFrames { get => _skillContextFrames; }
 
     enum SkillICons
     {
-        Skill1icon,
-        Skill2icon,
-        Skill3icon,
-        Skill4icon
+        SkillContextFrame1,
+        SkillContextFrame2,
+        SkillContextFrame3,
+        SkillContextFrame4
     }
 
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        _skillICon = new Image[4];
-        Bind<Image>(typeof(SkillICons));
+        _skillContextFrames = new Transform[4];
+        Bind<Transform>(typeof(SkillICons));
         SkillICons[] skillIcons = (SkillICons[])System.Enum.GetValues(typeof(SkillICons));
-        for (int i = 0; i < _skillICon.Length; i++)
+        for (int i = 0; i < _skillContextFrames.Length; i++)
         {
-            _skillICon[i] = Get<Image>((int)skillIcons[i]);
+            _skillContextFrames[i] = Get<Transform>((int)skillIcons[i]);
         }
+    }
+
+    public Transform SetLocationSkillSlot(SkillComponent skillcomponent)
+    {
+        foreach(Transform skillFrameTr in _skillContextFrames)
+        {
+            if(skillFrameTr.childCount <= 0)
+            {
+                return skillFrameTr;
+            }
+        }
+        Debug.LogError("Skill slots are full.");
+        return null;
     }
 
     protected override void StartInit()

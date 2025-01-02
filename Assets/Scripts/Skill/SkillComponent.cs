@@ -1,25 +1,74 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillComponent : MonoBehaviour
+public class SkillComponent : UI_Base
 {
+    
+    enum SkillIamge
+    {
+        SkillIconImage,
+        CoolTimeIMG
+    }
     private IBaseSkill _skill;
     public IBaseSkill Skill { get => _skill; }
 
 
-    private Image _image;
-
+    private Image _iconimage;
+    private Image _coolTimeIMG;
     private float _coolTime;
-
-
-    private void Start()
-    {
-        _image.sprite = _skill.SkillconImage;
-        _coolTime = _skill.CoolTime;
-    }
+    private bool _isSkillReady;
 
     public void SetSkillComponent(IBaseSkill skill)
     {
         _skill = skill;
+        _iconimage.sprite = _skill.SkillconImage;
+        _coolTime = _skill.CoolTime;
     }
+
+    protected override void AwakeInit()
+    {
+        Bind<Image>(typeof(SkillIamge));
+        _iconimage = Get<Image>((int)SkillIamge.SkillIconImage);
+        _coolTimeIMG = Get<Image>((int)SkillIamge.CoolTimeIMG);
+        BindEvent(_iconimage.gameObject, ClicktoSkill);
+        _isSkillReady = true;
+    }
+
+
+    public void ClicktoSkill(PointerEventData eventdata)
+    {
+        if(_isSkillReady)
+        StartCoroutine(TriggerCooldown());
+    }
+
+
+    private IEnumerator TriggerCooldown()
+    {
+        _coolTimeIMG.fillAmount = 1;
+        _isSkillReady = false;
+        while (_coolTimeIMG.fillAmount > 0)
+        {
+            _coolTimeIMG.fillAmount -= Time.deltaTime / _coolTime;
+            yield return null;  
+        }
+        _coolTimeIMG.fillAmount = 0;
+        _isSkillReady = true;
+    }
+
+    public void AttachItemToSlot(GameObject go, Transform slot)
+    {
+        go.transform.SetParent(slot);
+        go.GetComponent<RectTransform>().anchorMin = Vector2.zero; // 좌측 하단 (0, 0)
+        go.GetComponent<RectTransform>().anchorMax = Vector2.one;  // 우측 상단 (1, 1)
+        go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // 오프셋 제거
+        go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // 오프셋 제거
+    }
+
+    protected override void StartInit()
+    {
+
+    }
+
 }
