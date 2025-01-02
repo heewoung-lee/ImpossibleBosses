@@ -25,7 +25,7 @@ public class PlayerController : MoveableController
     protected override int Hash_Move => Player_Anim_Hash.Run;
     protected override int Hash_Attack => Player_Anim_Hash.Attack;
     protected override int Hash_Die => Player_Anim_Hash.Die;
-    private int _hash_PickUp => Animator.StringToHash("Gathering");
+    private int _hash_PickUp => Animator.StringToHash("Pickup");
 
     public override AttackState Base_Attackstate => _base_Attackstate;
     public override IDleState Base_IDleState => _base_IDleState;

@@ -7,6 +7,8 @@ using UnityEngine.AI;
 public class PlayScene : BaseScene
 {
     private GameObject _player;
+
+    public Define.PlayerClass SpawnPlayerClass;
     protected override void StartInit()
     {
         base.StartInit();
@@ -18,8 +20,6 @@ public class PlayScene : BaseScene
         Vector3 targetPosition = Vector3.zero;
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);//낑김방지를 위한 함수실행
 
-
-
     }
 
     public override void Clear()
@@ -29,6 +29,6 @@ public class PlayScene : BaseScene
 
     protected override void AwakeInit()
     {
-        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Fighter");
+        _player = Managers.GameManagerEx.Spawn($"Prefabs/Player/{SpawnPlayerClass}");
     }
 }
