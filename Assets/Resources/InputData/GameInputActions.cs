@@ -263,7 +263,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Close_Popup_UI"",
                     ""type"": ""Button"",
                     ""id"": ""4beedf42-98bc-4bd8-b6e6-e2c7b3a590bf"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -272,6 +272,33 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""SkillBar_GetKeyQ"",
                     ""type"": ""Button"",
                     ""id"": ""bf4e1e81-b952-43be-872c-eeeb2d6a5ea0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillBar_GetKeyW"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f3f6e1d-1910-4c17-b819-64652044502a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillBar_GetKeyE"",
+                    ""type"": ""Button"",
+                    ""id"": ""132fb82d-3287-45d5-9458-7153085d8a48"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillBar_GetKeyR"",
+                    ""type"": ""Button"",
+                    ""id"": ""bb876110-1883-4aa0-b2be-656932f183e6"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -348,11 +375,44 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c94a4249-0fbe-4d18-a83b-905eaa7e4dfe"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SkillBar_GetKeyQ"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea9ef6a2-b438-48e0-a4d2-8b091edea0dd"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillBar_GetKeyW"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c2b68d6-b3aa-4936-94b6-aa83541f5d2a"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillBar_GetKeyE"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""105a04ae-f606-4bca-bb7b-d21dc8362e88"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillBar_GetKeyR"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -443,6 +503,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_UI_Consumabar_GetKey4 = m_UI.FindAction("Consumabar_GetKey4", throwIfNotFound: true);
         m_UI_Close_Popup_UI = m_UI.FindAction("Close_Popup_UI", throwIfNotFound: true);
         m_UI_SkillBar_GetKeyQ = m_UI.FindAction("SkillBar_GetKeyQ", throwIfNotFound: true);
+        m_UI_SkillBar_GetKeyW = m_UI.FindAction("SkillBar_GetKeyW", throwIfNotFound: true);
+        m_UI_SkillBar_GetKeyE = m_UI.FindAction("SkillBar_GetKeyE", throwIfNotFound: true);
+        m_UI_SkillBar_GetKeyR = m_UI.FindAction("SkillBar_GetKeyR", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -658,6 +721,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Consumabar_GetKey4;
     private readonly InputAction m_UI_Close_Popup_UI;
     private readonly InputAction m_UI_SkillBar_GetKeyQ;
+    private readonly InputAction m_UI_SkillBar_GetKeyW;
+    private readonly InputAction m_UI_SkillBar_GetKeyE;
+    private readonly InputAction m_UI_SkillBar_GetKeyR;
     public struct UIActions
     {
         private @GameInputActions m_Wrapper;
@@ -669,6 +735,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @Consumabar_GetKey4 => m_Wrapper.m_UI_Consumabar_GetKey4;
         public InputAction @Close_Popup_UI => m_Wrapper.m_UI_Close_Popup_UI;
         public InputAction @SkillBar_GetKeyQ => m_Wrapper.m_UI_SkillBar_GetKeyQ;
+        public InputAction @SkillBar_GetKeyW => m_Wrapper.m_UI_SkillBar_GetKeyW;
+        public InputAction @SkillBar_GetKeyE => m_Wrapper.m_UI_SkillBar_GetKeyE;
+        public InputAction @SkillBar_GetKeyR => m_Wrapper.m_UI_SkillBar_GetKeyR;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -699,6 +768,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @SkillBar_GetKeyQ.started += instance.OnSkillBar_GetKeyQ;
             @SkillBar_GetKeyQ.performed += instance.OnSkillBar_GetKeyQ;
             @SkillBar_GetKeyQ.canceled += instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyW.started += instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyW.performed += instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyW.canceled += instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyE.started += instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyE.performed += instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyE.canceled += instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyR.started += instance.OnSkillBar_GetKeyR;
+            @SkillBar_GetKeyR.performed += instance.OnSkillBar_GetKeyR;
+            @SkillBar_GetKeyR.canceled += instance.OnSkillBar_GetKeyR;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -724,6 +802,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @SkillBar_GetKeyQ.started -= instance.OnSkillBar_GetKeyQ;
             @SkillBar_GetKeyQ.performed -= instance.OnSkillBar_GetKeyQ;
             @SkillBar_GetKeyQ.canceled -= instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyW.started -= instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyW.performed -= instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyW.canceled -= instance.OnSkillBar_GetKeyW;
+            @SkillBar_GetKeyE.started -= instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyE.performed -= instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyE.canceled -= instance.OnSkillBar_GetKeyE;
+            @SkillBar_GetKeyR.started -= instance.OnSkillBar_GetKeyR;
+            @SkillBar_GetKeyR.performed -= instance.OnSkillBar_GetKeyR;
+            @SkillBar_GetKeyR.canceled -= instance.OnSkillBar_GetKeyR;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -809,5 +896,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnConsumabar_GetKey4(InputAction.CallbackContext context);
         void OnClose_Popup_UI(InputAction.CallbackContext context);
         void OnSkillBar_GetKeyQ(InputAction.CallbackContext context);
+        void OnSkillBar_GetKeyW(InputAction.CallbackContext context);
+        void OnSkillBar_GetKeyE(InputAction.CallbackContext context);
+        void OnSkillBar_GetKeyR(InputAction.CallbackContext context);
     }
 }

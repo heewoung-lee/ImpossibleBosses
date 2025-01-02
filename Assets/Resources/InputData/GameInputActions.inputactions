@@ -241,7 +241,7 @@
                     "name": "Close_Popup_UI",
                     "type": "Button",
                     "id": "4beedf42-98bc-4bd8-b6e6-e2c7b3a590bf",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -250,6 +250,33 @@
                     "name": "SkillBar_GetKeyQ",
                     "type": "Button",
                     "id": "bf4e1e81-b952-43be-872c-eeeb2d6a5ea0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillBar_GetKeyW",
+                    "type": "Button",
+                    "id": "3f3f6e1d-1910-4c17-b819-64652044502a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillBar_GetKeyE",
+                    "type": "Button",
+                    "id": "132fb82d-3287-45d5-9458-7153085d8a48",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillBar_GetKeyR",
+                    "type": "Button",
+                    "id": "bb876110-1883-4aa0-b2be-656932f183e6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -326,11 +353,44 @@
                 {
                     "name": "",
                     "id": "c94a4249-0fbe-4d18-a83b-905eaa7e4dfe",
-                    "path": "",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "SkillBar_GetKeyQ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea9ef6a2-b438-48e0-a4d2-8b091edea0dd",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillBar_GetKeyW",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c2b68d6-b3aa-4936-94b6-aa83541f5d2a",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillBar_GetKeyE",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "105a04ae-f606-4bca-bb7b-d21dc8362e88",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillBar_GetKeyR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
