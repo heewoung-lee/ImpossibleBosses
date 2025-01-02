@@ -267,6 +267,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillBar_GetKeyQ"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf4e1e81-b952-43be-872c-eeeb2d6a5ea0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -333,6 +342,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Close_Popup_UI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c94a4249-0fbe-4d18-a83b-905eaa7e4dfe"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillBar_GetKeyQ"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -422,6 +442,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_UI_Consumabar_GetKey3 = m_UI.FindAction("Consumabar_GetKey3", throwIfNotFound: true);
         m_UI_Consumabar_GetKey4 = m_UI.FindAction("Consumabar_GetKey4", throwIfNotFound: true);
         m_UI_Close_Popup_UI = m_UI.FindAction("Close_Popup_UI", throwIfNotFound: true);
+        m_UI_SkillBar_GetKeyQ = m_UI.FindAction("SkillBar_GetKeyQ", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -636,6 +657,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Consumabar_GetKey3;
     private readonly InputAction m_UI_Consumabar_GetKey4;
     private readonly InputAction m_UI_Close_Popup_UI;
+    private readonly InputAction m_UI_SkillBar_GetKeyQ;
     public struct UIActions
     {
         private @GameInputActions m_Wrapper;
@@ -646,6 +668,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @Consumabar_GetKey3 => m_Wrapper.m_UI_Consumabar_GetKey3;
         public InputAction @Consumabar_GetKey4 => m_Wrapper.m_UI_Consumabar_GetKey4;
         public InputAction @Close_Popup_UI => m_Wrapper.m_UI_Close_Popup_UI;
+        public InputAction @SkillBar_GetKeyQ => m_Wrapper.m_UI_SkillBar_GetKeyQ;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -673,6 +696,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Close_Popup_UI.started += instance.OnClose_Popup_UI;
             @Close_Popup_UI.performed += instance.OnClose_Popup_UI;
             @Close_Popup_UI.canceled += instance.OnClose_Popup_UI;
+            @SkillBar_GetKeyQ.started += instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyQ.performed += instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyQ.canceled += instance.OnSkillBar_GetKeyQ;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -695,6 +721,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Close_Popup_UI.started -= instance.OnClose_Popup_UI;
             @Close_Popup_UI.performed -= instance.OnClose_Popup_UI;
             @Close_Popup_UI.canceled -= instance.OnClose_Popup_UI;
+            @SkillBar_GetKeyQ.started -= instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyQ.performed -= instance.OnSkillBar_GetKeyQ;
+            @SkillBar_GetKeyQ.canceled -= instance.OnSkillBar_GetKeyQ;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -779,5 +808,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnConsumabar_GetKey3(InputAction.CallbackContext context);
         void OnConsumabar_GetKey4(InputAction.CallbackContext context);
         void OnClose_Popup_UI(InputAction.CallbackContext context);
+        void OnSkillBar_GetKeyQ(InputAction.CallbackContext context);
     }
 }

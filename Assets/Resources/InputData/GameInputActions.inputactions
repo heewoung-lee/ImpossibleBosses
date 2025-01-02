@@ -245,6 +245,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SkillBar_GetKeyQ",
+                    "type": "Button",
+                    "id": "bf4e1e81-b952-43be-872c-eeeb2d6a5ea0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -311,6 +320,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Close_Popup_UI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c94a4249-0fbe-4d18-a83b-905eaa7e4dfe",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillBar_GetKeyQ",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

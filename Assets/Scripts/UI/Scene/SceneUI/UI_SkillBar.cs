@@ -1,11 +1,15 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityInput;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UI_SkillBar : UI_Scene
 {
     private Transform[] _skillContextFrames;
-
-    public Transform[] SkillContextFrames { get => _skillContextFrames; }
+    private InputAction _getQKey;
+    private InputAction _getWKey;
+    private InputAction _getEKey;
+    private InputAction _getRKey;
 
     enum SkillICons
     {
@@ -25,6 +29,7 @@ public class UI_SkillBar : UI_Scene
         {
             _skillContextFrames[i] = Get<Transform>((int)skillIcons[i]);
         }
+        BindKeyBoard();
     }
 
     public Transform SetLocationSkillSlot(SkillComponent skillcomponent)
@@ -39,6 +44,27 @@ public class UI_SkillBar : UI_Scene
         Debug.LogError("Skill slots are full.");
         return null;
     }
+
+    public void BindKeyBoard()
+    {
+        _getQKey = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "SkillBar_GetKeyQ");
+        _getWKey = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "SkillBar_GetKeyW");
+        _getEKey = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "SkillBar_GetKeyE");
+        _getRKey = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "SkillBar_GetKeyR");
+
+        _getQKey.Enable();
+        _getWKey.Enable();
+        _getEKey.Enable();
+        _getRKey.Enable();
+
+        _getQKey.started += GetQKey;
+    }
+
+    public void GetQKey(InputAction.CallbackContext context)
+    {
+        
+    }
+
 
     protected override void StartInit()
     {
