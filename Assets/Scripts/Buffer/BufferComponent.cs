@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +10,10 @@ public class BufferComponent : MonoBehaviour
 
     private BaseStats _targetStat;
     public BaseStats TarGetStat { get => _targetStat; }
+
+
+    private List<BaseStats> _targetStats;
+    public List<BaseStats> TargetStats { get => _targetStats; }
 
     private float _duration;
 
@@ -18,7 +24,7 @@ public class BufferComponent : MonoBehaviour
 
     private Buff_Modifier _modifier;
     public Buff_Modifier Modifier { get => _modifier; }
-
+ 
 
     public void InitAndStartBuff(BaseStats targetStat, float duration,ItemEffect effect)
     {
@@ -38,9 +44,11 @@ public class BufferComponent : MonoBehaviour
         _value = effect.value;
 
 
-        StartBuff(effect);
+        StartBuff();
     }
-    private void StartBuff(ItemEffect effect)
+
+
+    private void StartBuff()
     {
         if (_modifier is Immediately_Buff)
         {

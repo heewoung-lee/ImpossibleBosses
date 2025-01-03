@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class SkillManager : IManagerInitializable
 {
-    Dictionary<string, IBaseSkill> _allSKillDict = new Dictionary<string, IBaseSkill>();
-    public Dictionary<string, IBaseSkill> AllSKillDict { get => _allSKillDict; }
+    Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
+    public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
 
     List<Type> _skillType = new List<Type>();
 
@@ -28,7 +28,7 @@ public class SkillManager : IManagerInitializable
         foreach (Type type in _skillType)
         {
            
-            IBaseSkill skill = Activator.CreateInstance(type) as IBaseSkill;
+            BaseSkill skill = Activator.CreateInstance(type) as BaseSkill;
 
             AllSKillDict.Add(skill.SkillName, skill);
         }
@@ -38,7 +38,7 @@ public class SkillManager : IManagerInitializable
 
     private void GetAllofSkill(Type type, List<Type> typeList)
     {
-        if (typeof(IBaseSkill).IsAssignableFrom(type))
+        if (typeof(BaseSkill).IsAssignableFrom(type))
         {
             typeList.Add(type);
         }

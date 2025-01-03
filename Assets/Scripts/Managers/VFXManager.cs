@@ -35,10 +35,10 @@ public class VFXManager
         Managers.ManagersStartCoroutine(FadeOutOverDuration(defaultDuration, particle));
 
         // 위치와 부모 설정
+        particle.Play();
         particleObject.transform.position = pos;
         particleObject.transform.SetParent(VFX_Root);
         particleObject.SetActive(true);
-        particle.Play();
         if (particle.main.loop == false)
         {
             Managers.ResourceManager.DestroyObject(particleObject, defaultDuration);
@@ -60,8 +60,8 @@ public class VFXManager
             {
                 yield break; // 파괴된 경우 코루틴 종료
             }
-            elasedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(1,0, elasedTime/duration);
+            elasedTime += Time.deltaTime/ duration;
+            float alpha = Mathf.Lerp(1,0, elasedTime);
             int aliveParticleNum = particle.GetParticles(particles);
 
             for (int i = 0;  i < aliveParticleNum; i++)

@@ -26,13 +26,11 @@ public class BufferManager:IManagerInitializable
             return _ui_BufferBar;
         }
     }
-
     public Buff_Modifier GetModifier(ItemEffect efftect)
     {
         return _allBuffModifierDict[efftect.buffname];
     }
 
-    
     public BufferComponent InitBuff(BaseStats targetStat, float duration,ItemEffect effect)
     {
         BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();

@@ -7,7 +7,7 @@ public abstract class Module_Player_Class : MonoBehaviour
     public abstract Define.PlayerClass PlayerClass { get; }
 
 
-    private Dictionary<string, IBaseSkill> _playerSkill;
+    private Dictionary<string, BaseSkill> _playerSkill;
 
     public virtual void InitAwake()
     {
@@ -22,7 +22,7 @@ public abstract class Module_Player_Class : MonoBehaviour
 
        
 
-        foreach(IBaseSkill skill in _playerSkill.Values)
+        foreach(BaseSkill skill in _playerSkill.Values)
         {
             GameObject skillPrefab = Managers.ResourceManager.InstantiatePrefab("UI/Skill/UI_SkillComponent");
             SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
@@ -36,7 +36,7 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     private void Awake()
     {
-        _playerSkill = new Dictionary<string, IBaseSkill>();
+        _playerSkill = new Dictionary<string, BaseSkill>();
         InitAwake();
     }
 

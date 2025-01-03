@@ -11,8 +11,8 @@ public class SkillComponent : UI_Base
         SkillIconImage,
         CoolTimeIMG
     }
-    private IBaseSkill _skill;
-    public IBaseSkill Skill { get => _skill; }
+    private BaseSkill _skill;
+    public BaseSkill Skill { get => _skill; }
 
 
     private Image _iconimage;
@@ -20,7 +20,7 @@ public class SkillComponent : UI_Base
     private float _coolTime;
     private bool _isSkillReady;
 
-    public void SetSkillComponent(IBaseSkill skill)
+    public void SetSkillComponent(BaseSkill skill)
     {
         _skill = skill;
         _iconimage.sprite = _skill.SkillconImage;
@@ -48,6 +48,7 @@ public class SkillComponent : UI_Base
         {
             StartCoroutine(TriggerCooldown());
             _skill.InvokeSkill();
+            //이부분에 버프류 스킬이면 Duration이 돌아가게 만들어야함
         }
     }
 
