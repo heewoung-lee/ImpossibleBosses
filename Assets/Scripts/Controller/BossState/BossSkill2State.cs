@@ -3,6 +3,8 @@ using System;
 
 public class BossSkill2State : IState
 {
+    public bool lockAnimationChange => false;
+
     public event Action UpdateStateEvent;
     public BossSkill2State(Action bossSkill2State)
     {

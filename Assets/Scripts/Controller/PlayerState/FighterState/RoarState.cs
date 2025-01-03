@@ -1,13 +1,13 @@
 using System;
 
-public class PickUpState : IState
+public class RoarState : IState
 {
     public bool lockAnimationChange => true;
 
     public event Action UpdateStateEvent;
-    public PickUpState(Action pickUpState)
+    public RoarState(Action roarState)
     {
-        UpdateStateEvent += pickUpState;
+        UpdateStateEvent += roarState;
     }
     public void UpdateState()
     {

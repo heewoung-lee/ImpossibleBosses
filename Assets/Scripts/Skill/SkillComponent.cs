@@ -39,10 +39,17 @@ public class SkillComponent : UI_Base
 
     public void ClicktoSkill(PointerEventData eventdata)
     {
-        if(_isSkillReady)
-        StartCoroutine(TriggerCooldown());
+        SkillStart();
     }
-
+    
+    public void SkillStart()
+    {
+        if (_isSkillReady)
+        {
+            StartCoroutine(TriggerCooldown());
+            _skill.InvokeSkill();
+        }
+    }
 
     private IEnumerator TriggerCooldown()
     {

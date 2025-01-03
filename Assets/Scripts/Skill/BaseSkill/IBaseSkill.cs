@@ -11,4 +11,6 @@ public interface IBaseSkill
     public string DescriptionText { get; }
 
     public Sprite SkillconImage { get; }
+
+    public void InvokeSkill();
 }

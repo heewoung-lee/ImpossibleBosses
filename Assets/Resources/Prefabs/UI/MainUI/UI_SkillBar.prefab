@@ -440,6 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8229800722886446245}
+  - component: {fileID: 2846892336278937792}
   m_Layer: 0
   m_Name: SkillContextFrame1
   m_TagString: Untagged
@@ -466,6 +467,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2846892336278937792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870683385656996187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2717eb2b72ab7c04a8e5116ec55c3e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillComponent: {fileID: 0}
 --- !u!1 &4025718204356601430
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3873044574185717122}
+  - component: {fileID: 2124051955821267935}
   m_Layer: 0
   m_Name: SkillContextFrame4
   m_TagString: Untagged
@@ -501,6 +516,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2124051955821267935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4025718204356601430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2717eb2b72ab7c04a8e5116ec55c3e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillComponent: {fileID: 0}
 --- !u!1 &4229507545014124499
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,6 +979,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3955959791807290380}
+  - component: {fileID: 3519785330340368742}
   m_Layer: 0
   m_Name: SkillContextFrame3
   m_TagString: Untagged
@@ -977,6 +1006,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3519785330340368742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115722275470262242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2717eb2b72ab7c04a8e5116ec55c3e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillComponent: {fileID: 0}
 --- !u!1 &6161803013233929414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,6 +1556,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1544072031022043192}
+  - component: {fileID: 1320571842336576193}
   m_Layer: 0
   m_Name: SkillContextFrame2
   m_TagString: Untagged
@@ -1540,3 +1583,16 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1320571842336576193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9020617693943402664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2717eb2b72ab7c04a8e5116ec55c3e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillComponent: {fileID: 0}

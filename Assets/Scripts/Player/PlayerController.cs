@@ -82,17 +82,14 @@ public class PlayerController : MoveableController
     }
     private Vector3 MouseRightClickPosEvent(InputAction.CallbackContext context)
     {
-        if (CurrentStateType == _base_DieState)
-            return Vector3.zero;
-
         Ray ray = Camera.main.ScreenPointToRay(_pointerAction.ReadValue<Vector2>());
-
         RaycastHit hit;
+
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red);
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Ground")))
         {
             _destPos = hit.point;
-            if (CurrentStateType != _base_MoveState)
+            if (CurrentStateType != _base_MoveState && CurrentStateType.lockAnimationChange == false)
                 CurrentStateType = _base_MoveState;
         }
         return hit.point;
@@ -113,7 +110,7 @@ public class PlayerController : MoveableController
 
     private void Attack(InputAction.CallbackContext context)
     {
-        if (CurrentStateType == Base_Attackstate)
+        if (CurrentStateType == Base_Attackstate && CurrentStateType.lockAnimationChange)
             return;
 
         CurrentStateType = Base_Attackstate;
@@ -125,8 +122,10 @@ public class PlayerController : MoveableController
 
     public override void UpdateMove()
     {
-        if (CurrentStateType == Base_DieState)
+        if (CurrentStateType.lockAnimationChange)
             return;
+
+
         Vector3 dir = new Vector3(_destPos.x, 0, _destPos.z) - new Vector3(transform.position.x, 0, transform.position.z);//높이에 대한 값을 빼야 근사값에 더 정확한 수치를 뽑을 수 있음.
         if (dir.magnitude < 0.01f)
         {
@@ -161,10 +160,10 @@ public class PlayerController : MoveableController
     {
         ChangeStateToIdle("Attack");
     }
-    private void ChangeStateToIdle(string animName)
+    public void ChangeStateToIdle(string animName)
     {
         AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
-        // Attack 스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
+        //  스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
         if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName(animName) && stateInfo.normalizedTime >= 1.0f)
         {
             CurrentStateType = _base_IDleState;

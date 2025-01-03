@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityInput;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 public class UI_SkillBar : UI_Scene
 {
     private Transform[] _skillContextFrames;
+    private SkillSlot[] _skillSlot;
     private InputAction _getQKey;
     private InputAction _getWKey;
     private InputAction _getEKey;
@@ -22,12 +24,14 @@ public class UI_SkillBar : UI_Scene
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        _skillContextFrames = new Transform[4];
+        _skillContextFrames = new Transform[Enum.GetValues(typeof(SkillICons)).Length];
+        _skillSlot = new SkillSlot[Enum.GetValues(typeof(SkillICons)).Length];
         Bind<Transform>(typeof(SkillICons));
         SkillICons[] skillIcons = (SkillICons[])System.Enum.GetValues(typeof(SkillICons));
         for (int i = 0; i < _skillContextFrames.Length; i++)
         {
             _skillContextFrames[i] = Get<Transform>((int)skillIcons[i]);
+            _skillSlot[i] = _skillContextFrames[i].GetComponent<SkillSlot>();
         }
         BindKeyBoard();
     }
@@ -36,8 +40,11 @@ public class UI_SkillBar : UI_Scene
     {
         foreach(Transform skillFrameTr in _skillContextFrames)
         {
-            if(skillFrameTr.childCount <= 0)
+            SkillSlot skillslot = skillFrameTr.GetComponent<SkillSlot>();
+
+            if (skillslot.SkillComponent == null)
             {
+                skillslot.SkillComponent = skillcomponent;
                 return skillFrameTr;
             }
         }
@@ -57,12 +64,37 @@ public class UI_SkillBar : UI_Scene
         _getEKey.Enable();
         _getRKey.Enable();
 
-        _getQKey.started += GetQKey;
+        _getQKey.started += GetKey;
+        _getWKey.started += GetKey;
+        _getEKey.started += GetKey;
+        _getRKey.started += GetKey;
     }
 
-    public void GetQKey(InputAction.CallbackContext context)
+    public void GetKey(InputAction.CallbackContext context)
     {
-        
+        switch (context.control.name)
+        {
+            case "q":
+                if (_skillContextFrames[(int)SkillICons.SkillContextFrame1].GetComponent<SkillSlot>().SkillComponent == null)
+                    return;
+                _skillSlot[(int)SkillICons.SkillContextFrame1].SkillComponent.SkillStart();
+                break;
+            case "w":
+                if (_skillContextFrames[(int)SkillICons.SkillContextFrame2].GetComponent<SkillSlot>().SkillComponent == null)
+                    return;
+                _skillSlot[(int)SkillICons.SkillContextFrame2].SkillComponent.SkillStart();
+                break;
+            case "e":
+                if (_skillContextFrames[(int)SkillICons.SkillContextFrame3].GetComponent<SkillSlot>().SkillComponent == null)
+                    return;
+                _skillSlot[(int)SkillICons.SkillContextFrame3].SkillComponent.SkillStart();
+                break;
+            case "r":
+                if (_skillContextFrames[(int)SkillICons.SkillContextFrame4].GetComponent<SkillSlot>().SkillComponent == null)
+                    return;
+                _skillSlot[(int)SkillICons.SkillContextFrame4].SkillComponent.SkillStart();
+                break;
+        }
     }
 
 

@@ -9,4 +9,6 @@ public abstract class Skill_Immedialty_Buff : Immediately_Buff, IBaseSkill
     public abstract Define.PlayerClass PlayerClass { get; }
     public abstract string DescriptionText { get; }
     public abstract Sprite SkillconImage { get; }
+
+    public abstract void InvokeSkill();
 }

@@ -22,7 +22,7 @@ public abstract class BaseController : MonoBehaviour
     private int _animLayer = 0;
 
     private StateAnimationDict _stateAnimDict = new StateAnimationDict();//스테이터스가 바뀌면 애니메이션을 호출하는 딕셔너리
-    protected StateAnimationDict StateAnimDict => _stateAnimDict;
+    public StateAnimationDict StateAnimDict => _stateAnimDict;
 
     protected abstract int Hash_Idle { get; }
     protected abstract int Hash_Move { get; }

@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using Google.Apis.Sheets.v4.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Skill_Buff_Roar : Skill_Duration_Buff
@@ -18,8 +19,10 @@ public class Skill_Buff_Roar : Skill_Duration_Buff
 
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/Roar");
 
-    Collider[] _players = null; 
+    Collider[] _players = null;
 
+    BaseController _playerBaseController;
+    Module_Fighter_Class _fighter_Class;
     public override void ApplyStats(BaseStats stats, float value)
     {
         LayerMask playerLayerMask = LayerMask.GetMask("Player");
@@ -29,7 +32,7 @@ public class Skill_Buff_Roar : Skill_Duration_Buff
         _players = Physics.OverlapSphere(stats.transform.position, skillRadius, playerLayerMask);
 
 
-        //1. 로어 애니메이션 실행
+        
         //2. 모든 플레이어들을 감지
         //3. 버프 넣어주고
         //4. 쿨타임 돌리고
@@ -43,5 +46,15 @@ public class Skill_Buff_Roar : Skill_Duration_Buff
         {
 
         }
+    }
+
+    public override void InvokeSkill()
+    {
+        if(_playerBaseController == null|| _fighter_Class == null)
+        {
+            _playerBaseController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            _fighter_Class = _playerBaseController.GetComponent<Module_Fighter_Class>();
+        }
+        _playerBaseController.CurrentStateType = _fighter_Class.RoarState;
     }
 }
