@@ -29,7 +29,7 @@ public abstract class BaseController : MonoBehaviour
     protected abstract int Hash_Attack { get; }
     protected abstract int Hash_Die { get; }
 
-    public abstract AttackState Base_Attackstate { get;}
+    public abstract AttackState Base_Attackstate { get; }
     public abstract IDleState Base_IDleState { get; }
     public abstract DieState Base_DieState { get; }
     public abstract MoveState Base_MoveState { get; }
@@ -53,16 +53,46 @@ public abstract class BaseController : MonoBehaviour
         get => _currentStateType;
         set
         {
+
+            if (_currentStateType.lockAnimationChange == true)
+                return;
+
             _currentStateType = value;
             _stateAnimDict.CallState(_currentStateType); // 현재 상태의 루프문 실행
         }
+    }
+
+    public void ChangeAnimIfCurrentIsDone(string currentAnimName, IState changeState)
+    {
+        if (IsAnimationDone(currentAnimName) == false)
+            return;
+
+        if (CurrentStateType.lockAnimationChange)
+        {
+            _currentStateType = changeState;
+            _stateAnimDict.CallState(_currentStateType);
+        }
+        else
+        {
+            CurrentStateType = changeState;
+        }
+    }
+
+    public bool IsAnimationDone(string animName)
+    {
+        AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
+        //  스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
+        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName(animName) && stateInfo.normalizedTime >= 1.0f)
+            return true;
+
+        return false;
     }
     private void Awake()
     {
         _anim = GetComponent<Animator>();
         AwakeInit();
         InitailizeStateDict(); //기본 스테이터스 초기화
-        CurrentStateType = Base_IDleState; //기본 스테이터스 지정
+        _currentStateType = Base_IDleState; //기본 스테이터스 지정
     }
     private void Start()
     {
@@ -72,7 +102,7 @@ public abstract class BaseController : MonoBehaviour
     protected abstract void AwakeInit();
     protected abstract void StartInit();
 
-    public void SetDefalutTransition_Value() 
+    public void SetDefalutTransition_Value()
     {
         _transition_Idle = DEFALUT_Transition_Idle;
         _transition_Move = DEFALUT_Transition_Move;
@@ -84,15 +114,15 @@ public abstract class BaseController : MonoBehaviour
 
     private void InitailizeStateDict()
     {
-        _stateAnimDict.RegisterState(Base_Attackstate, ()=> RunAnimation(Hash_Attack, Transition_Attack));
-        _stateAnimDict.RegisterState(Base_DieState ,()=> RunAnimation(Hash_Die, Transition_Die));
-        _stateAnimDict.RegisterState(Base_IDleState, ()=> RunAnimation(Hash_Idle, Transition_Idle));
-        _stateAnimDict.RegisterState(Base_MoveState ,()=> RunAnimation(Hash_Move, Transition_Move));
+        _stateAnimDict.RegisterState(Base_Attackstate, () => RunAnimation(Hash_Attack, Transition_Attack));
+        _stateAnimDict.RegisterState(Base_DieState, () => RunAnimation(Hash_Die, Transition_Die));
+        _stateAnimDict.RegisterState(Base_IDleState, () => RunAnimation(Hash_Idle, Transition_Idle));
+        _stateAnimDict.RegisterState(Base_MoveState, () => RunAnimation(Hash_Move, Transition_Move));
         AddInitalizeStateDict();
     }
 
 
-    public void RunAnimation(int HashCode,float Transition_State)
+    public void RunAnimation(int HashCode, float Transition_State)
     {
         if (HashCode == 0)
             return;

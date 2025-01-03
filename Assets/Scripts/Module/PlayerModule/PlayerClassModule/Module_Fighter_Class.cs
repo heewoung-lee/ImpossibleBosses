@@ -27,6 +27,6 @@ public class Module_Fighter_Class : Module_Player_Class
 
     public void UpdateRoar()
     {
-        _controller.ChangeStateToIdle("Roar");
+        _controller.ChangeAnimIfCurrentIsDone("Roar",_controller.Base_IDleState);
     }
 }
