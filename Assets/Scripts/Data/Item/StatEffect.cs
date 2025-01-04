@@ -1,0 +1,17 @@
+using System;
+using UnityEngine;
+
+[Serializable]
+public class StatEffect
+{
+    public StatEffect(StatType statType, float value, string buffname)
+    {
+        this.statType = statType;
+        this.value = value;
+        this.buffname = buffname;
+    }
+
+    public StatType statType;  // 변화 스탯
+    public float value;        // 변화 값
+    public string buffname;
+}

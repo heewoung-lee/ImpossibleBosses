@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using Google.Apis.Sheets.v4.Data;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public override float CoolTime => 5f;
 
-    public override string DescriptionText => $"파티원들에게 10의 공격력을 부여합니다";
+    public override string EffectDescriptionText => $"파티원들에게 10의 공격력을 부여합니다";
 
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/Roar");
 
@@ -21,10 +22,14 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public override string SkillName => "분노";
 
-    Collider[] _players = null;
+    public override string ETCDescriptionText => "화가난다!";
 
+    public override float Value => 10f;
+
+    Collider[] _players = null;
     BaseController _playerBaseController;
     Module_Fighter_Class _fighter_Class;
+
     public override void InvokeSkill()
     {
         if(_playerBaseController == null|| _fighter_Class == null)
@@ -39,10 +44,14 @@ public class Skill_Buff_Roar : Skill_Duration
 
 
         _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
-
         foreach (Collider players_collider in _players)
         {
             GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("States/Aura_Roar", players_collider.gameObject, Duration);
+
+            if(players_collider.TryGetComponent(out BaseStats playerStats))
+            {
+               Managers.BufferManager.InitBuff(playerStats, Duration,typeof(Buffer_AttackModifier) ,Value);
+            }
         }
     }
 
@@ -54,4 +63,5 @@ public class Skill_Buff_Roar : Skill_Duration
 
         }
     }
+
 }

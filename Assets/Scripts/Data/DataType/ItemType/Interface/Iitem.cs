@@ -32,7 +32,7 @@ public interface IItem
     public int ItemNumber { get; }
     public ItemType Item_Type { get; }
     public Item_Grade_Type Item_Grade { get; }
-    public List<ItemEffect> ItemEffects { get; }
+    public List<StatEffect> ItemEffects { get; }
     public string ItemName { get; }
     public string DescriptionText { get; }
     public string ItemIconSourceText { get; }

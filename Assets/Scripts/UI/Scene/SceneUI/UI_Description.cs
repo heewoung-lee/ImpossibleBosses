@@ -85,10 +85,11 @@ public class UI_Description : UI_Scene
         //소비 아이템이면 타입에 소비아이템으로 나눔
     }
 
-    public void SetValue(Sprite iconSprite,string name)
+    public void SetValue(Sprite iconSprite,string name,string typeText = null)
     {
         _itemImage.sprite = iconSprite;
         _itemNameText.text = name;
+        _itemType.text = typeText;
     }
     public void SetItemEffectText(string text)
     {

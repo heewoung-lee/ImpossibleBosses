@@ -26,7 +26,7 @@ public class BufferComponent : MonoBehaviour
     public Buff_Modifier Modifier { get => _modifier; }
  
 
-    public void InitAndStartBuff(BaseStats targetStat, float duration,ItemEffect effect)
+    public void InitAndStartBuff(BaseStats targetStat, float duration,StatEffect effect)
     {
         _targetStat = targetStat;
         _duration = duration;
@@ -42,11 +42,26 @@ public class BufferComponent : MonoBehaviour
         }
         _image.SetNativeSize();
         _value = effect.value;
-
-
         StartBuff();
     }
-
+    public void InitAndStartBuff(BaseStats targetStat, float duration, Type buff_Modifier,float value)
+    {
+        _targetStat = targetStat;
+        _duration = duration;
+        _image = GetComponentInChildren<Image>();
+        _modifier = Managers.BufferManager.GetModifier(buff_Modifier);
+        if (_modifier is Immediately_Buff)
+        {
+            _image.sprite = null;
+        }
+        else
+        {
+            _image.sprite = (_modifier as Duration_Buff).BuffIconImage;
+        }
+        _image.SetNativeSize();
+        _value = value;
+        StartBuff();
+    }
 
     private void StartBuff()
     {

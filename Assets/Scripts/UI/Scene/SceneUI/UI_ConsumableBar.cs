@@ -80,7 +80,7 @@ public class UI_ConsumableBar : UI_Scene
             {
                 Managers.ResourceManager.DestroyObject(consumable.gameObject);
             }
-            foreach (ItemEffect effect in consumable.ItemEffects)
+            foreach (StatEffect effect in consumable.ItemEffects)
             {
                 Managers.BufferManager.InitBuff(_playerStats,consumable.DuringBuffTime,effect);
             }

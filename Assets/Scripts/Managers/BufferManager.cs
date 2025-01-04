@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tactical.Tasks;
+using Mono.Cecil;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,15 +27,27 @@ public class BufferManager:IManagerInitializable
             return _ui_BufferBar;
         }
     }
-    public Buff_Modifier GetModifier(ItemEffect efftect)
+    public Buff_Modifier GetModifier(StatEffect efftect)
     {
         return _allBuffModifierDict[efftect.buffname];
     }
 
-    public BufferComponent InitBuff(BaseStats targetStat, float duration,ItemEffect effect)
+    public Buff_Modifier GetModifier(Type modifier_Type)
+    {
+        return _allBuffModifierDict.Values.FirstOrDefault(modifier => modifier.GetType() == modifier_Type);
+    }
+
+    public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
     {
         BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, effect);
+        return buffer;
+    }
+
+    public BufferComponent InitBuff(BaseStats targetStat, float duration, Type buffer_modifier,float value)
+    {
+        BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+        buffer.InitAndStartBuff(targetStat, duration, buffer_modifier, value);
         return buffer;
     }
     public void RemoveBuffer(BufferComponent buffer)

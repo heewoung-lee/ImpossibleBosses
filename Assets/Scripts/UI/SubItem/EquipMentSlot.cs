@@ -34,9 +34,9 @@ public class EquipMentSlot : MonoBehaviour,IItemUnEquip
 
     private void ApplyItemEffects()
     {
-        List<ItemEffect> Itemeffects = _equipedItem.ItemEffects;
+        List<StatEffect> Itemeffects = _equipedItem.ItemEffects;
 
-        foreach (ItemEffect effect in Itemeffects)
+        foreach (StatEffect effect in Itemeffects)
         {
             StatType statType = effect.statType;
             float statValue = effect.value;

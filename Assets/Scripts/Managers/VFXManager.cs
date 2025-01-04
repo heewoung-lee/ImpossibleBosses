@@ -47,6 +47,7 @@ public class VFXManager
             ParticleSystem.MainModule main = particle.main;
 
             duration = settingDuration <= 0 ? main.duration : settingDuration;
+            main.duration = duration;
             if (particle.GetComponent<ParticleLifetimeSync>())//파티클 시스템중 Duration과 시간을 맞춰야 하는 파티클이 있다면 적용
             {
                 main.startLifetime = duration;

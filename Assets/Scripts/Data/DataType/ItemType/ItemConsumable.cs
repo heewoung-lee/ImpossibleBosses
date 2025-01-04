@@ -13,7 +13,7 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
     public int itemNumber;
     public ItemType itemType = ItemType.Consumable;
     public string itemGradeText = "Normal";
-    public List<ItemEffect> itemEffects = new List<ItemEffect>();
+    public List<StatEffect> itemEffects = new List<StatEffect>();
     public string itemName;
     public string descriptionText;
     public string itemIconSourceText;
@@ -27,7 +27,7 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
     public int Key => itemNumber;
     public ItemType Item_Type => itemType;
     public Item_Grade_Type Item_Grade => (Item_Grade_Type)System.Enum.Parse(typeof(Item_Grade_Type), itemGradeText);
-    public List<ItemEffect> ItemEffects => itemEffects;
+    public List<StatEffect> ItemEffects => itemEffects;
     public string ItemName => itemName;
     public string DescriptionText => descriptionText;
     public string ItemIconSourceText => itemIconSourceText;
@@ -42,7 +42,7 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
         descriptionBuilder.AppendLine(DescriptionText);
 
         // 효과들에 대한 설명 추가
-        foreach (ItemEffect effect in ItemEffects)
+        foreach (StatEffect effect in ItemEffects)
         {
             string actionText = (duration > 0) ? "증가" : "회복";
             descriptionBuilder.AppendLine($"{Utill.StatTypeConvertToKorean(effect.statType)} {effect.value} {actionText}");

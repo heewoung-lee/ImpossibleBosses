@@ -13,7 +13,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected int _itemNumber;
     protected ItemType _itemType;
     protected Item_Grade_Type _item_Grade;
-    protected List<ItemEffect> _Itemeffects;
+    protected List<StatEffect> _Itemeffects;
     protected string _itemName;
     protected string _descriptionText;
     protected string _itemIconSourceImageText;
@@ -26,7 +26,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     public int ItemNumber => _itemNumber;
     public ItemType Item_Type => _itemType;
     public Item_Grade_Type Item_Grade => _item_Grade;
-    public List<ItemEffect> ItemEffects => _Itemeffects;
+    public List<StatEffect> ItemEffects => _Itemeffects;
     public string ItemName => _itemName;
     public string DescriptionText => _descriptionText;
     public string ItemIconSourceText => _itemIconSourceImageText;

@@ -35,18 +35,26 @@ public class SkillComponent : UI_Base
         _iconimage = Get<Image>((int)SkillIamge.SkillIconImage);
         _coolTimeIMG = Get<Image>((int)SkillIamge.CoolTimeIMG);
         _isSkillReady = true;
+        _skillComponentRectTr = transform as RectTransform;
         BindEvent(_iconimage.gameObject, ClicktoSkill);
         BindEvent(gameObject, ShowDescription, Define.UI_Event.PointerEnter);
         BindEvent(gameObject, CloseDescription, Define.UI_Event.PointerExit);
     }
-
-    private void CloseDescription(PointerEventData data)
-    {
-    }
-
     private void ShowDescription(PointerEventData data)
     {
-        
+        _decriptionObject.gameObject.SetActive(true);
+
+        _decriptionObject.DescriptionWindow.transform.position
+           = _decriptionObject.SetDecriptionPos(transform, _skillComponentRectTr.rect.width, _skillComponentRectTr.rect.height);
+
+        _decriptionObject.SetValue(_skill.SkillconImage,_skill.SkillName);
+        _decriptionObject.SetItemEffectText(_skill.EffectDescriptionText);
+        _decriptionObject.SetDescription(_skill.ETCDescriptionText);
+    }
+    private void CloseDescription(PointerEventData data)
+    {
+        _decriptionObject.gameObject.SetActive(false);
+        _decriptionObject.SetdecriptionOriginPos();
     }
 
     public void ClicktoSkill(PointerEventData eventdata)
@@ -63,7 +71,7 @@ public class SkillComponent : UI_Base
             //이부분에 버프류 스킬이면 Duration이 돌아가게 만들어야함
         }
 
-        _decriptionObject = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+       
     }
 
     private IEnumerator TriggerCooldown()
@@ -87,10 +95,10 @@ public class SkillComponent : UI_Base
         go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // 오프셋 제거
         go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // 오프셋 제거
     }
-
     protected override void StartInit()
     {
-
+        _decriptionObject = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+        
     }
 
 }

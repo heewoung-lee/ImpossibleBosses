@@ -22,7 +22,7 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
     public ItemType itemType = ItemType.Equipment;
     public string itemGradeText;
     public string equipment_SlotText;
-    public List<ItemEffect> itemEffects = new List<ItemEffect>();
+    public List<StatEffect> itemEffects = new List<StatEffect>();
     public string itemName;
     public string descriptionText;
     public string itemIconSourceText;
@@ -34,7 +34,7 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
     public Item_Grade_Type Item_Grade => (Item_Grade_Type)System.Enum.Parse(typeof(Item_Grade_Type), itemGradeText);
     public Equipment_Slot_Type Equipment_Slot => (Equipment_Slot_Type) System.Enum.Parse(typeof(Equipment_Slot_Type),equipment_SlotText);
     public int Key => itemNumber;
-    public List<ItemEffect> ItemEffects => itemEffects;
+    public List<StatEffect> ItemEffects => itemEffects;
     public string ItemName => itemName;
     public string DescriptionText => descriptionText;
     public string ItemIconSourceText => itemIconSourceText;
@@ -44,7 +44,7 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
     {
         string descriptionText = "";
         descriptionText = Utill.ItemGradeConvertToKorean(Item_Grade) + "µî±Þ\n";
-        foreach (ItemEffect effect in ItemEffects)
+        foreach (StatEffect effect in ItemEffects)
         {
             descriptionText += $"{Utill.StatTypeConvertToKorean(effect.statType)} : {effect.value} \n";
         }
