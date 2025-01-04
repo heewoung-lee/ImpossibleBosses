@@ -14717,7 +14717,7 @@ GameObject:
   - component: {fileID: 7952806900849739330}
   - component: {fileID: -7637125406615205649}
   m_Layer: 0
-  m_Name: Aura_acceleration
+  m_Name: Aura_Roar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

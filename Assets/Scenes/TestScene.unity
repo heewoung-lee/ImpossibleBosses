@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 22120623}
   - component: {fileID: 22120622}
   - component: {fileID: 22120626}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 22120621}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.73, y: 0.5, z: 0}
+  m_LocalPosition: {x: 2.73, y: 0.5, z: 3.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -237,14 +237,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 22120621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fce1616d5d20684cb71f0207dd40132, type: 3}
+  m_Script: {fileID: 11500000, guid: 4901ba921c39bbc47b5691d91f21d688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTransform: {fileID: 0}
-  targetTransform: {fileID: 0}
-  projectilePrefab: {fileID: 5850001623458330267, guid: 6a1451c54ff252a49943256f8f8b6e1d, type: 3}
-  maxHeight: 5
-  flightSpeed: 5
 --- !u!1001 &603684000
 PrefabInstance:
   m_ObjectHideFlags: 0

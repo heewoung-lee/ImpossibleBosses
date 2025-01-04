@@ -51,8 +51,8 @@ public class UI_Button : UI_Scene
         _scoreButton.onClick.AddListener(() =>
         {
             TestIteminInventort();
-            //TestPlayerDamaged();
-            //TestGenerateBossSkill1();
+            TestGetGold();
+            TestGetExp();
         });
 
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>
@@ -61,16 +61,9 @@ public class UI_Button : UI_Scene
         }, Define.UI_Event.Drag);
     }
 
-
-    public void TestPlayerDamaged()
-    {
-        _playerStats.Exp += 5;
-        Debug.Log(_playerStats.Exp + "플레이어 경험치");
-        Debug.Log($"플레이어 레벨{_playerStats.Level}");
-
-        _playerStats.Gold += 5;
-        _playerStats.OnAttacked(_playerStats,5);
-    }
+    public void TestGetGold() => _playerStats.Gold += 5;
+    public void TestGetDamaged() => _playerStats.OnAttacked(_playerStats, 5);
+    public void TestGetExp() => _playerStats.Exp += 5;
 
     public void TestGenerateBossSkill1()
     {

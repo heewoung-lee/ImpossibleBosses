@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using Google.Apis.Sheets.v4.Data;
+using System.Collections;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/Roar");
 
-    public override float Duration => 5f;
+    public override float Duration => 10f;//지속시간
 
     public override string SkillName => "분노";
 
@@ -39,12 +40,12 @@ public class Skill_Buff_Roar : Skill_Duration
 
         _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
 
-        foreach(Collider players_collider in _players)
+        foreach (Collider players_collider in _players)
         {
-            Managers.VFX_Manager.GenerateParticle("States/Aura_acceleration", players_collider.transform.position,3f);
+            GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("States/Aura_Roar", players_collider.gameObject, Duration);
         }
-
     }
+
 
     public override void RemoveStats()
     {

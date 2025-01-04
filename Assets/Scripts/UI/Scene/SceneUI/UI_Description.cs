@@ -67,6 +67,8 @@ public class UI_Description : UI_Scene
         _descriptionWidth = _description_RectTr.rect.width;
         _descriptionHeight = _description_RectTr.rect.height;
         _descriptionCanvas = GetComponent<Canvas>();
+
+        gameObject.SetActive(false);
     }
 
 
@@ -81,6 +83,12 @@ public class UI_Description : UI_Scene
         //아이템 타입으로 스위치를 나눠서
         //장비 아이템이면 장비아이템 타입으로 나눔
         //소비 아이템이면 타입에 소비아이템으로 나눔
+    }
+
+    public void SetValue(Sprite iconSprite,string name)
+    {
+        _itemImage.sprite = iconSprite;
+        _itemNameText.text = name;
     }
     public void SetItemEffectText(string text)
     {
@@ -130,13 +138,12 @@ public class UI_Description : UI_Scene
     protected override void StartInit()
     {
         _descriptionCanvas.sortingOrder = UI_DESCRIPTION_SORTING_ORDER;
-        gameObject.SetActive(false);
+        
     }
-
-    public Vector3 SetDecriptionPos(UI_ItemComponent itemComponent, float width, float height)
+    public Vector3 SetDecriptionPos(Transform componentTr, float width, float height)
     {
         _currnt_Dir = Direction.Right;
-        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, itemComponent.transform.position);
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, componentTr.position);
         //다른 캔버스의 UI위치를 다른캔버스로 옮겨야 하기 때문에 먼저 해당 로컬좌표를 화면좌표로 변환한다.
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -154,7 +161,7 @@ public class UI_Description : UI_Scene
         while (true)
         {
             direction_settingCount++;
-            if(direction_settingCount > 4)
+            if (direction_settingCount > 4)
             {
                 _description_RectTr.pivot = new Vector2(0.5f, 0.5f);
                 return OriginPos;
@@ -200,7 +207,6 @@ public class UI_Description : UI_Scene
             }
         }
     }
-
     public void SetdecriptionOriginPos()
     {
         transform.position = OriginPos;

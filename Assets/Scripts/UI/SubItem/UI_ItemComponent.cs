@@ -23,7 +23,6 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected UI_Description _decriptionObject;
     protected bool _isDragging = false;
 
-
     public int ItemNumber => _itemNumber;
     public ItemType Item_Type => _itemType;
     public Item_Grade_Type Item_Grade => _item_Grade;
@@ -47,6 +46,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
 
     }
 
+
     protected override void StartInit()
     {
 
@@ -64,17 +64,15 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         if (_isDragging)
             return;
-
         _decriptionObject.gameObject.SetActive(true);
 
         _decriptionObject.DescriptionWindow.transform.position
-            = _decriptionObject.SetDecriptionPos(this, ItemRectTr.rect.width, ItemRectTr.rect.height);
+            = _decriptionObject.SetDecriptionPos(transform, ItemRectTr.rect.width, ItemRectTr.rect.height);
 
         _decriptionObject.SetItemEffectText((_iteminfo as IItemDescriptionForm).GetItemEffectText());
         _decriptionObject.SetValue(_iteminfo);//여기에 부모클래스인 IITem이 나와야함
         _decriptionObject.SetDescription(_descriptionText);
     }
-
     protected override void OnDisableInit()
     {
         base.OnDisableInit();
@@ -84,6 +82,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         }
         RevertImage();
     }
+
     protected void RevertImage()
     {
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);

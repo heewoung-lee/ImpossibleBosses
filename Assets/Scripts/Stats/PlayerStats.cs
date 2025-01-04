@@ -67,6 +67,7 @@ public class PlayerStats : BaseStats, IAttackRange
                     _currentexp -= stat.xpRequired;
                     _level++;
                     UpdateStat();
+                    Managers.VFX_Manager.GenerateParticle("States/Level_up",gameObject);
                 }
             }
         }

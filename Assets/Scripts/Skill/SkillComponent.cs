@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,7 +20,8 @@ public class SkillComponent : UI_Base
     private Image _coolTimeIMG;
     private float _coolTime;
     private bool _isSkillReady;
-
+    private UI_Description _decriptionObject;
+    private RectTransform _skillComponentRectTr;
     public void SetSkillComponent(BaseSkill skill)
     {
         _skill = skill;
@@ -32,10 +34,20 @@ public class SkillComponent : UI_Base
         Bind<Image>(typeof(SkillIamge));
         _iconimage = Get<Image>((int)SkillIamge.SkillIconImage);
         _coolTimeIMG = Get<Image>((int)SkillIamge.CoolTimeIMG);
-        BindEvent(_iconimage.gameObject, ClicktoSkill);
         _isSkillReady = true;
+        BindEvent(_iconimage.gameObject, ClicktoSkill);
+        BindEvent(gameObject, ShowDescription, Define.UI_Event.PointerEnter);
+        BindEvent(gameObject, CloseDescription, Define.UI_Event.PointerExit);
     }
 
+    private void CloseDescription(PointerEventData data)
+    {
+    }
+
+    private void ShowDescription(PointerEventData data)
+    {
+        
+    }
 
     public void ClicktoSkill(PointerEventData eventdata)
     {
@@ -50,6 +62,8 @@ public class SkillComponent : UI_Base
             _skill.InvokeSkill();
             //이부분에 버프류 스킬이면 Duration이 돌아가게 만들어야함
         }
+
+        _decriptionObject = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
     }
 
     private IEnumerator TriggerCooldown()
