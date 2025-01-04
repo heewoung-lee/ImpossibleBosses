@@ -38948,6 +38948,7 @@ GameObject:
   - component: {fileID: 4115630293061819656}
   - component: {fileID: 2048362926622766347}
   - component: {fileID: 8078318927741769301}
+  - component: {fileID: 9095023303962238138}
   m_Layer: 0
   m_Name: Lootbeams_Runic_Epic
   m_TagString: Untagged
@@ -43856,3 +43857,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &9095023303962238138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316858287737145693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96d3b3164ea1e846bd2fc88f1ff24b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

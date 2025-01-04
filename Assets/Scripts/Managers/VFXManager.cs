@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,13 @@ public class VFXManager
         particleObject.SetActive(true);
 
         float maxDurationTime = 0f;
+
+        if (particleObject.GetComponent<LoopingParticle>())
+        {
+            return particleObject;
+        }
+
+
         foreach (ParticleSystem particle in particles)
         {
             particle.Stop();
@@ -39,15 +47,11 @@ public class VFXManager
             ParticleSystem.MainModule main = particle.main;
 
             duration = settingDuration <= 0 ? main.duration : settingDuration;
-            main.duration = duration;
-
-
             if (particle.GetComponent<ParticleLifetimeSync>())//파티클 시스템중 Duration과 시간을 맞춰야 하는 파티클이 있다면 적용
             {
                 main.startLifetime = duration;
             }
-
-            if (duration < particle.main.startLifetime.constantMax)//Duration보다 파티클 생존시간이 큰 경우 파티클 생존시간을 넣는다.
+            else if (duration < particle.main.startLifetime.constantMax)//Duration보다 파티클 생존시간이 큰 경우 파티클 생존시간을 넣는다.
             {
                 maxDurationTime = particle.main.startLifetime.constantMax;
             }
@@ -55,6 +59,8 @@ public class VFXManager
             {
                 maxDurationTime = duration + particle.main.startLifetime.constantMax;
             }
+
+
             if (followTarget != null)
             {
                 Managers.ManagersStartCoroutine(FollowingGenerator(followTarget, particle));

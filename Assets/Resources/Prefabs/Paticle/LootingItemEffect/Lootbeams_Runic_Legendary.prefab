@@ -53581,6 +53581,7 @@ GameObject:
   - component: {fileID: 5430019271148519105}
   - component: {fileID: 8523839730338591825}
   - component: {fileID: 4617631024613659398}
+  - component: {fileID: -6251628971560750826}
   m_Layer: 0
   m_Name: Lootbeams_Runic_Legendary
   m_TagString: Untagged
@@ -58491,6 +58492,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-6251628971560750826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966019858013298159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96d3b3164ea1e846bd2fc88f1ff24b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8282289923100569328
 GameObject:
   m_ObjectHideFlags: 0

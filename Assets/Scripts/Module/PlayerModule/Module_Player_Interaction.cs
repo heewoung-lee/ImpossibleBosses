@@ -39,7 +39,7 @@ public class Module_Player_Interaction : MonoBehaviour
     {
         SphereCollider sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 1.5f; // 감지 반경
+        sphereCollider.radius = 1.2f; // 감지 반경
         _IconUI = Managers.UI_Manager.MakeUIWorldSpaceUI<UI_ShowInteraction_ICON>();
         _IconUI.gameObject.SetActive(false);
     }
