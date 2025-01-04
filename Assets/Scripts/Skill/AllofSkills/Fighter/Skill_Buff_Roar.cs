@@ -41,7 +41,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
         foreach(Collider players_collider in _players)
         {
-            Managers.VFX_Manager.GenerateParticle("States/Aura_acceleration", players_collider.transform.position,Duration);
+            Managers.VFX_Manager.GenerateParticle("States/Aura_acceleration", players_collider.transform.position,3f);
         }
 
     }

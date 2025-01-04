@@ -21,61 +21,44 @@ public class VFXManager
         }
     }
 
-    public GameObject GenerateParticle(string path, Vector3 pos = default, float? duration = null)
+    public GameObject GenerateParticle(string path, Vector3 pos = default,float duration = -1f)
     {
         GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path, VFX_Root);
         particleObject.SetActive(false);
-        ParticleSystem particle = particleObject.GetComponent<ParticleSystem>();
+        ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
 
-        float defaultDuration = particle.main.duration;
-        if (duration != null)
-        {
-            defaultDuration = duration.Value;
-        }
-        Managers.ManagersStartCoroutine(FadeOutOverDuration(defaultDuration, particle));
-
-        // 위치와 부모 설정
-        particle.Play();
         particleObject.transform.position = pos;
         particleObject.transform.SetParent(VFX_Root);
         particleObject.SetActive(true);
-        if (particle.main.loop == false)
+
+        float maxDurationTime = 0f;
+        foreach (ParticleSystem particle in particles)
         {
-            Managers.ResourceManager.DestroyObject(particleObject, defaultDuration);
+            particle.Stop();
+            float defaultDuration = 0f;
+            ParticleSystem.MainModule main = particle.main;
+            if (duration <= 0f)
+            {
+                defaultDuration = main.duration;
+            }
+            else
+            {
+                main.duration = duration;
+                defaultDuration = duration;
+
+                if (particle.GetComponent<ParticleLifetimeSync>())//파티클 시스템중 Duration과 시간을 맞춰야 하는 파티클이 있다면 적용
+                {
+                    main.startLifetime = duration;
+                }
+            }
+            if (maxDurationTime < defaultDuration + particle.main.startLifetime.constantMax)
+            {
+                maxDurationTime = defaultDuration + particle.main.startLifetime.constantMax;
+            }
+            // 위치와 부모 설정
+            particle.Play();
         }
+        Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
         return particleObject;
     }
-
-
-
-    IEnumerator FadeOutOverDuration(float duration, ParticleSystem particle)
-    {
-        float elasedTime = 0f;
-
-        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particle.main.maxParticles];
-
-        while (elasedTime < duration)
-        {
-            if (particle == null || particle.gameObject == null)
-            {
-                yield break; // 파괴된 경우 코루틴 종료
-            }
-            elasedTime += Time.deltaTime/ duration;
-            float alpha = Mathf.Lerp(1,0, elasedTime);
-            int aliveParticleNum = particle.GetParticles(particles);
-
-            for (int i = 0;  i < aliveParticleNum; i++)
-            {
-                Color color = particles[i].startColor;
-                color.a = alpha;
-                particles[i].startColor = color;
-            }
-
-            particle.SetParticles(particles, aliveParticleNum);
-
-            yield return null;
-        }
-
-    }
-
 }
