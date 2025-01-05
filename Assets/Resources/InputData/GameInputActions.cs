@@ -58,7 +58,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Stop"",
                     ""type"": ""Button"",
                     ""id"": ""d09c296a-2d08-4dfc-8fe4-d845553394aa"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -121,7 +121,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d94bb7cd-b1ac-4d56-a235-6dc52f607d1c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

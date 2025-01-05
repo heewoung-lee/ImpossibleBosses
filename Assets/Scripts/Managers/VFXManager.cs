@@ -43,6 +43,7 @@ public class VFXManager
         foreach (ParticleSystem particle in particles)
         {
             particle.Stop();
+            particle.Clear();
             float duration = 0f;
             ParticleSystem.MainModule main = particle.main;
 
@@ -76,7 +77,7 @@ public class VFXManager
     {
         return GenerateParticleInternal(path,pos,settingDuration);
     }
-    public GameObject GenerateParticle(string path, GameObject generator, float settingDuration = -1f)
+    public GameObject GenerateParticle(string path, GameObject generator, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
     {
         return GenerateParticleInternal(path, generator.transform.position, settingDuration, generator.transform);
     }
@@ -86,7 +87,7 @@ public class VFXManager
     {
         while(particle != null)
         {
-            particle.transform.position = generatorTr.position;
+            particle.transform.position = new Vector3(generatorTr.position.x,particle.transform.position.y,generatorTr.position.z);
             yield return generatorTr;
         }
     }

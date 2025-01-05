@@ -143,7 +143,7 @@ public class PlayerController : MoveableController
 
     public void UpdatePickup()
     {
-        ChangeAnimIfCurrentIsDone("Pickup",_base_IDleState);
+        ChangeAnimIfCurrentIsDone(_hash_PickUp, _base_IDleState);
     }
     public override void UpdateDie()
     {
@@ -154,7 +154,7 @@ public class PlayerController : MoveableController
     }
     public override void UpdateAttack()
     {
-        ChangeAnimIfCurrentIsDone("Attack",_base_IDleState);
+        ChangeAnimIfCurrentIsDone(Hash_Attack, _base_IDleState);
     }
     protected override void AddInitalizeStateDict()
     {

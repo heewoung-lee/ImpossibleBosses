@@ -24,7 +24,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
 
-    public override float Duration => 10f;//지속시간
+    public override float SkillDuration => 10f;//지속시간
 
     public override string SkillName => "분노";
 
@@ -56,11 +56,11 @@ public class Skill_Buff_Roar : Skill_Duration
         _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
         foreach (Collider players_collider in _players)
         {
-            GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("States/Aura_Roar", players_collider.gameObject, Duration);
+            GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", players_collider.gameObject, SkillDuration);
 
             if(players_collider.TryGetComponent(out BaseStats playerStats))
             {
-               Managers.BufferManager.InitBuff(playerStats, Duration, _roarModifier, Value);
+               Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
             }
         }
     }

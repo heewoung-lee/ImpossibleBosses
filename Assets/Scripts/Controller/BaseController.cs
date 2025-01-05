@@ -61,10 +61,9 @@ public abstract class BaseController : MonoBehaviour
             _stateAnimDict.CallState(_currentStateType); // 현재 상태의 루프문 실행
         }
     }
-
-    public void ChangeAnimIfCurrentIsDone(string currentAnimName, IState changeState)
+    public void ChangeAnimIfCurrentIsDone(int currentAnimHash, IState changeState)
     {
-        if (IsAnimationDone(currentAnimName) == false)
+        if (IsAnimationDone(currentAnimHash) == false)
             return;
 
         if (CurrentStateType.lockAnimationChange)
@@ -77,12 +76,11 @@ public abstract class BaseController : MonoBehaviour
             CurrentStateType = changeState;
         }
     }
-
-    public bool IsAnimationDone(string animName)
+    public bool IsAnimationDone(int animHash)
     {
         AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
         //  스테이트가 정상 재생 중이며, 재생이 끝났는지 검사
-        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.IsName(animName) && stateInfo.normalizedTime >= 1.0f)
+        if (Anim.IsInTransition(AnimLayer) == false && stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= 1.0f)
             return true;
 
         return false;
