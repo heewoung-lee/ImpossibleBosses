@@ -32,11 +32,6 @@ public class BufferManager:IManagerInitializable
         return _allBuffModifierDict[efftect.buffname];
     }
 
-    public Buff_Modifier GetModifier(Type modifier_Type)
-    {
-        return _allBuffModifierDict.Values.FirstOrDefault(modifier => modifier.GetType() == modifier_Type);
-    }
-
     public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
     {
         BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
@@ -44,7 +39,7 @@ public class BufferManager:IManagerInitializable
         return buffer;
     }
 
-    public BufferComponent InitBuff(BaseStats targetStat, float duration, Type buffer_modifier,float value)
+    public BufferComponent InitBuff(BaseStats targetStat, float duration, Buff_Modifier buffer_modifier,float value)
     {
         BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, buffer_modifier, value);

@@ -8,15 +8,21 @@ using UnityEngine;
 
 public class Skill_Buff_Roar : Skill_Duration
 {
+    public Skill_Buff_Roar()
+    {
+        _buffIconImage =  Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/Icon_Booster_Power");
+        _roarModifier = new Buffer_RoarModifier(_buffIconImage);
+    }
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
 
-    public override Sprite BuffIconImage => Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");
+    public override Sprite BuffIconImage => _buffIconImage;
 
+    private Sprite _buffIconImage;
     public override float CoolTime => 5f;
 
     public override string EffectDescriptionText => $"파티원들에게 10의 공격력을 부여합니다";
 
-    public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/Roar");
+    public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
 
     public override float Duration => 10f;//지속시간
 
@@ -25,6 +31,10 @@ public class Skill_Buff_Roar : Skill_Duration
     public override string ETCDescriptionText => "화가난다!";
 
     public override float Value => 10f;
+
+    public override Buff_Modifier Buff_Modifier => _roarModifier;
+
+    private Buffer_RoarModifier _roarModifier;
 
     Collider[] _players = null;
     BaseController _playerBaseController;
@@ -50,7 +60,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
             if(players_collider.TryGetComponent(out BaseStats playerStats))
             {
-               Managers.BufferManager.InitBuff(playerStats, Duration,typeof(Buffer_AttackModifier) ,Value);
+               Managers.BufferManager.InitBuff(playerStats, Duration, _roarModifier, Value);
             }
         }
     }

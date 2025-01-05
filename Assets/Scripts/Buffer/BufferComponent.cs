@@ -26,30 +26,11 @@ public class BufferComponent : MonoBehaviour
     public Buff_Modifier Modifier { get => _modifier; }
  
 
-    public void InitAndStartBuff(BaseStats targetStat, float duration,StatEffect effect)
+    private void InitAndStartBuffInternal(BaseStats targetStat, float duration)
     {
         _targetStat = targetStat;
         _duration = duration;
         _image = GetComponentInChildren<Image>();
-        _modifier = Managers.BufferManager.GetModifier(effect);
-        if(_modifier is Immediately_Buff)
-        {
-            _image.sprite = null;
-        }
-        else
-        {
-            _image.sprite = (_modifier as Duration_Buff).BuffIconImage;
-        }
-        _image.SetNativeSize();
-        _value = effect.value;
-        StartBuff();
-    }
-    public void InitAndStartBuff(BaseStats targetStat, float duration, Type buff_Modifier,float value)
-    {
-        _targetStat = targetStat;
-        _duration = duration;
-        _image = GetComponentInChildren<Image>();
-        _modifier = Managers.BufferManager.GetModifier(buff_Modifier);
         if (_modifier is Immediately_Buff)
         {
             _image.sprite = null;
@@ -58,9 +39,21 @@ public class BufferComponent : MonoBehaviour
         {
             _image.sprite = (_modifier as Duration_Buff).BuffIconImage;
         }
-        _image.SetNativeSize();
-        _value = value;
         StartBuff();
+    }
+
+
+    public void InitAndStartBuff(BaseStats targetStat, float duration,StatEffect effect)
+    {
+        _modifier = Managers.BufferManager.GetModifier(effect);
+        _value = effect.value;
+        InitAndStartBuffInternal(targetStat, duration);
+    }
+    public void InitAndStartBuff(BaseStats targetStat, float duration, Buff_Modifier buff_Modifier,float value)
+    {
+        _modifier = buff_Modifier;
+        _value = value;
+        InitAndStartBuffInternal(targetStat, duration);
     }
 
     private void StartBuff()
@@ -82,7 +75,7 @@ public class BufferComponent : MonoBehaviour
         foreach (BufferComponent buffer in transform.parent.GetComponentsInChildren<BufferComponent>())
         {
 
-            if (_modifier.Buffname != buffer.Modifier.Buffname)//같은 버프가 아니라면 넘긴다.
+            if (_modifier != buffer.Modifier)//같은 버프가 아니라면 넘긴다.
                 continue;
 
             if (buffer == this)//내 버프라면 넘긴다.

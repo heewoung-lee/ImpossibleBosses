@@ -11,4 +11,6 @@ public abstract class BaseSkill
     public abstract Sprite SkillconImage { get; }
     public abstract float Value { get; }
     public abstract void InvokeSkill();
+
+    public abstract Buff_Modifier Buff_Modifier { get; }
 }
