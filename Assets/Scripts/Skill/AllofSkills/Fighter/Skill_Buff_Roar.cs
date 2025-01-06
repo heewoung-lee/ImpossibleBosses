@@ -56,11 +56,10 @@ public class Skill_Buff_Roar : Skill_Duration
         _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
         foreach (Collider players_collider in _players)
         {
-            GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", players_collider.gameObject, SkillDuration);
-
             if(players_collider.TryGetComponent(out BaseStats playerStats))
             {
-               Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
+                GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerStats.gameObject, SkillDuration);
+                Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
             }
         }
     }
