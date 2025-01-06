@@ -38,8 +38,10 @@ public class VFXManager
         {
             return particleObject;
         }
-
-
+        if (followTarget != null)
+        {
+            Managers.ManagersStartCoroutine(FollowingGenerator(followTarget, particleObject));
+        }
         foreach (ParticleSystem particle in particles)
         {
             particle.Stop();
@@ -63,10 +65,7 @@ public class VFXManager
             }
 
 
-            if (followTarget != null)
-            {
-                Managers.ManagersStartCoroutine(FollowingGenerator(followTarget, particle));
-            }
+           
             particle.Play();
         }
         Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
@@ -83,7 +82,7 @@ public class VFXManager
     }
 
 
-    private IEnumerator FollowingGenerator(Transform generatorTr, ParticleSystem particle)
+    private IEnumerator FollowingGenerator(Transform generatorTr, GameObject particle)
     {
         while(particle != null)
         {
