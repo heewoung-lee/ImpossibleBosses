@@ -119,6 +119,10 @@ public class LootItem : MonoBehaviour,IInteraction
     {
         PlayerController base_controller = player.PlayerController;
         base_controller.CurrentStateType = base_controller.PickupState;//픽업 애니메이션 실행
+
+        if (base_controller.CurrentStateType != base_controller.PickupState)
+            return;
+
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
         if (_ui_player_Inventory.gameObject.activeSelf)//인벤토리가 열려있다면 바로 들어간다.
         {

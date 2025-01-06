@@ -56,7 +56,6 @@ public abstract class BaseController : MonoBehaviour
 
             if (_currentStateType.lockAnimationChange == true)
                 return;
-
             _currentStateType = value;
             _stateAnimDict.CallState(_currentStateType); // 현재 상태의 루프문 실행
         }
