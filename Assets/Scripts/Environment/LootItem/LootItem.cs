@@ -136,6 +136,7 @@ public class LootItem : MonoBehaviour,IInteraction
         Managers.ResourceManager.DestroyObject(gameObject);
         player.DisEnable_Icon_UI();//상호작용 아이콘 제거
     }
+
     public void OutInteraction()
     {
 

@@ -8,7 +8,6 @@ using UnityEngine;
 public abstract class MoveableController : BaseController
 {
     protected Vector3 _destPos;
-    protected GameObject _target;
     PlayerController _player;
     private void Update()
     {

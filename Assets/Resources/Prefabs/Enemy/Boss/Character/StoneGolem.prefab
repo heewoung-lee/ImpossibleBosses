@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 149606342554775049}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.00034529547, w: 0.99999994}
+  m_LocalPosition: {x: 0.0011621952, y: 0.000039100647, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4949343589888775300}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.04}
 --- !u!137 &1590839459892402146
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -1148,6 +1148,50 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.15750402, y: 0.037939817, z: -0.021735042}
     m_Extent: {x: 0.30859756, y: 0.19376278, z: 0.18626364}
   m_DirtyAABB: 0
+--- !u!1 &2107864289074591936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3118408780791738135}
+  - component: {fileID: 8872481123978405625}
+  m_Layer: 7
+  m_Name: HeadTr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3118408780791738135
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107864289074591936}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.00033488273, y: 1.38, z: -0.142}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7388149949887060508}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8872481123978405625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107864289074591936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 198345e21edef6c49aa9089e6aaf13d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2152646407117518655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,7 +2451,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3118408780791738135}
   m_Father: {fileID: 4949343589888775300}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8422066514031856760
@@ -2591,7 +2636,7 @@ MonoBehaviour:
         Phase 1Skill Used","Instant":true,"SharedBool_isPhaseSkillUsed":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsPhase1SkillUsed","IsShared":true,"BooleanmValue":false}},{"Type":"BossSkill1","NodeData":{"Offset":"(46.3781738,170.138672)"},"ID":19,"Name":"Boss
         Skill 1","Instant":true,"SharedIntDamage":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"BossSkill1Damage","IsShared":true,"Int32mValue":2}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(182.376709,252.3157)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CheckAttackProbability","NodeData":{"Offset":"(-96.7113342,174.685547)"},"ID":21,"Name":"Check
         Attack Probability","Instant":true,"Int32successRate":100},{"Type":"BossSkill1","NodeData":{"Offset":"(109.235229,174.424316)"},"ID":22,"Name":"Boss
-        Skill 1","Instant":true,"SharedIntDamage":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"BossSkill1Damage","IsShared":true,"Int32mValue":2}}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(1296.66675,358.75)"},"ID":23,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(-120,190)"},"ID":24,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Movement.Chaser","NodeData":{"Offset":"(-110,190)"},"ID":25,"Name":"Chaser","Instant":true,"SharedGameObjectm_Target":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedBool_hasArrived":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"hasArrived","IsShared":true,"BooleanmValue":false},"SharedFloatm_Speed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedFloatm_AngularSpeed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":120},"SharedFloatm_ArriveDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedBoolm_StopOnTaskEnd":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolm_UpdateRotation":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true}},{"Type":"WaitTimeTarget","NodeData":{"Offset":"(100.000061,190)"},"ID":26,"Name":"Wait
+        Skill 1","Instant":true,"SharedIntDamage":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"BossSkill1Damage","IsShared":true,"Int32mValue":2}}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(1296.66675,358.75)"},"ID":23,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(-120,190)"},"ID":24,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Movement.Chaser","NodeData":{"Offset":"(-110,190)"},"ID":25,"Name":"Chaser","Instant":true,"SharedGameObjectm_Target":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"IsShared":true},"SharedBool_hasArrived":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"hasArrived","IsShared":true,"BooleanmValue":false},"SharedFloatm_Speed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedFloatm_AngularSpeed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":120},"SharedFloatm_ArriveDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5},"SharedBoolm_StopOnTaskEnd":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolm_UpdateRotation":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true}},{"Type":"WaitTimeTarget","NodeData":{"Offset":"(100.000061,190)"},"ID":26,"Name":"Wait
         Time Target","Instant":true,"SharedBool_hasArrived":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"hasArrived","IsShared":true,"BooleanmValue":false},"SharedFloat_minSecond":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3},"SharedFloat_maxSecond":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":5}}]},{"Type":"BossAttack","NodeData":{"Offset":"(170,200)","WatchedFields":["_attack_indicator"]},"ID":27,"Name":"Boss
         Attack","Instant":true,"SharedProjector_attack_indicator":{"Type":"SharedProjector","Name":"Boss_Indicator","IsShared":true},"Int32radius_Step":4,"Int32Angle_Step":7}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"hasArrived","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsPhase2SkillUsed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsPhase1SkillUsed","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"BossSkill1Damage","IsShared":true,"Int32mValue":2},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"BossSkill2Damege","IsShared":true,"Int32mValue":40},{"Type":"SharedProjector","Name":"Boss_Indicator","IsShared":true}]}'
       fieldSerializationData:
@@ -4496,13 +4541,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6489120921254968029}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.0046895733, y: 0.00000019271744, z: -0.0016743677, w: 0.9999876}
+  m_LocalPosition: {x: -0.0050902846, y: -0.003472042, z: 0.014256477}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4949343589888775300}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.537, y: 0.001, z: -0.192}
 --- !u!137 &1878471849873788540
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

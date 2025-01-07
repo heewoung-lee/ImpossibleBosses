@@ -37,10 +37,10 @@ public class Skill_Buff_Determination : Skill_Duration
         {
             _playerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
             _fighter_Class = _playerController.GetComponent<Module_Fighter_Class>();
-            _playerController.StateAnimDict.RegisterState(_fighter_Class.RoarState, OnStateChanged);
+            _playerController.StateAnimDict.RegisterState(_fighter_Class.DeterminationState, OnStateChanged);
 
         }
-        _playerController.CurrentStateType = _fighter_Class.RoarState;//로어 애니메이션 그대로 사용
+        _playerController.CurrentStateType = _fighter_Class.DeterminationState;
     }
 
     public void OnStateChanged()
@@ -52,7 +52,7 @@ public class Skill_Buff_Determination : Skill_Duration
         {
             if (players_collider.TryGetComponent(out BaseStats playerStats))
             {
-                GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Shield_Determination", playerStats.gameObject, SkillDuration);
+                GameObject determinationParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Shield_Determination", playerStats.transform, SkillDuration);
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _determination, Value);
             }
         }

@@ -13,28 +13,54 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskIcon("3278c95539f686f47a519013713b31ac", "9f01c6fc9429bae4bacb3d426405ffe4")]
     public class Chaser : NavMeshMovement
     {
-        [Tooltip("The GameObject that the agent is seeking")]
-        [UnityEngine.Serialization.FormerlySerializedAs("target")]
-        public SharedGameObject m_Target;
+        public GameObject targetOBject
+        {
+
+            set
+            {
+                if (_controller == null)
+                {
+                    _controller = Owner.GetComponent<BossGolemController>();
+                }
+                _controller.TargetObject = value;
+            }
+            get
+            {
+                if (_controller == null)
+                {
+                    _controller = Owner.GetComponent<BossGolemController>();
+                }
+                return _controller.TargetObject;
+            }
+        }
         [Tooltip("If target is null then use the target position")]
         [UnityEngine.Serialization.FormerlySerializedAs("targetPosition")]
         public SharedBool _hasArrived;
         private BossGolemController _controller;
+
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            _controller = Owner.GetComponent<BossGolemController>();
+        }
         public override void OnStart()
         {
             base.OnStart();
             _hasArrived.Value = false;
-            _controller = Owner.GetComponent<BossGolemController>();
-            Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, 10000f, LayerMask.GetMask("Player"));
-            float findClosePlayer = float.MaxValue;
-            foreach (Collider collider in checkedPlayer)
+
+            if(targetOBject == null)
             {
-                float distance = (transform.position - collider.transform.position).sqrMagnitude;
-                findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
-                if (findClosePlayer == distance)
+                Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, float.MaxValue, LayerMask.GetMask("Player"));
+                float findClosePlayer = float.MaxValue;
+                foreach (Collider collider in checkedPlayer)
                 {
-                    m_Target = collider.transform.gameObject;
-                    break;
+                    float distance = (transform.position - collider.transform.position).sqrMagnitude;
+                    findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
+                    if (findClosePlayer == distance)
+                    {
+                        targetOBject = collider.transform.gameObject;
+                    }
                 }
             }
             SetDestination(Target());
@@ -45,7 +71,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override TaskStatus OnUpdate()
         {
             _controller.UpdateMove();
-            _hasArrived.Value = HasArrived() && TargetInSight.IsTargetInSight(_controller.GetComponent<IAttackRange>(), m_Target.Value.transform, 0.2f);
+            _hasArrived.Value = HasArrived() && TargetInSight.IsTargetInSight(_controller.GetComponent<IAttackRange>(), targetOBject.transform, 0.2f);
             if (_hasArrived.Value)
             {
                 SetDestination(transform.position);
@@ -58,9 +84,9 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return targetPosition if target is null
         private Vector3 Target()
         {
-            if (m_Target.Value != null)
+            if (targetOBject != null)
             {
-                return m_Target.Value.transform.position;
+                return targetOBject.transform.position;
             }
             return Vector3.zero;
         }
@@ -68,14 +94,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             base.OnReset();
-            m_Target = null;
+            targetOBject = null;
         }
 
 
         public override void OnEnd()
         {
             base.OnEnd();
-            m_Target.Value = null;
+            targetOBject = null;
         }
     }
 }

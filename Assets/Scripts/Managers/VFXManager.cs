@@ -76,9 +76,9 @@ public class VFXManager
     {
         return GenerateParticleInternal(path,pos,settingDuration);
     }
-    public GameObject GenerateParticle(string path, GameObject generator, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
+    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
     {
-        return GenerateParticleInternal(path, generator.transform.position, settingDuration, generator.transform);
+        return GenerateParticleInternal(path, generatorTr.position, settingDuration, generatorTr);
     }
 
 

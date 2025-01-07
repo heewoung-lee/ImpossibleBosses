@@ -63,7 +63,7 @@ public class Skill_Slash : Skill_Immedialty
     }
     public void PlaytheSlah()
     {
-        GameObject slashParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Fighter_Slash", _playerController.gameObject);
+        GameObject slashParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Fighter_Slash", _playerController.transform);
         slashParticle.transform.rotation = _playerController.transform.rotation;
         Managers.ManagersStartCoroutine(FrameInHit(_playerStat, SlashAnimClip.length));
     }

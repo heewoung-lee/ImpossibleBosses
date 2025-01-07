@@ -21,6 +21,10 @@ public abstract class BaseController : MonoBehaviour
     private float _transition_Die = DEFALUT_Transition_Die;
     private int _animLayer = 0;
 
+    private GameObject _targetObject;
+    public GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
+
+
     private StateAnimationDict _stateAnimDict = new StateAnimationDict();//스테이터스가 바뀌면 애니메이션을 호출하는 딕셔너리
     public StateAnimationDict StateAnimDict => _stateAnimDict;
 
@@ -59,6 +63,8 @@ public abstract class BaseController : MonoBehaviour
             _stateAnimDict.CallState(_currentStateType); // 현재 상태의 루프문 실행
         }
     }
+
+
     public void ChangeAnimIfCurrentIsDone(int currentAnimHash, IState changeState)
     {
         if (IsAnimationDone(currentAnimHash) == false)

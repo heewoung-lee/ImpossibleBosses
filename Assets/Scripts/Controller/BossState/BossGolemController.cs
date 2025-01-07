@@ -84,7 +84,9 @@ public class BossGolemController : BossController
         }
 
     }
-
+    private void Update()
+    {
+    }
     public override void UpdateDie()
     {
         if (CurrentStateType == Base_DieState)
