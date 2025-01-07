@@ -64,14 +64,10 @@ public class SkillComponent : UI_Base
     
     public void SkillStart()
     {
-        if (_isSkillReady)
+        if (_isSkillReady&& _skill.IsStateUpdatedAfterSkill())
         {
             StartCoroutine(TriggerCooldown());
-            _skill.InvokeSkill();
-            //이부분에 버프류 스킬이면 Duration이 돌아가게 만들어야함
         }
-
-       
     }
 
     private IEnumerator TriggerCooldown()

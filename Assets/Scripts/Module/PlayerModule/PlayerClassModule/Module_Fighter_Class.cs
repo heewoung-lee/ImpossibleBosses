@@ -10,9 +10,10 @@ public class Module_Fighter_Class : Module_Player_Class
     private PlayerController _controller;
     private RoarState _roarState;
     private SlashState _slashState;
-    private int _hash_Roar => Animator.StringToHash("Roar");
-    private int _hash_Slash => Animator.StringToHash("Slash");
-
+    private int _hash_Roar = Animator.StringToHash("Roar");
+    public int Hash_Roar => _hash_Roar;
+    private int _hash_Slash = Animator.StringToHash("Slash");
+    public int Hash_Slash => _hash_Slash;
 
     public RoarState RoarState { get => _roarState; }
     public SlashState SlashState { get => _slashState; }

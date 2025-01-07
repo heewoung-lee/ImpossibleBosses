@@ -22,14 +22,27 @@ public class Skill_Slash : Skill_Immedialty
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Slash");
     public override float Value => 1.5f;
 
-    BaseController _playerBaseController;
+    BaseController _playerController;
     PlayerStats _playerStat;
     Module_Fighter_Class _fighter_Class;
+
+    AnimationClip _slashAnimClip;
+    AnimationClip SlashAnimClip
+    {
+        get
+        {
+            if(_slashAnimClip == null)
+            {
+                _slashAnimClip = _playerController.GetComponent<Module_Player_AnimInfo>().GetAnimationClip(_fighter_Class.Hash_Slash);
+            }
+            return _slashAnimClip;
+        }
+    }
     float AttackDamage
     {
         get
         {
-            if(_playerStat == null)
+            if (_playerStat == null)
             {
                 _playerStat = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
             }
@@ -39,50 +52,36 @@ public class Skill_Slash : Skill_Immedialty
 
     public override void InvokeSkill()
     {
-        if (_playerBaseController == null || _fighter_Class == null)
+        if (_playerController == null || _fighter_Class == null)
         {
-            _playerBaseController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
-            _fighter_Class = _playerBaseController.GetComponent<Module_Fighter_Class>();
-            _playerStat = _playerBaseController.GetComponent<PlayerStats>();
+            _playerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            _fighter_Class = _playerController.GetComponent<Module_Fighter_Class>();
+            _playerStat = _playerController.GetComponent<PlayerStats>();
+            _playerController.StateAnimDict.RegisterState(_fighter_Class.SlashState, PlaytheSlah);
         }
-        _playerBaseController.CurrentStateType = _fighter_Class.SlashState;
-        GameObject slashParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Fighter_Slash",_playerBaseController.gameObject);
-        slashParticle.transform.rotation = _playerBaseController.transform.rotation;
-        Managers.ManagersStartCoroutine(FrameInHit(_playerStat));
+        _playerController.CurrentStateType = _fighter_Class.SlashState;
+    }
+    public void PlaytheSlah()
+    {
+        GameObject slashParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Fighter_Slash", _playerController.gameObject);
+        slashParticle.transform.rotation = _playerController.transform.rotation;
+        Managers.ManagersStartCoroutine(FrameInHit(_playerStat, SlashAnimClip.length));
     }
 
-    IEnumerator FrameInHit(PlayerStats stats)
+
+    IEnumerator FrameInHit(PlayerStats stats, float animLength)
     {
         float duration = 0f;
-        float firstHitFrame = 0.25f;
-        float secondHitFrame = 0.75f;
-        float thirdHitFrame = 1f;
-        bool isfirstHit = false;
-        bool issecondHit = false;
-        bool isthirdHit = false;
-
-        float animationLength = _playerBaseController.Anim.GetCurrentAnimatorStateInfo(0).length;
+        float[] hitFrames = new float[3] { 0.25f, 0.5f, 0.75f };
+        int hitIndex = 0;
         while (duration < 1)
         {
-            duration += Time.deltaTime / animationLength;
-            Debug.Log(duration);
-            if(duration> firstHitFrame && isfirstHit == false)
+            duration += Time.deltaTime / animLength;
+
+            if (hitIndex < hitFrames.Length && duration > hitFrames[hitIndex])
             {
-                Debug.Log("첫번째 공격");
                 TargetInSight.AttackTargetInSector(stats, (int)AttackDamage);
-                isfirstHit = true;
-            }
-            else if(isfirstHit == true && duration > secondHitFrame && issecondHit == false)
-            {
-                Debug.Log($"두번째 공격{duration}");
-                TargetInSight.AttackTargetInSector(stats, (int)AttackDamage);
-                issecondHit = true;
-            }
-            else if(isfirstHit == true && issecondHit == true && duration > thirdHitFrame && isthirdHit == false)
-            {
-                Debug.Log($"세번째 공격{duration}");
-                TargetInSight.AttackTargetInSector(stats, (int)AttackDamage);
-                isthirdHit = true;
+                hitIndex++;
             }
             yield return null;
         }

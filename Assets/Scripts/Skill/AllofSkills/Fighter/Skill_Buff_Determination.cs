@@ -11,7 +11,7 @@ public class Skill_Buff_Determination : Skill_Duration
     private Sprite _buffIconImage;
     private Buffer_Determination _determination;
     private Collider[] _players = null;
-    private BaseController _playerBaseController;
+    private BaseController _playerController;
     private Module_Fighter_Class _fighter_Class;
 
     public override float SkillDuration => 10f;
@@ -33,18 +33,21 @@ public class Skill_Buff_Determination : Skill_Duration
 
     public override void InvokeSkill()
     {
-        if (_playerBaseController == null || _fighter_Class == null)
+        if (_playerController == null || _fighter_Class == null)
         {
-            _playerBaseController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
-            _fighter_Class = _playerBaseController.GetComponent<Module_Fighter_Class>();
+            _playerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            _fighter_Class = _playerController.GetComponent<Module_Fighter_Class>();
+            _playerController.StateAnimDict.RegisterState(_fighter_Class.RoarState, OnStateChanged);
+
         }
+        _playerController.CurrentStateType = _fighter_Class.RoarState;//로어 애니메이션 그대로 사용
+    }
 
-        _playerBaseController.CurrentStateType = _fighter_Class.RoarState;//로어 애니메이션 그대로 사용
-
+    public void OnStateChanged()
+    {
         LayerMask playerLayerMask = LayerMask.GetMask("Player");
         float skillRadius = float.MaxValue;
-
-        _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
+        _players = Physics.OverlapSphere(_playerController.transform.position, skillRadius, playerLayerMask);
         foreach (Collider players_collider in _players)
         {
             if (players_collider.TryGetComponent(out BaseStats playerStats))
@@ -53,8 +56,6 @@ public class Skill_Buff_Determination : Skill_Duration
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _determination, Value);
             }
         }
-
-
     }
 
     public override void RemoveStats()

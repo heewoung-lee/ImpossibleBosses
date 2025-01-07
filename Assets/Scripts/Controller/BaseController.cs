@@ -53,7 +53,6 @@ public abstract class BaseController : MonoBehaviour
         get => _currentStateType;
         set
         {
-
             if (_currentStateType.lockAnimationChange == true)
                 return;
             _currentStateType = value;

@@ -12,4 +12,18 @@ public abstract class BaseSkill
     public abstract float Value { get; }
     public abstract void InvokeSkill();
 
+    private BaseController baseController;
+
+    public bool IsStateUpdatedAfterSkill()
+    {
+        if(baseController == null)
+        {
+            baseController =  Managers.GameManagerEx.Player.GetComponent<BaseController>();
+        }
+        IState currentIState = baseController.CurrentStateType;
+        InvokeSkill();
+
+        return currentIState != baseController.CurrentStateType ? true : false;
+    }
+
 }

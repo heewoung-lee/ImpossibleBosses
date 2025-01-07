@@ -37,33 +37,34 @@ public class Skill_Buff_Roar : Skill_Duration
     private Buffer_RoarModifier _roarModifier;
 
     Collider[] _players = null;
-    BaseController _playerBaseController;
+    BaseController _playerController;
     Module_Fighter_Class _fighter_Class;
 
     public override void InvokeSkill()
     {
-        if(_playerBaseController == null|| _fighter_Class == null)
+        if(_playerController == null|| _fighter_Class == null)
         {
-            _playerBaseController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
-            _fighter_Class = _playerBaseController.GetComponent<Module_Fighter_Class>();
+            _playerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            _fighter_Class = _playerController.GetComponent<Module_Fighter_Class>();
+            _playerController.StateAnimDict.RegisterState(_fighter_Class.RoarState, PlaytheRoar);
         }
-        _playerBaseController.CurrentStateType = _fighter_Class.RoarState;
+        _playerController.CurrentStateType = _fighter_Class.RoarState;
+    }
 
+    public void PlaytheRoar()
+    {
         LayerMask playerLayerMask = LayerMask.GetMask("Player");
         float skillRadius = float.MaxValue;
-
-
-        _players = Physics.OverlapSphere(_playerBaseController.transform.position, skillRadius, playerLayerMask);
+        _players = Physics.OverlapSphere(_playerController.transform.position, skillRadius, playerLayerMask);
         foreach (Collider players_collider in _players)
         {
-            if(players_collider.TryGetComponent(out BaseStats playerStats))
+            if (players_collider.TryGetComponent(out BaseStats playerStats))
             {
                 GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerStats.gameObject, SkillDuration);
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
             }
         }
     }
-
 
     public override void RemoveStats()
     {

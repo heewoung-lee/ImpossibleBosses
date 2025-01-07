@@ -7,7 +7,14 @@ public class StateAnimationDict
 
     public void RegisterState(IState iMoveableState ,Action stateStrategy)
     {
-        _stateDict[iMoveableState] = stateStrategy;
+        if (!_stateDict.ContainsKey(iMoveableState))
+        {
+            _stateDict.Add(iMoveableState, stateStrategy);
+        }
+        else
+        {
+            _stateDict[iMoveableState] += stateStrategy;
+        }
     }
     public void CallState(IState iMoveableState)
     {
