@@ -1,10 +1,15 @@
+using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_LoginPopup : UI_Popup
 {
-
+   
     enum Buttons
     {
         Close_Button,
@@ -49,7 +54,7 @@ public class UI_LoginPopup : UI_Popup
     }
     public void ShowSignUpUI()
     {
-        if(_ui_signUpPopup == null)
+        if (_ui_signUpPopup == null)
         {
             _ui_signUpPopup = Managers.UI_Manager.ShowUIPopupUI<UI_SignUpPopup>();
         }
@@ -61,9 +66,24 @@ public class UI_LoginPopup : UI_Popup
         string userID = _idInputField.text;
         string userPW = _pwInputField.text;
 
-        Debug.Log("유저ID"+userID);
-        Debug.Log("유저PW" + userPW);
-        
+        PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPW);
+
+        if(playerinfo.Equals(default(PlayerLoginInfo)))
+        {
+            string titleText = "오류";
+            string bodyText = "아이디와 비밀번호가 틀립니다";
+            UI_AlertPopupBase alertPopupUI = Managers.UI_Manager.ShowUIPopupUI<UI_AlertDialog>();
+            alertPopupUI.SetText(titleText, bodyText);
+            Managers.UI_Manager.ShowPopupUI(alertPopupUI);
+
+            Debug.Log("Login Failed");
+        }
+
+        if(playerinfo.NickName == null)
+        {
+            //닉네임 짓는 창 띄우기
+        }
+
     }
 
 }

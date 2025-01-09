@@ -693,7 +693,7 @@ GameObject:
   - component: {fileID: 27400145241563339}
   - component: {fileID: 27400145241563342}
   m_Layer: 5
-  m_Name: Button_Login
+  m_Name: Button_Signup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1402,7 +1402,7 @@ GameObject:
   - component: {fileID: 1986973177662970504}
   - component: {fileID: 1986973177662970507}
   m_Layer: 5
-  m_Name: InputField_Password
+  m_Name: PWInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1582,7 +1582,7 @@ GameObject:
   - component: {fileID: 1986973177702010005}
   - component: {fileID: 1986973177702010004}
   m_Layer: 5
-  m_Name: InputField_Username
+  m_Name: IDInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

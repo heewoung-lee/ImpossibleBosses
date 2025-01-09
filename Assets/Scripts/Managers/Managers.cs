@@ -30,6 +30,9 @@ public class Managers : MonoBehaviour
     private ItemDataManager _itemDataManaer = new ItemDataManager();
     public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
+    private LogInManager _logInManager = new LogInManager();
+    public static LogInManager LogInManager { get => Instance._logInManager; }
+
     private LootItemManager _lootItemManaer = new LootItemManager();
     public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }
     

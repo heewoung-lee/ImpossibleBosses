@@ -143,6 +143,46 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         File.WriteAllText(filePath, jsonString);
         Debug.Log($"{fileName} 데이터를 로컬에 저장했습니다.");
     }
+
+
+    public Spreadsheet GetGoogleSheetData(out SheetsService service,out string spreadsheetId,bool isWrite = false)
+    {
+        // 구글 스프레드시트에서 데이터 로드하는 로직
+        // 반환값: Dictionary<string, string> (sheetName, jsonString)
+
+        // 구글 인증 및 서비스 생성
+        try
+        {
+            string[] readAndWriteOption = isWrite == true ? new[] { SheetsService.Scope.Spreadsheets } : new[] { SheetsService.Scope.SpreadsheetsReadonly };
+           UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                new ClientSecrets
+                {
+                    ClientId = "646291088321-0dc3aa9ktvfmfk16adn5097nk5n0ejeh.apps.googleusercontent.com",
+                    ClientSecret = "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"
+                },
+                readAndWriteOption,
+                "user",
+                CancellationToken.None).Result;
+
+            service = new SheetsService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "ItemDataSheet"
+            });
+
+            spreadsheetId = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
+
+            // 스프레드시트 요청
+            Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
+            return spreadsheet;
+        }
+        catch (Exception error)//구글 스프레드시트에 연결이 안될때 에러처리
+        {
+            Debug.Log($"Error: {error}\nNot Connetced Internet");
+            throw;
+        }
+    }
+
     private void LoadDataFromGoogleSheets(List<Type> requestDataTypes)
     {
         // 구글 스프레드시트에서 데이터 로드하는 로직
@@ -151,27 +191,8 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         // 구글 인증 및 서비스 생성
         try
         {
-            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
-                {
-                    ClientId = "646291088321-0dc3aa9ktvfmfk16adn5097nk5n0ejeh.apps.googleusercontent.com",
-                    ClientSecret = "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"
-                },
-                new[] { SheetsService.Scope.SpreadsheetsReadonly },
-                "user",
-                CancellationToken.None).Result;
-
-            SheetsService service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "ItemDataSheet"
-            });
-
-            string spreadsheetId = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
-
             // 스프레드시트 요청
-            Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
-
+            Spreadsheet spreadsheet = GetGoogleSheetData(out SheetsService service,out string spreadsheetId);
             foreach (Type requestType in requestDataTypes)
             {
                 Sheet sheet = null;
