@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 5923943900912387056}
   - component: {fileID: 2647119107518870618}
   m_Layer: 5
-  m_Name: Button_Blue
+  m_Name: Confirm_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 3409229722214865091}
   - component: {fileID: 6667311471545672727}
   m_Layer: 5
-  m_Name: Button_Close
+  m_Name: Close_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 516647024889938584}
   - component: {fileID: 3550212622209073910}
   m_Layer: 5
-  m_Name: Button_Signup
+  m_Name: Signup_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2283,10 +2283,10 @@ RectTransform:
   - {fileID: 4936955412108637098}
   - {fileID: 2658673104800874091}
   - {fileID: 532947744754047557}
-  - {fileID: 5139016301646701724}
-  - {fileID: 1032925527607208524}
   - {fileID: 6186751767013152913}
+  - {fileID: 1032925527607208524}
   - {fileID: 3874397409060322269}
+  - {fileID: 5139016301646701724}
   m_Father: {fileID: 1829879147723100642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.31143752, y: 0.08637038}
