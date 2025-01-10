@@ -25,9 +25,25 @@ interface ILoader<TKey, TValue>
 
 public class DataManager : IManagerInitializable,IManagerIResettable
 {
+    private const string SPREEDSHEETID = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
+
     private List<Type> _requestDataTypes;
     public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
 
+
+    private GoogleDataBaseStruct _databaseStruct;
+
+    public GoogleDataBaseStruct DatabaseStruct
+    {
+        get
+        {
+            if (_databaseStruct.Equals(default(GoogleDataBaseStruct)))
+            {
+                _databaseStruct = new GoogleDataBaseStruct(Define.GOOGLE_CLIENT_ID, Define.GOOGLE_SECRET, Define.APPLICATIONNAME, SPREEDSHEETID);
+            }
+            return _databaseStruct;
+        }
+    }
 
     public void Init()
     {
@@ -145,7 +161,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
     }
 
 
-    public Spreadsheet GetGoogleSheetData(out SheetsService service,out string spreadsheetId,bool isWrite = false)
+    public Spreadsheet GetGoogleSheetData(GoogleDataBaseStruct databaseStruct,out SheetsService service,out string spreadsheetId,bool isWrite = false)
     {
         // 구글 스프레드시트에서 데이터 로드하는 로직
         // 반환값: Dictionary<string, string> (sheetName, jsonString)
@@ -153,12 +169,12 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         // 구글 인증 및 서비스 생성
         try
         {
-            string[] readAndWriteOption = isWrite == true ? new[] { SheetsService.Scope.Spreadsheets } : new[] { SheetsService.Scope.SpreadsheetsReadonly };
+           string[] readAndWriteOption = isWrite == true ? new[] { SheetsService.Scope.Spreadsheets } : new[] { SheetsService.Scope.SpreadsheetsReadonly };
            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 new ClientSecrets
                 {
-                    ClientId = "646291088321-0dc3aa9ktvfmfk16adn5097nk5n0ejeh.apps.googleusercontent.com",
-                    ClientSecret = "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"
+                    ClientId = databaseStruct._google_Client_ID,
+                    ClientSecret = databaseStruct._google_Secret
                 },
                 readAndWriteOption,
                 "user",
@@ -167,10 +183,10 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             service = new SheetsService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "ItemDataSheet"
+                ApplicationName = databaseStruct._applicationName
             });
 
-            spreadsheetId = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
+            spreadsheetId = databaseStruct._spreedSheetID;
 
             // 스프레드시트 요청
             Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
@@ -192,7 +208,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         try
         {
             // 스프레드시트 요청
-            Spreadsheet spreadsheet = GetGoogleSheetData(out SheetsService service,out string spreadsheetId);
+            Spreadsheet spreadsheet = GetGoogleSheetData(DatabaseStruct, out SheetsService service,out string spreadsheetId);
             foreach (Type requestType in requestDataTypes)
             {
                 Sheet sheet = null;

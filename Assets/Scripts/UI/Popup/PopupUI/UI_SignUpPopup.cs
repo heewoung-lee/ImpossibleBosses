@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UI_SignUpPopup : UI_Popup
@@ -8,6 +10,8 @@ public class UI_SignUpPopup : UI_Popup
     Button _buttonSignup;
     TMP_InputField _idInputField;
     TMP_InputField _pwInputField;
+    private UI_AlertPopupBase _alertPopup;
+    private UI_AlertPopupBase _confirmPopup;
     enum Buttons
     {
         Button_Close,
@@ -36,7 +40,46 @@ public class UI_SignUpPopup : UI_Popup
     }
     public async void CreateID()
     {
-      await Managers.LogInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
+        (bool isCheckResult, string message) =  await Managers.LogInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
+
+        if(isCheckResult == false)
+        {
+            _alertPopup = ShowAlertDialogUI<UI_AlertDialog>(_alertPopup, "오류", message);
+        }
+        else
+        {
+            _confirmPopup = ShowAlertDialogUI<UI_ConfirmDialog>(_confirmPopup, "성공", message, ShowLoginAfterSignUp);
+            ClearIDAndPW();
+        }
+    }
+
+    public void ClearIDAndPW()
+    {
+        _idInputField.text = "";
+        _pwInputField.text = "";
+    }
+
+    public void ShowLoginAfterSignUp()
+    {
+        Managers.UI_Manager.CloseAllPopupUI();
+        UI_LoginPopup loginPopup = Managers.UI_Manager.GetImportant_Popup_UI<UI_LoginPopup>();
+        Managers.UI_Manager.ShowPopupUI(loginPopup);
+    }
+
+    private UI_AlertPopupBase ShowAlertDialogUI<T>(UI_AlertPopupBase alertBasePopup,string titleMessage,string bodyText,UnityAction closeButtonAction = null) where T: UI_AlertPopupBase
+    {
+        if(alertBasePopup == null)
+        {
+            alertBasePopup = Managers.UI_Manager.TryGetPopupDictAndShowPopup<T>();
+        }
+        alertBasePopup.SetText(titleMessage, bodyText);
+        if (closeButtonAction != null)
+        {
+            alertBasePopup.SetCloseButtonOverride(closeButtonAction);
+        }
+        Managers.UI_Manager.ShowPopupUI(alertBasePopup);
+
+        return alertBasePopup;
     }
 
     protected override void StartInit()

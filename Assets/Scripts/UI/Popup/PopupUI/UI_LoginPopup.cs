@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,8 @@ public class UI_LoginPopup : UI_Popup
     UI_SignUpPopup _ui_signUpPopup;
     TMP_InputField _idInputField;
     TMP_InputField _pwInputField;
+    UI_AlertPopupBase _ui_alertPopupUI;
+    UI_CreateNickName _ui_CreateNickName;
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -47,7 +50,7 @@ public class UI_LoginPopup : UI_Popup
         });
         _signup_Button.onClick.AddListener(ShowSignUpUI);
         _confirm_Button.onClick.AddListener(AuthenticateUser);
-
+        Managers.UI_Manager.AddImportant_Popup_UI(this);
     }
     protected override void StartInit()
     {
@@ -66,22 +69,31 @@ public class UI_LoginPopup : UI_Popup
         string userID = _idInputField.text;
         string userPW = _pwInputField.text;
 
+        if (string.IsNullOrEmpty(userID)|| string.IsNullOrEmpty(userPW))
+            return;
+
         PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPW);
 
         if(playerinfo.Equals(default(PlayerLoginInfo)))
         {
             string titleText = "오류";
             string bodyText = "아이디와 비밀번호가 틀립니다";
-            UI_AlertPopupBase alertPopupUI = Managers.UI_Manager.ShowUIPopupUI<UI_AlertDialog>();
-            alertPopupUI.SetText(titleText, bodyText);
-            Managers.UI_Manager.ShowPopupUI(alertPopupUI);
-
+            if(_ui_alertPopupUI == null)
+            {
+                _ui_alertPopupUI = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            }
+            _ui_alertPopupUI.SetText(titleText, bodyText);
+            Managers.UI_Manager.ShowPopupUI(_ui_alertPopupUI);
             Debug.Log("Login Failed");
         }
 
-        if(playerinfo.NickName == null)
+        if(string.IsNullOrEmpty(playerinfo.NickName))
         {
-            //닉네임 짓는 창 띄우기
+            if(_ui_CreateNickName == null)
+            {
+                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_CreateNickName>();
+            }
+            Managers.UI_Manager.ShowPopupUI(_ui_CreateNickName);
         }
 
     }

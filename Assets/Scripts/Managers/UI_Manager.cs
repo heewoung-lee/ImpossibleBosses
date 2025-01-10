@@ -62,7 +62,7 @@ public class UI_Manager : IManagerIResettable
             return value as T;
         }
 
-        Debug.LogError($"Not Found KeyType: {typeof(T)}");
+        Debug.Log($"Not Found KeyType: {typeof(T)}");
         return null;
     }
 
@@ -100,6 +100,16 @@ public class UI_Manager : IManagerIResettable
         {
             canvas.sortingOrder = 0;
         }
+    }
+
+    public T TryGetPopupDictAndShowPopup<T>() where T : UI_Popup
+    {
+        T popup = GetImportant_Popup_UI<T>();
+        if (popup == null)
+        {
+            return ShowUIPopupUI<T>();
+        }
+        return popup;
     }
 
     public T ShowUIPopupUI<T>(string name = null) where T : UI_Popup

@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public abstract class UI_AlertPopupBase : UI_Popup
@@ -39,7 +41,13 @@ public abstract class UI_AlertPopupBase : UI_Popup
         {
             Managers.UI_Manager.ClosePopupUI(this);
         });
+        Managers.UI_Manager.AddImportant_Popup_UI(this);
+    }
 
+    public void SetCloseButtonOverride(UnityAction closeButtonAction)
+    {
+        _confirm_Button.onClick.RemoveAllListeners();
+        _confirm_Button.onClick.AddListener(closeButtonAction);
     }
 
 }
