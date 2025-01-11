@@ -5,12 +5,14 @@ using UnityEngine;
 using System;
 using Unity.Android.Gradle.Manifest;
 using System.Threading.Tasks;
+using static UnityEngine.Rendering.DebugUI;
 
 public struct PlayerLoginInfo
 {
     public string ID;
     public string Password;
     public string NickName;
+    public int RowNumber;
 }
 
 public class LogInManager
@@ -22,7 +24,8 @@ public class LogInManager
     {
         ID,
         PW,
-        NickName
+        NickName,
+        RowNumber
     }
     private const string USER_AUTHENTICATE_DATASHEET_NAME = "UserAuthenticateData";
 
@@ -46,14 +49,14 @@ public class LogInManager
 
     public PlayerLoginInfo CurrentPlayerInfo { get { return currentPlayerInfo; } }
 
-    public PlayerLoginInfo AuthenticateUserCommon(string userID, string userPW=null)
+    public PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
     {
         //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
         //있으면 로비창으로 씬전환
         //없으면 오류메세지 출력
         Spreadsheet spreadsheet = Managers.DataManager.GetGoogleSheetData(GoogleDataBaseStruct, out SheetsService service, out string spreadsheetId);
         Sheet UserAthenticateData = null;
-
+        bool ischeckSamePlayerLoginfo = false;
         foreach (Sheet sheet in spreadsheet.Sheets)
         {
             if (sheet.Properties.Title == USER_AUTHENTICATE_DATASHEET_NAME)
@@ -96,27 +99,15 @@ public class LogInManager
                     ID = idData,
                     Password = pwData,
                     NickName = nickNameData,
+                    RowNumber = rowIndex,
                 };
             }
+            ischeckSamePlayerLoginfo = action.Invoke(currentPlayerInfo);
 
-            if(userPW != null)
-            {
-                if (userID == currentPlayerInfo.ID && userPW == currentPlayerInfo.Password)
-                {
-                    Debug.Log("DB Has ID And PW");
-                    return currentPlayerInfo;
-                }
-            }
+            if (ischeckSamePlayerLoginfo == false)
+                continue;
             else
-            {
-                if (userID == currentPlayerInfo.ID)
-                {
-                    Debug.Log("DB Has ID");
-                    return currentPlayerInfo;
-                }
-            }
-           
-
+                return currentPlayerInfo;
         }
         return default;
     }
@@ -126,11 +117,39 @@ public class LogInManager
 
     public PlayerLoginInfo AuthenticateUser(string userID, string userPW)
     {
-        return AuthenticateUserCommon(userID, userPW);
+        return AuthenticateUserCommon((currentPlayerInfo) =>
+        {
+            if (userID == currentPlayerInfo.ID && userPW == currentPlayerInfo.Password)
+            {
+                Debug.Log("DB Has ID And PW");
+                return true;
+            }
+            return false;
+        });
     }
     public PlayerLoginInfo AuthenticateUser(string userID)
     {
-        return AuthenticateUserCommon(userID);
+        return AuthenticateUserCommon((currentPlayerInfo) =>
+        {
+            if (userID == currentPlayerInfo.ID)
+            {
+                Debug.Log("DB Has ID And PW");
+                return true;
+            }
+            return false;
+        });
+    }
+    public PlayerLoginInfo AuthenticateUserNickname(string userNickName)
+    {
+        return AuthenticateUserCommon((currentPlayerInfo) =>
+        {
+            if (userNickName == currentPlayerInfo.NickName)
+            {
+                Debug.Log("DB Has Nickname");
+                return true;
+            }
+            return false;
+        });
     }
 
     public async Task<(bool,string)> WriteToGoogleSheet(string id, string password)
@@ -175,6 +194,45 @@ public class LogInManager
             return (false, "DB를 쓰는중 오류가 발생했습니다.");
         }
         return (true, "회원가입을 축하드립니다.");
+    }
+
+
+    public async Task<(bool,string)> WriteNickNameToGoogleSheet(PlayerLoginInfo playerInfo,string nickName)
+    {
+        Spreadsheet sheet = Managers.DataManager.GetGoogleSheetData(GoogleDataBaseStruct, out SheetsService service, out string spreadsheetId, true);
+
+        PlayerLoginInfo isNickNameDatabase = AuthenticateUserNickname(nickName);
+
+        if (isNickNameDatabase.Equals(default(PlayerLoginInfo)) == false)
+        {
+            Debug.Log("이미 있는 닉네임 입니다");
+            return (false, "이미 있는 닉네임 입니다");
+        }
+        List<IList<object>> values = new List<IList<object>>()
+        {
+            new List<object> { nickName }
+        };
+
+        ValueRange valueRange = new ValueRange
+        {
+            Values = values
+        };
+        // 범위 설정: 시트 이름과 범위를 지정
+        string writeRange = $"{USER_AUTHENTICATE_DATASHEET_NAME}!C{playerInfo.RowNumber+1}"; // 예: "A2:B2" 특정 위치
+        SpreadsheetsResource.ValuesResource.UpdateRequest updateRequest = service.Spreadsheets.Values.Update(valueRange, spreadsheetId, writeRange);
+        updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
+        try
+        {
+            // 요청 실행
+            UpdateValuesResponse response = await updateRequest.ExecuteAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{ex} 오류가 발생했습니다");
+            return (false, "DB를 쓰는 중 오류가 발생했습니다.");
+        }
+
+        return (true, "닉네임을 짓기성공.");
     }
 
 }

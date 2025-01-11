@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class Utill
@@ -156,5 +157,11 @@ public class Utill
                 return "이동속도";
         }
         return "Unknown";
+    }
+
+    public static bool IsAlphanumeric(string input)
+    {
+        // 영문과 숫자만 포함된 문자열인지 확인
+        return Regex.IsMatch(input, "^[A-Za-z0-9]+$");
     }
 }

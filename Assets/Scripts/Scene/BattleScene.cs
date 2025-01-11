@@ -11,6 +11,8 @@ public class BattleScene : BaseScene
 
     public Define.PlayerClass SpawnPlayerClass;
 
+    public override Define.Scene CurrentScene => Define.Scene.BattleScene;
+
     protected override void StartInit()
     {
         base.StartInit();
@@ -25,7 +27,6 @@ public class BattleScene : BaseScene
     }
     protected override void AwakeInit()
     {
-        currentScene = Define.Scene.Battle;
         _player = Managers.GameManagerEx.Spawn($"Prefabs/Player/{SpawnPlayerClass}");
         _boss = Managers.GameManagerEx.Spawn("Prefabs/Enemy/Boss/Character/StoneGolem");
 

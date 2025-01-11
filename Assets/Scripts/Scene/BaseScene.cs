@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public abstract class BaseScene : MonoBehaviour
 {
-    public Define.Scene currentScene { get; protected set; } = Define.Scene.Unknown;
+    public abstract Define.Scene CurrentScene { get; }
     MoveMarkerController _moveMarker;
 
     void Start()

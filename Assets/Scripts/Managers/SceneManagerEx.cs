@@ -3,19 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneManagerEx:IManagerIResettable
+public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 { 
  
-    //현재 베이스 씬을 가져온다.
-    //LoadScene 씬을 클리어한후 로드한다.
-    //Enum을 이름으로 바꿔주는 메서드
     public BaseScene currentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
+
+    private LoadingScene _loadingscene;
+
 
     public void LoadScene(Define.Scene scene)
     {
         Managers.Clear();
         SceneManager.LoadScene(GetEnumName(scene));
     }
+
+    public void LoadSceneWithLoadingScreen(Define.Scene Nextscene)
+    {
+        Managers.Clear();
+        LoadingScene.LoadNextScene(Nextscene);
+        SceneManager.LoadScene(GetEnumName(Define.Scene.LoadingScene));
+    }
+
+
+
 
     public string GetEnumName(Define.Scene type)
     {
@@ -26,5 +36,9 @@ public class SceneManagerEx:IManagerIResettable
     public void Clear()
     {
         currentScene.Clear();   
+    }
+
+    public void Init()
+    {
     }
 }

@@ -35,10 +35,11 @@ public class Define
     public enum Scene
     {
         Unknown,
-        Login,
-        Lobby,
-        Game,
-        Battle
+        LoginScene,
+        LobbyScene,
+        GamePlayScene,
+        BattleScene,
+        LoadingScene
     }
     public enum CurrentMouseType
     {

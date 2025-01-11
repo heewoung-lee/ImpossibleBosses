@@ -7,6 +7,9 @@ using UnityEngine.AI;
 public class TestScene : BaseScene
 {
     private GameObject _player;
+
+    public override Define.Scene CurrentScene => Define.Scene.Unknown;
+
     protected override void StartInit()
     {
         base.StartInit();

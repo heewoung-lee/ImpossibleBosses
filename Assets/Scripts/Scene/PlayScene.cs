@@ -9,11 +9,12 @@ public class PlayScene : BaseScene
     private GameObject _player;
 
     public Define.PlayerClass SpawnPlayerClass;
+
+    public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
+
     protected override void StartInit()
     {
         base.StartInit();
-
-        currentScene = Define.Scene.Game;
         //Vector3 targetPosition = Managers.GameManagerEx.SpawnPoint.transform
         //    .GetChild(Random.Range(0, Managers.GameManagerEx.SpawnPoint.transform.childCount)).position;
 

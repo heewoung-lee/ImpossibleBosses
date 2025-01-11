@@ -27,11 +27,47 @@ public class UI_LoginPopup : UI_Popup
     Button _close_Button;
     Button _signup_Button;
     Button _confirm_Button;
-    UI_SignUpPopup _ui_signUpPopup;
     TMP_InputField _idInputField;
     TMP_InputField _pwInputField;
     UI_AlertPopupBase _ui_alertPopupUI;
+
+    UI_SignUpPopup _ui_signUpPopup;
+    public UI_SignUpPopup UI_signUpPopup
+    {
+        get
+        {
+            if (_ui_signUpPopup == null)
+            {
+                _ui_signUpPopup = Managers.UI_Manager.ShowUIPopupUI<UI_SignUpPopup>();
+            }
+            return _ui_signUpPopup;
+        }
+    }
+    public UI_AlertPopupBase UI_AlertPopupUI
+    {
+        get
+        {
+            if (_ui_alertPopupUI == null)
+            {
+                _ui_alertPopupUI = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            }
+            return _ui_alertPopupUI;
+        }
+    }
     UI_CreateNickName _ui_CreateNickName;
+    public UI_CreateNickName UI_CreateNickName
+    {
+        get
+        {
+            if (_ui_CreateNickName == null)
+            {
+                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_CreateNickName>();
+            }
+            return _ui_CreateNickName;
+        }
+    }
+
+
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -57,11 +93,13 @@ public class UI_LoginPopup : UI_Popup
     }
     public void ShowSignUpUI()
     {
-        if (_ui_signUpPopup == null)
-        {
-            _ui_signUpPopup = Managers.UI_Manager.ShowUIPopupUI<UI_SignUpPopup>();
-        }
-        Managers.UI_Manager.ShowPopupUI(_ui_signUpPopup);
+        Managers.UI_Manager.ShowPopupUI(UI_signUpPopup);
+    }
+
+    private void OnDisable()
+    {
+        _idInputField.text = "";
+        _pwInputField.text = "";
     }
 
     public void AuthenticateUser()
@@ -72,30 +110,38 @@ public class UI_LoginPopup : UI_Popup
         if (string.IsNullOrEmpty(userID)|| string.IsNullOrEmpty(userPW))
             return;
 
+        if (Utill.IsAlphanumeric(userID) == false) //영문+숫자외 다른 문자가 섞인경우.
+        {
+            string titleText = "난 한글을 사랑하지만..";
+            string bodyText = "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.";
+            UI_AlertPopupUI.SetText(titleText, bodyText);
+            Managers.UI_Manager.ShowPopupUI(UI_AlertPopupUI);
+            return;
+        }
+
+
         PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPW);
 
         if(playerinfo.Equals(default(PlayerLoginInfo)))
         {
             string titleText = "오류";
             string bodyText = "아이디와 비밀번호가 틀립니다";
-            if(_ui_alertPopupUI == null)
-            {
-                _ui_alertPopupUI = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            }
-            _ui_alertPopupUI.SetText(titleText, bodyText);
-            Managers.UI_Manager.ShowPopupUI(_ui_alertPopupUI);
+            UI_AlertPopupUI.SetText(titleText, bodyText);
+            Managers.UI_Manager.ShowPopupUI(UI_AlertPopupUI);
             Debug.Log("Login Failed");
+            return;
         }
 
-        if(string.IsNullOrEmpty(playerinfo.NickName))
+        if (string.IsNullOrEmpty(playerinfo.NickName))
         {
-            if(_ui_CreateNickName == null)
-            {
-                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_CreateNickName>();
-            }
-            Managers.UI_Manager.ShowPopupUI(_ui_CreateNickName);
+            Managers.UI_Manager.ShowPopupUI(UI_CreateNickName);
+            UI_CreateNickName.PlayerLoginInfo = playerinfo;
+            return;
         }
 
+        Debug.Log("로그인완료");
+        Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
     }
+
 
 }
