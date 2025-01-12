@@ -161,7 +161,6 @@ public class LogInManager
 
         if(isIDInDatabase.Equals(default(PlayerLoginInfo)) == false)
         {
-            Debug.Log("이미 있는 ID 입니다");
             return (false, "이미 있는 ID 입니다");
         }
 
@@ -205,7 +204,6 @@ public class LogInManager
 
         if (isNickNameDatabase.Equals(default(PlayerLoginInfo)) == false)
         {
-            Debug.Log("이미 있는 닉네임 입니다");
             return (false, "이미 있는 닉네임 입니다");
         }
         List<IList<object>> values = new List<IList<object>>()
@@ -228,7 +226,6 @@ public class LogInManager
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{ex} 오류가 발생했습니다");
             return (false, "DB를 쓰는 중 오류가 발생했습니다.");
         }
 

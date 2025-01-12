@@ -28,7 +28,6 @@ public class UI_Loading : UI_Scene
         set
         {
             _loadingSlider.value = value;
-            Debug.Log(_loadingSlider.value);
             _text_LoadingValue.text = $"Loading...{(int)(_loadingSlider.value * 100f)}";
         }
     }

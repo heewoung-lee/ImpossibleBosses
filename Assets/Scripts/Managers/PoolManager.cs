@@ -56,7 +56,7 @@ public class PoolManager : IManagerInitializable,IManagerIResettable
                 popitem = Create();
 
             if(parent == null)
-                popitem.transform.SetParent(Managers.SceneManagerEx.currentScene.transform);
+                popitem.transform.SetParent(Managers.SceneManagerEx.CurrentScene.transform);
 
 
             popitem.transform.SetParent(parent);//parent가 Null이라면 BaseScene에 하위에 있는 자식들이 전부 다시 부모가 없게 되어버림
