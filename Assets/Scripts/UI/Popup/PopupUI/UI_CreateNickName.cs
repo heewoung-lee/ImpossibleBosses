@@ -20,7 +20,7 @@ public class UI_CreateNickName : UI_Popup
     private Button _confirm_Button;
     private GameObject _messageError;
     private TMP_Text _errorMessageText;
-
+    private Module_UI_FadeOut _errorMessageTextFadeOutMoudule;
     public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
     protected override void OnDisableInit()
@@ -54,6 +54,7 @@ public class UI_CreateNickName : UI_Popup
 
     public async void CreateUserNickName(PlayerLoginInfo playerinfo, string Nickname)
     {
+
         (bool isCheckResult, string message) = await Managers.LogInManager.WriteNickNameToGoogleSheet(playerinfo, Nickname);
 
         if (isCheckResult == false)

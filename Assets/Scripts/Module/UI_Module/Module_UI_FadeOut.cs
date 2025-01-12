@@ -1,54 +1,53 @@
 using System.Collections;
-using TMPro;
-using Unity.Android.Types;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Module_UI_FadeOut : MonoBehaviour
 {
-    Image[] _ui_Images;
-    TMP_Text[] _tmp_texts;
+    private Graphic[] _graphics;
+    private bool isPlayingFadeout = false;
+    public bool IsPlayingFadeOut => isPlayingFadeout;
 
     private void Awake()
     {
-        _ui_Images = GetComponentsInChildren<Image>();
-        _tmp_texts = GetComponentsInChildren<TMP_Text>();
+        _graphics = GetComponentsInChildren<Graphic>();
     }
 
     private void OnEnable()
     {
         StartCoroutine(FadeOutImage());
     }
+
     private void OnDisable()
     {
-        foreach (Image image in _ui_Images)
+        isPlayingFadeout = false;
+        // Disable될 때 컬러를 알파1로 초기화
+        foreach (Graphic g in _graphics)
         {
-            image.color = image.color.WithAlpha(1f);
-        }
-        foreach (TMP_Text text in _tmp_texts)
-        {
-            text.color = text.color.WithAlpha(1f);
+            Color c = g.color;
+            c.a = 1f;
+            g.color = c;
         }
     }
+
     IEnumerator FadeOutImage()
     {
+        isPlayingFadeout = true;
         float duration = 1f;
-        while(duration > 0)
+        while (duration > 0)
         {
-            duration -= Time.deltaTime/2f;
-            foreach(Image image in _ui_Images)
+            duration -= Time.deltaTime / 2f;
+
+            foreach (Graphic g in _graphics)
             {
-                image.color = image.color.WithAlpha(duration);
-            }
-            foreach(TMP_Text text in _tmp_texts)
-            {
-                text.color = text.color.WithAlpha(duration);
+                Color c = g.color;
+                c.a = duration;
+                g.color = c;
             }
 
             yield return null;
         }
         gameObject.SetActive(false);
     }
-
 }
