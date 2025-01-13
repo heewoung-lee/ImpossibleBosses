@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_LoginPopup : UI_Popup
+public class UI_LoginPopup : ID_PW_Popup
 {
    
     enum Buttons
@@ -67,6 +67,9 @@ public class UI_LoginPopup : UI_Popup
         }
     }
 
+    public override TMP_InputField ID_Input_Field => _idInputField;
+
+    public override TMP_InputField PW_Input_Field => _pwInputField;
 
     protected override void AwakeInit()
     {

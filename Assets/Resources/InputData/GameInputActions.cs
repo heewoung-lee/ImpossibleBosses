@@ -303,6 +303,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ID_PW_Popup_TabKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""4824f36a-58cc-462f-8f62-af512c28fd0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -415,6 +424,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""SkillBar_GetKeyR"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6147314c-e017-4fc3-8804-bcadd33790d7"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ID_PW_Popup_TabKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -506,6 +526,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_UI_SkillBar_GetKeyW = m_UI.FindAction("SkillBar_GetKeyW", throwIfNotFound: true);
         m_UI_SkillBar_GetKeyE = m_UI.FindAction("SkillBar_GetKeyE", throwIfNotFound: true);
         m_UI_SkillBar_GetKeyR = m_UI.FindAction("SkillBar_GetKeyR", throwIfNotFound: true);
+        m_UI_ID_PW_Popup_TabKey = m_UI.FindAction("ID_PW_Popup_TabKey", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -724,6 +745,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_SkillBar_GetKeyW;
     private readonly InputAction m_UI_SkillBar_GetKeyE;
     private readonly InputAction m_UI_SkillBar_GetKeyR;
+    private readonly InputAction m_UI_ID_PW_Popup_TabKey;
     public struct UIActions
     {
         private @GameInputActions m_Wrapper;
@@ -738,6 +760,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @SkillBar_GetKeyW => m_Wrapper.m_UI_SkillBar_GetKeyW;
         public InputAction @SkillBar_GetKeyE => m_Wrapper.m_UI_SkillBar_GetKeyE;
         public InputAction @SkillBar_GetKeyR => m_Wrapper.m_UI_SkillBar_GetKeyR;
+        public InputAction @ID_PW_Popup_TabKey => m_Wrapper.m_UI_ID_PW_Popup_TabKey;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -777,6 +800,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @SkillBar_GetKeyR.started += instance.OnSkillBar_GetKeyR;
             @SkillBar_GetKeyR.performed += instance.OnSkillBar_GetKeyR;
             @SkillBar_GetKeyR.canceled += instance.OnSkillBar_GetKeyR;
+            @ID_PW_Popup_TabKey.started += instance.OnID_PW_Popup_TabKey;
+            @ID_PW_Popup_TabKey.performed += instance.OnID_PW_Popup_TabKey;
+            @ID_PW_Popup_TabKey.canceled += instance.OnID_PW_Popup_TabKey;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -811,6 +837,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @SkillBar_GetKeyR.started -= instance.OnSkillBar_GetKeyR;
             @SkillBar_GetKeyR.performed -= instance.OnSkillBar_GetKeyR;
             @SkillBar_GetKeyR.canceled -= instance.OnSkillBar_GetKeyR;
+            @ID_PW_Popup_TabKey.started -= instance.OnID_PW_Popup_TabKey;
+            @ID_PW_Popup_TabKey.performed -= instance.OnID_PW_Popup_TabKey;
+            @ID_PW_Popup_TabKey.canceled -= instance.OnID_PW_Popup_TabKey;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -899,5 +928,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnSkillBar_GetKeyW(InputAction.CallbackContext context);
         void OnSkillBar_GetKeyE(InputAction.CallbackContext context);
         void OnSkillBar_GetKeyR(InputAction.CallbackContext context);
+        void OnID_PW_Popup_TabKey(InputAction.CallbackContext context);
     }
 }

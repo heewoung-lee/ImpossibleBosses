@@ -2,12 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class Module_UI_FadeOut : MonoBehaviour
 {
     private Graphic[] _graphics;
     private bool isPlayingFadeout = false;
     public bool IsPlayingFadeOut => isPlayingFadeout;
+
+    public Action DoneFadeoutEvent;
 
     private void Awake()
     {
@@ -22,6 +25,7 @@ public class Module_UI_FadeOut : MonoBehaviour
     private void OnDisable()
     {
         isPlayingFadeout = false;
+        DoneFadeoutEvent?.Invoke();
         // Disable될 때 컬러를 알파1로 초기화
         foreach (Graphic g in _graphics)
         {

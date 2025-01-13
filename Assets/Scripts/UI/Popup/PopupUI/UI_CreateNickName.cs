@@ -43,18 +43,20 @@ public class UI_CreateNickName : UI_Popup
         _confirm_Button = Get<Button>((int)Buttons.Confirm_Button);
         _messageError = Get<GameObject>((int)GameObjects.MessageError);
         _errorMessageText = _messageError.GetComponentInChildren<TMP_Text>();
+        _errorMessageTextFadeOutMoudule = _messageError.GetComponent<Module_UI_FadeOut>();
+        _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () => _confirm_Button.interactable = true;
         _messageError.SetActive(false);
         _confirm_Button.onClick.AddListener(CreateNickname);
-
     }
+
     public void CreateNickname()
     {
+        _confirm_Button.interactable = false;
         CreateUserNickName(PlayerLoginInfo, _nickNameInputField.text);
     }
 
     public async void CreateUserNickName(PlayerLoginInfo playerinfo, string Nickname)
     {
-
         (bool isCheckResult, string message) = await Managers.LogInManager.WriteNickNameToGoogleSheet(playerinfo, Nickname);
 
         if (isCheckResult == false)

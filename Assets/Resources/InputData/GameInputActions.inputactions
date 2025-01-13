@@ -281,6 +281,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ID_PW_Popup_TabKey",
+                    "type": "Button",
+                    "id": "4824f36a-58cc-462f-8f62-af512c28fd0f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -391,6 +400,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SkillBar_GetKeyR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6147314c-e017-4fc3-8804-bcadd33790d7",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ID_PW_Popup_TabKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

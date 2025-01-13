@@ -18,7 +18,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     {
         LoadScene(Define.Scene.LoadingScene);
         LoadingScene.LoadNextScene(Nextscene);
-
     }
 
     public string GetEnumName(Define.Scene type)
@@ -34,5 +33,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void Init()
     {
+
     }
 }

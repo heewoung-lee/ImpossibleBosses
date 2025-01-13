@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UI_SignUpPopup : UI_Popup
+public class UI_SignUpPopup : ID_PW_Popup
 {
     Button _buttonClose;
     Button _buttonSignup;
@@ -12,6 +12,11 @@ public class UI_SignUpPopup : UI_Popup
     TMP_InputField _pwInputField;
     private UI_AlertPopupBase _alertPopup;
     private UI_AlertPopupBase _confirmPopup;
+
+    public override TMP_InputField ID_Input_Field => _idInputField;
+
+    public override TMP_InputField PW_Input_Field => _pwInputField;
+
     enum Buttons
     {
         Button_Close,
