@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_LoginPopup : ID_PW_Popup
+public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 {
    
     enum Buttons
@@ -71,6 +71,8 @@ public class UI_LoginPopup : ID_PW_Popup
 
     public override TMP_InputField PW_Input_Field => _pwInputField;
 
+    public Button CloseButton => _close_Button;
+
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -81,12 +83,7 @@ public class UI_LoginPopup : ID_PW_Popup
         _confirm_Button = Get<Button>((int)Buttons.Confirm_Button);
         _idInputField = Get<TMP_InputField>((int)InputFields.IDInputField);
         _pwInputField = Get<TMP_InputField>((int)InputFields.PWInputField);
-
-
-        _close_Button.onClick.AddListener(() =>
-        {
-            Managers.UI_Manager.ClosePopupUI(this);
-        });
+        _close_Button.onClick.AddListener(OnClickCloseButton);
         _signup_Button.onClick.AddListener(ShowSignUpUI);
         _confirm_Button.onClick.AddListener(AuthenticateUser);
         Managers.UI_Manager.AddImportant_Popup_UI(this);
@@ -146,5 +143,8 @@ public class UI_LoginPopup : ID_PW_Popup
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
     }
 
-
+    public void OnClickCloseButton()
+    {
+        Managers.UI_Manager.ClosePopupUI(this);
+    }
 }

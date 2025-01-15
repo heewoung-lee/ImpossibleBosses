@@ -226,7 +226,7 @@ public class LogInManager
         }
         catch (Exception ex)
         {
-            return (false, "DB를 쓰는 중 오류가 발생했습니다.");
+            return (false, $"DB를 쓰는 중 오류가 발생했습니다.에러코드: {ex}");
         }
 
         return (true, "닉네임을 짓기성공.");

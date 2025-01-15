@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UI_SignUpPopup : ID_PW_Popup
+public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
 {
     Button _buttonClose;
     Button _buttonSignup;
@@ -16,6 +16,8 @@ public class UI_SignUpPopup : ID_PW_Popup
     public override TMP_InputField ID_Input_Field => _idInputField;
 
     public override TMP_InputField PW_Input_Field => _pwInputField;
+
+    public Button CloseButton => _buttonClose;
 
     enum Buttons
     {
@@ -37,10 +39,7 @@ public class UI_SignUpPopup : ID_PW_Popup
         _pwInputField = Get<TMP_InputField>((int)InputFields.PWInputField);
         _buttonClose = Get<Button>((int)Buttons.Button_Close);
         _buttonSignup = Get<Button>((int)Buttons.Button_Signup);
-        _buttonClose.onClick.AddListener(() =>
-        {
-            Managers.UI_Manager.ClosePopupUI(this);
-        });
+        _buttonClose.onClick.AddListener(OnClickCloseButton);
         _buttonSignup.onClick.AddListener(CreateID);
     }
     public async void CreateID()
@@ -89,5 +88,10 @@ public class UI_SignUpPopup : ID_PW_Popup
 
     protected override void StartInit()
     {
+    }
+
+    public void OnClickCloseButton()
+    {
+        Managers.UI_Manager.ClosePopupUI(this);
     }
 }
