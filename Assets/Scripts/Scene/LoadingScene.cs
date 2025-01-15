@@ -23,7 +23,6 @@ public class LoadingScene : BaseScene
 
     public override void Clear()
     {
-        throw new System.NotImplementedException();
     }
 
     protected override void AwakeInit()

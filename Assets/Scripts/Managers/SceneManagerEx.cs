@@ -8,6 +8,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
  
     public BaseScene CurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
 
+    private LoadingScene _loadingScene;
     public void LoadScene(Define.Scene scene)
     {
         Managers.Clear();
@@ -33,6 +34,5 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void Init()
     {
-
     }
 }
