@@ -60,6 +60,9 @@ public class Managers : MonoBehaviour
     private VFXManager _vFX_Manager = new VFXManager();
     public static VFXManager VFX_Manager { get => Instance._vFX_Manager; }
 
+    private VivoxManager _vivoxManager = new VivoxManager();
+    public static VivoxManager VivoxManager { get => Instance._vivoxManager; }
+
     public static Coroutine ManagersStartCoroutine(IEnumerator couroutine)
     {
         return _instance.StartCoroutine(couroutine);
@@ -96,7 +99,7 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        await _instance._lobbyManager.QuitApplication();
+        await _instance._lobbyManager.LogoutAndLeaveLobby();
     }
 
     public static void Clear()

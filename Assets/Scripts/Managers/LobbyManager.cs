@@ -33,7 +33,7 @@ public class LobbyManager
     public Action InitDoneEvent;
 
     string _playerID;
-    private Lobby _waitLobby;
+    private Lobby _currentLobby;
 
     private bool isalready = false;
     public async Task<bool> InitLobbyScene()
@@ -86,7 +86,7 @@ public class LobbyManager
             if (queryResponse.Results.Count > 0)
             {
                 string lobbyId = queryResponse.Results[0].Id;
-                _waitLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+                _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
                 Debug.Log("Successfully joined the waiting lobby.");
                 return true;
             }
@@ -98,9 +98,7 @@ public class LobbyManager
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.LogWarning("Rate limit exceeded. Retrying in 1 seconds...");
-            await Task.Delay(1000); // 5초 대기
-            return await JoinWaitLobby(); // 재시도
+            return await RateLimited(()=>JoinWaitLobby()); // 재시도
         }
         catch (LobbyServiceException e)
         {
@@ -116,9 +114,9 @@ public class LobbyManager
         CreateLobbyOptions options = new CreateLobbyOptions();
         options.IsPrivate = false;
 
-        _waitLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
-        if (_waitLobby != null)
-            Debug.Log($"로비 만들어짐{_waitLobby}");
+        _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
+        if (_currentLobby != null)
+            Debug.Log($"로비 만들어짐{_currentLobby}");
     }
     async Task<string> SignInAnonymouslyAsync()
     {
@@ -177,10 +175,7 @@ public class LobbyManager
                             }
                             else
                             {
-                                // 로비에서 플레이어 제거
-                                await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _playerID);
-                                // 인증 세션 만료 처리
-                                SignOutPlayer();
+                                await LogoutAndLeaveLobby();
                                 return true;
                             }
 
@@ -192,9 +187,7 @@ public class LobbyManager
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.LogWarning("Rate limit exceeded. Retrying in 1 seconds...");
-            await Task.Delay(1000); // 5초 대기
-            return await IsAlreadyLogInID(usernickName); // 재시도
+            return await RateLimited(()=>IsAlreadyLogInID(usernickName)); // 재시도
         }
         catch (LobbyServiceException e)
         {
@@ -202,21 +195,16 @@ public class LobbyManager
             return false;
         }
     }
-    private void SignOutPlayer()
+
+    private async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
     {
-        try
-        {
-           AuthenticationService.Instance.SignOut();
-            Debug.Log("Player signed out successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error signing out: {ex.Message}");
-        }
+        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+        await Task.Delay(millisecondsDelay); // 대기
+        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
     }
     private async Task InputPlayerData()
     {
-        Player myPlayer = _waitLobby.Players.Find(player => player.Id == CurrentPlayerInfo.Id);
+        Player myPlayer = _currentLobby.Players.Find(player => player.Id == CurrentPlayerInfo.Id);
 
         if (myPlayer == null)
             return;
@@ -227,26 +215,28 @@ public class LobbyManager
         };
 
         // 자신의 플레이어 데이터 업데이트
-        await LobbyService.Instance.UpdatePlayerAsync(_waitLobby.Id, myPlayer.Id, new UpdatePlayerOptions
+        await LobbyService.Instance.UpdatePlayerAsync(_currentLobby.Id, myPlayer.Id, new UpdatePlayerOptions
         {
             Data = updatedData
         });
     }
 
-
-    public async Task QuitApplication()
+    public async Task LogoutAndLeaveLobby()
     {
         try
         {
-            //Ensure you sign-in before calling Authentication Instance
-            //See IAuthenticationService interface
-            string playerId = AuthenticationService.Instance.PlayerId;
-            await LobbyService.Instance.RemovePlayerAsync(_waitLobby.Id, playerId);
+            // 로비에서 사용자 제거
+            await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, _playerID);
+            Debug.Log("Player removed from lobby.");
         }
-        catch (LobbyServiceException e)
+        catch (LobbyServiceException ex)
         {
-            Debug.Log(e);
+            Debug.LogError($"Failed to remove player from lobby: {ex.Message}");
         }
+
+        // 사용자 인증 로그아웃
+        AuthenticationService.Instance.SignOut();
+        Debug.Log("User signed out successfully.");
     }
-    
+
 }

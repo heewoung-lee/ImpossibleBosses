@@ -133,6 +133,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             UI_AlertPopupUI.SetText(titleText, bodyText);
             Managers.UI_Manager.ShowPopupUI(UI_AlertPopupUI);
             Debug.Log("Login Failed");
+            _confirm_Button.interactable = true;
             return;
         }
 
@@ -140,6 +141,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         {
             Managers.UI_Manager.ShowPopupUI(UI_CreateNickName);
             UI_CreateNickName.PlayerLoginInfo = playerinfo;
+            _confirm_Button.interactable = true;
             return;
         }
 
