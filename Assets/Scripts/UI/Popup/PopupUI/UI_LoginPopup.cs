@@ -102,10 +102,14 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         _pwInputField.text = "";
     }
 
-    public void AuthenticateUser()
+    public async void AuthenticateUser()
     {
         string userID = _idInputField.text;
         string userPW = _pwInputField.text;
+
+
+        _confirm_Button.interactable = false;
+
 
         if (string.IsNullOrEmpty(userID)|| string.IsNullOrEmpty(userPW))
             return;
@@ -139,7 +143,18 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             return;
         }
 
+        bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
+        if (checkPlayerNickNameAlreadyConnected is true)
+        {
+            UI_AlertDialog uI_AlertDialog= Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            uI_AlertDialog.SetText("오류", "이미 접속되어 있습니다.");
+            Managers.UI_Manager.ShowPopupUI(uI_AlertDialog);
+            _confirm_Button.interactable = true;
+            return;
+        }
+
         Debug.Log("로그인완료");
+        _confirm_Button.interactable = true;
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
     }
 

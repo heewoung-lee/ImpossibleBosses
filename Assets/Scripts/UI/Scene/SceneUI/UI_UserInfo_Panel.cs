@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,17 +10,27 @@ public class UI_UserInfo_Panel : UI_Scene
         LoginSceneBackButton
     }
 
+    enum Texts
+    {
+        PlayerNickNameText
+    }
+
+
     Button _createRoomButton;
     Button _loginSceneBackButton;
     UI_CreateRoom _createRoomUI;
 
+    TMP_Text _userNickNamaText;
     protected override void AwakeInit()
     {
         base.AwakeInit();
         Bind<Button>(typeof(Buttons));
+        Bind<TMP_Text>(typeof(Texts));
         _createRoomButton = Get<Button>((int)Buttons.CreateRoomButton);
         _createRoomButton.onClick.AddListener(ShowCreateRoomUI);
         _loginSceneBackButton = Get<Button>((int)Buttons.LoginSceneBackButton);
+        _userNickNamaText = Get<TMP_Text>((int)Texts.PlayerNickNameText);
+        ShowUserNickName();
     }
 
     public void ShowCreateRoomUI()
@@ -29,6 +40,23 @@ public class UI_UserInfo_Panel : UI_Scene
             _createRoomUI = Managers.UI_Manager.ShowUIPopupUI<UI_CreateRoom>();
         }
         Managers.UI_Manager.ShowPopupUI(_createRoomUI);
+    }
+
+    private void ShowUserNickName()
+    {
+        if (Managers.LobbyManager.CurrentPlayerInfo.Equals(default(PlayerIngameLoginInfo)))
+        {
+            Managers.LobbyManager.InitDoneEvent += ShowNickname;
+        }
+        else
+        {
+            ShowNickname();
+        }
+    }
+
+    private void ShowNickname() 
+    {
+        _userNickNamaText.text += Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
     }
 
 }

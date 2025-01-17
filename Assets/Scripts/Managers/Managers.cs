@@ -30,6 +30,9 @@ public class Managers : MonoBehaviour
     private ItemDataManager _itemDataManaer = new ItemDataManager();
     public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
+    private LobbyManager _lobbyManager = new LobbyManager();
+    public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
+
     private LogInManager _logInManager = new LogInManager();
     public static LogInManager LogInManager { get => Instance._logInManager; }
 
@@ -91,6 +94,10 @@ public class Managers : MonoBehaviour
 
     }
 
+    public async void OnApplicationQuit()
+    {
+        await _instance._lobbyManager.QuitApplication();
+    }
 
     public static void Clear()
     {

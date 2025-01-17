@@ -7,7 +7,6 @@ public class LobbyScene : BaseScene
 {
     public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
     UI_LobbyScene _uI_LobbyScene;
-    UGSInitializer _ugsInitalizer;//플레이어 로비 연결
     public override void Clear()
     {
     }
@@ -20,7 +19,7 @@ public class LobbyScene : BaseScene
     {
         base.StartInit();
         _uI_LobbyScene = Managers.UI_Manager.ShowSceneUI<UI_LobbyScene>();
-        _ugsInitalizer = Utill.GetOrAddComponent<UGSInitializer>(gameObject);
+       // Managers.LobbyManager.InitLobbyScene();
     }
 
 }

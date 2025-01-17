@@ -28,11 +28,9 @@ public class DataManager : IManagerInitializable,IManagerIResettable
     private const string SPREEDSHEETID = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
 
     private List<Type> _requestDataTypes;
-    public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
-
 
     private GoogleDataBaseStruct _databaseStruct;
-
+    public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
     public GoogleDataBaseStruct DatabaseStruct
     {
         get
@@ -160,7 +158,6 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         Debug.Log($"{fileName} 데이터를 로컬에 저장했습니다.");
     }
 
-
     public Spreadsheet GetGoogleSheetData(GoogleDataBaseStruct databaseStruct,out SheetsService service,out string spreadsheetId,bool isWrite = false)
     {
         // 구글 스프레드시트에서 데이터 로드하는 로직
@@ -170,7 +167,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         try
         {
            string[] readAndWriteOption = isWrite == true ? new[] { SheetsService.Scope.Spreadsheets } : new[] { SheetsService.Scope.SpreadsheetsReadonly };
-           UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            UserCredential _credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 new ClientSecrets
                 {
                     ClientId = databaseStruct._google_Client_ID,
@@ -182,7 +179,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
             service = new SheetsService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = credential,
+                HttpClientInitializer = _credential,
                 ApplicationName = databaseStruct._applicationName
             });
 

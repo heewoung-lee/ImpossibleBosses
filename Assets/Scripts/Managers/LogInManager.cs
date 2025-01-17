@@ -6,6 +6,7 @@ using System;
 using Unity.Android.Gradle.Manifest;
 using System.Threading.Tasks;
 using static UnityEngine.Rendering.DebugUI;
+using Google.Apis.Auth.OAuth2;
 
 public struct PlayerLoginInfo
 {
@@ -30,6 +31,8 @@ public class LogInManager
     private const string USER_AUTHENTICATE_DATASHEET_NAME = "UserAuthenticateData";
 
     private GoogleDataBaseStruct _googleDataBaseStruct;
+    private PlayerLoginInfo currentPlayerInfo;
+
 
     GoogleDataBaseStruct GoogleDataBaseStruct
     {
@@ -42,13 +45,7 @@ public class LogInManager
             return _googleDataBaseStruct;
         }
     }
-
-
-
-    PlayerLoginInfo currentPlayerInfo;
-
     public PlayerLoginInfo CurrentPlayerInfo { get { return currentPlayerInfo; } }
-
     public PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
     {
         //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
@@ -133,7 +130,7 @@ public class LogInManager
         {
             if (userID == currentPlayerInfo.ID)
             {
-                Debug.Log("DB Has ID And PW");
+                Debug.Log("DB Has ID");
                 return true;
             }
             return false;

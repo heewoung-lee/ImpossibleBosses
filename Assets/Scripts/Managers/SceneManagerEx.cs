@@ -17,8 +17,8 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void LoadSceneWithLoadingScreen(Define.Scene Nextscene)
     {
-        LoadScene(Define.Scene.LoadingScene);
         LoadingScene.LoadNextScene(Nextscene);
+        LoadScene(Define.Scene.LoadingScene);
     }
 
     public string GetEnumName(Define.Scene type)

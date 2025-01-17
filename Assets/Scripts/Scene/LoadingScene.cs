@@ -47,7 +47,7 @@ public class LoadingScene : BaseScene
             }
             else
             {
-                timer += Time.deltaTime/10f;
+                timer += Time.deltaTime/3f;
                 _ui_loding.LoaingSliderValue = Mathf.Lerp(0.9f,1,timer);
                 if (_ui_loding.LoaingSliderValue>=1.0f)
                 {
