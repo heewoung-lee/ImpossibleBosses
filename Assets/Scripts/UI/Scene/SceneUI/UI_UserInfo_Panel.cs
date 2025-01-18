@@ -41,8 +41,19 @@ public class UI_UserInfo_Panel : UI_Scene
     protected override void StartInit()
     {
         base.StartInit();
-        Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
-        Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
+        InitButtonInteractable();
+    }
+    private void InitButtonInteractable()
+    {
+        if (Managers.VivoxManager.CheckDoneLoginProcess == false)
+        {
+            Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
+            Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
+        }
+        else
+        {
+            ButtonInteractable();
+        }
     }
     public void ShowCreateRoomUI()
     {

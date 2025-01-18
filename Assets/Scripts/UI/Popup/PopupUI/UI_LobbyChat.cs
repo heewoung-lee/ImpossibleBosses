@@ -50,12 +50,22 @@ public class UI_LobbyChat : UI_Scene
     protected override void StartInit()
     {
         base.StartInit();
+        InitButtonInteractable();
         VivoxService.Instance.ChannelMessageReceived += ChannelMessageReceived;
-        Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
-        Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
     }
 
-
+    private void InitButtonInteractable()
+    {
+        if (Managers.VivoxManager.CheckDoneLoginProcess == false)
+        {
+            Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
+            Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
+        }
+        else
+        {
+            ButtonInteractable();
+        }
+    }
     public async void SendChatingMessage(string message)
     {
         if (string.IsNullOrEmpty(_chattingInputField.text) || _sendButton.interactable == false)

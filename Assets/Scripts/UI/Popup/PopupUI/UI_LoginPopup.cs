@@ -158,6 +158,8 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         Debug.Log("로그인완료");
         _confirm_Button.interactable = true;
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
+        await Managers.VivoxManager.InitializeAsync();
+        await Managers.VivoxManager.LoginToVivoxAsync();
     }
 
     public void OnClickCloseButton()

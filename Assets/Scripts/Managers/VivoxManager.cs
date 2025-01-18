@@ -8,6 +8,8 @@ using UnityEngine;
 public class VivoxManager: IManagerEventInitailize
 {
     public Action VivoxDoneLoginEvent;
+    private bool _checkDoneLoginProcess = false;
+    public bool CheckDoneLoginProcess => _checkDoneLoginProcess;
     string _currentChanel = null;
     public async Task InitializeAsync()
     {
@@ -31,7 +33,8 @@ public class VivoxManager: IManagerEventInitailize
         options.EnableTTS = true;
         await VivoxService.Instance.LoginAsync(options);
         await JoinChannel(Managers.LobbyManager.CurrentLobby.Id);
-        VivoxDoneLoginEvent.Invoke();
+        _checkDoneLoginProcess = true;
+        VivoxDoneLoginEvent?.Invoke();
         Debug.Log("ViVox 로그인완료");
     }
     public async Task JoinChannel(string chanelID)

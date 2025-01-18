@@ -16,13 +16,11 @@ public class LobbyScene : BaseScene
     {
     }
 
-    protected override async void StartInit()
+    protected override void StartInit()
     {
         base.StartInit();
         _uI_LobbyScene = Managers.UI_Manager.ShowSceneUI<UI_LobbyScene>();
 
-        await Managers.VivoxManager.InitializeAsync();
-        await Managers.VivoxManager.LoginToVivoxAsync();
     }
 
 }
