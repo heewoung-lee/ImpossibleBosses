@@ -36,8 +36,10 @@ public class LobbyManager
     private Lobby _currentLobby;
 
     private bool isalready = false;
+
     public async Task<bool> InitLobbyScene()
     {
+        Managers.OnApplicationQuitEvent += LogoutAndLeaveLobby;
         try
         {
             // Unity Services √ ±‚»≠

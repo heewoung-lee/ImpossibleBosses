@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
     private static Managers _instance;
+
+    public static Func<Task> OnApplicationQuitEvent;
 
     private static Managers Instance
     {
@@ -99,7 +103,7 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        await _instance._lobbyManager.LogoutAndLeaveLobby();
+        await OnApplicationQuitEvent?.Invoke();
     }
 
     public static void Clear()
