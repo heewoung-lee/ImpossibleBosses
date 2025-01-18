@@ -1,9 +1,12 @@
+using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_UserInfo_Panel : UI_Scene
 {
+
     enum Buttons
     {
         CreateRoomButton,
@@ -29,10 +32,18 @@ public class UI_UserInfo_Panel : UI_Scene
         _createRoomButton = Get<Button>((int)Buttons.CreateRoomButton);
         _createRoomButton.onClick.AddListener(ShowCreateRoomUI);
         _loginSceneBackButton = Get<Button>((int)Buttons.LoginSceneBackButton);
+        _loginSceneBackButton.onClick.AddListener(MoveLoginScene);
         _userNickNamaText = Get<TMP_Text>((int)Texts.PlayerNickNameText);
+        ButtonDisInteractable();
         ShowUserNickName();
     }
 
+    protected override void StartInit()
+    {
+        base.StartInit();
+        Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
+        Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
+    }
     public void ShowCreateRoomUI()
     {
         if (_createRoomUI == null)
@@ -57,6 +68,23 @@ public class UI_UserInfo_Panel : UI_Scene
     private void ShowNickname() 
     {
         _userNickNamaText.text += Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
+    }
+
+    public async void MoveLoginScene()
+    {
+        await Managers.DisconnectApiEvent?.Invoke();
+        Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene);
+    }
+
+    private void ButtonInteractable()
+    {
+        _createRoomButton.interactable = true;
+        _loginSceneBackButton.interactable = true;
+    }
+    private void ButtonDisInteractable()
+    {
+        _createRoomButton.interactable = false;
+        _loginSceneBackButton.interactable = false;
     }
 
 }

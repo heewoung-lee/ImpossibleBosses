@@ -25,7 +25,7 @@ public struct PlayerIngameLoginInfo
 }
 
 
-public class LobbyManager
+public class LobbyManager : IManagerEventInitailize
 {
     PlayerIngameLoginInfo _currentPlayerInfo;
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
@@ -34,12 +34,13 @@ public class LobbyManager
 
     string _playerID;
     private Lobby _currentLobby;
+    public Lobby CurrentLobby => _currentLobby;
 
     private bool isalready = false;
 
     public async Task<bool> InitLobbyScene()
     {
-        Managers.OnApplicationQuitEvent += LogoutAndLeaveLobby;
+        InitalizeEvent();
         try
         {
             // Unity Services 초기화
@@ -238,7 +239,14 @@ public class LobbyManager
 
         // 사용자 인증 로그아웃
         AuthenticationService.Instance.SignOut();
+        _currentPlayerInfo = default;
         Debug.Log("User signed out successfully.");
     }
 
+    public void InitalizeEvent()
+    {
+        Managers.OnApplicationQuitEvent += LogoutAndLeaveLobby;
+        Managers.DisconnectApiEvent -= LogoutAndLeaveLobby;
+        Managers.DisconnectApiEvent += LogoutAndLeaveLobby;
+    }
 }

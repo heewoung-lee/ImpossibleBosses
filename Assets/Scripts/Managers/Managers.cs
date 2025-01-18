@@ -10,7 +10,7 @@ public class Managers : MonoBehaviour
     private static Managers _instance;
 
     public static Func<Task> OnApplicationQuitEvent;
-
+    public static Func<Task> DisconnectApiEvent;
     private static Managers Instance
     {
         get

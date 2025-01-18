@@ -1,14 +1,17 @@
+using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Vivox;
 using UnityEngine;
 
-public class VivoxManager
+public class VivoxManager: IManagerEventInitailize
 {
+    public Action VivoxDoneLoginEvent;
+    string _currentChanel = null;
     public async Task InitializeAsync()
     {
-        Managers.OnApplicationQuitEvent += LogoutOfVivoxAsync;
+        InitalizeEvent();
         if (UnityServices.State != ServicesInitializationState.Initialized)
         {
             await UnityServices.InitializeAsync();
@@ -20,22 +23,29 @@ public class VivoxManager
 
     public async Task LoginToVivoxAsync()
     {
+        if (VivoxService.Instance.IsLoggedIn)
+            return;
+
         LoginOptions options = new LoginOptions();
         options.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
         options.EnableTTS = true;
         await VivoxService.Instance.LoginAsync(options);
+        await JoinChannel(Managers.LobbyManager.CurrentLobby.Id);
+        VivoxDoneLoginEvent.Invoke();
+        Debug.Log("ViVox 로그인완료");
     }
-    public async Task JoinEchoChannel()
+    public async Task JoinChannel(string chanelID)
     {
-        string channelToJoin = "Lobby";
-        await VivoxService.Instance.JoinEchoChannelAsync(channelToJoin, ChatCapability.TextAndAudio);
+        _currentChanel = chanelID;
+        Debug.Log($"현재{_currentChanel}");
+        await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);
+
     }
 
 
-    public async Task LeaveEchoChannelAsync()
+    public async Task LeaveEchoChannelAsync(string chanelID)
     {
-        string channelToLeave = "Lobby";
-        await VivoxService.Instance.LeaveChannelAsync(channelToLeave);
+        await VivoxService.Instance.LeaveChannelAsync(chanelID);
     }
 
 
@@ -45,5 +55,15 @@ public class VivoxManager
         await VivoxService.Instance.LogoutAsync();
     }
 
-    
+    public async Task SendMessageAsync(string message)
+    {
+       await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, message);
+    }
+
+    public void InitalizeEvent()
+    {
+        Managers.OnApplicationQuitEvent += LogoutOfVivoxAsync;
+        Managers.DisconnectApiEvent -= LogoutOfVivoxAsync;
+        Managers.DisconnectApiEvent += LogoutOfVivoxAsync;
+    }
 }

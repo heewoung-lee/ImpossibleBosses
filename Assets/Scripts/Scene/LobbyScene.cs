@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Vivox;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class LobbyScene : BaseScene
     {
         base.StartInit();
         _uI_LobbyScene = Managers.UI_Manager.ShowSceneUI<UI_LobbyScene>();
+
         await Managers.VivoxManager.InitializeAsync();
         await Managers.VivoxManager.LoginToVivoxAsync();
     }

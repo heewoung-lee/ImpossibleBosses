@@ -51,7 +51,7 @@ public class UI_Manager : IManagerIResettable
     public void AddImportant_Popup_UI(UI_Base important_UI)
     {
         Type type = important_UI.GetType();
-        _importantPopup_UI.Add(type, important_UI);
+        _importantPopup_UI[type] = important_UI; 
     }
 
     public T GetImportant_Popup_UI<T>() where T : UI_Base
