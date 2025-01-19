@@ -1,4 +1,4 @@
 public interface IManagerEventInitailize
 {
-    public void InitalizeEvent();
+    public void InitalizeVivoxEvent();
 }

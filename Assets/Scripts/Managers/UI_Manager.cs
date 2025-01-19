@@ -87,13 +87,13 @@ public class UI_Manager : IManagerIResettable
         {
             if(go.GetComponent<UI_Popup>() != null)
             {
-                canvas.sortingOrder = _popupSorting;
                 _popupSorting++;
+                canvas.sortingOrder = _popupSorting;
             }
             else
             {
-                canvas.sortingOrder = _sorting;
                 _sorting++;
+                canvas.sortingOrder = _sorting;
             }
         }
         else
@@ -102,17 +102,26 @@ public class UI_Manager : IManagerIResettable
         }
     }
 
-    public T TryGetPopupDictAndShowPopup<T>() where T : UI_Popup
+    public T TryGetPopupInDict<T>() where T : UI_Popup
     {
         T popup = GetImportant_Popup_UI<T>();
         if (popup == null)
         {
-            return ShowUIPopupUI<T>();
+            popup = GetPopupUIFromResource<T>();
+            AddImportant_Popup_UI(popup);
+            return popup;
         }
         return popup;
     }
 
-    public T ShowUIPopupUI<T>(string name = null) where T : UI_Popup
+    public T TryGetPopupDictAndShowPopup<T>() where T : UI_Popup
+    {
+        T ui_popup = TryGetPopupInDict<T>();
+        Managers.UI_Manager.ShowPopupUI(ui_popup);
+        return ui_popup;
+    }
+
+    public T GetPopupUIFromResource<T>(string name = null) where T : UI_Popup
     {
         if (name == null)
             name = typeof(T).Name;
@@ -125,7 +134,7 @@ public class UI_Manager : IManagerIResettable
 
         return popup;
     }
-    public T ShowSceneUI<T>(string name = null) where T : UI_Scene
+    public T GetSceneUIFromResource<T>(string name = null) where T : UI_Scene
     {
         if (name == null)
             name = typeof(T).Name;

@@ -19,7 +19,7 @@ public class LobbyScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
-        _uI_LobbyScene = Managers.UI_Manager.ShowSceneUI<UI_LobbyScene>();
+        _uI_LobbyScene = Managers.UI_Manager.GetSceneUIFromResource<UI_LobbyScene>();
 
     }
 

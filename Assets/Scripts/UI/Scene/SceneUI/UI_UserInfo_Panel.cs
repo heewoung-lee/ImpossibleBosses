@@ -59,7 +59,7 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         if (_createRoomUI == null)
         {
-            _createRoomUI = Managers.UI_Manager.ShowUIPopupUI<UI_CreateRoom>();
+            _createRoomUI = Managers.UI_Manager.GetPopupUIFromResource<UI_CreateRoom>();
         }
         Managers.UI_Manager.ShowPopupUI(_createRoomUI);
     }
@@ -83,7 +83,7 @@ public class UI_UserInfo_Panel : UI_Scene
 
     public async void MoveLoginScene()
     {
-        await Managers.DisconnectApiEvent?.Invoke();
+        await Managers.SocketEventManager.DisconnectApiEvent?.Invoke();
         Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene);
     }
 

@@ -30,7 +30,7 @@ public class UI_LoginTitle : UI_Scene
     {
         if(_loginPopup == null)
         {
-            _loginPopup = Managers.UI_Manager.ShowUIPopupUI<UI_LoginPopup>();
+            _loginPopup = Managers.UI_Manager.GetPopupUIFromResource<UI_LoginPopup>();
         }
         Managers.UI_Manager.ShowPopupUI(_loginPopup);
     }

@@ -36,17 +36,24 @@ public abstract class UI_AlertPopupBase : UI_Popup
         _titleText = Get<TMP_Text>((int)Texts.TitleText);
         _bodyText = Get<TMP_Text>((int)(Texts.BodyText));
         _confirm_Button = Get<Button>((int)Buttons.Confirm_Button);
-
-        _confirm_Button.onClick.AddListener(() =>
-        {
-            Managers.UI_Manager.ClosePopupUI(this);
-        });
         Managers.UI_Manager.AddImportant_Popup_UI(this);
+    }
+
+
+    protected override void OnEnableInit()
+    {
+        base.OnEnableInit();
+        _confirm_Button.onClick.AddListener(() => { Managers.UI_Manager.ClosePopupUI(this); });
+    }
+
+    protected override void OnDisableInit()
+    {
+        base.OnDisableInit();
+        _confirm_Button.onClick.RemoveAllListeners();
     }
 
     public void SetCloseButtonOverride(UnityAction closeButtonAction)
     {
-        _confirm_Button.onClick.RemoveAllListeners();
         _confirm_Button.onClick.AddListener(closeButtonAction);
     }
 

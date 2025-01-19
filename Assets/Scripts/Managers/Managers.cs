@@ -8,9 +8,6 @@ using UnityEngine;
 public class Managers : MonoBehaviour
 {
     private static Managers _instance;
-
-    public static Func<Task> OnApplicationQuitEvent;
-    public static Func<Task> DisconnectApiEvent;
     private static Managers Instance
     {
         get
@@ -54,6 +51,9 @@ public class Managers : MonoBehaviour
 
     private SkillManager _skillManager = new SkillManager();
     public static SkillManager SkillManager { get => Instance._skillManager; }
+
+    private SocketEventManager _socketEventManager = new SocketEventManager();
+    public static SocketEventManager SocketEventManager { get => Instance._socketEventManager; }
 
     private SoundManager _soundManager = new SoundManager();
     public static SoundManager SoundManager { get => Instance._soundManager; }
@@ -103,7 +103,7 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        await OnApplicationQuitEvent?.Invoke();
+        await SocketEventManager.OnApplicationQuitEvent?.Invoke();
     }
 
     public static void Clear()

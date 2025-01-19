@@ -31,29 +31,6 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
     TMP_InputField _pwInputField;
     UI_AlertPopupBase _ui_alertPopupUI;
 
-    UI_SignUpPopup _ui_signUpPopup;
-    public UI_SignUpPopup UI_signUpPopup
-    {
-        get
-        {
-            if (_ui_signUpPopup == null)
-            {
-                _ui_signUpPopup = Managers.UI_Manager.ShowUIPopupUI<UI_SignUpPopup>();
-            }
-            return _ui_signUpPopup;
-        }
-    }
-    public UI_AlertPopupBase UI_AlertPopupUI
-    {
-        get
-        {
-            if (_ui_alertPopupUI == null)
-            {
-                _ui_alertPopupUI = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            }
-            return _ui_alertPopupUI;
-        }
-    }
     UI_CreateNickName _ui_CreateNickName;
     public UI_CreateNickName UI_CreateNickName
     {
@@ -61,7 +38,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         {
             if (_ui_CreateNickName == null)
             {
-                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_CreateNickName>();
+                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupInDict<UI_CreateNickName>();
             }
             return _ui_CreateNickName;
         }
@@ -93,7 +70,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
     }
     public void ShowSignUpUI()
     {
-        Managers.UI_Manager.ShowPopupUI(UI_signUpPopup);
+        Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_SignUpPopup>();
     }
 
     private void OnDisable()
@@ -108,18 +85,16 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         string userPW = _pwInputField.text;
 
 
-        _confirm_Button.interactable = false;
-
-
         if (string.IsNullOrEmpty(userID)|| string.IsNullOrEmpty(userPW))
             return;
 
+        _confirm_Button.interactable = false;
+
         if (Utill.IsAlphanumeric(userID) == false) //영문+숫자외 다른 문자가 섞인경우.
         {
-            string titleText = "난 한글을 사랑하지만..";
-            string bodyText = "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.";
-            UI_AlertPopupUI.SetText(titleText, bodyText);
-            Managers.UI_Manager.ShowPopupUI(UI_AlertPopupUI);
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                .AlertSetText("난 한글을 사랑하지만..", "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.")
+                .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
             return;
         }
 
@@ -128,12 +103,9 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 
         if(playerinfo.Equals(default(PlayerLoginInfo)))
         {
-            string titleText = "오류";
-            string bodyText = "아이디와 비밀번호가 틀립니다";
-            UI_AlertPopupUI.SetText(titleText, bodyText);
-            Managers.UI_Manager.ShowPopupUI(UI_AlertPopupUI);
-            Debug.Log("Login Failed");
-            _confirm_Button.interactable = true;
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
+                .AfterAlertEvent(() => {_confirm_Button.interactable = true;});
             return;
         }
 
@@ -148,10 +120,9 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
         if (checkPlayerNickNameAlreadyConnected is true)
         {
-            UI_AlertDialog uI_AlertDialog= Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            uI_AlertDialog.SetText("오류", "이미 접속되어 있습니다.");
-            Managers.UI_Manager.ShowPopupUI(uI_AlertDialog);
-            _confirm_Button.interactable = true;
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+              .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
+              .AlertSetText("오류", "이미 접속되어 있습니다.");
             return;
         }
 

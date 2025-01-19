@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
 {
@@ -44,7 +45,11 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
     }
     public async void CreateID()
     {
-        (bool isCheckResult, string message) =  await Managers.LogInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
+        if (string.IsNullOrEmpty(_idInputField.text) || string.IsNullOrEmpty(_pwInputField.text))
+            return;
+
+
+            (bool isCheckResult, string message) =  await Managers.LogInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
 
         if(isCheckResult == false)
         {
@@ -74,7 +79,7 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
     {
         if(alertBasePopup == null)
         {
-            alertBasePopup = Managers.UI_Manager.TryGetPopupDictAndShowPopup<T>();
+            alertBasePopup = Managers.UI_Manager.TryGetPopupInDict<T>();
         }
         alertBasePopup.SetText(titleMessage, bodyText);
         if (closeButtonAction != null)

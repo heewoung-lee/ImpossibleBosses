@@ -192,6 +192,9 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         catch (Exception error)//구글 스프레드시트에 연결이 안될때 에러처리
         {
             Debug.Log($"Error: {error}\nNot Connetced Internet");
+            UI_AlertDialog alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            alertDialog.SetText("오류", "인터넷 연결이 안됐습니다.");
+
             throw;
         }
     }

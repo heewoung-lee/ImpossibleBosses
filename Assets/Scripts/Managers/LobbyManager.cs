@@ -40,7 +40,7 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<bool> InitLobbyScene()
     {
-        InitalizeEvent();
+        InitalizeVivoxEvent();
         try
         {
             // Unity Services √ ±‚»≠
@@ -243,10 +243,10 @@ public class LobbyManager : IManagerEventInitailize
         Debug.Log("User signed out successfully.");
     }
 
-    public void InitalizeEvent()
+    public void InitalizeVivoxEvent()
     {
-        Managers.OnApplicationQuitEvent += LogoutAndLeaveLobby;
-        Managers.DisconnectApiEvent -= LogoutAndLeaveLobby;
-        Managers.DisconnectApiEvent += LogoutAndLeaveLobby;
+        Managers.SocketEventManager.OnApplicationQuitEvent += LogoutAndLeaveLobby;
+        Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndLeaveLobby;
+        Managers.SocketEventManager.DisconnectApiEvent += LogoutAndLeaveLobby;
     }
 }
