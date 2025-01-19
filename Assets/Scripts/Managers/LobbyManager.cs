@@ -226,6 +226,9 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task LogoutAndLeaveLobby()
     {
+        if (AuthenticationService.Instance.IsSignedIn == false)
+            return;
+
         try
         {
             // 로비에서 사용자 제거
