@@ -89,6 +89,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
     public override void ItemRightClick(PointerEventData eventdata)
     {
         base.ItemRightClick(eventdata);
+        //아이템창이 닫힌상태에서 받는게 불가능하니, 닫힌상태에서는 루트아이템으로 보내버리기
         BuyItem();
     }
 

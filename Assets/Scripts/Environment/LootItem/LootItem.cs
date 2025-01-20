@@ -124,15 +124,7 @@ public class LootItem : MonoBehaviour,IInteraction
             return;
 
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
-        if (_ui_player_Inventory.gameObject.activeSelf)//인벤토리가 열려있다면 바로 들어간다.
-        {
-            Transform inventory_content = _ui_player_Inventory.ItemInventoryTr;
-            inventory_item.transform.SetParent(inventory_content);
-        }
-        else//인벤토리가 꺼져있으면 LootingItem에 모아둔다음 열리면 집어넣는다.
-        {
-            inventory_item.transform.SetParent(Managers.LootItemManager.TemporaryInventory);
-        }
+        inventory_item.transform.SetParent(Managers.LootItemManager.GetItemComponentPosition(_ui_player_Inventory));
         Managers.ResourceManager.DestroyObject(gameObject);
         player.DisEnable_Icon_UI();//상호작용 아이콘 제거
     }

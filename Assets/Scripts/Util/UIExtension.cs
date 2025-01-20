@@ -115,10 +115,12 @@ public static class UIExtension
         UI_Player_Inventory inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
 
         if (parentTr == null)
-            parentTr = inventory.ItemInventoryTr;
+        {
+            parentTr = Managers.LootItemManager.GetItemComponentPosition(inventory);
+        }
 
         IInventoryItemMaker itemUIType = iteminfo as IInventoryItemMaker;
-        return itemUIType.MakeItemComponentInventory(parentTr, itemCount, name, path);
+         return itemUIType.MakeItemComponentInventory(parentTr, itemCount, name, path);
     }
 
     public static UI_ShopItemComponent MakeShopItemComponent(this IItem iteminfo,int price,Transform parentTr = null, int itemCount = 1, string name = null, string path = null)

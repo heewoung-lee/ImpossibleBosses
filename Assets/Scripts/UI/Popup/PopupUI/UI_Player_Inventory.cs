@@ -145,7 +145,7 @@ public class UI_Player_Inventory : UI_Popup
             _stat.Event_StatsChanged += UpdateStats;
             UpdateStats();
         }
-        LoadItemsFromLootStorage();
+        Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;
     }
     protected override void OnDisableInit()
@@ -159,27 +159,7 @@ public class UI_Player_Inventory : UI_Popup
         CloseDecriptionWindow();
     }
 
-    private void LoadItemsFromLootStorage()
-    {
-        if (_lootitemStorage.childCount <= 0)
-            return;
-
-
-        for (int i = _lootitemStorage.childCount - 1; i >= 0; i--)
-        {
-            Transform child = _lootitemStorage.GetChild(i);
-            UI_ItemComponent_Inventory lootItem = child.GetComponent<UI_ItemComponent_Inventory>();
-            if (lootItem != null)
-            {
-                lootItem.transform.SetParent(_itemInventoryTr);
-
-                if (lootItem is UI_ItemComponent_Consumable)
-                {
-                    (lootItem as UI_ItemComponent_Consumable).CombineConsumableItems();
-                }
-            }
-        }
-    }
+  
 
 
     public void UpdateStats()
