@@ -139,6 +139,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _descriptionText = iteminfo.DescriptionText;
         _itemIconSourceImageText = iteminfo.ItemIconSourceText;
         _itemIconSourceImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
+        //TODO: 아이템구매시 이미지 못찾음
         _imageSource = iteminfo.ImageSource;
         _iteminfo = iteminfo;//다른 클래스들이 형변환을 쉽게 하기 위해 인터페이스를 저장
     }

@@ -103,7 +103,7 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        await SocketEventManager.OnApplicationQuitEvent?.Invoke();
+        await _socketEventManager.OnApplicationQuitEvent?.Invoke();
     }
 
     public static void Clear()
