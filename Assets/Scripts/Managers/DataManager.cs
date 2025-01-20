@@ -166,7 +166,18 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         // 구글 인증 및 서비스 생성
         try
         {
-           string[] readAndWriteOption = isWrite == true ? new[] { SheetsService.Scope.Spreadsheets } : new[] { SheetsService.Scope.SpreadsheetsReadonly };
+            string[] readAndWriteOption;
+            string tokenID;
+            if (isWrite == true)
+            {
+                readAndWriteOption = new[] { SheetsService.Scope.Spreadsheets };
+                tokenID = "WriteUser";
+            }
+            else
+            {
+                readAndWriteOption = new[] { SheetsService.Scope.SpreadsheetsReadonly };
+                tokenID = "ReadUser";
+            }
             UserCredential _credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 new ClientSecrets
                 {
@@ -174,7 +185,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
                     ClientSecret = databaseStruct._google_Secret
                 },
                 readAndWriteOption,
-                "user",
+                tokenID,
                 CancellationToken.None).Result;
 
             service = new SheetsService(new BaseClientService.Initializer()
@@ -194,7 +205,6 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             Debug.Log($"Error: {error}\nNot Connetced Internet");
             UI_AlertDialog alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alertDialog.SetText("오류", "인터넷 연결이 안됐습니다.");
-
             throw;
         }
     }
