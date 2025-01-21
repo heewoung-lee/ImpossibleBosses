@@ -7,10 +7,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public abstract class UI_Base : MonoBehaviour
 {
-    Dictionary<Type, UnityEngine.Object[]> _bindDictionary = new Dictionary<Type, UnityEngine.Object[]>();
+    Dictionary<Type, Object[]> _bindDictionary = new Dictionary<Type,Object[]>();
     protected abstract void StartInit();
     protected abstract void AwakeInit();
 
@@ -37,33 +38,64 @@ public abstract class UI_Base : MonoBehaviour
     {
         StartInit();
     }
-    protected void Bind<T>(Type type) where T : UnityEngine.Object
+    protected void Bind<T>(Type type) where T : Object
     {
 
         if (type.IsEnum == false)
             return;
 
         string[] names = Enum.GetNames(type);
-        UnityEngine.Object[] objects = new UnityEngine.Object[names.Length];
-
-
-        for(int i = 0; i< names.Length; i++)
-        {
-            if(typeof(T) == typeof(GameObject))
-            {
-                objects[i] = Utill.FindChild(gameObject,names[i],true);
-            }
-            else
-            {
-                objects[i] = Utill.FindChild<T>(gameObject, names[i], true);
-            }
-        }
+        Object[] objects = new Object[names.Length];
+        objects = FindObjects<T>(objects, 0, names.Length, names);
 
         _bindDictionary.Add(typeof(T), objects);
     }
-    protected T Get<T>(int idx) where T : UnityEngine.Object
+
+    protected void AddBind<T>(Type type) where T: Object
     {
-        UnityEngine.Object[] objects = null;
+        if (_bindDictionary.ContainsKey(typeof(T)))
+        {
+            Object[] objects = _bindDictionary[typeof(T)];
+            List<string> nameList = new List<string>();
+            for(int beforeIndex=0; beforeIndex < objects.Length; beforeIndex++)
+            {
+                nameList.Add(objects[beforeIndex].name);
+            }
+            string[] names = Enum.GetNames(type);
+            for (int index=0; index < names.Length; index++)
+            {
+                nameList.Add(names[index]);
+            }
+            Object[] newObjects = new Object[nameList.Count];
+            Array.Copy(objects, newObjects, objects.Length);
+            newObjects = FindObjects<T>(newObjects, objects.Length, newObjects.Length, nameList.ToArray());
+            _bindDictionary[typeof(T)] = newObjects;
+        }
+    }
+
+    private Object[] FindObjects<T>(Object[] objects,int startIndex,int endIndex, string[] names) where T : Object
+    {
+        Object[] newObjects = objects;
+
+        for (int i = startIndex; i < endIndex; i++)
+        {
+            if (typeof(T) == typeof(GameObject))
+            {
+                newObjects[i] = Utill.FindChild(gameObject, names[i], true);
+            }
+            else
+            {
+                newObjects[i] = Utill.FindChild<T>(gameObject, names[i], true);
+            }
+        }
+        return newObjects;
+    }
+
+
+
+    protected T Get<T>(int idx) where T : Object
+    {
+        Object[] objects = null;
 
         if(_bindDictionary.TryGetValue(typeof(T),out objects) == false)
             return null;
@@ -79,8 +111,6 @@ public abstract class UI_Base : MonoBehaviour
     protected Image GetImage(int idx) => Get<Image>(idx);
 
     protected GameObject GetObject(int idx) => Get<GameObject>(idx);
-
-
 
     // UI_Base는 모든 UI들이 상속받는 프레임워크
     //딕셔너리를 통해 UI_Base의 Bind타입들을 키로 저장하고, BIND타입안에 있는 이름과 같은 객체들을 배열로 저장한다.

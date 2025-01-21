@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 {
-   
+
     enum Buttons
     {
         Close_Button,
@@ -85,7 +86,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         string userPW = _pwInputField.text;
 
 
-        if (string.IsNullOrEmpty(userID)|| string.IsNullOrEmpty(userPW))
+        if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(userPW))
             return;
 
         _confirm_Button.interactable = false;
@@ -98,24 +99,35 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             return;
         }
 
-
-        PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPW);
-
-        if(playerinfo.Equals(default(PlayerLoginInfo)))
+        try
         {
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
-                .AfterAlertEvent(() => {_confirm_Button.interactable = true;});
+            PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPW);
+
+            if (playerinfo.Equals(default(PlayerLoginInfo)))
+            {
+                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                    .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
+                    .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
+                return;
+            }
+            if (string.IsNullOrEmpty(playerinfo.NickName))
+            {
+                Managers.UI_Manager.ShowPopupUI(UI_CreateNickName);
+                UI_CreateNickName.PlayerLoginInfo = playerinfo;
+                _confirm_Button.interactable = true;
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"Error: {ex}\nNot Connetced Internet");
+            UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                .AlertSetText("오류", "인터넷 연결이 안됐습니다.")
+                .AfterAlertEvent(()=> { _confirm_Button.interactable = true; });
             return;
         }
 
-        if (string.IsNullOrEmpty(playerinfo.NickName))
-        {
-            Managers.UI_Manager.ShowPopupUI(UI_CreateNickName);
-            UI_CreateNickName.PlayerLoginInfo = playerinfo;
-            _confirm_Button.interactable = true;
-            return;
-        }
+
 
         bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
         if (checkPlayerNickNameAlreadyConnected is true)

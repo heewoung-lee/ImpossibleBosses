@@ -37,6 +37,7 @@ public class Define
         Unknown,
         LoginScene,
         LobbyScene,
+        RoomScene,
         GamePlayScene,
         BattleScene,
         LoadingScene
