@@ -1,4 +1,6 @@
+using System;
 using TMPro;
+using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,9 +58,32 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
         });
     }
 
-    public void ConnectRoom()
+    public async void ConnectRoom()
     {
+        try
+        {
+            int? roomPassWord = null;
 
+            if (int.TryParse(PW_Input_Field.text,out int result))
+            {
+                roomPassWord = result;
+            }
+
+            if ((float)roomPassWord / 10000000 < 1)//8자리 아래 있을때 에러
+            {
+                UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                    .AlertSetText("오류", "비밀번호는 8자리 이상");
+                return;
+            }
+            string roomid = await Managers.LobbyManager.CreateRoom(ID_Input_Field.text, int.Parse(_currentCount.text), roomPassWord);
+            Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+           
+        }
+      
     }
     public void OnClickCloseButton()
     {

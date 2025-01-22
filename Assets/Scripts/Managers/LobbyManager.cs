@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
@@ -41,12 +42,13 @@ public class LobbyManager : IManagerEventInitailize
     public async Task<bool> InitLobbyScene()
     {
         InitalizeVivoxEvent();
+
         try
         {
             // Unity Services 초기화
             await UnityServices.InitializeAsync();
             _playerID = await SignInAnonymouslyAsync();
-            if (await JoinWaitLobby() is false)
+            if (await TryJoinWaitLobby() is false)
             {
                 await CreateWaitLobby();
             }
@@ -57,7 +59,7 @@ public class LobbyManager : IManagerEventInitailize
                 return true;
             }
 
-            
+
             InitDoneEvent?.Invoke();
             return false;
         }
@@ -68,7 +70,7 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    async Task<bool> JoinWaitLobby()
+    async Task<bool> TryJoinWaitLobby()
     {
         try
         {
@@ -101,7 +103,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await RateLimited(()=>JoinWaitLobby()); // 재시도
+            return await RateLimited(() => TryJoinWaitLobby()); // 재시도
         }
         catch (LobbyServiceException e)
         {
@@ -116,11 +118,64 @@ public class LobbyManager : IManagerEventInitailize
         int maxPlayers = 150;
         CreateLobbyOptions options = new CreateLobbyOptions();
         options.IsPrivate = false;
-
         _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
+
         if (_currentLobby != null)
             Debug.Log($"로비 만들어짐{_currentLobby}");
     }
+
+    async Task TryJoinOrCreateWaitLobby()
+    {
+        if (await TryJoinWaitLobby() == false)
+        {
+            await CreateWaitLobby();
+        }
+    }
+
+    public async Task<string> CreateRoom(string roomName, int maxPlayers, int? roomPW = default)
+    {
+        try
+        {
+            CreateLobbyOptions options = new CreateLobbyOptions();
+            options.IsPrivate = false;
+            if (roomPW.HasValue)
+            {
+                options.Password = roomPW.Value.ToString();
+            }
+            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(roomName, maxPlayers, options);
+            _currentLobby = lobby;
+            return lobby.Id;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+    public async Task LeaveLobby()
+    {
+        await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, _playerID);
+        _currentLobby = null;
+    }
+
+    public async Task JoinRoom(string roomId,int? roomPw = default)
+    {
+        try
+        {
+            JoinLobbyByIdOptions idOptions = null;
+            if (roomPw.HasValue)
+            {
+                idOptions = new JoinLobbyByIdOptions { Password = roomPw.Value.ToString() };
+            }
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(roomId, idOptions);
+            _currentLobby = lobby;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+
     async Task<string> SignInAnonymouslyAsync()
     {
         try
@@ -159,20 +214,20 @@ public class LobbyManager : IManagerEventInitailize
 
             foreach (Lobby lobby in queryResponse.Results)
             {
-               foreach(Player player in lobby.Players)
+                foreach (Player player in lobby.Players)
                 {
                     foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
                     {
                         if (_playerID == player.Id) //자기자신은 건너뛰기
                             continue;
 
-                       if(data.Key != "NickName")
+                        if (data.Key != "NickName")
                         {
                             continue;
                         }
                         else
                         {
-                            if(data.Value.Value != usernickName)
+                            if (data.Value.Value != usernickName)
                             {
                                 continue;
                             }
@@ -190,7 +245,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await RateLimited(()=>IsAlreadyLogInID(usernickName)); // 재시도
+            return await RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
         }
         catch (LobbyServiceException e)
         {
