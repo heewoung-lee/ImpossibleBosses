@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TMPro;
 using Unity.VisualScripting;
@@ -51,9 +52,10 @@ public abstract class UI_Base : MonoBehaviour
         _bindDictionary.Add(typeof(T), objects);
     }
 
-    protected void AddBind<T>(Type type) where T: Object
+    protected void AddBind<T>(Type type,out string[] indexString) where T: Object
     {
-        if (_bindDictionary.ContainsKey(typeof(T)))
+        
+        if(_bindDictionary.ContainsKey(typeof(T)))
         {
             Object[] objects = _bindDictionary[typeof(T)];
             List<string> nameList = new List<string>();
@@ -62,14 +64,20 @@ public abstract class UI_Base : MonoBehaviour
                 nameList.Add(objects[beforeIndex].name);
             }
             string[] names = Enum.GetNames(type);
-            for (int index=0; index < names.Length; index++)
             {
+            for (int index=0; index < names.Length; index++)
                 nameList.Add(names[index]);
             }
             Object[] newObjects = new Object[nameList.Count];
             Array.Copy(objects, newObjects, objects.Length);
             newObjects = FindObjects<T>(newObjects, objects.Length, newObjects.Length, nameList.ToArray());
             _bindDictionary[typeof(T)] = newObjects;
+            indexString = nameList.ToArray();
+        }
+        else
+        {
+            Bind<T>(type);
+            indexString = _bindDictionary[typeof(T)].Select(bindObject=>bindObject.name).ToArray();
         }
     }
 
@@ -98,8 +106,10 @@ public abstract class UI_Base : MonoBehaviour
         Object[] objects = null;
 
         if(_bindDictionary.TryGetValue(typeof(T),out objects) == false)
+        {
+            Debug.LogError($"not Found Object{typeof(T)}");
             return null;
-
+        }
         return objects[idx] as T;
     }
 
