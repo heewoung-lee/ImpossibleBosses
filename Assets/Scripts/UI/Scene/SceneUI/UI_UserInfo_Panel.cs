@@ -10,6 +10,7 @@ public class UI_UserInfo_Panel : UI_Scene
     enum Buttons
     {
         CreateRoomButton,
+        RefreshLobbyButton,
         LoginSceneBackButton
     }
 
@@ -20,6 +21,7 @@ public class UI_UserInfo_Panel : UI_Scene
 
 
     Button _createRoomButton;
+    Button _refreshLobbyButton;
     Button _loginSceneBackButton;
     UI_CreateRoom _createRoomUI;
 
@@ -31,6 +33,8 @@ public class UI_UserInfo_Panel : UI_Scene
         Bind<TMP_Text>(typeof(Texts));
         _createRoomButton = Get<Button>((int)Buttons.CreateRoomButton);
         _createRoomButton.onClick.AddListener(ShowCreateRoomUI);
+        _refreshLobbyButton = Get<Button>((int)Buttons.RefreshLobbyButton);
+        _refreshLobbyButton.onClick.AddListener(RefreshButton);
         _loginSceneBackButton = Get<Button>((int)Buttons.LoginSceneBackButton);
         _loginSceneBackButton.onClick.AddListener(MoveLoginScene);
         _userNickNamaText = Get<TMP_Text>((int)Texts.PlayerNickNameText);
@@ -42,6 +46,11 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         base.StartInit();
         InitButtonInteractable();
+    }
+
+    public void RefreshButton()
+    {
+
     }
     private void InitButtonInteractable()
     {
@@ -90,11 +99,13 @@ public class UI_UserInfo_Panel : UI_Scene
     private void ButtonInteractable()
     {
         _createRoomButton.interactable = true;
+        _refreshLobbyButton.interactable = true;
         _loginSceneBackButton.interactable = true;
     }
     private void ButtonDisInteractable()
     {
         _createRoomButton.interactable = false;
+        _refreshLobbyButton.interactable = false;
         _loginSceneBackButton.interactable = false;
     }
 

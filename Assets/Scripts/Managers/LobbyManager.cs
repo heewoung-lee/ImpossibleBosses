@@ -75,7 +75,7 @@ public class LobbyManager : IManagerEventInitailize
     }
 
 
-    async Task<Lobby> TryJoinLobbyByNameOrCreateLobby(string lobbyName,int MaxPlayers, CreateLobbyOptions lobbyOption)
+    public async Task<Lobby> TryJoinLobbyByNameOrCreateLobby(string lobbyName,int MaxPlayers, CreateLobbyOptions lobbyOption)
     {
         Lobby lobby = null;
         lobby = await TryJoinLobbyByName(lobbyName);

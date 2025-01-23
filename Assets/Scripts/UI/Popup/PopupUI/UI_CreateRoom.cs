@@ -69,12 +69,13 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 roomPassWord = result;
             }
 
-            if ((float)roomPassWord / 10000000 < 1)//8자리 아래 있을때 에러
+            if (roomPassWord.HasValue && (float)roomPassWord / 10000000 < 1)//8자리 아래 있을때 에러
             {
                 UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                     .AlertSetText("오류", "비밀번호는 8자리 이상");
                 return;
             }
+            
             string roomid = await Managers.LobbyManager.CreateRoom(ID_Input_Field.text, int.Parse(_currentCount.text), roomPassWord);
             Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
         }
