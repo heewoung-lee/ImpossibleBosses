@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Vivox;
 using UnityEngine;
@@ -66,6 +67,7 @@ public class UI_LobbyChat : UI_Scene
             ButtonInteractable();
         }
     }
+
     public async void SendChatingMessage(string message)
     {
         if (string.IsNullOrEmpty(_chattingInputField.text) || _sendButton.interactable == false)
@@ -92,7 +94,7 @@ public class UI_LobbyChat : UI_Scene
         string senderDisplayName = message.SenderDisplayName;
         string messageChannel = message.ChannelName;
 
-        _chatLog.text += $"[{senderDisplayName}] {messageText} \n";
+        _chatLog.text += $"{messageText} \n";
     }
 
     private void ButtonInteractable()

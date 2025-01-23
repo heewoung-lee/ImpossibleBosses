@@ -2,14 +2,16 @@ using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
+using Unity.Services.Lobbies.Models;
 using Unity.Services.Vivox;
 using UnityEngine;
 
-public class VivoxManager: IManagerEventInitailize
+public class VivoxManager : IManagerEventInitailize
 {
     public Action VivoxDoneLoginEvent;
     private bool _checkDoneLoginProcess = false;
     public bool CheckDoneLoginProcess => _checkDoneLoginProcess;
+    LoginOptions _loginOptions;
     string _currentChanel = null;
     public async Task InitializeAsync()
     {
@@ -21,12 +23,12 @@ public class VivoxManager: IManagerEventInitailize
                 await UnityServices.InitializeAsync();
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
-        await VivoxService.Instance.InitializeAsync();
+            await VivoxService.Instance.InitializeAsync();
         }
         catch (Exception ex)
         {
             UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류","오류가 발생했습니다.");
+            alert.SetText("오류", "오류가 발생했습니다.");
             Debug.LogError(ex);
         }
     }
@@ -39,16 +41,17 @@ public class VivoxManager: IManagerEventInitailize
 
         try
         {
-        LoginOptions options = new LoginOptions();
-        options.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
-        options.EnableTTS = true;
-        await VivoxService.Instance.LoginAsync(options);
-        await JoinChannel(Managers.LobbyManager.CurrentLobby.Id);
-        _checkDoneLoginProcess = true;
-        VivoxDoneLoginEvent?.Invoke();
-        Debug.Log("ViVox 로그인완료");
+            _loginOptions = new LoginOptions();
+            _loginOptions.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
+            _loginOptions.EnableTTS = true;
+            await VivoxService.Instance.LoginAsync(_loginOptions);
+            Lobby lobby = await Managers.LobbyManager.GetCurrentLobby();
+            await JoinChannel(lobby.Id);
+            _checkDoneLoginProcess = true;
+            VivoxDoneLoginEvent?.Invoke();
+            Debug.Log("ViVox 로그인완료");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert.SetText("오류", "오류가 발생했습니다.");
@@ -60,10 +63,10 @@ public class VivoxManager: IManagerEventInitailize
         try
         {
             _currentChanel = chanelID;
-            Debug.Log($"현재{_currentChanel}");
+            Debug.Log($"현재채널ID:{_currentChanel}");
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);
         }
-        catch( Exception ex)
+        catch (Exception ex)
         {
             UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert.SetText("오류", "오류가 발생했습니다.");
@@ -79,7 +82,7 @@ public class VivoxManager: IManagerEventInitailize
         {
             await VivoxService.Instance.LeaveChannelAsync(chanelID);
         }
-       catch ( Exception ex)
+        catch (Exception ex)
         {
             UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert.SetText("오류", "오류가 발생했습니다.");
@@ -108,9 +111,26 @@ public class VivoxManager: IManagerEventInitailize
     {
         try
         {
-            await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, message);
+            string sendMessageFormmat = $"[{_loginOptions.DisplayName}] {message}";
+            await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, sendMessageFormmat);
         }
-        catch(Exception ex)
+        catch (Exception ex)
+        {
+            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            alert.SetText("오류", "오류가 발생했습니다.");
+            Debug.LogError(ex);
+        }
+    }
+
+    public async Task SendSystemMessageAsync(string systemMessage)
+    {
+        try
+        {
+            string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
+
+            await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, formattedMessage);
+        }
+        catch (Exception ex)
         {
             UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert.SetText("오류", "오류가 발생했습니다.");
