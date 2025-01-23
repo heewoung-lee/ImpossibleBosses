@@ -121,7 +121,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3877332234243807116}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.54670894
+  m_Size: 0.5467099
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 8453772813861328938}
   - component: {fileID: 6639308715519680268}
   m_Layer: 5
-  m_Name: Content
+  m_Name: Room_Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
