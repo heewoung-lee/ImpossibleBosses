@@ -48,9 +48,27 @@ public class UI_UserInfo_Panel : UI_Scene
         InitButtonInteractable();
     }
 
-    public void RefreshButton()
+    public async void RefreshButton()
     {
+        _refreshLobbyButton.interactable = false;
+        UI_Room_Inventory inventory = Managers.UI_Manager.Get_Scene_UI<UI_Room_Inventory>();
+        try
+        {
+            await Managers.LobbyManager.ReFreshRoomList();
+        }catch (Exception ex)
+        {
+            UI_AlertDialog alert_Popup =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            alert_Popup.SetText("오류", $"{ex}");
+            _refreshLobbyButton.interactable = true;
+        }
+        _refreshLobbyButton.interactable = true;
 
+         var lobbyList = await Managers.LobbyManager.ViewCurrentPlayerLobby();
+
+        foreach(string lobby in lobbyList)
+        {
+            Debug.Log($"현재플레이어의 로비:{lobby}");
+        }
     }
     private void InitButtonInteractable()
     {

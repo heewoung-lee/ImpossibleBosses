@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_RoomInfoPanel : UI_Base
+public class UI_Room_Info_Panel : UI_Base
 {
 
     enum Texts

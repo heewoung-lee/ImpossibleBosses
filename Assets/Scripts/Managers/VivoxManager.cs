@@ -45,17 +45,15 @@ public class VivoxManager : IManagerEventInitailize
             _loginOptions.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
             _loginOptions.EnableTTS = true;
             await VivoxService.Instance.LoginAsync(_loginOptions);
-            Lobby lobby = await Managers.LobbyManager.GetCurrentLobby();
+            Lobby lobby = Managers.LobbyManager.CurrentLobby;
             await JoinChannel(lobby.Id);
             _checkDoneLoginProcess = true;
             VivoxDoneLoginEvent?.Invoke();
             Debug.Log("ViVox 로그인완료");
         }
-        catch (Exception ex)
+        catch
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            throw;
         }
     }
     public async Task JoinChannel(string chanelID)

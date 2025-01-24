@@ -141,8 +141,18 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         Debug.Log("로그인완료");
         _confirm_Button.interactable = true;
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
-        await Managers.VivoxManager.InitializeAsync();
-        await Managers.VivoxManager.LoginToVivoxAsync();
+        try
+        {
+            await Managers.VivoxManager.InitializeAsync();
+            await Managers.VivoxManager.LoginToVivoxAsync();
+        }
+        catch(Exception ex)
+        {
+            UI_AlertPopupBase alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                .AlertSetText("오류", "오류가 발생했습니다.")
+                .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+            Debug.LogError(ex);
+        }
     }
 
     public void OnClickCloseButton()
