@@ -63,8 +63,10 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
     {
         try
         {
+            if (string.IsNullOrEmpty(_roomNameInputField.text))
+                return;
 
-            string passWord = PW_Input_Field.text;
+            string passWord = _roomPWInputField.text;
             int value = 0;
             CreateLobbyOptions option;
 
