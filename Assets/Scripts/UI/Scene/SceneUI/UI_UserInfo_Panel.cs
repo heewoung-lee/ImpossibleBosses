@@ -72,10 +72,10 @@ public class UI_UserInfo_Panel : UI_Scene
     }
     private void InitButtonInteractable()
     {
-        if (Managers.VivoxManager.CheckDoneLoginProcess == false)
+        if (Managers.LobbyManager.IsDoneInitEvent == false)
         {
-            Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
-            Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
+            Managers.LobbyManager.InitDoneEvent -= ButtonInteractable;
+            Managers.LobbyManager.InitDoneEvent += ButtonInteractable;
         }
         else
         {

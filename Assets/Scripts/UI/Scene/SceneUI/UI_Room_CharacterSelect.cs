@@ -18,7 +18,8 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     enum Buttons
     {
-        BackToLobbyButton
+        BackToLobbyButton,
+
     }
     GameObject _playerSelector;
     public GameObject PlayerSelector { get { return _playerSelector; } }

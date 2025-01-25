@@ -24,6 +24,7 @@ public class VivoxManager : IManagerEventInitailize
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
             await VivoxService.Instance.InitializeAsync();
+            await LoginToVivoxAsync();
         }
         catch (Exception ex)
         {
@@ -46,7 +47,6 @@ public class VivoxManager : IManagerEventInitailize
             _loginOptions.EnableTTS = true;
             await VivoxService.Instance.LoginAsync(_loginOptions);
             Lobby lobby = Managers.LobbyManager.CurrentLobby;
-            await JoinChannel(lobby.Id);
             _checkDoneLoginProcess = true;
             VivoxDoneLoginEvent?.Invoke();
             Debug.Log("ViVox 로그인완료");
@@ -60,6 +60,10 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
+            if(VivoxService.Instance.IsLoggedIn == false)
+            {
+                await InitializeAsync();
+            }
             _currentChanel = chanelID;
             Debug.Log($"현재채널ID:{_currentChanel}");
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);

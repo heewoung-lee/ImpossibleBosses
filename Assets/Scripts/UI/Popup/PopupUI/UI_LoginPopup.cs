@@ -63,7 +63,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         _pwInputField = Get<TMP_InputField>((int)InputFields.PWInputField);
         _close_Button.onClick.AddListener(OnClickCloseButton);
         _signup_Button.onClick.AddListener(ShowSignUpUI);
-        _confirm_Button.onClick.AddListener(AuthenticateUser);
+        _confirm_Button.onClick.AddListener(()=>AuthenticateUser(_idInputField.text, _pwInputField.text));
         Managers.UI_Manager.AddImportant_Popup_UI(this);
     }
     protected override void StartInit()
@@ -80,11 +80,8 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         _pwInputField.text = "";
     }
 
-    public async void AuthenticateUser()
+    public async void AuthenticateUser(string userID,string userPW)
     {
-        string userID = _idInputField.text;
-        string userPW = _pwInputField.text;
-
 
         if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(userPW))
             return;
@@ -128,30 +125,15 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         }
 
 
-
+        Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
         bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
         if (checkPlayerNickNameAlreadyConnected is true)
         {
             Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
               .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
-              .AlertSetText("오류", "이미 접속되어 있습니다.");
+              .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
+             .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
             return;
-        }
-
-        Debug.Log("로그인완료");
-        _confirm_Button.interactable = true;
-        Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
-        try
-        {
-            await Managers.VivoxManager.InitializeAsync();
-            await Managers.VivoxManager.LoginToVivoxAsync();
-        }
-        catch(Exception ex)
-        {
-            UI_AlertPopupBase alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                .AlertSetText("오류", "오류가 발생했습니다.")
-                .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
-            Debug.LogError(ex);
         }
     }
 

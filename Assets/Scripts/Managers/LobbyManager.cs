@@ -29,22 +29,19 @@ public struct PlayerIngameLoginInfo
 
 public class LobbyManager : IManagerEventInitailize
 {
-    PlayerIngameLoginInfo _currentPlayerInfo;
-    public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
-
-    public Action InitDoneEvent;
-
+    private PlayerIngameLoginInfo _currentPlayerInfo;
+    private bool _isDoneInitEvent = false;
     private string _playerID;
     private Lobby _currentLobby;
-    public Lobby CurrentLobby => _currentLobby;
     private LobbyEventCallbacks _callBackEvent;
     private bool isRefreshing = false;
     private ILobbyEvents _lobbyEvents;
-    
     private bool isalready = false;
-
     private UI_Room_Inventory _ui_Room_Inventory;
-
+    public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
+    public Action InitDoneEvent;
+    public Lobby CurrentLobby => _currentLobby;
+    public bool IsDoneInitEvent { get => _isDoneInitEvent; }
     public UI_Room_Inventory UI_Room_Inventory
     {
         get
@@ -65,17 +62,15 @@ public class LobbyManager : IManagerEventInitailize
             // Unity Services 초기화
             await UnityServices.InitializeAsync();
             _playerID = await SignInAnonymouslyAsync();
+            isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             _currentLobby = await TryJoinLobbyByNameOrCreateLobby("WaitLobby",100, new CreateLobbyOptions()
             {
                 IsPrivate = false
             });
-            isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             if (isalready is true)
             {
                 return true;
             }
-
-            InitDoneEvent?.Invoke();
             return false;
         }
         catch (Exception ex)
@@ -88,13 +83,12 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<Lobby> TryJoinLobbyByNameOrCreateLobby(string lobbyName,int MaxPlayers, CreateLobbyOptions lobbyOption)
     {
-        Lobby lobby = null;
-        lobby = await TryJoinLobbyByName(lobbyName);
-        if (lobby == null)
+        _currentLobby = await TryJoinLobbyByName(lobbyName);
+        if (_currentLobby == null)
         {
-            lobby = await CreateLobby(lobbyName, MaxPlayers, lobbyOption);
+            _currentLobby = await CreateLobby(lobbyName, MaxPlayers, lobbyOption);
         }
-        return lobby;
+        return _currentLobby;
     }
 
 
@@ -152,10 +146,9 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
-            await RegisterEvents(_currentLobby);
-            await InputPlayerData(_currentLobby);//플레이어의 데이터 넣기
-            if (_currentLobby == null)
-                return null;
+            if (_currentLobby != null)
+                Debug.Log($"로비 만들어짐{_currentLobby}");
+            await JoinRoomInitalize();
         }
         catch(Exception error)
         {
@@ -164,21 +157,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         return _currentLobby;
     }
-    private async Task LeaveAllLobby()
-    {
-        string playerId = AuthenticationService.Instance.PlayerId;
-        List<string> lobbyes = await LobbyService.Instance.GetJoinedLobbiesAsync();
-        foreach (string lobby in lobbyes)
-        {
-            await LobbyService.Instance.RemovePlayerAsync(lobby, playerId); //먼저 로그인되어있는 로비에서 전부 나가기
-            Debug.Log($"{lobby}에서 나갔습니다.");
-        }//먼저 연결되어있는 로비 전부제거.
-    }
 
-    private async Task LeaveCurrentLobbyToConnectTargetLobby(Lobby targetLobby)
-    {
-        await LeaveCurrentLobby();
-    }
 
     public async Task LeaveCurrentLobby()
     {
@@ -195,8 +174,7 @@ public class LobbyManager : IManagerEventInitailize
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby}");
 
-            await RegisterEvents(_currentLobby);
-            await InputPlayerData(_currentLobby);//플레이어의 데이터 넣기
+            await JoinRoomInitalize();
             Debug.Log($"로비 아이디: {_currentLobby.Id} \n 로비 이름{_currentLobby.Name}");
 
             return _currentLobby;
@@ -208,6 +186,31 @@ public class LobbyManager : IManagerEventInitailize
             throw;
         }
     }
+
+    private async Task JoinRoomInitalize()
+    {
+        _isDoneInitEvent = false;
+        try
+        {
+            Task registerEventsTask = RegisterEvents(_currentLobby);
+            Task inputPlayerDataTask = InputPlayerData(_currentLobby);
+            Task joinChannelTask = Managers.VivoxManager.JoinChannel(_currentLobby.Id);
+
+            // 모든 작업이 완료될 때까지 대기
+            await Task.WhenAll(registerEventsTask, inputPlayerDataTask, joinChannelTask);
+            InitDoneEvent?.Invoke();
+            _isDoneInitEvent = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"JoinRoomInitalize 중 오류 발생: {ex.Message}");
+            _isDoneInitEvent = false;
+            throw; // 상위 호출부에 예외를 전달
+        }
+
+    }
+
+    
 
     private async Task RegisterEvents(Lobby lobby)
     {
@@ -255,17 +258,17 @@ public class LobbyManager : IManagerEventInitailize
         await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
         Debug.Log($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
     }
-    private async Task LeaveAllLobbyes()
+
+    private async Task LeaveAllLobby()
     {
         string playerId = AuthenticationService.Instance.PlayerId;
         List<string> lobbyes = await LobbyService.Instance.GetJoinedLobbiesAsync();
-        foreach (string lobbyID in lobbyes)
+        foreach (string lobby in lobbyes)
         {
-            await LobbyService.Instance.RemovePlayerAsync(lobbyID, playerId); //먼저 로그인되어있는 로비에서 전부 나가기
-            Debug.Log($"{lobbyID}에서 나갔습니다.");
-        }
+            await LobbyService.Instance.RemovePlayerAsync(lobby, playerId); //먼저 로그인되어있는 로비에서 전부 나가기
+            Debug.Log($"{lobby}에서 나갔습니다.");
+        }//먼저 연결되어있는 로비 전부제거.
     }
-
     async Task<string> SignInAnonymouslyAsync()
     {
         try
