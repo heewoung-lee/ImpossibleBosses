@@ -134,12 +134,20 @@ public class UI_Manager : IManagerIResettable
 
         return popup;
     }
-    public T GetSceneUIFromResource<T>(string name = null) where T : UI_Scene
+    public T GetSceneUIFromResource<T>(string name = null,string path = null) where T : UI_Scene
     {
         if (name == null)
             name = typeof(T).Name;
 
-        GameObject go = Managers.ResourceManager.Instantiate($"Prefabs/UI/MainUI/{name}");
+        GameObject go = null;
+        if (path == null)
+        {
+            go = Managers.ResourceManager.Instantiate($"Prefabs/UI/MainUI/{name}");
+        }
+        else
+        {
+            go = Managers.ResourceManager.Instantiate($"{path}");
+        }
         T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T),scene);
         go.transform.SetParent(Root.transform);

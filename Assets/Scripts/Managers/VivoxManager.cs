@@ -64,6 +64,10 @@ public class VivoxManager : IManagerEventInitailize
             {
                 await InitializeAsync();
             }
+
+            if(_currentChanel != null)
+                await LeaveEchoChannelAsync(_currentChanel);
+
             _currentChanel = chanelID;
             Debug.Log($"현재채널ID:{_currentChanel}");
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);

@@ -10,7 +10,7 @@ public class LogInTestToggle : UI_Scene
     }
     enum Toggles 
     {
-        TestToggle
+        LogInTestToggle
     }
     
 
@@ -18,10 +18,11 @@ public class LogInTestToggle : UI_Scene
     Toggle _testToggle;
     protected override void AwakeInit()
     {
+        base.AwakeInit();
         Bind<Button>(typeof(Buttons));
         Bind<Toggle>(typeof(Toggles));
         _testButton = Get<Button>((int)Buttons.Test_Button);
-        _testToggle = Get<Toggle>((int)Toggles.TestToggle);
+        _testToggle = Get<Toggle>((int)Toggles.LogInTestToggle);
         _testButton.interactable = _testToggle.interactable;
         _testToggle.onValueChanged.AddListener((ison) =>
         {
@@ -38,6 +39,7 @@ public class LogInTestToggle : UI_Scene
 
     protected override void StartInit()
     {
+        base.AwakeInit();
     }
 
 }

@@ -63,14 +63,14 @@ public class LobbyManager : IManagerEventInitailize
             await UnityServices.InitializeAsync();
             _playerID = await SignInAnonymouslyAsync();
             isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
-            _currentLobby = await TryJoinLobbyByNameOrCreateLobby("WaitLobby",100, new CreateLobbyOptions()
-            {
-                IsPrivate = false
-            });
             if (isalready is true)
             {
                 return true;
             }
+            _currentLobby = await TryJoinLobbyByNameOrCreateLobby("WaitLobby",100, new CreateLobbyOptions()
+            {
+                IsPrivate = false
+            });
             return false;
         }
         catch (Exception ex)

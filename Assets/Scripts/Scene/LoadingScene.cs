@@ -35,7 +35,7 @@ public class LoadingScene : BaseScene
 
     private IEnumerator LoadingSceneProcess()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(_nextScene.ToString());
+         AsyncOperation operation = SceneManager.LoadSceneAsync(_nextScene.ToString());
         operation.allowSceneActivation = false;
         float timer = 0f;
         while (!operation.isDone)

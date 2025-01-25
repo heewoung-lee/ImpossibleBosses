@@ -11,13 +11,11 @@ public class LoginScene : BaseScene
         base.StartInit();
         ui_login = Managers.UI_Manager.GetSceneUIFromResource<UI_LoginTitle>();
         //테스트용 UI
-        LogInTestToggle testTogle = Managers.UI_Manager.MakeSubItem<LogInTestToggle>( path: "Prefabs/UI/TestUI/LogInTestToggle");
-        testTogle.transform.SetParent(ui_login.transform);
+        LogInTestToggle testTogle = Managers.UI_Manager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
     }
 
     protected override void AwakeInit()
     {
-        //여기에 
     }
     public override void Clear()
     {
