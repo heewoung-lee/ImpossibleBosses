@@ -61,6 +61,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
 
     public async void ConnectRoom()
     {
+        _button_connect.interactable = false;
         try
         {
             if (string.IsNullOrEmpty(_roomNameInputField.text))
@@ -78,6 +79,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 {
                     UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                    .AlertSetText("오류", "비밀번호는 8자리 이상");
+                    _button_connect.interactable = true;
                     return;
                 }
                 option = new CreateLobbyOptions()
@@ -91,12 +93,14 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 option = new CreateLobbyOptions()
                 { IsPrivate = false };
             }
-            Lobby robby = await Managers.LobbyManager.CreateLobby(ID_Input_Field.text, int.Parse(_currentCount.text), option);
+            await Managers.LobbyManager.CreateLobby(ID_Input_Field.text, int.Parse(_currentCount.text), option);
             Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+            _button_connect.interactable = true;
         }
         catch (Exception e)
         {
             Debug.Log(e);
+            _button_connect.interactable = true;
         }
       
     }

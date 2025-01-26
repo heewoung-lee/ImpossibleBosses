@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -63,12 +64,20 @@ public class UI_UserInfo_Panel : UI_Scene
         }
         _refreshLobbyButton.interactable = true;
 
-         var lobbyList = await Managers.LobbyManager.ViewCurrentPlayerLobby();
+        var lobbyList =  await Managers.LobbyManager.ViewCurrentPlayerLobby();
+        var serverLobbyList = await Managers.LobbyManager.ViewShowAllLobby();
 
         foreach(string lobby in lobbyList)
         {
             Debug.Log($"현재플레이어의 로비:{lobby}");
+            Debug.Log($"CurrentLobby{Managers.LobbyManager.CurrentLobby.Id}");
         }
+
+        foreach(Unity.Services.Lobbies.Models.Lobby lobby in serverLobbyList)
+        {
+            Debug.Log($"로비전체목록{lobby.Id}");
+        }
+
     }
     private void InitButtonInteractable()
     {

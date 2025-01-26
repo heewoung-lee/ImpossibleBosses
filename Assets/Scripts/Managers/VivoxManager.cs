@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -28,9 +29,8 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"InitializeAsync 에러 발생{ex}");
+            throw;
         }
     }
 
@@ -51,8 +51,9 @@ public class VivoxManager : IManagerEventInitailize
             VivoxDoneLoginEvent?.Invoke();
             Debug.Log("ViVox 로그인완료");
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.LogError($"LoginToVivoxAsync 에러 발생{ex}");
             throw;
         }
     }
@@ -65,18 +66,16 @@ public class VivoxManager : IManagerEventInitailize
                 await InitializeAsync();
             }
 
-            if(_currentChanel != null)
+            if (_currentChanel != null)
                 await LeaveEchoChannelAsync(_currentChanel);
 
             _currentChanel = chanelID;
-            Debug.Log($"현재채널ID:{_currentChanel}");
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"JoinChannel 에러 발생{ex}");
+            throw;
         }
 
     }
@@ -90,9 +89,8 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"LeaveEchoChannelAsync 에러 발생{ex}");
+            throw;
         }
     }
 
@@ -104,12 +102,12 @@ public class VivoxManager : IManagerEventInitailize
             Debug.Log("vivox 로그아웃");
             await VivoxService.Instance.LogoutAsync();
             _checkDoneLoginProcess = false;
+            _currentChanel = null;
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"LogoutOfVivoxAsync 에러 발생{ex}");
+            throw;
         }
     }
 
@@ -117,14 +115,16 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
+            if (VivoxService.Instance.IsLoggedIn == false)
+                return;
+
             string sendMessageFormmat = $"[{_loginOptions.DisplayName}] {message}";
             await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, sendMessageFormmat);
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"SendMessageAsync 에러 발생{ex}");
+            throw;
         }
     }
 
@@ -132,15 +132,17 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
-            string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
+            if (VivoxService.Instance.IsLoggedIn == false || VivoxService.Instance.ActiveChannels.Any())
+                return;
 
+            string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
+            Debug.Log(_currentChanel);
             await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, formattedMessage);
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert.SetText("오류", "오류가 발생했습니다.");
-            Debug.LogError(ex);
+            Debug.LogError($"SendSystemMessageAsync 에러 발생{ex}");
+            throw;
         }
     }
 

@@ -29,7 +29,8 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void Clear()
     {
-        CurrentScene.Clear();   
+        CurrentScene.Clear();
+        Managers.UI_Manager.Clear();
     }
 
     public void Init()

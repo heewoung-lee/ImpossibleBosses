@@ -8,16 +8,22 @@ using UnityEngine.EventSystems;
 
 public class UI_Manager : IManagerIResettable
 {
-    int _sorting = 0;
-    int _popupSorting = 30;
-    int _descriptionUI_Sorting = 50;
+
+    private const int SCENE_UI_SORTING_DEFAULT_VALUE = 0;
+    private const int POPUP_UI_SORTING_DEFAULT_VALUE = 30;
+    private const int DESCRIPTION_UI_SORTING_DEFAULT_VALUE = 50;
+
+
+    int _sorting = SCENE_UI_SORTING_DEFAULT_VALUE;
+    int _popupSorting = POPUP_UI_SORTING_DEFAULT_VALUE;
+    int _descriptionUI_Sorting = DESCRIPTION_UI_SORTING_DEFAULT_VALUE;
 
     public int DescriptionUI_Sorting => _descriptionUI_Sorting;
 
     Stack<UI_Popup> _ui_Popups = new Stack<UI_Popup>();
     public Stack<UI_Popup> UI_popup => _ui_Popups;
 
-    Dictionary<Type, UI_Scene> _ui_sceneDict = new Dictionary<Type, UI_Scene>();
+    private Dictionary<Type, UI_Scene> _ui_sceneDict = new Dictionary<Type, UI_Scene>();
     public Dictionary<Type, UI_Scene> UI_sceneDict => _ui_sceneDict;
 
     private Dictionary<Type, UI_Base> _importantPopup_UI = new Dictionary<Type, UI_Base>();
@@ -78,7 +84,7 @@ public class UI_Manager : IManagerIResettable
         return null;
     }
 
-    public void SetCanvas(GameObject go, bool sorting = false)
+    public void SetCanvas(GameObject go, bool sorting = false)//씬 넘어갈때 다초기화 할것
     {
         Canvas canvas = Utill.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -277,5 +283,11 @@ public class UI_Manager : IManagerIResettable
     {
         CloseAllPopupUI();
         _ui_sceneDict.Clear();
+        _importantPopup_UI.Clear();
+        _ui_Popups.Clear();
+        _importantPopup_UI.Clear();
+        _sorting = SCENE_UI_SORTING_DEFAULT_VALUE;
+        _popupSorting = POPUP_UI_SORTING_DEFAULT_VALUE;
+        _descriptionUI_Sorting = DESCRIPTION_UI_SORTING_DEFAULT_VALUE;
     }
 }

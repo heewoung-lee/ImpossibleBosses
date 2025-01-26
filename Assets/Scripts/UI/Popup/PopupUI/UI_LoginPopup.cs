@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Multiplayer.Playmode;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -134,6 +135,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
               .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
               .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
              .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+            LoadingSceneSetErrorOccurred();
             return;
         }
     }
@@ -141,5 +143,14 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
     public void OnClickCloseButton()
     {
         Managers.UI_Manager.ClosePopupUI(this);
+    }
+
+    private void LoadingSceneSetErrorOccurred()
+    {
+
+        if(Managers.SceneManagerEx.CurrentScene is LoadingScene loaingScene)
+        {
+            loaingScene.IsErrorOccurred = true;
+        }
     }
 }

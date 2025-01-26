@@ -9,7 +9,7 @@ public class LoadingScene : BaseScene
 
     private static Define.Scene _nextScene;
     public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
-
+    public bool IsErrorOccurred { get; set; } = false;
     public static void LoadNextScene(Define.Scene nextScene)
     {
         _nextScene = nextScene;
@@ -41,6 +41,10 @@ public class LoadingScene : BaseScene
         while (!operation.isDone)
         {
             yield return null;
+
+            if (IsErrorOccurred == true)
+                yield break;
+
             if(operation.progress < 0.9f)
             {
                 _ui_loding.LoaingSliderValue = operation.progress;
