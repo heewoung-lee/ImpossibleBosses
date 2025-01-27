@@ -86,10 +86,11 @@ public class LobbyManager : IManagerEventInitailize
     IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
     {
         //하트비트 로비를 만든 호스트만 보낼 것 
-        var delay = new WaitForSecondsRealtime(waitTimeSeconds);
+        WaitForSecondsRealtime delay = new WaitForSecondsRealtime(waitTimeSeconds);
 
         while (true)
         {
+            Debug.Log("하트비트 보내는중");
             LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
             yield return delay;
         }
@@ -157,7 +158,6 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
-            await JoinRoomInitalize();
         }
         catch (Exception error)
         {
@@ -176,7 +176,10 @@ public class LobbyManager : IManagerEventInitailize
             _lobbyEvents = null;
         }
         if (_currentLobby != null)
+        {
+            Debug.Log("로비에서 플레이어 데이터 삭제");
             await RemovePlayerData();
+        }
     }
     public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
     {
@@ -201,7 +204,6 @@ public class LobbyManager : IManagerEventInitailize
 
     private async Task JoinRoomInitalize()
     {
-        Debug.Log("이건 진짜 한번찍여야함");
         _isDoneInitEvent = false;
         try
         {
@@ -214,7 +216,6 @@ public class LobbyManager : IManagerEventInitailize
             await RegisterEvents(_currentLobby);
             await InputPlayerData(_currentLobby);
             await Managers.VivoxManager.JoinChannel(_currentLobby.Id);
-            //await Task.WhenAll(registerEventsTask, inputPlayerDataTask, joinChaanel);
 
 
             // 모든 작업이 완료될 때까지 대기
@@ -235,25 +236,25 @@ public class LobbyManager : IManagerEventInitailize
     private async Task RegisterEvents(Lobby lobby)
     {
         _callBackEvent = new LobbyEventCallbacks();
-        _callBackEvent.PlayerJoined += PlayerJoinedEvent;
-        _callBackEvent.PlayerLeft += async (List<int> list) =>
-        {
-            await PlayerLeftEvent(list);
-        };
-        try
-        {
-            _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
-        }
-        catch (LobbyServiceException ex)
-        {
-            switch (ex.Reason)
-            {
-                case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{lobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
-                case LobbyExceptionReason.SubscriptionToLobbyLostWhileBusy: Debug.LogError($"Subscription to lobby events was lost while it was busy trying to subscribe. Exception Message: {ex.Message}"); throw;
-                case LobbyExceptionReason.LobbyEventServiceConnectionError: Debug.LogError($"Failed to connect to lobby events. Exception Message: {ex.Message}"); throw;
-                default: throw;
-            }
-        }
+        //_callBackEvent.PlayerJoined += PlayerJoinedEvent;
+        //_callBackEvent.PlayerLeft += async (List<int> list) =>
+        //{
+        //    await PlayerLeftEvent(list);
+        //};
+        //try
+        //{
+        //    _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
+        //}
+        //catch (LobbyServiceException ex)
+        //{
+        //    switch (ex.Reason)
+        //    {
+        //        case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{lobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
+        //        case LobbyExceptionReason.SubscriptionToLobbyLostWhileBusy: Debug.LogError($"Subscription to lobby events was lost while it was busy trying to subscribe. Exception Message: {ex.Message}"); throw;
+        //        case LobbyExceptionReason.LobbyEventServiceConnectionError: Debug.LogError($"Failed to connect to lobby events. Exception Message: {ex.Message}"); throw;
+        //        default: throw;
+        //    }
+        //}
         //이벤트 구독
 
     }
@@ -266,9 +267,9 @@ public class LobbyManager : IManagerEventInitailize
             await ReFreshRoomList();
             await LobbyService.Instance.GetLobbyAsync(_currentLobby.Id);
         }
-        catch (LobbyServiceException e)
+        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.Log(e);
+            await RateLimited(() => PlayerLeftEvent(list));
         }
     }
 
@@ -280,7 +281,7 @@ public class LobbyManager : IManagerEventInitailize
             await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
             Debug.Log($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.Log($"에러가 발생했습니다 : 로비ID{_currentLobby.Id} 에러코드: {ex}");
         }
@@ -399,12 +400,22 @@ public class LobbyManager : IManagerEventInitailize
         {
             { "NickName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, $"{CurrentPlayerInfo.PlayerNickName}") },
         };
-        // 자신의 플레이어 데이터 업데이트
-        await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, myPlayer.Id, new UpdatePlayerOptions
+        try
         {
-            Data = updatedData
-        });
+            // 자신의 플레이어 데이터 업데이트
+            await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, myPlayer.Id, new UpdatePlayerOptions
+            {
+                Data = updatedData
+            });
+        }
+        catch (ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
+        {
+            Debug.Log($"{alreadyAddKey}이미 키가 있음 무시해도 됨");
+        }
+
     }
+
+
     private async Task RemovePlayerData()
     {
         if (_currentLobby == null)
@@ -434,6 +445,7 @@ public class LobbyManager : IManagerEventInitailize
 
         // 사용자 인증 로그아웃
         AuthenticationService.Instance.SignOut();
+        AuthenticationService.Instance.ClearSessionToken();
         _currentPlayerInfo = default;
         _currentLobby = null;
         Debug.Log("User signed out successfully.");
@@ -444,7 +456,7 @@ public class LobbyManager : IManagerEventInitailize
         return await LobbyService.Instance.GetJoinedLobbiesAsync();
     }
 
-    public async Task<List<Lobby>> ViewShowAllLobby() 
+    public async Task<List<Lobby>> ViewShowAllLobby()
     {
         try
         {

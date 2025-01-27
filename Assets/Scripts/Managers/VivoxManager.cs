@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Vivox;
 using UnityEngine;
+using static System.Net.WebRequestMethods;
 
 public class VivoxManager : IManagerEventInitailize
 {
@@ -38,7 +40,11 @@ public class VivoxManager : IManagerEventInitailize
     public async Task LoginToVivoxAsync()
     {
         if (VivoxService.Instance.IsLoggedIn)
+        {
+            Debug.Log("로그인이 되어있음 리턴하겠음");
             return;
+
+        }
 
         try
         {
@@ -61,23 +67,46 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
-            if(VivoxService.Instance.IsLoggedIn == false)
+            if (VivoxService.Instance.IsLoggedIn == false)
             {
                 await InitializeAsync();
             }
 
             if (_currentChanel != null)
+            {
+                Debug.Log($"채널{_currentChanel}지워짐");
                 await LeaveEchoChannelAsync(_currentChanel);
-
+            }
             _currentChanel = chanelID;
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);
         }
-        catch (Exception ex)
+        catch (MintException mint)
+        {
+            Debug.Log($"오류발생{mint}");
+            await RateLimited(()=>JoinChannel(chanelID));
+        }
+        catch(ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
+        {
+            Debug.Log($"{alreadyAddKey}이미 키가 있음 무시해도 됨");
+        }
+        catch (Exception ex) 
         {
             Debug.LogError($"JoinChannel 에러 발생{ex}");
             throw;
         }
 
+    }
+    private async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
+    {
+        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+        await Task.Delay(millisecondsDelay); // 대기
+        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+    }
+    private async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
+    {
+        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+        await Task.Delay(millisecondsDelay); // 대기
+        await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
     }
 
 
@@ -85,6 +114,7 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
+            //await VivoxService.Instance.LeaveAllChannelsAsync();
             await VivoxService.Instance.LeaveChannelAsync(chanelID);
         }
         catch (Exception ex)
@@ -132,7 +162,7 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
-            if (VivoxService.Instance.IsLoggedIn == false || VivoxService.Instance.ActiveChannels.Any())
+            if (VivoxService.Instance.IsLoggedIn == false || VivoxService.Instance.ActiveChannels.Any() == false)
                 return;
 
             string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,11 +78,41 @@ public class UI_UserInfo_Panel : UI_Scene
         foreach(Unity.Services.Lobbies.Models.Lobby lobby in serverLobbyList)
         {
             Debug.Log($"로비전체목록{lobby.Id}");
+            foreach(Unity.Services.Lobbies.Models.Player player in lobby.Players)
+            {
+                Debug.Log($"{lobby.Name}로비 안에 있은 Player{player.Id}");
+            }
         }
 
+
+        GetActiveChannels();
+
+    }
+
+
+    public void GetActiveChannels()
+    {
+        var activeChannels = VivoxService.Instance.ActiveChannels;
+
+        if (activeChannels.Count == 0)
+        {
+            Debug.Log("현재 접속 중인 채널이 없습니다.");
+            return;
+        }
+
+        Debug.Log($"현재 접속 중인 채널 수: {activeChannels.Count}");
+
+        foreach (var channel in activeChannels)
+        {
+            string channelName = channel.Key; // 채널 ID 또는 이름
+            var channelSession = channel.Value; // 채널 세션 정보
+
+            Debug.Log($"채널 이름: {channelName}");
+        }
     }
     private void InitButtonInteractable()
     {
+        Debug.Log("버튼 이벤트 여부" + Managers.LobbyManager.IsDoneInitEvent);
         if (Managers.LobbyManager.IsDoneInitEvent == false)
         {
             Managers.LobbyManager.InitDoneEvent -= ButtonInteractable;
