@@ -112,7 +112,6 @@ public class UI_UserInfo_Panel : UI_Scene
     }
     private void InitButtonInteractable()
     {
-        Debug.Log("버튼 이벤트 여부" + Managers.LobbyManager.IsDoneInitEvent);
         if (Managers.LobbyManager.IsDoneInitEvent == false)
         {
             Managers.LobbyManager.InitDoneEvent -= ButtonInteractable;

@@ -90,7 +90,6 @@ public class LobbyManager : IManagerEventInitailize
 
         while (true)
         {
-            Debug.Log("하트비트 보내는중");
             LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
             yield return delay;
         }
@@ -158,6 +157,7 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
+            await JoinRoomInitalize();
         }
         catch (Exception error)
         {
