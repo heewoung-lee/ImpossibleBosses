@@ -8,6 +8,7 @@ using Unity.Multiplayer.Playmode;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
@@ -138,6 +139,11 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             LoadingSceneSetErrorOccurred();
             return;
         }
+
+
+   
+
+
     }
 
     public void OnClickCloseButton()
