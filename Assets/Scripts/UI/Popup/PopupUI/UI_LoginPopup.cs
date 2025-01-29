@@ -125,8 +125,6 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
                 .AfterAlertEvent(()=> { _confirm_Button.interactable = true; });
             return;
         }
-
-        //TODO:비동기로 먼저 아이디 이미 접속중인지 테스트할 것
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
 
         bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
