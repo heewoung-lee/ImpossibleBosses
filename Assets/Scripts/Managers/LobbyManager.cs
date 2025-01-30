@@ -153,8 +153,8 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<Lobby> JoinLobbyByID(string lobbyID)
     {
-        //await LeaveCurrentLobby();
-        await LeaveAllLobby();
+        await LeaveCurrentLobby();
+        //await LeaveAllLobby();
         try
         {
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
@@ -163,6 +163,7 @@ public class LobbyManager : IManagerEventInitailize
         catch (Exception error)
         {
             Debug.Log($"An Error Occured ErrorCode:{error}");
+
             return null;
         }
         return _currentLobby;
@@ -469,12 +470,12 @@ public class LobbyManager : IManagerEventInitailize
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
-    private async Task ShowUpdatedLobbyPlayers(Lobby currentLobby)
+    private async Task ShowUpdatedLobbyPlayers()
     {
         try
         {
             // 서버에서 현재 로비의 최신 상태를 다시 받아온다
-            Lobby updatedLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
+            Lobby updatedLobby = await LobbyService.Instance.GetLobbyAsync(_currentLobby.Id);
 
             Debug.Log($"Lobby ID: {updatedLobby.Id}, Name: {updatedLobby.Name}");
 
@@ -494,6 +495,11 @@ public class LobbyManager : IManagerEventInitailize
         {
             Debug.LogError($"Failed to fetch updated lobby info: {e.Message}");
         }
+        catch (Exception ex)
+        {
+            Debug.Log($"에러{ex}");
+        }
+
     }
     public async Task ReFreshRoomList()
     {
@@ -532,7 +538,7 @@ public class LobbyManager : IManagerEventInitailize
                 //여기에 룸정보 입력하기.방제 인원 등
             }
             Debug.Log($"호스트ID{_currentLobby.HostId}");
-            await ShowUpdatedLobbyPlayers(_currentLobby);
+            await ShowUpdatedLobbyPlayers();
         }
         catch (LobbyServiceException e)
         {

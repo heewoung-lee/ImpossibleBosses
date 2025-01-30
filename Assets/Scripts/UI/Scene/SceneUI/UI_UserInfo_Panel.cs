@@ -80,7 +80,7 @@ public class UI_UserInfo_Panel : UI_Scene
             Debug.Log($"로비전체목록{lobby.Id}");
             foreach(Unity.Services.Lobbies.Models.Player player in lobby.Players)
             {
-                Debug.Log($"{lobby.Name}로비 안에 있은 Player{player.Id}");
+                Debug.Log($"{lobby.Name}로비 안에 있은 Player: {player.Id}");
             }
         }
         GetActiveChannels();

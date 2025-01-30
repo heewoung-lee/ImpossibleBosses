@@ -126,22 +126,23 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             return;
         }
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
-
-        bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
-        if (checkPlayerNickNameAlreadyConnected is true)
+        try
         {
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-              .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
-              .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
-             .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
-            LoadingSceneSetErrorOccurred();
-            return;
+            bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
+            if (checkPlayerNickNameAlreadyConnected is true)
+            {
+                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                  .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
+                  .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
+                 .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                LoadingSceneSetErrorOccurred();
+                return;
+            }
         }
-
-
-   
-
-
+        catch(Exception ex)
+        {
+            Debug.Log($"오류{ex}");
+        }
     }
 
     public void OnClickCloseButton()
