@@ -78,7 +78,7 @@ public class VivoxManager : IManagerEventInitailize
                 await LeaveEchoChannelAsync(_currentChanel);
             }
             _currentChanel = chanelID;
-            await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextAndAudio);
+            await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextOnly);
         }
         catch (MintException mint)
         {

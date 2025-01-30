@@ -214,7 +214,7 @@ public class LobbyManager : IManagerEventInitailize
 
 
             await RegisterEvents(_currentLobby);
-            await InputPlayerData(_currentLobby);
+            //await InputPlayerData(_currentLobby);
             await Managers.VivoxManager.JoinChannel(_currentLobby.Id);
 
 
@@ -405,8 +405,11 @@ public class LobbyManager : IManagerEventInitailize
             // 자신의 플레이어 데이터 업데이트
             await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, myPlayer.Id, new UpdatePlayerOptions
             {
+
                 Data = updatedData
             });
+            Debug.Log($"로비에 플레이어정보넣기{lobby.Id}{myPlayer.Id}");
+
         }
         catch (ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
         {
@@ -425,6 +428,8 @@ public class LobbyManager : IManagerEventInitailize
         if (myPlayer == null)
             return;
 
+
+        Debug.Log($"{_currentLobby.Id}{myPlayer.Id}가 발견됨");
         await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, myPlayer.Id);
     }
     public async Task LogoutAndAllLeaveLobby()
