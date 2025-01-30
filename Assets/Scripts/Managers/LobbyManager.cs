@@ -153,7 +153,8 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<Lobby> JoinLobbyByID(string lobbyID)
     {
-        await LeaveCurrentLobby();
+        //await LeaveCurrentLobby();
+        await LeaveAllLobby();
         try
         {
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
@@ -177,7 +178,6 @@ public class LobbyManager : IManagerEventInitailize
         }
         if (_currentLobby != null)
         {
-            Debug.Log("로비에서 플레이어 데이터 삭제");
             await RemovePlayerData();
         }
     }
@@ -193,6 +193,7 @@ public class LobbyManager : IManagerEventInitailize
 
             await JoinRoomInitalize();
             Debug.Log($"로비 아이디: {_currentLobby.Id} \n 로비 이름{_currentLobby.Name}");
+
         }
 
         catch (Exception e)
@@ -214,7 +215,7 @@ public class LobbyManager : IManagerEventInitailize
 
 
             await RegisterEvents(_currentLobby);
-            //await InputPlayerData(_currentLobby);
+            await InputPlayerData(_currentLobby);
             await Managers.VivoxManager.JoinChannel(_currentLobby.Id);
 
 
@@ -305,6 +306,7 @@ public class LobbyManager : IManagerEventInitailize
             Debug.Log("Sign in anonymously succeeded!");
 
             string playerID = AuthenticationService.Instance.PlayerId;
+            Debug.Log($"플레이어 ID 만들어짐{playerID}");
             _currentPlayerInfo = new PlayerIngameLoginInfo(Managers.LogInManager.CurrentPlayerInfo.NickName, playerID);
 
             // Shows how to get the playerID
@@ -391,25 +393,19 @@ public class LobbyManager : IManagerEventInitailize
 
     private async Task InputPlayerData(Lobby lobby)
     {
-        Unity.Services.Lobbies.Models.Player myPlayer = lobby.Players.Find(player => player.Id == CurrentPlayerInfo.Id);
-
-        if (myPlayer == null)
-            return;
 
         Dictionary<string, PlayerDataObject> updatedData = new Dictionary<string, PlayerDataObject>
         {
-            { "NickName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, $"{CurrentPlayerInfo.PlayerNickName}") },
+            { "NickName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, $"{_currentPlayerInfo.PlayerNickName}") },
         };
         try
         {
-            // 자신의 플레이어 데이터 업데이트
-            await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, myPlayer.Id, new UpdatePlayerOptions
+           await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, _currentPlayerInfo.Id, new UpdatePlayerOptions
             {
-
                 Data = updatedData
             });
-            Debug.Log($"로비에 플레이어정보넣기{lobby.Id}{myPlayer.Id}");
 
+            Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 입력되었습니다.");
         }
         catch (ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
         {
@@ -421,16 +417,9 @@ public class LobbyManager : IManagerEventInitailize
 
     private async Task RemovePlayerData()
     {
-        if (_currentLobby == null)
-            return;
+        Debug.Log($"로비ID{_currentLobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 제거되었습니다.");
 
-        Unity.Services.Lobbies.Models.Player myPlayer = _currentLobby.Players.Find(player => player.Id == CurrentPlayerInfo.Id);
-        if (myPlayer == null)
-            return;
-
-
-        Debug.Log($"{_currentLobby.Id}{myPlayer.Id}가 발견됨");
-        await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, myPlayer.Id);
+        await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, _currentPlayerInfo.Id);
     }
     public async Task LogoutAndAllLeaveLobby()
     {

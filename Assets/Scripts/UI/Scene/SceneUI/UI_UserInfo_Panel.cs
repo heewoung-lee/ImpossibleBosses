@@ -83,8 +83,6 @@ public class UI_UserInfo_Panel : UI_Scene
                 Debug.Log($"{lobby.Name}로비 안에 있은 Player{player.Id}");
             }
         }
-
-
         GetActiveChannels();
 
     }
