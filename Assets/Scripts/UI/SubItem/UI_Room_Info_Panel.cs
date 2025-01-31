@@ -35,5 +35,9 @@ public class UI_Room_Info_Panel : UI_Base
         _roomNameText.text = roomName;
         _currentPlayerCount.text = $"{correntUserCount}/{userCount}";
     }
+    public void JoinButtonAddListener(UnityEngine.Events.UnityAction addEvent)
+    {
+        _joinButton.onClick.AddListener(addEvent);
+    }
     
 }

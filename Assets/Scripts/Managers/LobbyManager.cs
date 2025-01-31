@@ -163,14 +163,18 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    public async Task<Lobby> JoinLobbyByID(string lobbyID)
+    public async Task<Lobby> JoinLobbyByID(string lobbyID,string password = null)
     {
         await LeaveCurrentLobby();
         //await LeaveAllLobby();
         try
         {
+            JoinLobbyByIdOptions options = new JoinLobbyByIdOptions()
+            {
+                Password = password,
+            };
             _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
-            await JoinRoomInitalize();
+            await JoinLobbyInitalize();
         }
         catch (Exception error)
         {
@@ -204,7 +208,7 @@ public class LobbyManager : IManagerEventInitailize
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
 
-            await JoinRoomInitalize();
+            await JoinLobbyInitalize();
             Debug.Log($"로비 아이디: {_currentLobby.Id} \n 로비 이름{_currentLobby.Name}");
 
         }
@@ -216,7 +220,7 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    private async Task JoinRoomInitalize()
+    private async Task JoinLobbyInitalize()
     {
         _isDoneInitEvent = false;
         try
@@ -553,10 +557,7 @@ public class LobbyManager : IManagerEventInitailize
             }
             foreach (Lobby lobby in lobbies.Results)
             {
-                UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(UI_Room_Inventory.Room_Content);
-                infoPanel.SetRoomInfo(lobby.Name, lobby.Players.Count,lobby.MaxPlayers);
-                //Managers.ResourceManager.Instantiate(); TODO: 여기에 UI 생성
-                //여기에 룸정보 입력하기.방제 인원 등
+                CreateRoomInitalize(lobby);
             }
             Debug.Log($"호스트ID{_currentLobby.HostId}");
             await ShowUpdatedLobbyPlayers();
@@ -569,5 +570,40 @@ public class LobbyManager : IManagerEventInitailize
         }
 
         isRefreshing = false;
+    }
+
+    public void CreateRoomInitalize(Lobby lobby)
+    {
+        UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(UI_Room_Inventory.Room_Content);
+        infoPanel.SetRoomInfo(lobby.Name, lobby.Players.Count, lobby.MaxPlayers);
+        infoPanel.JoinButtonAddListener(async () =>
+        {
+            if (lobby.HasPassword)
+            {
+                UI_InputRoomPassWord ui_inputPassword =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
+                ui_inputPassword.ConfirmButtonAddListener(async() =>
+                {
+                    try
+                    {
+                       return await JoinLobbyByID(lobby.Id, ui_inputPassword.RoomPwInputField.text);
+                    }
+                    catch (LobbyServiceException wrongPw) when (wrongPw.Reason == LobbyExceptionReason.IncorrectPassword)
+                    {
+                        Debug.Log("비밀번호가 틀렸습니다!");
+                        return null;
+                    }
+
+                    catch(Exception error)
+                    {
+                        Debug.Log($"에러가 발생했습니다{error}");
+                        return null;
+                    }
+                });
+            }
+            else
+            {
+                await JoinLobbyByID(lobby.Id);
+            }
+        });
     }
 }
