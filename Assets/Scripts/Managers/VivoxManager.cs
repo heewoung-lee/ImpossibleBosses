@@ -80,9 +80,9 @@ public class VivoxManager : IManagerEventInitailize
             _currentChanel = chanelID;
             await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextOnly);
         }
-        catch (MintException mint)
+        catch (RequestFailedException requestFailExceoption)
         {
-            Debug.Log($"오류발생{mint}");
+            Debug.Log($"오류발생{requestFailExceoption}");
             await RateLimited(()=>JoinChannel(chanelID));
         }
         catch(ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))

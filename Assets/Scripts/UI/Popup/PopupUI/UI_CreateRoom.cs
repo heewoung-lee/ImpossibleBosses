@@ -85,13 +85,23 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 option = new CreateLobbyOptions()
                 {
                     IsPrivate = false,
-                    Password = passWord
+                    Password = passWord,
+                    Data = new System.Collections.Generic.Dictionary<string, DataObject>
+                    {
+                        {"LobbyType",new DataObject(DataObject.VisibilityOptions.Public,value:"CharactorSelect",index:DataObject.IndexOptions.S1) }
+                    }
                 };
             }
             else
             {
                 option = new CreateLobbyOptions()
-                { IsPrivate = false };
+                { 
+                    IsPrivate = false,
+                    Data = new System.Collections.Generic.Dictionary<string, DataObject>
+                    {
+                        {"LobbyType",new DataObject(DataObject.VisibilityOptions.Public,value:"CharactorSelect",index:DataObject.IndexOptions.S1) }
+                    }
+                };
             }
             await Managers.LobbyManager.CreateLobby(ID_Input_Field.text, int.Parse(_currentCount.text), option);
             Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);

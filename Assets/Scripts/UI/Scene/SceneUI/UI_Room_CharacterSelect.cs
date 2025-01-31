@@ -65,10 +65,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         try
         {
             _loadingPanel.SetActive(true);
-            await Managers.LobbyManager.TryJoinLobbyByNameOrCreateLobby("WaitLobby", 100, new CreateLobbyOptions()
-            {
-                IsPrivate = false
-            });
+            await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
         }
         catch(Exception error)

@@ -29,5 +29,11 @@ public class UI_Room_Info_Panel : UI_Base
     protected override void StartInit()
     {
     }
+
+    public void SetRoomInfo(string roomName,int correntUserCount,int userCount)
+    {
+        _roomNameText.text = roomName;
+        _currentPlayerCount.text = $"{correntUserCount}/{userCount}";
+    }
     
 }

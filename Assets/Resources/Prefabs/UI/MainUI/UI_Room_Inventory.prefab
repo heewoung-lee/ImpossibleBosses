@@ -120,8 +120,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7101533426255476396}
   m_HandleRect: {fileID: 3877332234243807116}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.5467099
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -413,6 +413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8453772813861328938}
   - component: {fileID: 6639308715519680268}
+  - component: {fileID: 7318311548150993057}
   m_Layer: 5
   m_Name: Room_Content
   m_TagString: Untagged
@@ -436,9 +437,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -386.8359}
-  m_SizeDelta: {x: 0, y: 773.6719}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6639308715519680268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +466,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7318311548150993057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560489022189416680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &6452814191169941970
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +573,7 @@ MonoBehaviour:
   m_Content: {fileID: 8453772813861328938}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
