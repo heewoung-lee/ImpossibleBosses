@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public abstract class ID_PW_Popup : UI_Popup
@@ -11,7 +12,7 @@ public abstract class ID_PW_Popup : UI_Popup
     public abstract TMP_InputField PW_Input_Field { get; }
 
 
-    protected Action<TMP_InputField> _inputAction;
+    protected Action<TMP_InputField> PreInputFieldAction;
 
     protected override void AwakeInit()
     {
@@ -22,17 +23,14 @@ public abstract class ID_PW_Popup : UI_Popup
         _inputTabKey.started += SwitchingField;
     }
 
-    private void SwitchingField(InputAction.CallbackContext context)
+    protected void SwitchingField(InputAction.CallbackContext context)
     {
         if (ID_Input_Field.isFocused)
         {
-            Debug.Log("IDÅÇÅ°´­¸²");
             PW_Input_Field.ActivateInputField();
-            _inputAction?.Invoke(ID_Input_Field);
         }
         else
         {
-            Debug.Log("PWÅÇÅ°´­¸²");
             ID_Input_Field.ActivateInputField();
         }
     }

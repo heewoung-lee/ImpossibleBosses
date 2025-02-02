@@ -59,23 +59,16 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
             _currentCount.text = value.ToString();
         });
 
-
-        _inputAction += (_roomNameInputField) =>
+        _roomNameInputField.onEndEdit.AddListener((value) =>
         {
-            Debug.Log("OnEndEdit실행");
-            string finalText = _roomNameInputField;
+            string finalText = value;
             if (!string.IsNullOrEmpty(Input.compositionString))
             {
                 finalText += Input.compositionString;
-
-                // (옵션) 입력 필드 업데이트
-                _roomNameInputField += finalText;
             }
             _roomNameInputField.text = finalText;
         });
     }
-
-    
 
     public async void ConnectRoom()
     {
