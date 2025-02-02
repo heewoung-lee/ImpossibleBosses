@@ -11,9 +11,6 @@ public abstract class ID_PW_Popup : UI_Popup
     public abstract TMP_InputField ID_Input_Field { get; }
     public abstract TMP_InputField PW_Input_Field { get; }
 
-
-    protected Action<TMP_InputField> PreInputFieldAction;
-
     protected override void AwakeInit()
     {
         base.AwakeInit();
