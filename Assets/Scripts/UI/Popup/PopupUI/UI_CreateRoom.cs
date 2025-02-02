@@ -4,6 +4,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
+using Input = UnityEngine.Input;
 
 public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
 {
@@ -46,7 +47,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
         Bind<Slider>(typeof(Sliders));
         Bind<TMP_Text>(typeof(Texts));
         _roomNameInputField = Get<TMP_InputField>((int)InputFields.RoomNameInputField);
-        _roomPWInputField = Get<TMP_InputField>((int) InputFields.RoomPWInputField);
+        _roomPWInputField = Get<TMP_InputField>((int)InputFields.RoomPWInputField);
         _button_connect = Get<Button>((int)Buttons.Button_Connect);
         _button_close = Get<Button>((int)Buttons.Button_Close);
         _userCount_slider = Get<Slider>((int)Sliders.UserCountSlider);
@@ -57,7 +58,24 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
         {
             _currentCount.text = value.ToString();
         });
+
+
+        _inputAction += (_roomNameInputField) =>
+        {
+            Debug.Log("OnEndEdit실행");
+            string finalText = _roomNameInputField;
+            if (!string.IsNullOrEmpty(Input.compositionString))
+            {
+                finalText += Input.compositionString;
+
+                // (옵션) 입력 필드 업데이트
+                _roomNameInputField += finalText;
+            }
+            _roomNameInputField.text = finalText;
+        });
     }
+
+    
 
     public async void ConnectRoom()
     {
@@ -75,13 +93,15 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
             if (string.IsNullOrEmpty(passWord) == false)
             {
                 value = int.Parse(passWord);
-                if((float)value / 10000000 < 1)
+                if ((float)value / 10000000 < 1)
                 {
                     UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                    .AlertSetText("오류", "비밀번호는 8자리 이상");
                     _button_connect.interactable = true;
                     return;
                 }
+
+                Debug.Log($"비밀번호가 있음{value}");
                 option = new CreateLobbyOptions()
                 {
                     IsPrivate = false,
@@ -95,7 +115,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
             else
             {
                 option = new CreateLobbyOptions()
-                { 
+                {
                     IsPrivate = false,
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>
                     {
@@ -103,7 +123,8 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                     }
                 };
             }
-            await Managers.LobbyManager.CreateLobby(ID_Input_Field.text, int.Parse(_currentCount.text), option);
+            await Managers.LobbyManager.CreateLobby(_roomNameInputField.text, int.Parse(_currentCount.text), option);
+            Debug.Log($"로비가 비밀번호가 있는지 : {Managers.LobbyManager.CurrentLobby.HasPassword}");
             Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
             _button_connect.interactable = true;
         }
@@ -112,7 +133,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
             Debug.Log(e);
             _button_connect.interactable = true;
         }
-      
+
     }
     public void OnClickCloseButton()
     {

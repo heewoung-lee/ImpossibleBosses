@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Utill
@@ -163,5 +164,18 @@ public class Utill
     {
         // 영문과 숫자만 포함된 문자열인지 확인
         return Regex.IsMatch(input, "^[A-Za-z0-9]+$");
+    }
+
+    public static async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
+    {
+        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+        await Task.Delay(millisecondsDelay); // 대기
+        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+    }
+    public static async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
+    {
+        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+        await Task.Delay(millisecondsDelay); // 대기
+        await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
     }
 }

@@ -61,8 +61,14 @@ public class LobbyManager : IManagerEventInitailize
         InitalizeVivoxEvent();
         try
         {
+
             // Unity Services 초기화
             await UnityServices.InitializeAsync();
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                Debug.Log("Logging out from previous session...");
+                AuthenticationService.Instance.SignOut();
+            }
             _playerID = await SignInAnonymouslyAsync();
             isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             if (isalready is true)
@@ -72,7 +78,6 @@ public class LobbyManager : IManagerEventInitailize
 
             await TryJoinLobbyByNameOrCreateWaitLobby();
 
-            Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(_currentLobby.Id, 15f));
             return false;
         }
         catch (Exception ex)
@@ -116,11 +121,12 @@ public class LobbyManager : IManagerEventInitailize
     }
 
 
+
     async Task<bool> TryJoinLobbyByName(string lobbyName)
     {
         try
         {
-            QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync(new QueryLobbiesOptions()//Call WaitLobby
+            QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom(new QueryLobbiesOptions()//Call WaitLobby
             {
                 Filters = new List<QueryFilter>
                 {
@@ -154,7 +160,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await RateLimited(() => TryJoinLobbyByName(lobbyName)); // 재시도
+            return await Utill.RateLimited(() => TryJoinLobbyByName(lobbyName)); // 재시도
         }
         catch (LobbyServiceException e)
         {
@@ -163,30 +169,40 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    public async Task<Lobby> JoinLobbyByID(string lobbyID,string password = null)
+    public async Task<Lobby> JoinLobbyByID(string lobbyID, string password = null)
     {
-        await LeaveCurrentLobby();
         //await LeaveAllLobby();
         try
         {
+            if (_currentLobby != null)
+                await LeaveLobby(_currentLobby);
+
             JoinLobbyByIdOptions options = new JoinLobbyByIdOptions()
             {
                 Password = password,
             };
-            _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID);
+            _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID, options);
             await JoinLobbyInitalize();
+
+        }
+        catch (LobbyServiceException wrongPw) when (wrongPw.Reason == LobbyExceptionReason.IncorrectPassword)
+        {
+            Debug.Log("비밀번호가 틀렸습니다!");
+            throw;
+        }
+        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
+        {
+            await Utill.RateLimited(() => JoinLobbyByID(lobbyID, password), 2000);
         }
         catch (Exception error)
         {
             Debug.Log($"An Error Occured ErrorCode:{error}");
-
             return null;
         }
         return _currentLobby;
     }
 
-
-    public async Task LeaveCurrentLobby()
+    public async Task LeaveLobby(Lobby lobby)
     {
         if (_lobbyEvents != null)
         {
@@ -195,14 +211,14 @@ public class LobbyManager : IManagerEventInitailize
         }
         if (_currentLobby != null)
         {
-            await RemovePlayerData();
+            await RemovePlayerData(lobby);
         }
     }
     public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
     {
         try
         {
-            await LeaveCurrentLobby();
+            await LeaveLobby(_currentLobby);
             _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
             if (_currentLobby != null)
@@ -210,7 +226,7 @@ public class LobbyManager : IManagerEventInitailize
 
             await JoinLobbyInitalize();
             Debug.Log($"로비 아이디: {_currentLobby.Id} \n 로비 이름{_currentLobby.Name}");
-
+            Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(_currentLobby.Id, 15f));
         }
 
         catch (Exception e)
@@ -285,7 +301,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            await RateLimited(() => PlayerLeftEvent(list));
+            await Utill.RateLimited(() => PlayerLeftEvent(list), 2000);
         }
     }
 
@@ -298,13 +314,20 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            await RateLimited(async () =>
-            {
-                return await GetLobbyAsyncCustom(lobbyID);
-            });
-            return null;
+            return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
-    } 
+    }
+    private async Task<QueryResponse> GetQueryLobbiesAsyncCustom(QueryLobbiesOptions queryFilter = null)
+    {
+        try
+        {
+            return await LobbyService.Instance.QueryLobbiesAsync(queryFilter);
+        }
+        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
+        {
+            return await Utill.RateLimited(() => GetQueryLobbiesAsyncCustom(queryFilter));
+        }
+    }
 
     private async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
@@ -364,13 +387,18 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            // 모든 로비 검색
-            QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync();
+            QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom();
 
             foreach (Lobby lobby in queryResponse.Results)
             {
                 foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
                 {
+
+                    if (player.Data == null)
+                    {
+                        Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
+                        return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
+                    }
                     foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
                     {
                         if (_playerID == player.Id) //자기자신은 건너뛰기
@@ -400,27 +428,16 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
+            Debug.Log($"히히 타임리밋에 걸렸다{e}유저닉네임: {usernickName}");
+            return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
         }
-        catch (LobbyServiceException e)
+        catch (Exception ex)
         {
-            Debug.LogError($"Failed to query lobbies: {e.Message}");
+            Debug.LogError($"Failed to query lobbies: {ex.Message}");
             return false;
         }
     }
 
-    private async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
-    {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
-    }
-    private async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
-    {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
-    }
 
 
     private async Task InputPlayerData(Lobby lobby)
@@ -447,11 +464,11 @@ public class LobbyManager : IManagerEventInitailize
     }
 
 
-    private async Task RemovePlayerData()
+    private async Task RemovePlayerData(Lobby lobby)
     {
-        Debug.Log($"로비ID{_currentLobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 제거되었습니다.");
+        Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 제거되었습니다.");
 
-        await LobbyService.Instance.RemovePlayerAsync(_currentLobby.Id, _currentPlayerInfo.Id);
+        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _currentPlayerInfo.Id);
     }
     public async Task LogoutAndAllLeaveLobby()
     {
@@ -466,7 +483,7 @@ public class LobbyManager : IManagerEventInitailize
         catch (LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.RateLimited)
         {
             Debug.Log($"Failed to remove player from lobby: {ex.Message} 다시 시도중");
-            await RateLimited(() => LogoutAndAllLeaveLobby());
+            await Utill.RateLimited(() => LogoutAndAllLeaveLobby());
         }
 
         // 사용자 인증 로그아웃
@@ -486,12 +503,12 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            QueryResponse lobbies = await LobbyService.Instance.QueryLobbiesAsync();
+            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom();
             return lobbies.Results; // 로비 목록 반환
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await RateLimited(() => ViewShowAllLobby()); // 재시도
+            return await Utill.RateLimited(() => ViewShowAllLobby()); // 재시도
         }
     }
 
@@ -503,23 +520,28 @@ public class LobbyManager : IManagerEventInitailize
     }
     private async Task ShowUpdatedLobbyPlayers()
     {
+
+        QueryLobbiesOptions viewOption = new QueryLobbiesOptions();
+        viewOption.Count = 25;
+        viewOption.Filters = new List<QueryFilter>()
+            {
+            new QueryFilter(
+            field: QueryFilter.FieldOptions.AvailableSlots,
+            op: QueryFilter.OpOptions.GT,
+            value: "0"),
+            };
         try
         {
-            // 서버에서 현재 로비의 최신 상태를 다시 받아온다
-            Lobby updatedLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
-
-            Debug.Log($"Lobby ID: {updatedLobby.Id}, Name: {updatedLobby.Name}");
-
-            // 최신 로비에 있는 플레이어 목록 순회
-            foreach (var player in updatedLobby.Players)
+            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom(viewOption);
+            foreach (var lobby in lobbies.Results)
             {
-                Debug.Log($"Player ID: {player.Id}");
-
-                // 예: Player Data에 "NickName" 키가 있는지 확인
-                if (player.Data.ContainsKey("NickName"))
+                Debug.Log($"현재 로비이름 {lobby.Name}");
+                Debug.Log($"-----------------------------------");
+                foreach (var player in lobby.Players)
                 {
-                    Debug.Log($"NickName: {player.Data["NickName"].Value}");
+                    Debug.Log($"플레이어 아이디: {player.Id}");
                 }
+                Debug.Log($"-----------------------------------");
             }
         }
         catch (LobbyServiceException e)
@@ -530,8 +552,9 @@ public class LobbyManager : IManagerEventInitailize
         {
             Debug.Log($"에러{ex}");
         }
-
     }
+
+
     public async Task ReFreshRoomList()
     {
         if (isRefreshing) { return; }
@@ -548,8 +571,12 @@ public class LobbyManager : IManagerEventInitailize
             field: QueryFilter.FieldOptions.S1,
             op: QueryFilter.OpOptions.EQ,
             value: "CharactorSelect"),
+            new QueryFilter(
+            field: QueryFilter.FieldOptions.AvailableSlots,
+            op: QueryFilter.OpOptions.GT,
+            value: "0"),
             };
-            QueryResponse lobbies = await LobbyService.Instance.QueryLobbiesAsync(options);
+            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom(options);
 
             foreach (Transform child in UI_Room_Inventory.Room_Content)
             {
@@ -559,7 +586,6 @@ public class LobbyManager : IManagerEventInitailize
             {
                 CreateRoomInitalize(lobby);
             }
-            Debug.Log($"호스트ID{_currentLobby.HostId}");
             await ShowUpdatedLobbyPlayers();
         }
         catch (LobbyServiceException e)
@@ -575,35 +601,6 @@ public class LobbyManager : IManagerEventInitailize
     public void CreateRoomInitalize(Lobby lobby)
     {
         UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(UI_Room_Inventory.Room_Content);
-        infoPanel.SetRoomInfo(lobby.Name, lobby.Players.Count, lobby.MaxPlayers);
-        infoPanel.JoinButtonAddListener(async () =>
-        {
-            if (lobby.HasPassword)
-            {
-                UI_InputRoomPassWord ui_inputPassword =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
-                ui_inputPassword.ConfirmButtonAddListener(async() =>
-                {
-                    try
-                    {
-                       return await JoinLobbyByID(lobby.Id, ui_inputPassword.RoomPwInputField.text);
-                    }
-                    catch (LobbyServiceException wrongPw) when (wrongPw.Reason == LobbyExceptionReason.IncorrectPassword)
-                    {
-                        Debug.Log("비밀번호가 틀렸습니다!");
-                        return null;
-                    }
-
-                    catch(Exception error)
-                    {
-                        Debug.Log($"에러가 발생했습니다{error}");
-                        return null;
-                    }
-                });
-            }
-            else
-            {
-                await JoinLobbyByID(lobby.Id);
-            }
-        });
+        infoPanel.SetRoomInfo(lobby);
     }
 }

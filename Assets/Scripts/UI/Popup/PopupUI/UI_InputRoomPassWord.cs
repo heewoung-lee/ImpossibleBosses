@@ -22,6 +22,7 @@ public class UI_InputRoomPassWord : UI_Popup
     }
     private TMP_InputField _roomPwInputField;
     public TMP_InputField RoomPwInputField => _roomPwInputField;
+    private UI_Room_Info_Panel _roomInfoPanel;
     private Button _confirm_Button;
     private GameObject _messageError;
     private TMP_Text _errorMessageText;
@@ -32,6 +33,7 @@ public class UI_InputRoomPassWord : UI_Popup
     {
         base.OnDisableInit();
         _roomPwInputField.text = "";
+        _roomInfoPanel = null;
     }
     protected override void StartInit()
     {
@@ -50,18 +52,35 @@ public class UI_InputRoomPassWord : UI_Popup
         _errorMessageText = _messageError.GetComponentInChildren<TMP_Text>();
         _errorMessageTextFadeOutMoudule = _messageError.GetComponent<Module_UI_FadeOut>();
         _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () => _confirm_Button.interactable = true;
+        _confirm_Button.onClick.AddListener(async () => await CheckJoinRoom());
         _messageError.SetActive(false);
     }
-    public void ConfirmButtonAddListener(Func<Task<Lobby>> funcEvent)
+    public void SetRoomInfoPanel(UI_Room_Info_Panel info_panel)
     {
-        Lobby lobby = null;
-        _confirm_Button.onClick.AddListener(async () => lobby = await funcEvent());
-
-        if (lobby == null)
+        _roomInfoPanel = info_panel;
+    }
+    private async Task CheckJoinRoom()
+    {
+        Lobby lobby = _roomInfoPanel.LobbyRegisteredPanel;
+        Lobby tempLobby = Managers.LobbyManager.CurrentLobby;
+        try
         {
-            _messageError.SetActive(true);
-            _errorMessageText.text = "비밀번호가 틀렸습니다.";
-            Managers.UI_Manager.ClosePopupUI(this);
+            await Managers.LobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
         }
+        catch (Unity.Services.Lobbies.LobbyServiceException wrongPw) when (wrongPw.Reason == Unity.Services.Lobbies.LobbyExceptionReason.IncorrectPassword)
+        {
+            Debug.Log("비밀번호가 틀렸습니다!");
+            _errorMessageText.text = "비밀번호가 틀렸습니다";
+            _messageError.SetActive(true);
+            await Managers.LobbyManager.JoinLobbyByID(tempLobby.Id);
+            return;
+        }
+
+        catch (Exception error)
+        {
+            Debug.Log($"에러가 발생했습니다{error}");
+            return;
+        }
+        Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
     }
 }

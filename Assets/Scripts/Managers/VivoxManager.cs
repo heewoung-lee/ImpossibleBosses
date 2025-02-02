@@ -71,19 +71,18 @@ public class VivoxManager : IManagerEventInitailize
             {
                 await InitializeAsync();
             }
-
             if (_currentChanel != null)
             {
                 Debug.Log($"채널{_currentChanel}지워짐");
-                await LeaveEchoChannelAsync(_currentChanel);
+                await LeaveEchoChannelAsyncCustom(_currentChanel);
             }
             _currentChanel = chanelID;
-            await VivoxService.Instance.JoinGroupChannelAsync(_currentChanel, ChatCapability.TextOnly);
+            await JoinGroupChannelAsyncCustom(_currentChanel, ChatCapability.TextOnly);
         }
         catch (RequestFailedException requestFailExceoption)
         {
             Debug.Log($"오류발생{requestFailExceoption}");
-            await RateLimited(()=>JoinChannel(chanelID));
+            await Utill.RateLimited(()=>JoinChannel(chanelID));
         }
         catch(ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
         {
@@ -96,30 +95,45 @@ public class VivoxManager : IManagerEventInitailize
         }
 
     }
-    private async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
+
+    public async Task JoinGroupChannelAsyncCustom(string currentChanel,ChatCapability chatCapbillty)
     {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
-    }
-    private async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
-    {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+        try
+        {
+            //await VivoxService.Instance.LeaveAllChannelsAsync();
+            await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty);
+        }
+        catch (MintException e) when (e.Message.Contains("Request timeout"))
+        {
+            Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
+            await Utill.RateLimited(async () => await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty));
+            throw;
+        }
+        catch (Exception error)
+        {
+            Debug.LogError($"에러발생{error}");
+            throw;
+        }
     }
 
 
-    public async Task LeaveEchoChannelAsync(string chanelID)
+
+    public async Task LeaveEchoChannelAsyncCustom(string chanelID)
     {
         try
         {
             //await VivoxService.Instance.LeaveAllChannelsAsync();
             await VivoxService.Instance.LeaveChannelAsync(chanelID);
         }
-        catch (Exception ex)
+        catch (MintException e) when (e.Message.Contains("Request timeout"))
         {
-            Debug.LogError($"LeaveEchoChannelAsync 에러 발생{ex}");
+            Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
+            await Utill.RateLimited(async () => await LeaveEchoChannelAsyncCustom(chanelID));
+            throw;
+        }
+        catch(Exception error)
+        {
+            Debug.LogError($"에러발생{error}");
             throw;
         }
     }

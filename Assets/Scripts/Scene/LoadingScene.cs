@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +12,7 @@ public class LoadingScene : BaseScene
     private static Define.Scene _nextScene;
     public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
     public bool IsErrorOccurred { get; set; } = false;
+
     public static void LoadNextScene(Define.Scene nextScene)
     {
         _nextScene = nextScene;
@@ -38,14 +41,14 @@ public class LoadingScene : BaseScene
          AsyncOperation operation = SceneManager.LoadSceneAsync(_nextScene.ToString());
         operation.allowSceneActivation = false;
         float timer = 0f;
-        while (!operation.isDone)
+        while (operation.isDone == false)
         {
             yield return null;
 
             if (IsErrorOccurred == true)
                 yield break;
 
-            if(operation.progress < 0.9f)
+            if (operation.progress < 0.9f)
             {
                 _ui_loding.LoaingSliderValue = operation.progress;
             }

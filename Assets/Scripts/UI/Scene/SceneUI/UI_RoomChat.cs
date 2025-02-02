@@ -52,8 +52,7 @@ public class UI_RoomChat : UI_LobbyChat
 
     protected override void StartInit()
     {
-        // base.StartInit();
-
+        base.StartInit();
     }
 
     private void SetSwitchingChatting()
