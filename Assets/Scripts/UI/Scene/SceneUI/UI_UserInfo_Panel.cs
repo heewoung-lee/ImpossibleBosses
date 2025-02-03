@@ -65,30 +65,11 @@ public class UI_UserInfo_Panel : UI_Scene
             _refreshLobbyButton.interactable = true;
         }
         _refreshLobbyButton.interactable = true;
-
-        var lobbyList =  await Managers.LobbyManager.ViewCurrentPlayerLobby();
-        var serverLobbyList = await Managers.LobbyManager.ViewShowAllLobby();
-
-        foreach(string lobby in lobbyList)
-        {
-            Debug.Log($"현재플레이어의 로비:{lobby}");
-            Debug.Log($"CurrentLobby{Managers.LobbyManager.CurrentLobby.Id}");
-        }
-
-        foreach(Unity.Services.Lobbies.Models.Lobby lobby in serverLobbyList)
-        {
-            Debug.Log($"로비전체목록{lobby.Id}");
-            foreach(Unity.Services.Lobbies.Models.Player player in lobby.Players)
-            {
-                Debug.Log($"{lobby.Name}로비 안에 있은 Player: {player.Id}");
-            }
-        }
-        GetActiveChannels();
-
+        GetActiveVivoxChannels();
     }
 
 
-    public void GetActiveChannels()
+    public void GetActiveVivoxChannels()
     {
         var activeChannels = VivoxService.Instance.ActiveChannels;
 
@@ -98,7 +79,7 @@ public class UI_UserInfo_Panel : UI_Scene
             return;
         }
 
-        Debug.Log($"현재 접속 중인 채널 수: {activeChannels.Count}");
+        Debug.Log($"현재 접속 중인 VIVOX 채널 수: {activeChannels.Count}");
 
         foreach (var channel in activeChannels)
         {

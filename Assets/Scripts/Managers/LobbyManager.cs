@@ -85,7 +85,6 @@ public class LobbyManager : IManagerEventInitailize
     }
     IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
     {
-        //하트비트 로비를 만든 호스트만 보낼 것 
         WaitForSecondsRealtime delay = new WaitForSecondsRealtime(waitTimeSeconds);
 
         while (true)
@@ -93,6 +92,7 @@ public class LobbyManager : IManagerEventInitailize
             LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
             yield return delay;
         }
+
     }
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
@@ -182,7 +182,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException timeLimit) when (timeLimit.Reason == LobbyExceptionReason.RateLimited)
         {
-            await Utill.RateLimited(() => JoinLobbyByID(lobbyID, password), 2000);
+            return await Utill.RateLimited(() => JoinLobbyByID(lobbyID, password), 2000);
         }
         catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
         {
@@ -194,7 +194,7 @@ public class LobbyManager : IManagerEventInitailize
             return null;
         }
         await LeaveLobby(currentlobby);
-        await JoinLobbyInitalize();
+        await JoinLobbyInitalize(_currentLobby);
         return _currentLobby;
     }
 
@@ -219,9 +219,7 @@ public class LobbyManager : IManagerEventInitailize
 
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
-
-            await JoinLobbyInitalize();
-            Debug.Log($"로비 아이디: {_currentLobby.Id} \n 로비 이름{_currentLobby.Name}");
+            await JoinLobbyInitalize(_currentLobby);
             Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(_currentLobby.Id, 15f));
         }
 
@@ -232,14 +230,14 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    private async Task JoinLobbyInitalize()
+    private async Task JoinLobbyInitalize(Lobby lobby)
     {
         _isDoneInitEvent = false;
         try
         {
-            await InputPlayerData(_currentLobby);
-            await RegisterEvents(_currentLobby);
-            await Managers.VivoxManager.JoinChannel(_currentLobby.Id);
+            await InputPlayerData(lobby);
+            await RegisterEvents(lobby);
+            await Managers.VivoxManager.JoinChannel(lobby.Id);
 
             // 모든 작업이 완료될 때까지 대기
             InitDoneEvent?.Invoke();
@@ -253,22 +251,19 @@ public class LobbyManager : IManagerEventInitailize
         }
 
     }
-
-
-
     private async Task RegisterEvents(Lobby lobby)
     {
-        LobbyEventCallbacks callBackEvent;
-        callBackEvent = new LobbyEventCallbacks();
-        callBackEvent.PlayerJoined += PlayerJoinedEvent;
-        callBackEvent.PlayerLeft += async (List<int> list) =>
-        {
-            await PlayerLeftEvent(list);
-        };
         try
         {
-            Debug.Log($"현재 로비{_currentLobby.Name} 파라미터로비 {lobby.Name} ");
-            _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, callBackEvent);
+            LobbyEventCallbacks callBackEvent;
+            callBackEvent = new LobbyEventCallbacks();
+            callBackEvent.PlayerJoined += PlayerJoinedEvent;
+            callBackEvent.PlayerLeft += async (List<int> list) =>
+            {
+                await PlayerLeftEvent(list);
+            };
+            _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(_currentLobby.Id, callBackEvent);
+            await _lobbyEvents.SubscribeAsync();
         }
         catch (LobbyServiceException ex)
         {
@@ -285,7 +280,6 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            Debug.Log("업데이트");
             await ReFreshRoomList();
             await GetLobbyAsyncCustom(_currentLobby.Id);
         }
@@ -321,6 +315,7 @@ public class LobbyManager : IManagerEventInitailize
 
     private async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
+        Debug.Log("Aasdasd");
         try
         {
             await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
@@ -442,7 +437,7 @@ public class LobbyManager : IManagerEventInitailize
                 Data = updatedData
             });
 
-            Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 입력되었습니다.");
+            Debug.Log($"로비ID: {lobby.Id} \t 플레이어ID: {_currentPlayerInfo.Id} 정보가 입력되었습니다.");
         }
         catch (ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
         {
@@ -481,24 +476,6 @@ public class LobbyManager : IManagerEventInitailize
         Debug.Log("User signed out successfully.");
     }
 
-    public async Task<List<string>> ViewCurrentPlayerLobby()
-    {
-        return await LobbyService.Instance.GetJoinedLobbiesAsync();
-    }
-
-    public async Task<List<Lobby>> ViewShowAllLobby()
-    {
-        try
-        {
-            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom();
-            return lobbies.Results; // 로비 목록 반환
-        }
-        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
-        {
-            return await Utill.RateLimited(() => ViewShowAllLobby()); // 재시도
-        }
-    }
-
     public void InitalizeVivoxEvent()
     {
         Managers.SocketEventManager.OnApplicationQuitEvent += LogoutAndAllLeaveLobby;
@@ -507,19 +484,9 @@ public class LobbyManager : IManagerEventInitailize
     }
     private async Task ShowUpdatedLobbyPlayers()
     {
-
-        QueryLobbiesOptions viewOption = new QueryLobbiesOptions();
-        viewOption.Count = 25;
-        viewOption.Filters = new List<QueryFilter>()
-            {
-            new QueryFilter(
-            field: QueryFilter.FieldOptions.AvailableSlots,
-            op: QueryFilter.OpOptions.GT,
-            value: "0"),
-            };
         try
         {
-            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom(viewOption);
+            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom();
             foreach (var lobby in lobbies.Results)
             {
                 Debug.Log($"현재 로비이름 {lobby.Name}");
