@@ -280,8 +280,6 @@ public class LobbyManager : IManagerEventInitailize
                 default: throw;
             }
         }
-        //이벤트 구독
-
     }
     private async Task PlayerLeftEvent(List<int> list)
     {
