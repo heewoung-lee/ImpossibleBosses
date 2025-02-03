@@ -41,6 +41,8 @@ public class LobbyManager : IManagerEventInitailize
     private ILobbyEvents _lobbyEvents;
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
     public Action InitDoneEvent;
+    private LobbyEventCallbacks _callBackEvent;
+
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
     public UI_Room_Inventory UI_Room_Inventory
@@ -220,7 +222,7 @@ public class LobbyManager : IManagerEventInitailize
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
             await JoinLobbyInitalize(_currentLobby);
-            Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(_currentLobby.Id, 15f));
+            Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(_currentLobby.Id, 30f));
         }
 
         catch (Exception e)
@@ -235,11 +237,8 @@ public class LobbyManager : IManagerEventInitailize
         _isDoneInitEvent = false;
         try
         {
-            await InputPlayerData(lobby);
-            await RegisterEvents(lobby);
-            await Managers.VivoxManager.JoinChannel(lobby.Id);
 
-            // 모든 작업이 완료될 때까지 대기
+            await Task.WhenAll(InputPlayerData(lobby),RegisterEvents(lobby),Managers.VivoxManager.JoinChannel(lobby.Id));
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;
         }
@@ -251,19 +250,17 @@ public class LobbyManager : IManagerEventInitailize
         }
 
     }
-    private async Task RegisterEvents(Lobby lobby)
+    public async Task RegisterEvents(Lobby lobby)
     {
+        _callBackEvent = new LobbyEventCallbacks();
+        _callBackEvent.PlayerJoined += PlayerJoinedEvent;
+        _callBackEvent.PlayerLeft += async (list) =>
+        {
+            await PlayerLeftEvent();
+        };
         try
         {
-            LobbyEventCallbacks callBackEvent;
-            callBackEvent = new LobbyEventCallbacks();
-            callBackEvent.PlayerJoined += PlayerJoinedEvent;
-            callBackEvent.PlayerLeft += async (List<int> list) =>
-            {
-                await PlayerLeftEvent(list);
-            };
-            _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(_currentLobby.Id, callBackEvent);
-            await _lobbyEvents.SubscribeAsync();
+            _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
         }
         catch (LobbyServiceException ex)
         {
@@ -275,17 +272,19 @@ public class LobbyManager : IManagerEventInitailize
                 default: throw;
             }
         }
+
     }
-    private async Task PlayerLeftEvent(List<int> list)
+    private async Task PlayerLeftEvent()
     {
         try
         {
-            await ReFreshRoomList();
-            await GetLobbyAsyncCustom(_currentLobby.Id);
+            //await ReFreshRoomList();
+            //await GetLobbyAsyncCustom(_currentLobby.Id);
+            await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
         }
-        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
+        catch (Exception ex)
         {
-            await Utill.RateLimited(() => PlayerLeftEvent(list), 2000);
+            Debug.LogError($"{ex.Message}");
         }
     }
 
@@ -313,9 +312,8 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    private async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
+    public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
-        Debug.Log("Aasdasd");
         try
         {
             await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
