@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Events;
@@ -61,21 +62,34 @@ public class UI_InputRoomPassWord : UI_Popup
     }
     private async Task CheckJoinRoom()
     {
+        _confirm_Button.interactable = false;
         Lobby lobby = _roomInfoPanel.LobbyRegisteredPanel;
-        Lobby tempLobby = Managers.LobbyManager.CurrentLobby;
         try
         {
             await Managers.LobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
         }
         catch (Unity.Services.Lobbies.LobbyServiceException wrongPw) when (wrongPw.Reason == Unity.Services.Lobbies.LobbyExceptionReason.IncorrectPassword)
         {
-            Debug.Log("비밀번호가 틀렸습니다!");
             _errorMessageText.text = "비밀번호가 틀렸습니다";
             _messageError.SetActive(true);
-            await Managers.LobbyManager.JoinLobbyByID(tempLobby.Id);
+            _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () =>
+            {
+                _confirm_Button.interactable = true;
+            };
             return;
         }
-
+        catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
+        {
+            Debug.Log("로비를 찾을 수 없습니다");
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>().AlertSetText("오류", "로비를 찾을 수 없습니다")
+                .AfterAlertEvent(async () =>
+                {
+                    Managers.UI_Manager.ClosePopupUI(this);
+                    _confirm_Button.interactable = true;
+                    await Managers.LobbyManager.ReFreshRoomList();
+                });
+            return;
+        }
         catch (Exception error)
         {
             Debug.Log($"에러가 발생했습니다{error}");
