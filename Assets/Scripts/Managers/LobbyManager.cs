@@ -31,6 +31,7 @@ public struct PlayerIngameLoginInfo
 
 public class LobbyManager : IManagerEventInitailize
 {
+    private const string LOBBYID = "WaitLobbyRoom";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -110,11 +111,21 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task TryJoinLobbyByNameOrCreateLobby(string lobbyName, int MaxPlayers, CreateLobbyOptions lobbyOption)
     {
-        bool isLobbyJoinable = await TryJoinLobbyByName(lobbyName);
-        if (isLobbyJoinable == false)
+        //    bool isLobbyJoinable = await TryJoinLobbyByName(lobbyName);
+        //    if (isLobbyJoinable == false)
+        //    {
+        //        await CreateLobby(lobbyName, MaxPlayers, lobbyOption);
+        //    }
+
+        try
         {
-            await CreateLobby(lobbyName, MaxPlayers, lobbyOption);
+            await LobbyService.Instance.CreateOrJoinLobbyAsync(LOBBYID, lobbyName, MaxPlayers, lobbyOption);
         }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+        await JoinLobbyInitalize(_currentLobby);
     }
 
 
@@ -238,7 +249,13 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
 
-            await Task.WhenAll(InputPlayerData(lobby),RegisterEvents(lobby),Managers.VivoxManager.JoinChannel(lobby.Id));
+            //await Task.WhenAll(InputPlayerData(lobby),RegisterEvents(lobby),Managers.VivoxManager.JoinChannel(lobby.Id));
+
+            await InputPlayerData(lobby);
+            await RegisterEvents(lobby);
+            await Managers.VivoxManager.JoinChannel(lobby.Id);
+
+
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;
         }
@@ -369,40 +386,35 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom();
-
-            foreach (Lobby lobby in queryResponse.Results)
+            Lobby waitLobby = await LobbyService.Instance.GetLobbyAsync(LOBBYID);
+            foreach (Unity.Services.Lobbies.Models.Player player in waitLobby.Players)
             {
-                foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
+                if (player.Data == null)
                 {
+                    Debug.LogError($" Player {player.Id} in lobby {waitLobby.Id} has NULL Data!");
+                    return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
+                }
+                foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
+                {
+                    if (_playerID == player.Id) //자기자신은 건너뛰기
+                        continue;
 
-                    if (player.Data == null)
+                    if (data.Key != "NickName")
                     {
-                        Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
-                        return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
+                        continue;
                     }
-                    foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
+                    else
                     {
-                        if (_playerID == player.Id) //자기자신은 건너뛰기
-                            continue;
-
-                        if (data.Key != "NickName")
+                        if (data.Value.Value != usernickName)
                         {
                             continue;
                         }
                         else
                         {
-                            if (data.Value.Value != usernickName)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                await LogoutAndAllLeaveLobby();
-                                return true;
-                            }
-
+                            await LogoutAndAllLeaveLobby();
+                            return true;
                         }
+
                     }
                 }
             }
