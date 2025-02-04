@@ -83,6 +83,15 @@ public class UI_Manager : IManagerIResettable
         Debug.LogError($"Not Found KeyType: {typeof(T)}");
         return null;
     }
+    public T TryGet_Scene_UI<T>() where T : UI_Scene
+    {
+        T sceneUI_value = Get_Scene_UI<T>();
+        if (sceneUI_value == null)
+        {
+           sceneUI_value = GetSceneUIFromResource<T>();
+        }
+        return sceneUI_value;
+    }
 
     public void SetCanvas(GameObject go, bool sorting = false)//씬 넘어갈때 다초기화 할것
     {
