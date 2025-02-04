@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UI_Room_Info_Panel : UI_Base
@@ -32,6 +33,10 @@ public class UI_Room_Info_Panel : UI_Base
         _currentPlayerCount = Get<TMP_Text>((int)Texts.CurrentCount);
         _joinButton = Get<Button>((int)Buttons.JoinButton);
         _joinButton.onClick.AddListener(async ()=>await AddJoinEvent());
+        _joinButton.onClick.AddListener(() =>
+        {
+            _joinButton.interactable = false;
+        });
     }
 
     protected override void StartInit()
@@ -52,6 +57,7 @@ public class UI_Room_Info_Panel : UI_Base
         {
             UI_InputRoomPassWord ui_inputPassword = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
             ui_inputPassword.SetRoomInfoPanel(this);
+            //TODO: 여기에 _isJoining 달아야함
         }
         else
         {
@@ -59,10 +65,19 @@ public class UI_Room_Info_Panel : UI_Base
             {
                 await Managers.LobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
                 Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+                _joinButton.interactable = true;
             }
-            catch (LobbyServiceException e)
+            catch (LobbyServiceException notFoundLobby) when(notFoundLobby.Message.Contains("lobby not found")) 
             {
-                Debug.Log($"오류발생{e}");
+                string errorMsg = "방이 없습니다.";
+                Debug.Log($"{errorMsg}");
+                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                    .AlertSetText("오류",$"{errorMsg}")
+                    .AfterAlertEvent(async() =>
+                    {
+                        await Managers.LobbyManager.ReFreshRoomList();
+                    });
+                _joinButton.interactable = true;
                 return;
             }
         }

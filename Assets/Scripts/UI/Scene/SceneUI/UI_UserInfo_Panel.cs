@@ -129,7 +129,15 @@ public class UI_UserInfo_Panel : UI_Scene
 
     public async void MoveLoginScene()
     {
-        await Managers.SocketEventManager.DisconnectApiEvent?.Invoke();
+        try
+        {
+            await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"에러가 발생했습니다.{e}");
+            return;
+        }
         Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene);
     }
 
