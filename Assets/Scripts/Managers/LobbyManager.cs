@@ -351,6 +351,8 @@ public class LobbyManager : IManagerEventInitailize
     }
     private async Task PlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
     {
+
+        //ToDO:넘어올때 하나만 넘어옴 int는 인덱스임
         if (dictionary[dictionary.Count] == null)
             return;
 
