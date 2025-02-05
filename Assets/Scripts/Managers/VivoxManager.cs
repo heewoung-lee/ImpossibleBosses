@@ -52,7 +52,6 @@ public class VivoxManager : IManagerEventInitailize
             _loginOptions.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
             _loginOptions.EnableTTS = true;
             await VivoxService.Instance.LoginAsync(_loginOptions);
-            Lobby lobby = Managers.LobbyManager.CurrentLobby;
             _checkDoneLoginProcess = true;
             VivoxDoneLoginEvent?.Invoke();
             Debug.Log("ViVox 로그인완료");
