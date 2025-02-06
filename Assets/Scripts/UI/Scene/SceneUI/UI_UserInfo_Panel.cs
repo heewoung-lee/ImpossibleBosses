@@ -131,7 +131,7 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         try
         {
-            await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
+            await Managers.SocketEventManager.DisconnectApiEvent.Invoke();
         }
         catch (Exception e)
         {

@@ -42,6 +42,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         SignInAnonymously,
         CheckAlreadyLogInID,
         TryJoinLobby,
+        VivoxLogin
     }
     private const string LOBBYID = "WaitLobbyRoom";
     private PlayerIngameLoginInfo _currentPlayerInfo;
@@ -89,6 +90,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
         _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
         LoadingScene.SetCheckTaskChecker(_taskChecker);
+        Managers.VivoxManager.VivoxDoneLoginEvent += () => _taskChecker[(int)LoadingProcess.VivoxLogin] = true;
         InitalizeVivoxEvent();
         _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
         try
