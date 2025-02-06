@@ -5,13 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 { 
- 
-    public BaseScene CurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
-
+    private Define.Scene _currentSceneName;
     private LoadingScene _loadingScene;
+    public BaseScene GetCurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
+    public Define.Scene CurrentSceneName => _currentSceneName;
     public void LoadScene(Define.Scene scene)
     {
         Managers.Clear();
+        _currentSceneName = scene;
         SceneManager.LoadScene(GetEnumName(scene));
     }
 
@@ -29,7 +30,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void Clear()
     {
-        CurrentScene.Clear();
+        GetCurrentScene.Clear();
         Managers.UI_Manager.Clear();
     }
 

@@ -153,7 +153,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
     private void LoadingSceneSetErrorOccurred()
     {
 
-        if(Managers.SceneManagerEx.CurrentScene is LoadingScene loaingScene)
+        if(Managers.SceneManagerEx.GetCurrentScene is LoadingScene loaingScene)
         {
             loaingScene.IsErrorOccurred = true;
         }

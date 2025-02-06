@@ -16,6 +16,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Player = Unity.Services.Lobbies.Models.Player;
 
+
+
 public struct PlayerIngameLoginInfo
 {
     private readonly string _nickname;
@@ -31,8 +33,16 @@ public struct PlayerIngameLoginInfo
     }
 }
 
-public class LobbyManager : IManagerEventInitailize
+public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 {
+    enum LoadingProcess
+    {
+        Vivox,
+        UnityServices,
+        SignInAnonymously,
+        CheckAlreadyLogInID,
+        TryJoinLobby,
+    }
     private const string LOBBYID = "WaitLobbyRoom";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
@@ -44,6 +54,7 @@ public class LobbyManager : IManagerEventInitailize
     private ILobbyEvents _lobbyEvents;
     private Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> _playersJoinLobbyDict;
     private LobbyEventCallbacks _callBackEvent;
+    private bool[] _taskChecker;
 
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
     public Action InitDoneEvent;
@@ -71,33 +82,40 @@ public class LobbyManager : IManagerEventInitailize
             return _playersJoinLobbyDict;
         }
     }
-
+    public bool[] TaskChecker => _taskChecker;
 
     public async Task<bool> InitLobbyScene()
     {
+
+        _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
+        LoadingScene.SetCheckTaskChecker(_taskChecker);
         InitalizeVivoxEvent();
+        _taskChecker[(int)LoadingProcess.Vivox] = true;
         try
         {
             // Unity Services 초기화
             await UnityServices.InitializeAsync();
+            _taskChecker[(int)LoadingProcess.UnityServices] = true;
             if (AuthenticationService.Instance.IsSignedIn)
             {
                 await LogoutAndAllLeaveLobby();
                 Debug.Log("Logging out from previous session...");
                 AuthenticationService.Instance.SignOut();
+
             }
             _playerID = await SignInAnonymouslyAsync();
+            _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
+
             isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             if (isalready is true)
             {
                 return true;
             }
+            _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
 
             ///여기까진 문제 없음;
             await TryJoinLobbyByNameOrCreateWaitLobby();
-            //1. 로비 찾고 로비 없으면 들어간다.
-            //2. 로비 초기화 작업 진행
-            //3. 로비를 만든 호스트는 하트비트 넣어준다.
+            _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
             return false;
         }
         catch (Exception ex)
