@@ -173,56 +173,6 @@ public class LobbyManager : IManagerEventInitailize
         {
             Debug.Log(ex);
         }
-
-        //TODO 타임 리밋 예외처리 할 것
-    }
-
-
-    async Task<bool> TryJoinLobbyByName(string lobbyName)
-    {
-        try
-        {
-            QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom(new QueryLobbiesOptions()//Call WaitLobby
-            {
-                Filters = new List<QueryFilter>
-                {
-                    new QueryFilter(QueryFilter.FieldOptions.Name, lobbyName, QueryFilter.OpOptions.EQ)
-                }
-            });
-
-
-            if (queryResponse == null)
-            {
-                Debug.LogError("Failed to retrieve lobbies.");
-                return false;
-            }
-            if (queryResponse.Results.Count > 0)
-            {
-                foreach (var result in queryResponse.Results)
-                {
-                    Debug.Log(result.Id);
-                }
-
-                string lobbyId = queryResponse.Results[0].Id;
-                Lobby lobby = await JoinLobbyByID(lobbyId);
-                Debug.Log($"Successfully joined {lobbyName}lobby.");
-                return true;
-            }
-            else
-            {
-                Debug.Log($"{lobbyName}Lobby not found.");
-                return false;
-            }
-        }
-        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
-        {
-            return await Utill.RateLimited(() => TryJoinLobbyByName(lobbyName)); // 재시도
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.LogError($"Lobby Service Exception: {e.Message}");
-            return false;
-        }
     }
     public async Task<Lobby> JoinLobbyByID(string lobbyID, string password = null)
     {
@@ -304,7 +254,6 @@ public class LobbyManager : IManagerEventInitailize
         {
 
             //await Task.WhenAll(InputPlayerData(lobby),RegisterEvents(lobby),Managers.VivoxManager.JoinChannel(lobby.Id));
-            Debug.Log($"로비의 존재{lobby.Name}");
             await InputPlayerData(lobby);
             await Managers.VivoxManager.JoinChannel(lobby.Id);
             await RegisterEvents(lobby);
