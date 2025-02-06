@@ -37,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 {
     enum LoadingProcess
     {
-        Vivox,
+        VivoxInitalize,
         UnityServices,
         SignInAnonymously,
         CheckAlreadyLogInID,
@@ -90,7 +90,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
         LoadingScene.SetCheckTaskChecker(_taskChecker);
         InitalizeVivoxEvent();
-        _taskChecker[(int)LoadingProcess.Vivox] = true;
+        _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
         try
         {
             // Unity Services √ ±‚»≠
