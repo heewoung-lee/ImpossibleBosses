@@ -135,27 +135,22 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
                   .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
                   .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
                  .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
-                LoadingSceneSetErrorOccurred();
                 return;
             }
         }
         catch(Exception ex)
         {
             Debug.Log($"오류{ex}");
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                 .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
+                 .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
+                .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+            return;
         }
     }
 
     public void OnClickCloseButton()
     {
         Managers.UI_Manager.ClosePopupUI(this);
-    }
-
-    private void LoadingSceneSetErrorOccurred()
-    {
-
-        if(Managers.SceneManagerEx.GetCurrentScene is LoadingScene loaingScene)
-        {
-            loaingScene.IsErrorOccurred = true;
-        }
     }
 }
