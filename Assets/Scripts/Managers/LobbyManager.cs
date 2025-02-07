@@ -142,7 +142,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
     {
         WaitForSecondsRealtime delay = new WaitForSecondsRealtime(waitTimeSeconds);
-
         while (true)
         {
             LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
@@ -306,10 +305,14 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task RegisterEvents(Lobby lobby)
     {
         _callBackEvent = new LobbyEventCallbacks();
-        _callBackEvent.PlayerDataAdded += (playerdaData) => PlayerDataAdded(playerdaData);
+        _callBackEvent.PlayerDataAdded += (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
         _callBackEvent.PlayerJoined += PlayerJoinedEvent;
-        _callBackEvent.PlayerLeft += async (list) =>{await CheckHostAndInjectionHeartBeat();};
-
+        _callBackEvent.PlayerLeft += async (list) =>
+        {
+            await CheckHostAndInjectionHeartBeat();
+            await isCheckLobbyInPlayerCount();
+        };
+ 
         try
         {
             _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
@@ -326,6 +329,23 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
 
     }
+
+    private async Task isCheckLobbyInPlayerCount()
+    {
+        if (_currentLobby.Players.Count <= 0&& _currentLobby.HostId == _playerID)
+        {
+            try
+            {
+                // 모든 플레이어가 나갔으므로 로비 삭제
+                await LobbyService.Instance.DeleteLobbyAsync(_currentLobby.Id);
+                Debug.Log("로비가 삭제되었습니다.");
+            }
+            catch (LobbyServiceException timeLimmit) when (timeLimmit.Reason == LobbyExceptionReason.RequestTimeOut)
+            {
+                await Utill.RateLimited(() => isCheckLobbyInPlayerCount());
+            }
+        }
+    }
     public async Task CheckHostAndInjectionHeartBeat()
     {
         Lobby currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
@@ -339,10 +359,11 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         try 
         {
-            foreach(LobbyPlayerJoined player in joined)
-            {
-               await Managers.VivoxManager.SendSystemMessageAsync($"{player.Player.Data["NickName"].Value}님이 입장하셨습니다.");
-            }
+            Debug.Log(joined);
+            //foreach(LobbyPlayerJoined player in joined)
+            //{
+            //   await Managers.VivoxManager.SendSystemMessageAsync($"{player.Player.Data["NickName"].Value}님이 입장하셨습니다.");
+            //}
             //await Managers.VivoxManager.SendSystemMessageAsync($"{player.Player.Data["NickName"].Value}님이 입장하셨습니다.");
         }
         catch (Exception ex)
@@ -350,7 +371,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log($"에러가 발생했습니다 : 로비ID{_currentLobby.Id} 에러코드: {ex}");
         }
     }
-    private void PlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
+    private void JoinLobbyPlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
     {
         foreach (int keyIndex in dictionary.Keys)
         {
@@ -418,13 +439,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private async Task LeaveAllLobby()
     {
-        string playerId = AuthenticationService.Instance.PlayerId;
-        List<string> lobbyes = await LobbyService.Instance.GetJoinedLobbiesAsync();
-        foreach (string lobby in lobbyes)
+       
+        QueryResponse allLobbyResponse = await GetQueryLobbiesAsyncCustom();
+        foreach(Lobby lobby in allLobbyResponse.Results)
         {
-            await LobbyService.Instance.RemovePlayerAsync(lobby, playerId); //먼저 로그인되어있는 로비에서 전부 나가기
+            await LeaveLobby(lobby);
             Debug.Log($"{lobby}에서 나갔습니다.");
-        }//먼저 연결되어있는 로비 전부제거.
+        }
     }
     async Task<string> SignInAnonymouslyAsync()
     {
@@ -542,8 +563,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private async Task RemovePlayerData(Lobby lobby)
     {
-        Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 제거되었습니다.");
-        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _currentPlayerInfo.Id);
+        Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_playerID} 정보가 제거되었습니다.");
+        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _playerID);
     }
     public async Task LogoutAndAllLeaveLobby()
     {
@@ -554,6 +575,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         {
             await LeaveAllLobby();
             Debug.Log("Player removed from lobby.");
+
         }
         catch (LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.RateLimited)
         {

@@ -109,6 +109,10 @@ public class VivoxManager : IManagerEventInitailize
             await Utill.RateLimited(async () => await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty));
             throw;
         }
+        catch(Exception authorizedException) when (authorizedException.Message.Contains("not authorized"))
+        {
+            await VivoxService.Instance.LoginAsync(_loginOptions);
+        }
         catch (Exception error)
         {
             Debug.LogError($"에러발생{error}");
