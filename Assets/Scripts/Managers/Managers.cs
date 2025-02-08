@@ -72,9 +72,18 @@ public class Managers : MonoBehaviour
         return _instance.StartCoroutine(couroutine);
     } 
 
-    public static void ManagersStopCoroutine(IEnumerator couroutine)
+    public static void ManagersStopCoroutine(IEnumerator couroutineIEnumerator)
+    {
+        _instance.StopCoroutine(couroutineIEnumerator);
+    }
+    public static void ManagersStopCoroutine(Coroutine couroutine)
     {
         _instance.StopCoroutine(couroutine);
+    }
+
+    public static void ManagersAllstopCoroutine()
+    {
+        _instance.StopAllCoroutines();
     }
 
     private static void Init()
@@ -103,10 +112,7 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        if(_socketEventManager.OnApplicationQuitEvent != null)
-        {
-            await _socketEventManager.OnApplicationQuitEvent?.Invoke();
-        }
+       await _socketEventManager.OnApplicationQuitEvent?.Invoke();
     }
 
     public static void Clear()

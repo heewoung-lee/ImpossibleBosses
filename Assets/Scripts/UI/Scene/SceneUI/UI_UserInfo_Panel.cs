@@ -58,7 +58,9 @@ public class UI_UserInfo_Panel : UI_Scene
         try
         {
             await Managers.LobbyManager.ReFreshRoomList();
-        }catch (Exception ex)
+            await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+        }
+        catch (Exception ex)
         {
             UI_AlertDialog alert_Popup =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert_Popup.SetText("¿À·ù", $"{ex}");
