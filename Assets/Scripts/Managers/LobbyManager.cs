@@ -119,11 +119,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 return true;
             }
             _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
-            ///여기까진 문제 없음;
-            ///
-
-            await TestView();
-
             await TryJoinLobbyByNameOrCreateWaitLobby();
             _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
             return false;
@@ -139,19 +134,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
     }
 
-    private async Task TestView()
-    {
-         QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync();
-
-        foreach (Lobby lobby in response.Results)
-        {
-            Debug.Log($"로비 ID {lobby.Id} 로비닉네임{lobby.Name}");
-            foreach(Player player in lobby.Players)
-            {
-                Debug.Log($"{player.Id}");
-            }
-        }
-    }
     private void SetVivoxTaskCheker()
     {
         _taskChecker[(int)LoadingProcess.VivoxLogin] = true;
@@ -184,7 +166,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         if (_currentLobby != null)
             await LeaveLobby(_currentLobby);
-
         try
         {
             await TryJoinLobbyByNameOrCreateLobby("WaitLobby", 100, new CreateLobbyOptions()
@@ -285,12 +266,16 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             {
                 await RemovePlayerData(lobby);
             }
-            if(_heartBeatCoroutine != null)
+            if (_heartBeatCoroutine != null)
             {
                 Debug.Log("하트비트 코루틴 삭제");
                 Managers.ManagersStopCoroutine(_heartBeatCoroutine);
                 _heartBeatCoroutine = null;
             }
+        }
+        catch(System.ObjectDisposedException disposedException)
+        {
+            Debug.Log($"이미 객체가 제거되었습니다.{disposedException.Message}");
         }
         catch (Exception e)
         {
@@ -504,7 +489,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
         foreach (Lobby lobby in allLobbyResponse.Results)
         {
-            if(lobby.Players.Any(p => p.Id == _playerID))
+            if(lobby.Players.Any(player => player.Id == _playerID))
             {
                 lobbyinPlayerList.Add(lobby);
             }
@@ -577,7 +562,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                             }
                             else
                             {
-                                await LogoutAndAllLeaveLobby();
+                               await LogoutAndAllLeaveLobby();
                                 return true;
                             }
 
