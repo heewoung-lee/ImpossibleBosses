@@ -112,7 +112,12 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-       await _socketEventManager.OnApplicationQuitEvent?.Invoke();
+        if (_socketEventManager.OnApplicationQuitEvent == null)
+        {
+            Debug.LogWarning("_socketEventManager is NULL!");
+            return;
+        }
+        await _socketEventManager.OnApplicationQuitEvent?.Invoke();
     }
 
     public static void Clear()

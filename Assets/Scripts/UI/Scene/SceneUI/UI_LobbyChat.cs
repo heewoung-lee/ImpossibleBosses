@@ -45,7 +45,11 @@ public class UI_LobbyChat : UI_Scene
         _chattingInputField.onSubmit.AddListener(SendChatingMessage);
         _sendButton.interactable = false;
     }
-
+    public void SendText(string text)
+    {
+        _chatLog.text += text;
+        _chatLog.text += "\n";
+    }
 
 
     protected override void StartInit()
