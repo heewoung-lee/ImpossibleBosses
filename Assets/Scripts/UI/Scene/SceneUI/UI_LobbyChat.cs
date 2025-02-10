@@ -57,6 +57,9 @@ public class UI_LobbyChat : UI_Scene
         base.StartInit();
         InitButtonInteractable();
         VivoxService.Instance.ChannelMessageReceived += ChannelMessageReceived;
+        Managers.LobbyManager.PlayerAddDataInputEvent -= SendNotice;
+        Managers.LobbyManager.PlayerAddDataInputEvent += SendNotice;
+
     }
 
     private void InitButtonInteractable()
@@ -71,6 +74,12 @@ public class UI_LobbyChat : UI_Scene
             ButtonInteractable();
         }
     }
+
+    public void SendNotice(string playerName)
+    {
+        _chatLog.text += $"<color=#FFD700>[SYSTEM]</color> {playerName}¥‘¿Ã ¿‘¿Â«œºÃΩ¿¥œ¥Ÿ.\n";
+    }
+
 
     public async void SendChatingMessage(string message)
     {

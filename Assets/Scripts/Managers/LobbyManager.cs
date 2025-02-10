@@ -45,7 +45,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom";
+    private const string LOBBYID = "WaitLobbyRoom4";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -60,10 +60,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     private HashSet<LobbyPlayerJoined> _playerJoined = null;
     private Coroutine _heartBeatCoroutine = null;
     private UI_LobbyChat _ui_LobbyChat = null;
+
     public string GetLobbyID => LOBBYID;
 
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
     public Action InitDoneEvent;
+    public Action<string> PlayerAddDataInputEvent;
+
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
     public UI_Room_Inventory UI_Room_Inventory
@@ -123,6 +126,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
             await TryJoinLobbyByNameOrCreateWaitLobby();
             _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
+
+            await ReRegisterEventCallback();
             return false;
         }
         catch (Exception ex)
@@ -154,19 +159,26 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public void StartHeartbeatLobby(Lobby lobby, float interval = 20f)
     {
-        if (_heartBeatCoroutine != null)
-        {
-            Managers.ManagersStopCoroutine(_heartBeatCoroutine);
-            Debug.Log("기존 코루틴 삭제");
-            _heartBeatCoroutine = null;
-        }
-        if(lobby.HostId == _playerID)
+        if (lobby == null || _playerID == null)
+            return;
+
+        StopHeartbeatLobby();
+        if (lobby.HostId == _playerID)
         {
             Debug.Log("하트비트 이식");
             _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
         }
     }
 
+    private void StopHeartbeatLobby()
+    {
+        if (_heartBeatCoroutine != null)
+        {
+            Managers.ManagersStopCoroutine(_heartBeatCoroutine);
+            Debug.Log("기존 코루틴 삭제");
+            _heartBeatCoroutine = null;
+        }
+    }
 
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
@@ -217,13 +229,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         {
             await Utill.RateLimited(() => TryJoinLobbyByNameOrCreateLobby(lobbyName, MaxPlayers, lobbyOption));
         }
-        catch (ArgumentException addKeyError)
-        {
-            Debug.Log($"키 충돌 에러 발생{addKeyError}");
-            _currentLobby = await LobbyService.Instance.ReconnectToLobbyAsync(LOBBYID);
-            await JoinLobbyInitalize(_currentLobby);
-            StartHeartbeatLobby(_currentLobby);
-        }
         catch (Exception ex)
         {
             Debug.Log(ex);
@@ -251,6 +256,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
         {
+            Debug.Log($"LobbyNotFound{notfound.Message}");
             throw;
         }
         catch (Exception error)
@@ -259,6 +265,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             return null;
         }
         await LeaveLobby(currentlobby);
+        StartHeartbeatLobby(_currentLobby);
         await JoinLobbyInitalize(_currentLobby);
         return _currentLobby;
     }
@@ -277,12 +284,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             if (lobby != null)
             {
                 await RemovePlayerData(lobby);
-            }
-            if (_heartBeatCoroutine != null)
-            {
-                Debug.Log("하트비트 코루틴 삭제");
-                Managers.ManagersStopCoroutine(_heartBeatCoroutine);
-                _heartBeatCoroutine = null;
             }
         }
         catch(System.ObjectDisposedException disposedException)
@@ -319,10 +320,11 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         _isDoneInitEvent = false;
         try
         {
-            await InputPlayerData(lobby);
-            await Managers.VivoxManager.JoinChannel(lobby.Id);
-            await RegisterEvents(lobby);
+            Task inputPlayerTask = InputPlayerData(lobby);
+            Task VivoxJoinChanelTask =  Managers.VivoxManager.JoinChannel(lobby.Id);
 
+            await Task.WhenAll(inputPlayerTask, VivoxJoinChanelTask);
+            await RegisterEvents(lobby);
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;
         }
@@ -398,18 +400,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
     public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
-        //try 
-        //{
-        //    Debug.Log(joined);
-        //    foreach (LobbyPlayerJoined player in joined)
-        //    {
-        //        await Managers.VivoxManager.SendSystemMessageAsync($"{player.Player.Data["NickName"].Value}님이 입장하셨습니다.");
-        //    }
-        //}
-        //catch (Exception ex)
-        //{
-        //    Debug.Log($"에러가 발생했습니다 : 로비ID{_currentLobby.Id} 에러코드: {ex}");
-        //}
+        await ReFreshRoomList();
     }
     private void JoinLobbyPlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
     {
@@ -424,17 +415,17 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 Debug.Log("NickName 데이터가 없습니다.");
                 return;
             }
+            if(playerValue.Value.Value != _currentPlayerInfo.PlayerNickName)
+            PlayerAddDataInputEvent?.Invoke(playerValue.Value.Value);
         }
+       
     }
 
     private async Task PlayerLeftEvent(List<int> leftPlayerIndices)
     {
-        Lobby updatedLobby = null;
         try
         {
             await ReFreshRoomList();
-            // 로비 정보 다시 가져오기 (혹은 미리 로컬에 캐싱한 로비 정보를 사용)
-            updatedLobby = await LobbyService.Instance.GetLobbyAsync(_currentLobby.Id);
         }
         catch (LobbyServiceException timeLimmit) when (timeLimmit.Reason == LobbyExceptionReason.RequestTimeOut)
         {
@@ -449,7 +440,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             PlayersJoinLobbyDict.Remove(index);
             Debug.Log($"{index}번째의 플레이어 데이터 삭제");
         }
-        // await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}님이 입장하셨습니다.");
     }
 
 
@@ -485,6 +475,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         {
             await LeaveLobby(lobby);
             Debug.Log($"{lobby}에서 나갔습니다.");
+            StopHeartbeatLobby();
+            
         }
     }
 
@@ -613,9 +605,9 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
             Debug.Log($"로비ID: {lobby.Id} \t 플레이어ID: {_currentPlayerInfo.Id} 정보가 입력되었습니다.");
         }
-        catch (ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
+        catch (Exception error)
         {
-            Debug.Log($"{alreadyAddKey}이미 키가 있음 무시해도 됨");
+            Debug.LogError($"에러 발생{error}");
         }
 
     }
@@ -669,7 +661,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             {
                 Player hostPlayer = lobby.Players.FirstOrDefault(player => player.Id == lobby.HostId);
 
-                Debug.Log($"현재 로비이름: {lobby.Name} 로비ID: {lobby.Id} 로비호스트: {lobby.HostId} 호스트닉네임: {hostPlayer.Data["NickName"].Value}");
+                Debug.Log($"현재 로비이름: {lobby.Name} 로비ID: {lobby.Id} 호스트닉네임: {hostPlayer.Data["NickName"].Value} 로비호스트: {lobby.HostId} ");
                 Debug.Log($"-----------------------------------");
                 foreach (var player in lobby.Players)
                 {
@@ -683,7 +675,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RequestTimeOut)
         {
             Debug.LogError($"RequestTimeOut");
-            await ShowUpdatedLobbyPlayers();
+            await Utill.RateLimited(async () => { await ShowUpdatedLobbyPlayers();}); 
         }
         catch (Exception ex)
         {
@@ -694,7 +686,18 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task ReFreshRoomList()
     {
-        if (isRefreshing || UI_Room_Inventory == null) { return; }
+        if (_currentLobby == null)
+            return;
+
+        foreach(Player player in _currentLobby.Players)
+        {
+            if (player.Id == _playerID)
+                return;
+        }
+
+        if (isRefreshing || UI_Room_Inventory == null) {
+            return; 
+        }
 
         isRefreshing = true;
 
@@ -723,7 +726,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             {
                 CreateRoomInitalize(lobby);
             }
-            //await ShowUpdatedLobbyPlayers();
         }
         catch (LobbyServiceException e)
         {
@@ -742,4 +744,16 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         Debug.Log($"방에 들어간 로비 ID{lobby.Id}");
     }
 
+
+    public async Task ReRegisterEventCallback()
+    {
+
+        if (_lobbyEvents != null)
+        {
+            await _lobbyEvents.UnsubscribeAsync();
+            _lobbyEvents = null;
+        }
+
+        await RegisterEvents(_currentLobby);
+    }
 }
