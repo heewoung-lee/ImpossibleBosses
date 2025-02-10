@@ -45,7 +45,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoomTest6";
+    private const string LOBBYID = "WaitLobbyRoom";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -152,7 +152,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
     }
 
-    public void StartHeartbeatLobby(string lobbyId, float interval = 20f)
+    public void StartHeartbeatLobby(Lobby lobby, float interval = 20f)
     {
         if (_heartBeatCoroutine != null)
         {
@@ -160,7 +160,11 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log("기존 코루틴 삭제");
             _heartBeatCoroutine = null;
         }
-        _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobbyId, interval));
+        if(lobby.HostId == _playerID)
+        {
+            Debug.Log("하트비트 이식");
+            _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
+        }
     }
 
 
@@ -202,10 +206,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             await JoinLobbyInitalize(_currentLobby);
             Debug.Log($"플레이어 ID: {_playerID}");
             Debug.Log($"호스트 ID: {_currentLobby.HostId}");
-            if ( _playerID == _currentLobby.HostId)
-            {
-                StartHeartbeatLobby(_currentLobby.Id);
-            }
+            StartHeartbeatLobby(_currentLobby);
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
@@ -221,10 +222,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log($"키 충돌 에러 발생{addKeyError}");
             _currentLobby = await LobbyService.Instance.ReconnectToLobbyAsync(LOBBYID);
             await JoinLobbyInitalize(_currentLobby);
-            if (_playerID == _currentLobby.HostId)
-            {
-                StartHeartbeatLobby(_currentLobby.Id);
-            }
+            StartHeartbeatLobby(_currentLobby);
         }
         catch (Exception ex)
         {
@@ -306,7 +304,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
             await JoinLobbyInitalize(_currentLobby);
-            StartHeartbeatLobby(_currentLobby.Id);
+            StartHeartbeatLobby(_currentLobby);
         }
 
         catch (Exception e)
@@ -396,11 +394,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
     public void CheckHostAndInjectionHeartBeat()
     {
-        if(_currentLobby.HostId == _playerID)
-        {
-            Debug.Log("하트비트 이식");
-            StartHeartbeatLobby(_currentLobby.Id);
-        }
+       StartHeartbeatLobby(_currentLobby);
     }
     public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
