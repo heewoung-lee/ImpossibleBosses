@@ -59,6 +59,9 @@ public class UI_LobbyChat : UI_Scene
         VivoxService.Instance.ChannelMessageReceived += ChannelMessageReceived;
         Managers.LobbyManager.PlayerAddDataInputEvent -= SendNotice;
         Managers.LobbyManager.PlayerAddDataInputEvent += SendNotice;
+        Managers.LobbyManager.PlayerDeleteEvent -= ExitMessage;
+        Managers.LobbyManager.PlayerDeleteEvent += ExitMessage;
+
 
     }
 
@@ -79,7 +82,11 @@ public class UI_LobbyChat : UI_Scene
     {
         _chatLog.text += $"<color=#FFD700>[SYSTEM]</color> {playerName}님이 입장하셨습니다.\n";
     }
+    public void ExitMessage(int playerNumber)
+    {
+        _chatLog.text += $"<color=#FFD700>[SYSTEM]</color>{playerNumber}번째 플레이어가 로비에서 나갔습니다.\n";
 
+    }
 
     public async void SendChatingMessage(string message)
     {

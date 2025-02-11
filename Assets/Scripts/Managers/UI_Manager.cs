@@ -57,7 +57,7 @@ public class UI_Manager : IManagerIResettable
     public void AddImportant_Popup_UI(UI_Base important_UI)
     {
         Type type = important_UI.GetType();
-        _importantPopup_UI[type] = important_UI; 
+        _importantPopup_UI[type] = important_UI;
     }
 
     public T GetImportant_Popup_UI<T>() where T : UI_Base
@@ -83,6 +83,17 @@ public class UI_Manager : IManagerIResettable
         Debug.LogError($"Not Found KeyType: {typeof(T)}");
         return null;
     }
+
+    public bool Try_Get_Scene_UI<T>(out T ui_scene) where T : UI_Scene
+    {
+        if (_ui_sceneDict.TryGetValue(typeof(T), out UI_Scene scene))
+        {
+            ui_scene = scene as T;
+            return ui_scene is not null;
+        }
+        ui_scene = null;
+        return false;
+    }
     public void SetCanvas(GameObject go, bool sorting = false)//씬 넘어갈때 다초기화 할것
     {
         Canvas canvas = Utill.GetOrAddComponent<Canvas>(go);
@@ -90,7 +101,7 @@ public class UI_Manager : IManagerIResettable
         canvas.overrideSorting = true;
         if (sorting)
         {
-            if(go.GetComponent<UI_Popup>() != null)
+            if (go.GetComponent<UI_Popup>() != null)
             {
                 _popupSorting++;
                 canvas.sortingOrder = _popupSorting;
@@ -139,7 +150,7 @@ public class UI_Manager : IManagerIResettable
 
         return popup;
     }
-    public T GetSceneUIFromResource<T>(string name = null,string path = null) where T : UI_Scene
+    public T GetSceneUIFromResource<T>(string name = null, string path = null) where T : UI_Scene
     {
         if (name == null)
             name = typeof(T).Name;
@@ -154,7 +165,7 @@ public class UI_Manager : IManagerIResettable
             go = Managers.ResourceManager.Instantiate($"{path}");
         }
         T scene = Utill.GetOrAddComponent<T>(go);
-        _ui_sceneDict.Add(typeof(T),scene);
+        _ui_sceneDict.Add(typeof(T), scene);
         go.transform.SetParent(Root.transform);
 
         return scene;
@@ -226,11 +237,11 @@ public class UI_Manager : IManagerIResettable
     public void ClosePopupUI(UI_Popup popup)
     {
         Stack<UI_Popup> tempUIPopupStack = new Stack<UI_Popup>();
-       
-        while(_ui_Popups.Count > 0)
+
+        while (_ui_Popups.Count > 0)
         {
             UI_Popup popup_ui = _ui_Popups.Pop();
-            if(popup_ui == popup)//나와 _ui_Popups에서 꺼낸 popup이 같다면 종료
+            if (popup_ui == popup)//나와 _ui_Popups에서 꺼낸 popup이 같다면 종료
             {
                 popup.gameObject.SetActive(false);
                 _popupSorting--;
@@ -242,9 +253,9 @@ public class UI_Manager : IManagerIResettable
             }
         }
 
-        while(tempUIPopupStack.Count > 0)//임시로 보관된 팝업창들을 다시 _ui_Popups에 붓는다.
+        while (tempUIPopupStack.Count > 0)//임시로 보관된 팝업창들을 다시 _ui_Popups에 붓는다.
         {
-            _ui_Popups.Push( tempUIPopupStack.Pop());
+            _ui_Popups.Push(tempUIPopupStack.Pop());
         }
     }
     public void CloseAllPopupUI()
@@ -270,7 +281,7 @@ public class UI_Manager : IManagerIResettable
         if (_ui_Popups.Count <= 0)
             return false;
 
-        if(_ui_Popups.Peek() == popup)
+        if (_ui_Popups.Peek() == popup)
         {
             return true;
         }

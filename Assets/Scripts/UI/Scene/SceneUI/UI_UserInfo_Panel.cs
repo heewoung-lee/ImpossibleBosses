@@ -59,7 +59,6 @@ public class UI_UserInfo_Panel : UI_Scene
         {
             await Managers.LobbyManager.ReFreshRoomList();
             await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
-            await Managers.LobbyManager.ReRegisterEventCallback();
         }
         catch (Exception ex)
         {

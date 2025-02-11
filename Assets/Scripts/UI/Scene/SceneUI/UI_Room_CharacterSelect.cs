@@ -68,7 +68,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
         }
-        catch(Exception error)
+        catch (Exception error)
         {
             Debug.Log($"에러코드{error}");
         }
