@@ -1,20 +1,12 @@
-
-using Google.Apis.Sheets.v4.Data;
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.Android.Gradle;
-using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
-using Unity.Services.Matchmaker.Models;
-using Unity.VisualScripting;
 using UnityEngine;
 using Player = Unity.Services.Lobbies.Models.Player;
 
@@ -46,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom37";
+    private const string LOBBYID = "WaitLobbyRoom50";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -75,7 +67,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task<bool> InitLobbyScene()
     {
-
         _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
         LoadingScene.SetCheckTaskChecker(_taskChecker);
         Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
@@ -152,7 +143,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         if (_heartBeatCoroutine != null)
         {
             Managers.ManagersStopCoroutine(_heartBeatCoroutine);
-            Debug.Log("기존 코루틴 삭제");
             _heartBeatCoroutine = null;
         }
     }
@@ -164,7 +154,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
         if (_currentLobby != null)
-            await LeaveLobby(_currentLobby);
+            await LeaveLobby(_currentLobby); //이쪽은 문제 없음
 
         try
         {
@@ -196,10 +186,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         try
         {
             _currentLobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(LOBBYID, lobbyName, MaxPlayers, lobbyOption);
-            await JoinLobbyInitalize(_currentLobby);
-            Debug.Log($"플레이어 ID: {_playerID}");
-            Debug.Log($"호스트 ID: {_currentLobby.HostId}");
             CheckHostAndSendsHeartBeat(_currentLobby);
+            await JoinLobbyInitalize(_currentLobby);
+
+            Debug.Log("로비버전: "+_currentLobby.Version);
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
@@ -258,7 +248,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             {
                 await RemovePlayerData(lobby);
             }
-
             if (_lobbyEvents != null)
             {
                 await _lobbyEvents.UnsubscribeAsync();
@@ -322,10 +311,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             _callBackEvent = new LobbyEventCallbacks();
             _callBackEvent.PlayerDataAdded -= (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
             _callBackEvent.PlayerDataAdded += (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
-            _callBackEvent.PlayerJoined -= PlayerJoinedEvent;
-            _callBackEvent.PlayerJoined += PlayerJoinedEvent;
-            _callBackEvent.PlayerLeft -= (leftPlayerlist) => PlayerLeftEvent(leftPlayerlist);
-            _callBackEvent.PlayerLeft += (leftPlayerlist) => PlayerLeftEvent(leftPlayerlist);
+            //_callBackEvent.PlayerJoined -= PlayerJoinedEvent;
+            //_callBackEvent.PlayerJoined += PlayerJoinedEvent;
+            _callBackEvent.PlayerLeft -= async (leftPlayerlist) => await PlayerLeftEvent(leftPlayerlist);
+            _callBackEvent.PlayerLeft += async (leftPlayerlist) =>await PlayerLeftEvent(leftPlayerlist);
             _callBackEvent.LobbyChanged -= CallBackEvent_LobbyChanged;
             _callBackEvent.LobbyChanged += CallBackEvent_LobbyChanged;
             _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
@@ -350,10 +339,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private void CallBackEvent_LobbyChanged(ILobbyChanges lobbyChanges)
     {
+        Debug.Log("CallBackEvent_LobbyChanged 호출");
+
         if (lobbyChanges.HostId.Value == null)
             return;
-
-        Debug.Log($"{lobbyChanges.HostId.Value}바뀜");
 
         if (_playerID == lobbyChanges.HostId.Value)
         {
@@ -362,21 +351,25 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             StartHeartbeat(_currentLobby);
         }
     }
-    private void PlayerLeftEvent(List<int> leftPlayerlist)
+    private async Task PlayerLeftEvent(List<int> leftPlayerlist)
     {
+        Debug.Log("PlayerLeftEvent 호출");
+
         foreach (int leftPlayerIndex in leftPlayerlist)
         {
             Debug.Log($"{leftPlayerIndex}번째 플레이어가 로비에서 나갔습니다.");
             PlayerDeleteEvent?.Invoke(leftPlayerIndex);
         }
+        await ReFreshRoomList();
     }
     public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
-        Debug.Log("플레이어조인이벤트발생");
         await ReFreshRoomList();
     }
     private void JoinLobbyPlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
     {
+
+        Debug.Log("JoinLobbyPlayerDataAdded 호출");
         foreach (int keyIndex in dictionary.Keys)
         {
             Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>> joinPlayerDict = dictionary[keyIndex];
@@ -688,7 +681,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
         UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(room_inventory_ui.Room_Content);
         infoPanel.SetRoomInfo(lobby);
-        Debug.Log($"방에 들어간 로비 ID{lobby.Id}");
     }
 
 
