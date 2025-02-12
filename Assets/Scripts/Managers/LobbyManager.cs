@@ -38,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom50";
+    private const string LOBBYID = "WaitLobbyRoom51";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -309,14 +309,12 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         try
         {
             _callBackEvent = new LobbyEventCallbacks();
-            _callBackEvent.PlayerDataAdded -= (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
             _callBackEvent.PlayerDataAdded += (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
-            //_callBackEvent.PlayerJoined -= PlayerJoinedEvent;
             //_callBackEvent.PlayerJoined += PlayerJoinedEvent;
-            _callBackEvent.PlayerLeft -= async (leftPlayerlist) => await PlayerLeftEvent(leftPlayerlist);
             _callBackEvent.PlayerLeft += async (leftPlayerlist) =>await PlayerLeftEvent(leftPlayerlist);
-            _callBackEvent.LobbyChanged -= CallBackEvent_LobbyChanged;
             _callBackEvent.LobbyChanged += CallBackEvent_LobbyChanged;
+
+            Debug.Log($"로비 아이디: {lobby.Id} 로비 이름:{lobby.Name}");
             _lobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, _callBackEvent);
         }
         catch (LobbyServiceException ex)
@@ -364,6 +362,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
     public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
+        foreach (LobbyPlayerJoined joinPlayer in joined)
+        {
+            Debug.Log($"{joinPlayer.Player.Data["NickName"].Value}플레이어가 접속했습니다.");
+        }
         await ReFreshRoomList();
     }
     private void JoinLobbyPlayerDataAdded(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> dictionary)
@@ -549,7 +551,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         {
             Debug.LogError($"에러 발생{error}");
         }
-
     }
 
 
@@ -609,8 +610,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 }
                 Debug.Log($"-----------------------------------");
             }
-
-            Debug.Log($"현재로비{_currentLobby.Id} 로비 이름{_currentLobby.Name}");
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RequestTimeOut)
         {
