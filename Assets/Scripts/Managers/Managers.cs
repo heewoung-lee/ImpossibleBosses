@@ -39,6 +39,10 @@ public class Managers : MonoBehaviour
 
     private LootItemManager _lootItemManaer = new LootItemManager();
     public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }
+
+    private RelayManager _relayManager = new RelayManager();
+
+    public static RelayManager RelayManager { get => Instance._relayManager; }
     
     private PoolManager _poolManager = new PoolManager();
     public static PoolManager PoolManager { get => Instance._poolManager; }
