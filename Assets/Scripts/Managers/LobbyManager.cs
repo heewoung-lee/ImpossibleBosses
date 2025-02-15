@@ -42,7 +42,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom80";
+    private const string LOBBYID = "WaitLobbyRoom84";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -60,6 +60,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public Action<string> PlayerAddDataInputEvent;
     public Action<int> PlayerDeleteEvent;
     public Action<bool> LobbyLoading;
+    public Func<string,Task<bool>> HostChangedEvent;
 
 
     public Lobby CurrentLobby => _currentLobby;
@@ -75,8 +76,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         InitalizeVivoxEvent();
         Managers.RelayManager.DisconnectPlayerEvent -= DisconnectPlayer;
         Managers.RelayManager.DisconnectPlayerEvent += DisconnectPlayer;
-
-
         _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
         try
         {
@@ -315,6 +314,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         {
             await InputPlayerData(lobby);
             await Managers.VivoxManager.JoinChannel(lobby.Id);
+            CallbackInitalize(lobby);
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;
         }
@@ -632,11 +632,34 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         infoPanel.SetRoomInfo(lobby);
     }
 
+    public void CallbackInitalize(Lobby lobby)
+    {
+        LobbyEventCallbacks lobbyEventCallbacks = new LobbyEventCallbacks();
+        lobbyEventCallbacks.LobbyChanged += async (lobbyChange) =>
+        {
+            if (lobbyChange.HostId.Value == _playerID)
+            {
+                await OnChangeHostPlayer();
+            }
+        };
+        LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, lobbyEventCallbacks);
+    }
+    public async Task OnChangeHostPlayer()
+    {
+        string joinCode = await Managers.RelayManager.StartHostWithRelay(_currentLobby.MaxPlayers);
 
+        await LobbyService.Instance.UpdateLobbyAsync(_currentLobby.Id, new UpdateLobbyOptions()
+        {
+            Data = new Dictionary<string, DataObject>
+                {
+                   {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joinCode)}
+                }
+        });
+    }
     public async Task DisconnectPlayer()
     {
         LobbyLoading?.Invoke(true);
-        await ReFreshRoomList();
+        Debug.Log($"현재 로비의 호스트 ID{_currentLobby.HostId}");
         LobbyLoading?.Invoke(false);
     }
 

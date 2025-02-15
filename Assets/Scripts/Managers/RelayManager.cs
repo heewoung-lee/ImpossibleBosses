@@ -19,7 +19,7 @@ public class RelayManager : IManagerInitializable
     private NetworkManager _netWorkManager;
     private string _joinCode;
     public Func<Task> DisconnectPlayerEvent;
-    private NetworkManager NetWorkManager
+    public NetworkManager NetWorkManager
     {
         get
         {
@@ -100,5 +100,7 @@ public class RelayManager : IManagerInitializable
         Managers.SocketEventManager.OnApplicationQuitEvent += WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntion;
+        Managers.LobbyManager.HostChangedEvent -= JoinGuestRelay;
+        Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
     }
 }

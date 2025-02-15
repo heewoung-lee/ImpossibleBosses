@@ -26,6 +26,7 @@ public class UI_LoadingPanel : UI_Scene
 
     public void LobbyLoading(bool isLobbyLoading)
     {
+        if(_loadingPanel != null)
         _loadingPanel.SetActive(isLobbyLoading);
     }
 
