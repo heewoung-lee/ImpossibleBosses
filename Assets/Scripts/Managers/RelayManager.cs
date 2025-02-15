@@ -10,12 +10,15 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.VisualScripting;
 using Unity.Services.Multiplayer;
+using static System.Net.WebRequestMethods;
+using System.Net.Mail;
 
 public class RelayManager : IManagerInitializable
 {
 
     private NetworkManager _netWorkManager;
-
+    private string _joinCode;
+    public Func<Task> DisconnectPlayerEvent;
     private NetworkManager NetWorkManager
     {
         get
@@ -31,13 +34,16 @@ public class RelayManager : IManagerInitializable
     {
         try
         {
+            if (NetWorkManager.IsHost)
+                return _joinCode;
+
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
-            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            _joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             if (NetWorkManager.StartHost())
             {
-                return joinCode;
+                return _joinCode;
             }
             return null;
 
@@ -56,6 +62,11 @@ public class RelayManager : IManagerInitializable
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             return !string.IsNullOrEmpty(joinCode) && NetWorkManager.StartClient();
+        }
+        catch (RelayServiceException ex) when (ex.ErrorCode == 404)
+        {
+            Debug.Log("소켓에러");
+            return false;
         }
         catch (Exception ex)
         {
@@ -78,6 +89,7 @@ public class RelayManager : IManagerInitializable
     public void OnClickentDisconnectEvent(ulong disconntedIndex)
     {
         Debug.Log($"{disconntedIndex}유저의 연결이 끊어졌습니다");
+        DisconnectPlayerEvent?.Invoke();
     }
 
     public void Init()

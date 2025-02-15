@@ -52,6 +52,11 @@ public abstract class UI_Base : MonoBehaviour
         _bindDictionary.Add(typeof(T), objects);
     }
 
+    protected void SetSortingOrder(int soringOrder)
+    {
+        gameObject.GetComponent<Canvas>().sortingOrder = soringOrder;
+    }
+
     protected void AddBind<T>(Type type,out string[] indexString) where T: Object
     {
         

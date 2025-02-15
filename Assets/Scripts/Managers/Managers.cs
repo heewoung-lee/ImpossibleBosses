@@ -110,7 +110,6 @@ public class Managers : MonoBehaviour
             _instance._itemDataManaer.Init();
             _instance._bufferManager.Init();
             _instance._skillManager.Init();
-            _instance._lobbyManager.Init();
             _instance._relayManager.Init();
         }
 

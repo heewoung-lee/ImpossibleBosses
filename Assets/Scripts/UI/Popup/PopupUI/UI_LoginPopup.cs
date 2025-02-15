@@ -34,14 +34,14 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
     TMP_InputField _pwInputField;
     UI_AlertPopupBase _ui_alertPopupUI;
 
-    UI_InputRoomPassWord _ui_CreateNickName;
-    public UI_InputRoomPassWord UI_CreateNickName
+    UI_CreateNickName _ui_CreateNickName;
+    public UI_CreateNickName UI_CreateNickName
     {
         get
         {
             if (_ui_CreateNickName == null)
             {
-                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupInDict<UI_InputRoomPassWord>();
+                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupInDict<UI_CreateNickName>();
             }
             return _ui_CreateNickName;
         }
