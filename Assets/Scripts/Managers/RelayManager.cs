@@ -6,12 +6,6 @@ using Unity.Services.Relay;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
-using Unity.VisualScripting;
-using Unity.Services.Multiplayer;
-using static System.Net.WebRequestMethods;
-using System.Net.Mail;
 
 public class RelayManager : IManagerInitializable
 {
@@ -34,7 +28,7 @@ public class RelayManager : IManagerInitializable
     {
         try
         {
-            if (NetWorkManager.IsHost)
+            if (NetWorkManager.IsHost && _joinCode != null)
                 return _joinCode;
 
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
@@ -77,7 +71,8 @@ public class RelayManager : IManagerInitializable
 
     public void ShutDownRelay()
     {
-        NetWorkManager.Shutdown();
+        NetworkManager.Singleton.Shutdown();
+        _joinCode = null;
     }
 
     private Task WarpperDisConntion()
@@ -88,10 +83,10 @@ public class RelayManager : IManagerInitializable
 
     public void OnClickentDisconnectEvent(ulong disconntedIndex)
     {
-        Debug.Log($"{disconntedIndex}유저의 연결이 끊어졌습니다");
+        if (NetWorkManager.LocalClientId == disconntedIndex)
+            return;
         DisconnectPlayerEvent?.Invoke();
     }
-
     public void Init()
     {
         NetWorkManager.NetworkConfig.EnableSceneManagement = false;
@@ -102,5 +97,14 @@ public class RelayManager : IManagerInitializable
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntion;
         Managers.LobbyManager.HostChangedEvent -= JoinGuestRelay;
         Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
+    }
+
+
+    public void ShowRelayPlayer()
+    {
+        foreach (NetworkClient player in NetWorkManager.ConnectedClientsList)
+        {
+            Debug.Log($"현재 접속되어있는 클라이언트 목록{player.ClientId}");
+        }
     }
 }
