@@ -537,34 +537,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
-    public async Task ShowUpdatedLobbyPlayers()
-    {
-        try
-        {
-            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom();
-            foreach (var lobby in lobbies.Results)
-            {
-                Player hostPlayer = lobby.Players.FirstOrDefault(player => player.Id == lobby.HostId);
-
-                Debug.Log($"현재 로비이름: {lobby.Name} 로비ID: {lobby.Id} 호스트닉네임: {hostPlayer.Data["NickName"].Value} 로비호스트: {lobby.HostId} ");
-                Debug.Log($"-----------------------------------");
-                foreach (var player in lobby.Players)
-                {
-                    Debug.Log($"플레이어 아이디: {player.Id} 플레이어 닉네임:{player.Data["NickName"].Value}");
-                }
-                Debug.Log($"-----------------------------------");
-            }
-        }
-        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RequestTimeOut)
-        {
-            Debug.LogError($"RequestTimeOut");
-            await Utill.RateLimited(async () => { await ShowUpdatedLobbyPlayers(); });
-        }
-        catch (Exception ex)
-        {
-            Debug.Log($"에러{ex}");
-        }
-    }
+    
 
 
     public async Task ReFreshRoomList()
@@ -666,6 +639,9 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LobbyLoading?.Invoke(false);
     }
 
+
+
+    #region TestDebugCode
     public void ShowLobbyData()
     {
         foreach(var data in _currentLobby.Data)
@@ -673,5 +649,33 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log($"{data.Key}의 값은 {data.Value.Value}");
         }
     }
+    public async Task ShowUpdatedLobbyPlayers()
+    {
+        try
+        {
+            QueryResponse lobbies = await GetQueryLobbiesAsyncCustom();
+            foreach (var lobby in lobbies.Results)
+            {
+                Player hostPlayer = lobby.Players.FirstOrDefault(player => player.Id == lobby.HostId);
 
+                Debug.Log($"현재 로비이름: {lobby.Name} 로비ID: {lobby.Id} 호스트닉네임: {hostPlayer.Data["NickName"].Value} 로비호스트: {lobby.HostId} ");
+                Debug.Log($"-----------------------------------");
+                foreach (var player in lobby.Players)
+                {
+                    Debug.Log($"플레이어 아이디: {player.Id} 플레이어 닉네임:{player.Data["NickName"].Value}");
+                }
+                Debug.Log($"-----------------------------------");
+            }
+        }
+        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RequestTimeOut)
+        {
+            Debug.LogError($"RequestTimeOut");
+            await Utill.RateLimited(async () => { await ShowUpdatedLobbyPlayers(); });
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"에러{ex}");
+        }
+    }
+    #endregion
 }
