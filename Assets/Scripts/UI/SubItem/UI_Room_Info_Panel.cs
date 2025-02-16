@@ -57,7 +57,6 @@ public class UI_Room_Info_Panel : UI_Base
         {
             UI_InputRoomPassWord ui_inputPassword = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
             ui_inputPassword.SetRoomInfoPanel(this);
-            //TODO: 여기에 _isJoining 달아야함
         }
         else
         {
@@ -65,7 +64,6 @@ public class UI_Room_Info_Panel : UI_Base
             {
                 await Managers.LobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
                 Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
-                //_joinButton.interactable = true;
             }
             catch (LobbyServiceException notFoundLobby) when(notFoundLobby.Message.Contains("lobby not found")) 
             {

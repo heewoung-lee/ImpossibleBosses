@@ -7,7 +7,7 @@ using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
 
-public class RelayManager : IManagerInitializable
+public class RelayManager
 {
 
     private NetworkManager _netWorkManager;
@@ -72,6 +72,7 @@ public class RelayManager : IManagerInitializable
     public void ShutDownRelay()
     {
         NetworkManager.Singleton.Shutdown();
+        NetWorkManager.Shutdown();
         _joinCode = null;
     }
 
@@ -83,11 +84,13 @@ public class RelayManager : IManagerInitializable
 
     public void OnClickentDisconnectEvent(ulong disconntedIndex)
     {
-        if (NetWorkManager.LocalClientId == disconntedIndex)
-            return;
+        //if (NetWorkManager.LocalClientId != disconntedIndex)
+        //    return;
+
+
         DisconnectPlayerEvent?.Invoke();
     }
-    public void Init()
+    public void InitalizeRelayServer()
     {
         NetWorkManager.NetworkConfig.EnableSceneManagement = false;
         NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
@@ -99,7 +102,10 @@ public class RelayManager : IManagerInitializable
         Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
     }
 
-
+    public void UnSubscribeCallBackEvent()
+    {
+        NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
+    }
     public void ShowRelayPlayer()
     {
         foreach (NetworkClient player in NetWorkManager.ConnectedClientsList)

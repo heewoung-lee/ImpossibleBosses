@@ -42,7 +42,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom94";
+    private const string LOBBYID = "WaitLobbyRoom117";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -71,11 +71,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
         LoadingScene.SetCheckTaskChecker(_taskChecker);
-        Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
-        Managers.VivoxManager.VivoxDoneLoginEvent += SetVivoxTaskCheker;
         InitalizeVivoxEvent();
-        Managers.RelayManager.DisconnectPlayerEvent -= DisconnectPlayer;
-        Managers.RelayManager.DisconnectPlayerEvent += DisconnectPlayer;
+        InitalizeRelayEvent();
         _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
         try
         {
@@ -150,10 +147,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     private async Task CheckHostfromRelayServer(Lobby lobby)
     {
         Managers.RelayManager.ShutDownRelay();
-        if (_currentLobby.HostId == _playerID)
+        if (_currentLobby.HostId == _playerID && Managers.RelayManager.NetWorkManager.IsHost == false)
         {
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
-            await InjectionRelayJoinCodeintoLobby(_currentLobby, joincode);
+            await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
         else
         {
@@ -182,7 +179,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
         if (_currentLobby != null)
-            await LeaveLobby(_currentLobby); //이쪽은 문제 없음
+            await LeaveLobbyAndDisconnectRelay(_currentLobby); //이쪽은 문제 없음
 
         try
         {
@@ -230,6 +227,46 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log(ex);
         }
     }
+    public async Task LeaveLobbyAndDisconnectRelay(Lobby lobby)
+    {
+        try
+        {
+            if (lobby != null)
+            {
+                await RemovePlayerData(lobby);
+                Managers.RelayManager.UnSubscribeCallBackEvent();
+            }
+        }
+        catch (System.ObjectDisposedException disposedException)
+        {
+            Debug.Log($"이미 객체가 제거되었습니다.{disposedException.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"LeaveLobby 메서드 안에서의 에러{e}");
+        }
+    }
+    public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
+    {
+        try
+        {
+            await LeaveLobbyAndDisconnectRelay(_currentLobby);
+            _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
+
+            if (_currentLobby != null)
+                Debug.Log($"로비 만들어짐{_currentLobby.Name}");
+
+            await JoinLobbyInitalize(_currentLobby);
+            await CheckPlayerHostAndGuest(_currentLobby);
+            Debug.Log("조인코드 삽입");
+        }
+
+        catch (Exception e)
+        {
+            Debug.Log($"An error occurred while creating the room.{e}");
+            throw;
+        }
+    }
     public async Task<Lobby> JoinLobbyByID(string lobbyID, string password = null)
     {
         Lobby currentlobby = _currentLobby;
@@ -260,48 +297,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log($"An Error Occured ErrorCode:{error}");
             return null;
         }
-        await LeaveLobby(currentlobby);
+        await LeaveLobbyAndDisconnectRelay(currentlobby);
         await JoinLobbyInitalize(_currentLobby);
+        await CheckPlayerHostAndGuest(_currentLobby);
         return _currentLobby;
-    }
-
-    public async Task LeaveLobby(Lobby lobby)
-    {
-        try
-        {
-            if (lobby != null)
-            {
-                await RemovePlayerData(lobby);
-            }
-        }
-        catch (System.ObjectDisposedException disposedException)
-        {
-            Debug.Log($"이미 객체가 제거되었습니다.{disposedException.Message}");
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"LeaveLobby 메서드 안에서의 에러{e}");
-        }
-    }
-    public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
-    {
-        try
-        {
-            await LeaveLobby(_currentLobby);
-            _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
-
-            if (_currentLobby != null)
-                Debug.Log($"로비 만들어짐{_currentLobby.Name}");
-            await JoinLobbyInitalize(_currentLobby);
-            await CheckPlayerHostAndGuest(_currentLobby);
-            Debug.Log("조인코드 삽입");
-        }
-
-        catch (Exception e)
-        {
-            Debug.Log($"An error occurred while creating the room.{e}");
-            throw;
-        }
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)
     {
@@ -367,7 +366,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         List<Lobby> lobbyinPlayerList = await CheckAllLobbyinPlayer();
         foreach (Lobby lobby in lobbyinPlayerList)
         {
-            await LeaveLobby(lobby);
+            await LeaveLobbyAndDisconnectRelay(lobby);
             Debug.Log($"{lobby}에서 나갔습니다.");
             StopHeartbeat();
         }
@@ -545,12 +544,19 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public void InitalizeVivoxEvent()
     {
+        Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
+        Managers.VivoxManager.VivoxDoneLoginEvent += SetVivoxTaskCheker;
         Managers.SocketEventManager.OnApplicationQuitEvent += LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
     
-
+    public void InitalizeRelayEvent()
+    {
+        Managers.RelayManager.DisconnectPlayerEvent -= DisconnectPlayer;
+        Managers.RelayManager.DisconnectPlayerEvent += DisconnectPlayer;
+        Managers.RelayManager.InitalizeRelayServer();
+    }
 
     public async Task ReFreshRoomList()
     {
@@ -628,7 +634,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task DisconnectPlayer()
     {
         LobbyLoading?.Invoke(true);
-        Debug.Log($"현재 로비의 호스트 ID{_currentLobby.HostId}");
+        await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+        await ReFreshRoomList();
+        _currentLobby = await GetLobbyAsyncCustom(LOBBYID);
+        Debug.Log($"현재 로비의 호스트 ID: {_currentLobby.HostId} 현재 로비 이름 {_currentLobby.Name}");
         await CheckPlayerHostAndGuest(_currentLobby, 15f);
         LobbyLoading?.Invoke(false);
     }
