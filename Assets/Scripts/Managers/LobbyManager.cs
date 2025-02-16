@@ -42,7 +42,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom84";
+    private const string LOBBYID = "WaitLobbyRoom85";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -178,7 +178,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 IsPrivate = false,
                 Data = new Dictionary<string, DataObject>
                 {
-                    {"WaitLobby",new DataObject(DataObject.VisibilityOptions.Public) }
+                    {"WaitLobby",new DataObject(DataObject.VisibilityOptions.Public,"PlayerWaitLobbyRoom") }
                 }
             });
         }
@@ -298,13 +298,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             return;
         }
 
-        await LobbyService.Instance.UpdateLobbyAsync(_currentLobby.Id, new UpdateLobbyOptions
-        {
-            Data = new Dictionary<string, DataObject>
-                    {
-                        {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode) }
-                    }
-        });
+        await UpdateLobbyRelayCode(lobby, joincode);
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)
@@ -648,7 +642,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         string joinCode = await Managers.RelayManager.StartHostWithRelay(_currentLobby.MaxPlayers);
 
-        await LobbyService.Instance.UpdateLobbyAsync(_currentLobby.Id, new UpdateLobbyOptions()
+        await UpdateLobbyRelayCode(_currentLobby, joinCode);
+    }
+
+
+    private async Task UpdateLobbyRelayCode(Lobby lobbby,string joinCode)
+    {
+        await LobbyService.Instance.UpdateLobbyAsync(lobbby.Id, new UpdateLobbyOptions()
         {
             Data = new Dictionary<string, DataObject>
                 {
@@ -656,11 +656,22 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 }
         });
     }
+
+
+
     public async Task DisconnectPlayer()
     {
         LobbyLoading?.Invoke(true);
         Debug.Log($"현재 로비의 호스트 ID{_currentLobby.HostId}");
         LobbyLoading?.Invoke(false);
+    }
+
+    public void ShowLobbyData()
+    {
+        foreach(var data in _currentLobby.Data)
+        {
+            Debug.Log($"{data.Key}의 값은 {data.Value.Value}");
+        }
     }
 
 }
