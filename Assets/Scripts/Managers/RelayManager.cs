@@ -6,6 +6,7 @@ using Unity.Services.Relay;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
+using Unity.Networking.Transport;
 
 public class RelayManager
 {
@@ -72,7 +73,6 @@ public class RelayManager
     public void ShutDownRelay()
     {
         NetworkManager.Singleton.Shutdown();
-        NetWorkManager.Shutdown();
         _joinCode = null;
     }
 
