@@ -7,12 +7,15 @@ using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
 using Unity.Networking.Transport;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 
 public class RelayManager
 {
 
     private NetworkManager _netWorkManager;
     private string _joinCode;
+    
+    private Allocation _allocation;
     public Func<Task> DisconnectPlayerEvent;
     public NetworkManager NetWorkManager
     {
@@ -25,6 +28,9 @@ public class RelayManager
             return _netWorkManager;
         }
     }
+
+    public string JoinCode { get => _joinCode;}
+
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
         try
@@ -32,10 +38,10 @@ public class RelayManager
             if (NetWorkManager.IsHost && _joinCode != null)
                 return _joinCode;
 
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
-            RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
+            _allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
+            RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
-            _joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
             if (NetWorkManager.StartHost())
             {
                 return _joinCode;
@@ -56,6 +62,7 @@ public class RelayManager
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
+            _joinCode = joinCode;
             return !string.IsNullOrEmpty(joinCode) && NetWorkManager.StartClient();
         }
         catch (RelayServiceException ex) when (ex.ErrorCode == 404)
@@ -72,8 +79,11 @@ public class RelayManager
 
     public void ShutDownRelay()
     {
-        NetworkManager.Singleton.Shutdown();
-        _joinCode = null;
+        if(_netWorkManager != null)
+        {
+            NetworkManager.Singleton.Shutdown();
+            _joinCode = null;
+        }
     }
 
     private Task WarpperDisConntion()
@@ -92,14 +102,18 @@ public class RelayManager
     }
     public void InitalizeRelayServer()
     {
-        NetWorkManager.NetworkConfig.EnableSceneManagement = false;
         NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
         NetWorkManager.OnClientDisconnectCallback += OnClickentDisconnectEvent;
+        Managers.LobbyManager.HostChangedEvent -= JoinGuestRelay;
+        Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
+    }
+
+    public void SceneLoadInitalizeRelayServer()
+    {
+        NetWorkManager.NetworkConfig.EnableSceneManagement = false;
         Managers.SocketEventManager.OnApplicationQuitEvent += WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntion;
-        Managers.LobbyManager.HostChangedEvent -= JoinGuestRelay;
-        Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
     }
 
     public void UnSubscribeCallBackEvent()
