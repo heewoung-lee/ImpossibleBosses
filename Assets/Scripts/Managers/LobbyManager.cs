@@ -1,17 +1,14 @@
-using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
-using Unity.Services.Multiplayer;
 using UnityEngine;
-using UnityEngine.Events;
+using static UnityEngine.InputSystem.PlayerInputManager;
 using Player = Unity.Services.Lobbies.Models.Player;
 
 
@@ -42,7 +39,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom117";
+    private const string LOBBYID = "WaitLobbyRoom119";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -132,7 +129,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             return;
 
         CheckHostAndSendHeartBeat(lobby,interval);
-        await CheckHostfromRelayServer(lobby);//호스트가 바뀌면 
+        //await CheckHostfromRelayServer(lobby);//호스트가 바뀌면 
     }
 
     private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
@@ -318,8 +315,12 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         _isDoneInitEvent = false;
         try
         {
-            await InputPlayerData(lobby);//로비에 있는 player에 닉네임추가
-            await Managers.VivoxManager.JoinChannel(lobby.Id);
+            Task inputplayerDataTask =  InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
+            Task vivoxChanelTask  = Managers.VivoxManager.JoinChannel(lobby.Id);
+            Task inputLobbyCallBackTask = InputLobbyCallback(lobby);
+
+            await Task.WhenAll(inputplayerDataTask, vivoxChanelTask, inputLobbyCallBackTask);
+
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;
         }
@@ -333,6 +334,56 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     }
 
+
+    private async Task InputLobbyCallback(Lobby lobby)
+    {
+        LobbyEventCallbacks lobbycallbacks = new LobbyEventCallbacks();
+        lobbycallbacks.LobbyChanged += LobbyChangedEvent;
+        lobbycallbacks.PlayerJoined += async (playerJoined) =>
+        {
+            await PlayerJoinedEventWrap(playerJoined);
+        };
+        lobbycallbacks.PlayerLeft += async (playerLeftIndex) =>
+        {
+            await PlayerLeftEvent(playerLeftIndex);
+        };
+        lobbycallbacks.PlayerDataChanged += PlayerDataChangedEvent;
+        try
+        {
+            await LobbyService.Instance.SubscribeToLobbyEventsAsync(_currentLobby.Id, lobbycallbacks);
+        }
+        catch (LobbyServiceException ex)
+        {
+            switch (ex.Reason)
+            {
+                case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{lobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
+                case LobbyExceptionReason.SubscriptionToLobbyLostWhileBusy: Debug.LogError($"Subscription to lobby events was lost while it was busy trying to subscribe. Exception Message: {ex.Message}"); throw;
+                case LobbyExceptionReason.LobbyEventServiceConnectionError: Debug.LogError($"Failed to connect to lobby events. Exception Message: {ex.Message}"); throw;
+                default: throw;
+            }
+        }
+    }
+
+    private void PlayerDataChangedEvent(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> obj)
+    {
+        Debug.Log(obj);
+    }
+
+    private async Task PlayerJoinedEventWrap(List<LobbyPlayerJoined> joinedPlayer)
+    {
+       _currentLobby= await GetLobbyAsyncCustom(_currentLobby.Id);
+    }
+
+    private void LobbyChangedEvent(ILobbyChanges change)
+    {
+        Debug.Log($"로비가 바뀜{change}");
+    }
+
+
+    private async Task PlayerLeftEvent(List<int> leftPlayerIndex)
+    {
+        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
+    }
 
 
     private async Task<Lobby> GetLobbyAsyncCustom(string lobbyID)
@@ -486,7 +537,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
     }
 
-    private async Task InputPlayerData(Lobby lobby)
+    private async Task InputPlayerDataIntoLobby(Lobby lobby)
     {
 
         Dictionary<string, PlayerDataObject> updatedData = new Dictionary<string, PlayerDataObject>
