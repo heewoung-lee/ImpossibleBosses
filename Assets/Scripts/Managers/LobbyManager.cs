@@ -32,10 +32,6 @@ public struct PlayerIngameLoginInfo
 
 public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 {
-
-    private int _disconnectPlayerCallCount = 0;//테스트용
-
-
     enum LoadingProcess
     {
         VivoxInitalize,
@@ -45,7 +41,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom174";
+    private const string LOBBYID = "WaitLobbyRoom177";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -56,7 +52,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     private Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> _playersJoinLobbyDict;
     private bool[] _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
-
 
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
     public Action InitDoneEvent;
@@ -331,9 +326,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
         });
-
-        await VivoxService.Instance.SendChannelTextMessageAsync(_currentLobby.Id, "호스트 변경됨");
-
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)
@@ -626,7 +618,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             isRefreshing = false;
             throw;
         }
-        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         isRefreshing = false;
     }
 
@@ -643,11 +634,11 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task DisconnectPlayer()
     {
-        Debug.Log($"DisconntectPlayer메서드 호출{_disconnectPlayerCallCount++}");
         LobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
-        await CheckHostRelay(_currentLobby);
+        await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         await CheckClientRelay(_currentLobby);
         LobbyLoading?.Invoke(false);
     }
