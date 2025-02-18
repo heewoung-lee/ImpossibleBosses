@@ -104,8 +104,7 @@ public class RelayManager
     {
         NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
         NetWorkManager.OnClientDisconnectCallback += OnClickentDisconnectEvent;
-        Managers.LobbyManager.HostChangedEvent -= JoinGuestRelay;
-        Managers.LobbyManager.HostChangedEvent += JoinGuestRelay;
+      
     }
 
     public void SceneLoadInitalizeRelayServer()

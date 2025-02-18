@@ -127,6 +127,7 @@ public class VivoxManager : IManagerEventInitailize
         try
         {
             //await VivoxService.Instance.LeaveAllChannelsAsync();
+            if(VivoxService.Instance.ActiveChannels.ContainsKey(chanelID) != default)
             await VivoxService.Instance.LeaveChannelAsync(chanelID);
         }
         catch (MintException e) when (e.Message.Contains("Request timeout"))

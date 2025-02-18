@@ -60,7 +60,7 @@ public class UI_UserInfo_Panel : UI_Scene
             await Managers.LobbyManager.ReFreshRoomList();
             await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             Managers.LobbyManager.ShowLobbyData();
-            Managers.RelayManager.ShowRelayPlayer();
+            //Managers.RelayManager.ShowRelayPlayer();
         }
         catch (Exception ex)
         {
