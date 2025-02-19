@@ -41,7 +41,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom177";
+    private const string LOBBYID = "WaitLobbyRoom187";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -58,7 +58,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public Action<string> PlayerAddDataInputEvent;
     public Action<int> PlayerDeleteEvent;
     public Action<bool> LobbyLoading;
-
+    public string PlayerID => _playerID;
 
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
@@ -326,6 +326,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
         });
+        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다. 방을 새로고침 합니다.");
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)
@@ -637,11 +638,36 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
-        await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+        if(_heartBeatCoroutine == null)
+        {
+            await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+        }
+        LobbyLoading?.Invoke(false);
+    }
+
+    public async Task RefreshClientPlayer()
+    {
+        LobbyLoading?.Invoke(true);
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         await CheckClientRelay(_currentLobby);
         LobbyLoading?.Invoke(false);
     }
+
+    public async Task<bool> isCheckLobbyInClientPlayer(string LobbyId, string playerID)
+    {
+        Lobby lobby = await GetLobbyAsyncCustom(LobbyId);
+
+        foreach(Player player in lobby.Players)
+        {
+            if (lobby.HostId == playerID || player.Id != playerID)
+                continue;
+
+            if (player.Id == playerID)
+                return true;
+        }
+        return false;
+    }
+
 
     #region TestDebugCode
     public void ShowLobbyData()

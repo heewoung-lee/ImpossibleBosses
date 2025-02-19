@@ -57,12 +57,6 @@ public class UI_LobbyChat : UI_Scene
         base.StartInit();
         InitButtonInteractable();
         VivoxService.Instance.ChannelMessageReceived += ChannelMessageReceived;
-        Managers.LobbyManager.PlayerAddDataInputEvent -= SendNotice;
-        Managers.LobbyManager.PlayerAddDataInputEvent += SendNotice;
-        Managers.LobbyManager.PlayerDeleteEvent -= ExitMessage;
-        Managers.LobbyManager.PlayerDeleteEvent += ExitMessage;
-
-
     }
 
     private void InitButtonInteractable()
@@ -76,16 +70,6 @@ public class UI_LobbyChat : UI_Scene
         {
             ButtonInteractable();
         }
-    }
-
-    public void SendNotice(string playerName)
-    {
-        _chatLog.text += $"<color=#FFD700>[SYSTEM]</color> {playerName}님이 입장하셨습니다.\n";
-    }
-    public void ExitMessage(int playerNumber)
-    {
-        _chatLog.text += $"<color=#FFD700>[SYSTEM]</color>{playerNumber}번째 플레이어가 로비에서 나갔습니다.\n";
-
     }
 
     public async void SendChatingMessage(string message)
@@ -107,7 +91,7 @@ public class UI_LobbyChat : UI_Scene
         _chattingInputField.ActivateInputField();
     }
 
-    private void ChannelMessageReceived(VivoxMessage message)
+    private async void ChannelMessageReceived(VivoxMessage message)
     {
         string messageText = message.MessageText;
         string senderID = message.SenderPlayerId;
@@ -115,6 +99,16 @@ public class UI_LobbyChat : UI_Scene
         string messageChannel = message.ChannelName;
 
         _chatLog.text += $"{messageText} \n";
+
+        if (messageText.Contains("[SYSTEM]") == false)
+            return;
+
+        if (await Managers.LobbyManager.isCheckLobbyInClientPlayer(messageChannel, Managers.LobbyManager.PlayerID) &&
+    messageText.Contains("호스트가 변경되었습니다."))
+        {
+            Debug.Log("클라이언트들에게만 찍힘");
+            await Managers.LobbyManager.RefreshClientPlayer();
+        }
     }
 
     private void ButtonInteractable()
