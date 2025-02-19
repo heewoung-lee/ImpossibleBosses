@@ -103,12 +103,8 @@ public class UI_LobbyChat : UI_Scene
         if (messageText.Contains("[SYSTEM]") == false)
             return;
 
-        if (await Managers.LobbyManager.isCheckLobbyInClientPlayer(messageChannel, Managers.LobbyManager.PlayerID) &&
-    messageText.Contains("호스트가 변경되었습니다."))
-        {
-            Debug.Log("클라이언트들에게만 찍힘");
-            await Managers.LobbyManager.RefreshClientPlayer();
-        }
+        await Managers.LobbyManager.ExecuteSystemMessageAction(messageChannel, messageText, 
+            "호스트가 변경되었습니다.",Managers.LobbyManager.RefreshClientPlayer);
     }
 
     private void ButtonInteractable()

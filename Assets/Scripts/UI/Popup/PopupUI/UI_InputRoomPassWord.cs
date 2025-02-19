@@ -66,7 +66,10 @@ public class UI_InputRoomPassWord : UI_Popup
         Lobby lobby = _roomInfoPanel.LobbyRegisteredPanel;
         try
         {
-            await Managers.LobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
+            await Managers.LobbyManager.LoadingPanel(async() =>
+            {
+                await Managers.LobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
+            });
         }
         catch (Unity.Services.Lobbies.LobbyServiceException wrongPw) when (wrongPw.Reason == Unity.Services.Lobbies.LobbyExceptionReason.IncorrectPassword)
         {

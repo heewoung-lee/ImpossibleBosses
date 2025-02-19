@@ -116,9 +116,11 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                     }
                 };
             }
-            await Managers.LobbyManager.CreateLobby(_roomNameInputField.text, int.Parse(_currentCount.text), option);
-            Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
-            //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            await Managers.LobbyManager.LoadingPanel(async () =>
+            {
+                await Managers.LobbyManager.CreateLobby(_roomNameInputField.text, int.Parse(_currentCount.text), option);
+                Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+            });
         }
         catch (Exception e)
         {

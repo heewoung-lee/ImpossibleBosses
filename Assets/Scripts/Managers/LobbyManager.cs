@@ -1,4 +1,3 @@
-using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,9 +7,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
-using Unity.Services.Vivox;
 using UnityEngine;
-using static UnityEngine.InputSystem.PlayerInputManager;
 using Player = Unity.Services.Lobbies.Models.Player;
 
 
@@ -41,15 +38,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom187";
+    private const string LOBBYID = "WaitLobbyRoom191";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
     private Lobby _currentLobby;
     private bool isRefreshing = false;
     private bool isalready = false;
-    private UI_Room_Inventory _ui_Room_Inventory;
-    private Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> _playersJoinLobbyDict;
     private bool[] _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
 
@@ -59,7 +54,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public Action<int> PlayerDeleteEvent;
     public Action<bool> LobbyLoading;
     public string PlayerID => _playerID;
-
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
     public bool[] TaskChecker => _taskChecker;
@@ -326,7 +320,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
         });
-        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다. 방을 새로고침 합니다.");
+        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)
@@ -615,7 +609,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException e)
         {
-            Debug.Log(e);
+            Debug.Log($"에러발생:{e}");
             isRefreshing = false;
             throw;
         }
@@ -668,6 +662,29 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         return false;
     }
 
+
+    public async Task ExecuteSystemMessageAction(string messageChannel,string systemMessageText,string detectionText,Func<Task> executeMethod)
+    {
+        if (await isCheckLobbyInClientPlayer(messageChannel, Managers.LobbyManager.PlayerID)
+            && systemMessageText.Contains(detectionText))
+        {
+            Debug.Log("클라이언트들에게만 찍힘");
+            await executeMethod.Invoke();
+        }
+    }
+
+    public async Task LoadingPanel(Func<Task> process)
+    {
+        LobbyLoading?.Invoke(true);
+        await process.Invoke();
+        LobbyLoading?.Invoke(false);
+    } 
+    public void LoadingPanel(Action process)
+    {
+        LobbyLoading?.Invoke(true);
+        process.Invoke();
+        LobbyLoading?.Invoke(false);
+    }
 
     #region TestDebugCode
     public void ShowLobbyData()

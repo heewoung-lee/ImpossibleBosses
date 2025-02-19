@@ -62,8 +62,12 @@ public class UI_Room_Info_Panel : UI_Base
         {
             try
             {
-                await Managers.LobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
-                Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+                await Managers.LobbyManager.LoadingPanel(async () =>
+                {
+                    await Managers.LobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
+                    Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+                });
+
             }
             catch (LobbyServiceException notFoundLobby) when(notFoundLobby.Message.Contains("lobby not found")) 
             {
