@@ -38,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom191";
+    private const string LOBBYID = "WaitLobbyRoom201";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -304,6 +304,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         await LeaveLobbyAndDisconnectRelay(waitLobby);
         await JoinLobbyInitalize(_currentLobby);
         await CheckPlayerHostAndClient(_currentLobby, CheckClientRelay);
+
         return _currentLobby;
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)

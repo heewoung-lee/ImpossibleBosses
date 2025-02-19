@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Unity.Services.Lobbies;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,6 +81,9 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
+        GameObject ChractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
+
+        //TODO:ChractorSeletor배치해야함
     }
 
 

@@ -8,15 +8,17 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
 using Unity.Networking.Transport;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using UnityEditor.PackageManager;
 
 public class RelayManager
 {
 
     private NetworkManager _netWorkManager;
     private string _joinCode;
-    
     private Allocation _allocation;
+
     public Func<Task> DisconnectPlayerEvent;
+
     public NetworkManager NetWorkManager
     {
         get
@@ -54,6 +56,13 @@ public class RelayManager
             Debug.LogException(ex);
             return null;
         }
+    }
+
+    public GameObject SpawnCharactor_Selector(ulong clientId)
+    {
+        GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select");
+        characterSelector.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        return characterSelector;
     }
     public async Task<bool> JoinGuestRelay(string joinCode)
     {
