@@ -173,4 +173,26 @@ public abstract class UI_Base : MonoBehaviour
 
     }
 
+    protected Vector2 GetUISize(GameObject uiObject)
+    {
+        RectTransform rectTransform = uiObject.GetComponent<RectTransform>();
+        RectTransform parentRect = rectTransform.parent as RectTransform;
+
+        if (parentRect != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
+        }
+
+        Vector2 size = rectTransform.rect.size;
+        float width = rectTransform.rect.width;
+        float height = rectTransform.rect.height;
+        return size;
+    }
+
+    protected Vector2 GetUIScreenPosition(RectTransform rectTr)
+    {
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, rectTr.position);
+        return screenPos;
+    }
+
 }

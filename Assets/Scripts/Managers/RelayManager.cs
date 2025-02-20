@@ -60,8 +60,12 @@ public class RelayManager
 
     public GameObject SpawnCharactor_Selector(ulong clientId)
     {
-        GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select");
-        characterSelector.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
+        if(NetWorkManager.IsListening == true)
+        {
+            NetworkObject characterSelectorNetWork = characterSelector.AddComponent<NetworkObject>();
+            characterSelectorNetWork.SpawnAsPlayerObject(clientId);
+        }
         return characterSelector;
     }
     public async Task<bool> JoinGuestRelay(string joinCode)

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using Unity.Services.Lobbies;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
@@ -22,15 +23,37 @@ public class UI_Room_CharacterSelect : UI_Scene
         BackToLobbyButton,
 
     }
-    GameObject _playerSelector;
-    public GameObject PlayerSelector { get { return _playerSelector; } }
-    
-    Transform _charactorSelectTr;
+    private GameObject _playerSelector;
+    private Transform _charactorSelectTr;
+    private UI_RoomPlayerFrame[] _ui_RoomPlayerFrames;
+    private Button _backToLobbyButton;
+    private GameObject _loadingPanel;
+    private UI_LoadingPanel _ui_LoadingPanel;
+    private GameObject _ui_CharactorSelectRoot;
 
-    UI_RoomPlayerFrame[] _ui_RoomPlayerFrames;
-    Button _backToLobbyButton;
-    GameObject _loadingPanel;
-    UI_LoadingPanel _ui_LoadingPanel;
+    public GameObject PlayerSelector { get { return _playerSelector; } }
+
+    public GameObject UI_CharactorSelectRoot
+    {
+        get
+        {
+            if(_ui_CharactorSelectRoot == null)
+            {
+                _ui_CharactorSelectRoot = new GameObject() {name = "NGO_ROOT" };
+                if(Managers.RelayManager.NetWorkManager.IsListening == true)
+                {
+                    NetworkObject networkObject = _ui_CharactorSelectRoot.AddComponent<NetworkObject>();
+                    networkObject.Spawn();
+                }
+                _ui_CharactorSelectRoot.AddComponent<RectTransform>();
+                Canvas ui_canvas = _ui_CharactorSelectRoot.AddComponent<Canvas>();
+                ui_canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                ui_canvas.sortingOrder = 100;
+                
+            }
+            return _ui_CharactorSelectRoot;
+        }
+    }
 
 
     protected override void AwakeInit()
@@ -81,10 +104,28 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        GameObject ChractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
-
-        //TODO:ChractorSeletor배치해야함
+        SpawnPlayerSelector();
     }
+
+    private void SpawnPlayerSelector()
+    {
+        GameObject targetFrame = _ui_RoomPlayerFrames[Managers.RelayManager.NetWorkManager.LocalClientId].gameObject;
+        RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
+
+        GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
+        RectTransform chractorSeletor_Rect = chractorSeletor.GetComponent<RectTransform>();
+
+        Vector2 frame_size = GetUISize(targetFrame);
+        Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
+
+
+        // 부모 설정
+        chractorSeletor_Rect.SetParent(UI_CharactorSelectRoot.transform,false);
+        chractorSeletor_Rect.sizeDelta = frame_size;
+        chractorSeletor_Rect.position = frame_screenPos;
+
+    }
+
 
 
     //TODO:테스트하면 이거 지워야함
