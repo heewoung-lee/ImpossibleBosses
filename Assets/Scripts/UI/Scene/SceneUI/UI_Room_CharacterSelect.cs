@@ -79,6 +79,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelectTr);
         }
+        _netWorkManager = Managers.RelayManager.NetWorkManager;
     }
 
 
@@ -89,20 +90,9 @@ public class UI_Room_CharacterSelect : UI_Scene
         _loadingPanel.SetActive(false);
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
     }
-
-    protected override void OnDisableInit()
-    {
-        base.OnDisableInit();
-        _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
-    }
-
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
-        if (_netWorkManager.IsHost)
-        {
-            GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
-            SetPositionCharacterSelector(chractorSeletor);
-        }
+        SpawnChractorSeletorAndSetPosition();
     }
 
     public async Task BacktoLobby()
@@ -110,6 +100,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         try
         {
             _loadingPanel.SetActive(true);
+            _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");
@@ -125,7 +116,17 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        _netWorkManager = Managers.RelayManager.NetWorkManager;
+        SpawnChractorSeletorAndSetPosition();
+    }
+
+
+    private void SpawnChractorSeletorAndSetPosition()
+    {
+        if (_netWorkManager.IsHost)
+        {
+            GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
+            SetPositionCharacterSelector(chractorSeletor);
+        }
     }
 
     private void SetPositionCharacterSelector(GameObject chractorSeletor)

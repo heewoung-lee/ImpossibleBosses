@@ -80,6 +80,7 @@ public class UI_Room_Info_Panel : UI_Base
                         await Managers.LobbyManager.ReFreshRoomList();
                     });
                 _joinButton.interactable = true;
+                Managers.LobbyManager.LobbyLoading?.Invoke(false);
                 return;
             }
         }
