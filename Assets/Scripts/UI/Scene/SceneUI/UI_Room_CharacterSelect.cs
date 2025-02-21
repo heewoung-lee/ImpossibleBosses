@@ -30,8 +30,11 @@ public class UI_Room_CharacterSelect : UI_Scene
     private GameObject _loadingPanel;
     private UI_LoadingPanel _ui_LoadingPanel;
     private GameObject _ui_CharactorSelectRoot;
+    private NetworkManager _netWorkManager;
 
     public GameObject PlayerSelector { get { return _playerSelector; } }
+    
+
 
     public GameObject UI_CharactorSelectRoot
     {
@@ -44,12 +47,12 @@ public class UI_Room_CharacterSelect : UI_Scene
                 {
                     NetworkObject networkObject = _ui_CharactorSelectRoot.AddComponent<NetworkObject>();
                     networkObject.Spawn();
+                    networkObject.SynchronizeTransform = false;
                 }
                 _ui_CharactorSelectRoot.AddComponent<RectTransform>();
                 Canvas ui_canvas = _ui_CharactorSelectRoot.AddComponent<Canvas>();
                 ui_canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 ui_canvas.sortingOrder = 100;
-                
             }
             return _ui_CharactorSelectRoot;
         }
@@ -78,10 +81,28 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
     }
 
+
+
     protected override void OnEnableInit()
     {
         base.OnEnableInit();
         _loadingPanel.SetActive(false);
+        _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
+    }
+
+    protected override void OnDisableInit()
+    {
+        base.OnDisableInit();
+        _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
+    }
+
+    public void EntetedPlayerinLobby(ulong playerIndex)
+    {
+        if (_netWorkManager.IsHost)
+        {
+            GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
+            SetPositionCharacterSelector(chractorSeletor);
+        }
     }
 
     public async Task BacktoLobby()
@@ -104,26 +125,23 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        SpawnPlayerSelector();
+        _netWorkManager = Managers.RelayManager.NetWorkManager;
     }
 
-    private void SpawnPlayerSelector()
+    private void SetPositionCharacterSelector(GameObject chractorSeletor)
     {
         GameObject targetFrame = _ui_RoomPlayerFrames[Managers.RelayManager.NetWorkManager.LocalClientId].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
 
-        GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
         RectTransform chractorSeletor_Rect = chractorSeletor.GetComponent<RectTransform>();
 
         Vector2 frame_size = GetUISize(targetFrame);
         Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
 
-
         // 부모 설정
         chractorSeletor_Rect.SetParent(UI_CharactorSelectRoot.transform,false);
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
-
     }
 
 
