@@ -80,11 +80,19 @@ public class UI_Room_CharacterSelect : UI_Scene
         base.OnEnableInit();
         _loadingPanel.SetActive(false);
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
+        _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
     }
+
+    private void DisConnetedPlayerinLobby(ulong obj)
+    {
+        Debug.Log("플레이어가 나갔습니다.");
+    }
+
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
-        SpawnChractorSeletorAndSetPosition();
+        SpawnChractorSeletorAndSetPosition(playerIndex);
     }
+    
 
     public async Task BacktoLobby()
     {
@@ -92,6 +100,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             _loadingPanel.SetActive(true);
             _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
+            _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");
@@ -107,23 +116,22 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        SpawnChractorSeletorAndSetPosition();
+        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
     }
 
 
-    private void SpawnChractorSeletorAndSetPosition()
+    private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
     {
         if (_netWorkManager.IsHost)
         {
             GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
-            characterSelector = SetPositionCharacterSelector(characterSelector);
+            characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
         }
     }
 
-    private GameObject SetPositionCharacterSelector(GameObject characterSelector)
+    private GameObject SetPositionCharacterSelector(GameObject characterSelector,ulong playerIndex)
     {
-        ulong currentPlayerCount = (ulong)_netWorkManager.ConnectedClientsList.Count - 1;
-        GameObject targetFrame = _ui_RoomPlayerFrames[currentPlayerCount].gameObject;
+        GameObject targetFrame = _ui_RoomPlayerFrames[playerIndex].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
 
         RectTransform chractorSeletor_Rect = characterSelector.GetComponent<RectTransform>();
@@ -134,7 +142,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
 
-        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(currentPlayerCount, characterSelector, UI_CharactorSelectRoot.transform);
+        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, UI_CharactorSelectRoot.transform);
 
         return characterSelecter;
     }
