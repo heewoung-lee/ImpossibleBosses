@@ -9,6 +9,7 @@ using Unity.Netcode;
 using Unity.Networking.Transport;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using UnityEditor.PackageManager;
+using Unity.Services.Lobbies.Models;
 
 public class RelayManager
 {
@@ -25,7 +26,7 @@ public class RelayManager
         {
             if( _netWorkManager is null)
             {
-                _netWorkManager = Managers.ResourceManager.InstantiatePrefab("Network/NetworkManager").GetComponent<NetworkManager>();
+                _netWorkManager = Managers.ResourceManager.InstantiatePrefab("NGO/NetworkManager").GetComponent<NetworkManager>();
             }
             return _netWorkManager;
         }
@@ -58,15 +59,19 @@ public class RelayManager
         }
     }
 
-    public GameObject SpawnCharactor_Selector(ulong clientId)
+    public GameObject SpawnNetworkOBJ(ulong clientId,GameObject obj,Transform parent=null)
     {
-        GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
         if(NetWorkManager.IsListening == true)
         {
-            NetworkObject characterSelectorNetWork = characterSelector.GetOrAddComponent<NetworkObject>();
-            characterSelectorNetWork.SpawnAsPlayerObject(clientId);
+            NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
+            networkObj.SpawnWithOwnership(clientId);
+
+            if(parent != null)
+            {
+                networkObj.transform.SetParent(parent,false);
+            }
         }
-        return characterSelector;
+        return obj;
     }
     public async Task<bool> JoinGuestRelay(string joinCode)
     {
@@ -139,4 +144,5 @@ public class RelayManager
             Debug.Log($"현재 접속되어있는 클라이언트 목록{player.ClientId}");
         }
     }
+
 }

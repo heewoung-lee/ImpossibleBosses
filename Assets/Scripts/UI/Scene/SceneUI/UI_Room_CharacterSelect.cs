@@ -42,17 +42,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             if(_ui_CharactorSelectRoot == null)
             {
-                _ui_CharactorSelectRoot = new GameObject() {name = "NGO_ROOT" };
-                if(Managers.RelayManager.NetWorkManager.IsListening == true)
-                {
-                    NetworkObject networkObject = _ui_CharactorSelectRoot.AddComponent<NetworkObject>();
-                    networkObject.Spawn();
-                    networkObject.SynchronizeTransform = false;
-                }
-                _ui_CharactorSelectRoot.AddComponent<RectTransform>();
-                Canvas ui_canvas = _ui_CharactorSelectRoot.AddComponent<Canvas>();
-                ui_canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                ui_canvas.sortingOrder = 100;
+                _ui_CharactorSelectRoot = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
+                Managers.RelayManager.SpawnNetworkOBJ(_netWorkManager.LocalClientId, _ui_CharactorSelectRoot);
             }
             return _ui_CharactorSelectRoot;
         }
@@ -124,28 +115,29 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         if (_netWorkManager.IsHost)
         {
-            GameObject chractorSeletor = Managers.RelayManager.SpawnCharactor_Selector(Managers.RelayManager.NetWorkManager.LocalClientId);
-            SetPositionCharacterSelector(chractorSeletor);
+            GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
+            characterSelector = SetPositionCharacterSelector(characterSelector);
         }
     }
 
-    private void SetPositionCharacterSelector(GameObject chractorSeletor)
+    private GameObject SetPositionCharacterSelector(GameObject characterSelector)
     {
-        GameObject targetFrame = _ui_RoomPlayerFrames[Managers.RelayManager.NetWorkManager.LocalClientId].gameObject;
+        ulong currentPlayerCount = (ulong)_netWorkManager.ConnectedClientsList.Count - 1;
+        GameObject targetFrame = _ui_RoomPlayerFrames[currentPlayerCount].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
 
-        RectTransform chractorSeletor_Rect = chractorSeletor.GetComponent<RectTransform>();
+        RectTransform chractorSeletor_Rect = characterSelector.GetComponent<RectTransform>();
 
         Vector2 frame_size = GetUISize(targetFrame);
         Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
 
-        // 부모 설정
-        chractorSeletor_Rect.SetParent(UI_CharactorSelectRoot.transform,false);
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
+
+        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(currentPlayerCount, characterSelector, UI_CharactorSelectRoot.transform);
+
+        return characterSelecter;
     }
-
-
 
     //TODO:테스트하면 이거 지워야함
     private void OnGUI()

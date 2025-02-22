@@ -38,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom215";
+    private const string LOBBYID = "WaitLobbyRoom234";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -237,6 +237,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 await RemovePlayerData(lobby);
                 Managers.RelayManager.UnSubscribeCallBackEvent();
                 Managers.RelayManager.ShutDownRelay();
+                IsLastUserInLobby();
             }
         }
         catch (System.ObjectDisposedException disposedException)
@@ -687,6 +688,15 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LobbyLoading?.Invoke(false);
     }
 
+    public void IsLastUserInLobby()
+    {
+        if (_currentLobby.Players.Count == 1)
+        {
+            Debug.Log("한사람만 남음");
+            _currentLobby.Data.Remove("RelayCode");
+        }
+
+    }
     #region TestDebugCode
     public void ShowLobbyData()
     {
