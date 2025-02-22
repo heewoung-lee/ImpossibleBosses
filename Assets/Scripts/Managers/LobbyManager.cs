@@ -154,7 +154,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
         if (_currentLobby != null)
-            await LeaveLobby(_currentLobby); //이쪽은 문제 없음
+            await LeaveLobby(_currentLobby);
 
         try
         {
@@ -309,9 +309,9 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         try
         {
             _callBackEvent = new LobbyEventCallbacks();
-            _callBackEvent.PlayerDataAdded += (playerdaData) => JoinLobbyPlayerDataAdded(playerdaData);
+            _callBackEvent.PlayerDataAdded += JoinLobbyPlayerDataAdded;
             //_callBackEvent.PlayerJoined += PlayerJoinedEvent;
-            _callBackEvent.PlayerLeft += async (leftPlayerlist) =>await PlayerLeftEvent(leftPlayerlist);
+            _callBackEvent.PlayerLeft += PlayerLeftEvent;
             _callBackEvent.LobbyChanged += CallBackEvent_LobbyChanged;
 
             Debug.Log($"로비 아이디: {lobby.Id} 로비 이름:{lobby.Name}");
@@ -349,7 +349,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             StartHeartbeat(_currentLobby);
         }
     }
-    private async Task PlayerLeftEvent(List<int> leftPlayerlist)
+    private void PlayerLeftEvent(List<int> leftPlayerlist)
     {
         Debug.Log("PlayerLeftEvent 호출");
 
@@ -358,7 +358,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log($"{leftPlayerIndex}번째 플레이어가 로비에서 나갔습니다.");
             PlayerDeleteEvent?.Invoke(leftPlayerIndex);
         }
-        await ReFreshRoomList();
     }
     public async void PlayerJoinedEvent(List<LobbyPlayerJoined> joined)
     {
@@ -668,8 +667,9 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             isRefreshing = false;
             throw;
         }
-
+        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         isRefreshing = false;
+        Debug.Log($"CurrentLobby Version:{_currentLobby.Version}");
     }
 
     public void CreateRoomInitalize(Lobby lobby)
@@ -680,17 +680,5 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
         UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(room_inventory_ui.Room_Content);
         infoPanel.SetRoomInfo(lobby);
-    }
-
-
-    public async Task ReRegisterEventCallback()
-    {
-
-        if (_lobbyEvents != null)
-        {
-            await _lobbyEvents.UnsubscribeAsync();
-            _lobbyEvents = null;
-        }
-        await RegisterEvents(_currentLobby);
     }
 }
