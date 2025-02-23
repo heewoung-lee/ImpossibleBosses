@@ -81,6 +81,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _loadingPanel.SetActive(false);
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
         _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
+        Managers.RelayManager.DisconnectPlayerEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
     }
 
     private void DisConnetedPlayerinLobby(ulong obj)
@@ -90,6 +91,7 @@ public class UI_Room_CharacterSelect : UI_Scene
 
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
+        Debug.Log("EnteredPlayerinLobby 이벤트 발생");
         SpawnChractorSeletorAndSetPosition(playerIndex);
     }
     
@@ -101,6 +103,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             _loadingPanel.SetActive(true);
             _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
             _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
+            Managers.RelayManager.DisconnectPlayerEvent = null;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");
@@ -131,7 +134,10 @@ public class UI_Room_CharacterSelect : UI_Scene
 
     private GameObject SetPositionCharacterSelector(GameObject characterSelector,ulong playerIndex)
     {
-        GameObject targetFrame = _ui_RoomPlayerFrames[playerIndex].gameObject;
+
+        int playerframeindex = _netWorkManager.ConnectedClientsList.Count-1;
+
+        GameObject targetFrame = _ui_RoomPlayerFrames[playerframeindex].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
 
         RectTransform chractorSeletor_Rect = characterSelector.GetComponent<RectTransform>();

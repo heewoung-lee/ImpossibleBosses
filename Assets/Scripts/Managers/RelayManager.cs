@@ -114,8 +114,7 @@ public class RelayManager
     {
         //if (NetWorkManager.LocalClientId != disconntedIndex)
         //    return;
-
-
+        Debug.Log("OnClickentDisconnectEvent ¹ß»ý");
         DisconnectPlayerEvent?.Invoke();
     }
     public void InitalizeRelayServer()

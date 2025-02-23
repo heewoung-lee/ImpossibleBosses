@@ -38,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom234";
+    private const string LOBBYID = "WaitLobbyRoom237";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -163,7 +163,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         catch (KeyNotFoundException exception)
         {
             Debug.Log($"릴레이 코드가 존재하지 않습니다.{exception}");
-
             await Utill.RateLimited(async () => await InitLobbyScene());
         }
     }
@@ -635,6 +634,17 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         await ReFreshRoomList();
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         if(_heartBeatCoroutine == null)
+        {
+            await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+        }
+        LobbyLoading?.Invoke(false);
+    }
+
+    public async Task DisconnetPlayerinRoom()
+    {
+        LobbyLoading?.Invoke(true);
+        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
+        if (_heartBeatCoroutine == null)
         {
             await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
         }
