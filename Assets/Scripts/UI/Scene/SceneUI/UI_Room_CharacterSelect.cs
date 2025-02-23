@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
 using Unity.VisualScripting;
@@ -49,7 +50,6 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
     }
 
-
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -84,7 +84,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         Managers.RelayManager.DisconnectPlayerEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
     }
 
-    private void DisConnetedPlayerinLobby(ulong obj)
+    private void DisConnetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("플레이어가 나갔습니다.");
     }
@@ -93,6 +93,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
         SpawnChractorSeletorAndSetPosition(playerIndex);
+        Managers.RelayManager.NetWorkManager.ConnectedClients.TryGetValue(playerIndex, out NetworkClient playerValue);
     }
     
 
