@@ -114,7 +114,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     }
 
     [ServerRpc]
-    public void PlayerReady()
+    public void PlayerReadyServerRpc()
     {
         _readyPanel.SetActive(!_readyPanel.activeSelf);
     }
