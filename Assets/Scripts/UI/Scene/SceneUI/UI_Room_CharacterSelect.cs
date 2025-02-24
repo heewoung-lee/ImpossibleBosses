@@ -7,6 +7,7 @@ using Unity.Services.Lobbies;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UI_Room_CharacterSelect : UI_Scene
@@ -34,7 +35,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     private GameObject _ui_CharactorSelectRoot;
     private NetworkManager _netWorkManager;
     private Button _button_Ready;
-    private CharacterSelectorNGO _characterSelectorNGO;
 
     public GameObject PlayerSelector { get { return _playerSelector; } }
     
@@ -75,7 +75,6 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
         _netWorkManager = Managers.RelayManager.NetWorkManager;
         _button_Ready = Get<Button>((int)Buttons.Button_Ready);
-        _button_Ready.onClick.AddListener(()=>_characterSelectorNGO.PlayerReadyServerRpc());
     }
 
 
@@ -87,6 +86,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
         _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
         Managers.RelayManager.DisconnectPlayerEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
+    }
+
+    public void SetButtonEvent(UnityAction action)
+    {
+        _button_Ready.onClick.AddListener(action);
     }
 
     private void DisConnetedPlayerinLobby(ulong playerIndex)
@@ -124,19 +128,17 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        _characterSelectorNGO = SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId).GetComponent<CharacterSelectorNGO>();
+        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
     }
 
 
-    private GameObject SpawnChractorSeletorAndSetPosition(ulong playerIndex)
+    private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
     {
-        GameObject characterSelector = null;
         if (_netWorkManager.IsHost)
         {
-            characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
+            GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
             characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
         }
-        return characterSelector;
     }
 
     private GameObject SetPositionCharacterSelector(GameObject characterSelector,ulong playerIndex)

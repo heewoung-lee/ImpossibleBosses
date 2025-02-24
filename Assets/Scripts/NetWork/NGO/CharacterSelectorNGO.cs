@@ -15,10 +15,9 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
     new FixedString64Bytes(""), // 기본값을 빈 문자열로 설정
-    NetworkVariableReadPermission.Everyone,
-    NetworkVariableWritePermission.Server // 서버만 수정 가능하도록 설정
-);
-
+    NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server );// 서버만 수정 가능하도록 설정
+    private NetworkVariable<bool> _isReady = new NetworkVariable<bool>(
+    false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     enum Images
     {
         Bg,
@@ -75,14 +74,19 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
             Debug.Log($"오너의 클라이언트ID{Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName}");
             SetNicknameServerRpc(Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName);
+            Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>().SetButtonEvent(()=> PlayerReadyServerRpc());
         }
         DisPlayHostMarker();
         _playerNickname.OnValueChanged += (oldValue, newValue) => {
             _playerNickNameText.text = newValue.ToString();
         };
-
+        _isReady.OnValueChanged += (oldValue, newValue) =>
+        {
+            _readyPanel.SetActive(newValue);
+        };
         // UI 초기화
         _playerNickNameText.text = _playerNickname.Value.ToString();
+        _readyPanel.SetActive(_isReady.Value);
     }
 
     [ServerRpc]
@@ -97,6 +101,12 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _playerNickname.Value = new FixedString64Bytes(newNickname);
             Debug.Log($"플레이어 {clientId}의 닉네임이 '{newNickname}'로 설정됨");
         }
+    }
+    [ServerRpc]
+    public void PlayerReadyServerRpc(ServerRpcParams rpcParams = default)
+    {
+        _isReady.Value = !_isReady.Value;
+        _readyPanel.SetActive(_isReady.Value);
     }
     private void DisPlayHostMarker()
     {
@@ -113,9 +123,5 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         base.OnNetworkDespawn();
     }
 
-    [ServerRpc]
-    public void PlayerReadyServerRpc()
-    {
-        _readyPanel.SetActive(!_readyPanel.activeSelf);
-    }
+   
 }
