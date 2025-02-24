@@ -10,7 +10,6 @@ public class UI_RoomPlayerFrame : UI_Base
         Bg
     }
     private readonly Color EMPTY_PLAYER_FRAME_COLOR = "#988B8B50".HexCodetoConvertColor();
-    private Module_ChoosePlayer_Manager _charactor_Selector;
     private CharacterSelectorNGO _characterNgo;
     private Image _bg;
     public CharacterSelectorNGO ChracterSelectorNGO { get => _characterNgo; }
@@ -24,7 +23,6 @@ public class UI_RoomPlayerFrame : UI_Base
 
     protected override void StartInit()
     {
-        _charactor_Selector = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>().PlayerSelector.GetComponent<Module_ChoosePlayer_Manager>();
     }
 
     public void SetCharacterSelector(GameObject chracterSelecter)

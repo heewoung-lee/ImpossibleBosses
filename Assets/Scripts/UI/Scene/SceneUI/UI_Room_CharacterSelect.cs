@@ -23,7 +23,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     enum Buttons
     {
         BackToLobbyButton,
-
+        Button_Ready
     }
     private GameObject _playerSelector;
     private Transform _charactorSelectTr;
@@ -33,6 +33,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     private UI_LoadingPanel _ui_LoadingPanel;
     private GameObject _ui_CharactorSelectRoot;
     private NetworkManager _netWorkManager;
+    private Button _button_Ready;
 
     public GameObject PlayerSelector { get { return _playerSelector; } }
     
@@ -72,6 +73,8 @@ public class UI_Room_CharacterSelect : UI_Scene
             _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelectTr);
         }
         _netWorkManager = Managers.RelayManager.NetWorkManager;
+        _button_Ready = Get<Button>((int)Buttons.Button_Ready);
+
     }
 
 

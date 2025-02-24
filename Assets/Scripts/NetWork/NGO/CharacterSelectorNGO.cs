@@ -113,4 +113,9 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         base.OnNetworkDespawn();
     }
 
+    [ServerRpc]
+    public void PlayerReady()
+    {
+        _readyPanel.SetActive(!_readyPanel.activeSelf);
+    }
 }
