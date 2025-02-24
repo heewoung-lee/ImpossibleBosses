@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
@@ -93,7 +94,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
         SpawnChractorSeletorAndSetPosition(playerIndex);
-        Managers.RelayManager.NetWorkManager.ConnectedClients.TryGetValue(playerIndex, out NetworkClient playerValue);
     }
     
 
@@ -135,8 +135,16 @@ public class UI_Room_CharacterSelect : UI_Scene
 
     private GameObject SetPositionCharacterSelector(GameObject characterSelector,ulong playerIndex)
     {
-
-        int playerframeindex = _netWorkManager.ConnectedClientsList.Count-1;
+        int playerframeindex = 0; 
+        for (int i = 0; i< _ui_RoomPlayerFrames.Length; i++)
+        {
+            if (_ui_RoomPlayerFrames[i].ChracterSelectorNGO == null)
+            {
+                _ui_RoomPlayerFrames[i].SetCharacterSelector(characterSelector);
+                playerframeindex = i;
+                break;
+            }
+        }
 
         GameObject targetFrame = _ui_RoomPlayerFrames[playerframeindex].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();

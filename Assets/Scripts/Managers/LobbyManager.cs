@@ -38,7 +38,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom243";
+    private const string LOBBYID = "WaitLobbyRoom258";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -115,6 +115,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log("HeartBeat is Running");
             yield return delay;
         }
+
     }
 
     public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)
@@ -281,10 +282,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException wrongPw) when (wrongPw.Reason == LobbyExceptionReason.IncorrectPassword)
         {
-            Debug.Log($"현재 로비 {_currentLobby.Id}");
-            Debug.Log("비밀번호가 틀렸습니다!");
             _currentLobby = waitLobby;
-            Debug.Log($"후의 로비 {_currentLobby.Id}");
             throw;
         }
         catch (LobbyServiceException timeLimit) when (timeLimit.Reason == LobbyExceptionReason.RateLimited)
