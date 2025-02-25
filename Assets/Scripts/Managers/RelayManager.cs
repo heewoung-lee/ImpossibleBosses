@@ -137,12 +137,4 @@ public class RelayManager
     {
         NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
     }
-    public void ShowRelayPlayer()
-    {
-        foreach (NetworkClient player in NetWorkManager.ConnectedClientsList)
-        {
-            Debug.Log($"현재 접속되어있는 클라이언트 목록{player.ClientId}");
-        }
-    }
-
 }

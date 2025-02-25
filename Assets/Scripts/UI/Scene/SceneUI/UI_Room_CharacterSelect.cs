@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 struct ReadyButtonImages
 {
-   public Image readyButtonImage;
+   public Sprite readyButtonImage;
    public string readyButtonText;
    public Color readyButtonTextColor;
 }
@@ -99,13 +99,11 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         _readyButtonStateValue = new ReadyButtonImages[Enum.GetValues(typeof(readyButtonStateEnum)).Length];
 
-        _readyButtonStateValue[(int)readyButtonStateEnum.trueState].readyButtonImage = new GameObject().GetOrAddComponent<Image>();
-        _readyButtonStateValue[(int)readyButtonStateEnum.trueState].readyButtonImage.sprite = _button_Ready.GetComponent<Image>().sprite;
+        _readyButtonStateValue[(int)readyButtonStateEnum.trueState].readyButtonImage = _button_Ready.GetComponent<Image>().sprite;
         _readyButtonStateValue[(int)readyButtonStateEnum.trueState].readyButtonText = _button_Ready.GetComponentInChildren<TMP_Text>().text;
         _readyButtonStateValue[(int)readyButtonStateEnum.trueState].readyButtonTextColor = _button_Ready.GetComponentInChildren<TMP_Text>().color;
 
-        _readyButtonStateValue[(int)readyButtonStateEnum.cancelState].readyButtonImage = new GameObject().GetOrAddComponent<Image>();
-        _readyButtonStateValue[(int)readyButtonStateEnum.cancelState].readyButtonImage.sprite = Managers.ResourceManager.Load<Sprite>("Art/UI/ButtonImage/Button_Rectangle_Red");
+        _readyButtonStateValue[(int)readyButtonStateEnum.cancelState].readyButtonImage = Managers.ResourceManager.Load<Sprite>("Art/UI/ButtonImage/Button_Rectangle_Red");
         _readyButtonStateValue[(int)readyButtonStateEnum.cancelState].readyButtonText = "Not Ready";
         _readyButtonStateValue[(int)readyButtonStateEnum.cancelState].readyButtonTextColor = Color.white;
     }
@@ -214,7 +212,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         ReadyButtonImages buttonimages = _readyButtonStateValue[(int)state];
 
-        _button_Ready.image.sprite = buttonimages.readyButtonImage.sprite;
+        _button_Ready.image.sprite = buttonimages.readyButtonImage;
         _button_Text.text = buttonimages.readyButtonText;
         _button_Text.color = buttonimages.readyButtonTextColor;
     }
