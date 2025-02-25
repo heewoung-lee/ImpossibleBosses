@@ -20,6 +20,7 @@ struct ReadyButtonImages
 public class UI_Room_CharacterSelect : UI_Scene
 {
     private const int MAX_PLAYER_COUNT = 8;
+   
     enum readyButtonStateEnum
     {
         cancelState,
@@ -38,8 +39,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         BackToLobbyButton,
         Button_Ready
     }
-    private GameObject _playerSelector;
-    private Transform _charactorSelectTr;
+    private Transform _chooseCameraTr;
+    private Transform _charactorSelect;
     private UI_RoomPlayerFrame[] _ui_RoomPlayerFrames;
     private Button _backToLobbyButton;
     private GameObject _loadingPanel;
@@ -49,13 +50,11 @@ public class UI_Room_CharacterSelect : UI_Scene
     private Button _button_Ready;
     private TMP_Text _button_Text;
     private bool _readyButtonState;
+    
 
     private ReadyButtonImages[] _readyButtonStateValue;
 
-    public GameObject PlayerSelector { get { return _playerSelector; } }
-    
-
-
+    public Transform ChooseCameraTr { get => _chooseCameraTr; }
     public GameObject UI_CharactorSelectRoot
     {
         get
@@ -68,6 +67,8 @@ public class UI_Room_CharacterSelect : UI_Scene
             return _ui_CharactorSelectRoot;
         }
     }
+   
+
 
     protected override void AwakeInit()
     {
@@ -75,8 +76,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         Bind<Transform>(typeof(Transforms));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
-        _playerSelector = Managers.ResourceManager.InstantiatePrefab("Map/ChoosePlayer");
-        _charactorSelectTr = Get<Transform>((int)Transforms.CharactorSelectTr);
+        _chooseCameraTr = Managers.ResourceManager.InstantiatePrefab("Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
+        _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _backToLobbyButton.onClick.AddListener(async () =>
         {
@@ -87,7 +88,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _ui_RoomPlayerFrames = new UI_RoomPlayerFrame[MAX_PLAYER_COUNT];
         for (int index = 0; index < _ui_RoomPlayerFrames.Length; index++)
         {
-            _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelectTr);
+            _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelect);
         }
         _netWorkManager = Managers.RelayManager.NetWorkManager;
         _button_Ready = Get<Button>((int)Buttons.Button_Ready);
@@ -216,7 +217,6 @@ public class UI_Room_CharacterSelect : UI_Scene
         _button_Text.text = buttonimages.readyButtonText;
         _button_Text.color = buttonimages.readyButtonTextColor;
     }
-
     //TODO:테스트하면 이거 지워야함
     private void OnGUI()
     {

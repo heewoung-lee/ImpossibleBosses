@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8131264845966953290}
   - component: {fileID: 7613754464630600725}
   - component: {fileID: 3405596405991351386}
+  - component: {fileID: 5958979602131744907}
   m_Layer: 0
   m_Name: Character_Select_Rect
   m_TagString: Untagged
@@ -83,6 +84,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &5958979602131744907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641167045363581546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 062a91a1286b77f49974fce957605c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1844186465525722026
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +349,7 @@ GameObject:
   - component: {fileID: 1073890633344988295}
   - component: {fileID: 4973123710522880493}
   - component: {fileID: 5356844850645516867}
+  - component: {fileID: 8540044986705804915}
   m_Layer: 0
   m_Name: SelectCamara
   m_TagString: Untagged
@@ -453,6 +467,18 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &8540044986705804915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4957382371142728046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846da763ca0c48439398ce46e57dfa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5003354845680966159
 GameObject:
   m_ObjectHideFlags: 0
