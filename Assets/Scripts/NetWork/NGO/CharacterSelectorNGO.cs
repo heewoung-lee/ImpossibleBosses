@@ -106,17 +106,21 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         _bg.color = PLAYER_FRAME_COLOR;
+        _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
         _playerNickNameObject.SetActive(true);
         if (IsOwner)
         {
             _previousButton.gameObject.SetActive(true);
             _nextButton.gameObject.SetActive(true);
-            _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
             _ui_Room_CharacterSelect.ButtonState(false);
             Debug.Log($"오너의 클라이언트ID{Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName}");
             SetNicknameServerRpc(Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName);
             _ui_Room_CharacterSelect.SetButtonEvent(()=> PlayerReadyServerRpc());
             SetPositionCharacterChooseCamera();
+        }
+        if (IsHost)
+        {
+            _ui_Room_CharacterSelect.SetHostButton();
         }
         DisPlayHostMarker();
         _playerChooseCamera.transform.localPosition = _characterSeletorCamera.Value;
@@ -202,6 +206,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         if (IsOwnedByServer)
         {
+            
             _hostIMage.gameObject.SetActive(true);
         }
     }

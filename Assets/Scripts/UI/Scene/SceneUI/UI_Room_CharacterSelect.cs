@@ -37,7 +37,8 @@ public class UI_Room_CharacterSelect : UI_Scene
     enum Buttons
     {
         BackToLobbyButton,
-        Button_Ready
+        Button_Ready,
+        Button_Start
     }
     private Transform _chooseCameraTr;
     private Transform _charactorSelect;
@@ -48,6 +49,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     private GameObject _ui_CharactorSelectRoot;
     private NetworkManager _netWorkManager;
     private Button _button_Ready;
+    private Button _button_Start;
     private TMP_Text _button_Text;
     private bool _readyButtonState;
     
@@ -79,6 +81,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         _chooseCameraTr = Managers.ResourceManager.InstantiatePrefab("Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
+        _button_Start = Get<Button>((int)Buttons.Button_Start);
+        _button_Start.gameObject.SetActive(false);
         _backToLobbyButton.onClick.AddListener(async () =>
         {
             await BacktoLobby();
@@ -153,6 +157,13 @@ public class UI_Room_CharacterSelect : UI_Scene
             Debug.Log($"에러코드{error}");
         }
 
+    }
+
+
+    public void SetHostButton()
+    {
+        _button_Ready.gameObject.SetActive(false);
+        _button_Start.gameObject.SetActive(true);
     }
     protected override void StartInit()
     {
