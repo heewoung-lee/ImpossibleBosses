@@ -134,6 +134,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _isReady.OnValueChanged += (oldValue, newValue) =>
         {
             _readyPanel.SetActive(newValue);
+            if(IsOwner)
             SetActiveCharacterSelectionArrow(!newValue);
         };
         // UI √ ±‚»≠
