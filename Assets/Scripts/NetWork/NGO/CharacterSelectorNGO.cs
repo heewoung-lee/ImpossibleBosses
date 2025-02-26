@@ -18,13 +18,13 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     private readonly Color PLAYER_FRAME_COLOR = "#143658".HexCodetoConvertColor();
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
-    new FixedString64Bytes(""),NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server );// 서버만 수정 가능하도록 설정
-    
+    new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);// 서버만 수정 가능하도록 설정
+
     private NetworkVariable<bool> _isReady = new NetworkVariable<bool>(
     false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private NetworkVariable<Vector3> _characterSeletorCamera = new NetworkVariable<Vector3>(
-    Vector3.zero,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public enum CameraOperation
     {
@@ -71,10 +71,11 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     private bool isRunnningCoroutine = false;
     private Coroutine _cameraMoveCoroutine;
     private bool _isInitCameraPosition = false;
+    private Module_ChooseCharacter_Move _module_chooseCharacter_Move;
 
     public Button PreViousButton { get => _previousButton; }
     public Button NextButton { get => _nextButton; }
-    public bool ISReady {  get => _isReady.Value; }
+    public bool ISReady { get => _isReady.Value; }
     public RawImage SelectPlayerRawImage
     {
         get
@@ -84,6 +85,17 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
                 _selectPlayerRawImage = Get<RawImage>((int)RawImages.SelectPlayerRawImage);
             }
             return _selectPlayerRawImage;
+        }
+    }
+    public Module_ChooseCharacter_Move Module_ChooseCharacter_Move
+    {
+        get
+        {
+            if(_module_chooseCharacter_Move == null)
+            {
+                _module_chooseCharacter_Move = GetComponent<Module_ChooseCharacter_Move>();
+            }
+            return _module_chooseCharacter_Move;
         }
     }
     protected override void AwakeInit()
@@ -109,7 +121,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
         _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
 
-      
+
     }
 
     public override void OnNetworkSpawn()
@@ -123,44 +135,53 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _nextButton.gameObject.SetActive(true);
             _ui_Room_CharacterSelect.ButtonState(false);
             SetNicknameServerRpc(Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName);
-            _ui_Room_CharacterSelect.SetButtonEvent(()=> PlayerReadyServerRpc());
+            _ui_Room_CharacterSelect.SetButtonEvent(() => PlayerReadyServerRpc());
             SetPositionCharacterChooseCamera();
         }
-        if (IsHost )
+        if (IsHost && IsOwner)//호스트 최초 1번 호출부
         {
-            _ui_Room_CharacterSelect.SetHostStartButton(false);
-            if (IsOwner)//호스트 최초 1번 호출부
-            {
-                _ui_Room_CharacterSelect.SetHostButton();
-                Debug.Log("호스트 버튼 호출됨");
-                Managers.RelayManager.DisconnectPlayerEvent -= CheckHostIsAlone;
-                Managers.RelayManager.DisconnectPlayerEvent += CheckHostIsAlone;
-                _ui_Room_CharacterSelect.SetHostStartButton(true);
-            }
+            _ui_Room_CharacterSelect.SetHostButton();
+            Managers.RelayManager.ConnectPlayerEvent -= DisableHostStartButton;
+            Managers.RelayManager.ConnectPlayerEvent += DisableHostStartButton;
+            Managers.RelayManager.DisconnectPlayerEvent -= CheckHostIsAlone;
+            Managers.RelayManager.DisconnectPlayerEvent += CheckHostIsAlone;
+            _ui_Room_CharacterSelect.SetHostStartButton(true);
         }
         DisPlayHostMarker();
         _playerChooseCamera.transform.localPosition = _characterSeletorCamera.Value;
         _characterSeletorCamera.OnValueChanged += SelecterCameraOnValueChanged;
-        _playerNickname.OnValueChanged += (oldValue, newValue) => {
+        _playerNickname.OnValueChanged += (oldValue, newValue) =>
+        {
             _playerNickNameText.text = newValue.ToString();
         };
         _isReady.OnValueChanged += (oldValue, newValue) =>
         {
             _readyPanel.SetActive(newValue);
-            if(IsOwner)
-            SetActiveCharacterSelectionArrow(!newValue);
+            if (IsOwner)
+            {
+                SetActiveCharacterSelectionArrow(!newValue);
+                Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)Module_ChooseCharacter_Move.PlayerChooseIndex;
+                Debug.Log(Managers.RelayManager.ChoicePlayerCharacter);
+                //TODO: 캐릭터 선택까지 정해둠, RelayManager를 근거로 캐릭터 스폰할것
+            }
         };
         // UI 초기화
         _playerNickNameText.text = _playerNickname.Value.ToString();
         _readyPanel.SetActive(_isReady.Value);
     }
 
-    public void CheckHostIsAlone()
+
+    private void CheckHostIsAlone()
     {
-        if(Managers.RelayManager.NetWorkManager.ConnectedClientsIds.Count == 1 && IsHost)
+        if (Managers.RelayManager.NetWorkManager.ConnectedClientsIds.Count == 1 && IsHost)
         {
             _ui_Room_CharacterSelect.SetHostStartButton(true);
         }
+    }
+
+    private void DisableHostStartButton()
+    {
+        _ui_Room_CharacterSelect.SetHostStartButton(false);
     }
 
     public void SelecterCameraOnValueChanged(Vector3 oldValue, Vector3 newValue)
@@ -194,10 +215,10 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         Vector3 targetWorldPosition = _ui_Room_CharacterSelect.ChooseCameraTr.position;
         Vector3 targetLocalPosition = transform.InverseTransformPoint(targetWorldPosition);
-        SetCameraPositionServerRpc(targetLocalPosition,CameraOperation.Set);
+        SetCameraPositionServerRpc(targetLocalPosition, CameraOperation.Set);
     }
     [ServerRpc]
-    public void SetCameraPositionServerRpc(Vector3 position,CameraOperation cameraOperation,ServerRpcParams rpcParams = default)
+    public void SetCameraPositionServerRpc(Vector3 position, CameraOperation cameraOperation, ServerRpcParams rpcParams = default)
     {
         switch (cameraOperation)
         {
@@ -212,13 +233,14 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     [ServerRpc]
     private void SetNicknameServerRpc(string newNickname, ServerRpcParams rpcParams = default)
     {
-       _playerNickname.Value = new FixedString64Bytes(newNickname);
+        _playerNickname.Value = new FixedString64Bytes(newNickname);
     }
     [ServerRpc]
     public void PlayerReadyServerRpc(ServerRpcParams rpcParams = default)
     {
         _isReady.Value = !_isReady.Value;
         _readyPanel.SetActive(_isReady.Value);
+
         isCheckReadyToPlayers();
 
         NotifyButtonStateClientRpc(_isReady.Value, rpcParams.Receive.SenderClientId);
@@ -233,7 +255,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     }
     private void isCheckReadyToPlayers()
     {
-        foreach (CharacterSelectorNGO playerNGO in _ui_Room_CharacterSelect.UI_CharactorSelectRoot.GetComponentsInChildren<CharacterSelectorNGO>())
+        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT.GetComponentsInChildren<CharacterSelectorNGO>())
         {
             if (playerNGO.IsOwnedByServer)
                 continue;

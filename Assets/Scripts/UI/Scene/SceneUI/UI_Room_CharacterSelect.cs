@@ -57,21 +57,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     private ReadyButtonImages[] _readyButtonStateValue;
 
     public Transform ChooseCameraTr { get => _chooseCameraTr; }
-    public GameObject UI_CharactorSelectRoot
-    {
-        get
-        {
-            if(_ui_CharactorSelectRoot == null)
-            {
-                _ui_CharactorSelectRoot = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                Managers.RelayManager.SpawnNetworkOBJ(_netWorkManager.LocalClientId, _ui_CharactorSelectRoot);
-            }
-            return _ui_CharactorSelectRoot;
-        }
-    }
-   
-
-
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -214,13 +199,14 @@ public class UI_Room_CharacterSelect : UI_Scene
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
 
-        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, UI_CharactorSelectRoot.transform);
+        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT.transform);
         return characterSelecter;
     }
     public void LoadScenePlayGames()
     {
-        // Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
-        _netWorkManager.SceneManager.LoadScene("GamePlayScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        //TODO: 호스트가 선택한 캐릭터 저장해야함
+        _netWorkManager.NetworkConfig.EnableSceneManagement = true;
+        Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)

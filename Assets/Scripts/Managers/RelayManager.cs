@@ -17,9 +17,14 @@ public class RelayManager
     private NetworkManager _netWorkManager;
     private string _joinCode;
     private Allocation _allocation;
+    private GameObject _nGO_ROOT;
+
+    public Define.PlayerClass ChoicePlayerCharacter;
 
     public Func<Task> DisconnectPlayerAsyncEvent;
     public Action DisconnectPlayerEvent;
+
+    public Action ConnectPlayerEvent;
 
 
     public NetworkManager NetWorkManager
@@ -33,7 +38,18 @@ public class RelayManager
             return _netWorkManager;
         }
     }
-
+    public GameObject NGO_ROOT
+    {
+        get
+        {
+            if (_nGO_ROOT == null)
+            {
+                _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
+                Managers.RelayManager.SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
+            }
+            return _nGO_ROOT;
+        }
+    }
     public string JoinCode { get => _joinCode;}
 
     public async Task<string> StartHostWithRelay(int maxConnections)
@@ -47,7 +63,6 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
-            _netWorkManager.NetworkConfig.EnableSceneManagement = true;
             if (NetWorkManager.StartHost())
             {
                 return _joinCode;
@@ -85,7 +100,6 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = joinCode;
-            _netWorkManager.NetworkConfig.EnableSceneManagement = true;
             return !string.IsNullOrEmpty(joinCode) && NetWorkManager.StartClient();
         }
         catch (RelayServiceException ex) when (ex.ErrorCode == 404)
@@ -115,7 +129,7 @@ public class RelayManager
         return Task.CompletedTask;
     }
 
-    public void OnClickentDisconnectEvent(ulong disconntedIndex)
+    public void OnClientDisconnectEvent(ulong disconntedIndex)
     {
         //if (NetWorkManager.LocalClientId != disconntedIndex)
         //    return;
@@ -123,11 +137,19 @@ public class RelayManager
         DisconnectPlayerAsyncEvent?.Invoke();
         DisconnectPlayerEvent?.Invoke();
     }
+    public void OnClientconnectEvent(ulong disconntedIndex)
+    {
+        Debug.Log("OnClientconnectEvent ¹ß»ý");
+        ConnectPlayerEvent?.Invoke();
+    }
+
+
     public void InitalizeRelayServer()
     {
-        NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
-        NetWorkManager.OnClientDisconnectCallback += OnClickentDisconnectEvent;
-      
+        NetWorkManager.OnClientDisconnectCallback -= OnClientDisconnectEvent;
+        NetWorkManager.OnClientDisconnectCallback += OnClientDisconnectEvent;
+        NetWorkManager.OnClientConnectedCallback -= OnClientconnectEvent;
+        NetWorkManager.OnClientConnectedCallback += OnClientconnectEvent;
     }
 
     public void SceneLoadInitalizeRelayServer()
@@ -140,6 +162,7 @@ public class RelayManager
 
     public void UnSubscribeCallBackEvent()
     {
-        NetWorkManager.OnClientDisconnectCallback -= OnClickentDisconnectEvent;
+        NetWorkManager.OnClientDisconnectCallback -= OnClientconnectEvent;
+        NetWorkManager.OnClientConnectedCallback -= OnClientconnectEvent;
     }
 }

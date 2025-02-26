@@ -23,6 +23,10 @@ public class Module_ChooseCharacter_Move : MonoBehaviour
     private Button _previousButton;
     private Button _nextButton;
 
+    private int _playerChooseIndex;
+
+    public int PlayerChooseIndex => _playerChooseIndex;
+
     public CharacterSelectorNGO CharacterSelectorNGO
     {
         get
@@ -82,6 +86,7 @@ public class Module_ChooseCharacter_Move : MonoBehaviour
         if(index != _currentSelectCharactorIndex)
         {
             CharacterSelectorNGO.SetCameraPositionServerRpc((int)direction * Vector3.right * MOVEVALUE,CharacterSelectorNGO.CameraOperation.Add);
+            _playerChooseIndex = _currentSelectCharactorIndex;
         }
     }
 }
