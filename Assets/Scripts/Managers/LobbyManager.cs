@@ -39,7 +39,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom265";
+    private const string LOBBYID = "WaitLobbyRoom268";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -564,8 +564,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public void InitalizeRelayEvent()
     {
-        Managers.RelayManager.DisconnectPlayerEvent -= DisconnectPlayer;
-        Managers.RelayManager.DisconnectPlayerEvent += DisconnectPlayer;
+        Managers.RelayManager.DisconnectPlayerAsyncEvent -= DisconnectPlayer;
+        Managers.RelayManager.DisconnectPlayerAsyncEvent += DisconnectPlayer;
         Managers.RelayManager.InitalizeRelayServer();
     }
 

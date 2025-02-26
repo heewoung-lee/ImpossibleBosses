@@ -119,7 +119,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _loadingPanel.SetActive(false);
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
         _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
-        Managers.RelayManager.DisconnectPlayerEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
+        Managers.RelayManager.DisconnectPlayerAsyncEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
     }
 
     public void SetButtonEvent(UnityAction action)
@@ -146,7 +146,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             _loadingPanel.SetActive(true);
             _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
             _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
-            Managers.RelayManager.DisconnectPlayerEvent = null;
+            Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");
@@ -164,6 +164,11 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         _button_Ready.gameObject.SetActive(false);
         _button_Start.gameObject.SetActive(true);
+    }
+
+    public void SetHostStartButton(bool startButtonstate)
+    {
+        _button_Start.interactable = startButtonstate;
     }
     protected override void StartInit()
     {

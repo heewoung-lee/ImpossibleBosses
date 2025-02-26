@@ -18,7 +18,9 @@ public class RelayManager
     private string _joinCode;
     private Allocation _allocation;
 
-    public Func<Task> DisconnectPlayerEvent;
+    public Func<Task> DisconnectPlayerAsyncEvent;
+    public Action DisconnectPlayerEvent;
+
 
     public NetworkManager NetWorkManager
     {
@@ -116,6 +118,7 @@ public class RelayManager
         //if (NetWorkManager.LocalClientId != disconntedIndex)
         //    return;
         Debug.Log("OnClickentDisconnectEvent ¹ß»ý");
+        DisconnectPlayerAsyncEvent?.Invoke();
         DisconnectPlayerEvent?.Invoke();
     }
     public void InitalizeRelayServer()

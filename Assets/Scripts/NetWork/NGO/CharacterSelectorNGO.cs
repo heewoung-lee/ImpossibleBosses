@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.UI;
 public enum SelecterDirection
@@ -72,6 +74,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
     public Button PreViousButton { get => _previousButton; }
     public Button NextButton { get => _nextButton; }
+    public bool ISReady {  get => _isReady.Value; }
     public RawImage SelectPlayerRawImage
     {
         get
@@ -105,6 +108,8 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
         _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
+
+      
     }
 
     public override void OnNetworkSpawn()
@@ -121,9 +126,17 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _ui_Room_CharacterSelect.SetButtonEvent(()=> PlayerReadyServerRpc());
             SetPositionCharacterChooseCamera();
         }
-        if (IsHost)
+        if (IsHost )
         {
-            _ui_Room_CharacterSelect.SetHostButton();
+            _ui_Room_CharacterSelect.SetHostStartButton(false);
+            if (IsOwner)//호스트 최초 1번 호출부
+            {
+                _ui_Room_CharacterSelect.SetHostButton();
+                Debug.Log("호스트 버튼 호출됨");
+                Managers.RelayManager.DisconnectPlayerEvent -= CheckHostIsAlone;
+                Managers.RelayManager.DisconnectPlayerEvent += CheckHostIsAlone;
+                _ui_Room_CharacterSelect.SetHostStartButton(true);
+            }
         }
         DisPlayHostMarker();
         _playerChooseCamera.transform.localPosition = _characterSeletorCamera.Value;
@@ -142,6 +155,13 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _readyPanel.SetActive(_isReady.Value);
     }
 
+    public void CheckHostIsAlone()
+    {
+        if(Managers.RelayManager.NetWorkManager.ConnectedClientsIds.Count == 1 && IsHost)
+        {
+            _ui_Room_CharacterSelect.SetHostStartButton(true);
+        }
+    }
 
     public void SelecterCameraOnValueChanged(Vector3 oldValue, Vector3 newValue)
     {
@@ -199,6 +219,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         _isReady.Value = !_isReady.Value;
         _readyPanel.SetActive(_isReady.Value);
+        isCheckReadyToPlayers();
 
         NotifyButtonStateClientRpc(_isReady.Value, rpcParams.Receive.SenderClientId);
     }
@@ -210,6 +231,24 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _ui_Room_CharacterSelect.ButtonState(state); // 본인의 클라이언트에서만 실행
         }
     }
+    private void isCheckReadyToPlayers()
+    {
+        foreach (CharacterSelectorNGO playerNGO in _ui_Room_CharacterSelect.UI_CharactorSelectRoot.GetComponentsInChildren<CharacterSelectorNGO>())
+        {
+            if (playerNGO.IsOwnedByServer)
+                continue;
+
+            if (playerNGO.ISReady == false)
+            {
+                _ui_Room_CharacterSelect.SetHostStartButton(false);
+                return;
+            }
+        }
+        _ui_Room_CharacterSelect.SetHostStartButton(true);
+    }
+
+
+
     private void DisPlayHostMarker()
     {
         if (IsOwnedByServer)
