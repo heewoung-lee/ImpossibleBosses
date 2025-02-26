@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,13 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadingScene.LoadNextScene(Nextscene);
         LoadScene(Define.Scene.LoadingScene);
     }
+
+    public void NetworkLoadScene(NetworkManager networkManager,Define.Scene scene)
+    {
+        Managers.Clear();
+        networkManager.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
 
     public string GetEnumName(Define.Scene type)
     {

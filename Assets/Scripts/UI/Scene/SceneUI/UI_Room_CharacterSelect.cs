@@ -82,6 +82,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
+        _button_Start.onClick.AddListener(LoadScenePlayGames);
         _button_Start.gameObject.SetActive(false);
         _backToLobbyButton.onClick.AddListener(async () =>
         {
@@ -216,7 +217,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, UI_CharactorSelectRoot.transform);
         return characterSelecter;
     }
-
+    public void LoadScenePlayGames()
+    {
+        // Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
+        _netWorkManager.SceneManager.LoadScene("GamePlayScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
 
     public void ButtonState(bool state)
     {

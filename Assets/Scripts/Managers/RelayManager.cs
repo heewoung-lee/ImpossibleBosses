@@ -47,6 +47,7 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
+            _netWorkManager.NetworkConfig.EnableSceneManagement = true;
             if (NetWorkManager.StartHost())
             {
                 return _joinCode;
@@ -84,6 +85,7 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = joinCode;
+            _netWorkManager.NetworkConfig.EnableSceneManagement = true;
             return !string.IsNullOrEmpty(joinCode) && NetWorkManager.StartClient();
         }
         catch (RelayServiceException ex) when (ex.ErrorCode == 404)
