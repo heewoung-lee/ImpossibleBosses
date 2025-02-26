@@ -23,6 +23,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
     private NetworkVariable<Vector3> _characterSeletorCamera = new NetworkVariable<Vector3>(
     Vector3.zero,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public enum CameraOperation
     {
         Set,
@@ -67,6 +68,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     private RawImage _selectPlayerRawImage;
     private bool isRunnningCoroutine = false;
     private Coroutine _cameraMoveCoroutine;
+    private bool _isInitCameraPosition = false;
 
     public Button PreViousButton { get => _previousButton; }
     public Button NextButton { get => _nextButton; }
@@ -98,13 +100,11 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _playerChooseCamera = Get<Camera>((int)Cameras.SelectCamara);
 
         _hostIMage.gameObject.SetActive(false);
-        _previousButton.gameObject.SetActive(false);
-        _nextButton.gameObject.SetActive(false);
+        SetActiveCharacterSelectionArrow(false);
         _readyPanel.gameObject.SetActive(false);
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
         _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
-
     }
 
     public override void OnNetworkSpawn()
@@ -126,6 +126,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _ui_Room_CharacterSelect.SetHostButton();
         }
         DisPlayHostMarker();
+        _playerChooseCamera.transform.localPosition = _characterSeletorCamera.Value;
         _characterSeletorCamera.OnValueChanged += SelecterCameraOnValueChanged;
         _playerNickname.OnValueChanged += (oldValue, newValue) => {
             _playerNickNameText.text = newValue.ToString();
@@ -133,6 +134,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _isReady.OnValueChanged += (oldValue, newValue) =>
         {
             _readyPanel.SetActive(newValue);
+            SetActiveCharacterSelectionArrow(!newValue);
         };
         // UI √ ±‚»≠
         _playerNickNameText.text = _playerNickname.Value.ToString();
@@ -142,6 +144,12 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
     public void SelecterCameraOnValueChanged(Vector3 oldValue, Vector3 newValue)
     {
+        if (_isInitCameraPosition == false)
+        {
+            _playerChooseCamera.transform.localPosition = newValue;
+            _isInitCameraPosition = true;
+            return;
+        }
         if (IsOwner)
         {
             if (isRunnningCoroutine == true)
@@ -156,12 +164,15 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _playerChooseCamera.transform.localPosition = newValue;
         }
     }
-
+    private void SetActiveCharacterSelectionArrow(bool State)
+    {
+        _previousButton.gameObject.SetActive(State);
+        _nextButton.gameObject.SetActive(State);
+    }
     private void SetPositionCharacterChooseCamera()
     {
         Vector3 targetWorldPosition = _ui_Room_CharacterSelect.ChooseCameraTr.position;
         Vector3 targetLocalPosition = transform.InverseTransformPoint(targetWorldPosition);
-        _playerChooseCamera.transform.localPosition = targetLocalPosition;
         SetCameraPositionServerRpc(targetLocalPosition,CameraOperation.Set);
     }
     [ServerRpc]
