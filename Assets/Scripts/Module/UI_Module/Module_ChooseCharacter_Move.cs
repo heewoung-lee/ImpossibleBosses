@@ -81,11 +81,7 @@ public class Module_ChooseCharacter_Move : MonoBehaviour
         }
         if(index != _currentSelectCharactorIndex)
         {
-            CharacterSelectorNGO.MoveCameraPositionServerRpc((int)direction * Vector3.right * MOVEVALUE);
+            CharacterSelectorNGO.SetCameraPositionServerRpc((int)direction * Vector3.right * MOVEVALUE,CharacterSelectorNGO.CameraOperation.Add);
         }
-
     }
-
-   
-
 }

@@ -216,7 +216,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     public void ButtonState(bool state)
     {
         _readyButtonState = state;
-        Debug.Log($"현재 버튼 상태{_readyButtonState}");
         ButtonImageChanged(state == false ? readyButtonStateEnum.trueState : readyButtonStateEnum.cancelState);
     }
 
