@@ -47,7 +47,13 @@ public class UI_Button : UI_Scene
     }
     protected override void StartInit()
     {
-        _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUI_Button;
+    }
+
+
+    public void InitalizeUI_Button(GameObject player)
+    {
+        _playerStats = player.GetComponent<PlayerStats>();
         _scoreButton.onClick.AddListener(() =>
         {
             TestIteminInventort();
@@ -60,7 +66,7 @@ public class UI_Button : UI_Scene
             _scoreImage.gameObject.transform.position = PointerEventData.position;
         }, Define.UI_Event.Drag);
     }
-
+    
     public void TestGetGold() => _playerStats.Gold += 5;
     public void TestGetDamaged() => _playerStats.OnAttacked(_playerStats, 5);
     public void TestGetExp() => _playerStats.Exp += 5;

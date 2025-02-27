@@ -17,10 +17,12 @@ public class PlayerFollowingCamera : MonoBehaviour
     {
         _camera = GetComponent<CinemachineCamera>();
         _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeFollowingCamera;
     }
-    private void Start()
+
+    public void InitalizeFollowingCamera(GameObject player)
     {
-        _playerTr = Managers.GameManagerEx.Player.transform;
+        _playerTr = player.transform;
         _camera.Target.TrackingTarget = _playerTr;
 
         _mouseMiddleButton = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");
@@ -38,7 +40,6 @@ public class PlayerFollowingCamera : MonoBehaviour
         _mouseScroll.Enable();
         _mouseScroll.performed += SetCameraHeight;
     }
-
 
     public void PressedMiddleMouseButton(InputAction.CallbackContext context)
     {

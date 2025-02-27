@@ -91,11 +91,24 @@ public class UI_ConsumableBar : UI_Scene
 
     protected override void StartInit()
     {
-        _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        //_playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        //foreach (InputAction getKeyEvent in _comsumableGetKey)
+        //{
+        //    getKeyEvent.performed += UsedPosition;
+        //    getKeyEvent.Enable();
+        //}
+
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeConsumbleBar;
+    }
+
+    public void InitalizeConsumbleBar(GameObject player)
+    {
+        _playerStats = player.GetComponent<PlayerStats>();
         foreach (InputAction getKeyEvent in _comsumableGetKey)
         {
             getKeyEvent.performed += UsedPosition;
             getKeyEvent.Enable();
         }
     }
+
 }

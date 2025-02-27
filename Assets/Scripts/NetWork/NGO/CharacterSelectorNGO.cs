@@ -166,13 +166,6 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _readyPanel.SetActive(_isReady.Value);
     }
 
-
-    protected override void OnNetworkSessionSynchronized()
-    {
-        base.OnNetworkSessionSynchronized();
-        Debug.Log("OnNetworkSessionSynchronized »£√‚µ ");
-    }
-
     private void CheckHostIsAlone()
     {
         if (Managers.RelayManager.NetWorkManager.ConnectedClientsIds.Count == 1 && IsHost)

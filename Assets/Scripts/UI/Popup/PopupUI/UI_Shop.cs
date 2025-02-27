@@ -99,7 +99,10 @@ public class UI_Shop : UI_Popup
         base.OnEnableInit();
         _close_Popup_UI.performed += CloseDecriptionWindow;
         if (_playerStats == null)
-            Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged += UpdateShopData;
+        {
+            Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUpdateShopData;
+           //Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged += UpdateShopData;
+        }
         else
             _playerStats.Event_StatsChanged += UpdateShopData;
         UpdateShopData();
@@ -110,7 +113,10 @@ public class UI_Shop : UI_Popup
         base.OnDisableInit();
         _close_Popup_UI.performed -= CloseDecriptionWindow;
         if (_playerStats == null)
-            Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged -= UpdateShopData;
+        {
+            //Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged -= UpdateShopData;
+            Managers.SocketEventManager.PlayerSpawnInitalize -= InitalizeUpdateShopData;
+        }
         else
             _playerStats.Event_StatsChanged -= UpdateShopData;
 
@@ -123,7 +129,13 @@ public class UI_Shop : UI_Popup
             _playerHasGoldText.text = _playerStats.Gold.ToString();
         }
     }
-
+    public void InitalizeUpdateShopData(GameObject player)
+    {
+        if (player.TryGetComponent(out PlayerStats stat))
+        {
+            _playerHasGoldText.text = stat.Gold.ToString();
+        }
+    }
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
         CloseDecriptionWindow();

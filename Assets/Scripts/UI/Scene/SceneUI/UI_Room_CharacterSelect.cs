@@ -53,9 +53,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     private TMP_Text _button_Text;
     private bool _readyButtonState;
 
-    public UI_LoadingPanel UI_LoadingPanel { get => _ui_LoadingPanel; }
-
-
     private ReadyButtonImages[] _readyButtonStateValue;
 
     public Transform ChooseCameraTr { get => _chooseCameraTr; }
