@@ -52,7 +52,9 @@ public class UI_Room_CharacterSelect : UI_Scene
     private Button _button_Start;
     private TMP_Text _button_Text;
     private bool _readyButtonState;
-    
+
+    public UI_LoadingPanel UI_LoadingPanel { get => _ui_LoadingPanel; }
+
 
     private ReadyButtonImages[] _readyButtonStateValue;
 
@@ -67,7 +69,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
-        _button_Start.onClick.AddListener(LoadScenePlayGames);
+        _button_Start.onClick.AddListener(async()=> await LoadScenePlayGames());
         _button_Start.gameObject.SetActive(false);
         _backToLobbyButton.onClick.AddListener(async () =>
         {
@@ -123,7 +125,6 @@ public class UI_Room_CharacterSelect : UI_Scene
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
         SpawnChractorSeletorAndSetPosition(playerIndex);
     }
-    
 
     public async Task BacktoLobby()
     {
@@ -202,11 +203,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT.transform);
         return characterSelecter;
     }
-    public void LoadScenePlayGames()
+    public async Task LoadScenePlayGames()
     {
         //TODO: 호스트가 선택한 캐릭터 저장해야함
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
+        await Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)

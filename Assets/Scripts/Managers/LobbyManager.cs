@@ -12,7 +12,6 @@ using UnityEngine.Rendering;
 using Player = Unity.Services.Lobbies.Models.Player;
 
 
-
 public struct PlayerIngameLoginInfo
 {
     private readonly string _nickname;
@@ -39,7 +38,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    private const string LOBBYID = "WaitLobbyRoom270";
+    
+    private const string LOBBYID = "WaitLobbyRoom271";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private string _playerID;
@@ -238,7 +238,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 await RemovePlayerData(lobby);
                 Managers.RelayManager.UnSubscribeCallBackEvent();
                 Managers.RelayManager.ShutDownRelay();
-                IsLastUserInLobby();
+                DeleteRelayCodefromLobby();
             }
         }
         catch (System.ObjectDisposedException disposedException)
@@ -248,6 +248,18 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         catch (Exception e)
         {
             Debug.Log($"LeaveLobby 메서드 안에서의 에러{e}");
+        }
+    }
+
+    public async Task LeaveCurrentLobby()
+    {
+        if (_currentLobby != null)
+        {
+            await RemovePlayerData(_currentLobby);
+            DeleteRelayCodefromLobby();
+            StopHeartbeat();
+
+            Debug.Log($"현재로비{_currentLobby}");
         }
     }
     public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
@@ -371,7 +383,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
 
 
-    private async Task LeaveAllLobby()
+    public async Task LeaveAllLobby()
     {
         LobbyLoading?.Invoke(true);
         List<Lobby> lobbyinPlayerList = await CheckAllLobbyinPlayer();
@@ -692,12 +704,12 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     } 
     public void LoadingPanel(Action process)
     {
-        LobbyLoading?.Invoke(true);
+        LobbyLoading.Invoke(true);
         process.Invoke();
-        LobbyLoading?.Invoke(false);
+        LobbyLoading.Invoke(false);
     }
 
-    public void IsLastUserInLobby()
+    public void DeleteRelayCodefromLobby()
     {
         if (_currentLobby.Players.Count == 1)
         {

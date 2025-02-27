@@ -91,7 +91,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         get
         {
-            if(_module_chooseCharacter_Move == null)
+            if (_module_chooseCharacter_Move == null)
             {
                 _module_chooseCharacter_Move = GetComponent<Module_ChooseCharacter_Move>();
             }
@@ -120,15 +120,11 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
         _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
-
-
     }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         _bg.color = PLAYER_FRAME_COLOR;
-        _playerNickNameObject.SetActive(true);
         if (IsOwner)
         {
             _previousButton.gameObject.SetActive(true);
@@ -170,6 +166,12 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _readyPanel.SetActive(_isReady.Value);
     }
 
+
+    protected override void OnNetworkSessionSynchronized()
+    {
+        base.OnNetworkSessionSynchronized();
+        Debug.Log("OnNetworkSessionSynchronized »£√‚µ ");
+    }
 
     private void CheckHostIsAlone()
     {

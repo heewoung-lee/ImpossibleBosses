@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,10 +24,12 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public void NetworkLoadScene(NetworkManager networkManager,Define.Scene scene)
+    public async Task NetworkLoadScene(NetworkManager networkManager, Define.Scene scene)
     {
         Managers.Clear();
+        _currentSceneName = scene;
         networkManager.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+        await Managers.LobbyManager.LeaveCurrentLobby();
     }
 
 
