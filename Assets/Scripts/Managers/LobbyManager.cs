@@ -258,8 +258,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             await RemovePlayerData(_currentLobby);
             DeleteRelayCodefromLobby();
             StopHeartbeat();
-
-            Debug.Log($"현재로비{_currentLobby}");
         }
     }
     public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
@@ -369,6 +367,21 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
     }
+
+    public async Task<(bool,Lobby)> TryGetLobbyAsyncCustom(string lobbyId)
+    {
+        try
+        {
+            Lobby lobby = await GetLobbyAsyncCustom(lobbyId);
+            return (true, lobby);
+        }
+        catch(LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.LobbyNotFound)
+        {
+            return (false, null);
+        }
+        
+    }
+
     private async Task<QueryResponse> GetQueryLobbiesAsyncCustom(QueryLobbiesOptions queryFilter = null)
     {
         try

@@ -24,12 +24,12 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public async Task NetworkLoadScene(NetworkManager networkManager, Define.Scene scene)
+    public async Task NetworkLoadSceneAsync(NetworkManager networkManager, Define.Scene scene)
     {
         Managers.Clear();
         _currentSceneName = scene;
-        networkManager.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
         await Managers.LobbyManager.LeaveCurrentLobby();
+        networkManager.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
 

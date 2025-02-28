@@ -43,6 +43,10 @@ public class GameManagerEx : IManagerInitializable
         return go;
     }
 
+    public void SetPlayer(GameObject playerObject)
+    {
+        _player = playerObject;
+    }
     public Define.WorldObject GetWorldObjectType(GameObject go)
     {
         if (go.TryGetComponent(out BaseController baseController))

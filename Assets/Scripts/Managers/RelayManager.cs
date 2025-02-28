@@ -45,8 +45,7 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                _nGO_ROOT.GetComponent<NetworkObject>().DestroyWithScene = true;
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT,destroyOption: true);
             }
             return _nGO_ROOT;
         }
@@ -79,14 +78,15 @@ public class RelayManager
 
     }
 
-    public GameObject SpawnNetworkOBJ(ulong clientId,GameObject obj,Transform parent=null)
+    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = false)
     {
         if(NetWorkManager.IsListening == true)
         {
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
             networkObj.SpawnWithOwnership(clientId);
+            networkObj.DestroyWithScene = destroyOption;
 
-            if(parent != null)
+            if (parent != null)
             {
                 networkObj.transform.SetParent(parent,false);
             }

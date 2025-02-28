@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayScene : BaseScene
 {
-    private GameObject _player;
     private RelayManager _relayManager;
     public Define.PlayerClass SpawnPlayerClass;
     public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
@@ -21,16 +21,17 @@ public class PlayScene : BaseScene
     {
         base.StartInit();
         string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
-        _player = Managers.GameManagerEx.Spawn($"Prefabs/Player/{choicePlayer}");
+        GameObject player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}");
+        Managers.GameManagerEx.SetPlayer(player);
         Vector3 targetPosition = Vector3.zero;
-        _player.GetComponent<NavMeshAgent>().Warp(targetPosition);//³©±è¹æÁö
-        _relayManager.SpawnNetworkOBJ(_relayManager.NetWorkManager.LocalClientId, _player, _relayManager.NGO_ROOT.transform);
-        Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(_player);
+        player.GetComponent<NavMeshAgent>().Warp(targetPosition);//³©±è¹æÁö
+        _relayManager.SpawnNetworkOBJ(_relayManager.NetWorkManager.LocalClientId, player);
+        Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(player);
     }
 
     public override void Clear()
     {
-        
+
     }
 
 }

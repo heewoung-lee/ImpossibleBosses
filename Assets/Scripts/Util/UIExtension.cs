@@ -158,7 +158,6 @@ public static class UIExtension
     public static Image ImageEnable(this Image image,bool isLobbyLoading)
     {
         image.enabled = isLobbyLoading;
-        Debug.Log($"ImageEnable 호출완료{isLobbyLoading}");
         return image;
     }
 }

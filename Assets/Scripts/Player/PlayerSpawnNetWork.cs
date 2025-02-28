@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEngine;
 
 public class PlayerSpawnNetWork : NetworkBehaviourBase
 {
@@ -8,8 +9,9 @@ public class PlayerSpawnNetWork : NetworkBehaviourBase
         if (IsOwner)
         {
             SetTransformServerRpc();
+            Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(gameObject);
         }
-        
+
     }
     protected override void AwakeInit()
     {

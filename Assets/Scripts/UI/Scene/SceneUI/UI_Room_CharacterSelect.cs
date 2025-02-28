@@ -197,14 +197,14 @@ public class UI_Room_CharacterSelect : UI_Scene
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
 
-        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT.transform);
+        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT.transform,true);
         return characterSelecter;
     }
     public async Task LoadScenePlayGames()
     {
         //TODO: 호스트가 선택한 캐릭터 저장해야함
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-        await Managers.SceneManagerEx.NetworkLoadScene(_netWorkManager, Define.Scene.GamePlayScene);
+        await Managers.SceneManagerEx.NetworkLoadSceneAsync(_netWorkManager, Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)
