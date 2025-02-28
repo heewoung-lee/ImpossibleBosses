@@ -46,7 +46,7 @@ public class RelayManager
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
                 _nGO_ROOT.GetComponent<NetworkObject>().DestroyWithScene = true;
-                Managers.RelayManager.SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
             }
             return _nGO_ROOT;
         }

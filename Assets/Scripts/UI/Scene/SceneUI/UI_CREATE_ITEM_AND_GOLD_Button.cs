@@ -3,13 +3,31 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Button : UI_Scene
+public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 {
     private Button _scoreButton;
     private TMP_Text _scoreText;
     private Image _scoreImage;
 
     private PlayerStats _playerStats;
+
+
+    public PlayerStats PlayerStats
+    {
+        get
+        {
+            if(_playerStats == null)
+            {
+                if(Managers.GameManagerEx.Player == null)
+                {
+                    Managers.SocketEventManager.PlayerSpawnInitalize -= IninitalizePlayerStats;
+                    Managers.SocketEventManager.PlayerSpawnInitalize += IninitalizePlayerStats;
+                }
+                _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+            }
+            return _playerStats;
+        }
+    }
 
     public ItemGeneratingType itemGeneratingType = ItemGeneratingType.All;
 
@@ -44,16 +62,18 @@ public class UI_Button : UI_Scene
         _scoreButton = GetButton((int)Buttons.ScoreButton);
         _scoreImage = GetImage((int)Images.ScoreImage);
         _scoreText = GetText((int)Texts.ScoreText);
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUI_Button;
     }
     protected override void StartInit()
     {
+        InitalizeUI_Button();
     }
 
-
-    public void InitalizeUI_Button(GameObject player)
+    public void IninitalizePlayerStats(GameObject player)
     {
         _playerStats = player.GetComponent<PlayerStats>();
+    }
+    public void InitalizeUI_Button()
+    {
         _scoreButton.onClick.AddListener(() =>
         {
             TestIteminInventort();
@@ -67,9 +87,9 @@ public class UI_Button : UI_Scene
         }, Define.UI_Event.Drag);
     }
     
-    public void TestGetGold() => _playerStats.Gold += 5;
-    public void TestGetDamaged() => _playerStats.OnAttacked(_playerStats, 5);
-    public void TestGetExp() => _playerStats.Exp += 5;
+    public void TestGetGold() => PlayerStats.Gold += 5;
+    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats, 5);
+    public void TestGetExp() => PlayerStats.Exp += 5;
 
     public void TestGenerateBossSkill1()
     {

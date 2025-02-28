@@ -35,10 +35,10 @@ public class UI_Player_Info : UI_Scene
         _hpText = GetText((int)User_text.HP_Text);
         _levelText = GetText((int)User_text.Level_Text);
         _playerName_Text = GetText((int)User_text.PlayerName_Text);
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitializePlayerInfo;
     }
     protected override void StartInit()
     {
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitializePlayerInfo;
     }
 
     public void InitializePlayerInfo(GameObject player)
