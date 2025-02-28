@@ -64,6 +64,7 @@ public class UI_ConsumableBar : UI_Scene
             _comsumableGetKey[i].Enable();
         }
         _itemDragImage = Utill.FindChild<Image>(gameObject, "ItemDragImage");
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeConsumbleBar;
     }
 
     public void UsedPosition(InputAction.CallbackContext context)
@@ -97,8 +98,6 @@ public class UI_ConsumableBar : UI_Scene
         //    getKeyEvent.performed += UsedPosition;
         //    getKeyEvent.Enable();
         //}
-
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeConsumbleBar;
     }
 
     public void InitalizeConsumbleBar(GameObject player)

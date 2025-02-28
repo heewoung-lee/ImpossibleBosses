@@ -38,15 +38,6 @@ public class UI_Player_Info : UI_Scene
     }
     protected override void StartInit()
     {
-        //_stats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        //_stats.Event_StatsChanged -= SetHpUI;
-        //_stats.Event_StatsChanged += SetHpUI;
-
-        //_stats.Event_StatsLoaded -= UpdateUIInfo;
-        //_stats.Event_StatsLoaded += UpdateUIInfo;
-
-        //_stats.Event_StatsLoaded.Invoke();
-
         Managers.SocketEventManager.PlayerSpawnInitalize += InitializePlayerInfo;
     }
 

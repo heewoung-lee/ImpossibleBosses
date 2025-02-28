@@ -101,7 +101,6 @@ public class UI_Shop : UI_Popup
         if (_playerStats == null)
         {
             Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUpdateShopData;
-           //Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged += UpdateShopData;
         }
         else
             _playerStats.Event_StatsChanged += UpdateShopData;
@@ -114,7 +113,6 @@ public class UI_Shop : UI_Popup
         _close_Popup_UI.performed -= CloseDecriptionWindow;
         if (_playerStats == null)
         {
-            //Managers.GameManagerEx.Player.GetComponent<PlayerStats>().Event_StatsChanged -= UpdateShopData;
             Managers.SocketEventManager.PlayerSpawnInitalize -= InitalizeUpdateShopData;
         }
         else

@@ -44,10 +44,10 @@ public class UI_Button : UI_Scene
         _scoreButton = GetButton((int)Buttons.ScoreButton);
         _scoreImage = GetImage((int)Images.ScoreImage);
         _scoreText = GetText((int)Texts.ScoreText);
+        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUI_Button;
     }
     protected override void StartInit()
     {
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUI_Button;
     }
 
 
