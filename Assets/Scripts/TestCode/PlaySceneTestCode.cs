@@ -19,7 +19,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby27";
+    string LobbyID = "TestLobby37";
     string _playerType = null;
     private async void Start()
     {
@@ -37,12 +37,15 @@ public class PlaySceneTestCode : MonoBehaviour
             }
             else
             {
+                await Task.Delay(1000);
                 (bool ischeckLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
-                if (ischeckLobby == false)
+                if (ischeckLobby == false|| lobby.Data == null)
                 {
-                    await Utill.RateLimited(async() => await JoinChannel(),5000);
+                    await Utill.RateLimited(async() => await JoinChannel(),1000);
+                    return;
                 }
-               await Managers.LobbyManager.JoinLobbyByID(LobbyID);
+                string joinCode = lobby.Data["RelayCode"].Value;
+                await Managers.RelayManager.JoinGuestRelay(joinCode);
             }
 
         }
