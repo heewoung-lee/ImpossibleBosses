@@ -140,8 +140,7 @@ public class UI_Shop : UI_Popup
     }
     public void CloseDecriptionWindow()
     {
-        UI_Description description = null;
-        if (description = Managers.UI_Manager.Get_Scene_UI<UI_Description>())
+        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
         {
             description.gameObject.SetActive(false);
             description.SetdecriptionOriginPos();

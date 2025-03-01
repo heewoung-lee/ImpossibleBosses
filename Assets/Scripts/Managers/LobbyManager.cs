@@ -38,11 +38,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         TryJoinLobby,
         VivoxLogin
     }
-    
+
     private const string LOBBYID = "WaitLobbyRoom271";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
-    private string _playerID;
     private Lobby _currentLobby;
     private bool isRefreshing = false;
     private bool isalready = false;
@@ -54,7 +53,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public Action<string> PlayerAddDataInputEvent;
     public Action<int> PlayerDeleteEvent;
     public Action<bool> LobbyLoading;
-    public string PlayerID => _playerID;
+    public string PlayerID => _currentPlayerInfo.Id;
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
     public bool[] TaskChecker => _taskChecker;
@@ -78,7 +77,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 AuthenticationService.Instance.SignOut();
 
             }
-            _playerID = await SignInAnonymouslyAsync();
+            await SignInAnonymouslyAsync();
             _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
             isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             if (isalready is true)
@@ -121,7 +120,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)
     {
-        if (lobby == null || _playerID == null)
+        if (lobby == null || _currentPlayerInfo.Id == null)
             return;
 
         CheckHostAndSendHeartBeat(lobby, interval);
@@ -132,7 +131,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
     {
         StopHeartbeat();
-        if (_currentLobby.HostId == _playerID)
+        if (lobby.HostId == _currentPlayerInfo.Id)
         {
             Debug.Log("하트비트 이식");
             _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
@@ -146,7 +145,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private async Task CheckHostRelay(Lobby lobby)
     {
-        if (_currentLobby.HostId != _playerID)
+        if (lobby.HostId != _currentPlayerInfo.Id)
             return;
 
         string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
@@ -154,7 +153,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
     private async Task CheckClientRelay(Lobby lobby)
     {
-        if (_currentLobby.HostId == _playerID)
+        if (lobby.HostId == _currentPlayerInfo.Id)
             return;
 
         try
@@ -253,9 +252,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task LeaveCurrentLobby()
     {
-        if (_currentLobby != null)
+        await LeaveLobby(_currentLobby);
+    }
+    public async Task LeaveLobby(Lobby lobby)
+    {
+        if (lobby != null)
         {
-            await RemovePlayerData(_currentLobby);
+            await RemovePlayerData(lobby);
             DeleteRelayCodefromLobby();
             StopHeartbeat();
         }
@@ -277,6 +280,28 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         catch (Exception e)
         {
             Debug.Log($"An error occurred while creating the room.{e}");
+            throw;
+        }
+    }
+
+
+    public async Task<Lobby> CreateLobbyID(string lobbyID, string lobbyName, int maxPlayers, CreateLobbyOptions options = null)
+    {
+        try
+        {
+            if (_currentLobby != null)
+            {
+                await LeaveLobbyAndDisconnectRelay(_currentLobby);
+            }
+            Lobby lobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(lobbyID, lobbyName, maxPlayers, options);
+            await JoinLobbyInitalize(lobby);
+            await CheckPlayerHostAndClient(lobby, CheckHostRelay);
+            return lobby;
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"An error occurred while creating the room.{e}");
+            return null;
             throw;
         }
     }
@@ -356,7 +381,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     }
 
-    private async Task<Lobby> GetLobbyAsyncCustom(string lobbyID)
+    public async Task<Lobby> GetLobbyAsyncCustom(string lobbyID)
     {
         try
         {
@@ -368,18 +393,18 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
     }
 
-    public async Task<(bool,Lobby)> TryGetLobbyAsyncCustom(string lobbyId)
+    public async Task<(bool, Lobby)> TryGetLobbyAsyncCustom(string lobbyId)
     {
         try
         {
             Lobby lobby = await GetLobbyAsyncCustom(lobbyId);
             return (true, lobby);
         }
-        catch(LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.LobbyNotFound)
+        catch (LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.LobbyNotFound)
         {
             return (false, null);
         }
-        
+
     }
 
     private async Task<QueryResponse> GetQueryLobbiesAsyncCustom(QueryLobbiesOptions queryFilter = null)
@@ -418,7 +443,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
         foreach (Lobby lobby in allLobbyResponse.Results)
         {
-            if (lobby.Players.Any(player => player.Id == _playerID))
+            if (lobby.Players.Any(player => player.Id == _currentPlayerInfo.Id))
             {
                 lobbyinPlayerList.Add(lobby);
             }
@@ -469,7 +494,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             {
                 foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
                 {
-                    if (player.Data == null && _playerID == player.Id)//나인데 데이터를 할당 못받았으면,다시 초기화
+                    if (player.Data == null && _currentPlayerInfo.Id == player.Id)//나인데 데이터를 할당 못받았으면,다시 초기화
                     {
                         Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
                         return await Utill.RateLimited(() => InitLobbyScene(), 5000); // 재시도
@@ -479,7 +504,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                         if (player.Data == null)
                             continue;
 
-                        if (_playerID == player.Id) //자기자신은 건너뛰기
+                        if (_currentPlayerInfo.Id == player.Id) //자기자신은 건너뛰기
                             continue;
 
                         if (data.Key != "NickName")
@@ -547,8 +572,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private async Task RemovePlayerData(Lobby lobby)
     {
-        Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_playerID} 정보가 제거되었습니다.");
-        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _playerID);
+        Debug.Log($"로비ID{lobby.Id} \t 플레이어ID{_currentPlayerInfo.Id} 정보가 제거되었습니다.");
+        await LobbyService.Instance.RemovePlayerAsync(lobby.Id, _currentPlayerInfo.Id);
     }
     public async Task LogoutAndAllLeaveLobby()
     {
@@ -657,7 +682,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
-        if(_heartBeatCoroutine == null)
+        if (_heartBeatCoroutine == null)
         {
             await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
         }
@@ -687,7 +712,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         Lobby lobby = await GetLobbyAsyncCustom(LobbyId);
 
-        foreach(Player player in lobby.Players)
+        foreach (Player player in lobby.Players)
         {
             if (lobby.HostId == playerID || player.Id != playerID)
                 continue;
@@ -699,7 +724,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
 
 
-    public async Task ExecuteSystemMessageAction(string messageChannel,string systemMessageText,string detectionText,Func<Task> executeMethod)
+    public async Task ExecuteSystemMessageAction(string messageChannel, string systemMessageText, string detectionText, Func<Task> executeMethod)
     {
         if (await isCheckLobbyInClientPlayer(messageChannel, Managers.LobbyManager.PlayerID)
             && systemMessageText.Contains(detectionText))
@@ -714,7 +739,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LobbyLoading?.Invoke(true);
         await process.Invoke();
         LobbyLoading?.Invoke(false);
-    } 
+    }
     public void LoadingPanel(Action process)
     {
         LobbyLoading.Invoke(true);
@@ -732,6 +757,10 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     }
     #region TestDebugCode
+    public void SetPlayerLoginInfo(PlayerIngameLoginInfo info)
+    {
+        _currentPlayerInfo = info;
+    }
     public void ShowLobbyData()
     {
         foreach (var data in _currentLobby.Data)

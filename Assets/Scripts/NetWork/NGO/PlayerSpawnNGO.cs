@@ -1,13 +1,13 @@
 using System;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayerSpawnNGO : NetworkBehaviourBase
 {
-    private GameObject _player;
-
     private RelayManager _relayManager;
+    GameObject _player;
     protected override void AwakeInit()
     {
         _relayManager = Managers.RelayManager;
@@ -15,24 +15,34 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
 
     protected override void StartInit()
     {
-        //Vector3 targetPosition = Managers.GameManagerEx.SpawnPoint.transform
-        //    .GetChild(Random.Range(0, Managers.GameManagerEx.SpawnPoint.transform.childCount)).position;
-
-        //Vector3 targetPosition = Vector3.zero;
-        //_player.GetComponent<NavMeshAgent>().Warp(targetPosition);//낑김방지를 위한 함수실행
+        if (IsOwner)
+        {
+            SpawntoPlayerServerRpc();
+        }
     }
 
-    //protected override void OnNetworkPostSpawn()
-    //{
-    //    base.OnNetworkPostSpawn();
-    //    if (IsOwner)
-    //    {
-    //        string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
-    //        _player = Managers.GameManagerEx.Spawn($"Prefab/Player/{choicePlayer}");
-    //        Vector3 targetPosition = Vector3.zero;
-    //        _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
-    //        _relayManager.SpawnNetworkOBJ(OwnerClientId, _player, _relayManager.NGO_ROOT.transform);
-    //        Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(_player);
-    //    }
-    //}
+    protected override void OnNetworkPostSpawn()
+    {
+        base.OnNetworkPostSpawn();
+    } 
+
+    [ServerRpc]
+    private void SpawntoPlayerServerRpc()
+    {
+        string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
+        _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}");
+        Managers.GameManagerEx.SetPlayer(_player);
+        Vector3 targetPosition = Vector3.zero;
+        _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
+        Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(_player);
+        SpawntoPlayerClientRpc();
+    }
+
+
+    [ClientRpc]
+    private void SpawntoPlayerClientRpc()
+    {
+        _player = _relayManager.SpawnNetworkOBJ(OwnerClientId, _player, _relayManager.NGO_ROOT.transform);
+    }
+
 }
