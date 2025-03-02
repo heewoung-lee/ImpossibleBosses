@@ -15,19 +15,16 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
 
     protected override void StartInit()
     {
-        if (IsOwner)
-        {
-            SpawntoPlayerServerRpc();
-        }
+      RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId);
     }
 
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
-    } 
+    }
 
-    [ServerRpc]
-    private void SpawntoPlayerServerRpc()
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestSpawnPlayerServerRpc(ulong requestingClientId)
     {
         string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
         _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}");
@@ -35,13 +32,14 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
         Vector3 targetPosition = Vector3.zero;
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
         Managers.SocketEventManager.PlayerSpawnInitalize?.Invoke(_player);
-        SpawntoPlayerClientRpc();
+        SpawntoPlayerClientRpc(requestingClientId);
     }
 
 
     [ClientRpc]
-    private void SpawntoPlayerClientRpc()
+    private void SpawntoPlayerClientRpc(ulong requestingClientId)
     {
+        _player.GetComponent<NetworkObject>().SpawnAsPlayerObject(requestingClientId);
         _player = _relayManager.SpawnNetworkOBJ(OwnerClientId, _player, _relayManager.NGO_ROOT.transform);
     }
 

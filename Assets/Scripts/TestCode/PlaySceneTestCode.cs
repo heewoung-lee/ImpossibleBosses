@@ -19,13 +19,13 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby38";
+    string LobbyID = "TestLobby51";
     string _playerType = null;
+    GameObject _ngoRoot;
     private async void Start()
     {
         await JoinChannel();
     }
-
     private async Task JoinChannel()
     {
         if (Managers.RelayManager.NetWorkManager.IsListening == false)
@@ -34,6 +34,8 @@ public class PlaySceneTestCode : MonoBehaviour
             if (_playerType == "Player1")
             {
                 await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
+                _ngoRoot = Managers.RelayManager.SetNGO_ROOT();
+                
             }
             else
             {
@@ -84,20 +86,21 @@ public class PlaySceneTestCode : MonoBehaviour
     {
        if(GUI.Button(new Rect(0, 0, 100, 100), "GetLobby"))
         {
-          Lobby lobby = await Managers.LobbyManager.GetLobbyAsyncCustom(LobbyID);
-            if(lobby == null)
+
+            (bool isgetLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
+
+            if(isgetLobby == false)
             {
-                Debug.Log(lobby + "의 데이터가 없습니다");
+                Debug.Log("로비가 존재하지 않습니다");
                 return;
             }
 
-            Debug.Log($"{lobby.Id}의 플레이어 목록");
-            Debug.Log($"조인코드{lobby.Data["RelayCode"].Value}");
-            foreach (Player player in lobby.Players)
+            string joinCode = lobby.Data["RelayCode"].Value;
+            Debug.Log($"조인코드: {joinCode}");
+            foreach (NetworkClient player in Managers.RelayManager.NetWorkManager.ConnectedClientsList)
             {
-                Debug.Log($"현재 참여하고 있는 플레이어 : {player.Id}");
+                Debug.Log($"플레이어의 아이디: {player.ClientId}");
             }
-
         }
     }
 }
