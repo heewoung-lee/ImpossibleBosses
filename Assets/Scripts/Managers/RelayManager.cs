@@ -10,6 +10,8 @@ using Unity.Networking.Transport;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using UnityEditor.PackageManager;
 using Unity.Services.Lobbies.Models;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class RelayManager
 {
@@ -45,17 +47,20 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT,destroyOption: true);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT, destroyOption: true);
             }
             return _nGO_ROOT;
         }
     }
-
-    public GameObject SetNGO_ROOT()
-    {
-        return NGO_ROOT;
-    }
     public string JoinCode { get => _joinCode;}
+
+    public GameObject Load_NGO_ROOT_object(string path)
+    {
+        GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
+        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ, destroyOption: true);
+        _nGO_ROOT = networkOBJ;
+        return networkOBJ;
+    }
 
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
@@ -83,7 +88,7 @@ public class RelayManager
 
     }
 
-    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = false)
+    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj,Transform parent = null, bool destroyOption = false)
     {
         if(NetWorkManager.IsListening == true)
         {

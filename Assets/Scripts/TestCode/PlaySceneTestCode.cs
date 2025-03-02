@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
@@ -19,7 +20,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby51";
+    string LobbyID = "TestLobby71";
     string _playerType = null;
     GameObject _ngoRoot;
     private async void Start()
@@ -34,8 +35,7 @@ public class PlaySceneTestCode : MonoBehaviour
             if (_playerType == "Player1")
             {
                 await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
-                _ngoRoot = Managers.RelayManager.SetNGO_ROOT();
-                
+                _ngoRoot = Managers.RelayManager.Load_NGO_ROOT_object("NGO/NGO_ROOT_AddPlayerSpawner");
             }
             else
             {
