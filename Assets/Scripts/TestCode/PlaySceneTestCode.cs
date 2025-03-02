@@ -19,7 +19,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby37";
+    string LobbyID = "TestLobby38";
     string _playerType = null;
     private async void Start()
     {

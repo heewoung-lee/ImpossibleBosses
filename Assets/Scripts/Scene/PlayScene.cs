@@ -17,6 +17,8 @@ public class PlayScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
+        if(Managers.RelayManager.NetWorkManager.IsHost)
+        Managers.RelayManager.SetNGO_ROOT();
     }
 
     public override void Clear()

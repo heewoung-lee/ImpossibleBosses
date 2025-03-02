@@ -50,6 +50,11 @@ public class RelayManager
             return _nGO_ROOT;
         }
     }
+
+    public GameObject SetNGO_ROOT()
+    {
+        return NGO_ROOT;
+    }
     public string JoinCode { get => _joinCode;}
 
     public async Task<string> StartHostWithRelay(int maxConnections)
