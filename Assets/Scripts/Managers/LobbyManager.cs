@@ -64,6 +64,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         LoadingScene.SetCheckTaskChecker(_taskChecker);
         Managers.RelayManager.SceneLoadInitalizeRelayServer();
         InitalizeVivoxEvent();
+        InitalizeLobbyEvent();
         _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
         try
         {
@@ -607,11 +608,14 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     {
         Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
         Managers.VivoxManager.VivoxDoneLoginEvent += SetVivoxTaskCheker;
+   
+    }
+    public void InitalizeLobbyEvent()
+    {
         Managers.SocketEventManager.OnApplicationQuitEvent += LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
-
     public void InitalizeRelayEvent()
     {
         Managers.RelayManager.DisconnectPlayerAsyncEvent -= DisconnectPlayer;

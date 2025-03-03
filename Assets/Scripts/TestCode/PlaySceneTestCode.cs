@@ -20,7 +20,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby71";
+    string LobbyID = "TestLobby80";
     string _playerType = null;
     GameObject _ngoRoot;
     private async void Start()
@@ -49,8 +49,9 @@ public class PlaySceneTestCode : MonoBehaviour
                 string joinCode = lobby.Data["RelayCode"].Value;
                 await Managers.RelayManager.JoinGuestRelay(joinCode);
             }
-
         }
+        Managers.LobbyManager.InitalizeLobbyEvent();
+        Managers.LobbyManager.InitalizeRelayEvent();
     }
 
     private async Task SetAuthenticationService()
