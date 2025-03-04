@@ -8,6 +8,7 @@ public class Module_UI_SkillBar : MonoBehaviour
     void Start()
     {
         UI_SkillBar skillBar_UI = Managers.UI_Manager.GetSceneUIFromResource<UI_SkillBar>();
+        Managers.SkillManager.Done_UI_SKilBar_Init_Event?.Invoke();
     }
 
 }

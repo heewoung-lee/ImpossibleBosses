@@ -7,6 +7,8 @@ public class SkillManager : IManagerInitializable
     Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
     public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
 
+    public Action Done_UI_SKilBar_Init_Event;
+
     List<Type> _skillType = new List<Type>();
 
     private UI_SkillBar _ui_SkillBar;
