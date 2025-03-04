@@ -42,9 +42,9 @@ public class PlayerController : MoveableController
 
     protected override void AwakeInit()
     {
-        _stats = GetComponent<PlayerStats>();
-        _agent = GetComponent<NavMeshAgent>();
-        _playerInput = GetComponent<PlayerInput>();
+        _stats = gameObject.GetOrAddComponent<PlayerStats>();
+        _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
+        _playerInput = gameObject.GetOrAddComponent<PlayerInput>();
 
         _inputmanager = Managers.InputManager;
         _playerInput.actions = _inputmanager.InputActionAsset;
@@ -83,6 +83,9 @@ public class PlayerController : MoveableController
     private Vector3 MouseRightClickPosEvent(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(_pointerAction.ReadValue<Vector2>());
+
+        Debug.Log(_pointerAction.ReadValue<Vector2>());
+
         RaycastHit hit;
 
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red);

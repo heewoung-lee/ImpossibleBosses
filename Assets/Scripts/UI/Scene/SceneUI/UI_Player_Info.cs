@@ -12,7 +12,7 @@ public class UI_Player_Info : UI_Scene
     private Slider _hpSlider;
     private TMP_Text _hpText;
     private TMP_Text _levelText;
-    private PlayerStats _stats;
+    private PlayerStats _playerStats;
     private TMP_Text _playerName_Text;
 
     enum HP_Slider
@@ -35,35 +35,49 @@ public class UI_Player_Info : UI_Scene
         _hpText = GetText((int)User_text.HP_Text);
         _levelText = GetText((int)User_text.Level_Text);
         _playerName_Text = GetText((int)User_text.PlayerName_Text);
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitializePlayerInfo;
+
+        if (Managers.GameManagerEx.Player.gameObject.TryGetComponent(out PlayerStats stats))
+        {
+            _playerStats = stats;
+            InitalizePlayerInfo();
+        }
+        else
+        {
+            Managers.SocketEventManager.PlayerSpawnInitalize += SubScribePlayerStats;
+        }
     }
     protected override void StartInit()
     {
     }
 
-    public void InitializePlayerInfo(GameObject player)
+    public void SubScribePlayerStats(GameObject player)
     {
-        _stats = player.GetComponent<PlayerStats>();
-        _stats.Event_StatsChanged -= SetHpUI;
-        _stats.Event_StatsChanged += SetHpUI;
+        _playerStats = player.GetComponent<PlayerStats>();
+        InitalizePlayerInfo();
+    }
 
-        _stats.Event_StatsLoaded -= UpdateUIInfo;
-        _stats.Event_StatsLoaded += UpdateUIInfo;
+    private void InitalizePlayerInfo()
+    {
+        _playerStats.Event_StatsChanged -= SetHpUI;
+        _playerStats.Event_StatsChanged += SetHpUI;
 
-        _stats.Event_StatsLoaded.Invoke();
+        _playerStats.Event_StatsLoaded -= UpdateUIInfo;
+        _playerStats.Event_StatsLoaded += UpdateUIInfo;
+
+        _playerStats.Event_StatsLoaded.Invoke();
     }
 
     public void SetHpUI()
     {
-        _hpSlider.value = (float)_stats.Hp / (float)_stats.MaxHp;
-        _hpText.text = $"{_stats.Hp}/{_stats.MaxHp}";
+        _hpSlider.value = (float)_playerStats.Hp / (float)_playerStats.MaxHp;
+        _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
     }
 
     public void UpdateUIInfo()
     {
-        _hpText.text = $"{_stats.Hp}/{_stats.MaxHp}";
-        _hpSlider.value = (float)_stats.Hp / (float)_stats.MaxHp;
-        _levelText.text = _stats.Level.ToString();
-        _playerName_Text.text = _stats.Name.ToString();
+        _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
+        _hpSlider.value = (float)_playerStats.Hp / (float)_playerStats.MaxHp;
+        _levelText.text = _playerStats.Level.ToString();
+        _playerName_Text.text = _playerStats.Name.ToString();
     }
 }

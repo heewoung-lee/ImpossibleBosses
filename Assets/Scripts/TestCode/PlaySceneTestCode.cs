@@ -20,7 +20,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby80";
+    string LobbyID = "TestLobby99";
     string _playerType = null;
     GameObject _ngoRoot;
     private async void Start()
@@ -32,10 +32,10 @@ public class PlaySceneTestCode : MonoBehaviour
         if (Managers.RelayManager.NetWorkManager.IsListening == false)
         {
             await SetAuthenticationService();
-            if (_playerType == "Player1")
+            if (_playerType == "Player1" || _playerType == null)
             {
                 await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
-                _ngoRoot = Managers.RelayManager.Load_NGO_ROOT_object("NGO/NGO_ROOT_AddPlayerSpawner");
+                Managers.RelayManager.Load_NGO_ROOT_Module("NGO/PlayerSpawner");
             }
             else
             {

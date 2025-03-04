@@ -10,7 +10,17 @@ using UnityEngine.InputSystem;
 public class InputManager : IManagerInitializable
 {
     private InputActionAsset _inputActionAsset;
-    public InputActionAsset InputActionAsset { get => _inputActionAsset; }
+    public InputActionAsset InputActionAsset
+    {
+        get
+        {
+            if(_inputActionAsset == null)
+            {
+                _inputActionAsset = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
+            }
+            return _inputActionAsset;
+        }
+    }
 
     private Dictionary<string, Dictionary<string, InputAction>> _inputActionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
 

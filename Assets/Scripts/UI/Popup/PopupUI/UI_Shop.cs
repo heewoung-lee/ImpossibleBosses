@@ -103,7 +103,10 @@ public class UI_Shop : UI_Popup
             Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUpdateShopData;
         }
         else
+        {
             _playerStats.Event_StatsChanged += UpdateShopData;
+            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        }
         UpdateShopData();
     }
 
@@ -111,13 +114,15 @@ public class UI_Shop : UI_Popup
     {
         base.OnDisableInit();
         _close_Popup_UI.performed -= CloseDecriptionWindow;
-        if (_playerStats == null)
+        if (_playerStats != null)
+        {
+            _playerStats.Event_StatsChanged -= UpdateShopData;
+            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        }
+        else
         {
             Managers.SocketEventManager.PlayerSpawnInitalize -= InitalizeUpdateShopData;
         }
-        else
-            _playerStats.Event_StatsChanged -= UpdateShopData;
-
         CloseDecriptionWindow();
     }
     public void UpdateShopData()

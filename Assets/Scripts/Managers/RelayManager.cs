@@ -54,11 +54,10 @@ public class RelayManager
     }
     public string JoinCode { get => _joinCode;}
 
-    public GameObject Load_NGO_ROOT_object(string path)
+    public GameObject Load_NGO_ROOT_Module(string path)
     {
         GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
-        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ, destroyOption: true);
-        _nGO_ROOT = networkOBJ;
+        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ,NGO_ROOT.transform, destroyOption: true);
         return networkOBJ;
     }
 

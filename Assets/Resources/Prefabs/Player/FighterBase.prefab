@@ -129,7 +129,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: -4696372513327696577, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: -7587406257340603790, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: -8994959554151067519, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: -6098187673321945875, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
@@ -146,8 +145,8 @@ PrefabInstance:
     - {fileID: -388476828865260582, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: -3984807160648414991, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: 6593791145542767442, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 5652189764018988351, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -4370330232208596069, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 4042310880286096690, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -158,9 +157,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7615198593283114050}
-    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5184173044421695906}
   m_SourcePrefab: {fileID: 100100000, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
 --- !u!1 &813255069752340708 stripped
 GameObject:
@@ -204,16 +200,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b34355288f4974aa81ba8e0754dc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5184173044421695906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 813255069752340708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b85cec80049a61147a30a434779ff45a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1

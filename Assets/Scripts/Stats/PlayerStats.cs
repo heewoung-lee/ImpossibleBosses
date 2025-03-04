@@ -10,13 +10,23 @@ public class PlayerStats : BaseStats, IAttackRange
     private float _viewAngle;
     private float _viewDistance;
 
-    [SerializeField] private string _playerName;
+   private string _playerName;
 
     public Action PlayerDeadEvent;
     private LayerMask _targetLayer;
     public Action<int> Event_changedGold;
 
-    public string Name { get => _playerName; }
+    public string Name
+    {
+        get
+        {
+            if (_playerName == null)
+            {
+                _playerName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
+            }
+            return _playerName;
+        }
+    }
     public int Gold
     {
         get => _gold;
