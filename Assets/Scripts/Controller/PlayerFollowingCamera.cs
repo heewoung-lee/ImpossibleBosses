@@ -17,7 +17,15 @@ public class PlayerFollowingCamera : MonoBehaviour
     {
         _camera = GetComponent<CinemachineCamera>();
         _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeFollowingCamera;
+
+        if(Managers.GameManagerEx.Player == null)
+        {
+            Managers.SocketEventManager.DonePlayerSpawnEvent += InitalizeFollowingCamera;
+        }
+        else
+        {
+            InitalizeFollowingCamera(Managers.GameManagerEx.Player);
+        }
     }
 
     public void InitalizeFollowingCamera(GameObject player)

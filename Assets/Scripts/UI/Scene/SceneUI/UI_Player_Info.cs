@@ -36,24 +36,11 @@ public class UI_Player_Info : UI_Scene
         _levelText = GetText((int)User_text.Level_Text);
         _playerName_Text = GetText((int)User_text.PlayerName_Text);
 
-        if (Managers.GameManagerEx.Player.gameObject.TryGetComponent(out PlayerStats stats))
-        {
-            _playerStats = stats;
-            InitalizePlayerInfo();
-        }
-        else
-        {
-            Managers.SocketEventManager.PlayerSpawnInitalize += SubScribePlayerStats;
-        }
+        _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
+        InitalizePlayerInfo();
     }
     protected override void StartInit()
     {
-    }
-
-    public void SubScribePlayerStats(GameObject player)
-    {
-        _playerStats = player.GetComponent<PlayerStats>();
-        InitalizePlayerInfo();
     }
 
     private void InitalizePlayerInfo()

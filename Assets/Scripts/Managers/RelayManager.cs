@@ -19,6 +19,7 @@ public class RelayManager
     private NetworkManager _netWorkManager;
     private string _joinCode;
     private Allocation _allocation;
+    private GameObject _nGO_ROOT_UI;
     private GameObject _nGO_ROOT;
 
     public Define.PlayerClass ChoicePlayerCharacter;
@@ -40,6 +41,19 @@ public class RelayManager
             return _netWorkManager;
         }
     }
+    public GameObject NGO_ROOT_UI
+    {
+        get
+        {
+            if (_nGO_ROOT_UI == null)
+            {
+                _nGO_ROOT_UI = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT_UI");
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT_UI, destroyOption: true);
+            }
+            return _nGO_ROOT_UI;
+        }
+    }
+
     public GameObject NGO_ROOT
     {
         get
@@ -47,7 +61,7 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT, destroyOption: true);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId,_nGO_ROOT, destroyOption: true);
             }
             return _nGO_ROOT;
         }
@@ -57,7 +71,7 @@ public class RelayManager
     public GameObject Load_NGO_ROOT_Module(string path)
     {
         GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
-        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ,NGO_ROOT.transform, destroyOption: true);
+        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ,NGO_ROOT_UI.transform, destroyOption: true);
         return networkOBJ;
     }
 

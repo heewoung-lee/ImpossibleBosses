@@ -92,52 +92,44 @@ public class UI_Shop : UI_Popup
         BindEvent(_consumableItem_icon.gameObject, ClickToTab);
         BindEvent(_etcItem_icon.gameObject, ClickToTab);
 
+        if(_playerStats == null)
+        {
+            Managers.SocketEventManager.DonePlayerSpawnEvent += InitializePlayerStatEvent;
+        }
+        else
+        {
+            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+        }
+    }
+
+    public void InitializePlayerStatEvent(GameObject player)
+    {
+        _playerStats = player.GetComponent<PlayerStats>();
+        OnEnableInit();
     }
 
     protected override void OnEnableInit()
     {
         base.OnEnableInit();
-        _close_Popup_UI.performed += CloseDecriptionWindow;
         if (_playerStats == null)
-        {
-            Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeUpdateShopData;
-        }
-        else
-        {
-            _playerStats.Event_StatsChanged += UpdateShopData;
-            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        }
+            return;
+        _close_Popup_UI.performed += CloseDecriptionWindow;
+        _playerStats.Event_StatsChanged += UpdateShopData;
         UpdateShopData();
     }
 
     protected override void OnDisableInit()
     {
+        if (_playerStats == null)
+            return;
         base.OnDisableInit();
         _close_Popup_UI.performed -= CloseDecriptionWindow;
-        if (_playerStats != null)
-        {
-            _playerStats.Event_StatsChanged -= UpdateShopData;
-            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        }
-        else
-        {
-            Managers.SocketEventManager.PlayerSpawnInitalize -= InitalizeUpdateShopData;
-        }
+        _playerStats.Event_StatsChanged -= UpdateShopData;
         CloseDecriptionWindow();
     }
     public void UpdateShopData()
     {
-        if (_playerStats != null)
-        {
-            _playerHasGoldText.text = _playerStats.Gold.ToString();
-        }
-    }
-    public void InitalizeUpdateShopData(GameObject player)
-    {
-        if (player.TryGetComponent(out PlayerStats stat))
-        {
-            _playerHasGoldText.text = stat.Gold.ToString();
-        }
+      _playerHasGoldText.text = _playerStats.Gold.ToString();
     }
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {

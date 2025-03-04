@@ -42,14 +42,31 @@ public class Module_Fighter_Class : Module_Player_Class
     public override void InitStart()
     {
         base.InitStart();
-        _controller = GetComponent<PlayerController>();
-        _controller.StateAnimDict.RegisterState(_roarState,()=>_controller.RunAnimation(_hash_Roar, DEFALUT_TRANSITION_ROAR));
-        _controller.StateAnimDict.RegisterState(_determinationState, () => _controller.RunAnimation(_hash_Roar, DEFALUT_TRANSITION_ROAR));
-        _controller.StateAnimDict.RegisterState(_slashState,()=>_controller.RunAnimation(_hash_Slash,DEFALUT_TRANSITION_Slash));
-        _controller.StateAnimDict.RegisterState(_tauntState, () => _controller.RunAnimation(_hash_Taunt, DEFALUT_TRANSITION_TAUNT));
+
+        if(TryGetComponent(out PlayerController controller))
+        {
+            _controller = controller;
+            InitailizeState();
+        }
+        else
+        {
+            Managers.SocketEventManager.DonePlayerSpawnEvent += Initailize_Player_DoneEvent;
+        }
 
     }
+    private void Initailize_Player_DoneEvent(GameObject player)
+    {
+        _controller = player.GetComponent<PlayerController>();
+        InitailizeState();
+    }
 
+    private void InitailizeState()
+    {
+        _controller.StateAnimDict.RegisterState(_roarState, () => _controller.RunAnimation(_hash_Roar, DEFALUT_TRANSITION_ROAR));
+        _controller.StateAnimDict.RegisterState(_determinationState, () => _controller.RunAnimation(_hash_Roar, DEFALUT_TRANSITION_ROAR));
+        _controller.StateAnimDict.RegisterState(_slashState, () => _controller.RunAnimation(_hash_Slash, DEFALUT_TRANSITION_Slash));
+        _controller.StateAnimDict.RegisterState(_tauntState, () => _controller.RunAnimation(_hash_Taunt, DEFALUT_TRANSITION_TAUNT));
+    }
 
     public void UpdateRoar()
     {

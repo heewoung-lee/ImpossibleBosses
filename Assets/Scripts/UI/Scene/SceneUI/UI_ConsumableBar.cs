@@ -64,7 +64,6 @@ public class UI_ConsumableBar : UI_Scene
             _comsumableGetKey[i].Enable();
         }
         _itemDragImage = Utill.FindChild<Image>(gameObject, "ItemDragImage");
-        Managers.SocketEventManager.PlayerSpawnInitalize += InitalizeConsumbleBar;
     }
 
     public void UsedPosition(InputAction.CallbackContext context)
@@ -92,22 +91,11 @@ public class UI_ConsumableBar : UI_Scene
 
     protected override void StartInit()
     {
-        //_playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        //foreach (InputAction getKeyEvent in _comsumableGetKey)
-        //{
-        //    getKeyEvent.performed += UsedPosition;
-        //    getKeyEvent.Enable();
-        //}
-    }
-
-    public void InitalizeConsumbleBar(GameObject player)
-    {
-        _playerStats = player.GetComponent<PlayerStats>();
+        _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         foreach (InputAction getKeyEvent in _comsumableGetKey)
         {
             getKeyEvent.performed += UsedPosition;
             getKeyEvent.Enable();
         }
     }
-
 }

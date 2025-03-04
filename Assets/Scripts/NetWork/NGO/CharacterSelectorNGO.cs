@@ -250,7 +250,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     }
     private void isCheckReadyToPlayers()
     {
-        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT.GetComponentsInChildren<CharacterSelectorNGO>())
+        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
         {
             if (playerNGO.IsOwnedByServer)
                 continue;

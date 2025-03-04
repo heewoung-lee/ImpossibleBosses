@@ -20,8 +20,6 @@ public abstract class Module_Player_Class : MonoBehaviour
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
             .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다
 
-       
-
         foreach(BaseSkill skill in _playerSkill.Values)
         {
             GameObject skillPrefab = Managers.ResourceManager.InstantiatePrefab("UI/Skill/UI_SkillComponent");

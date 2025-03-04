@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SkillManager : IManagerInitializable
 {
@@ -14,13 +15,15 @@ public class SkillManager : IManagerInitializable
         get
         {
             if (_ui_SkillBar == null)
-                _ui_SkillBar = Managers.UI_Manager.Get_Scene_UI<UI_SkillBar>();
-
+            {
+                if(Managers.UI_Manager.Try_Get_Scene_UI(out UI_SkillBar skillbar))
+                {
+                    _ui_SkillBar = skillbar;
+                }
+            }
             return _ui_SkillBar;
         }
     }
-
-
     public void Init()
     {
         //Skill/AllofSkill에 있는 타입들을 가져온다.

@@ -197,7 +197,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         chractorSeletor_Rect.sizeDelta = frame_size;
         chractorSeletor_Rect.position = frame_screenPos;
         //TODO: 크기 조절 되도록 수정
-        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT.transform,true);
+        GameObject characterSelecter = Managers.RelayManager.SpawnNetworkOBJ(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT_UI.transform,true);
         return characterSelecter;
     }
     public async Task LoadScenePlayGames()

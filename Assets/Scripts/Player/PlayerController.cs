@@ -42,9 +42,9 @@ public class PlayerController : MoveableController
 
     protected override void AwakeInit()
     {
-        _stats = gameObject.GetOrAddComponent<PlayerStats>();
-        _agent = gameObject.GetOrAddComponent<NavMeshAgent>();
-        _playerInput = gameObject.GetOrAddComponent<PlayerInput>();
+        _stats = gameObject.GetComponent<PlayerStats>();
+        _agent = gameObject.GetComponent<NavMeshAgent>();
+        _playerInput = gameObject.GetComponent<PlayerInput>();
 
         _inputmanager = Managers.InputManager;
         _playerInput.actions = _inputmanager.InputActionAsset;

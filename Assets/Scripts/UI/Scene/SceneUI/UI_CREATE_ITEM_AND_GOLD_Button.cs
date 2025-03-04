@@ -18,15 +18,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
         {
             if(_playerStats == null)
             {
-                if(Managers.GameManagerEx.Player == null)
-                {
-                    Managers.SocketEventManager.PlayerSpawnInitalize -= IninitalizePlayerStats;
-                    Managers.SocketEventManager.PlayerSpawnInitalize += IninitalizePlayerStats;
-                }
-                else
-                {
-                    _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-                }
+                _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
             }
             return _playerStats;
         }
