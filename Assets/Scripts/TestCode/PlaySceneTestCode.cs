@@ -20,7 +20,7 @@ public class PlaySceneTestCode : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby116";
+    string LobbyID = "TestLobby126";
     string _playerType = null;
     GameObject _ngoRoot;
     private async void Start()

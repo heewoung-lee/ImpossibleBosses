@@ -52,13 +52,17 @@ public class PlayerController : MoveableController
         _pointerAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Pointer");
         _attackAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Attack");
         _stopAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Stop");
-
+        _moveAction.Enable();
+        _pointerAction.Enable(); 
+        _attackAction.Enable();
+        _stopAction.Enable();
 
         _base_Attackstate = new AttackState(UpdateAttack);
         _base_MoveState = new MoveState(UpdateMove);
         _base_DieState = new DieState(UpdateDie);
         _base_IDleState = new IDleState(UpdateIdle);
         _pickup_State = new PickUpState(UpdatePickup);
+
     }
 
     private void OnEnable()
@@ -83,9 +87,6 @@ public class PlayerController : MoveableController
     private Vector3 MouseRightClickPosEvent(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(_pointerAction.ReadValue<Vector2>());
-
-        Debug.Log(_pointerAction.ReadValue<Vector2>());
-
         RaycastHit hit;
 
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red);

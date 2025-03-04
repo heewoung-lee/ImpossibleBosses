@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,6 +30,14 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.SocketEventManager.DonePlayerSpawnEvent?.Invoke(gameObject);
         }
     }
+    [ServerRpc]
+    public void SetNameServerRPC()
+    {
+      
+    }
+
+
+
 
 
     protected override void StartInit()
@@ -38,10 +47,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
-       
+        gameObject.name = "Owner";
         //PlayerInput input = gameObject.GetOrAddComponent<PlayerInput>();
         //input.actions = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
-        
         gameObject.GetOrAddComponent<PlayerInput>();
         gameObject.GetOrAddComponent<PlayerStats>();
         gameObject.GetOrAddComponent<PlayerController>();
@@ -58,6 +66,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.GetOrAddComponent<Module_MainCamera_CinemachineBrain>();
         gameObject.GetOrAddComponent<Module_Player_AnimInfo>();
         gameObject.GetOrAddComponent<Module_UI_Player_TestButton>();
+        gameObject.GetOrAddComponent<Module_Fighter_Class>();//TODO: 우선 하드코딩, 플레이어의 직업에 맞는 클래스 넣어야함
         _interactionTr.GetOrAddComponent<Module_Player_Interaction>();
     }
 }
