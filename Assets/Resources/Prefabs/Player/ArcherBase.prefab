@@ -140,13 +140,22 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 4042310880286096690, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+    - {fileID: 376582870658293108, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
       insertIndex: 3
       addedObject: {fileID: -4363587404947196095}
+    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5540589418671876690}
   m_SourcePrefab: {fileID: 100100000, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+--- !u!95 &1950295445477397170 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3918218250099777477, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+  m_PrefabInstance: {fileID: 3274286128380267895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3188457727675774094 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
@@ -177,3 +186,18 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-5540589418671876690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188457727675774094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23794edc3565e1f4f97ed9a8021ec557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 1950295445477397170}
