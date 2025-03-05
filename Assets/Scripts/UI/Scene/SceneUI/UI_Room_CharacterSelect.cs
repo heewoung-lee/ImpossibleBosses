@@ -51,6 +51,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     private Button _button_Ready;
     private Button _button_Start;
     private TMP_Text _button_Text;
+    private CharacterSelectorNGO _chracterSelectorNGO;
     private bool _readyButtonState;
 
     private ReadyButtonImages[] _readyButtonStateValue;
@@ -168,6 +169,10 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
             characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
+            if (characterSelector.GetComponent<NetworkObject>().IsOwner)
+            {
+                _chracterSelectorNGO =  characterSelector.GetComponent<CharacterSelectorNGO>();    
+            }
         }
     }
 
@@ -202,8 +207,9 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public async Task LoadScenePlayGames()
     {
-        //TODO: 호스트가 선택한 캐릭터 저장해야함
+        // Managers.RelayManager.
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
+        Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
         await Managers.SceneManagerEx.NetworkLoadSceneAsync(_netWorkManager, Define.Scene.GamePlayScene);
     }
 

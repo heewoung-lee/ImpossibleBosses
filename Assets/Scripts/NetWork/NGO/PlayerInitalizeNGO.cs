@@ -48,31 +48,33 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
+        Debug.Log(Managers.SceneManagerEx.GetCurrentScene);
+
         gameObject.name = "OnwerPlayer";
         //PlayerInput input = gameObject.GetOrAddComponent<PlayerInput>();
         //input.actions = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
-        gameObject.GetOrAddComponent<PlayerInput>();
-        gameObject.GetOrAddComponent<PlayerStats>();
-        gameObject.GetOrAddComponent<PlayerController>();
-        gameObject.GetOrAddComponent<Module_Player_TextureCamera>();
-        gameObject.GetOrAddComponent<Module_HP_Bar>();
-        gameObject.GetOrAddComponent<Module_Damage_Text>();
-        gameObject.GetOrAddComponent<Module_UI_BufferBar>();
-        gameObject.GetOrAddComponent<Module_UI_ConsumableBar>();
-        gameObject.GetOrAddComponent<Module_UI_ItemDragImage>();
-        gameObject.GetOrAddComponent<Module_UI_Player_Inventory>();
-        gameObject.GetOrAddComponent<Module_UI_PlayerInfo>();
-        gameObject.GetOrAddComponent<Module_UI_SkillBar>();
-        gameObject.GetOrAddComponent<Module_UI_Description>();
-        gameObject.GetOrAddComponent<Module_MainCamera_CinemachineBrain>();
-        gameObject.GetOrAddComponent<Module_Player_AnimInfo>();
-        gameObject.GetOrAddComponent<Module_UI_Player_TestButton>();
+        gameObject.AddComponent<PlayerInput>();
+        gameObject.AddComponent<PlayerStats>();
+        gameObject.AddComponent<PlayerController>();
+        gameObject.AddComponent<Module_Player_TextureCamera>();
+        gameObject.AddComponent<Module_HP_Bar>();
+        gameObject.AddComponent<Module_Damage_Text>();
+        gameObject.AddComponent<Module_UI_BufferBar>();
+        gameObject.AddComponent<Module_UI_ConsumableBar>();
+        gameObject.AddComponent<Module_UI_ItemDragImage>();
+        gameObject.AddComponent<Module_UI_Player_Inventory>();
+        gameObject.AddComponent<Module_UI_PlayerInfo>();
+        gameObject.AddComponent<Module_UI_SkillBar>();
+        gameObject.AddComponent<Module_UI_Description>();
+        gameObject.AddComponent<Module_MainCamera_CinemachineBrain>();
+        gameObject.AddComponent<Module_Player_AnimInfo>();
+        gameObject.AddComponent<Module_UI_Player_TestButton>();
         gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
-        _interactionTr.GetOrAddComponent<Module_Player_Interaction>();
+        _interactionTr.AddComponent<Module_Player_Interaction>();
     }
 
 
-    public Type GetPlayerModuleClass(Define.PlayerClass playerclass)
+    private Type GetPlayerModuleClass(Define.PlayerClass playerclass)
     {
         switch (playerclass)
         {

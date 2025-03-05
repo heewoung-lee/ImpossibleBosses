@@ -39,7 +39,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom286";
+    private const string LOBBYID = "WaitLobbyRoom292";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
