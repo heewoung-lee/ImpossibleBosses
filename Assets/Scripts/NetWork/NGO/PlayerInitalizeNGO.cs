@@ -48,7 +48,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
-        gameObject.name = gameObject.name.Replace("(Clone)", "(Owner)");
+        gameObject.name = "OnwerPlayer";
         //PlayerInput input = gameObject.GetOrAddComponent<PlayerInput>();
         //input.actions = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
         gameObject.GetOrAddComponent<PlayerInput>();
@@ -67,7 +67,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.GetOrAddComponent<Module_MainCamera_CinemachineBrain>();
         gameObject.GetOrAddComponent<Module_Player_AnimInfo>();
         gameObject.GetOrAddComponent<Module_UI_Player_TestButton>();
-        gameObject.GetComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
+        gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
         _interactionTr.GetOrAddComponent<Module_Player_Interaction>();
     }
 

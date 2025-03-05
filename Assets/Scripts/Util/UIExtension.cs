@@ -17,7 +17,6 @@ public static class UIExtension
     {
         return Utill.GetOrAddComponent<T>(go);
     }
-
     public static void AddUIEvent(this GameObject go, Action<PointerEventData> action, Define.UI_Event mouseEvent = Define.UI_Event.LeftClick)
     {
         UI_Base.BindEvent(go, action, mouseEvent);
