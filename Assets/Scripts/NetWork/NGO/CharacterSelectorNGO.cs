@@ -217,7 +217,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         switch (cameraOperation)
         {
-            case CameraOperation.Set:
+            case CameraOperation.Set: 
                 _characterSeletorCamera.Value = position;
                 break;
             case CameraOperation.Add:

@@ -18,9 +18,22 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
 
     protected override void StartInit()
     {
+        Managers.RelayManager.NetWorkManager.SceneManager.OnLoadComplete += SceneManager_OnLoadComplete;
+
+
+    }
+
+    private void SceneManager_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
+    {
         string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
         RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId, choicePlayer);
     }
+
+    //public void SpawnPlayer()
+    //{
+    //    string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
+    //    RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId, choicePlayer);
+    //}
 
     protected override void OnNetworkPostSpawn()
     {
