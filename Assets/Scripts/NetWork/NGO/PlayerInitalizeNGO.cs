@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -47,7 +48,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
-        gameObject.name = "Owner";
+        gameObject.name = gameObject.name.Replace("(Clone)", "(Owner)");
         //PlayerInput input = gameObject.GetOrAddComponent<PlayerInput>();
         //input.actions = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
         gameObject.GetOrAddComponent<PlayerInput>();
@@ -66,7 +67,27 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.GetOrAddComponent<Module_MainCamera_CinemachineBrain>();
         gameObject.GetOrAddComponent<Module_Player_AnimInfo>();
         gameObject.GetOrAddComponent<Module_UI_Player_TestButton>();
-        gameObject.GetOrAddComponent<Module_Fighter_Class>();//TODO: 우선 하드코딩, 플레이어의 직업에 맞는 클래스 넣어야함
+        gameObject.GetComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
         _interactionTr.GetOrAddComponent<Module_Player_Interaction>();
+    }
+
+
+    public Type GetPlayerModuleClass(Define.PlayerClass playerclass)
+    {
+        switch (playerclass)
+        {
+            case Define.PlayerClass.Archer:
+                return typeof(Module_Acher_Class); 
+            case Define.PlayerClass.Fighter:
+                return typeof(Module_Fighter_Class);
+            case Define.PlayerClass.Mage:
+                return typeof(Module_Mage_Class);
+            case Define.PlayerClass.Monk:
+                return typeof(Module_Monk_Class);
+            case Define.PlayerClass.Necromancer:
+                return typeof(Module_Necromancer_Class);
+
+            default: return null;
+        }
     }
 }

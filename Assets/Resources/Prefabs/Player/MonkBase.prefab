@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1627225296105453973, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3039773411
+      objectReference: {fileID: 0}
     - target: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
       propertyPath: m_Name
       value: MonkBase
@@ -155,61 +159,5 @@ PrefabInstance:
     - {fileID: 376582870658293108, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: -1998023827369901985}
-    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1138406578915004816}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
---- !u!95 &764925143596855119 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 3918218250099777477, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-  m_PrefabInstance: {fileID: 4394881981926387850}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4445885620368329075 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-  m_PrefabInstance: {fileID: 4394881981926387850}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-1998023827369901985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4445885620368329075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1444461589
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &1138406578915004816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4445885620368329075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23794edc3565e1f4f97ed9a8021ec557, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 764925143596855119}

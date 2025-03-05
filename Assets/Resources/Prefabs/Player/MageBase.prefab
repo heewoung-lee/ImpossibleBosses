@@ -209,83 +209,27 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: -7587406257340603790, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -8994959554151067519, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -6098187673321945875, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 850154694049948795, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 2813656340661799537, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 1017662072194200811, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 5152953194385980138, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 8888899754884143065, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 5587150210521501145, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -3444880847190970961, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -2583159688179709759, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 2815364281679709954, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 7574922321927486665, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -388476828865260582, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: -3984807160648414991, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-    - {fileID: 6593791145542767442, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 4042310880286096690, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     - {fileID: 376582870658293108, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 7201586824181273647}
-    - targetCorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 997157339288998758}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
---- !u!95 &1719806441231266936 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 3918218250099777477, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-  m_PrefabInstance: {fileID: 2431297722043788221}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2374101720546153028 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
-  m_PrefabInstance: {fileID: 2431297722043788221}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7201586824181273647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2374101720546153028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1511484595
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &997157339288998758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2374101720546153028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23794edc3565e1f4f97ed9a8021ec557, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 1719806441231266936}

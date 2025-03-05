@@ -10,6 +10,7 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
+
     protected override void AwakeInit()
     {
         _relayManager = Managers.RelayManager;
@@ -28,7 +29,8 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
     [ServerRpc(RequireOwnership = false)]
     public void RequestSpawnPlayerServerRpc(ulong requestingClientId)
     {
-        string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
+        //string choicePlayer = Enum.GetName(typeof(Define.PlayerClass), _relayManager.ChoicePlayerCharacter);
+        string choicePlayer = Define.PlayerClass.Fighter.ToString();
         _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}base");
         Vector3 targetPosition = Vector3.zero;
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);

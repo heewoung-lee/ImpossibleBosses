@@ -17,13 +17,10 @@ public class PlayScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
-        if(Managers.RelayManager.NetWorkManager.IsHost)
-        Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
     }
 
     public override void Clear()
     {
-
     }
 
 }
