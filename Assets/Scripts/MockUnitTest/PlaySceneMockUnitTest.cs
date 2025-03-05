@@ -9,7 +9,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 
-public class PlaySceneTestCode : MonoBehaviour
+public class PlaySceneMockUnitTest : MonoBehaviour
 {
     public enum PlayersTag
     {
@@ -42,7 +42,7 @@ public class PlaySceneTestCode : MonoBehaviour
                 {
                     await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
                 }
-                Managers.RelayManager.Load_NGO_ROOT_Module("NGO/PlayerSpawner");
+                Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
             }
             else
             {

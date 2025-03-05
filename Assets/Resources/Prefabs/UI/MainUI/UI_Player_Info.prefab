@@ -1093,17 +1093,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: User name
+  m_text: "\uD55C\uAE00\uC784"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 162f7f16c4bec41ff98f811bd90e7b6e, type: 2}
-  m_sharedMaterial: {fileID: 6447333859754382329, guid: 162f7f16c4bec41ff98f811bd90e7b6e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cc58775ec6ef6e24c97db0df209b128a, type: 2}
+  m_sharedMaterial: {fileID: 1375025835229606627, guid: cc58775ec6ef6e24c97db0df209b128a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4289578974
-  m_fontColor: {r: 0.8705883, g: 0.7803922, b: 0.6784314, a: 1}
+    rgba: 4278224895
+  m_fontColor: {r: 1, g: 0.53061223, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1120,8 +1120,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
-  m_fontSizeBase: 26
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
