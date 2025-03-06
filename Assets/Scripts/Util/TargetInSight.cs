@@ -4,6 +4,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.InputSystem.XR;
 using System;
+using Unity.Netcode;
 
 public class TargetInSight
 {

@@ -8,8 +8,6 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Player = Unity.Services.Lobbies.Models.Player;
 
 
 public struct PlayerIngameLoginInfo
@@ -39,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom292";
+    private const string LOBBYID = "WaitLobbyRoom296";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
@@ -149,8 +147,17 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         if (lobby.HostId != _currentPlayerInfo.Id)
             return;
 
-        string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
-        await InjectionRelayJoinCodeintoLobby(lobby, joincode);
+
+        try
+        {
+            string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
+            await InjectionRelayJoinCodeintoLobby(lobby, joincode);
+        }
+        catch(LobbyServiceException TimeLimmitException) when(TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
+        {
+            await Utill.RateLimited(async () => await CheckHostRelay(lobby));
+            return;
+        }
     }
     private async Task CheckClientRelay(Lobby lobby)
     {
@@ -344,19 +351,20 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)
     {
-        if (joincode == null || lobby == null)
-        {
-            Debug.Log($"Data has been NULL, is Check Lobby Null?: {lobby.Equals(null)} is Check JoinCode Null? {lobby.Equals(null)}");
-            return;
-        }
-        _currentLobby = await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions()
-        {
-            Data = new Dictionary<string, DataObject>
+        
+            if (joincode == null || lobby == null)
+            {
+                Debug.Log($"Data has been NULL, is Check Lobby Null?: {lobby.Equals(null)} is Check JoinCode Null? {lobby.Equals(null)}");
+                return;
+            }
+            _currentLobby = await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions()
+            {
+                Data = new Dictionary<string, DataObject>
                 {
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
-        });
-        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
+            });
+            await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)

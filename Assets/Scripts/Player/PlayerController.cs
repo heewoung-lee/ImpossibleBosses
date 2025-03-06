@@ -1,6 +1,7 @@
 using BaseStates;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -18,6 +19,7 @@ public class PlayerController : MoveableController
     private InputAction _pointerAction;
     private InputAction _attackAction;
     private InputAction _stopAction;
+    private NetworkObject _playerNGO;
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
@@ -45,6 +47,7 @@ public class PlayerController : MoveableController
         _stats = gameObject.GetComponent<PlayerStats>();
         _agent = gameObject.GetComponent<NavMeshAgent>();
         _playerInput = gameObject.GetComponent<PlayerInput>();
+        _playerNGO = GetComponent<NetworkObject>();
 
         _inputmanager = Managers.InputManager;
         _playerInput.actions = _inputmanager.InputActionAsset;
@@ -62,7 +65,6 @@ public class PlayerController : MoveableController
         _base_DieState = new DieState(UpdateDie);
         _base_IDleState = new IDleState(UpdateIdle);
         _pickup_State = new PickUpState(UpdatePickup);
-
     }
 
     private void OnEnable()
@@ -164,7 +166,6 @@ public class PlayerController : MoveableController
     {
         StateAnimDict.RegisterState(_pickup_State, () => RunAnimation(_hash_PickUp, DEFALUT_TRANSITION_PICKUP));
     }
-
 
 
 

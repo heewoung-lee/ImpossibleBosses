@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Module_PlayerRenderTextureCamara : MonoBehaviour
 {
     private Transform _player; // 플레이어 Transform
+
 
     void Start()
     {

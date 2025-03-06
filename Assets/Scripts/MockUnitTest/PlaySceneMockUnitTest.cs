@@ -19,23 +19,26 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         Player4,
         None
     }
-
-
-    string LobbyID = "TestLobby139";
+    
+    string LobbyID = "TestLobby153";
     string _playerType = null;
     GameObject _ngoRoot;
+
+
+    public Define.PlayerClass PlayerClass;
     private async void Start()
     {
         await JoinChannel();
     }
     private async Task JoinChannel()
     {
+        Managers.RelayManager.ChoicePlayerCharacter = PlayerClass;
         if (Managers.RelayManager.NetWorkManager.IsListening == false)
         {
             await SetAuthenticationService();
             if (_playerType == "Player1")
             {
-                if (CurrentPlayer.ReadOnlyTags().Length == 0)//나혼자 테스트 할때
+                if (CurrentPlayer.ReadOnlyTags().Length == 1)//나혼자 테스트 할때
                 {
                     await Managers.RelayManager.StartHostWithRelay(8);
                 }

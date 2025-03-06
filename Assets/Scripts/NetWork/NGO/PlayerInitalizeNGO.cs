@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -31,15 +32,6 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.SocketEventManager.DonePlayerSpawnEvent?.Invoke(gameObject);
         }
     }
-    [ServerRpc]
-    public void SetNameServerRPC()
-    {
-      
-    }
-
-
-
-
 
     protected override void StartInit()
     {
@@ -48,11 +40,8 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
-        Debug.Log(Managers.SceneManagerEx.GetCurrentScene);
 
         gameObject.name = "OnwerPlayer";
-        //PlayerInput input = gameObject.GetOrAddComponent<PlayerInput>();
-        //input.actions = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
         gameObject.AddComponent<PlayerInput>();
         gameObject.AddComponent<PlayerStats>();
         gameObject.AddComponent<PlayerController>();
@@ -71,6 +60,12 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.AddComponent<Module_UI_Player_TestButton>();
         gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
         _interactionTr.AddComponent<Module_Player_Interaction>();
+        SetPlayerLayerMask();
+
+      
+        string wantPrefab = gameObject.GetComponent<Animator>().runtimeAnimatorController.name.Replace("Base", "");
+        AnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<AnimatorController>($"Resources/Art/Player/AnimData/Animation/FighterController");
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = OwnerPlayerAnimController;
     }
 
 
@@ -90,6 +85,27 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
                 return typeof(Module_Necromancer_Class);
 
             default: return null;
+        }
+    }
+    private void SetPlayerLayerMask()
+    {
+        LayerMask playerMask = LayerMask.NameToLayer("Player");
+        gameObject.layer = playerMask;
+        foreach (Transform childtr in gameObject.transform)
+        {
+            if (childtr.TryGetComponent(out Module_Player_LayerField module_Field))
+            {
+                module_Field.gameObject.layer = playerMask;
+                SetPlayerLayerMask(module_Field.transform, playerMask);
+            }
+        }
+    }
+    private void SetPlayerLayerMask(Transform setLayerMaskTr,LayerMask layerMask)
+    {
+        foreach (Transform childtr in setLayerMaskTr.transform)
+        {
+            childtr.gameObject.layer = layerMask;
+            SetPlayerLayerMask(childtr, layerMask);
         }
     }
 }
