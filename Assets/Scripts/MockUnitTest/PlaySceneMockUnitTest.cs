@@ -20,12 +20,13 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby153";
+    string LobbyID = "TestLobby154";
     string _playerType = null;
     GameObject _ngoRoot;
 
 
     public Define.PlayerClass PlayerClass;
+    public bool isSoloTest;
     private async void Start()
     {
         await JoinChannel();
@@ -38,7 +39,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
             await SetAuthenticationService();
             if (_playerType == "Player1")
             {
-                if (CurrentPlayer.ReadOnlyTags().Length == 1)//나혼자 테스트 할때
+                if (isSoloTest == true)//나혼자 테스트 할때
                 {
                     await Managers.RelayManager.StartHostWithRelay(8);
                 }

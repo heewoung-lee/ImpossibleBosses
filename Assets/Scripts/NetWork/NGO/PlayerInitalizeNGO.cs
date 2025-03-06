@@ -64,7 +64,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
       
         string wantPrefab = gameObject.GetComponent<Animator>().runtimeAnimatorController.name.Replace("Base", "");
-        AnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<AnimatorController>($"Resources/Art/Player/AnimData/Animation/FighterController");
+        RuntimeAnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/FighterController");
         gameObject.GetComponent<Animator>().runtimeAnimatorController = OwnerPlayerAnimController;
     }
 

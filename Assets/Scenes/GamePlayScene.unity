@@ -449,6 +449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerClass: 1
+  isSoloTest: 0
 --- !u!1001 &1840241570
 PrefabInstance:
   m_ObjectHideFlags: 0
