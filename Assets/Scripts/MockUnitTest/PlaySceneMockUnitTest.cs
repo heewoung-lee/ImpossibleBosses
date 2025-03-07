@@ -47,6 +47,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 {
                     await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
                 }
+
                 Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
                 SpawnToNPC(new List<(string, Vector3)>()
                 {

@@ -24,7 +24,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         protected set{
             if (IsSpawned == false)
                 return;
-
+            
             if (IsServer)
             {
                 playerHpValue.Value = Mathf.Clamp(value, 0, _maxHp);
@@ -33,7 +33,6 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             {
                 RequestHpChangedServerRpc(Mathf.Clamp(value, 0, _maxHp));
             }
-            Event_StatsChanged?.Invoke();
         }
     }
 
@@ -149,23 +148,22 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (IsHost == false)
             return;
 
-
-        playerHpValue.Value = 1000;
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        InitStatOption();
-        playerHpValue.OnValueChanged += OnDamaged;
+        playerHpValue.OnValueChanged += HpValueChanged;
     }
 
   
-    private void OnDamaged(int previousValue, int newValue)
+    private void HpValueChanged(int previousValue, int newValue)
     {
-        int damage = previousValue - newValue;
-        if(damage>0)
-        Event_Attacked?.Invoke(damage);
+        //int damage = previousValue - newValue;
+        //if(damage>0)
+        //Event_Attacked?.Invoke(damage);
+
+        Event_StatsChanged?.Invoke();
     }
 
 
@@ -181,7 +179,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             damage = spacialDamage.Value;
         damage = Mathf.Max(0, damage - Defence);
         Hp -= damage;
-        //Event_Attacked?.Invoke(damage);
+        Event_Attacked?.Invoke(damage);
         if (Hp <= 0)
         {
             Hp = 0;
