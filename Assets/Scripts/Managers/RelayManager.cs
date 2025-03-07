@@ -115,6 +115,31 @@ public class RelayManager
         }
         return obj;
     }
+
+    public void DeSpawn_NetWorkOBJ(GameObject go)
+    {
+        if (NetWorkManager.IsHost)
+        {
+            if (go.TryGetComponent(out NetworkObject ngo))
+            {
+                ngo.Despawn(true);
+            }
+        }
+        else
+        {
+            DeSpawn_NetWorkOBJServerRpc(go);
+        }
+    }
+
+    [ServerRpc]
+    private void DeSpawn_NetWorkOBJServerRpc(GameObject go)
+    {
+            if (go.TryGetComponent(out NetworkObject ngo))
+            {
+                ngo.Despawn(true);
+            }
+    }
+
     public async Task<bool> JoinGuestRelay(string joinCode)
     {
         try

@@ -5,7 +5,6 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
-    private int _hp;
     private int _maxHp;
     private int _attack;
     private int _defence;
@@ -21,19 +20,31 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
    
 
     public int Hp{ 
-        get => _hp;
+        get => playerHpValue.Value;
         protected set{
-            _hp = value;
-            _hp = Mathf.Clamp(_hp,0,_maxHp);
-            Event_StatsChanged?.Invoke();
-
-
             if (IsSpawned == false)
                 return;
 
-           playerHpValue.Value = value;
+            if (IsServer)
+            {
+                playerHpValue.Value = Mathf.Clamp(value, 0, _maxHp);
+            }
+            else
+            {
+                RequestHpChangedServerRpc(Mathf.Clamp(value, 0, _maxHp));
+            }
+            Event_StatsChanged?.Invoke();
         }
     }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestHpChangedServerRpc(int value)
+    {
+        playerHpValue.Value = value;
+    }
+
+
     public void Plus_Current_Hp_Abillity(int value)
     {
         Hp += value;
@@ -127,24 +138,34 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     protected virtual void AwakeInit()
     {
-        _hp = 1000;
         _maxHp = 1000;
         _attack = 10;
         _defence = 5;
         _movespeed = 5.0f;
-       
+    }
+
+    private void InitStatOption()
+    {
+        if (IsHost == false)
+            return;
+
+
+        playerHpValue.Value = 1000;
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        playerHpValue.OnValueChanged += dameged;
+        InitStatOption();
+        playerHpValue.OnValueChanged += OnDamaged;
     }
 
-
-    private void dameged(int previousValue, int newValue)
+  
+    private void OnDamaged(int previousValue, int newValue)
     {
-        Debug.Log(newValue);
+        int damage = previousValue - newValue;
+        if(damage>0)
+        Event_Attacked?.Invoke(damage);
     }
 
 
@@ -160,7 +181,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             damage = spacialDamage.Value;
         damage = Mathf.Max(0, damage - Defence);
         Hp -= damage;
-        Event_Attacked?.Invoke(damage);
+        //Event_Attacked?.Invoke(damage);
         if (Hp <= 0)
         {
             Hp = 0;

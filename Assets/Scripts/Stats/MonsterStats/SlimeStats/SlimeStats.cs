@@ -21,7 +21,7 @@ public class SlimeStats : MonsterStats
             playerStat.Exp += _exp;
         }
 
-        Managers.GameManagerEx.Despawn(gameObject);
+        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
     }
 
     protected override void StartInit()

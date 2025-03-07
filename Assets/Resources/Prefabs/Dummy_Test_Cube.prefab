@@ -179,6 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  playerHpValue:
+    m_InternalValue: 3000
 --- !u!114 &6945885772702523472
 MonoBehaviour:
   m_ObjectHideFlags: 0

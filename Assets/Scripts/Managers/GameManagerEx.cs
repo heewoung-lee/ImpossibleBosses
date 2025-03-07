@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ public class GameManagerEx : IManagerInitializable
     private GameObject _spawnPoint;
     private HashSet<GameObject> _enemy = new HashSet<GameObject>();
 
+
     public Action<int> SpawnEvent;
     public GameObject Player { get => _player; }
     public GameObject BossMonster { get => _bossMonster; }
     public Environment EnvironMent { get => _environment; }
     public GameObject SpawnPoint { get => _spawnPoint; }
-
     public HashSet<GameObject> Enemy { get => _enemy; }
 
     public GameObject Spawn(string path, Transform parent = null)
