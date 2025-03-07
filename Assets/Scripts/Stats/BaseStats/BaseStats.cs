@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 [DisallowMultipleComponent]
-public abstract class BaseStats : MonoBehaviour, IDamageable
+public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private int _hp;
     private int _maxHp;
@@ -15,12 +16,22 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
 
+    public NetworkVariable<int> playerHpValue = new NetworkVariable<int>
+        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+   
+
     public int Hp{ 
         get => _hp;
         protected set{
             _hp = value;
             _hp = Mathf.Clamp(_hp,0,_maxHp);
             Event_StatsChanged?.Invoke();
+
+
+            if (IsSpawned == false)
+                return;
+
+           playerHpValue.Value = value;
         }
     }
     public void Plus_Current_Hp_Abillity(int value)
@@ -121,6 +132,19 @@ public abstract class BaseStats : MonoBehaviour, IDamageable
         _attack = 10;
         _defence = 5;
         _movespeed = 5.0f;
+       
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        playerHpValue.OnValueChanged += dameged;
+    }
+
+
+    private void dameged(int previousValue, int newValue)
+    {
+        Debug.Log(newValue);
     }
 
 

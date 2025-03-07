@@ -108,7 +108,6 @@ public class RelayManager
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
             networkObj.SpawnWithOwnership(clientId);
             networkObj.DestroyWithScene = destroyOption;
-
             if (parent != null)
             {
                 networkObj.transform.SetParent(parent,false);

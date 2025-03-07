@@ -20,7 +20,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby155";
+    string LobbyID = "TestLobby161";
     string _playerType = null;
     GameObject _ngoRoot;
 
@@ -48,6 +48,10 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                     await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
                 }
                 Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
+                SpawnToNPC(new List<(string, Vector3)>()
+                {
+                    {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
+                });
             }
             else
             {
@@ -93,6 +97,17 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
     }
 
+
+    private void SpawnToNPC(List<(string,Vector3)> npcPathAndTr)
+    {
+        foreach((string, Vector3) npcdata in npcPathAndTr)
+        {
+            GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
+            dummy_cube.transform.position = npcdata.Item2;
+            Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId, dummy_cube,
+                Managers.RelayManager.NGO_ROOT.transform, false);
+        }
+    }
 
 
     public async void OnGUI()
