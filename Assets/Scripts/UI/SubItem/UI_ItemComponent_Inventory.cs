@@ -89,7 +89,6 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         RemoveItemFromInventory();
         GameObject lootItem = GetLootingItemObejct(_iteminfo);
         lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        return;
     }
 
 
