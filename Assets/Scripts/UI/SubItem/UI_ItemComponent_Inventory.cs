@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -20,6 +21,8 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected Image _backGroundImage;
     protected Image _itemGradeBorder;
     protected bool _isEquipped = false;
+
+    private GameObject _rootingItem;
 
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
@@ -87,10 +90,17 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     private void DropItemOnGround()
     {
         RemoveItemFromInventory();
-        GameObject lootItem = GetLootingItemObejct(_iteminfo);
-        lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
+        _rootingItem = GetLootingItemObejct(_iteminfo);
+        _rootingItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
+        RequestNGOSpawnServerRpc();
     }
 
+    //TODO:아이템 떨어지는거 완성시키기
+    [ServerRpc]
+    private void RequestNGOSpawnServerRpc()
+    {
+        Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId,_rootingItem);
+    }
 
 
     protected void AttachItemToSlot(GameObject go, Transform slot)

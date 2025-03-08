@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LootItem : MonoBehaviour,IInteraction
+public class LootItem : NetworkBehaviour,IInteraction
 {
     private const float ADDFORCE_OFFSET = 5f;
     private const float TORQUE_FORCE_OFFSET = 30f;
@@ -32,9 +33,15 @@ public class LootItem : MonoBehaviour,IInteraction
     }
     private void Start()
     {
+       
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
-        transform.position = _dropper.transform.position + Vector3.up*_dropper.GetComponent<Collider>().bounds.max.y;
+        transform.position = _dropper.transform.position + Vector3.up * _dropper.GetComponent<Collider>().bounds.max.y;
         //튀어오르면서 로테이션을 돌린다.
         //바닥에 닿으면 VFX효과를 킨다.
         //아이템을 회전시킨다.
@@ -47,7 +54,7 @@ public class LootItem : MonoBehaviour,IInteraction
             Random.Range(-1f, 1f)   // Z축 회전
         );
         // 회전 힘 추가 (랜덤 값에 강도를 조절)
-        _rigidBody.AddTorque(randomTorque* TORQUE_FORCE_OFFSET, ForceMode.Impulse);
+        _rigidBody.AddTorque(randomTorque * TORQUE_FORCE_OFFSET, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
