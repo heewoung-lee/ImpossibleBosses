@@ -10,6 +10,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public Action<int> Event_Attacked;
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
+    public Action Done_Base_Stats_Loading;
 
     public NetworkVariable<int> playerHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);

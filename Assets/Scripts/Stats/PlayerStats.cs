@@ -16,7 +16,6 @@ public class PlayerStats : BaseStats, IAttackRange
     private LayerMask _targetLayer;
     public Action<int> Event_changedGold;
 
-    public Action Done_Player_Stats_Loading;
 
     public string Name
     {
@@ -56,7 +55,7 @@ public class PlayerStats : BaseStats, IAttackRange
     protected override void StartInit()
     {
         _statDict = Managers.DataManager.AllDataDict[typeof(PlayerStat)] as Dictionary<int, PlayerStat>;
-        Done_Player_Stats_Loading?.Invoke();
+        Done_Base_Stats_Loading?.Invoke();
         _targetLayer = LayerMask.GetMask("Monster");
     }
     public int Exp
@@ -97,8 +96,8 @@ public class PlayerStats : BaseStats, IAttackRange
     {
         if(_statDict == null)
         {
-            Done_Player_Stats_Loading -= SetStats;
-            Done_Player_Stats_Loading += SetStats;
+            Done_Base_Stats_Loading -= SetStats;
+            Done_Base_Stats_Loading += SetStats;
             return;
         }
 
