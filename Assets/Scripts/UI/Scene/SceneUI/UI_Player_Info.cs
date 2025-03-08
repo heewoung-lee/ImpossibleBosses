@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-[RequireComponent(typeof(PlayerStats))]
 public class UI_Player_Info : UI_Scene
 {
     private Slider _hpSlider;

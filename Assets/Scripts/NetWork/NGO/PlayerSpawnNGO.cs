@@ -49,7 +49,7 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
     [ServerRpc(RequireOwnership = false)]
     public void RequestSpawnPlayerServerRpc(ulong requestingClientId,string choicePlayer)
     {
-        _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}base");
+        _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}Base");
         Vector3 targetPosition = new Vector3(1*requestingClientId, 0, 1);
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
         _relayManager.SpawnNetworkOBJ(requestingClientId, _player, parent: _relayManager.NGO_ROOT.transform);

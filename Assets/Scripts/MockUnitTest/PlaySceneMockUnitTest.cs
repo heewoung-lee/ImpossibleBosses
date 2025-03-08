@@ -20,7 +20,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby171";
+    string LobbyID = "TestLobby173";
     string _playerType = null;
     GameObject _ngoRoot;
 
@@ -49,10 +49,10 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 }
 
                 Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
-                SpawnToNPC(new List<(string, Vector3)>()
-                {
-                    {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
-                });
+                //SpawnToNPC(new List<(string, Vector3)>()
+                //{
+                //    {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
+                //});
             }
             else
             {

@@ -40,10 +40,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
 
     public void SetOwnerPlayerADD_Module()
     {
-
         gameObject.name = "OnwerPlayer";
+        //gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
-        gameObject.AddComponent<PlayerStats>();
         gameObject.AddComponent<PlayerController>();
         gameObject.AddComponent<Module_Player_TextureCamera>();
         gameObject.AddComponent<Module_HP_Bar>();
@@ -61,11 +60,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
         _interactionTr.AddComponent<Module_Player_Interaction>();
         SetPlayerLayerMask();
-
       
-        string wantPrefab = gameObject.GetComponent<Animator>().runtimeAnimatorController.name.Replace("Base", "");
-        RuntimeAnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/FighterController");
-        gameObject.GetComponent<Animator>().runtimeAnimatorController = OwnerPlayerAnimController;
+        RuntimeAnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = OwnerPlayerAnimController; 
     }
 
 

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: -8224358290919517820}
   - component: {fileID: -4800638692832331848}
   - component: {fileID: -3521527397901853935}
+  - component: {fileID: -2362964116440713974}
   m_Layer: 0
   m_Name: Player_Base
   m_TagString: Untagged
@@ -358,6 +359,21 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList: []
   m_Animator: {fileID: 3918218250099777477}
+--- !u!114 &-2362964116440713974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94351885454998009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb14a04870189d24db0ab1a8bebef7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerHpValue:
+    m_InternalValue: 0
 --- !u!1 &111029586966444443
 GameObject:
   m_ObjectHideFlags: 0
