@@ -27,7 +27,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public NetworkVariable<float> playerMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    public int Hp{ 
+    public int Hp {
         get => playerHpValue.Value;
         protected set
         {
@@ -147,7 +147,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     public void Plus_MoveSpeed_Abillity(float value)
     {
-       MoveSpeed += value;
+        MoveSpeed += value;
     }
 
     protected abstract void SetStats();
@@ -182,7 +182,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
         UpdateStat();
     }
-  
+
     private void HpValueChanged(int previousValue, int newValue)
     {
         Event_StatsChanged?.Invoke();
@@ -203,19 +203,29 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     {
         Event_StatsChanged?.Invoke();
     }
-    public void OnAttacked(IAttackRange attacker, int? spacialDamage = null)
+    public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {
         if (_isCheckDead) return;
 
+        NetworkObjectReference netWorkRef = GetOnAttackedOwner(attacker);
+        OnAttackedServerRpc(netWorkRef, spacialDamage);
+    }
+
+
+    [ServerRpc]
+    public void OnAttackedServerRpc(NetworkObjectReference attackerRef, int spacialDamage = -1)
+    {
         int damage = 0;
-        attacker.Owner_Transform.TryGetComponent(out BaseStats attackerStats);
-        if (spacialDamage == null)
+        attackerRef.TryGet(out NetworkObject attackerNGO);
+        attackerNGO.TryGetComponent(out BaseStats attackerStats);
+
+        if (spacialDamage < 0)
             damage = attackerStats.Attack;
         else
-            damage = spacialDamage.Value;
+            damage = spacialDamage;
         damage = Mathf.Max(0, damage - Defence);
         Hp -= damage;
-        Event_Attacked?.Invoke(damage);
+        OnAttackedClientRpc(damage);
         if (Hp <= 0)
         {
             Hp = 0;
@@ -223,5 +233,23 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             _isCheckDead = true;
         }
     }
+    [ClientRpc]
+    public void OnAttackedClientRpc(int damage)
+    {
+        Event_Attacked?.Invoke(damage);
+    }
+
+    public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
+    {
+        if(attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))
+        {
+            return new NetworkObjectReference(ngo);
+        }
+        Debug.Log("Attacker hasn't a BaseStats");
+        return default;
+    }
+
+
+
     protected abstract void OnDead(BaseStats attacker);
 }

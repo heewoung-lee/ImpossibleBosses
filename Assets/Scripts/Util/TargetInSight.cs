@@ -14,7 +14,7 @@ public class TargetInSight
         return new Vector3(Mathf.Sin(_angle * Mathf.Deg2Rad), 0f, Mathf.Cos(_angle * Mathf.Deg2Rad));
     }
 
-    public static void AttackTargetInSector(IAttackRange _stats, int ?damage = null)
+    public static void AttackTargetInSector(IAttackRange _stats, int damage = -1)
     {
         Vector3 _leftBoundary = BoundaryAngle(_stats.ViewAngle * -0.5f, _stats.Owner_Transform);
         Vector3 _rightBoundary = BoundaryAngle(_stats.ViewAngle * 0.5f, _stats.Owner_Transform);
@@ -36,10 +36,11 @@ public class TargetInSight
                     RaycastHit hit;
                     if (Physics.Raycast(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _direction, out hit, _stats.ViewDistance))
                     {
-                        if (damage == null)
-                            idamaged.OnAttacked(_stats);
-                        else
+                        if (damage > 0)
                             idamaged.OnAttacked(_stats, damage);
+                        else
+                            idamaged.OnAttacked(_stats);
+
                     }
                 }
             }
