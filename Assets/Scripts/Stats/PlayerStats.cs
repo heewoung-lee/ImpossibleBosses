@@ -94,13 +94,12 @@ public class PlayerStats : BaseStats, IAttackRange
 
     protected override void SetStats()
     {
-        if(_statDict == null)
+        if(_statDict == null)//트라이겟 시도해볼것 
         {
             Done_Base_Stats_Loading -= SetStats;
             Done_Base_Stats_Loading += SetStats;
             return;
         }
-
         PlayerStat stat = _statDict[_level];
         MaxHp = stat.hp;
         Hp = stat.hp;

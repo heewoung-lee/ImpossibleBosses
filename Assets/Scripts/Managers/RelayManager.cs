@@ -132,8 +132,10 @@ public class RelayManager
     }
 
     [ServerRpc]
-    private void DeSpawn_NetWorkOBJServerRpc(GameObject go)
+    private void DeSpawn_NetWorkOBJServerRpc(GameObject go, ServerRpcParams rpcParams = default)
     {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        Debug.Log("이 RPC를 호출한 클라이언트 ID: " + clientId);
         if (go.TryGetComponent(out NetworkObject ngo))
         {
             ngo.Despawn(true);
