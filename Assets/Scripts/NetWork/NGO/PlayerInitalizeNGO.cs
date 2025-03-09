@@ -41,12 +41,10 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
     public void SetOwnerPlayerADD_Module()
     {
         gameObject.name = "OnwerPlayer";
-        //gameObject.GetComponent<PlayerStats>().enabled = true;
+        // gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
         gameObject.AddComponent<PlayerController>();
         gameObject.AddComponent<Module_Player_TextureCamera>();
-        gameObject.AddComponent<Module_HP_Bar>();
-        gameObject.AddComponent<Module_Damage_Text>();
         gameObject.AddComponent<Module_UI_BufferBar>();
         gameObject.AddComponent<Module_UI_ConsumableBar>();
         gameObject.AddComponent<Module_UI_ItemDragImage>();

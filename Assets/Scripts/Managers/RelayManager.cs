@@ -34,7 +34,7 @@ public class RelayManager
     {
         get
         {
-            if( _netWorkManager is null)
+            if (_netWorkManager is null)
             {
                 _netWorkManager = Managers.ResourceManager.InstantiatePrefab("NGO/NetworkManager").GetComponent<NetworkManager>();
             }
@@ -61,17 +61,17 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId,_nGO_ROOT, destroyOption: true);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT, destroyOption: true);
             }
             return _nGO_ROOT;
         }
     }
-    public string JoinCode { get => _joinCode;}
+    public string JoinCode { get => _joinCode; }
 
     public GameObject Load_NGO_ROOT_UI_Module(string path)
     {
         GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
-        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ,NGO_ROOT_UI.transform, destroyOption: true);
+        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ, NGO_ROOT_UI.transform, destroyOption: true);
         return networkOBJ;
     }
 
@@ -101,16 +101,16 @@ public class RelayManager
 
     }
 
-    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj,Transform parent = null, bool destroyOption = false)
+    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = false)
     {
-        if(NetWorkManager.IsListening == true)
+        if (NetWorkManager.IsListening == true)
         {
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
             networkObj.SpawnWithOwnership(clientId);
             networkObj.DestroyWithScene = destroyOption;
             if (parent != null)
             {
-                networkObj.transform.SetParent(parent,false);
+                networkObj.transform.SetParent(parent, false);
             }
         }
         return obj;
@@ -134,10 +134,15 @@ public class RelayManager
     [ServerRpc]
     private void DeSpawn_NetWorkOBJServerRpc(GameObject go)
     {
-            if (go.TryGetComponent(out NetworkObject ngo))
-            {
-                ngo.Despawn(true);
-            }
+        if (go.TryGetComponent(out NetworkObject ngo))
+        {
+            ngo.Despawn(true);
+        }
+    }
+    [ServerRpc]
+    public void Spawn_Object_ServerRpc(ulong clientId, GameObject obj,Transform parent = null, bool destroyOption = false)
+    {
+        SpawnNetworkOBJ(clientId,obj,parent,destroyOption);
     }
 
     public async Task<bool> JoinGuestRelay(string joinCode)
@@ -164,7 +169,7 @@ public class RelayManager
 
     public void ShutDownRelay()
     {
-        if(_netWorkManager != null)
+        if (_netWorkManager != null)
         {
             NetworkManager.Singleton.Shutdown();
             _joinCode = null;

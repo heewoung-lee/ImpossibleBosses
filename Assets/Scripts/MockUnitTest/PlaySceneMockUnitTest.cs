@@ -20,10 +20,10 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby174";
+    string LobbyID = "TestLobby178";
     string _playerType = null;
     GameObject _ngoRoot;
-
+    
 
     public Define.PlayerClass PlayerClass;
     public bool isSoloTest;

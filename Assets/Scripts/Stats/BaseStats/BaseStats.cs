@@ -104,7 +104,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership =false)]
     private void RequestHpValueServerRpc(int value)
     {
         playerHpValue.Value = value;
@@ -178,7 +178,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerHpValue.OnValueChanged += HpValueChanged;
         playerMaxHpValue.OnValueChanged += MaxHpValueChanged;
         playerAttackValue.OnValueChanged += AttackValueChanged;
-        playerDefenceValue.OnValueChanged -= DefenceValueChanged;
+        playerDefenceValue.OnValueChanged += DefenceValueChanged;
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
         UpdateStat();
     }
@@ -212,7 +212,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
 
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void OnAttackedServerRpc(NetworkObjectReference attackerRef, int spacialDamage = -1)
     {
         int damage = 0;
@@ -237,6 +237,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public void OnAttackedClientRpc(int damage)
     {
         Event_Attacked?.Invoke(damage);
+        Debug.Log($"이벤트의 존재 여부{Event_Attacked}");
     }
 
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)

@@ -22,7 +22,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected Image _itemGradeBorder;
     protected bool _isEquipped = false;
 
-    private GameObject _rootingItem;
+    [SerializeField]private GameObject _rootingItem;
 
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
@@ -92,15 +92,15 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         RemoveItemFromInventory();
         _rootingItem = GetLootingItemObejct(_iteminfo);
         _rootingItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        RequestNGOSpawnServerRpc();
+        Managers.RelayManager.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
     }
 
-    //TODO:아이템 떨어지는거 완성시키기
-    [ServerRpc]
-    private void RequestNGOSpawnServerRpc()
-    {
-        Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId,_rootingItem);
-    }
+    ////TODO:아이템 떨어지는거 완성시키기
+    //[ServerRpc(RequireOwnership = false)]
+    //private void RequestNGOSpawnServerRpc()
+    //{
+    //    Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId,_rootingItem);
+    //}
 
 
     protected void AttachItemToSlot(GameObject go, Transform slot)

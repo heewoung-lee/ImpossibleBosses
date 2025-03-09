@@ -178,6 +178,8 @@ GameObject:
   - component: {fileID: -4800638692832331848}
   - component: {fileID: -3521527397901853935}
   - component: {fileID: -2362964116440713974}
+  - component: {fileID: 6318345427645833407}
+  - component: {fileID: -5300060477282626606}
   m_Layer: 0
   m_Name: Player_Base
   m_TagString: Untagged
@@ -374,6 +376,38 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   playerHpValue:
     m_InternalValue: 0
+  playerMaxHpValue:
+    m_InternalValue: 0
+  playerAttackValue:
+    m_InternalValue: 0
+  playerDefenceValue:
+    m_InternalValue: 0
+  playerMoveSpeedValue:
+    m_InternalValue: 0
+--- !u!114 &6318345427645833407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94351885454998009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fe02c744bf94944838ebc0c647e259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5300060477282626606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94351885454998009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52395888f1aaaae4e85a081ff7821ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &111029586966444443
 GameObject:
   m_ObjectHideFlags: 0
