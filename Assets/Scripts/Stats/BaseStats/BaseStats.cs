@@ -11,7 +11,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
     public Action Done_Base_Stats_Loading;
-    //TODO 0으로 되는 버그 여기 초기화 될때 의심
+
+
     public NetworkVariable<int> playerHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -33,11 +34,12 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         {
             if (IsServer)
             {
-                playerHpValue.Value = Mathf.Clamp(value, 0, playerMaxHpValue.Value);
+                playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
             }
             else
             {
-                RequestHpValueRpc(Mathf.Clamp(value, 0, playerMaxHpValue.Value));
+                Debug.Log($"바꿔야 하는 값{value}");
+                RequestHpValueRpc(Mathf.Clamp(value, 0, MaxHp));
             }
         }
     }
@@ -105,7 +107,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestHpValueRpc(int value)
+    private void RequestHpValueRpc(int value,RpcParams param = default)
     {
         playerHpValue.Value = value;
     }
@@ -175,16 +177,17 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        UpdateStat();
         playerHpValue.OnValueChanged += HpValueChanged;
         playerMaxHpValue.OnValueChanged += MaxHpValueChanged;
         playerAttackValue.OnValueChanged += AttackValueChanged;
         playerDefenceValue.OnValueChanged += DefenceValueChanged;
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
+        UpdateStat();
     }
 
     private void HpValueChanged(int previousValue, int newValue)
     {
+        Debug.Log($"이전값{previousValue} , 이후값{newValue}");
         Event_StatsChanged?.Invoke();
         int damage = previousValue - newValue;
         if(damage > 0)
