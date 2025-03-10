@@ -131,7 +131,7 @@ public class RelayManager
         }
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     private void DeSpawn_NetWorkOBJServerRpc(GameObject go, ServerRpcParams rpcParams = default)
     {
         ulong clientId = rpcParams.Receive.SenderClientId;
@@ -141,7 +141,7 @@ public class RelayManager
             ngo.Despawn(true);
         }
     }
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     public void Spawn_Object_ServerRpc(ulong clientId, GameObject obj,Transform parent = null, bool destroyOption = false)
     {
         SpawnNetworkOBJ(clientId,obj,parent,destroyOption);

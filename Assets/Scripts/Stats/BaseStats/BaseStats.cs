@@ -38,7 +38,6 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             }
             else
             {
-                Debug.Log($"바꿔야 하는 값{value}");
                 RequestHpValueRpc(Mathf.Clamp(value, 0, MaxHp));
             }
         }
@@ -187,7 +186,6 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     private void HpValueChanged(int previousValue, int newValue)
     {
-        Debug.Log($"이전값{previousValue} , 이후값{newValue}");
         Event_StatsChanged?.Invoke();
         int damage = previousValue - newValue;
         if(damage > 0)
