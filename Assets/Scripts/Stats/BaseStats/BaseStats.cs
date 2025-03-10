@@ -7,7 +7,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private bool _isCheckDead = false;
 
-    public Action<int,int> Event_Attacked;
+    public Action<int, int> Event_Attacked;
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
     public Action Done_Base_Stats_Loading;
@@ -28,19 +28,12 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public NetworkVariable<float> playerMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    public int Hp {
+    public int Hp
+    {
         get => playerHpValue.Value;
         protected set
         {
-            Debug.Log($"{value}값으로 변경");
-            if (IsServer)
-            {
-                playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
-            }
-            else
-            {
-                RequestHpValueRpc(Mathf.Clamp(value, 0, MaxHp));
-            }
+            playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
         }
     }
     public int MaxHp
@@ -48,14 +41,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerMaxHpValue.Value;
         protected set
         {
-            if (IsServer)
-            {
-                playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
-            }
-            else
-            {
-                RequestMaxHpValueRpc(Mathf.Clamp(value, 0, int.MaxValue));
-            }
+            playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public int Attack
@@ -63,14 +49,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerAttackValue.Value;
         protected set
         {
-            if (IsServer)
-            {
-                playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
-            }
-            else
-            {
-                RequestAttackValueRpc(Mathf.Clamp(value, 0, int.MaxValue));
-            }
+            playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public int Defence
@@ -78,14 +57,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerDefenceValue.Value;
         protected set
         {
-            if (IsServer)
-            {
-                playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
-            }
-            else
-            {
-                RequestDefenceValueRpc(Mathf.Clamp(value, 0, int.MaxValue));
-            }
+            playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public float MoveSpeed
@@ -93,45 +65,10 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerMoveSpeedValue.Value;
         protected set
         {
-            if (IsSpawned == false)
-                return;
-            if (IsServer)
-            {
-                playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
-            }
-            else
-            {
-                RequestMoveSpeedValueRpc(Mathf.Clamp(value, 0, float.MaxValue));
-            }
+            playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
         }
     }
 
-    [Rpc(SendTo.NotMe, RequireOwnership = false)]
-    private void RequestHpValueRpc(int value,RpcParams rpcParams = default)
-    {
-        Debug.Log($"{rpcParams.Receive.SenderClientId} 에서 요청을 보냈습니다.{value}");
-        playerHpValue.Value = value;
-    }
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestMaxHpValueRpc(int value)
-    {
-        playerMaxHpValue.Value = value;
-    }
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestAttackValueRpc(int value)
-    {
-        playerAttackValue.Value = value;
-    }
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestDefenceValueRpc(int value)
-    {
-        playerDefenceValue.Value = value;
-    }
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestMoveSpeedValueRpc(float value)
-    {
-        playerMoveSpeedValue.Value = value;
-    }
     public void Plus_Current_Hp_Abillity(int value)
     {
         Hp += value;
@@ -188,12 +125,11 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     private void HpValueChanged(int previousValue, int newValue)
     {
-        Debug.Log($"{previousValue}이전값 {newValue} 이후값");
-
         Event_StatsChanged?.Invoke();
         int damage = previousValue - newValue;
-        if(damage > 0)
+        if (damage > 0)
         {
+            if(IsHost)
             OnAttackedClientRpc(damage, newValue);
         }
     }
@@ -222,7 +158,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
 
 
-    [Rpc(SendTo.Server,RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     public void OnAttackedRpc(NetworkObjectReference attackerRef, int spacialDamage = -1)
     {
         int damage = 0;
@@ -242,23 +178,21 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             _isCheckDead = true;
         }
     }
-    [Rpc(SendTo.NotMe)]
-    public void OnAttackedClientRpc(int damage,int afterCurrentHp)
+    [Rpc(SendTo.ClientsAndHost)]
+    public void OnAttackedClientRpc(int damage, int afterCurrentHp)
     {
         Event_Attacked?.Invoke(damage, afterCurrentHp);
     }
 
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
     {
-        if(attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))
+        if (attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))
         {
             return new NetworkObjectReference(ngo);
         }
         Debug.Log("Attacker hasn't a BaseStats");
         return default;
     }
-
-
 
     protected abstract void OnDead(BaseStats attacker);
 }

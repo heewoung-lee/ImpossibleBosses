@@ -37,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom307";
+    private const string LOBBYID = "WaitLobbyRoom310";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
@@ -136,12 +136,20 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
     {
-        StopHeartbeat();
-        if (lobby.HostId == _currentPlayerInfo.Id)
+        try
         {
-            Debug.Log("하트비트 이식");
-            _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
+            StopHeartbeat();
+            if (lobby.HostId == _currentPlayerInfo.Id)
+            {
+                Debug.Log("하트비트 이식");
+                _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
+            }
         }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+
     }
     private async Task CheckHostOrClientRelay(Lobby lobby)
     {
@@ -405,7 +413,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.Log($"Stack Trace{System.Environment.StackTrace}");
             return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
     }

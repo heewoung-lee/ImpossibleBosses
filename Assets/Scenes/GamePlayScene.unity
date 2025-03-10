@@ -382,7 +382,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701164428}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 023e91f9abacd2a4aa4f4b6e878f6153, type: 3}
   m_Name: 
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701164428}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1ac43d34c1d4d147b2f3d2f68db5b46, type: 3}
   m_Name: 
@@ -1287,7 +1287,7 @@ PrefabInstance:
     - target: {fileID: 258900546468309182, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
       propertyPath: m_NavMeshData
       value: 
-      objectReference: {fileID: 23800000, guid: d3768a31ef70a0e4494a667288664399, type: 2}
+      objectReference: {fileID: 23800000, guid: d81657bf2b2e3ad479d6590ab854ab5b, type: 2}
     - target: {fileID: 258900546468309182, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
       propertyPath: m_MinRegionArea
       value: 1
