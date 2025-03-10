@@ -32,7 +32,7 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
 
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
-        if(clientId == _relayManager.NetWorkManager.LocalClientId)
+        if (clientId == _relayManager.NetWorkManager.LocalClientId)
             SpawnObject();
     }
 
@@ -40,27 +40,35 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
     {
         string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
         RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId, choicePlayer);
-        RequestSpawnDummyCube();
+        RequestSpawnToNPC(new List<(string, Vector3)>()
+        {
+           {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
+        });
     }
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
     }
 
-    public void RequestSpawnDummyCube()
+    private void RequestSpawnToNPC(List<(string, Vector3)> npcPathAndTr)
     {
-        if (IsHost)
+        if (IsHost == false)
+            return;
+
+        foreach ((string, Vector3) npcdata in npcPathAndTr)
         {
-            GameObject dummyCube = Managers.ResourceManager.InstantiatePrefab("Dummy_Test_Cube");
-            Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId, dummyCube,Managers.RelayManager.NGO_ROOT.transform);
+            GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
+            dummy_cube.transform.position = npcdata.Item2;
+            Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId, dummy_cube,
+                Managers.RelayManager.NGO_ROOT.transform, false);
         }
     }
 
-    [Rpc(SendTo.Server,RequireOwnership = false)]
-    public void RequestSpawnPlayerServerRpc(ulong requestingClientId,string choicePlayer)
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void RequestSpawnPlayerServerRpc(ulong requestingClientId, string choicePlayer)
     {
         _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}Base");
-        Vector3 targetPosition = new Vector3(1*requestingClientId, 0, 1);
+        Vector3 targetPosition = new Vector3(1 * requestingClientId, 0, 1);
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
         _relayManager.SpawnNetworkOBJ(requestingClientId, _player, parent: _relayManager.NGO_ROOT.transform);
     }
@@ -74,6 +82,6 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         {
             return true;
         }
-        return false; 
+        return false;
     }
 }
