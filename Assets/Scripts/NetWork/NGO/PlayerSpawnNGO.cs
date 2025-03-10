@@ -22,12 +22,15 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
         if (IsAvailableMockUnitTest())
         {
             PlayerSpawn();
+            RequestSpawnCube();
             return;
         }
 
         Managers.RelayManager.NetWorkManager.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
+        {
             PlayerSpawn();
+        }
     }
 
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
@@ -40,6 +43,7 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
     {
         string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
         RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId, choicePlayer);
+        
     }
     protected override void OnNetworkPostSpawn()
     {
@@ -53,6 +57,12 @@ public class PlayerSpawnNGO : NetworkBehaviourBase
         Vector3 targetPosition = new Vector3(1*requestingClientId, 0, 1);
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
         _relayManager.SpawnNetworkOBJ(requestingClientId, _player, parent: _relayManager.NGO_ROOT.transform);
+    }
+
+    public void RequestSpawnCube()
+    {
+        GameObject cube = Managers.ResourceManager.InstantiatePrefab("Dummy_Test_Cube_NGO");
+        _relayManager.SpawnNetworkOBJ(_relayManager.NetWorkManager.LocalClientId, cube, _relayManager.NGO_ROOT.transform);
     }
 
 
