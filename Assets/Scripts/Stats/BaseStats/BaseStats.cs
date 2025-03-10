@@ -33,6 +33,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerHpValue.Value;
         protected set
         {
+            if(IsServer)
             playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
         }
     }
@@ -41,7 +42,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerMaxHpValue.Value;
         protected set
         {
-            playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            if (IsServer)
+                playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public int Attack
@@ -49,7 +51,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerAttackValue.Value;
         protected set
         {
-            playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            if (IsServer)
+                playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public int Defence
@@ -57,7 +60,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerDefenceValue.Value;
         protected set
         {
-            playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            if (IsServer)
+                playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
         }
     }
     public float MoveSpeed
@@ -65,7 +69,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerMoveSpeedValue.Value;
         protected set
         {
-            playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
+            if (IsServer)
+                playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
         }
     }
 
