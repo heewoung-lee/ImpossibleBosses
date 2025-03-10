@@ -212,8 +212,8 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         Vector3 targetLocalPosition = transform.InverseTransformPoint(targetWorldPosition);
         SetCameraPositionServerRpc(targetLocalPosition, CameraOperation.Set);
     }
-    [ServerRpc]
-    public void SetCameraPositionServerRpc(Vector3 position, CameraOperation cameraOperation, ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    public void SetCameraPositionServerRpc(Vector3 position, CameraOperation cameraOperation, RpcParams rpcParams = default)
     {
         switch (cameraOperation)
         {
@@ -225,13 +225,13 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
                 break;
         }
     }
-    [ServerRpc]
-    private void SetNicknameServerRpc(string newNickname, ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SetNicknameServerRpc(string newNickname, RpcParams rpcParams = default)
     {
         _playerNickname.Value = new FixedString64Bytes(newNickname);
     }
-    [ServerRpc]
-    public void PlayerReadyServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    public void PlayerReadyServerRpc(RpcParams rpcParams = default)
     {
         _isReady.Value = !_isReady.Value;
         _readyPanel.SetActive(_isReady.Value);
@@ -240,7 +240,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
         NotifyButtonStateClientRpc(_isReady.Value, rpcParams.Receive.SenderClientId);
     }
-    [ClientRpc]
+    [Rpc(SendTo.NotMe)]
     private void NotifyButtonStateClientRpc(bool state, ulong targetClientId)
     {
         if (NetworkManager.Singleton.LocalClientId == targetClientId)

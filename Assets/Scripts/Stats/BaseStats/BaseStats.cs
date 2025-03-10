@@ -32,6 +32,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerHpValue.Value;
         protected set
         {
+            Debug.Log($"{value}값으로 변경");
             if (IsServer)
             {
                 playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
@@ -105,9 +106,10 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
 
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void RequestHpValueRpc(int value,RpcParams param = default)
+    [Rpc(SendTo.NotMe, RequireOwnership = false)]
+    private void RequestHpValueRpc(int value,RpcParams rpcParams = default)
     {
+        Debug.Log($"{rpcParams.Receive.SenderClientId} 에서 요청을 보냈습니다.{value}");
         playerHpValue.Value = value;
     }
     [Rpc(SendTo.Server, RequireOwnership = false)]
@@ -186,6 +188,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     private void HpValueChanged(int previousValue, int newValue)
     {
+        Debug.Log($"{previousValue}이전값 {newValue} 이후값");
+
         Event_StatsChanged?.Invoke();
         int damage = previousValue - newValue;
         if(damage > 0)

@@ -37,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom296";
+    private const string LOBBYID = "WaitLobbyRoom307";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
@@ -119,12 +119,19 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
 
     public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)
     {
-        if (lobby == null || _currentPlayerInfo.Id == null)
-            return;
+        try
+        {
+            if (lobby == null || _currentPlayerInfo.Id == null)
+                return;
 
-        CheckHostAndSendHeartBeat(lobby, interval);
-        Managers.RelayManager.ShutDownRelay();
-        await CheckHostAndGuestEvent?.Invoke(lobby);
+            CheckHostAndSendHeartBeat(lobby, interval);
+            Managers.RelayManager.ShutDownRelay();
+            await CheckHostAndGuestEvent?.Invoke(lobby);
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 
     private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
@@ -398,6 +405,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
+            Debug.Log($"Stack Trace{System.Environment.StackTrace}");
             return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
     }
