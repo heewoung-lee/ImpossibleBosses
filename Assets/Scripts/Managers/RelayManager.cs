@@ -21,6 +21,8 @@ public class RelayManager
     private Allocation _allocation;
     private GameObject _nGO_ROOT_UI;
     private GameObject _nGO_ROOT;
+    private NGO_RPC_Caller _nGO_RPC_Caller;
+
 
     public Define.PlayerClass ChoicePlayerCharacter;
 
@@ -48,7 +50,7 @@ public class RelayManager
             if (_nGO_ROOT_UI == null)
             {
                 _nGO_ROOT_UI = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT_UI");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT_UI, destroyOption: true);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT_UI);
             }
             return _nGO_ROOT_UI;
         }
@@ -61,11 +63,28 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT, destroyOption: true);
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
             }
             return _nGO_ROOT;
         }
     }
+
+    public NGO_RPC_Caller NGO_RPC_Caller
+    {
+        get
+        {
+            if (_nGO_RPC_Caller == null)
+            {
+                GameObject ngo_RPC_Caller;
+                ngo_RPC_Caller = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
+                SpawnNetworkOBJ(_netWorkManager.LocalClientId, ngo_RPC_Caller);
+                _nGO_RPC_Caller = ngo_RPC_Caller.GetComponent<NGO_RPC_Caller>();
+            }
+            return _nGO_RPC_Caller;
+        }
+    }
+
+
     public string JoinCode { get => _joinCode; }
 
     public GameObject Load_NGO_ROOT_UI_Module(string path)
@@ -101,7 +120,7 @@ public class RelayManager
 
     }
 
-    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = false)
+    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
     {
         if (NetWorkManager.IsListening == true)
         {
@@ -127,24 +146,8 @@ public class RelayManager
         }
         else
         {
-            DeSpawn_NetWorkOBJServerRpc(go);
+            NGO_RPC_Caller.DeSpawn_NetWorkOBJServerRpc(go);
         }
-    }
-
-    [Rpc(SendTo.Server)]
-    private void DeSpawn_NetWorkOBJServerRpc(GameObject go, ServerRpcParams rpcParams = default)
-    {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-        Debug.Log("이 RPC를 호출한 클라이언트 ID: " + clientId);
-        if (go.TryGetComponent(out NetworkObject ngo))
-        {
-            ngo.Despawn(true);
-        }
-    }
-    [Rpc(SendTo.Server)]
-    public void Spawn_Object_ServerRpc(ulong clientId, GameObject obj,Transform parent = null, bool destroyOption = false)
-    {
-        SpawnNetworkOBJ(clientId,obj,parent,destroyOption);
     }
 
     public async Task<bool> JoinGuestRelay(string joinCode)

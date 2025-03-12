@@ -92,7 +92,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         RemoveItemFromInventory();
         _rootingItem = GetLootingItemObejct(_iteminfo);
         _rootingItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        Managers.RelayManager.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
+        Managers.RelayManager.NGO_RPC_Caller.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
     }
 
     ////TODO:아이템 떨어지는거 완성시키기
