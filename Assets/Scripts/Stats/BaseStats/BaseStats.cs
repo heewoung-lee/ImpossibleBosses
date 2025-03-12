@@ -133,6 +133,10 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     protected abstract void StartInit();
     protected void UpdateStat()
     {
+        if (IsOwner == false)
+            return;
+
+
         SetStats();
         Event_StatsLoaded?.Invoke();
     }
@@ -159,7 +163,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerAttackValue.OnValueChanged += AttackValueChanged;
         playerDefenceValue.OnValueChanged += DefenceValueChanged;
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
-        UpdateStat();
+        //UpdateStat();
     }
 
     private void HpValueChanged(int previousValue, int newValue)

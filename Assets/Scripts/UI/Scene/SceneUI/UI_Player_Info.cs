@@ -34,12 +34,12 @@ public class UI_Player_Info : UI_Scene
         _hpText = GetText((int)User_text.HP_Text);
         _levelText = GetText((int)User_text.Level_Text);
         _playerName_Text = GetText((int)User_text.PlayerName_Text);
-
-        _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
-        InitalizePlayerInfo();
+        
     }
     protected override void StartInit()
     {
+        _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
+        InitalizePlayerInfo();
     }
 
     private void InitalizePlayerInfo()

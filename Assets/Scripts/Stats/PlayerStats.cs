@@ -103,8 +103,6 @@ public class PlayerStats : BaseStats, IAttackRange
         _statDict.TryGetValue(_level -1,out PlayerStat preStat);
         PlayerStat stat = _statDict[_level];
 
-
-
         MaxHp += stat.hp - preStat.hp;
         Hp += stat.hp - preStat.hp;
         Attack += stat.attack - preStat.attack;
