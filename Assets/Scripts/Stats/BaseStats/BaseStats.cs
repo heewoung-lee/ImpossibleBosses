@@ -2,30 +2,31 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 [DisallowMultipleComponent]
 public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private bool _isCheckDead = false;
 
-    public Action<int, int> Event_Attacked;
+    public Action<int> Event_Attacked;
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
     public Action Done_Base_Stats_Loading;
 
-
-    public NetworkVariable<int> playerHpValue = new NetworkVariable<int>
+    [SerializeField]
+    private NetworkVariable<int> playerHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-    public NetworkVariable<int> playerMaxHpValue = new NetworkVariable<int>
+    [SerializeField]
+    private NetworkVariable<int> playerMaxHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-    public NetworkVariable<int> playerAttackValue = new NetworkVariable<int>
+    [SerializeField]
+    private NetworkVariable<int> playerAttackValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-    public NetworkVariable<int> playerDefenceValue = new NetworkVariable<int>
+    [SerializeField]
+    private NetworkVariable<int> playerDefenceValue = new NetworkVariable<int>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
-    public NetworkVariable<float> playerMoveSpeedValue = new NetworkVariable<float>
+    [SerializeField]
+    private NetworkVariable<float> playerMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public int Hp
@@ -33,46 +34,79 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         get => playerHpValue.Value;
         protected set
         {
-            if(IsServer)
-            playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
+            PlayerHPValueChangedRpc(value);
         }
     }
+    [Rpc(SendTo.Server)]
+    public void PlayerHPValueChangedRpc(int value)
+    {
+        playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
+    }
+
+
+
     public int MaxHp
     {
         get => playerMaxHpValue.Value;
         protected set
         {
-            if (IsServer)
-                playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            PlayerMaxHPValueChangedRpc(value);
         }
     }
+    [Rpc(SendTo.Server)]
+    public void PlayerMaxHPValueChangedRpc(int value)
+    {
+        playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+    }
+
+
+
     public int Attack
     {
         get => playerAttackValue.Value;
         protected set
         {
-            if (IsServer)
-                playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            PlayerAttackValueChangedRpc(value);
         }
     }
+    [Rpc(SendTo.Server)]
+    public void PlayerAttackValueChangedRpc(int value)
+    {
+        playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+    }
+
+
+
     public int Defence
     {
         get => playerDefenceValue.Value;
         protected set
         {
-            if (IsServer)
-                playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+            PlayerDefenceValueChangedRpc(value);
         }
     }
+    [Rpc(SendTo.Server)]
+    public void PlayerDefenceValueChangedRpc(int value)
+    {
+        playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+    }
+
+
+
     public float MoveSpeed
     {
         get => playerMoveSpeedValue.Value;
         protected set
         {
-            if (IsServer)
-                playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
+            PlayeMoveSpeedValueChangedRpc(value);
         }
     }
+    [Rpc(SendTo.Server)]
+    public void PlayeMoveSpeedValueChangedRpc(float value)
+    {
+        playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
+    }
+
 
     public void Plus_Current_Hp_Abillity(int value)
     {
@@ -135,7 +169,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (damage > 0)
         {
             if(IsHost)
-            OnAttackedClientRpc(damage, newValue);
+            OnAttackedClientRpc(damage);
         }
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
@@ -184,9 +218,9 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
     [Rpc(SendTo.ClientsAndHost)]
-    public void OnAttackedClientRpc(int damage, int afterCurrentHp)
+    public void OnAttackedClientRpc(int damage)
     {
-        Event_Attacked?.Invoke(damage, afterCurrentHp);
+        Event_Attacked?.Invoke(damage);
     }
 
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
