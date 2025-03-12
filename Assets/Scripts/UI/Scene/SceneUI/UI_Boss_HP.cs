@@ -37,10 +37,10 @@ public class UI_Boss_HP : UI_Scene
     }
 
 
-    public void SetHpUI(int damage)
+    public void SetHpUI(int damage, int currentHp)
     {
         StartCoroutine(AnimationHP(damage));
-        _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
+        _hp_Text.text = $"{currentHp} / {_stats.MaxHp}";
     }
 
 

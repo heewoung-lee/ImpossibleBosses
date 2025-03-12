@@ -8,7 +8,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private bool _isCheckDead = false;
 
-    public Action<int> Event_Attacked;
+    public Action<int,int> Event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
     public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
     public Action Done_Base_Stats_Loading;
@@ -173,7 +173,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (damage > 0)
         {
             if(IsHost)
-            OnAttackedClientRpc(damage);
+            OnAttackedClientRpc(damage, newValue);
         }
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
@@ -222,11 +222,11 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
     [Rpc(SendTo.ClientsAndHost)]
-    public void OnAttackedClientRpc(int damage)
+    public void OnAttackedClientRpc(int damage,int currentHp)
     {
-        Event_Attacked?.Invoke(damage);
+        Event_Attacked?.Invoke(damage,currentHp);
     }
-
+    
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
     {
         if (attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))

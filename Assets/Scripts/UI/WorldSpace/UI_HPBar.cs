@@ -36,10 +36,10 @@ public class UI_HPBar : UI_Base
         if(_isDamaged)
         transform.rotation = Camera.main.transform.rotation;
     }
-    public void SetHpUI(int damage)
+    public void SetHpUI(int damage, int currentHp)
     {
         _isDamaged = true;
-        _hpSlider.value = (float)_stats.Hp / (float)_stats.MaxHp;
+        _hpSlider.value = (float)currentHp / (float)_stats.MaxHp;
         _canvasGroup.alpha = 1f;
         StopCoroutine(Hpbar_fadeaway());
         StartCoroutine(Hpbar_fadeaway());
