@@ -50,7 +50,7 @@ public class UI_Player_Info : UI_Scene
         _playerStats.Event_StatsLoaded -= UpdateUIInfo;
         _playerStats.Event_StatsLoaded += UpdateUIInfo;
 
-        _playerStats.Event_StatsLoaded.Invoke();
+        //_playerStats.Event_StatsLoaded.Invoke();
     }
 
     public void SetHpUI()
@@ -61,6 +61,10 @@ public class UI_Player_Info : UI_Scene
 
     public void UpdateUIInfo()
     {
+
+        Debug.Log($"스택 트레이스 {System.Environment.StackTrace}");
+        Debug.Log($"업데이트 해야할 현재 UP{_playerStats.Hp} MaxHP{_playerStats.MaxHp}");
+
         _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
         _hpSlider.value = (float)_playerStats.Hp / (float)_playerStats.MaxHp;
         _levelText.text = _playerStats.Level.ToString();

@@ -100,14 +100,22 @@ public class PlayerStats : BaseStats, IAttackRange
             Done_Base_Stats_Loading += SetStats;
             return;
         }
-        _statDict.TryGetValue(_level -1,out PlayerStat preStat);
+        //_statDict.TryGetValue(_level -1,out PlayerStat preStat);
         PlayerStat stat = _statDict[_level];
 
-        MaxHp += stat.hp - preStat.hp;
-        Hp += stat.hp - preStat.hp;
-        Attack += stat.attack - preStat.attack;
-        Defence += stat.defence - preStat.defence;
-        MoveSpeed += stat.speed - preStat.speed;
+        //MaxHp += stat.hp - preStat.hp;
+        //Hp += stat.hp - preStat.hp;
+        //Attack += stat.attack - preStat.attack;
+        //Defence += stat.defence - preStat.defence;
+        //MoveSpeed += stat.speed - preStat.speed;
+        //_viewAngle = stat.viewAngle;
+        //_viewDistance = stat.viewDistance;
+
+        MaxHp = stat.hp ;
+        Hp = stat.hp;
+        Attack = stat.attack;
+        Defence = stat.defence;
+        MoveSpeed = stat.speed;
         _viewAngle = stat.viewAngle;
         _viewDistance = stat.viewDistance;
     }

@@ -107,7 +107,6 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
     }
 
-
     public void Plus_Current_Hp_Abillity(int value)
     {
         Hp += value;
@@ -136,9 +135,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (IsOwner == false)
             return;
 
-
         SetStats();
-        Event_StatsLoaded?.Invoke();
     }
 
     private void Awake()
@@ -165,6 +162,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
         UpdateStat();
     }
+    //TODO: 클라이언트의 HP바가 NaN으로 나오는 이유는 스탯 밸류가 초기화 되기도 전에 호출을 해서 0/0이 되어
+    //UI의 값이 NaN으로 나왔던거임.해결은 모든 스탯이 초기화가 완료되면, 호출할것
 
     private void HpValueChanged(int previousValue, int newValue)
     {
