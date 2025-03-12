@@ -3,20 +3,32 @@ using UnityEngine;
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
-    [Rpc(SendTo.Server)]
-    public void DeSpawn_NetWorkOBJServerRpc(GameObject go, ServerRpcParams rpcParams = default)
+
+    NetworkManager _networkManager;
+    NetworkManager RelayNetworkManager
     {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-        Debug.Log("이 RPC를 호출한 클라이언트 ID: " + clientId);
-        if (go.TryGetComponent(out NetworkObject ngo))
+        get
         {
-            ngo.Despawn(true);
+            if (_networkManager == null)
+            {
+                _networkManager = Managers.RelayManager.NetWorkManager;
+            }
+            return _networkManager;
         }
     }
+
+
     [Rpc(SendTo.Server)]
-    public void Spawn_Object_ServerRpc(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = false)
+    public void DeSpawn_NetWorkOBJServerRpc(ulong networkID, RpcParams rpcParams = default)
     {
-        Managers.RelayManager.SpawnNetworkOBJ(clientId, obj, parent, destroyOption);
+        RelayNetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkID, out NetworkObject ngo);
+        ngo.Despawn(true);
     }
+    //[Rpc(SendTo.Server)]
+    //public void Spawn_Loot_Item(IItem iteminfo, Func<IItem, GameObject> spawnEvent, bool destroyOption = false)
+    //{
+    //    GameObject obj = spawnEvent?.Invoke(iteminfo);
+    //    RelayManager.SpawnNetworkOBJ(obj, Managers.LootItemManager.ItemRoot);
+    //}
 
 }

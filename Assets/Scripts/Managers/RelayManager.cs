@@ -135,19 +135,9 @@ public class RelayManager
         return obj;
     }
 
-    public void DeSpawn_NetWorkOBJ(GameObject go)
+    public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
-        if (NetWorkManager.IsHost)
-        {
-            if (go.TryGetComponent(out NetworkObject ngo))
-            {
-                ngo.Despawn(true);
-            }
-        }
-        else
-        {
-            NGO_RPC_Caller.DeSpawn_NetWorkOBJServerRpc(go);
-        }
+        NGO_RPC_Caller.DeSpawn_NetWorkOBJServerRpc(networkObjectID);
     }
 
     public async Task<bool> JoinGuestRelay(string joinCode)

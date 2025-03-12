@@ -163,7 +163,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         playerAttackValue.OnValueChanged += AttackValueChanged;
         playerDefenceValue.OnValueChanged += DefenceValueChanged;
         playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
-        //UpdateStat();
+        UpdateStat();
     }
 
     private void HpValueChanged(int previousValue, int newValue)

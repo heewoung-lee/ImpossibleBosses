@@ -1,3 +1,5 @@
+using Unity.Netcode;
+
 public class SlimeStats : MonsterStats
 {
     Define.MonsterID SlimeID;
@@ -34,7 +36,11 @@ public class SlimeStats : MonsterStats
             playerStat.Exp += _exp;
         }
 
-        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
+        if (gameObject.TryGetComponent(out NetworkObject ngo))
+        {
+            ulong networkObjectID = ngo.NetworkObjectId;
+            Managers.RelayManager.DeSpawn_NetWorkOBJ(networkObjectID);
+        }
     }
 
     protected override void StartInit()
