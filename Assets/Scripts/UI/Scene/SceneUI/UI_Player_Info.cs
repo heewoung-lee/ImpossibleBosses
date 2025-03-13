@@ -14,6 +14,7 @@ public class UI_Player_Info : UI_Scene
     private PlayerStats _playerStats;
     private TMP_Text _playerName_Text;
 
+
     enum HP_Slider
     {
         Player_HP_Slider,
@@ -40,6 +41,7 @@ public class UI_Player_Info : UI_Scene
     {
         _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
         InitalizePlayerInfo();
+        UpdateUIInfo(_playerStats.CharacterBaseStats);
     }
 
     private void InitalizePlayerInfo()
@@ -47,10 +49,8 @@ public class UI_Player_Info : UI_Scene
         _playerStats.Event_StatsChanged -= SetHpUI;
         _playerStats.Event_StatsChanged += SetHpUI;
 
-        _playerStats.Event_StatsLoaded -= UpdateUIInfo;
-        _playerStats.Event_StatsLoaded += UpdateUIInfo;
-
-        //_playerStats.Event_StatsLoaded.Invoke();
+        _playerStats.Done_Base_Stats_Loading -= UpdateUIInfo;
+        _playerStats.Done_Base_Stats_Loading += UpdateUIInfo;
     }
 
     public void SetHpUI()
@@ -59,14 +59,10 @@ public class UI_Player_Info : UI_Scene
         _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
     }
 
-    public void UpdateUIInfo()
+    public void UpdateUIInfo(CharacterBaseStat stat)
     {
-
-        Debug.Log($"스택 트레이스 {System.Environment.StackTrace}");
-        Debug.Log($"업데이트 해야할 현재 UP{_playerStats.Hp} MaxHP{_playerStats.MaxHp}");
-
-        _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
-        _hpSlider.value = (float)_playerStats.Hp / (float)_playerStats.MaxHp;
+        _hpText.text = $"{stat.hp}/{stat.maxHp}";
+        _hpSlider.value = stat.hp / stat.maxHp;
         _levelText.text = _playerStats.Level.ToString();
         _playerName_Text.text = _playerStats.Name.ToString();
     }

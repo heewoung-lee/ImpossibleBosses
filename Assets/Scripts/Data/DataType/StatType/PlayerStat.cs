@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 
 [Serializable]
 public struct PlayerStat : Ikey<int>

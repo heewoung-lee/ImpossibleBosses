@@ -13,20 +13,10 @@ public class SlimeStats : MonsterStats
     }
     protected override void SetStats()
     {
-        if(_statDict == null)
-        {
-            Done_Base_Stats_Loading -= SetStats;
-            Done_Base_Stats_Loading += SetStats;
-            return;
-        }
-
         MonsterStat stat = _statDict[(int)SlimeID];
-        MaxHp = stat.hp;
-        Hp = stat.hp;
-        Attack = stat.attack;
+        CharacterBaseStat basestat = new CharacterBaseStat(stat.hp, stat.hp, stat.attack, stat.defence,stat.speed);
+        SetPlayerBaseStatRpc(basestat);
         _exp = stat.exp;
-        Defence = stat.defence;
-        MoveSpeed = stat.speed;
     }
 
     protected override void OnDead(BaseStats attacker)
@@ -46,5 +36,6 @@ public class SlimeStats : MonsterStats
     protected override void StartInit()
     {
         base.StartInit();
+        UpdateStat();
     }
 }

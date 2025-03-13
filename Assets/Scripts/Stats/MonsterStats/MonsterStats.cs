@@ -10,7 +10,6 @@ public abstract class MonsterStats : BaseStats
     protected override void StartInit()
     {
         _statDict = Managers.DataManager.AllDataDict[typeof(MonsterStat)] as Dictionary<int, MonsterStat>;
-        Done_Base_Stats_Loading?.Invoke();
     }
 
     

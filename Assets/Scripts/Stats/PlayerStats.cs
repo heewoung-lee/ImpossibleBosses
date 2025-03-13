@@ -14,7 +14,6 @@ public class PlayerStats : BaseStats, IAttackRange
 
     public Action PlayerDeadEvent;
     private LayerMask _targetLayer;
-    public Action<int> Event_changedGold;
 
 
     public string Name
@@ -35,7 +34,6 @@ public class PlayerStats : BaseStats, IAttackRange
         {
             _gold = value;
             _gold = Mathf.Clamp(_gold, 0,int.MaxValue);
-            Event_changedGold?.Invoke(_gold);
             Event_StatsChanged?.Invoke();
         }
     }
@@ -55,7 +53,7 @@ public class PlayerStats : BaseStats, IAttackRange
     protected override void StartInit()
     {
         _statDict = Managers.DataManager.AllDataDict[typeof(PlayerStat)] as Dictionary<int, PlayerStat>;
-        Done_Base_Stats_Loading?.Invoke();
+        SetStats();
         _targetLayer = LayerMask.GetMask("Monster");
     }
     public int Exp
@@ -94,28 +92,9 @@ public class PlayerStats : BaseStats, IAttackRange
 
     protected override void SetStats()
     {
-        if(_statDict == null)//트라이겟 시도해볼것 
-        {
-            Done_Base_Stats_Loading -= SetStats;
-            Done_Base_Stats_Loading += SetStats;
-            return;
-        }
-        //_statDict.TryGetValue(_level -1,out PlayerStat preStat);
         PlayerStat stat = _statDict[_level];
-
-        //MaxHp += stat.hp - preStat.hp;
-        //Hp += stat.hp - preStat.hp;
-        //Attack += stat.attack - preStat.attack;
-        //Defence += stat.defence - preStat.defence;
-        //MoveSpeed += stat.speed - preStat.speed;
-        //_viewAngle = stat.viewAngle;
-        //_viewDistance = stat.viewDistance;
-
-        MaxHp = stat.hp ;
-        Hp = stat.hp;
-        Attack = stat.attack;
-        Defence = stat.defence;
-        MoveSpeed = stat.speed;
+        CharacterBaseStat baseStat = new CharacterBaseStat(stat.hp, stat.hp, stat.attack, stat.defence, stat.speed);
+        SetPlayerBaseStatRpc(baseStat);
         _viewAngle = stat.viewAngle;
         _viewDistance = stat.viewDistance;
     }

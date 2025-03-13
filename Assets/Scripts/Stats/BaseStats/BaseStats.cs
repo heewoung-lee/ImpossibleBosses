@@ -3,35 +3,79 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
+
+public struct CharacterBaseStat : INetworkSerializable
+{
+    public int maxHp;
+    public int hp;
+    public int attack;
+    public int defence;
+    public float speed;
+
+    public CharacterBaseStat(int hp, int maxHp,int attack, int defence, float speed)
+    {
+        this.hp = hp;
+        this.maxHp = maxHp;
+        this.attack = attack;
+        this.defence = defence;
+        this.speed = speed;
+    }
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref hp);
+        serializer.SerializeValue(ref maxHp);
+        serializer.SerializeValue(ref attack);
+        serializer.SerializeValue(ref defence);
+        serializer.SerializeValue(ref speed);
+    }
+}
 [DisallowMultipleComponent]
 public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private bool _isCheckDead = false;
 
     public Action<int,int> Event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
-    public Action Event_StatsLoaded;
     public Action Event_StatsChanged;
-    public Action Done_Base_Stats_Loading;
+    public Action<CharacterBaseStat> Done_Base_Stats_Loading;
 
     [SerializeField]
-    private NetworkVariable<int> playerHpValue = new NetworkVariable<int>
+    private NetworkVariable<CharacterBaseStat> _characterBaseStatValue = new NetworkVariable<CharacterBaseStat>
+         (new CharacterBaseStat(0,0,0,0,0f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField]
+    private NetworkVariable<int> _characterHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    private NetworkVariable<int> playerMaxHpValue = new NetworkVariable<int>
+    private NetworkVariable<int> _characterMaxHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    private NetworkVariable<int> playerAttackValue = new NetworkVariable<int>
+    private NetworkVariable<int> _characterAttackValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    private NetworkVariable<int> playerDefenceValue = new NetworkVariable<int>
+    private NetworkVariable<int> _characterDefenceValue = new NetworkVariable<int>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    private NetworkVariable<float> playerMoveSpeedValue = new NetworkVariable<float>
+    private NetworkVariable<float> _characterMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    public CharacterBaseStat CharacterBaseStats
+    {
+        get => _characterBaseStatValue.Value;
+        protected set
+        {
+            SetPlayerBaseStatRpc(value);
+        }
+
+    }
+    [Rpc(SendTo.Server)]
+    public void SetPlayerBaseStatRpc(CharacterBaseStat baseStats)
+    {
+        _characterBaseStatValue.Value = baseStats;
+    }
 
     public int Hp
     {
-        get => playerHpValue.Value;
+        get => _characterHpValue.Value;
         protected set
         {
             PlayerHPValueChangedRpc(value);
@@ -40,14 +84,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void PlayerHPValueChangedRpc(int value)
     {
-        playerHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
+        _characterHpValue.Value = Mathf.Clamp(value, 0, MaxHp);
     }
 
 
 
     public int MaxHp
     {
-        get => playerMaxHpValue.Value;
+        get => _characterMaxHpValue.Value;
         protected set
         {
             PlayerMaxHPValueChangedRpc(value);
@@ -56,14 +100,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void PlayerMaxHPValueChangedRpc(int value)
     {
-        playerMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+        _characterMaxHpValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
     }
 
 
 
     public int Attack
     {
-        get => playerAttackValue.Value;
+        get => _characterAttackValue.Value;
         protected set
         {
             PlayerAttackValueChangedRpc(value);
@@ -72,14 +116,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void PlayerAttackValueChangedRpc(int value)
     {
-        playerAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+        _characterAttackValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
     }
 
 
 
     public int Defence
     {
-        get => playerDefenceValue.Value;
+        get => _characterDefenceValue.Value;
         protected set
         {
             PlayerDefenceValueChangedRpc(value);
@@ -88,14 +132,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void PlayerDefenceValueChangedRpc(int value)
     {
-        playerDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
+        _characterDefenceValue.Value = Mathf.Clamp(value, 0, int.MaxValue);
     }
 
 
 
     public float MoveSpeed
     {
-        get => playerMoveSpeedValue.Value;
+        get => _characterMoveSpeedValue.Value;
         protected set
         {
             PlayeMoveSpeedValueChangedRpc(value);
@@ -104,7 +148,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void PlayeMoveSpeedValueChangedRpc(float value)
     {
-        playerMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
+        _characterMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
     }
 
     public void Plus_Current_Hp_Abillity(int value)
@@ -135,6 +179,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (IsOwner == false)
             return;
 
+
         SetStats();
     }
 
@@ -155,16 +200,27 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        playerHpValue.OnValueChanged += HpValueChanged;
-        playerMaxHpValue.OnValueChanged += MaxHpValueChanged;
-        playerAttackValue.OnValueChanged += AttackValueChanged;
-        playerDefenceValue.OnValueChanged += DefenceValueChanged;
-        playerMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
-        UpdateStat();
+        _characterBaseStatValue.OnValueChanged += PlayerValueChanged;
+        _characterHpValue.OnValueChanged += HpValueChanged;
+        _characterMaxHpValue.OnValueChanged += MaxHpValueChanged;
+        _characterAttackValue.OnValueChanged += AttackValueChanged;
+        _characterDefenceValue.OnValueChanged += DefenceValueChanged;
+        _characterMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
     }
-    //TODO: 클라이언트의 HP바가 NaN으로 나오는 이유는 스탯 밸류가 초기화 되기도 전에 호출을 해서 0/0이 되어
-    //UI의 값이 NaN으로 나왔던거임.해결은 모든 스탯이 초기화가 완료되면, 호출할것
+    private void PlayerValueChanged(CharacterBaseStat previousValue, CharacterBaseStat newValue)
+    {
+       
+        MaxHp = newValue.maxHp;
+        Hp = newValue.hp;
+        Attack = newValue.attack;
+        Defence = newValue.defence;
+        MoveSpeed = newValue.speed;
 
+        if (IsServer)
+        {
+            DoneInitalizeCharacterBaseStatRpc(newValue);
+        }
+    }
     private void HpValueChanged(int previousValue, int newValue)
     {
         Event_StatsChanged?.Invoke();
@@ -225,7 +281,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     {
         Event_Attacked?.Invoke(damage,currentHp);
     }
-    
+
+
+    [Rpc(SendTo.Owner)]
+    public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat)
+    {
+        Done_Base_Stats_Loading?.Invoke(stat);
+    }
+
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
     {
         if (attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))

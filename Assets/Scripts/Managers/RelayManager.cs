@@ -6,12 +6,6 @@ using Unity.Services.Relay;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
-using Unity.Networking.Transport;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
-using UnityEditor.PackageManager;
-using Unity.Services.Lobbies.Models;
-using NUnit.Framework;
-using System.Collections.Generic;
 
 public class RelayManager
 {
@@ -179,8 +173,6 @@ public class RelayManager
 
     public void OnClientDisconnectEvent(ulong disconntedIndex)
     {
-        //if (NetWorkManager.LocalClientId != disconntedIndex)
-        //    return;
         Debug.Log("OnClickentDisconnectEvent ¹ß»ý");
         DisconnectPlayerAsyncEvent?.Invoke();
         DisconnectPlayerEvent?.Invoke();
