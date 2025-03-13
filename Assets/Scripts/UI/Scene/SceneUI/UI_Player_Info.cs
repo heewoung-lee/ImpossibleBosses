@@ -46,6 +46,7 @@ public class UI_Player_Info : UI_Scene
 
     private void InitalizePlayerInfo()
     {
+        _playerStats.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
         _playerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
 
         _playerStats.Done_Base_Stats_Loading -= UpdateUIInfo;
@@ -61,7 +62,7 @@ public class UI_Player_Info : UI_Scene
     public void UpdateUIInfo(CharacterBaseStat stat)
     {
         _hpText.text = $"{stat.hp}/{stat.maxHp}";
-        _hpSlider.value = stat.hp / stat.maxHp;
+        _hpSlider.value = (float)stat.hp / (float)_playerStats.MaxHp;
         _levelText.text = _playerStats.Level.ToString();
         _playerName_Text.text = _playerStats.Name.ToString();
     }
