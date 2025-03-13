@@ -22,7 +22,6 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected Image _itemGradeBorder;
     protected bool _isEquipped = false;
 
-    [SerializeField]private GameObject _rootingItem;
 
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
@@ -90,9 +89,9 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     private void DropItemOnGround()
     {
         RemoveItemFromInventory();
-        _rootingItem = GetLootingItemObejct(_iteminfo);
-        _rootingItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-       // Managers.RelayManager.NGO_RPC_Caller.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
+        GetLootingItemObejct(_iteminfo);
+        GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
+      // Managers.RelayManager.NGO_RPC_Caller.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
     }
 
     ////TODO:아이템 떨어지는거 완성시키기

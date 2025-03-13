@@ -72,7 +72,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     {
         _scoreButton.onClick.AddListener(() =>
         {
-           //TestIteminInventort();
+           TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
