@@ -19,7 +19,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby274";
+    string LobbyID = "TestLobby282";
     string _playerType = null;
     GameObject _ngoRoot;
     

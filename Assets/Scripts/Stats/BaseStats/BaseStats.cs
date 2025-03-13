@@ -11,7 +11,17 @@ public struct CharacterBaseStat : INetworkSerializable
     public int attack;
     public int defence;
     public float speed;
-
+    public static CharacterBaseStat operator -(CharacterBaseStat firstValue, CharacterBaseStat SecondValue)
+    {
+        return new CharacterBaseStat
+        {
+            maxHp = firstValue.maxHp - SecondValue.maxHp,
+            hp = firstValue.hp - SecondValue.hp,
+            attack = firstValue.attack - SecondValue.attack,
+            defence = firstValue.defence - SecondValue.defence,
+            speed = firstValue.speed - SecondValue.speed
+        };
+    }
     public CharacterBaseStat(int hp, int maxHp,int attack, int defence, float speed)
     {
         this.hp = hp;
@@ -212,12 +222,13 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     private void PlayerValueChanged(CharacterBaseStat previousValue, CharacterBaseStat newValue)
     {
-       
-        MaxHp = newValue.maxHp;
+        CharacterBaseStat addValue = newValue - previousValue;
+
+        MaxHp += addValue.maxHp;
         Hp = newValue.hp;
-        Attack = newValue.attack;
-        Defence = newValue.defence;
-        MoveSpeed = newValue.speed;
+        Attack += addValue.attack;
+        Defence += addValue.defence;
+        MoveSpeed += addValue.speed;
 
         if(IsOwner)
         DoneInitalizeCharacterBaseStatRpc(newValue); 
