@@ -5,7 +5,7 @@ public class PlayerStats : BaseStats, IAttackRange
 {
     private Dictionary<int, PlayerStat> _statDict;
     private int _level;
-    private int _currentexp;
+    [SerializeField]private int _currentexp;
     private int _gold;
     private float _viewAngle;
     private float _viewDistance;
@@ -54,8 +54,12 @@ public class PlayerStats : BaseStats, IAttackRange
     protected override void StartInit()
     {
         _statDict = Managers.DataManager.AllDataDict[typeof(PlayerStat)] as Dictionary<int, PlayerStat>;
-        SetStats();
         _targetLayer = LayerMask.GetMask("Monster");
+
+        if (IsOwner == false)
+            return;
+
+        SetStats();
     }
     public int Exp
     {
@@ -95,8 +99,8 @@ public class PlayerStats : BaseStats, IAttackRange
     {
         PlayerStat stat = _statDict[_level];
         CharacterBaseStat baseStat = new CharacterBaseStat(stat.hp, stat.hp, stat.attack, stat.defence, stat.speed);
-        SetPlayerBaseStatRpc(baseStat);
-        _viewAngle = stat.viewAngle;
+        CharacterBaseStats = baseStat;
+         _viewAngle = stat.viewAngle;
         _viewDistance = stat.viewDistance;
     }
 }

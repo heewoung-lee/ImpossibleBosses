@@ -71,14 +71,12 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         {
             SetPlayerBaseStatRpc(value);
         }
-
     }
     [Rpc(SendTo.Server)]
-    public void SetPlayerBaseStatRpc(CharacterBaseStat baseStats)
+    public void SetPlayerBaseStatRpc(CharacterBaseStat baseStats,RpcParams rpcParams = default)
     {
         _characterBaseStatValue.Value = baseStats;
     }
-
     public int Hp
     {
         get => _characterHpValue.Value;
@@ -185,7 +183,6 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (IsOwner == false)
             return;
 
-
         SetStats();
     }
 
@@ -222,10 +219,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         Defence = newValue.defence;
         MoveSpeed = newValue.speed;
 
-        if (IsServer)
-        {
-            DoneInitalizeCharacterBaseStatRpc(newValue);
-        }
+        if(IsOwner)
+        DoneInitalizeCharacterBaseStatRpc(newValue); 
     }
     private void HpValueChanged(int previousValue, int newValue)
     {
@@ -290,7 +285,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
 
     [Rpc(SendTo.Owner)]
-    public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat)
+    public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat) //UI가 이벤트를 걸기도 전에 실행이 되어버린다.
     {
         Done_Base_Stats_Loading?.Invoke(stat);
     }
