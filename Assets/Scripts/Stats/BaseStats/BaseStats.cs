@@ -36,8 +36,14 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     private bool _isCheckDead = false;
 
     public Action<int,int> Event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
-    public Action Event_StatsChanged;
     public Action<CharacterBaseStat> Done_Base_Stats_Loading;
+
+    public Action<int> CurrentHPValueChangedEvent;
+    public Action<int> MaxHPValueChangedEvent;
+    public Action<int> AttackValueChangedEvent;
+    public Action<int> DefenceValueChangedEvent;
+    public Action<float> MoveSpeedValueChangedEvent;
+
 
     [SerializeField]
     private NetworkVariable<CharacterBaseStat> _characterBaseStatValue = new NetworkVariable<CharacterBaseStat>
@@ -223,7 +229,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     private void HpValueChanged(int previousValue, int newValue)
     {
-        Event_StatsChanged?.Invoke();
+        CurrentHPValueChangedEvent?.Invoke(newValue);
         int damage = previousValue - newValue;
         if (damage > 0)
         {
@@ -233,19 +239,19 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
     {
-        Event_StatsChanged?.Invoke();
+        MaxHPValueChangedEvent?.Invoke(newValue);
     }
     private void AttackValueChanged(int previousValue, int newValue)
     {
-        Event_StatsChanged?.Invoke();
+        AttackValueChangedEvent?.Invoke(newValue);
     }
     private void DefenceValueChanged(int previousValue, int newValue)
     {
-        Event_StatsChanged?.Invoke();
+        DefenceValueChangedEvent?.Invoke(newValue);
     }
     private void MoveSpeedValueChanged(float previousValue, float newValue)
     {
-        Event_StatsChanged?.Invoke();
+        MoveSpeedValueChangedEvent?.Invoke(newValue);
     }
     public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {

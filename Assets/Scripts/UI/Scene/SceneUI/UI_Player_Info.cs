@@ -46,17 +46,16 @@ public class UI_Player_Info : UI_Scene
 
     private void InitalizePlayerInfo()
     {
-        _playerStats.Event_StatsChanged -= SetHpUI;
-        _playerStats.Event_StatsChanged += SetHpUI;
+        _playerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
 
         _playerStats.Done_Base_Stats_Loading -= UpdateUIInfo;
         _playerStats.Done_Base_Stats_Loading += UpdateUIInfo;
     }
 
-    public void SetHpUI()
+    private void UpdateCurrentHPValue(int currentHP)
     {
-        _hpSlider.value = (float)_playerStats.Hp / (float)_playerStats.MaxHp;
-        _hpText.text = $"{_playerStats.Hp}/{_playerStats.MaxHp}";
+        _hpSlider.value = (float)currentHP / (float)_playerStats.MaxHp;
+        _hpText.text = $"{currentHP}/{_playerStats.MaxHp}";
     }
 
     public void UpdateUIInfo(CharacterBaseStat stat)

@@ -13,6 +13,7 @@ public class PlayerStats : BaseStats, IAttackRange
    private string _playerName;
 
     public Action PlayerDeadEvent;
+    public Action<int> PlayerHasGoldChangeEvent;
     private LayerMask _targetLayer;
 
 
@@ -34,7 +35,7 @@ public class PlayerStats : BaseStats, IAttackRange
         {
             _gold = value;
             _gold = Mathf.Clamp(_gold, 0,int.MaxValue);
-            Event_StatsChanged?.Invoke();
+            PlayerHasGoldChangeEvent?.Invoke(_gold);
         }
     }
     public float ViewAngle { get => _viewAngle; }

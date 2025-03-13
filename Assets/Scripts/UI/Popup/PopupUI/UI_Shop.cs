@@ -114,8 +114,8 @@ public class UI_Shop : UI_Popup
         if (_playerStats == null)
             return;
         _close_Popup_UI.performed += CloseDecriptionWindow;
-        _playerStats.Event_StatsChanged += UpdateShopData;
-        UpdateShopData();
+        _playerStats.PlayerHasGoldChangeEvent += UpdateHasGoldChanged;
+        UpdateHasGoldChanged(_playerStats.Gold);
     }
 
     protected override void OnDisableInit()
@@ -124,12 +124,12 @@ public class UI_Shop : UI_Popup
             return;
         base.OnDisableInit();
         _close_Popup_UI.performed -= CloseDecriptionWindow;
-        _playerStats.Event_StatsChanged -= UpdateShopData;
+        _playerStats.PlayerHasGoldChangeEvent -= UpdateHasGoldChanged;
         CloseDecriptionWindow();
     }
-    public void UpdateShopData()
+    public void UpdateHasGoldChanged(int gold)
     {
-      _playerHasGoldText.text = _playerStats.Gold.ToString();
+        _playerHasGoldText.text = gold.ToString();
     }
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
@@ -192,11 +192,10 @@ public class UI_Shop : UI_Popup
     protected override void StartInit()
     {
         _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        UpdateShopData();
+        UpdateHasGoldChanged(_playerStats.Gold);
         RandomItemRespawn();
         ShowItemTypeForSelectedTab(ItemType.Equipment);
     }
-
 
 
     public void RandomItemRespawn()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -119,8 +120,23 @@ public class UI_Player_Inventory : UI_Popup
         }, Define.UI_Event.Drag);
         _stat = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         UpdateStats();
-        _stat.Event_StatsChanged += UpdateStats;
+        UpdateGoldUI(_stat.Gold);
+        UpdatePlayerLevelAndNickName(_stat.CharacterBaseStats);
+        InitalizeEvent();
     }
+
+    private void InitalizeEvent()
+    {
+        SubscribePlayerEvent();
+        _stat.Done_Base_Stats_Loading += UpdatePlayerLevelAndNickName;
+    }
+
+    private void UpdatePlayerLevelAndNickName(CharacterBaseStat stat)
+    {
+        _playerName.text = _stat.Name;
+        _playerLevel.text = $"LV : {_stat.Level}";
+    }
+
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
         CloseDecriptionWindow();
@@ -142,8 +158,8 @@ public class UI_Player_Inventory : UI_Popup
         _close_Popup_UI.performed += CloseDecriptionWindow;
         if(_stat != null)
         {
-            _stat.Event_StatsChanged += UpdateStats;
-            UpdateStats();
+            SubscribePlayerEvent();
+            UpdateGoldUI(_stat.Gold);
         }
         Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;
@@ -154,22 +170,55 @@ public class UI_Player_Inventory : UI_Popup
         _close_Popup_UI.performed -= CloseDecriptionWindow;
         if (_stat != null)
         {
-            _stat.Event_StatsChanged -= UpdateStats;
+            DeSubscribePlayerEvent();
         }
         CloseDecriptionWindow();
     }
 
   
-
-
+    private void SubscribePlayerEvent()
+    {
+        _stat.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
+        _stat.MaxHPValueChangedEvent += UpdateMaxHpValue;
+        _stat.AttackValueChangedEvent += UpdateAttackValue;
+        _stat.DefenceValueChangedEvent += UpdatedefenceValue;
+        _stat.PlayerHasGoldChangeEvent += UpdateGoldUI;
+    }
+    private void DeSubscribePlayerEvent()
+    {
+        _stat.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
+        _stat.MaxHPValueChangedEvent -= UpdateMaxHpValue;
+        _stat.AttackValueChangedEvent -= UpdateAttackValue;
+        _stat.DefenceValueChangedEvent -= UpdatedefenceValue;
+        _stat.PlayerHasGoldChangeEvent -= UpdateGoldUI;
+    }
     public void UpdateStats()
     {
-        _playerName.text = _stat.Name;
-        _playerLevel.text = $"LV : {_stat.Level}";
-        _currentGold.text = _stat.Gold.ToString();
         _hp_Stat_Text.text = $"{_stat.Hp} / {_stat.MaxHp}";
         _attack_Stat_Text.text = _stat.Attack.ToString();
         _defense_Stat_Text.text = _stat.Defence.ToString();
+    }
+
+    private void UpdateGoldUI(int hasgold)
+    {
+        _currentGold.text = hasgold.ToString();
+    }
+
+    private void UpdateCurrentHPValue(int currentHP)
+    {
+        _hp_Stat_Text.text = $"{currentHP} / {_stat.MaxHp}";
+    }
+    private void UpdateMaxHpValue(int maxHP)
+    {
+        _hp_Stat_Text.text = $"{_stat.Hp} / {maxHP}";
+    }
+    private void UpdateAttackValue(int attack)
+    {
+        _attack_Stat_Text.text = attack.ToString();
+    }
+    private void UpdatedefenceValue(int defence)
+    {
+        _defense_Stat_Text.text = defence.ToString();
     }
 
 }
