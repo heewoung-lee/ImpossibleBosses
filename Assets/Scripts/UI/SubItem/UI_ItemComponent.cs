@@ -1,11 +1,117 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
+public struct IItemStruct : INetworkSerializable
+{
+    public int ItemNumber;
+    public ItemType Item_Type;
+    public Item_Grade_Type Item_Grade_Type;
+    public List<StatEffect> ItemEffects;
+    public string ItemName;
+    public string DescriptionText;
+    public string ItemIconSourceText;
+    public List<string> ItemSourcePath;
+
+
+    public IItemStruct(IItem iitem)
+    {
+        ItemNumber = iitem.ItemNumber;
+        Item_Type = iitem.Item_Type;
+        Item_Grade_Type = iitem.Item_Grade;
+        ItemEffects = iitem.ItemEffects;
+        ItemName = iitem.ItemName;
+        DescriptionText = iitem.DescriptionText;
+        ItemIconSourceText = iitem.ItemIconSourceText;
+        ItemSourcePath = iitem.ImageSource.Select((itemSource)=> itemSource.Key).ToList();
+    }
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref ItemNumber);
+        serializer.SerializeValue(ref Item_Type);
+        serializer.SerializeValue(ref Item_Grade_Type);
+        serializer.SerializeValue(ref ItemName);
+        serializer.SerializeValue(ref DescriptionText);
+        serializer.SerializeValue(ref ItemIconSourceText);
+        if (serializer.IsWriter)
+        {
+            // 1. List의 개수 직렬화
+            int count = ItemEffects == null ? 0 : ItemEffects.Count;
+            serializer.SerializeValue(ref count);
+
+            // 2. 원소를 하나씩 직렬화
+            if (ItemEffects != null)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    StatEffect stateffect = ItemEffects[i];
+                    serializer.SerializeValue(ref stateffect.value);
+                    serializer.SerializeValue(ref stateffect.statType);
+                    serializer.SerializeValue(ref stateffect.buffname);
+                }
+            }
+        }
+        else
+        {
+            // 1. 수신 측에서 개수 역직렬화
+            int count = 0;
+            serializer.SerializeValue(ref count);
+
+            // 2. List를 재생성 후 원소 채우기
+            ItemEffects = new List<StatEffect>(count);
+            for (int i = 0; i < count; i++)
+            {
+                StatEffect stat = default(StatEffect);
+                serializer.SerializeValue(ref stat.buffname);
+                serializer.SerializeValue(ref stat.statType);
+                serializer.SerializeValue(ref stat.value);
+
+                ItemEffects.Add(stat);
+            }
+        }
+
+        if (serializer.IsWriter)
+        {
+            // 1. 개수 먼저 직렬화
+            int pathCount = ItemSourcePath == null ? 0 : ItemSourcePath.Count;
+            serializer.SerializeValue(ref pathCount);
+
+            // 2. 원소(문자열) 하나씩 직렬화
+            if (ItemSourcePath != null)
+            {
+                for (int i = 0; i < pathCount; i++)
+                {
+                    string path = ItemSourcePath[i];
+                    serializer.SerializeValue(ref path);
+                }
+            }
+        }
+        else
+        {
+            // 1. 개수 역직렬화
+            int pathCount = 0;
+            serializer.SerializeValue(ref pathCount);
+
+            // 2. List<string> 재생성 후 읽기
+            ItemSourcePath = new List<string>(pathCount);
+            for (int i = 0; i < pathCount; i++)
+            {
+                string path = string.Empty; // 기본값
+                serializer.SerializeValue(ref path);
+                ItemSourcePath.Add(path);
+            }
+        }
+    }
+}
+
 
 public abstract class UI_ItemComponent : UI_Base, IItem
 {
@@ -139,7 +245,6 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _descriptionText = iteminfo.DescriptionText;
         _itemIconSourceImageText = iteminfo.ItemIconSourceText;
         _itemIconSourceImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
-        //TODO: 아이템구매시 이미지 못찾음
         _imageSource = iteminfo.ImageSource;
         _iteminfo = iteminfo;//다른 클래스들이 형변환을 쉽게 하기 위해 인터페이스를 저장
     }
