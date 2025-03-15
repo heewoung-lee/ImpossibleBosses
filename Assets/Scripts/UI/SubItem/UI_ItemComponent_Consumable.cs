@@ -170,6 +170,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         return lootitem;
     }
 
+
     protected override void RemoveItemFromInventory()
     {
         ItemCount--;

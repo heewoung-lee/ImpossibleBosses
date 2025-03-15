@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -32,7 +33,18 @@ public struct IItemStruct : INetworkSerializable
         ItemIconSourceText = iitem.ItemIconSourceText;
         ItemSourcePath = iitem.ImageSource.Select((itemSource)=> itemSource.Key).ToList();
     }
-
+    //public IItem ToIItem()
+    //{
+    //    //switch (Item_Type)
+    //    //{
+    //    //    case ItemType.Equipment:
+    //    //        return ne(this);
+    //    //    case ItemType.Consumable:
+    //    //        return new UI_ItemComponent_Consumable(this);
+    //    //    default:
+    //    //        return new ETCItem(this);
+    //    //}
+    //}
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref ItemNumber);
@@ -70,9 +82,9 @@ public struct IItemStruct : INetworkSerializable
             for (int i = 0; i < count; i++)
             {
                 StatEffect stat = default(StatEffect);
-                serializer.SerializeValue(ref stat.buffname);
-                serializer.SerializeValue(ref stat.statType);
                 serializer.SerializeValue(ref stat.value);
+                serializer.SerializeValue(ref stat.statType);
+                serializer.SerializeValue(ref stat.buffname);
 
                 ItemEffects.Add(stat);
             }

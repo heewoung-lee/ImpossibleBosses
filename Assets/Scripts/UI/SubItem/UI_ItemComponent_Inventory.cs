@@ -88,32 +88,16 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     private void DropItemOnGround()
     {
-
-        //RemoveItemFromInventory();
-        GameObject lootItem = GetLootingItemObejct(_iteminfo);
-        //lootItem.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        //return;
-
-
         RemoveItemFromInventory();
         IItemStruct itemStruct = new IItemStruct(_iteminfo);
-        //Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc();
+        //Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct);
 
 
         //RemoveItemFromInventory();
         //GetLootingItemObejct(_iteminfo);
         //GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-
-        // Managers.RelayManager.NGO_RPC_Caller.Spawn_Object_ServerRpc(Managers.RelayManager.NetWorkManager.LocalClientId, _rootingItem);
+        //return;
     }
-
-    ////TODO:아이템 떨어지는거 완성시키기
-    //[ServerRpc(RequireOwnership = false)]
-    //private void RequestNGOSpawnServerRpc()
-    //{
-    //    Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId,_rootingItem);
-    //}
-
 
     protected void AttachItemToSlot(GameObject go, Transform slot)
     {

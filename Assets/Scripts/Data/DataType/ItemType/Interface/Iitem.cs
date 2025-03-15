@@ -37,5 +37,4 @@ public interface IItem
     public string DescriptionText { get; }
     public string ItemIconSourceText { get; }
     public Dictionary<string,Sprite> ImageSource { get; }
-
 }

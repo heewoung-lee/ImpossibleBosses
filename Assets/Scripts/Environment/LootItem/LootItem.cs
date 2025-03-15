@@ -104,6 +104,7 @@ public class LootItem : NetworkBehaviour,IInteraction
     {
         _iteminfo = iteminfo;
     }
+    
 
     IEnumerator RotationDropItem()
     {
