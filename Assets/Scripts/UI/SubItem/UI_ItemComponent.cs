@@ -35,15 +35,17 @@ public struct IItemStruct : INetworkSerializable
     }
     //public IItem ToIItem()
     //{
-    //    //switch (Item_Type)
-    //    //{
-    //    //    case ItemType.Equipment:
-    //    //        return ne(this);
-    //    //    case ItemType.Consumable:
-    //    //        return new UI_ItemComponent_Consumable(this);
-    //    //    default:
-    //    //        return new ETCItem(this);
-    //    //}
+
+    //    switch (Item_Type)
+    //    {
+    //        case ItemType.Equipment:
+    //            new 
+    //            return 
+    //        case ItemType.Consumable:
+    //            return new UI_ItemComponent_Consumable(this);
+    //        default:
+    //            return new ETCItem(this);
+    //    }
     //}
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
