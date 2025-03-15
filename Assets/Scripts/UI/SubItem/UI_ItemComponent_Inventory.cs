@@ -88,15 +88,15 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     private void DropItemOnGround()
     {
-        RemoveItemFromInventory();
-        IItemStruct itemStruct = new IItemStruct(_iteminfo);
+        //RemoveItemFromInventory();
+        //IItemStruct itemStruct = new IItemStruct(_iteminfo);
         //Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct);
 
 
-        //RemoveItemFromInventory();
-        //GetLootingItemObejct(_iteminfo);
-        //GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        //return;
+        RemoveItemFromInventory();
+       GameObject lootObject =  GetLootingItemObejct(_iteminfo);
+       GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
+        return;
     }
 
     protected void AttachItemToSlot(GameObject go, Transform slot)
