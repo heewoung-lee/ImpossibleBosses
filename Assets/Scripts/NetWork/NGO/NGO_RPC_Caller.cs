@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -26,32 +27,53 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
 
-    //[Rpc(SendTo.Server)]
-    //public void Spawn_Loot_ItemRpc(IItemStruct itemStruct, bool destroyOption = true)
-    //{
+    [Rpc(SendTo.Server)]
+    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct,Vector3 dropPosition, bool destroyOption = true)
+    {
+        //여기에서 itemStruct를 IItem으로 변환
+        GameObject networkLootItem = null;
+        IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
+        switch (itemStruct.Item_Type)
+        {
+            case ItemType.Equipment:
+                iteminfo = new ItemEquipment(iteminfo);
+                networkLootItem = GetEquipLootItem(iteminfo);
+                break;
+            case ItemType.Consumable:
+                iteminfo = new ItemConsumable(iteminfo);
+                networkLootItem = GetConsumableLootItem(iteminfo);
+                break;
+            case ItemType.ETC:
+                break;
+        }
+        networkLootItem.gameObject.GetComponent<LootItem>().SetDropperAndItem(dropPosition, iteminfo);
+        Managers.RelayManager.SpawnNetworkOBJ(networkLootItem);
+    }
 
-    //    //여기에서 itemStruct를 IItem으로 변환
-    //    GameObject lootItem;
+    private GameObject GetEquipLootItem(IItem iteminfo)
+    {
+        GameObject lootItem;
+        switch ((iteminfo as ItemEquipment).Equipment_Slot)
+        {
+            case Equipment_Slot_Type.Helmet:
+            case Equipment_Slot_Type.Armor:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+                break;
+            case Equipment_Slot_Type.Weapon:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+                break;
+            default:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+                break;
+        }
+        lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        return lootItem;
+    }
 
-    //    switch (itemStruct.Item_Type)
-    //    {
-    //        case ItemType.Equipment:
-
-    //            itemStruct.Ty
-    //            lootItem = Managers.ResourceManager.InstantiatePrefab();
-    //            lootItem = GetLootingItemObejct();
-    //            break;
-    //        case ItemType.Consumable:
-
-    //            break;
-    //        case ItemType.ETC:
-    //            break;
-    //    }
-
-
-    //    lootItem.GetComponent<UI_ItemComponent_Inventory>().GetLootingItemObejct(iteminfo);
-    //     = GetLootingItemObejct(iteminfo);
-    //    RelayManager.SpawnNetworkOBJ(obj, Managers.LootItemManager.ItemRoot, destroyOption);
-    //}
-
+    private GameObject GetConsumableLootItem(IItem iteminfo)
+    {
+        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+        lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        return lootitem;
+    }
 }

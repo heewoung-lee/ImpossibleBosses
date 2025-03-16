@@ -19,7 +19,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby282";
+    string LobbyID = "TestLobby286";
     string _playerType = null;
     GameObject _ngoRoot;
     
@@ -101,8 +101,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         {
             GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
             dummy_cube.transform.position = npcdata.Item2;
-            Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId, dummy_cube,
-                Managers.RelayManager.NGO_ROOT.transform, false);
+            Managers.RelayManager.SpawnNetworkOBJ(dummy_cube,Managers.RelayManager.NGO_ROOT.transform, false);
         }
     }
 

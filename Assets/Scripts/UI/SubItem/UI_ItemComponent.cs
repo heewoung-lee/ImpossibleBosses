@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public struct IItemStruct : INetworkSerializable
+public struct IteminfoStruct : INetworkSerializable
 {
     public int ItemNumber;
     public ItemType Item_Type;
@@ -22,7 +22,7 @@ public struct IItemStruct : INetworkSerializable
     public List<string> ItemSourcePath;
 
 
-    public IItemStruct(IItem iitem)
+    public IteminfoStruct(IItem iitem)
     {
         ItemNumber = iitem.ItemNumber;
         Item_Type = iitem.Item_Type;
@@ -33,20 +33,6 @@ public struct IItemStruct : INetworkSerializable
         ItemIconSourceText = iitem.ItemIconSourceText;
         ItemSourcePath = iitem.ImageSource.Select((itemSource)=> itemSource.Key).ToList();
     }
-    //public IItem ToIItem()
-    //{
-
-    //    switch (Item_Type)
-    //    {
-    //        case ItemType.Equipment:
-    //            new 
-    //            return 
-    //        case ItemType.Consumable:
-    //            return new UI_ItemComponent_Consumable(this);
-    //        default:
-    //            return new ETCItem(this);
-    //    }
-    //}
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref ItemNumber);
@@ -69,7 +55,8 @@ public struct IItemStruct : INetworkSerializable
                     StatEffect stateffect = ItemEffects[i];
                     serializer.SerializeValue(ref stateffect.value);
                     serializer.SerializeValue(ref stateffect.statType);
-                    serializer.SerializeValue(ref stateffect.buffname);
+                    string buffname = stateffect.buffname == null ? "" : stateffect.buffname;
+                    serializer.SerializeValue(ref buffname);
                 }
             }
         }

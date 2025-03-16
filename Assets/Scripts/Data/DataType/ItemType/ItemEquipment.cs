@@ -26,9 +26,20 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
     public string itemName;
     public string descriptionText;
     public string itemIconSourceText;
+    public ItemEquipment() { }
+    public ItemEquipment(IItem iteminfo)
+    {
+        itemNumber = iteminfo.ItemNumber;
+        itemType = ItemType.Consumable;
+        itemGradeText = iteminfo.Item_Grade.ToString();
+        itemEffects = iteminfo.ItemEffects;
+        itemName = iteminfo.ItemName;
+        descriptionText = iteminfo.DescriptionText;
+        itemIconSourceText = iteminfo.ItemIconSourceText;
+        equipment_SlotText = (iteminfo as ItemEquipment).equipment_SlotText.ToString();
+    }
 
     private Dictionary<string, Sprite> _imageSource = new Dictionary<string, Sprite>();
-
     public int ItemNumber => itemNumber;
     public ItemType Item_Type => itemType;
     public Item_Grade_Type Item_Grade => (Item_Grade_Type)System.Enum.Parse(typeof(Item_Grade_Type), itemGradeText);
@@ -63,7 +74,6 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
         ui_Equipment_Component.IntializeItem(this);
         return ui_Equipment_Component;
     }
-
     public UI_ShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1, string name = null, string path = null)
     {
         UI_ShopItemComponent ui_shopItemComponent = Managers.UI_Manager.MakeSubItem<UI_ShopItemComponent>(parent, name, $"Prefabs/UI/Item/UI_ShopItemComponent");

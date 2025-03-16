@@ -59,8 +59,7 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         {
             GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
             dummy_cube.transform.position = npcdata.Item2;
-            Managers.RelayManager.SpawnNetworkOBJ(Managers.RelayManager.NetWorkManager.LocalClientId, dummy_cube,
-                Managers.RelayManager.NGO_ROOT.transform, false);
+            Managers.RelayManager.SpawnNetworkOBJ(dummy_cube,Managers.RelayManager.NGO_ROOT.transform);
         }
     }
 
@@ -70,7 +69,7 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}Base");
         Vector3 targetPosition = new Vector3(1 * requestingClientId, 0, 1);
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
-        _relayManager.SpawnNetworkOBJ(requestingClientId, _player, parent: _relayManager.NGO_ROOT.transform);
+        _relayManager.SpawnNetworkOBJInjectionOnwer(requestingClientId, _player,_relayManager.NGO_ROOT.transform);
     }
 
 

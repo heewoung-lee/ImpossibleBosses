@@ -9,10 +9,10 @@ public class ItemDataManager : IManagerInitializable
 {
     private const string ITEM_FRAME_BORDER_PATH = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
     private Dictionary<Item_Grade_Type, Sprite> _itemGradeBorder;
-public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
+    public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
 
     private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
-
+    private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
     private List<Type> _itemDataType;
     public void Init()
     {
@@ -41,6 +41,7 @@ public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
                     continue;
                 }
                 itemDict[key] = itemValue;
+                _itemDataKeyDict.Add(key, itemValue);
             }
             _allItemDataDict[itemtype] = itemDict;
             _allItemDataDict[itemtype] = BindImageSources(_allItemDataDict[itemtype]) as Dictionary<int, IItem>;
@@ -54,6 +55,15 @@ public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
             { Item_Grade_Type.Unique, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Red") },
             { Item_Grade_Type.Epic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Yellow") }
         };
+    }
+
+    public IItem GetItem(int itemNumber)
+    {
+        if(_itemDataKeyDict.TryGetValue(itemNumber,out IItem iteminfo))
+        {
+            return iteminfo;
+        }
+        return null;
     }
 
     public IItem GetRandomItem(Type itemtype)

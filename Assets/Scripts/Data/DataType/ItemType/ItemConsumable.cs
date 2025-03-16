@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,8 +22,6 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
 
     private Dictionary<string, Sprite> _imageSource = new Dictionary<string, Sprite>();
 
-
-
     public int ItemNumber => itemNumber;
     public int Key => itemNumber;
     public ItemType Item_Type => itemType;
@@ -33,6 +32,19 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
     public string ItemIconSourceText => itemIconSourceText;
     public float Duration => duration;
     public Dictionary<string, Sprite> ImageSource { get => _imageSource; set => _imageSource = value; }
+    public ItemConsumable(){ }
+
+    public ItemConsumable(IItem iteminfo)
+    {
+        itemNumber = iteminfo.ItemNumber;
+        itemType = ItemType.Consumable;
+        itemGradeText = iteminfo.Item_Grade.ToString();
+        itemEffects = iteminfo.ItemEffects;
+        itemName = iteminfo.ItemName;
+        descriptionText = iteminfo.DescriptionText;
+        itemIconSourceText = iteminfo.ItemIconSourceText;
+        duration = (iteminfo as ItemConsumable).Duration;
+    }
 
     public string GetItemEffectText()
     {

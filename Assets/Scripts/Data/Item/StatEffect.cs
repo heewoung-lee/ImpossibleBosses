@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class StatEffect
+public struct StatEffect
 {
     public StatEffect(StatType statType, float value, string buffname)
     {

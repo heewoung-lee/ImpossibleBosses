@@ -13,7 +13,7 @@ public class LootItem : NetworkBehaviour,IInteraction
     private const float DROPITEM_ROTATION_OFFSET = 40f;
     private UI_Player_Inventory _ui_player_Inventory;
 
-    Transform _dropper;
+    Vector3 _dropPosition;
     Rigidbody _rigidBody;
     GameObject _itemEffect;
     CapsuleCollider _collider;
@@ -31,32 +31,12 @@ public class LootItem : NetworkBehaviour,IInteraction
         _rigidBody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
     }
-    private void Start()
-    {
-        _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
-        _canInteraction = false;
-        transform.position = _dropper.transform.position + Vector3.up * _dropper.GetComponent<Collider>().bounds.max.y;
-        //튀어오르면서 로테이션을 돌린다.
-        //바닥에 닿으면 VFX효과를 킨다.
-        //아이템을 회전시킨다.
-        //상호작용을 하면
-        _rigidBody.AddForce(Vector3.up * ADDFORCE_OFFSET, ForceMode.Impulse);
-        // 임의의 회전을 위한 랜덤 값 생성
-        Vector3 randomTorque = new Vector3(
-            Random.Range(-1f, 1f),  // X축 회전
-            Random.Range(-1f, 1f),  // Y축 회전
-            Random.Range(-1f, 1f)   // Z축 회전
-        );
-        // 회전 힘 추가 (랜덤 값에 강도를 조절)
-        _rigidBody.AddTorque(randomTorque * TORQUE_FORCE_OFFSET, ForceMode.Impulse);
-    }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
-        transform.position = _dropper.transform.position + Vector3.up * _dropper.GetComponent<Collider>().bounds.max.y;
+        transform.position = _dropPosition + Vector3.up * 1.2f;
         //튀어오르면서 로테이션을 돌린다.
         //바닥에 닿으면 VFX효과를 킨다.
         //아이템을 회전시킨다.
@@ -94,9 +74,9 @@ public class LootItem : NetworkBehaviour,IInteraction
     }
 
 
-    public void SetDropperAndItem(Transform dropper,IItem iteminfo)
+    public void SetDropperAndItem(Vector3 dropperPos,IItem iteminfo)
     {
-        _dropper = dropper;
+        _dropPosition = dropperPos;
         _iteminfo = iteminfo;
     }
 

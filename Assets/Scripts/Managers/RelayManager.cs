@@ -44,7 +44,7 @@ public class RelayManager
             if (_nGO_ROOT_UI == null)
             {
                 _nGO_ROOT_UI = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT_UI");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT_UI);
+                SpawnNetworkOBJ(_nGO_ROOT_UI);
             }
             return _nGO_ROOT_UI;
         }
@@ -57,7 +57,7 @@ public class RelayManager
             if (_nGO_ROOT == null)
             {
                 _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, _nGO_ROOT);
+                SpawnNetworkOBJ(_nGO_ROOT);
             }
             return _nGO_ROOT;
         }
@@ -71,7 +71,7 @@ public class RelayManager
             {
                 GameObject ngo_RPC_Caller;
                 ngo_RPC_Caller = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
-                SpawnNetworkOBJ(_netWorkManager.LocalClientId, ngo_RPC_Caller);
+                SpawnNetworkOBJ(ngo_RPC_Caller);
                 _nGO_RPC_Caller = ngo_RPC_Caller.GetComponent<NGO_RPC_Caller>();
             }
             return _nGO_RPC_Caller;
@@ -84,7 +84,7 @@ public class RelayManager
     public GameObject Load_NGO_ROOT_UI_Module(string path)
     {
         GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
-        SpawnNetworkOBJ(_netWorkManager.LocalClientId, networkOBJ, NGO_ROOT_UI.transform, destroyOption: true);
+        SpawnNetworkOBJ(networkOBJ, NGO_ROOT_UI.transform);
         return networkOBJ;
     }
 
@@ -114,7 +114,7 @@ public class RelayManager
 
     }
 
-    public GameObject SpawnNetworkOBJ(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
+    public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
     {
         if (NetWorkManager.IsListening == true)
         {
@@ -127,6 +127,10 @@ public class RelayManager
             }
         }
         return obj;
+    }
+    public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
+    {
+        return SpawnNetworkOBJInjectionOnwer(_netWorkManager.LocalClientId,obj,parent,destroyOption);
     }
 
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
