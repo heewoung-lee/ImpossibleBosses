@@ -1,7 +1,7 @@
 {
 "stats":[
 {
-"itemNumber":"0",
+"itemNumber":"100",
 "itemGradeText":"Normal",
 "Equipment_SlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":5}],
@@ -10,7 +10,7 @@
 "itemIconSourceText":"equip_icon_axe_0"
 },
 {
-"itemNumber":"1",
+"itemNumber":"101",
 "itemGradeText":"Magic",
 "Equipment_SlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":8}],
@@ -19,7 +19,7 @@
 "itemIconSourceText":"equip_icon_axe_0"
 },
 {
-"itemNumber":"2",
+"itemNumber":"102",
 "itemGradeText":"Rare",
 "Equipment_SlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":10},{"statType":"Defence","value":1}],
