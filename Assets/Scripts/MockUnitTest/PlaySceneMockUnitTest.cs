@@ -46,20 +46,9 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 {
                     await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
                 }
-                // 서버가 이미 실행 중이라면 바로 실행
-                if (NetworkManager.Singleton.IsListening)
+                if (NetworkManager.Singleton.IsListening == true)
                 {
-                    Debug.Log("바로 출력");
                     Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
-                }
-                else
-                {
-                    Debug.Log("이벤트 담음");
-                    NetworkManager.Singleton.OnServerStarted += () =>
-                    {
-                        Debug.Log("서버 시작됨");
-                        Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
-                    };
                 }
             }
             else
