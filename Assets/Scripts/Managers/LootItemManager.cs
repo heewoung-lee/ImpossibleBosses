@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class LootItemManager
@@ -11,7 +12,9 @@ public class LootItemManager
         {
             if(_itemRoot == null)
             {
-                _itemRoot = new GameObject("@ItemRoot");
+                _itemRoot = new GameObject("@ItemRootNetWork");
+                _itemRoot.GetOrAddComponent<NetworkObject>();
+                Managers.RelayManager.SpawnNetworkOBJ(_itemRoot);
             }
             return _itemRoot.transform;
         }
@@ -26,7 +29,9 @@ public class LootItemManager
         {
             if(_temporaryInventory == null)
             {
-                _temporaryInventory = new GameObject("@LootItemRoot");
+                _temporaryInventory = new GameObject("@LootItemRootNetWork");
+                _temporaryInventory.GetOrAddComponent<NetworkObject>();
+                Managers.RelayManager.SpawnNetworkOBJ(_temporaryInventory);
             }
             return _temporaryInventory.transform;  
         }

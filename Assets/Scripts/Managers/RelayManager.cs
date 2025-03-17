@@ -26,18 +26,27 @@ public class RelayManager
 
     public Action ConnectPlayerEvent;
 
-
     public NetworkManager NetWorkManager
     {
         get
         {
-            if (_netWorkManager is null)
+            if (_netWorkManager != null)
+                return _netWorkManager;
+
+            if (NetworkManager.Singleton != null)
             {
-                _netWorkManager = Managers.ResourceManager.InstantiatePrefab("NGO/NetworkManager").GetComponent<NetworkManager>();
+                _netWorkManager = NetworkManager.Singleton;
+            }
+            else
+            {
+                Managers.ResourceManager.InstantiatePrefab("NGO/NetworkManager");
+                NetworkManager.Singleton.SetSingleton();
+                return NetworkManager.Singleton;
             }
             return _netWorkManager;
         }
     }
+
     public GameObject NGO_ROOT_UI
     {
         get

@@ -45,10 +45,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 break;
         }
         networkLootItem.transform.position = dropPosition;
-        Managers.RelayManager.SpawnNetworkOBJ(networkLootItem);
+        Managers.RelayManager.SpawnNetworkOBJ(networkLootItem,Managers.LootItemManager.ItemRoot);
 
         ulong networkID = networkLootItem.GetComponent<NetworkObject>().NetworkObjectId;
-        SetDropItemInfoRpc(itemStruct, networkID);
+        //SetDropItemInfoRpc(itemStruct, networkID);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -66,13 +66,13 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             case Equipment_Slot_Type.Helmet:
             case Equipment_Slot_Type.Armor:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield");
                 break;
             case Equipment_Slot_Type.Weapon:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword");
                 break;
             default:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag");
                 break;
         }
         lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -81,7 +81,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
     private GameObject GetConsumableLootItem(IItem iteminfo)
     {
-        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion");
         lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
         return lootitem;
     }
