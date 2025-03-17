@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public struct IteminfoStruct : INetworkSerializable
+public struct IteminfoStruct : INetworkSerializable//TODO: 나중에 아이템 강화등 고유아이템의 능력치가 변화할때 이걸로 던질것
 {
     public int ItemNumber;
     public ItemType Item_Type;
@@ -249,5 +250,4 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _imageSource = iteminfo.ImageSource;
         _iteminfo = iteminfo;//다른 클래스들이 형변환을 쉽게 하기 위해 인터페이스를 저장
     }
-
 }

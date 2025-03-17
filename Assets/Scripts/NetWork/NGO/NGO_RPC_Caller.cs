@@ -36,18 +36,27 @@ public class NGO_RPC_Caller : NetworkBehaviour
         switch (itemStruct.Item_Type)
         {
             case ItemType.Equipment:
-                iteminfo = new ItemEquipment(iteminfo);
                 networkLootItem = GetEquipLootItem(iteminfo);
                 break;
             case ItemType.Consumable:
-                iteminfo = new ItemConsumable(iteminfo);
                 networkLootItem = GetConsumableLootItem(iteminfo);
                 break;
             case ItemType.ETC:
                 break;
         }
-        networkLootItem.gameObject.GetComponent<LootItem>().SetDropperAndItem(dropPosition, iteminfo);
+        networkLootItem.transform.position = dropPosition;
         Managers.RelayManager.SpawnNetworkOBJ(networkLootItem);
+
+        ulong networkID = networkLootItem.GetComponent<NetworkObject>().NetworkObjectId;
+        SetDropItemInfoRpc(itemStruct, networkID);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetDropItemInfoRpc(IteminfoStruct itemStruct,ulong itemNumber)
+    {
+       NetworkObject ngo = Managers.RelayManager.NetWorkManager.SpawnManager.GetPlayerNetworkObject(itemNumber);
+       IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
+       ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
     }
 
     private GameObject GetEquipLootItem(IItem iteminfo)

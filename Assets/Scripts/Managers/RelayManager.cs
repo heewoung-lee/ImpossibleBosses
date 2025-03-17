@@ -6,6 +6,7 @@ using Unity.Services.Relay;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 
 public class RelayManager
 {
@@ -130,9 +131,17 @@ public class RelayManager
     }
     public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
     {
-        return SpawnNetworkOBJInjectionOnwer(_netWorkManager.LocalClientId,obj,parent,destroyOption);
+        if (NetWorkManager.IsListening == true)
+        {
+            NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
+            networkObj.Spawn(destroyOption);
+            if (parent != null)
+            {
+                networkObj.transform.SetParent(parent, false);
+            }
+        }
+        return obj;
     }
-
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
         NGO_RPC_Caller.DeSpawn_NetWorkOBJServerRpc(networkObjectID);

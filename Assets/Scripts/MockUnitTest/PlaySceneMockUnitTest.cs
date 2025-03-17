@@ -19,7 +19,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby286";
+    string LobbyID = "TestLobby290";
     string _playerType = null;
     GameObject _ngoRoot;
     
@@ -28,7 +28,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
     public bool isSoloTest;
     private async void Start()
     {
-        await JoinChannel();
+       await JoinChannel();
     }
     private async Task JoinChannel()
     {
@@ -46,9 +46,21 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 {
                     await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
                 }
-
-                Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
-
+                // 서버가 이미 실행 중이라면 바로 실행
+                if (NetworkManager.Singleton.IsListening)
+                {
+                    Debug.Log("바로 출력");
+                    Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
+                }
+                else
+                {
+                    Debug.Log("이벤트 담음");
+                    NetworkManager.Singleton.OnServerStarted += () =>
+                    {
+                        Debug.Log("서버 시작됨");
+                        Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
+                    };
+                }
             }
             else
             {
@@ -93,19 +105,6 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         }
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
     }
-
-
-    private void SpawnToNPC(List<(string,Vector3)> npcPathAndTr)
-    {
-        foreach((string, Vector3) npcdata in npcPathAndTr)
-        {
-            GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
-            dummy_cube.transform.position = npcdata.Item2;
-            Managers.RelayManager.SpawnNetworkOBJ(dummy_cube,Managers.RelayManager.NGO_ROOT.transform, false);
-        }
-    }
-
-
     public async void OnGUI()
     {
        if(GUI.Button(new Rect(0, 0, 100, 100), "GetLobby"))
