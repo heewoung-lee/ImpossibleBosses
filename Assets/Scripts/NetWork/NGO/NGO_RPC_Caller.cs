@@ -20,15 +20,24 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
     [Rpc(SendTo.Server)]
-    public void DeSpawn_NetWorkOBJServerRpc(ulong networkID, RpcParams rpcParams = default)
+    public void DeSpawnByIDServerRpc(ulong networkID, RpcParams rpcParams = default)
     {
         RelayNetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkID, out NetworkObject ngo);
         ngo.Despawn(true);
     }
 
+    [Rpc(SendTo.Server)]
+    public void DeSpawnByReferenceServerRpc(NetworkObjectReference ngoRef, RpcParams rpcParams = default)
+    {
+        if (ngoRef.TryGet(out NetworkObject ngo))
+        {
+            ngo.Despawn(true);
+        }
+    }
+
 
     [Rpc(SendTo.Server)]
-    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct,Vector3 dropPosition, bool destroyOption = true)
+    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true)
     {
         //여기에서 itemStruct를 IItem으로 변환
         GameObject networkLootItem = null;
@@ -44,18 +53,20 @@ public class NGO_RPC_Caller : NetworkBehaviour
             case ItemType.ETC:
                 break;
         }
-        networkLootItem.GetComponent<LootItem>().SetDropperAndItem(dropPosition, iteminfo);
-        Managers.RelayManager.SpawnNetworkOBJ(networkLootItem,Managers.LootItemManager.ItemRoot);
-        ulong networkID = networkLootItem.GetComponent<NetworkObject>().NetworkObjectId;
-        //SetDropItemInfoRpc(itemStruct, networkID);
+        networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
+        GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot);
+        NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
+        SetDropItemInfoRpc(itemStruct, rootItemRef);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void SetDropItemInfoRpc(IteminfoStruct itemStruct,ulong itemNumber)
+    public void SetDropItemInfoRpc(IteminfoStruct itemStruct, NetworkObjectReference rootitemRef)
     {
-       NetworkObject ngo = Managers.RelayManager.NetworkManagerEx.SpawnManager.GetPlayerNetworkObject(itemNumber);
-       IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
-       ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        if (rootitemRef.TryGet(out NetworkObject ngo))
+        {
+            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
+            ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        }
     }
 
     private GameObject GetEquipLootItem(IItem iteminfo)

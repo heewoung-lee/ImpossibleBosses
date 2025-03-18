@@ -124,9 +124,23 @@ public class RelayManager
 
     }
 
+
+    public NetworkObjectReference GetNetworkObject(GameObject gameobject)
+    {
+        if (gameobject.TryGetComponent(out NetworkObject ngo))
+        {
+            return new NetworkObjectReference(ngo);
+        }
+        Debug.Log("GameObject hasn't a BaseStats");
+        return default;
+    }
+    public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
+    {
+        return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, obj, parent, destroyOption);
+    }
     public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
     {
-        if (NetworkManagerEx.IsListening == true && NetworkManagerEx.IsHost)
+        if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
             networkObj.SpawnWithOwnership(clientId, destroyOption);
@@ -137,13 +151,15 @@ public class RelayManager
         }
         return obj;
     }
-    public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
-    {
-        return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, obj, parent, destroyOption);
-    }
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
-        NGO_RPC_Caller.DeSpawn_NetWorkOBJServerRpc(networkObjectID);
+        NGO_RPC_Caller.DeSpawnByIDServerRpc(networkObjectID);
+    }
+
+    public void DeSpawn_NetWorkOBJ(GameObject ngoGameobject)
+    {
+        NetworkObjectReference despawnNgo = GetNetworkObject(ngoGameobject);
+        NGO_RPC_Caller.DeSpawnByReferenceServerRpc(despawnNgo);
     }
 
     public async Task<bool> JoinGuestRelay(string joinCode)

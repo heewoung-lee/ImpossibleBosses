@@ -59,7 +59,6 @@ public class LootItem : NetworkBehaviour,IInteraction
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && _rigidBody.isKinematic == false)
         {
-            Debug.Log(other.name+"부딪힌 장애물의 이름");
             _rigidBody.isKinematic = true;
             transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
             transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
@@ -70,22 +69,16 @@ public class LootItem : NetworkBehaviour,IInteraction
     }
 
 
-    private void CreateLootingItemEffect()
+    public void CreateLootingItemEffect()
     {
-        if (_networkObject.IsOwner == false)
-            return;
-
-
         _itemEffect = ItemGradeEffect(_iteminfo);
         _itemEffect.transform.position = transform.position;
         _itemEffect.transform.SetParent(transform);
     }
 
-
-    public void SetDropperAndItem(Vector3 dropperPos,IItem iteminfo)
+    public void SetPosition(Vector3 dropPosition)
     {
-        _dropPosition = dropperPos;
-        _iteminfo = iteminfo;
+        _dropPosition = dropPosition;
     }
 
     public void SetIteminfo(IItem iteminfo)
@@ -125,7 +118,6 @@ public class LootItem : NetworkBehaviour,IInteraction
     {
         PlayerPickup(caller);
     }
-
     public void PlayerPickup(Module_Player_Interaction player)
     {
         PlayerController base_controller = player.PlayerController;
@@ -136,7 +128,7 @@ public class LootItem : NetworkBehaviour,IInteraction
 
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
         inventory_item.transform.SetParent(Managers.LootItemManager.GetItemComponentPosition(_ui_player_Inventory));
-        Managers.ResourceManager.DestroyObject(gameObject);
+        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
         player.DisEnable_Icon_UI();//상호작용 아이콘 제거
     }
 
