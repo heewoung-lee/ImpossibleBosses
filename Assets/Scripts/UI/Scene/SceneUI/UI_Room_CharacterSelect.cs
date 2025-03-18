@@ -80,7 +80,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelect);
         }
-        _netWorkManager = Managers.RelayManager.NetWorkManager;
+        _netWorkManager = Managers.RelayManager.NetworkManagerEx;
         _button_Ready = Get<Button>((int)Buttons.Button_Ready);
         _button_Text = _button_Ready.GetComponentInChildren<TMP_Text>();
         ReadyButtonInitalize();

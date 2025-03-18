@@ -25,21 +25,21 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
             return;
         }
 
-        Managers.RelayManager.NetWorkManager.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
             SpawnObject();
     }
 
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
-        if (clientId == _relayManager.NetWorkManager.LocalClientId)
+        if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
             SpawnObject();
     }
 
     private void SpawnObject()
     {
         string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
-        RequestSpawnPlayerServerRpc(_relayManager.NetWorkManager.LocalClientId, choicePlayer);
+        RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
         RequestSpawnToNPC(new List<(string, Vector3)>()
         {
            {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}

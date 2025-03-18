@@ -429,7 +429,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.2
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 8f7d22ec8aee0374ea4bd478ed8f4ecc, type: 2}
   m_BuildHeightMesh: 0
@@ -684,6 +684,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8456981743880769873}
+  - component: {fileID: 6496157311499068481}
   m_Layer: 6
   m_Name: '@Environment'
   m_TagString: Untagged
@@ -709,6 +710,18 @@ Transform:
   - {fileID: 1776881231452501974}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6496157311499068481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5561984592234017522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f7be9145e6ebca479dad35092c52c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5752101846003154857
 GameObject:
   m_ObjectHideFlags: 0

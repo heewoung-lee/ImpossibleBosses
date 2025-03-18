@@ -26,7 +26,7 @@ public class RelayManager
 
     public Action ConnectPlayerEvent;
 
-    public NetworkManager NetWorkManager
+    public NetworkManager NetworkManagerEx
     {
         get
         {
@@ -102,14 +102,14 @@ public class RelayManager
     {
         try
         {
-            if (NetWorkManager.IsHost && _joinCode != null)
+            if (NetworkManagerEx.IsHost && _joinCode != null)
                 return _joinCode;
 
             _allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
-            NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
+            NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
-            if (NetWorkManager.StartHost())
+            if (NetworkManagerEx.StartHost())
             {
                 return _joinCode;
             }
@@ -126,11 +126,10 @@ public class RelayManager
 
     public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
     {
-        if (NetWorkManager.IsListening == true)
+        if (NetworkManagerEx.IsListening == true && NetworkManagerEx.IsHost)
         {
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
-            networkObj.SpawnWithOwnership(clientId);
-            networkObj.DestroyWithScene = destroyOption;
+            networkObj.SpawnWithOwnership(clientId, destroyOption);
             if (parent != null)
             {
                 networkObj.transform.SetParent(parent, false);
@@ -140,16 +139,7 @@ public class RelayManager
     }
     public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
     {
-        if (NetWorkManager.IsListening == true)
-        {
-            NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
-            networkObj.Spawn(destroyOption);
-            if (parent != null)
-            {
-                networkObj.transform.SetParent(parent, false);
-            }
-        }
-        return obj;
+        return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, obj, parent, destroyOption);
     }
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
@@ -162,9 +152,9 @@ public class RelayManager
         {
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
-            NetWorkManager.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
+            NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = joinCode;
-            return !string.IsNullOrEmpty(joinCode) && NetWorkManager.StartClient();
+            return !string.IsNullOrEmpty(joinCode) && NetworkManagerEx.StartClient();
         }
         catch (RelayServiceException ex) when (ex.ErrorCode == 404)
         {
@@ -208,15 +198,15 @@ public class RelayManager
 
     public void InitalizeRelayServer()
     {
-        NetWorkManager.OnClientDisconnectCallback -= OnClientDisconnectEvent;
-        NetWorkManager.OnClientDisconnectCallback += OnClientDisconnectEvent;
-        NetWorkManager.OnClientConnectedCallback -= OnClientconnectEvent;
-        NetWorkManager.OnClientConnectedCallback += OnClientconnectEvent;
+        NetworkManagerEx.OnClientDisconnectCallback -= OnClientDisconnectEvent;
+        NetworkManagerEx.OnClientDisconnectCallback += OnClientDisconnectEvent;
+        NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
+        NetworkManagerEx.OnClientConnectedCallback += OnClientconnectEvent;
     }
 
     public void SceneLoadInitalizeRelayServer()
     {
-        NetWorkManager.NetworkConfig.EnableSceneManagement = false;
+        NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
         Managers.SocketEventManager.OnApplicationQuitEvent += WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntion;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntion;
@@ -224,7 +214,7 @@ public class RelayManager
 
     public void UnSubscribeCallBackEvent()
     {
-        NetWorkManager.OnClientDisconnectCallback -= OnClientconnectEvent;
-        NetWorkManager.OnClientConnectedCallback -= OnClientconnectEvent;
+        NetworkManagerEx.OnClientDisconnectCallback -= OnClientconnectEvent;
+        NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
     }
 }

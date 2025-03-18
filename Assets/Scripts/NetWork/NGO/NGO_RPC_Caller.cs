@@ -12,7 +12,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             if (_networkManager == null)
             {
-                _networkManager = Managers.RelayManager.NetWorkManager;
+                _networkManager = Managers.RelayManager.NetworkManagerEx;
             }
             return _networkManager;
         }
@@ -44,9 +44,8 @@ public class NGO_RPC_Caller : NetworkBehaviour
             case ItemType.ETC:
                 break;
         }
-        networkLootItem.transform.position = dropPosition;
+        networkLootItem.GetComponent<LootItem>().SetDropperAndItem(dropPosition, iteminfo);
         Managers.RelayManager.SpawnNetworkOBJ(networkLootItem,Managers.LootItemManager.ItemRoot);
-
         ulong networkID = networkLootItem.GetComponent<NetworkObject>().NetworkObjectId;
         //SetDropItemInfoRpc(itemStruct, networkID);
     }
@@ -54,7 +53,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void SetDropItemInfoRpc(IteminfoStruct itemStruct,ulong itemNumber)
     {
-       NetworkObject ngo = Managers.RelayManager.NetWorkManager.SpawnManager.GetPlayerNetworkObject(itemNumber);
+       NetworkObject ngo = Managers.RelayManager.NetworkManagerEx.SpawnManager.GetPlayerNetworkObject(itemNumber);
        IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
        ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
     }
@@ -66,13 +65,13 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             case Equipment_Slot_Type.Helmet:
             case Equipment_Slot_Type.Armor:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield");
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Shield");
                 break;
             case Equipment_Slot_Type.Weapon:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword");
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Sword");
                 break;
             default:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag");
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Bag");
                 break;
         }
         lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -81,7 +80,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
     private GameObject GetConsumableLootItem(IItem iteminfo)
     {
-        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion");
+        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Potion");
         lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
         return lootitem;
     }

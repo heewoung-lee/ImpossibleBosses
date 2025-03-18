@@ -19,7 +19,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby290";
+    string LobbyID = "TestLobby291";
     string _playerType = null;
     GameObject _ngoRoot;
     
@@ -33,7 +33,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
     private async Task JoinChannel()
     {
         Managers.RelayManager.ChoicePlayerCharacter = PlayerClass;
-        if (Managers.RelayManager.NetWorkManager.IsListening == false)
+        if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
         {
             await SetAuthenticationService();
             if (_playerType == "Player1")
@@ -109,7 +109,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
 
             string joinCode = lobby.Data["RelayCode"].Value;
             Debug.Log($"조인코드: {joinCode}");
-            foreach (NetworkClient player in Managers.RelayManager.NetWorkManager.ConnectedClientsList)
+            foreach (NetworkClient player in Managers.RelayManager.NetworkManagerEx.ConnectedClientsList)
             {
                 Debug.Log($"플레이어의 아이디: {player.ClientId}");
             }

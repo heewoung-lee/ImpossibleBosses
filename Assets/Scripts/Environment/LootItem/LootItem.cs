@@ -12,12 +12,13 @@ public class LootItem : NetworkBehaviour,IInteraction
     private const float DROPITEM_VERTICAL_OFFSET = 0.2f;
     private const float DROPITEM_ROTATION_OFFSET = 40f;
     private UI_Player_Inventory _ui_player_Inventory;
+    private NetworkObject _networkObject;
 
-    Vector3 _dropPosition;
-    Rigidbody _rigidBody;
-    GameObject _itemEffect;
-    CapsuleCollider _collider;
-    IItem _iteminfo;
+    [SerializeField] private Vector3 _dropPosition;
+    [SerializeField] private Rigidbody _rigidBody;
+    [SerializeField] private GameObject _itemEffect;
+    [SerializeField] private CapsuleCollider _collider;
+    [SerializeField] private IItem _iteminfo;
 
     public bool CanInteraction => _canInteraction;
     public string InteractionName => _iteminfo.ItemName;
@@ -30,6 +31,8 @@ public class LootItem : NetworkBehaviour,IInteraction
     {
         _rigidBody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
+        _networkObject = GetComponent<NetworkObject>();
+
     }
     public override void OnNetworkSpawn()
     {
@@ -54,8 +57,9 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && _rigidBody.isKinematic == false)
         {
+            Debug.Log(other.name+"부딪힌 장애물의 이름");
             _rigidBody.isKinematic = true;
             transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
             transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
@@ -68,6 +72,10 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     private void CreateLootingItemEffect()
     {
+        if (_networkObject.IsOwner == false)
+            return;
+
+
         _itemEffect = ItemGradeEffect(_iteminfo);
         _itemEffect.transform.position = transform.position;
         _itemEffect.transform.SetParent(transform);

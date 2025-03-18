@@ -168,7 +168,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
 
     private void CheckHostIsAlone()
     {
-        if (Managers.RelayManager.NetWorkManager.ConnectedClientsIds.Count == 1 && IsHost)
+        if (Managers.RelayManager.NetworkManagerEx.ConnectedClientsIds.Count == 1 && IsHost)
         {
             _ui_Room_CharacterSelect.SetHostStartButton(true);
         }
