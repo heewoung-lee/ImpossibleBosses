@@ -88,7 +88,6 @@ public class RelayManager
         }
     }
 
-
     public string JoinCode { get => _joinCode; }
 
     public GameObject Load_NGO_ROOT_UI_Module(string path)
@@ -121,7 +120,6 @@ public class RelayManager
             Debug.LogException(ex);
             return null;
         }
-
     }
 
 

@@ -26,12 +26,14 @@ public class NGO_RPC_Caller : NetworkBehaviour
         ngo.Despawn(true);
     }
 
-    [Rpc(SendTo.Server)]
+    [Rpc(SendTo.Server,RequireOwnership =false)]
     public void DeSpawnByReferenceServerRpc(NetworkObjectReference ngoRef, RpcParams rpcParams = default)
     {
+        Debug.Log("제거중");
         if (ngoRef.TryGet(out NetworkObject ngo))
         {
             ngo.Despawn(true);
+            Debug.Log("제거완료");
         }
     }
 

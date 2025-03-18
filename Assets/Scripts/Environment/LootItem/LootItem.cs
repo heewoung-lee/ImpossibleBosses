@@ -32,11 +32,11 @@ public class LootItem : NetworkBehaviour,IInteraction
         _rigidBody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
         _networkObject = GetComponent<NetworkObject>();
-
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
         transform.position = _dropPosition + Vector3.up * 1.2f;

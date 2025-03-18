@@ -10,6 +10,7 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
+    private NGO_RPC_Caller _ngo_Rpc_Caller;
 
 
     protected override void AwakeInit()
@@ -44,7 +45,22 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         {
            {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
         });
+        if (_relayManager.NetworkManagerEx.IsHost)
+        {
+            _ngo_Rpc_Caller = Managers.RelayManager.NGO_RPC_Caller;
+        }
+        else
+        {
+            Create_NGO_RPC_CallerRpc();
+        }
+
     }
+    [Rpc(SendTo.Server)]
+    public void Create_NGO_RPC_CallerRpc()
+    {
+        _ngo_Rpc_Caller = Managers.RelayManager.NGO_RPC_Caller;
+    }
+
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
@@ -71,8 +87,6 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
         _relayManager.SpawnNetworkOBJInjectionOnwer(requestingClientId, _player,_relayManager.NGO_ROOT.transform);
     }
-
-
 
     private bool IsAvailableMockUnitTest()
     {
