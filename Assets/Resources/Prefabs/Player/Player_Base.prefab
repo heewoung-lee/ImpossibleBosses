@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2922684549368662866}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.toes.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8317701438897665278}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3265657183368239282}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2649100371134943673}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloakdummy.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5924072663701706567}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_cloak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,16 +376,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  playerHpValue:
+  _characterHpValue:
     m_InternalValue: 0
-  playerMaxHpValue:
+  _characterMaxHpValue:
     m_InternalValue: 0
-  playerAttackValue:
+  _characterAttackValue:
     m_InternalValue: 0
-  playerDefenceValue:
+  _characterDefenceValue:
     m_InternalValue: 0
-  playerMoveSpeedValue:
+  _characterMoveSpeedValue:
     m_InternalValue: 0
+  _currentexp: 0
 --- !u!114 &6318345427645833407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,7 +464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6660770671861811463}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +496,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1455896901469040739}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7143202477835012346}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +560,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7100056625750608630}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +592,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4781675483629521191}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.foot.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 535877401446435126}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -655,7 +656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6079349773751987897}
   - component: {fileID: 1895871889902447137}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_archerarrow_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -944,7 +945,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8535442959301957306}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -976,7 +977,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4947345298509876314}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1009,7 +1010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8785767980482333667}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.L.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1040,7 +1041,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6005566971389989636}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1071,7 +1072,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8857783916278027160}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1102,7 +1103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2814240917390628993}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.ear.R.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,7 +1134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745701738814278590}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1164,7 +1165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8155135742851279161}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1196,7 +1197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4279325748750811868}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,7 +1228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2516133970192813521}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,7 +1260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8167530000613113461}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.back.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1290,7 +1291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5657608852022391083}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1324,7 +1325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6536535951490417949}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1356,7 +1357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745729435277133497}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1388,7 +1389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7604752064595036658}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1420,7 +1421,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1849363762781611441}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1452,7 +1453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8721121495391466147}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.back.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1484,7 +1485,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3290396088827871577}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1516,7 +1517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6359487091798405313}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1548,7 +1549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8202737082399694033}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1580,7 +1581,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3855025133753684644}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.R.000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1613,7 +1614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5243020020442916798}
   - component: {fileID: 9153602081245670318}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1902,7 +1903,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3326165011166093355}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1934,7 +1935,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7218293896891067714}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tail.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1965,7 +1966,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6531483225808437132}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1997,7 +1998,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6329587948342049917}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2028,7 +2029,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5195964794214403119}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2059,7 +2060,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3924019359977569157}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2101,7 +2102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6328159070020545274}
   - component: {fileID: 3378349887649844372}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2390,7 +2391,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4815645118003374027}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2422,7 +2423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6172602290078796506}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2454,7 +2455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 51888059577034279}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.neck.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2485,7 +2486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2823920200472494711}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2517,7 +2518,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7902300865191196949}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.011_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2548,7 +2549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2354695584647373487}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2584,7 +2585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1575434748917728016}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2616,7 +2617,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5155311939830758177}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2648,7 +2649,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2851820979930639120}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2679,7 +2680,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1066332331063855588}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2711,7 +2712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 288449234291015617}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stretch.foot.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2743,7 +2744,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3761555358763252865}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2775,7 +2776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1406748484102820863}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2807,7 +2808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5487278889341908480}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2838,7 +2839,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3125728394271029547}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2870,7 +2871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2786123466657996748}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.R.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2901,7 +2902,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5954553369945471033}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tail.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2933,7 +2934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8624149505177115019}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.hand.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2965,7 +2966,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6277222644330339872}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2997,7 +2998,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 507267496841239435}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3028,7 +3029,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7576445748803039634}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3060,7 +3061,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4337226480618423871}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3091,7 +3092,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5403452536359087758}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stretch.foot.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3123,7 +3124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7955940776447910825}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3155,7 +3156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1717514479164881298}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3187,7 +3188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5682090122075481412}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3219,7 +3220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1906544138588456417}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3251,7 +3252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2289293286941747941}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3283,7 +3284,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6476444247540374587}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.foot.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3316,7 +3317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6710366734205697545}
   - component: {fileID: 69090749335858287}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_archerbow_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3606,7 +3607,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8309318106898355245}
   - component: {fileID: 6421737504083952057}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_magestaff_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3896,7 +3897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3577407782200854950}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3928,7 +3929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6245792366010517687}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3960,7 +3961,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2746076349501912112}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.L.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3991,7 +3992,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9142315558303283401}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4023,7 +4024,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9165365367550823825}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4054,7 +4055,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8962360884583137815}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.face.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4086,7 +4087,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7826870059529587007}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.009_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4117,7 +4118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1998348932212044952}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4149,7 +4150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1725220806458271201}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4181,7 +4182,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6340275074225326493}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4213,7 +4214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2960495905736303468}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4245,7 +4246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 828152125345555833}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4276,7 +4277,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 438594592730643486}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4309,7 +4310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4439708828179978441}
   - component: {fileID: 7512599999623855143}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: skin_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4599,7 +4600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6856115660548095878}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4631,7 +4632,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6432746666709448}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.head.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4681,7 +4682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6419664796046774571}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4714,7 +4715,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6525721261602437602}
   - component: {fileID: 872718167932630369}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5004,7 +5005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8304414511361710601}
   - component: {fileID: 5133420580345796675}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_monk_boots_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5293,7 +5294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3004481480845946271}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5325,7 +5326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4639295801550264457}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.center.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5360,7 +5361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2265494433077595522}
   - component: {fileID: 744840579605513702}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_mage_body_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5649,7 +5650,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3710427515766323052}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5681,7 +5682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2956784742401656699}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5713,7 +5714,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8021343658769833109}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5745,7 +5746,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3054813092747014384}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5777,7 +5778,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 108556054362851321}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.chest.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5814,7 +5815,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4711201756919972857}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tail.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5846,7 +5847,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8453685182817125565}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5881,7 +5882,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 281307897906010785}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.neck.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5913,7 +5914,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6348939837136950199}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5945,7 +5946,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 681986791150456132}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5978,7 +5979,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 102115981158679678}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6010,7 +6011,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6547876173734357099}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6042,7 +6043,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7350007183393538157}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6074,7 +6075,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 88730607390521794}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6105,7 +6106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7360502471061171525}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6136,7 +6137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1695139879354840282}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6168,7 +6169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8106387174412964139}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.011_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6199,7 +6200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5923273578014384986}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6231,7 +6232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2101539724889618596}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6263,7 +6264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3671521222528483654}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.008_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6294,7 +6295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1803006258930622033}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6326,7 +6327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2379794077931896715}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6358,7 +6359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6528401981519504421}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6389,7 +6390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2075128451382064589}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6422,7 +6423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6375232918648286273}
   - component: {fileID: 2835299979447751033}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_archer_quiver_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6711,7 +6712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2447173392293485676}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6743,7 +6744,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6191598948830015845}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6775,7 +6776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5074790277231186620}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloakdummy.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6807,7 +6808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3471585971334495183}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6839,7 +6840,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7014693691496026420}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6871,7 +6872,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1503347275070205268}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6902,7 +6903,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5327431745558790434}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6933,7 +6934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5550044029255254644}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tail.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6966,7 +6967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5179766370847214563}
   - component: {fileID: 1750682923299594230}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7255,7 +7256,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9135822266915525024}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.back.dummy.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7288,7 +7289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2537415140772588350}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7320,7 +7321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 266603779997314015}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7352,7 +7353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5056102992927624707}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7383,7 +7384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6686208747620644582}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.nose.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7415,7 +7416,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7802306192901135346}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7447,7 +7448,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8865370701992256986}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7478,7 +7479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6800118888630373925}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7510,7 +7511,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3206007382944779522}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7542,7 +7543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4813019851747778686}
   - component: {fileID: 5067030871088342948}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_necromancerblade_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7832,7 +7833,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1048954852278056973}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7864,7 +7865,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2826846331926416214}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.face.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7896,7 +7897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3583653241846340852}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7928,7 +7929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6885067443432988716}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.ear.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7960,7 +7961,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2014309479626129128}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7992,7 +7993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5481176578523334177}
   - component: {fileID: 5823668453231120911}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_fighter_body_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8281,7 +8282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3267759476962834788}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8312,7 +8313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1897283001858604478}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8344,7 +8345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7614469615791449932}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.R.000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8376,7 +8377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4028041201103302028}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8408,7 +8409,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 61373285544267121}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.009_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8439,7 +8440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 807804205301154022}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.hand.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8475,7 +8476,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4848757243438121467}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stretch.hand.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8507,7 +8508,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6739185351953446971}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8539,7 +8540,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6736173941007068357}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.L.000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8571,7 +8572,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4039001857557887267}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8602,7 +8603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8630676474914910652}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8634,7 +8635,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7708420786114055491}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8666,7 +8667,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9014979240541519787}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8698,7 +8699,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6209824518560182526}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8730,7 +8731,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2787251634624763734}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8762,7 +8763,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4931987320504848326}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8794,7 +8795,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5215357284402086935}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.013_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8825,7 +8826,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7337618523961455787}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8858,7 +8859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4146271738974946428}
   - component: {fileID: 3565199235202549695}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8910,7 +8911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3869974855805050206}
   - component: {fileID: 5389629141638417002}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_necromancer_hat_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9199,7 +9200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 787446152424385124}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9232,7 +9233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6333930814312864003}
   - component: {fileID: 5965760121009845939}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_fighteraxe_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9522,7 +9523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8738479283614144986}
   - component: {fileID: 3196570794642729032}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_fighter_boots_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9811,7 +9812,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1764525991144180990}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.013_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9842,7 +9843,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6234506989332916309}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.009_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9873,7 +9874,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5044434993399294466}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9904,7 +9905,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5719581195904178189}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9936,7 +9937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6763721946017300110}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9968,7 +9969,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4558928839359029967}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloakdummy.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9999,7 +10000,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 673438881467689870}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10031,7 +10032,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8701309656448663881}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.back.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10063,7 +10064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8002965419273714689}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10096,7 +10097,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9102295145400352195}
   - component: {fileID: 7252607709017782920}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hair_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10386,7 +10387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4662225322284111430}
   - component: {fileID: 2350663657090619650}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: skin_brow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10676,7 +10677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5088009369946801685}
   - component: {fileID: 3407330277598447983}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_fighter_hat_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10966,7 +10967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4712954678434247763}
   - component: {fileID: 4098996411450875083}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_mage_boots_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11256,7 +11257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1271119761482770688}
   - component: {fileID: 845844598676046696}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_monk_body_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11545,7 +11546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3994599422797553564}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.waist.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11576,7 +11577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5804201965939471555}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11607,7 +11608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5328056451365674059}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11639,7 +11640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8980310344912983486}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11671,7 +11672,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4586213634041365674}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11702,7 +11703,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3672183288441465016}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11734,7 +11735,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3272121787507949358}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11766,7 +11767,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5794166088349590361}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11798,7 +11799,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6247478274457996377}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11830,7 +11831,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4421225264490175132}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11862,7 +11863,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 580136618242935678}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11895,7 +11896,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6684032110030849424}
   - component: {fileID: 9199100351901251147}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_necromancer_boots_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12184,7 +12185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4763025046083541662}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12219,7 +12220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2411882199010705401}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12251,7 +12252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3877340237759522035}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12282,7 +12283,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1141938349786976031}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12313,7 +12314,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4347746107448433358}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_boots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12350,7 +12351,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1658059507079675155}
   - component: {fileID: 5512283182602298440}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_necromancer_body_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12639,7 +12640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6133460269193896900}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12671,7 +12672,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7710200555362470975}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.009_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12702,7 +12703,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7516142836696553490}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12733,7 +12734,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3240776088808508544}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12765,7 +12766,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 282312922663873504}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12797,7 +12798,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2966931275983187293}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stretch.hand.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12829,7 +12830,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4630990454133018473}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12861,7 +12862,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6551586728701696190}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Root.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12899,7 +12900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4782612092218591979}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12931,7 +12932,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4754935321476149002}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12963,7 +12964,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3583968196762940725}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12995,7 +12996,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4731709884561052485}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13034,7 +13035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5627492915958422741}
   - component: {fileID: 5490109141237111155}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_monk_cloak_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13323,7 +13324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8541815667751326373}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13355,7 +13356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3739438341348851050}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13387,7 +13388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7011167791580131207}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13419,7 +13420,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4416333620678679601}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13451,7 +13452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6732055727301389592}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.hand.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13487,7 +13488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 93572226243689452}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13519,7 +13520,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6423073467740010267}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.008_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13550,7 +13551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6131697861494479539}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13582,7 +13583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3592087629570146835}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.008_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13613,7 +13614,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7418349599300393238}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13645,7 +13646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5864916508997604459}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.ear.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13677,7 +13678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2681763521086589821}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.foot.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13709,7 +13710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1203031221855233027}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13740,7 +13741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2472910389874427485}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13772,7 +13773,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4410375566490587101}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.nose.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13803,7 +13804,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 875990237111438880}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_accessory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13836,7 +13837,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 702510291406669789}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13868,7 +13869,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6868137589119340128}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13900,7 +13901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4662374124555317670}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13932,7 +13933,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 406851569954433596}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13963,7 +13964,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5918395519013701219}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13995,7 +13996,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5296519911529882658}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14027,7 +14028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4086980543941720604}
   - component: {fileID: 8315092762453189528}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_monkstaff_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14316,7 +14317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 711752045443026600}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.ear.L.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14347,7 +14348,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4129505192762807911}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14380,7 +14381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 580754632817669263}
   - component: {fileID: 2389605523789036962}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_archer_body_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14670,7 +14671,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8637664692626514504}
   - component: {fileID: 1881334076132623293}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_archer_boots_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14959,7 +14960,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5556545666358403502}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14991,7 +14992,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5689100630676545311}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.li.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15023,7 +15024,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4782590120651644130}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.face.L.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15054,7 +15055,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8792014629389450608}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15085,7 +15086,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5473162321405968014}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15116,7 +15117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4789807563200404385}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15148,7 +15149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4132091429515919078}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.front.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15224,7 +15225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3826323551183092513}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15256,7 +15257,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5950534600515342886}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15287,7 +15288,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1300815972177354101}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15318,7 +15319,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 372874024851749154}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.L.000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15350,7 +15351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3887654021098414187}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15382,7 +15383,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5938006509038656726}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15414,7 +15415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6112089369433869095}
   - component: {fileID: 8143210994025989421}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_mage_cloak_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15703,7 +15704,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2358127983437439750}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.dummy.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15735,7 +15736,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2003479205097565863}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15767,7 +15768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8360604023149254687}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15799,7 +15800,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9107580778935839755}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Base_Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15834,7 +15835,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1465356217587675938}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.back.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15866,7 +15867,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5965384434284079878}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15899,7 +15900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8916949513156479249}
   - component: {fileID: 7987424544524973458}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: skin_nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16188,7 +16189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6857009489304042222}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16220,7 +16221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3486219713360328316}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.abdomen.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16264,7 +16265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6535540434294264679}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body.waist.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16297,7 +16298,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1207231044204070547}
   - component: {fileID: 4511146286813510231}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: skin_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16587,7 +16588,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1999257246711688591}
   - component: {fileID: 2722608665661784269}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_fighter_gloves_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16876,7 +16877,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 738440810592226027}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16908,7 +16909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2417576044480020266}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.005_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16939,7 +16940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8163649342400704378}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.R.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16970,7 +16971,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8156349509024751971}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17002,7 +17003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1394787127724176443}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17035,7 +17036,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5820395487466129515}
   - component: {fileID: 1637979119964274017}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_mage_hat_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17324,7 +17325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3422031753980156000}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17356,7 +17357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6662250127390773928}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17388,7 +17389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9218721336331587999}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17420,7 +17421,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4977098085382086308}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.L.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17451,7 +17452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1211262106347591704}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.hand.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17484,7 +17485,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4621851593069891}
   - component: {fileID: 3609172885039262330}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_monk_hat_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17773,7 +17774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2480776448828301892}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tail.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17805,7 +17806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3890697610515837426}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_hat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17841,7 +17842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8553515967986365405}
   - component: {fileID: 2835404960315717624}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17885,7 +17886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7814725636368852363}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloakdummy.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17916,7 +17917,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7736679101603193237}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.R.002_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17947,7 +17948,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3267840599292380296}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17978,7 +17979,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8141883799821735793}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.ri.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18010,7 +18011,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5161024517816131753}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18045,7 +18046,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1992050181292176270}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.R.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18076,7 +18077,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2180189622342939212}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.front.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18108,7 +18109,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2341014611701267550}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18140,7 +18141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3759507941606871551}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.in.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18172,7 +18173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1142899867575985633}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.R.004_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18203,7 +18204,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6644000321417449890}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18235,7 +18236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2253512600992526814}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.finger.mi.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18267,7 +18268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3379365537305782932}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18299,7 +18300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 762600942210531222}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.toes.L.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18330,7 +18331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3315104834572014761}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.toes.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18362,7 +18363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 139536206324673090}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.R.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18394,7 +18395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3826228184823518897}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18426,7 +18427,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2546557316546154544}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.brow.L.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18458,7 +18459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8488282896983782119}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.toes.R.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18489,7 +18490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7958947498219023588}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18522,7 +18523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7056092104615837200}
   - component: {fileID: 8895961096881677536}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_archer_cloak_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18811,7 +18812,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5986861744972336100}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18843,7 +18844,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7367284056433760991}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.dummy.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18875,7 +18876,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5918912478791581850}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.thumb.L.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18907,7 +18908,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 101475486689114240}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18939,7 +18940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3629740644843798914}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.L.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18971,7 +18972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5354250116761632464}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: outfit_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19007,7 +19008,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2909201027571021073}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.hat.L.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19039,7 +19040,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9039705184399053637}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.dress.R.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19071,7 +19072,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4389963345114778424}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.L.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19103,7 +19104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4395732149918587730}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.foot.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19135,7 +19136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2957074740015033265}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head.face.R.001_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19166,7 +19167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4618560664625727349}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19198,7 +19199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7389008967941841704}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Leg.leg.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19230,7 +19231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4304573149462737869}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.L.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19262,7 +19263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4582314746611566729}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cloth.cloak.R.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19294,7 +19295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2380067915799249358}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Equipment.weapon.bow.R.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19326,7 +19327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6060234418220244847}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.L.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19358,7 +19359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8805827204362794645}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Arm.arm.R.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19390,7 +19391,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2455532633281218597}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hair.back.R.007_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19421,7 +19422,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4728079716721532758}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wing.L.003_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19453,7 +19454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2716030111195990563}
   - component: {fileID: 4866218401692238062}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: weapon_fighteraxe_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
