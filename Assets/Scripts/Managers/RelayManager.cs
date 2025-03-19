@@ -79,10 +79,23 @@ public class RelayManager
         {
             if (_nGO_RPC_Caller == null)
             {
-                GameObject ngo_RPC_Caller;
-                ngo_RPC_Caller = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
-                SpawnNetworkOBJ(ngo_RPC_Caller);
-                _nGO_RPC_Caller = ngo_RPC_Caller.GetComponent<NGO_RPC_Caller>();
+                if (NetworkManagerEx.IsHost)
+                {
+                    GameObject ngo_RPC_Caller_OBJ = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
+                    SpawnNetworkOBJ(ngo_RPC_Caller_OBJ);
+                    _nGO_RPC_Caller = ngo_RPC_Caller_OBJ.GetComponent<NGO_RPC_Caller>();
+                }
+                else
+                {
+                    foreach(NetworkObject netWorkOBJ in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
+                    {
+                        if (netWorkOBJ.TryGetComponent(out NGO_RPC_Caller rpccaller))
+                        {
+                            _nGO_RPC_Caller = rpccaller;
+                            break;
+                        }
+                    }
+                }
             }
             return _nGO_RPC_Caller;
         }
