@@ -45,14 +45,16 @@ public class NGO_RPC_Caller : NetworkBehaviour
         switch (itemStruct.Item_Type)
         {
             case ItemType.Equipment:
-                networkLootItem = GetEquipLootItem(iteminfo);
+                networkLootItem = Managers.ItemDataManager.GetEquipLootItem(iteminfo);
                 break;
             case ItemType.Consumable:
-                networkLootItem = GetConsumableLootItem(iteminfo);
+                networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo);
                 break;
             case ItemType.ETC:
                 break;
         }
+        //여기에서는 어떤 아이템을 스폰할껀지 아이템의 형상만 가져올 것.
+
         networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
         GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot);
         NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
@@ -64,35 +66,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         if (rootitemRef.TryGet(out NetworkObject ngo))
         {
-            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
+            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
             ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
         }
     }
 
-    private GameObject GetEquipLootItem(IItem iteminfo)
-    {
-        GameObject lootItem;
-        switch ((iteminfo as ItemEquipment).Equipment_Slot)
-        {
-            case Equipment_Slot_Type.Helmet:
-            case Equipment_Slot_Type.Armor:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Shield");
-                break;
-            case Equipment_Slot_Type.Weapon:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Sword");
-                break;
-            default:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Bag");
-                break;
-        }
-        lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
-        return lootItem;
-    }
-
-    private GameObject GetConsumableLootItem(IItem iteminfo)
-    {
-        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Potion");
-        lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
-        return lootitem;
-    }
 }

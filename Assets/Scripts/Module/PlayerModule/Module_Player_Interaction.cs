@@ -16,6 +16,7 @@ public class Module_Player_Interaction : MonoBehaviour
     private IInteraction _interactionTarget;
     private PlayerController _playerController;
 
+    public IInteraction InteractionTarget { get { return _interactionTarget; } }
     public PlayerController PlayerController => _playerController;
 
     private void Awake()

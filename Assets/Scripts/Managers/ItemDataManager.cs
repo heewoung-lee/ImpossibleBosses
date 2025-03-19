@@ -66,7 +66,6 @@ public class ItemDataManager : IManagerInitializable
         return null;
     }
 
-
     public IItem GetRandomItem(Type itemtype)
     {
         IItem item = null;
@@ -104,5 +103,34 @@ public class ItemDataManager : IManagerInitializable
     {
         items.ImageSource[items.ItemIconSourceText] = Managers.ResourceManager.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
         //TODO: 나중에 사용하는 모든 이미지파일을 모아서 경로지정을 다시 해야함.
+    }
+
+
+
+    public GameObject GetEquipLootItem(IItem iteminfo)
+    {
+        GameObject lootItem;
+        switch ((iteminfo as ItemEquipment).Equipment_Slot)
+        {
+            case Equipment_Slot_Type.Helmet:
+            case Equipment_Slot_Type.Armor:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Shield");
+                break;
+            case Equipment_Slot_Type.Weapon:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Sword");
+                break;
+            default:
+                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Bag");
+                break;
+        }
+        lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        return lootItem;
+    }
+
+    public GameObject GetConsumableLootItem(IItem iteminfo)
+    {
+        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Potion");
+        lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        return lootitem;
     }
 }

@@ -128,10 +128,36 @@ public class LootItem : NetworkBehaviour,IInteraction
 
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
         inventory_item.transform.SetParent(Managers.LootItemManager.GetItemComponentPosition(_ui_player_Inventory));
-        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
         player.DisEnable_Icon_UI();//상호작용 아이콘 제거
+        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        {
+            DisEnble_Icon_UI_Rpc();
+        }
+        else
+        {
+            Call_DisEnable_Icon_UI_Rpc();
+        }
+        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
     }
 
+    [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]
+    public void DisEnble_Icon_UI_Rpc()
+    {
+        Module_Player_Interaction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<Module_Player_Interaction>();
+        if (interaction.enabled == false)
+            return;
+
+        if (ReferenceEquals(interaction.InteractionTarget, this))
+        {
+            interaction.DisEnable_Icon_UI();
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    public void Call_DisEnable_Icon_UI_Rpc()
+    {
+        DisEnble_Icon_UI_Rpc();
+    }
     public void OutInteraction()
     {
 
