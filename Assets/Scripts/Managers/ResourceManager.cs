@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResourceManager
@@ -38,7 +40,16 @@ public class ResourceManager
 
 
         if (prefab.GetComponent<Poolable>() != null)
-            return Managers.PoolManager.Pop(prefab, parent).gameObject;
+        {
+            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.GetComponent<NetworkObject>())
+            {
+                //TODO:넷워크 오브젝트 풀링 처리
+            }
+            else
+            {
+                return Managers.PoolManager.Pop(prefab, parent).gameObject;
+            }
+        }
 
 
         GameObject go = Object.Instantiate(prefab, parent);
@@ -64,7 +75,14 @@ public class ResourceManager
 
         if (poolable != null)
         {
-            Managers.ManagersStartCoroutine(PushCoroutine(poolable, duration));
+            if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
+            {
+                //TODO:넷워크 오브젝트 풀링 처리
+            }
+            else
+            {
+                Managers.ManagersStartCoroutine(PushCoroutine(poolable, duration));
+            }
             return;
         }
         Object.Destroy(go, duration);
