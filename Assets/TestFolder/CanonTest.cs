@@ -28,7 +28,7 @@ public class CanonShooter : MonoBehaviour
         // 발사체 생성
         GameObject projectile = Managers.ResourceManager.InstantiatePrefab("Enemy/Boss/AttackPattren/BossSkill1");
 
-        projectile.transform.SetParent(Managers.VFX_Manager.VFX_Root);
+        projectile.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO);
         projectile.transform.position += Vector3.up * GetComponent<Collider>().bounds.max.y;
         projectile.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
 

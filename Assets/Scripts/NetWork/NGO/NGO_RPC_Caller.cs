@@ -76,13 +76,24 @@ public class NGO_RPC_Caller : NetworkBehaviour
     public void CreatePrefabServerRpc(string path,bool isRequestingOwnershipByYou = false,RpcParams rpcParams= default)
     {
         GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
+        NetworkObject networkObj; 
         if (isRequestingOwnershipByYou)
         {
-            Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj);
+            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj).GetComponent<NetworkObject>();
         }
         else
         {
-            Managers.RelayManager.SpawnNetworkOBJ(obj);
+            networkObj =  Managers.RelayManager.SpawnNetworkOBJ(obj).GetComponent<NetworkObject>();
+        }
+        NotifyPrefabSpawnedClientRpc(networkObj.NetworkObjectId);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void NotifyPrefabSpawnedClientRpc(ulong networkObjectId)
+    {
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject obj))
+        {
+            Managers.VFX_Manager.Set_VFX_Root_NGO(obj);
         }
     }
 }

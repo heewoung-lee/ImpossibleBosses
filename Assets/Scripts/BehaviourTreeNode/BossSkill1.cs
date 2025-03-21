@@ -59,7 +59,7 @@ public class BossSkill1 : Action
     private void SpawnProjector(Collider targetPlayer)
     {
         Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
-        projector.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
         projector.transform.position = targetPlayer.transform.position;
         projector.SetValue(2, 360);
         projector.FillProgress = 0;
@@ -92,7 +92,7 @@ public class BossSkill1 : Action
     private void SpawnStone(Collider targetPlayer)
     {
         GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
-        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
         stone.transform.position = Owner.transform.position + Vector3.up * Owner.GetComponent<Collider>().bounds.max.y;
         stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
         StartCoroutine(ThrowStoneParabola(stone.transform, targetPlayer, _attackDelayTime));

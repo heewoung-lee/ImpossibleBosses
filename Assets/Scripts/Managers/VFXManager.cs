@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Netcode;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.ParticleSystem;
@@ -9,29 +10,33 @@ using static UnityEngine.ParticleSystem;
 public class VFXManager
 {
 
-    GameObject _vfx_Root;
     GameObject _vfx_Root_NGO;
-    public Transform VFX_Root
+
+    public Transform VFX_Root_NGO
     {
         get
         {
-            if (_vfx_Root == null)
+            if (_vfx_Root_NGO == null)
             {
-                _vfx_Root = new GameObject() { name = "VFX_ROOT" };
+                Managers.RelayManager.NGO_RPC_Caller.CreatePrefabServerRpc("NGO/VFX_Root_NGO");
             }
-            return _vfx_Root.transform;
+            return _vfx_Root_NGO.transform;
         }
     }
-    //TODO: vfx_ROot_Ngo 프로퍼티 만들것
+
+    public void Set_VFX_Root_NGO(NetworkObject ngo)
+    {
+        _vfx_Root_NGO = ngo.gameObject;
+    }
 
     private GameObject GenerateParticleInternal(string path,Vector3 pos,float settingDuration,Transform followTarget = null)
     {
-        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path, VFX_Root);
+        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path,VFX_Root_NGO);
         particleObject.SetActive(false);
         ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
 
         particleObject.transform.position = pos;
-        particleObject.transform.SetParent(VFX_Root);
+        particleObject.transform.SetParent(VFX_Root_NGO);
         particleObject.SetActive(true);
 
         float maxDurationTime = 0f;
