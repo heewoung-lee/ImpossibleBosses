@@ -104,7 +104,7 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <summary>
     /// Builds up the cache for a prefab.
     /// </summary>
-    void RegisterPrefabInternal(GameObject prefab, int prewarmCount)
+    public void RegisterPrefabInternal(GameObject prefab, int prewarmCount = 5)
     {
         NetworkObject CreateFunc()
         {

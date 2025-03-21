@@ -43,7 +43,7 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.GetComponent<NetworkObject>())
             {
-                //TODO:넷워크 오브젝트 풀링 처리
+                NetworkObjectPool.Singleton.RegisterPrefabInternal(prefab);
             }
             else
             {
@@ -77,7 +77,7 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
             {
-                //TODO:넷워크 오브젝트 풀링 처리
+                NetworkObjectPool.Singleton.RegisterPrefabInternal(go);
             }
             else
             {

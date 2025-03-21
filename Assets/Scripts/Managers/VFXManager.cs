@@ -10,7 +10,7 @@ public class VFXManager
 {
 
     GameObject _vfx_Root;
-
+    GameObject _vfx_Root_NGO;
     public Transform VFX_Root
     {
         get
@@ -22,6 +22,8 @@ public class VFXManager
             return _vfx_Root.transform;
         }
     }
+    //TODO: vfx_ROot_Ngo 프로퍼티 만들것
+
     private GameObject GenerateParticleInternal(string path,Vector3 pos,float settingDuration,Transform followTarget = null)
     {
         GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path, VFX_Root);
