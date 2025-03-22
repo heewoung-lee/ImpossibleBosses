@@ -14,26 +14,12 @@ using UnityEngine.Pool;
 /// </summary>
 public class NetworkObjectPool : NetworkBehaviour
 {
-    public static NetworkObjectPool Singleton { get; private set; }
-
     [SerializeField]
     List<PoolConfigObject> PooledPrefabsList;
 
     HashSet<GameObject> m_Prefabs = new HashSet<GameObject>();
 
     Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
-
-    public void Awake()
-    {
-        if (Singleton != null && Singleton != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Singleton = this;
-        }
-    }
 
     public override void OnNetworkSpawn()
     {

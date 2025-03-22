@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using Unity.Netcode;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.ParticleSystem;
 
 public class VFXManager
 {

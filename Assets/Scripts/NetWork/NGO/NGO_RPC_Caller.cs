@@ -93,7 +93,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject obj))
         {
-            Managers.VFX_Manager.Set_VFX_Root_NGO(obj);
+            if(obj.TryGetComponent(out NGO_InitailizeBase ngoInitalize))
+            {
+                ngoInitalize.SetInitalze(obj);
+            }
         }
     }
 }
