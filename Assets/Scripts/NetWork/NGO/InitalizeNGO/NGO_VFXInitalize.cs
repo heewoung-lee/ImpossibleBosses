@@ -7,4 +7,10 @@ public class NGO_VFXInitalize : NGO_InitailizeBase
     {
        Managers.VFX_Manager.Set_VFX_Root_NGO(obj);
     }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        Managers.VFX_Manager.Set_VFX_Root_NGO(gameObject.GetComponent<NetworkObject>());
+    }
 }

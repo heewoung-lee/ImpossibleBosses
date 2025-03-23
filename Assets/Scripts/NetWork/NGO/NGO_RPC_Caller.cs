@@ -16,6 +16,15 @@ public class NGO_RPC_Caller : NetworkBehaviour
             }
             return _networkManager;
         }
+    
+    
+    
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        Managers.RelayManager.SetRPCCaller(gameObject);
     }
 
 

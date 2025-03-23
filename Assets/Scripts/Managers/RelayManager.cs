@@ -110,6 +110,11 @@ public class RelayManager
         return networkOBJ;
     }
 
+    public void SetRPCCaller(GameObject ngo)
+    {
+        _nGO_RPC_Caller = ngo.GetComponent<NGO_RPC_Caller>();
+    }
+
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
         try

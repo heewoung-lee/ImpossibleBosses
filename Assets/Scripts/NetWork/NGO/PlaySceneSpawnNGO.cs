@@ -10,8 +10,6 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
-    private NGO_RPC_Caller _ngo_Rpc_Caller;
-
 
     protected override void AwakeInit()
     {
@@ -22,30 +20,47 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
     {
         if (IsAvailableMockUnitTest())
         {
-            SpawnObject();
+            SpawnPlayerCharacter();
+            HostSpawnObject();
             return;
         }
 
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
-            SpawnObject();
+        {
+            SpawnPlayerCharacter();
+            HostSpawnObject();
+        }
     }
 
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
         if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
-            SpawnObject();
+            SpawnPlayerCharacter();
     }
 
-    private void SpawnObject()
+    private void SpawnPlayerCharacter()
     {
         string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
         RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
-        RequestSpawnToNPC(new List<(string, Vector3)>()
+    }
+
+    private void HostSpawnObject()
+    {
+        GameObject rpcCaller = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
+        Managers.RelayManager.SpawnNetworkOBJ(rpcCaller);
+
+        GameObject vfx_root_ngo = Managers.ResourceManager.InstantiatePrefab("NGO/VFX_Root_NGO");
+        Managers.RelayManager.SpawnNetworkOBJ(vfx_root_ngo);
+
+        //RPC콜러
+        //VFXNGO
+        //오브젝트풀
+
+        RequestSpawnToNPC(new List<(string, Vector3)>() //데미지 테스트용 더미 큐브
         {
            {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
         });
-        _ngo_Rpc_Caller = Managers.RelayManager.NGO_RPC_Caller;
     }
 
     protected override void OnNetworkPostSpawn()

@@ -1,24 +1,32 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class VFXManager
 {
 
-    GameObject _vfx_Root_NGO;
+    Dictionary<string, bool> _isCheckNGODict = new Dictionary<string, bool>();
 
-    public Transform VFX_Root_NGO
+    GameObject _vfx_Root;
+
+    public Transform VFX_Root
     {
         get
         {
-            if (_vfx_Root_NGO == null)
+            if(_vfx_Root == null)
             {
-                Managers.RelayManager.NGO_RPC_Caller.CreatePrefabServerRpc("NGO/VFX_Root_NGO");
+                GameObject root = new GameObject(name: "VFX_ROOT");
+                _vfx_Root = root;
             }
-            return _vfx_Root_NGO.transform;
+            return _vfx_Root.transform;
         }
     }
+    
+    GameObject _vfx_Root_NGO;
 
+    public Transform VFX_Root_NGO { get => _vfx_Root_NGO.transform; }
     public void Set_VFX_Root_NGO(NetworkObject ngo)
     {
         _vfx_Root_NGO = ngo.gameObject;
@@ -26,12 +34,26 @@ public class VFXManager
 
     private GameObject GenerateParticleInternal(string path,Vector3 pos,float settingDuration,Transform followTarget = null)
     {
-        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path,VFX_Root_NGO);
+      
+        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path);
+
+        if (_isCheckNGODict.ContainsKey(path) == false)
+        {
+            if (particleObject.TryGetComponent(out NetworkObject ngo))
+            {
+                _isCheckNGODict.Add(path, true);
+            }
+            else
+            {
+                _isCheckNGODict.Add(path, false);
+            }
+        }
+        Transform parentTr = _isCheckNGODict[path] == true ? VFX_Root_NGO : VFX_Root;
+
         particleObject.SetActive(false);
         ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
-
         particleObject.transform.position = pos;
-        particleObject.transform.SetParent(VFX_Root_NGO);
+        particleObject.transform.SetParent(parentTr);
         particleObject.SetActive(true);
 
         float maxDurationTime = 0f;
@@ -65,9 +87,6 @@ public class VFXManager
             {
                 maxDurationTime = duration + particle.main.startLifetime.constantMax;
             }
-
-
-           
             particle.Play();
         }
         Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
