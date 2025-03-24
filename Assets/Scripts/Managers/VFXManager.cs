@@ -42,7 +42,7 @@ public class VFXManager
     {
         _vfx_Root_NGO = ngo.gameObject;
     }
-    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration, bool isFollowing)
+    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration)
     {
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
@@ -50,7 +50,7 @@ public class VFXManager
         }
         if (_isCheckNGODict[path].isNetworkObject)
         {
-            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, duration, isFollowing);
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, duration);
             Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
             return null;
         }
@@ -59,18 +59,18 @@ public class VFXManager
         return particleObject;
     }
 
-    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f, bool isFollowing = true)//쫒아가는 파티클을 위해 나눠놓음
+    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, isFollowing);
-        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration, isFollowing);
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
+        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration);
     }
 
     public GameObject GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, false);
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
         return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatePos, settingDuration);
     }
-
+    //TODO:중복되는 부분 ACtion매개변수로 넘겨받아 처리할것
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, Vector3 generatePos, float settingDuration)
     {
         if (particleObject == null)
@@ -86,7 +86,7 @@ public class VFXManager
         Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
         return particleObject;
     }
-    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Transform generateTR, float settingDuration, bool isfollowing = false)
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Transform generateTR, float settingDuration)
     {
         if (particleObject == null)
             return null;
@@ -99,11 +99,7 @@ public class VFXManager
                 return particleObject;
         }
 
-        if (isfollowing == true)
-        {
-            Managers.ManagersStartCoroutine(FollowingGenerator(generateTR, particleObject));
-        }
-
+        Managers.ManagersStartCoroutine(FollowingGenerator(generateTR, particleObject));
         SettingAndRuntoParticle(particles, settingDuration, out float maxDurationTime);
         Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
         return particleObject;
