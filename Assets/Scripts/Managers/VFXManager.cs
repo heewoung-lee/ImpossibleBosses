@@ -4,6 +4,7 @@ using System.IO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 public struct ParticleInfo
 {
@@ -41,18 +42,36 @@ public class VFXManager
 
     private GameObject GenerateParticleInternal(string path, Vector3 pos, float settingDuration, Transform followTarget = null)
     {
-
-        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path);
-
-        CashingisCheckNGODict(particleObject, path);
-        Transform parentTr = _isCheckNGODict[path].isNetworkObject == true ? VFX_Root_NGO : VFX_Root;
+        GameObject particleObject = null;
+        //Dict 에서 키가 있는지 확인.
+        if (_isCheckNGODict.ContainsKey(path) == false)
+        {
+            CashingisCheckNGODict(path);//키가 없다면 등록.
+        }
 
         if (_isCheckNGODict[path].isNetworkObject)
         {
-            Managers.RelayManager.NGO_RPC_Caller.CreatePrefabServerRpc(path);
+            Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalize(path);
+
+            return null;
         }
+        else
+        {
+            particleObject = Managers.ResourceManager.InstantiatePrefab(path);
+            return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, pos, settingDuration, followTarget);
+        }
+    }
 
-
+    public GameObject GenerateParticle(string path, Vector3 pos = default, float settingDuration = -1f)
+    {
+        return GenerateParticleInternal(path, pos, settingDuration);
+    }
+    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
+    {
+        return GenerateParticleInternal(path, generatorTr.position, settingDuration, generatorTr);
+    }
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Vector3 pos, float settingDuration, Transform followTarget)
+    {
         particleObject.SetActive(false);
         ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
         particleObject.transform.position = pos;
@@ -61,10 +80,10 @@ public class VFXManager
 
         float maxDurationTime = 0f;
 
-        if (_isCheckNGODict.TryGetValue(path,out ParticleInfo info))
+        if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {
-            if(info.isLooping == true)
-            return particleObject;
+            if (info.isLooping == true)
+                return particleObject;
         }
 
         if (followTarget != null)
@@ -98,15 +117,6 @@ public class VFXManager
         return particleObject;
     }
 
-    public GameObject GenerateParticle(string path, Vector3 pos = default, float settingDuration = -1f)
-    {
-        return GenerateParticleInternal(path, pos, settingDuration);
-    }
-    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
-    {
-        return GenerateParticleInternal(path, generatorTr.position, settingDuration, generatorTr);
-    }
-
 
     private IEnumerator FollowingGenerator(Transform generatorTr, GameObject particle)
     {
@@ -118,35 +128,33 @@ public class VFXManager
     }
 
 
-    private void CashingisCheckNGODict(GameObject particleObject,string path)
+    private void CashingisCheckNGODict(string path)
     {
-        if (_isCheckNGODict.ContainsKey(path) == false)
+        GameObject particleOBJ = Managers.ResourceManager.Load<GameObject>("Prefabs/" + path);
+        if (particleOBJ.TryGetComponent(out NetworkObject ngo))
         {
-            if (particleObject.TryGetComponent(out NetworkObject ngo))
+            _isCheckNGODict.Add(path, new ParticleInfo()
             {
-                _isCheckNGODict.Add(path, new ParticleInfo()
-                {
-                    isNetworkObject = true
-                });
-            }
-            else
+                isNetworkObject = true
+            });
+        }
+        else
+        {
+            _isCheckNGODict.Add(path, new ParticleInfo()
             {
-                _isCheckNGODict.Add(path, new ParticleInfo()
-                {
-                    isNetworkObject = false
-                });
-            }
-            ParticleInfo particleinfo = _isCheckNGODict[path];
-            if (particleObject.TryGetComponent(out LoopingParticle loopingParticle))
-            {
-                particleinfo.isLooping = true;
-                _isCheckNGODict[path] = particleinfo;
-            }
-            else
-            {
-                particleinfo.isLooping = false;
-                _isCheckNGODict[path] = particleinfo;
-            }
+                isNetworkObject = false
+            });
+        }
+        ParticleInfo particleinfo = _isCheckNGODict[path];
+        if (particleOBJ.TryGetComponent(out LoopingParticle loopingParticle))
+        {
+            particleinfo.isLooping = true;
+            _isCheckNGODict[path] = particleinfo;
+        }
+        else
+        {
+            particleinfo.isLooping = false;
+            _isCheckNGODict[path] = particleinfo;
         }
     }
 }
