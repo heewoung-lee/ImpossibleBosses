@@ -86,7 +86,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void SpawnPrefabNeedToInitalize(string path,bool isRequestingOwnershipByYou = false,RpcParams rpcParams= default)
+    public void SpawnPrefabNeedToInitalizeRpc(string path,bool isRequestingOwnershipByYou = false,RpcParams rpcParams= default)
     {
         NetworkObject networkObj = SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams);
         NotifyPrefabSpawnedClientRpc(networkObj.NetworkObjectId);

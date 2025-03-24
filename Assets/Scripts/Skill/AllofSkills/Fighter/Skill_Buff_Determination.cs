@@ -52,7 +52,7 @@ public class Skill_Buff_Determination : Skill_Duration
         {
             if (players_collider.TryGetComponent(out BaseStats playerStats))
             {
-                GameObject determinationParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Shield_Determination", playerStats.transform, SkillDuration);
+                GameObject determinationParticle = Managers.VFX_Manager.GenerateLocalParticle("Player/SkillVFX/Shield_Determination", playerStats.transform, SkillDuration);
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _determination, Value);
             }
         }

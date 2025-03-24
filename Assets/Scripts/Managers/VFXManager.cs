@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -5,6 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.PlayerSettings;
+using static UnityEngine.ParticleSystem;
 
 public struct ParticleInfo
 {
@@ -40,45 +42,48 @@ public class VFXManager
         _vfx_Root_NGO = ngo.gameObject;
     }
 
-    private GameObject GenerateParticleInternal(string path, Vector3 pos, float settingDuration, Transform followTarget = null)
+    private GameObject GenerateParticleInternal_Base(string path, Func<GameObject, GameObject> handleSpawn)
     {
-        GameObject particleObject = null;
-        //Dict 에서 키가 있는지 확인.
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
-            CashingisCheckNGODict(path);//키가 없다면 등록.
+            CashingisCheckNGODict(path);
         }
 
         if (_isCheckNGODict[path].isNetworkObject)
         {
-            Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalize(path);
-
+            Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc(path);
             return null;
         }
-        else
+
+        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path);
+        return handleSpawn.Invoke(particleObject);
+    }
+    public GameObject GenerateLocalParticle(string path, Transform generatorTr, float settingDuration = -1f, bool isFollowing = true)//쫒아가는 파티클을 위해 나눠놓음
+    {
+        return GenerateParticleInternal_Base(path, (particleObject) =>
+      SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration, isFollowing));
+    }
+    public GameObject GenerateLocalParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
+    {
+        return GenerateParticleInternal_Base(path, (particleObject) =>
+        SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatePos, settingDuration));
+    }
+
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, Vector3 generatePos, float settingDuration)
+    {
+        ParticleSystem[] particles = ParticleObjectSetPosition(particleObject, generatePos, parentTr);
+        if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {
-            particleObject = Managers.ResourceManager.InstantiatePrefab(path);
-            return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, pos, settingDuration, followTarget);
+            if (info.isLooping == true)
+                return particleObject;
         }
+        SettingAndRuntoParticle(particles, settingDuration,out float maxDurationTime);
+        Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
+        return particleObject;
     }
-
-    public GameObject GenerateParticle(string path, Vector3 pos = default, float settingDuration = -1f)
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Transform generateTR, float settingDuration, bool isfollowing = false)
     {
-        return GenerateParticleInternal(path, pos, settingDuration);
-    }
-    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
-    {
-        return GenerateParticleInternal(path, generatorTr.position, settingDuration, generatorTr);
-    }
-    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Vector3 pos, float settingDuration, Transform followTarget)
-    {
-        particleObject.SetActive(false);
-        ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
-        particleObject.transform.position = pos;
-        particleObject.transform.SetParent(parentTr);
-        particleObject.SetActive(true);
-
-        float maxDurationTime = 0f;
+        ParticleSystem[] particles =  ParticleObjectSetPosition(particleObject, generateTR.position, parentTr);
 
         if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {
@@ -86,10 +91,19 @@ public class VFXManager
                 return particleObject;
         }
 
-        if (followTarget != null)
+        if (isfollowing == true)
         {
-            Managers.ManagersStartCoroutine(FollowingGenerator(followTarget, particleObject));
+            Managers.ManagersStartCoroutine(FollowingGenerator(generateTR, particleObject));
         }
+
+        SettingAndRuntoParticle(particles, settingDuration, out float maxDurationTime);
+        Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
+        return particleObject;
+    }
+
+    private void SettingAndRuntoParticle(ParticleSystem[] particles,float settingDuration,out float maxDurationTime)
+    {
+        maxDurationTime = 0f;
         foreach (ParticleSystem particle in particles)
         {
             particle.Stop();
@@ -113,10 +127,18 @@ public class VFXManager
             }
             particle.Play();
         }
-        Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
-        return particleObject;
     }
 
+    private ParticleSystem[] ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
+    {
+        particleObject.SetActive(false);
+        ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
+        particleObject.transform.position = generatePos;
+        particleObject.transform.SetParent(parentTr);
+        particleObject.SetActive(true);
+
+        return particles;
+    }
 
     private IEnumerator FollowingGenerator(Transform generatorTr, GameObject particle)
     {

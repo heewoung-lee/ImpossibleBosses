@@ -60,7 +60,7 @@ public class Skill_Buff_Roar : Skill_Duration
         {
             if (players_collider.TryGetComponent(out BaseStats playerStats))
             {
-                GameObject roarParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerStats.transform, SkillDuration);
+                GameObject roarParticle = Managers.VFX_Manager.GenerateLocalParticle("Player/SkillVFX/Aura_Roar", playerStats.transform, SkillDuration);
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
             }
         }

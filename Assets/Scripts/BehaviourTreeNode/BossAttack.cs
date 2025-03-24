@@ -55,7 +55,7 @@ public class BossAttack : Action
             {
                 foreach (Vector3 pos in _attackRangeParticlePos)
                 {
-                    Managers.VFX_Manager.GenerateParticle("Paticle/AttackEffect/Dust_Paticle", pos,1f);
+                    Managers.VFX_Manager.GenerateLocalParticle("Paticle/AttackEffect/Dust_Paticle", pos,1f);
                 }
                 Managers.ResourceManager.DestroyObject(_attack_indicator.Value.gameObject);
                 TargetInSight.AttackTargetInSector(_stats);

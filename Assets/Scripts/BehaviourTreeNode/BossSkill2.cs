@@ -65,7 +65,7 @@ public class BossSkill2 : Action
             {
                 foreach (Vector3 pos in _attackRangeCirclePos)
                 {
-                    Managers.VFX_Manager.GenerateParticle("Paticle/AttackEffect/Dust_Paticle", pos,1f);
+                    Managers.VFX_Manager.GenerateLocalParticle("Paticle/AttackEffect/Dust_Paticle", pos,1f);
                 }
                 Managers.ResourceManager.DestroyObject(_attackIndicator.Value.gameObject);
                 TargetInSight.AttackTargetInCircle(_stats, Attack_Range,Damage.Value);

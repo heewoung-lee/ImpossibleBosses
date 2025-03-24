@@ -11,7 +11,7 @@ public class NGO_PoolManager
         {
             if(_ngoPool == null)
             {
-                Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalize("NGO/NGO_Polling");
+                Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("NGO/NGO_Polling");
             }
             return _ngoPool;    
         }
