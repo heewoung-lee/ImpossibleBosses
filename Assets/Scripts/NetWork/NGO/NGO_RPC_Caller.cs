@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -94,6 +95,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             networkObj =  Managers.RelayManager.SpawnNetworkOBJ(obj).GetComponent<NetworkObject>();
         }
+
         NotifyPrefabSpawnedClientRpc(networkObj.NetworkObjectId);
     }
 
