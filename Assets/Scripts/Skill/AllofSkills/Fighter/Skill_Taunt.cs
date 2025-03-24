@@ -46,7 +46,7 @@ public class Skill_Taunt : Skill_Immedialty
         LayerMask monsterLayerMask = LayerMask.GetMask("Monster");
         float skillRadius = float.MaxValue;
 
-        Managers.VFX_Manager.GenerateLocalParticle("Player/SkillVFX/Taunt_Player", _playerController.transform, DURATION_PARTICLE);
+        Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Taunt_Player", _playerController.transform, DURATION_PARTICLE);
 
         _monsters = Physics.OverlapSphere(_playerController.transform.position, skillRadius, monsterLayerMask);
         foreach (Collider monster in _monsters)
@@ -54,7 +54,7 @@ public class Skill_Taunt : Skill_Immedialty
             HeadTr headTr  = monster.GetComponentInChildren<HeadTr>();
             if (headTr != null)
             {
-                GameObject tauntParticle = Managers.VFX_Manager.GenerateLocalParticle("Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
+                GameObject tauntParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
             }
         }
     }

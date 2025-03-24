@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Burst;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -41,36 +42,40 @@ public class VFXManager
     {
         _vfx_Root_NGO = ngo.gameObject;
     }
-
-    private GameObject GenerateParticleInternal_Base(string path, Func<GameObject, GameObject> handleSpawn)
+    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration, bool isFollowing)
     {
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
             CashingisCheckNGODict(path);
         }
-
         if (_isCheckNGODict[path].isNetworkObject)
         {
-            Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc(path);
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, duration, isFollowing);
+            Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
             return null;
         }
-
         GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path);
-        return handleSpawn.Invoke(particleObject);
+
+        return particleObject;
     }
-    public GameObject GenerateLocalParticle(string path, Transform generatorTr, float settingDuration = -1f, bool isFollowing = true)//쫒아가는 파티클을 위해 나눠놓음
+
+    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f, bool isFollowing = true)//쫒아가는 파티클을 위해 나눠놓음
     {
-        return GenerateParticleInternal_Base(path, (particleObject) =>
-      SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration, isFollowing));
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, isFollowing);
+        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration, isFollowing);
     }
-    public GameObject GenerateLocalParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
+
+    public GameObject GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
     {
-        return GenerateParticleInternal_Base(path, (particleObject) =>
-        SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatePos, settingDuration));
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, false);
+        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatePos, settingDuration);
     }
 
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, Vector3 generatePos, float settingDuration)
     {
+        if (particleObject == null)
+            return null;
+
         ParticleSystem[] particles = ParticleObjectSetPosition(particleObject, generatePos, parentTr);
         if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {
@@ -83,6 +88,9 @@ public class VFXManager
     }
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Transform generateTR, float settingDuration, bool isfollowing = false)
     {
+        if (particleObject == null)
+            return null;
+
         ParticleSystem[] particles =  ParticleObjectSetPosition(particleObject, generateTR.position, parentTr);
 
         if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))

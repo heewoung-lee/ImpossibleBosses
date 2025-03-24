@@ -101,17 +101,17 @@ public class LootItem : NetworkBehaviour,IInteraction
         switch (iteminfo.Item_Grade)
         {
             case Item_Grade_Type.Normal:
-                return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
+                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
             case Item_Grade_Type.Magic:
-                return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon");
+                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon");
             case Item_Grade_Type.Rare:
-                return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Rare");
+                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Rare");
             case Item_Grade_Type.Unique:
-                return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Epic");
+                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Epic");
             case Item_Grade_Type.Epic:
-                return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Legendary");
+                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Legendary");
         }
-        return Managers.VFX_Manager.GenerateLocalParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
+        return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
     }
 
     public void Interaction(Module_Player_Interaction caller)

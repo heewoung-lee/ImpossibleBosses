@@ -120,64 +120,20 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
 
-    //[Rpc(SendTo.Server)]
-    //public void SpawnVFXPrefabServerRpc(string path,float duration,bool isFollowing = false, ulong targerObjectID = INVALIDOBJECTID)
+    [Rpc(SendTo.Server)]
+    public void SpawnVFXPrefabServerRpc(string path, float duration, bool isFollowing = true, ulong targerObjectID = INVALIDOBJECTID)
+    {
+
+        //서버에서 VFX를 소환한다.
+        //포지션을 지정합니다.
+
+        NetworkObject vfxObj = SpawnObjectToResources(path);
+    }
+
+    //[Rpc(SendTo.ClientsAndHost)]
+    //public void SpawnVFXPrefabClientRpc()
     //{
-    //    NetworkObject vfxObj = SpawnObjectToResources(path);
-    //    Vector3 targetVector = targerObjectID == INVALIDOBJECTID ? Vector3.zero : 
 
-
-
-    //    GameObject particleObject = vfxObj.gameObject;
-    //    particleObject.SetActive(false);
-    //    ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
-    //    particleObject.transform.position = 
-    //    particleObject.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO);
-    //    particleObject.SetActive(true);
-
-    //    float maxDurationTime = 0f;
-
-    //    if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
-    //    {
-    //        if (info.isLooping == true)
-    //            return particleObject;
-    //    }
-
-    //    if (followTarget != null)
-    //    {
-    //        Managers.ManagersStartCoroutine(FollowingGenerator(followTarget, particleObject));
-    //    }
-    //    foreach (ParticleSystem particle in particles)
-    //    {
-    //        particle.Stop();
-    //        particle.Clear();
-    //        float duration = 0f;
-    //        ParticleSystem.MainModule main = particle.main;
-
-    //        duration = settingDuration <= 0 ? main.duration : settingDuration;
-    //        main.duration = duration;
-    //        if (particle.GetComponent<ParticleLifetimeSync>())//파티클 시스템중 Duration과 시간을 맞춰야 하는 파티클이 있다면 적용
-    //        {
-    //            main.startLifetime = duration;
-    //        }
-    //        else if (duration < particle.main.startLifetime.constantMax)//Duration보다 파티클 생존시간이 큰 경우 파티클 생존시간을 넣는다.
-    //        {
-    //            maxDurationTime = particle.main.startLifetime.constantMax;
-    //        }
-    //        else if (maxDurationTime < duration + particle.main.startLifetime.constantMax && particle.GetComponent<ParticleLifetimeSync>() == null)
-    //        {
-    //            maxDurationTime = duration + particle.main.startLifetime.constantMax;
-    //        }
-    //        particle.Play();
-    //    }
-    //    Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
-    //    ///필요한거
-    //    /// 1. 오브젝트 
-    //    /// 2. 부모 트랜트폼
-    //    /// 3. 경로
-    //    /// 4. 파티클 오브젝트 생성위치
-    //    /// 5. 몇초동안 생성
-    //    /// 6. 따라다닐껀지 
     //}
 
 
