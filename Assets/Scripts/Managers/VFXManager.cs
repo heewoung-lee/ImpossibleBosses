@@ -42,7 +42,7 @@ public class VFXManager
     {
         _vfx_Root_NGO = ngo.gameObject;
     }
-    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration)
+    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration,Action rpcCallSpawnParticleEvent)
     {
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
@@ -50,7 +50,7 @@ public class VFXManager
         }
         if (_isCheckNGODict[path].isNetworkObject)
         {
-            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, duration);
+            rpcCallSpawnParticleEvent.Invoke();
             Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
             return null;
         }
@@ -59,31 +59,42 @@ public class VFXManager
         return particleObject;
     }
 
-    public void GenerateParticle(string path, Transform generatorTr,float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
+    public void GenerateParticle(string path, Transform spawnTr,float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, () =>
+        {
+            ulong targetNGOID = NGO_RPC_Caller.INVALIDOBJECTID;
+            if (spawnTr.TryGetComponent(out NetworkObject networkObj))
+            {
+                targetNGOID = networkObj.NetworkObjectId;
+            }
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
+        });
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
         particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
         {
-            ParticleObjectSetPosition(paritcleOBJ,generatorTr.position, VFX_Root);
-            Managers.ManagersStartCoroutine(FollowingGenerator(generatorTr, particleObject));
+            ParticleObjectSetPosition(paritcleOBJ,spawnTr.position, VFX_Root);
+            Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleObject));
         });
         addParticleActionEvent?.Invoke(particleObject);
     }
 
-    public void GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
+    public void GenerateParticle(string path, Vector3 spawnPos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, () =>
+        {
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
+        });
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
         particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
         {
-            ParticleObjectSetPosition(paritcleOBJ, generatePos, VFX_Root);
+            ParticleObjectSetPosition(paritcleOBJ, spawnPos, VFX_Root);
         });
         addParticleActionEvent?.Invoke(particleObject);
     }

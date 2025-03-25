@@ -4,11 +4,11 @@ using System.IO;
 using Unity.Netcode;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
+using static UnityEngine.Rendering.DebugUI;
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
-
 
     NetworkManager _networkManager;
     NetworkManager RelayNetworkManager
@@ -104,9 +104,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
     }
 
-    private NetworkObject SpawnObjectToResources(string path,bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default)
+    private NetworkObject SpawnObjectToResources(string path,bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default,Vector3 position = default)
     {
         GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
+        obj.transform.position = position;
         NetworkObject networkObj;
         if (isRequestingOwnershipByYou)
         {
@@ -121,20 +122,41 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
     [Rpc(SendTo.Server)]
-    public void SpawnVFXPrefabServerRpc(string path, float duration, bool isFollowing = true, ulong targerObjectID = INVALIDOBJECTID)
+    public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = INVALIDOBJECTID)
     {
-
-        //서버에서 VFX를 소환한다.
-        //포지션을 지정합니다.
-
-        NetworkObject vfxObj = SpawnObjectToResources(path);
+        Vector3 pariclePos = Vector3.zero;
+        if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targerObjectID, out NetworkObject targetNgo))
+        {
+            pariclePos = targetNgo.transform.position;
+        }
+        NetworkObject vfxObj = SpawnObjectToResources(path, position: pariclePos);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, targerObjectID);
+    }
+    [Rpc(SendTo.Server)]
+    public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
+    {
+        Vector3 pariclePos = spawnPosition;
+        NetworkObject vfxObj = SpawnObjectToResources(path,position: pariclePos);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId);
     }
 
-    //[Rpc(SendTo.ClientsAndHost)]
-    //public void SpawnVFXPrefabClientRpc()
-    //{
 
-    //}
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpawnVFXPrefabClientRpc(ulong particleNGOID, ulong targetNGOID = INVALIDOBJECTID)
+    {
+        if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
+        {
+            if(paricleNgo.TryGetComponent(out NGO_Skill_Initailize_Base skillInitailze))
+            {
+                skillInitailze.SetInitalze(paricleNgo);
+                if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
+                {
+                   skillInitailze.SetTargetInitalze(targetNgo);
+                }
+                skillInitailze.InvokeSkill();
+            }
+        }
+    }
 
 
 

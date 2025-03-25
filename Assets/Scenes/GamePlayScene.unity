@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerClass: 1
-  isSoloTest: 1
+  isSoloTest: 0
 --- !u!1001 &1840241570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1076,8 +1076,8 @@ SceneRoots:
   - {fileID: 867313194}
   - {fileID: 1701164430}
   - {fileID: 6605725923628716576}
+  - {fileID: 2024626530}
   - {fileID: 3831255481495554774}
   - {fileID: 1840241570}
   - {fileID: 1667030973}
   - {fileID: 1990008168}
-  - {fileID: 2024626530}
