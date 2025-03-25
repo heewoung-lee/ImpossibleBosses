@@ -11,6 +11,6 @@ public class MoveMarkerController : MonoBehaviour
     }
     private void InstantiateMoveMarker(Vector3 MarkerPosition)
     {
-        GameObject paticle = Managers.VFX_Manager.GenerateParticle("Paticle/WayPointEffect/Move",MarkerPosition);
+        Managers.VFX_Manager.GenerateParticle("Paticle/WayPointEffect/Move",MarkerPosition);
     }
 }

@@ -59,31 +59,33 @@ public class VFXManager
         return particleObject;
     }
 
-    public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
+    public void GenerateParticle(string path, Transform generatorTr,float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
     {
         GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
-            return null;
+            return;
 
-        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
+        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
         {
             ParticleObjectSetPosition(paritcleOBJ,generatorTr.position, VFX_Root);
             Managers.ManagersStartCoroutine(FollowingGenerator(generatorTr, particleObject));
         });
+        addParticleActionEvent?.Invoke(particleObject);
     }
 
-    public GameObject GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
+    public void GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
     {
         GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
-            return null;
+            return;
 
-        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
+        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
         {
             ParticleObjectSetPosition(paritcleOBJ, generatePos, VFX_Root);
         });
+        addParticleActionEvent?.Invoke(particleObject);
     }
 
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)

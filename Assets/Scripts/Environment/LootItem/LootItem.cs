@@ -71,9 +71,7 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     public void CreateLootingItemEffect()
     {
-        _itemEffect = ItemGradeEffect(_iteminfo);
-        _itemEffect.transform.position = transform.position;
-        _itemEffect.transform.SetParent(transform);
+        ItemGradeEffect(_iteminfo);
     }
 
     public void SetPosition(Vector3 dropPosition)
@@ -96,23 +94,28 @@ public class LootItem : NetworkBehaviour,IInteraction
         }
     }
 
-    private GameObject ItemGradeEffect(IItem iteminfo)
+private void ItemGradeEffect(IItem itemInfo)
+{
+    string path = itemInfo.Item_Grade switch
     {
-        switch (iteminfo.Item_Grade)
-        {
-            case Item_Grade_Type.Normal:
-                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
-            case Item_Grade_Type.Magic:
-                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon");
-            case Item_Grade_Type.Rare:
-                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Rare");
-            case Item_Grade_Type.Unique:
-                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Epic");
-            case Item_Grade_Type.Epic:
-                return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Legendary");
-        }
-        return Managers.VFX_Manager.GenerateParticle("Paticle/LootingItemEffect/Lootbeams_Runic_Common");
-    }
+        Item_Grade_Type.Normal  => "Paticle/LootingItemEffect/Lootbeams_Runic_Common",
+        Item_Grade_Type.Magic   => "Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
+        Item_Grade_Type.Rare    => "Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
+        Item_Grade_Type.Unique  => "Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
+        Item_Grade_Type.Epic    => "Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
+        _ => null
+    };
+
+    if (string.IsNullOrEmpty(path))
+        return;
+
+    Managers.VFX_Manager.GenerateParticle(path, addParticleActionEvent: (itemEffectParticle) =>
+    {
+        itemEffectParticle.transform.position = transform.position;
+        itemEffectParticle.transform.SetParent(transform);
+    });
+}
+
 
     public void Interaction(Module_Player_Interaction caller)
     {

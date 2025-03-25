@@ -54,7 +54,7 @@ public class Skill_Taunt : Skill_Immedialty
             HeadTr headTr  = monster.GetComponentInChildren<HeadTr>();
             if (headTr != null)
             {
-                GameObject tauntParticle = Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
+                Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
             }
         }
     }
