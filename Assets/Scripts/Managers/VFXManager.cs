@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Burst;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -143,7 +144,7 @@ public class VFXManager
         }
     }
 
-    private void ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
+    public void ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
     {
         particleObject.SetActive(false);
         particleObject.transform.position = generatePos;
@@ -151,12 +152,12 @@ public class VFXManager
         particleObject.SetActive(true);
     }
 
-    private IEnumerator FollowingGenerator(Transform generatorTr, GameObject particle)
+    public IEnumerator FollowingGenerator(Transform targetTr, GameObject particle)
     {
         while (particle != null)
         {
-            particle.transform.position = new Vector3(generatorTr.position.x, particle.transform.position.y, generatorTr.position.z);
-            yield return generatorTr;
+            particle.transform.position = new Vector3(targetTr.position.x, particle.transform.position.y, targetTr.position.z);
+            yield return targetTr;
         }
     }
 

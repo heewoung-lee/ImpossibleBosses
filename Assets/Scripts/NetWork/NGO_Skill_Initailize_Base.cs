@@ -1,10 +1,16 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public abstract class NGO_Skill_Initailize_Base : NGO_InitailizeBase
 {
+
+    public abstract NetworkObject TargetNgo { get; }
     public abstract void SetTargetInitalze(NetworkObject targetNgo);
 
 
-    public abstract void InvokeSkill();
+    public virtual void InvokeSkill(string path,float duration, Action<GameObject> positionAndBehaviorSetterEvent)
+    {
+        Managers.VFX_Manager.SetPariclePosAndLifeCycle(SpawnNgo.gameObject,Managers.VFX_Manager.VFX_Root_NGO,path,duration, positionAndBehaviorSetterEvent);
+    }
 }

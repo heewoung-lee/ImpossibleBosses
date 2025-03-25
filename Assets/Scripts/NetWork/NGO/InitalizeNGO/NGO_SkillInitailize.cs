@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class NGO_SkillInitailize : NGO_InitailizeBase
 {
-    GameObject _skillParticleOBJ;
+    NetworkObject _skillParticleOBJ;
+
+    public override NetworkObject SpawnNgo => _skillParticleOBJ;
+
     public override void SetInitalze(NetworkObject obj)
     {
-        _skillParticleOBJ = obj.gameObject;
+        _skillParticleOBJ = obj;
     }
 
     public override void OnNetworkSpawn()

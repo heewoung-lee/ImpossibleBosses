@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
@@ -111,11 +112,11 @@ public class NGO_RPC_Caller : NetworkBehaviour
         NetworkObject networkObj;
         if (isRequestingOwnershipByYou)
         {
-            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj).GetComponent<NetworkObject>();
+            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj,Managers.VFX_Manager.VFX_Root_NGO).GetComponent<NetworkObject>();
         }
         else
         {
-            networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj).GetComponent<NetworkObject>();
+            networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj,Managers.VFX_Manager.VFX_Root_NGO).GetComponent<NetworkObject>();
         }
         return networkObj;
     }
@@ -130,30 +131,32 @@ public class NGO_RPC_Caller : NetworkBehaviour
             pariclePos = targetNgo.transform.position;
         }
         NetworkObject vfxObj = SpawnObjectToResources(path, position: pariclePos);
-        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, targerObjectID);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId,targetNgo.transform.position, path,duration,targerObjectID);
     }
     [Rpc(SendTo.Server)]
     public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
     {
         Vector3 pariclePos = spawnPosition;
         NetworkObject vfxObj = SpawnObjectToResources(path,position: pariclePos);
-        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path,duration);
     }
 
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void SpawnVFXPrefabClientRpc(ulong particleNGOID, ulong targetNGOID = INVALIDOBJECTID)
+    public void SpawnVFXPrefabClientRpc(ulong particleNGOID,Vector3 particleGeneratePos,string path,float duration, ulong targetNGOID = INVALIDOBJECTID)
     {
+        Action<GameObject> positionAndBehaviorSetterEvent = null;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
         {
-            if(paricleNgo.TryGetComponent(out NGO_Skill_Initailize_Base skillInitailze))
+            if (paricleNgo.TryGetComponent(out NGO_Skill_Initailize_Base skillInitailze))
             {
                 skillInitailze.SetInitalze(paricleNgo);
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
                 {
                    skillInitailze.SetTargetInitalze(targetNgo);
+                    positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFX_Manager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
                 }
-                skillInitailze.InvokeSkill();
+                skillInitailze.InvokeSkill(path,duration,positionAndBehaviorSetterEvent);
             }
         }
     }
