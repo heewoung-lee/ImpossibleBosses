@@ -62,52 +62,49 @@ public class VFXManager
     public GameObject GenerateParticle(string path, Transform generatorTr, float settingDuration = -1f)//쫒아가는 파티클을 위해 나눠놓음
     {
         GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
-        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatorTr, settingDuration);
+
+        if (particleObject == null)// NULL 이면 네트워크가 처리
+            return null;
+
+        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
+        {
+            ParticleObjectSetPosition(paritcleOBJ,generatorTr.position, VFX_Root);
+            Managers.ManagersStartCoroutine(FollowingGenerator(generatorTr, particleObject));
+        });
     }
 
     public GameObject GenerateParticle(string path, Vector3 generatePos = default, float settingDuration = -1f)
     {
         GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration);
-        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, generatePos, settingDuration);
-    }
-    //TODO:중복되는 부분 ACtion매개변수로 넘겨받아 처리할것
-    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, Vector3 generatePos, float settingDuration)
-    {
-        if (particleObject == null)
+
+        if (particleObject == null)// NULL 이면 네트워크가 처리
             return null;
 
-        ParticleSystem[] particles = ParticleObjectSetPosition(particleObject, generatePos, parentTr);
+        return SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
+        {
+            ParticleObjectSetPosition(paritcleOBJ, generatePos, VFX_Root);
+        });
+    }
+
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)
+    {
+
+        positionAndBehaviorSetterEvent?.Invoke(particleObject);
         if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {
             if (info.isLooping == true)
                 return particleObject;
         }
-        SettingAndRuntoParticle(particles, settingDuration,out float maxDurationTime);
-        Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
-        return particleObject;
-    }
-    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject,Transform parentTr ,string path, Transform generateTR, float settingDuration)
-    {
-        if (particleObject == null)
-            return null;
-
-        ParticleSystem[] particles =  ParticleObjectSetPosition(particleObject, generateTR.position, parentTr);
-
-        if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
-        {
-            if (info.isLooping == true)
-                return particleObject;
-        }
-
-        Managers.ManagersStartCoroutine(FollowingGenerator(generateTR, particleObject));
-        SettingAndRuntoParticle(particles, settingDuration, out float maxDurationTime);
+        SettingAndRuntoParticle(particleObject, settingDuration, out float maxDurationTime);
         Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
         return particleObject;
     }
 
-    private void SettingAndRuntoParticle(ParticleSystem[] particles,float settingDuration,out float maxDurationTime)
+    private void SettingAndRuntoParticle(GameObject particleObject, float settingDuration,out float maxDurationTime)
     {
         maxDurationTime = 0f;
+
+        ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
         foreach (ParticleSystem particle in particles)
         {
             particle.Stop();
@@ -133,15 +130,12 @@ public class VFXManager
         }
     }
 
-    private ParticleSystem[] ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
+    private void ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
     {
         particleObject.SetActive(false);
-        ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
         particleObject.transform.position = generatePos;
         particleObject.transform.SetParent(parentTr);
         particleObject.SetActive(true);
-
-        return particles;
     }
 
     private IEnumerator FollowingGenerator(Transform generatorTr, GameObject particle)
