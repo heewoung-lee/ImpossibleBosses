@@ -3,10 +3,11 @@ using Mono.Cecil;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
-
 
 public class BufferManager:IManagerInitializable
 {
@@ -31,7 +32,6 @@ public class BufferManager:IManagerInitializable
     {
         return _allBuffModifierDict[efftect.buffname];
     }
-
     public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
     {
         BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();

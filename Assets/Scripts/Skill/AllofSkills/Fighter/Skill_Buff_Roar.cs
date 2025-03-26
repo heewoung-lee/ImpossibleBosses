@@ -1,10 +1,13 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityLight;
 using Google.Apis.Sheets.v4.Data;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Skill_Buff_Roar : Skill_Duration
 {
@@ -53,7 +56,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public void PlaytheRoar()
     {
-        LayerMask playerLayerMask = LayerMask.GetMask("Player");
+        LayerMask playerLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("AnotherPlayer");
         float skillRadius = float.MaxValue;
         _players = Physics.OverlapSphere(_playerController.transform.position, skillRadius, playerLayerMask);
         foreach (Collider players_collider in _players)
@@ -61,6 +64,9 @@ public class Skill_Buff_Roar : Skill_Duration
             if (players_collider.TryGetComponent(out BaseStats playerStats))
             {
                 Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerStats.transform, SkillDuration);
+              
+                //RPC로 보낼때 클라이언트가 모디파이어를 다시 조립
+                
                 Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
             }
         }

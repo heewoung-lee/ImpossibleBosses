@@ -153,11 +153,21 @@ public class NGO_RPC_Caller : NetworkBehaviour
                    skillInitailze.SetTargetInitalze(targetNgo);
                     positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFX_Manager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
                 }
-                skillInitailze.InvokeSkill(path,duration,positionAndBehaviorSetterEvent);
+                skillInitailze.StartParticle(path,duration,positionAndBehaviorSetterEvent);
             }
         }
     }
 
+    [Rpc(SendTo.Server)]
+    public void Call_InitBuffer_ServerRpc()
+    {
+        Call_InitBuffer_ClicentRpc();
+    }
 
 
+    [Rpc(SendTo.ClientsAndHost)]
+    private void Call_InitBuffer_ClicentRpc()
+    {
+
+    }
 }

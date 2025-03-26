@@ -5,7 +5,7 @@ public class NGO_PoolInitailize : NGO_InitailizeBase
 {
 
     private NetworkObject _ngo;
-    public override NetworkObject SpawnNgo => _ngo;
+    public override NetworkObject ParticleNGO => _ngo;
 
     public override void SetInitalze(NetworkObject obj)
     {
