@@ -24,6 +24,8 @@ public class BufferComponent : MonoBehaviour
 
     private Buff_Modifier _modifier;
     public Buff_Modifier Modifier { get => _modifier; }
+
+    private Coroutine _bufferCoroutine; 
  
 
     private void InitAndStartBuffInternal(BaseStats targetStat, float duration)
@@ -65,12 +67,14 @@ public class BufferComponent : MonoBehaviour
         }
         else if(_modifier is Duration_Buff)
         {
-            RemoveSameTypeBuff();
-            StartCoroutine(StartBuffer());
+            if (RemoveSameTypeBuff() == false)
+            {
+                _bufferCoroutine = StartBuffer();
+            }
         }
     }
 
-    private void RemoveSameTypeBuff()
+    private bool RemoveSameTypeBuff()
     {
         foreach (BufferComponent buffer in transform.parent.GetComponentsInChildren<BufferComponent>())
         {
@@ -83,16 +87,16 @@ public class BufferComponent : MonoBehaviour
 
             else
             {
-                Managers.BufferManager.RemoveBuffer(buffer);//같은 버프가 있다면 전에 있던 버프를 종료시킨다.
-                break;
+                buffer.BufferReStart();
+                Managers.ResourceManager.DestroyObject(gameObject);
+                return true;
             }
         }
+        return false;
     }
 
-    private IEnumerator StartBuffer()
+    private IEnumerator StartBuffFlicker()
     {
-        _modifier.ApplyStats(_targetStat, _value);
-
         if (_image != null)
         {
             float elapsedTime = _duration;
@@ -131,4 +135,22 @@ public class BufferComponent : MonoBehaviour
         Managers.BufferManager.RemoveBuffer(this);
     }
 
+
+
+    private Coroutine StartBuffer()
+    {
+        _modifier.ApplyStats(_targetStat, _value);
+         return StartCoroutine(StartBuffFlicker());
+    }
+
+
+    public void BufferReStart()
+    {
+        if (_bufferCoroutine != null)
+        {
+            StopCoroutine(_bufferCoroutine);
+        }
+
+        _bufferCoroutine = StartCoroutine(StartBuffFlicker());
+    }
 }

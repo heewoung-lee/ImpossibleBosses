@@ -8,7 +8,7 @@ public class Buffer_MoveSpeedModifier : Duration_Buff
 
     public override StatType StatType => StatType.MoveSpeed;
 
-    private Sprite _iconImage => Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Boots");
+    private Sprite _iconImage = Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Boots");
 
 
     public override void ApplyStats(BaseStats stats, float value)
@@ -20,5 +20,10 @@ public class Buffer_MoveSpeedModifier : Duration_Buff
     {
         stats.Plus_MoveSpeed_Abillity(-(int)value);
 
+    }
+
+    public override void SetBuffIconImage(Sprite buffImageIcon)
+    {
+        _iconImage = buffImageIcon;
     }
 }

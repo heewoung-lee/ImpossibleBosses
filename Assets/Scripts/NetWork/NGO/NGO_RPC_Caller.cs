@@ -159,15 +159,28 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void Call_InitBuffer_ServerRpc()
+    public void Call_InitBuffer_ServerRpc(StatEffect effect,string buffIconImagePath = null,float duration = -1)
     {
-        Call_InitBuffer_ClicentRpc();
+        Call_InitBuffer_ClicentRpc(effect, buffIconImagePath, duration);
     }
 
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void Call_InitBuffer_ClicentRpc()
+    private void Call_InitBuffer_ClicentRpc(StatEffect effect, string buffIconImagePath = null,float duration = -1)
     {
+        PlayerStats playerstats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+
+        if(Managers.BufferManager.GetModifier(effect) is Duration_Buff durationbuff)
+        {
+            Sprite buffImageIcon =  Managers.ResourceManager.Load<Sprite>(buffIconImagePath);
+            durationbuff.SetBuffIconImage(buffImageIcon);
+            Managers.BufferManager.InitBuff(playerstats,duration,durationbuff, effect.value);
+        }
+        else
+        {
+            Managers.BufferManager.InitBuff(playerstats,duration,effect);
+        }
+
 
     }
 }

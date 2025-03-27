@@ -8,12 +8,12 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class BufferManager:IManagerInitializable
 {
 
     Dictionary<string, Buff_Modifier> _allBuffModifierDict = new Dictionary<string, Buff_Modifier>();
-
     List<Type> _requestType = new List<Type>();
 
     UI_BufferBar _ui_BufferBar;
@@ -67,7 +67,6 @@ public class BufferManager:IManagerInitializable
             //따라서 Type 메타정보를 바탕으로 인스턴스를 생성해줘야함
 
             Buff_Modifier modifierInstance = Activator.CreateInstance(type) as Buff_Modifier;
-
             _allBuffModifierDict.Add(modifierInstance.Buffname, modifierInstance);
         }
     }
@@ -76,6 +75,30 @@ public class BufferManager:IManagerInitializable
         if (typeof(Buff_Modifier).IsAssignableFrom(type))
         {
             typeList.Add(type);
+        }
+    }
+
+
+    public Collider[] DetectedPlayers()
+    {
+        LayerMask playerLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("AnotherPlayer");
+        float skillRadius = float.MaxValue;
+        return Physics.OverlapSphere(Vector3.zero, skillRadius, playerLayerMask);
+    }
+
+    public void ALL_Character_ApplyBuffAndCreateParticle(Collider[] targets,Action<NetworkObject> createPaticle,Action invokeBuff)
+    {
+        foreach (Collider players_collider in targets)
+        {
+            if (players_collider.TryGetComponent(out NetworkObject playerNGO))
+            {
+                createPaticle.Invoke(playerNGO);
+                if (playerNGO.IsOwner)
+                {
+                    invokeBuff.Invoke();
+                }
+
+            }
         }
     }
 }

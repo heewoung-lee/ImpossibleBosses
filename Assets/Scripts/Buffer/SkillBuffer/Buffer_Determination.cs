@@ -19,4 +19,9 @@ public class Buffer_Determination : Duration_Buff
     {
         stats.Plus_Defence_Abillity(-(int)value);
     }
+
+    public override void SetBuffIconImage(Sprite buffImageIcon)
+    {
+        _iconImage = buffImageIcon;
+    }
 }

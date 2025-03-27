@@ -3,7 +3,7 @@ using UnityEngine;
 public class Buffer_MaxHPModifier : Duration_Buff
 {
 
-    private Sprite _iconImage => null;
+    private Sprite _iconImage = null;
 
     public override Sprite BuffIconImage => _iconImage;
 
@@ -20,5 +20,10 @@ public class Buffer_MaxHPModifier : Duration_Buff
     public override void ApplyStats(BaseStats stats, float value)
     {
         stats.Plus_MaxHp_Abillity((int)value);
+    }
+
+    public override void SetBuffIconImage(Sprite buffImageIcon)
+    {
+        _iconImage = buffImageIcon;
     }
 }

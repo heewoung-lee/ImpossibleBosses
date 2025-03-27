@@ -4,6 +4,7 @@ using Google.Apis.Sheets.v4.Data;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -11,9 +12,10 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class Skill_Buff_Roar : Skill_Duration
 {
+    public const string BUFFICONIAMGE_PATH = "Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/Icon_Booster_Power";
     public Skill_Buff_Roar()
     {
-        _buffIconImage =  Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/Icon_Booster_Power");
+        _buffIconImage =  Managers.ResourceManager.Load<Sprite>(BUFFICONIAMGE_PATH);
         _roarModifier = new Buffer_RoarModifier(_buffIconImage);
     }
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
@@ -56,21 +58,22 @@ public class Skill_Buff_Roar : Skill_Duration
 
     public void PlaytheRoar()
     {
-        LayerMask playerLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("AnotherPlayer");
-        float skillRadius = float.MaxValue;
-        _players = Physics.OverlapSphere(_playerController.transform.position, skillRadius, playerLayerMask);
-        foreach (Collider players_collider in _players)
-        {
-            if (players_collider.TryGetComponent(out BaseStats playerStats))
+        _players = Managers.BufferManager.DetectedPlayers();
+
+        Managers.BufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
+
+            (playerNgo) =>
             {
-                Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerStats.transform, SkillDuration);
-              
-                //RPC로 보낼때 클라이언트가 모디파이어를 다시 조립
-                
-                Managers.BufferManager.InitBuff(playerStats, SkillDuration, _roarModifier, Value);
+                Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
             }
-        }
+            ,
+            () =>{
+                StatEffect effect = new StatEffect(_roarModifier.StatType, Value, _roarModifier.Buffname);
+                Managers.RelayManager.NGO_RPC_Caller.Call_InitBuffer_ServerRpc(effect, BUFFICONIAMGE_PATH, SkillDuration);
+            });
     }
+
+
 
     public override void RemoveStats()
     {

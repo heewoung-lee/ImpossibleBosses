@@ -160,6 +160,7 @@ public class UI_Player_Inventory : UI_Popup
         {
             SubscribePlayerEvent();
             UpdateGoldUI(_stat.Gold);
+            UpdateStats();
         }
         Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;

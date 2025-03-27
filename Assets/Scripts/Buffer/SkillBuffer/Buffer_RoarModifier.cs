@@ -19,4 +19,9 @@ public class Buffer_RoarModifier : Duration_Buff
     {
         stats.Plus_Attack_Ability(-(int)value);
     }
+
+    public override void SetBuffIconImage(Sprite buffImageIcon)
+    {
+        _iconImage = buffImageIcon;
+    }
 }

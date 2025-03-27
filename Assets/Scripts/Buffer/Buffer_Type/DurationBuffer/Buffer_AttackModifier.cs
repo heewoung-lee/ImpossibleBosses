@@ -5,7 +5,8 @@ public class Buffer_AttackModifier : Duration_Buff
     public override Sprite BuffIconImage => _iconImage;
     public override string Buffname => "공격력증가";
     public override StatType StatType => StatType.Attack;
-    private Sprite _iconImage => Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");
+
+    private Sprite _iconImage = Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");
 
     public override void ApplyStats(BaseStats stats, float value)
     {
@@ -15,5 +16,8 @@ public class Buffer_AttackModifier : Duration_Buff
     {
         stats.Plus_Attack_Ability(-(int)value);
     }
-
+    public override void SetBuffIconImage(Sprite buffImageIcon)
+    {
+        _iconImage = buffImageIcon;
+    }
 }
