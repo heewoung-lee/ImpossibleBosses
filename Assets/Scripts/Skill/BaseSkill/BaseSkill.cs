@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.CullingGroup;
 
 public abstract class BaseSkill
 {
@@ -10,7 +11,27 @@ public abstract class BaseSkill
     public abstract string ETCDescriptionText { get; }
     public abstract Sprite SkillconImage { get; }
     public abstract float Value { get; }
-    public abstract void InvokeSkill();
+
+    public virtual void AddInitailzeState() { }
+    public abstract BaseController PlayerController { get; protected set; }
+    public abstract Module_Player_Class Module_Player_Class { get; protected set; }
+
+    public abstract void SkillAction();
+
+    public abstract IState state { get; }
+
+
+    public virtual void InvokeSkill()
+    {
+        if (PlayerController == null || Module_Player_Class == null)
+        {
+            PlayerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            Module_Player_Class = PlayerController.GetComponent<Module_Player_Class>();
+            PlayerController.StateAnimDict.RegisterState(state, SkillAction);
+            AddInitailzeState();
+        }
+        PlayerController.CurrentStateType = state;
+    }
 
     private BaseController baseController;
 
