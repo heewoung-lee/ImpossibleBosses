@@ -12,9 +12,9 @@ public class NGO_FigherSkill_Roar_Initalize : NGO_Skill_Initailize_Base
     public override NetworkObject TargetNgo => _targetNGO;
     public override NetworkObject ParticleNGO => _particleNGO;
 
-    public override void SetInitalze(NetworkObject obj)
+    public override void SetInitalze(NetworkObject particleOBJ)
     {
-        _particleNGO = obj;
+        _particleNGO = particleOBJ;
     }
     public override void SetTargetInitalze(NetworkObject targetNgo)
     {

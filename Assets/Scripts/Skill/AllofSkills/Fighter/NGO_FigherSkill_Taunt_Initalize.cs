@@ -4,7 +4,7 @@ using UnityEngine;
 using static PlaySceneMockUnitTest;
 using static UnityEngine.Rendering.DebugUI;
 
-public class NGO_FigherSkill_Determination_Initalize : NGO_Skill_Initailize_Base
+public class NGO_FigherSkill_Taunt_Initalize : NGO_Skill_Initailize_Base
 {
     NetworkObject _particleNGO;
     NetworkObject _targetNGO;

@@ -65,7 +65,7 @@ public class VFXManager
         GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, () =>
         {
             ulong targetNGOID = NGO_RPC_Caller.INVALIDOBJECTID;
-            if (spawnTr.TryGetComponent(out NetworkObject networkObj))
+            if (spawnTr.TryGetFindObject(out NetworkObject networkObj))
             {
                 targetNGOID = networkObj.NetworkObjectId;
             }
@@ -117,7 +117,6 @@ public class VFXManager
     private void SettingAndRuntoParticle(GameObject particleObject, float settingDuration,out float maxDurationTime)
     {
         maxDurationTime = 0f;
-
         ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
         foreach (ParticleSystem particle in particles)
         {

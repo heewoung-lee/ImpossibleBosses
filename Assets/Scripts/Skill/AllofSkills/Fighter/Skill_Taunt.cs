@@ -48,12 +48,8 @@ public class Skill_Taunt : Skill_Immedialty
 
     public override void SkillAction()
     {
-        LayerMask monsterLayerMask = LayerMask.GetMask("Monster");
-        float skillRadius = float.MaxValue;
-
         Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Taunt_Player", _playerController.transform, DURATION_PARTICLE);
-
-        _monsters = Physics.OverlapSphere(_playerController.transform.position, skillRadius, monsterLayerMask);
+        _monsters = Managers.BufferManager.DetectedOther("Monster");
         foreach (Collider monster in _monsters)
         {
             HeadTr headTr = monster.GetComponentInChildren<HeadTr>();

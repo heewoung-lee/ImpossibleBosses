@@ -85,6 +85,12 @@ public class BufferManager:IManagerInitializable
         float skillRadius = float.MaxValue;
         return Physics.OverlapSphere(Vector3.zero, skillRadius, playerLayerMask);
     }
+    public Collider[] DetectedOther(params string[] layerName)
+    {
+        LayerMask detectTargetMask = LayerMask.GetMask(layerName);
+        float skillRadius = float.MaxValue;
+        return Physics.OverlapSphere(Vector3.zero, skillRadius, detectTargetMask);
+    }
 
     public void ALL_Character_ApplyBuffAndCreateParticle(Collider[] targets,Action<NetworkObject> createPaticle,Action invokeBuff)
     {

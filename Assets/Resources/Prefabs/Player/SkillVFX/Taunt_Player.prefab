@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9096930756399615349}
   - component: {fileID: 6642599957976284548}
   - component: {fileID: 5248764509782366729}
+  - component: {fileID: 3011807013592716454}
   m_Layer: 0
   m_Name: resource
   m_TagString: Untagged
@@ -45,7 +46,7 @@ ParticleSystem:
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
-  ringBufferMode: 2
+  ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
   looping: 0
@@ -4912,6 +4913,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3011807013592716454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346824277470396353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3214797192763329192
 GameObject:
   m_ObjectHideFlags: 0
@@ -4923,6 +4936,7 @@ GameObject:
   - component: {fileID: 2944634497797316295}
   - component: {fileID: 3765603913982431589}
   - component: {fileID: 5380604816666933222}
+  - component: {fileID: 1689943003327407095}
   m_Layer: 0
   m_Name: lines
   m_TagString: Untagged
@@ -9757,6 +9771,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &1689943003327407095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214797192763329192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3548035547822979198
 GameObject:
   m_ObjectHideFlags: 0
@@ -9768,6 +9794,7 @@ GameObject:
   - component: {fileID: 726998191117050267}
   - component: {fileID: 2142411361430762889}
   - component: {fileID: 9004158289731074750}
+  - component: {fileID: 5346055394978742577}
   m_Layer: 0
   m_Name: glow
   m_TagString: Untagged
@@ -14660,6 +14687,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5346055394978742577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3548035547822979198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4360405640089636799
 GameObject:
   m_ObjectHideFlags: 0
@@ -14671,6 +14710,9 @@ GameObject:
   - component: {fileID: 4136813330504773807}
   - component: {fileID: 5538598489270368552}
   - component: {fileID: 5485666029783437843}
+  - component: {fileID: -2599266221991831722}
+  - component: {fileID: -3594860333389791013}
+  - component: {fileID: -8040537253285854459}
   m_Layer: 0
   m_Name: Taunt_Player
   m_TagString: Untagged
@@ -19569,6 +19611,56 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-2599266221991831722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360405640089636799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 194baf7c4a0948441be1f5344f61f239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3594860333389791013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360405640089636799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3844058226
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &-8040537253285854459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360405640089636799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73c46350789edf44869353a952b7c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5181053793644654808
 GameObject:
   m_ObjectHideFlags: 0
@@ -19580,6 +19672,7 @@ GameObject:
   - component: {fileID: 2748719402855407990}
   - component: {fileID: 4295094590893014429}
   - component: {fileID: 3135877856445568092}
+  - component: {fileID: 8293892045256116420}
   m_Layer: 0
   m_Name: boke
   m_TagString: Untagged
@@ -24414,6 +24507,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &8293892045256116420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5181053793644654808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6801837426076956829
 GameObject:
   m_ObjectHideFlags: 0
@@ -24425,6 +24530,7 @@ GameObject:
   - component: {fileID: 9064646842628547287}
   - component: {fileID: 2627910146574672024}
   - component: {fileID: 8766637592267613321}
+  - component: {fileID: 1108651954554356376}
   m_Layer: 0
   m_Name: points
   m_TagString: Untagged
@@ -29304,6 +29410,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &1108651954554356376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801837426076956829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8056206842634513981
 GameObject:
   m_ObjectHideFlags: 0
@@ -29315,6 +29433,7 @@ GameObject:
   - component: {fileID: 4719624888366969231}
   - component: {fileID: 1501563569657301117}
   - component: {fileID: 6024740233437861479}
+  - component: {fileID: 4260346697179368588}
   m_Layer: 0
   m_Name: glow_vertical
   m_TagString: Untagged
@@ -34207,3 +34326,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &4260346697179368588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8056206842634513981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bdf6cf41a0a3b4f9662b122232d098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

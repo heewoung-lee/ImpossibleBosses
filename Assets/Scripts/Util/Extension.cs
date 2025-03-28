@@ -10,10 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine.Events;
+using Unity.Netcode;
 
 public static class Extension
 {
-    public static IItem SetIItemEffect(this IItem iteminfo,IteminfoStruct iteminfostruct)
+    public static IItem SetIItemEffect(this IItem iteminfo, IteminfoStruct iteminfostruct)
     {
         IItem setIteminfo = iteminfo;
 
@@ -23,5 +24,25 @@ public static class Extension
             setIteminfo.ItemEffects.AddRange(iteminfostruct.ItemEffects); // 새로운 데이터 추가
         }
         return iteminfo;
+    }
+    public static bool TryGetFindObject<T>(this Transform searchPosition,out T findObject) where T : Component
+    {
+        Transform tr = searchPosition;
+
+        while(tr != null)
+        {
+            if (tr.TryGetComponent(out T component))
+            {
+                findObject = component;
+                return true;
+            }
+            else
+            {
+                tr = tr.parent;
+            }
+        }
+        Debug.Log("Can't Find Object");
+        findObject = null;
+        return false;
     }
 }
