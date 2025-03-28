@@ -114,7 +114,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
             Debug.Log("HeartBeat is Running");
             yield return delay;
         }
-
     }
 
     public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)

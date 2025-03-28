@@ -41,9 +41,9 @@ public class ResourceManager
 
         if (prefab.GetComponent<Poolable>() != null)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.GetComponent<NetworkObject>())
+            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
             {
-                //Managers.NGO_PoolManager.
+                //return Managers.NGO_PoolManager.Pop(ngo, parent);
             }
             else
             {
@@ -77,7 +77,8 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
             {
-               // NetworkObjectPool.Singleton.RegisterPrefabInternal(go);
+                //Managers.NGO_PoolManager.Des
+
             }
             else
             {

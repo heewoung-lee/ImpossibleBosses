@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEngine;
 
 public class NGO_PoolManager
 {
     private NetworkObjectPool _ngoPool;
+
+    private Dictionary<string,>
 
     public NetworkObjectPool NgoPool
     {
@@ -22,4 +26,11 @@ public class NGO_PoolManager
         _ngoPool = ngo.gameObject.GetComponent<NetworkObjectPool>();
     }
 
+    //public Poolable Pop(NetworkObject ngo, Transform parent = null)
+    //{
+    //    if (_pools.ContainsKey(go.name) == false)
+    //        CreatePool(go);
+
+    //    return _pools[go.name].Pop(parent);
+    //}
 }

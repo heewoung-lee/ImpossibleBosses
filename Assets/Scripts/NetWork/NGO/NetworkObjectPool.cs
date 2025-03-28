@@ -37,7 +37,7 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             // Unregister Netcode Spawn handlers
             NetworkManager.Singleton.PrefabHandler.RemoveHandler(prefab);
-            m_PooledObjects[prefab].Clear();
+            m_PooledObjects[prefab].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
         }
         m_PooledObjects.Clear();
         m_Prefabs.Clear();
