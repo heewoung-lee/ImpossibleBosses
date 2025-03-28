@@ -94,25 +94,27 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         }
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
     }
-    public async void OnGUI()
-    {
-       if(GUI.Button(new Rect(0, 0, 100, 100), "GetLobby"))
-        {
 
-            (bool isgetLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
 
-            if(isgetLobby == false)
-            {
-                Debug.Log("로비가 존재하지 않습니다");
-                return;
-            }
+    //public async void OnGUI()
+    //{
+    //   if(GUI.Button(new Rect(0, 0, 100, 100), "GetLobby"))
+    //    {
 
-            string joinCode = lobby.Data["RelayCode"].Value;
-            Debug.Log($"조인코드: {joinCode}");
-            foreach (NetworkClient player in Managers.RelayManager.NetworkManagerEx.ConnectedClientsList)
-            {
-                Debug.Log($"플레이어의 아이디: {player.ClientId}");
-            }
-        }
-    }
+    //        (bool isgetLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
+
+    //        if(isgetLobby == false)
+    //        {
+    //            Debug.Log("로비가 존재하지 않습니다");
+    //            return;
+    //        }
+
+    //        string joinCode = lobby.Data["RelayCode"].Value;
+    //        Debug.Log($"조인코드: {joinCode}");
+    //        foreach (NetworkClient player in Managers.RelayManager.NetworkManagerEx.ConnectedClientsList)
+    //        {
+    //            Debug.Log($"플레이어의 아이디: {player.ClientId}");
+    //        }
+    //    }
+    //}
 }

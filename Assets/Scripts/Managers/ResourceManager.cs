@@ -43,7 +43,9 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
             {
-                //return Managers.NGO_PoolManager.Pop(ngo, parent);
+                
+                Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
+                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab,Vector3.zero,Quaternion.identity).gameObject;
             }
             else
             {

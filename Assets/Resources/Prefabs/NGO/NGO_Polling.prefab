@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -3196564419982207920}
   - component: {fileID: 8676863285269831915}
   m_Layer: 0
-  m_Name: NGO_Pooing
+  m_Name: NGO_Polling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -53,9 +53,8 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         GameObject vfx_root_ngo = Managers.ResourceManager.InstantiatePrefab("NGO/VFX_Root_NGO");
         Managers.RelayManager.SpawnNetworkOBJ(vfx_root_ngo);
 
-        //RPC콜러
-        //VFXNGO
-        //오브젝트풀
+
+        Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("NGO/NGO_Polling");
 
         RequestSpawnToNPC(new List<(string, Vector3)>() //데미지 테스트용 더미 큐브
         {
