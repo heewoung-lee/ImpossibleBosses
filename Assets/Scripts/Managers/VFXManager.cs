@@ -43,7 +43,7 @@ public class VFXManager
     {
         _vfx_Root_NGO = ngo.gameObject;
     }
-    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration,Action rpcCallSpawnParticleEvent)
+    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration, Action rpcCallSpawnParticleEvent)
     {
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
@@ -60,43 +60,56 @@ public class VFXManager
         return particleObject;
     }
 
-    public void GenerateParticle(string path, Transform spawnTr,float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
+    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, () =>
+        void FindTargetNGO_Spawn()
         {
             ulong targetNGOID = NGO_RPC_Caller.INVALIDOBJECTID;
-            if (spawnTr.TryGetFindObject(out NetworkObject networkObj))
+            if (spawnTr.TryGetComponentInParents(out NetworkObject networkObj))
             {
                 targetNGOID = networkObj.NetworkObjectId;
             }
+            else
+            {
+                Debug.Log("targetNGOID isn't Found NGO");
+                return;
+            }
             Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
-        });
+        }
+
+        void SetPositionAndChasetoTagetParticle(GameObject particleOBJ)
+        {
+            ParticleObjectSetPosition(particleOBJ, spawnTr.position, VFX_Root);
+            Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleOBJ));
+        }
+
+
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindTargetNGO_Spawn);
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
-        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
-        {
-            ParticleObjectSetPosition(paritcleOBJ,spawnTr.position, VFX_Root);
-            Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleObject));
-        });
+        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, SetPositionAndChasetoTagetParticle);
         addParticleActionEvent?.Invoke(particleObject);
     }
 
     public void GenerateParticle(string path, Vector3 spawnPos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
     {
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, () =>
+        void FindNgo_Spawn()
         {
             Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
-        });
+        }
+        void SetPositionParticle(GameObject particleOBJ)
+        {
+            ParticleObjectSetPosition(particleOBJ, spawnPos, VFX_Root);
+        }
+
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindNgo_Spawn);
 
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
-        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, (paritcleOBJ) =>
-        {
-            ParticleObjectSetPosition(paritcleOBJ, spawnPos, VFX_Root);
-        });
+        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, SetPositionParticle);
         addParticleActionEvent?.Invoke(particleObject);
     }
 
@@ -114,7 +127,7 @@ public class VFXManager
         return particleObject;
     }
 
-    private void SettingAndRuntoParticle(GameObject particleObject, float settingDuration,out float maxDurationTime)
+    private void SettingAndRuntoParticle(GameObject particleObject, float settingDuration, out float maxDurationTime)
     {
         maxDurationTime = 0f;
         ParticleSystem[] particles = particleObject.GetComponentsInChildren<ParticleSystem>();
@@ -143,7 +156,7 @@ public class VFXManager
         }
     }
 
-    public void ParticleObjectSetPosition(GameObject particleObject,Vector3 generatePos,Transform parentTr)
+    public void ParticleObjectSetPosition(GameObject particleObject, Vector3 generatePos, Transform parentTr)
     {
         particleObject.SetActive(false);
         particleObject.transform.position = generatePos;

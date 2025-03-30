@@ -45,6 +45,9 @@ public class ResourceManager
             {
                 
                 Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
+                //등록이 안되어있으면 등록
+                //등록이 되면 호출
+
                 return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab,Vector3.zero,Quaternion.identity).gameObject;
             }
             else

@@ -25,7 +25,7 @@ public static class Extension
         }
         return iteminfo;
     }
-    public static bool TryGetFindObject<T>(this Transform searchPosition,out T findObject) where T : Component
+    public static bool TryGetComponentInParents<T>(this Transform searchPosition,out T findObject) where T : Component
     {
         Transform tr = searchPosition;
 

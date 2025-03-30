@@ -11,6 +11,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
+
     NetworkManager _networkManager;
     NetworkManager RelayNetworkManager
     {
@@ -28,7 +29,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         Managers.RelayManager.SetRPCCaller(gameObject);
+        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+
+
     }
+
+
 
 
     [Rpc(SendTo.Server)]
@@ -102,18 +108,23 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
     }
 
-    private NetworkObject SpawnObjectToResources(string path,bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default,Vector3 position = default)
+    private NetworkObject SpawnVFXObjectToResources(string path,bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default,Vector3 position = default)
+    {
+        return SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams, position,Managers.VFX_Manager.VFX_Root_NGO);
+    }
+
+    private NetworkObject SpawnObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default,Transform parentTr=null)
     {
         GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
         obj.transform.position = position;
         NetworkObject networkObj;
         if (isRequestingOwnershipByYou)
         {
-            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj,Managers.VFX_Manager.VFX_Root_NGO).GetComponent<NetworkObject>();
+            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj, parentTr).GetComponent<NetworkObject>();
         }
         else
         {
-            networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj,Managers.VFX_Manager.VFX_Root_NGO).GetComponent<NetworkObject>();
+            networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
         }
         return networkObj;
     }
@@ -127,14 +138,14 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             pariclePos = targetNgo.transform.position;
         }
-        NetworkObject vfxObj = SpawnObjectToResources(path, position: pariclePos);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId,targetNgo.transform.position, path,duration,targerObjectID);
     }
     [Rpc(SendTo.Server)]
     public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
     {
         Vector3 pariclePos = spawnPosition;
-        NetworkObject vfxObj = SpawnObjectToResources(path,position: pariclePos);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path,position: pariclePos);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path,duration);
     }
 

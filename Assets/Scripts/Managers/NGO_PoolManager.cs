@@ -14,16 +14,8 @@ public class NGO_PoolManager
     {
         _ngoPool = ngo.gameObject.GetComponent<NetworkObjectPool>();
     }
-
-
-    //public Poolable Pop(NetworkObject ngo, Transform parent = null)
-    //{
-    //    if (_pools.ContainsKey(go.name) == false)
-    //        CreatePool(go);
-
-    //    return _pools[go.name].Pop(parent);
-    //}
-
-
-
+    public void Create_NGO_Pooling_Object()
+    {
+        Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("NGO/NGO_Polling");
+    }
 }

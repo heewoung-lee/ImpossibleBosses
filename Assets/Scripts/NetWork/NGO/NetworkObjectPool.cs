@@ -14,45 +14,25 @@ using UnityEngine.Pool;
 /// </summary>
 public class NetworkObjectPool : NetworkBehaviour
 {
-    [SerializeField]
-    List<PoolConfigObject> PooledPrefabsList;
-
     HashSet<GameObject> m_Prefabs = new HashSet<GameObject>();
 
     Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
 
+    public Dictionary<GameObject, ObjectPool<NetworkObject>> PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
     public override void OnNetworkSpawn()
     {
-        // Registers all objects in PooledPrefabsList to the cache.
-        foreach (var configObject in PooledPrefabsList)
-        {
-            RegisterPrefabInternal(configObject.Prefab, configObject.PrewarmCount);
-        }
     }
 
     public override void OnNetworkDespawn()
     {
+        // 디스폰 될때 모든 프리펩들이 등록을 취소하고 없어져야 함.
         // Unregisters all objects in PooledPrefabsList from the cache.
         foreach (var prefab in m_Prefabs)
         {
-            // Unregister Netcode Spawn handlers
-            NetworkManager.Singleton.PrefabHandler.RemoveHandler(prefab);
             m_PooledObjects[prefab].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
         }
         m_PooledObjects.Clear();
         m_Prefabs.Clear();
-    }
-
-    public void OnValidate()
-    {
-        for (var i = 0; i < PooledPrefabsList.Count; i++)
-        {
-            var prefab = PooledPrefabsList[i].Prefab;
-            if (prefab != null)
-            {
-                Assert.IsNotNull(prefab.GetComponent<NetworkObject>(), $"{nameof(NetworkObjectPool)}: Pooled prefab \"{prefab.name}\" at index {i.ToString()} has no {nameof(NetworkObject)} component.");
-            }
-        }
     }
 
     /// <summary>
@@ -92,6 +72,12 @@ public class NetworkObjectPool : NetworkBehaviour
     /// </summary>
     public void RegisterPrefabInternal(GameObject prefab, int prewarmCount = 5)
     {
+        if(Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
+        {
+            Debug.Log($"{prefab.name} is not registed the NetworkManager");
+            return;
+        }
+
         NetworkObject CreateFunc()
         {
             return Instantiate(prefab).GetComponent<NetworkObject>();
@@ -127,37 +113,6 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             m_PooledObjects[prefab].Release(networkObject);
         }
-
-        // Register Netcode Spawn handlers
-        NetworkManager.Singleton.PrefabHandler.AddHandler(prefab, new PooledPrefabInstanceHandler(prefab, this));
-    }
-}
-
-[Serializable]
-struct PoolConfigObject
-{
-    public GameObject Prefab;
-    public int PrewarmCount;
-}
-
-class PooledPrefabInstanceHandler : INetworkPrefabInstanceHandler
-{
-    GameObject m_Prefab;
-    NetworkObjectPool m_Pool;
-
-    public PooledPrefabInstanceHandler(GameObject prefab, NetworkObjectPool pool)
-    {
-        m_Prefab = prefab;
-        m_Pool = pool;
-    }
-
-    NetworkObject INetworkPrefabInstanceHandler.Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
-    {
-        return m_Pool.GetNetworkObject(m_Prefab, position, rotation);
-    }
-
-    void INetworkPrefabInstanceHandler.Destroy(NetworkObject networkObject)
-    {
-        m_Pool.ReturnNetworkObject(networkObject, m_Prefab);
+      
     }
 }
