@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class ResourceManager
 {
+    Dictionary<string, Poolable> _cachingPoolableObject = new Dictionary<string, Poolable>();
+
+
+
     public T Load<T>(string path) where T : Object
     {
         return Resources.Load<T>(path);
@@ -31,6 +35,7 @@ public class ResourceManager
         if (string.IsNullOrEmpty(path))
             return null;
 
+
         GameObject prefab = Load<GameObject>(path);
 
         if (prefab == null)
@@ -38,6 +43,8 @@ public class ResourceManager
             Debug.Log($"Failed to Load Object Path:{path}");
         }
 
+
+        //먼저 풀링오브젝트에 캐싱이 
 
         if (prefab.GetComponent<Poolable>() != null)
         {
