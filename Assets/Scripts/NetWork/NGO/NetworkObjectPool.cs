@@ -18,7 +18,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
     Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
 
-    public Dictionary<GameObject, ObjectPool<NetworkObject>> PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
+    public Dictionary<GameObject, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
     public override void OnNetworkSpawn()
     {
     }
@@ -29,6 +29,7 @@ public class NetworkObjectPool : NetworkBehaviour
         // Unregisters all objects in PooledPrefabsList from the cache.
         foreach (var prefab in m_Prefabs)
         {
+            // Unregister Netcode Spawn handlers
             m_PooledObjects[prefab].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
         }
         m_PooledObjects.Clear();
@@ -80,7 +81,12 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            return Instantiate(prefab).GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab).GetComponent<NetworkObject>();
+            ngo.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO);
+            return ngo;
+            //TODO: 아침에 와서 네트워크 풀링 다시 작성하기
+            //해쉬셋 필요없을 것 같고, 딕셔너리도 내가 만든 Instantiate를 사용하기위해서 Key를 전부 String(Path) 으로 바꿔야함
+            //위에 호스트가 생성한다음 부모 위치로 초기화 시키는 작업이 필요
         }
 
         void ActionOnGet(NetworkObject networkObject)

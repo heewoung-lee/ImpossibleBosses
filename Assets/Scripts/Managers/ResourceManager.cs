@@ -43,10 +43,12 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
             {
-                
-                Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
-                //등록이 안되어있으면 등록
-                //등록이 되면 호출
+                Debug.Log(Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.ContainsKey(prefab));
+                if (Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.TryGetValue(prefab,out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool) == false)
+                { //등록이 안되어있으면 등록
+                    Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
+                }
+               
 
                 return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab,Vector3.zero,Quaternion.identity).gameObject;
             }
@@ -82,7 +84,7 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
             {
-                //Managers.NGO_PoolManager.Des
+                Debug.Log("이쪽에 호출");
 
             }
             else
