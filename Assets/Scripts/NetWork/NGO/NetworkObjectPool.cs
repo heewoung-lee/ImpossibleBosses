@@ -77,7 +77,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab).GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab,Managers.VFX_Manager.VFX_Root_NGO).RemoveCloneText().GetComponent<NetworkObject>();
             return ngo;
             //TODO: 아침에 와서 네트워크 풀링 다시 작성하기
             //해쉬셋 필요없을 것 같고, 딕셔너리도 내가 만든 Instantiate를 사용하기위해서 Key를 전부 String(Path) 으로 바꿔야함

@@ -59,7 +59,7 @@ public class ResourceManager : IManagerIResettable
             _cachingPoolableObject[path] = prefab;
             if (isCheckNetworkPrefab(prefab))
             {
-                return Managers.NGO_PoolManager.Pop(prefab,parent);
+                return Managers.NGO_PoolManager.Pop(prefab, parent);
             }
             else
             {
@@ -67,34 +67,9 @@ public class ResourceManager : IManagerIResettable
             }
         }
 
-        GameObject go = Object.Instantiate(prefab, parent);
+        GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
 
-        return RemoveCloneText(go);
-    }
-    public GameObject Instantiate(GameObject prefab, Transform parent = null)
-    {
-        if (prefab == null)
-            return null;
-
-        bool isNetworked = isCheckNetworkPrefab(prefab);
-
-        // Poolable이 붙어있다면 풀링 처리
-        if (prefab.TryGetComponent(out Poolable poolable))
-        {
-            if (isNetworked)
-            {
-                return Managers.NGO_PoolManager.Pop(prefab,parent); // NetworkObject + Poolable
-            }
-            else
-            {
-                return Managers.PoolManager.Pop(prefab, parent).gameObject; // 일반 Poolable
-            }
-        }
-
-        // 그냥 Instantiate
-        GameObject go = Object.Instantiate(prefab, parent);
-
-        return RemoveCloneText(go);
+        return go;
     }
     private GameObject RemoveCloneText(GameObject go)
     {
@@ -117,10 +92,6 @@ public class ResourceManager : IManagerIResettable
     public GameObject InstantiatePrefab(string path, Transform parent = null)
     {
         return Instantiate("Prefabs/" + path, parent);
-    }
-    public GameObject InstantiatePrefab(GameObject go, Transform parent = null)
-    {
-        return Instantiate(go, parent);
     }
 
     public void DestroyObject(GameObject go, float duration = 0)

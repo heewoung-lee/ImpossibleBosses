@@ -45,4 +45,14 @@ public static class Extension
         findObject = null;
         return false;
     }
+
+
+    public static GameObject RemoveCloneText(this GameObject go)
+    {
+        int index = go.name.IndexOf("(Clone)");
+        if (index > 0)
+            go.name = go.name.Substring(0, index);
+
+        return go;
+    }
 }
