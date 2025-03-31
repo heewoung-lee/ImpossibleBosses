@@ -70,14 +70,15 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
-        _scoreButton.onClick.AddListener(() =>
+        void TestButtonClick()
         {
-           TestIteminInventort();
+            TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
-        });
+        }
 
+        _scoreButton.onClick.AddListener(TestButtonClick);
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>
         {
             _scoreImage.gameObject.transform.position = PointerEventData.position;

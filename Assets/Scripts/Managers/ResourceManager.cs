@@ -6,18 +6,16 @@ using UnityEngine;
 
 public class ResourceManager
 {
-    Dictionary<string, Poolable> _cachingPoolableObject = new Dictionary<string, Poolable>();
-
-
+    Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
 
     public T Load<T>(string path) where T : Object
     {
         return Resources.Load<T>(path);
     }
-    
+
     public T[] LoadAll<T>(string path) where T : Object
     {
-        return Resources.LoadAll<T> (path);
+        return Resources.LoadAll<T>(path);
     }
 
 
@@ -32,39 +30,46 @@ public class ResourceManager
     }
     public GameObject Instantiate(string path, Transform parent = null)
     {
+
         if (string.IsNullOrEmpty(path))
             return null;
 
+        if (_cachingPoolableObject.TryGetValue(path, out GameObject cachedPrefab))
+        {
+            if (isCheckNetworkPrefab(cachedPrefab))
+            {
+                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(cachedPrefab, Vector3.zero, Quaternion.identity).gameObject;
+            }
+            else
+            {
+                return Managers.PoolManager.Pop(cachedPrefab, parent).gameObject;
+            }
+        }
 
         GameObject prefab = Load<GameObject>(path);
 
         if (prefab == null)
         {
             Debug.Log($"Failed to Load Object Path:{path}");
+            return null;
         }
-
-
-        //먼저 풀링오브젝트에 캐싱이 
 
         if (prefab.GetComponent<Poolable>() != null)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
+            _cachingPoolableObject[path] = prefab;
+            if (isCheckNetworkPrefab(prefab))
             {
-                Debug.Log(Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.ContainsKey(prefab));
-                if (Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.TryGetValue(prefab,out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool) == false)
+                if (Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.TryGetValue(prefab, out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool) == false)
                 { //등록이 안되어있으면 등록
                     Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
                 }
-               
-
-                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab,Vector3.zero,Quaternion.identity).gameObject;
+                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab, Vector3.zero, Quaternion.identity).gameObject;
             }
             else
             {
                 return Managers.PoolManager.Pop(prefab, parent).gameObject;
             }
         }
-
 
         GameObject go = Object.Instantiate(prefab, parent);
         int index = go.name.IndexOf("(Clone)");
@@ -73,11 +78,21 @@ public class ResourceManager
 
 
         return go;
+
+        bool isCheckNetworkPrefab(GameObject prefab)
+        {
+            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
-    public GameObject InstantiatePrefab(string path,Transform parent = null)
+
+    public GameObject InstantiatePrefab(string path, Transform parent = null)
     {
-        return Instantiate("Prefabs/"+path, parent);
+        return Instantiate("Prefabs/" + path, parent);
     }
 
     public void DestroyObject(GameObject go, float duration = 0)
@@ -104,9 +119,9 @@ public class ResourceManager
     }
 
 
-    IEnumerator PushCoroutine(Poolable poolable,float duration)
+    IEnumerator PushCoroutine(Poolable poolable, float duration)
     {
-        if(duration <= 0)
+        if (duration <= 0)
         {
             Managers.PoolManager.Push(poolable);
         }
