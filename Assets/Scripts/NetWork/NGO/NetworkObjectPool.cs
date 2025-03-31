@@ -14,9 +14,9 @@ using UnityEngine.Pool;
 /// </summary>
 public class NetworkObjectPool : NetworkBehaviour
 {
-    Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
+    Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
 
-    public Dictionary<GameObject, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
+    public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
     public override void OnNetworkSpawn()
     {
     }
@@ -25,9 +25,9 @@ public class NetworkObjectPool : NetworkBehaviour
     {
         // 디스폰 될때 모든 프리펩들이 등록을 취소하고 없어져야 함.
         // Unregisters all objects in PooledPrefabsList from the cache.
-        foreach (GameObject prefab in m_PooledObjects.Keys)
+        foreach (string prefabPath in m_PooledObjects.Keys)
         {
-            m_PooledObjects[prefab].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
+            m_PooledObjects[prefabPath].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
         }
         m_PooledObjects.Clear();
     }
@@ -41,13 +41,13 @@ public class NetworkObjectPool : NetworkBehaviour
     /// PooledPrefabInstanceHandler when the client receives a spawn message for a prefab that has been registered
     /// here.
     /// </remarks>
-    /// <param name="prefab"></param>
+    /// <param name="prefabPath"></param>
     /// <param name="position">The position to spawn the object at.</param>
     /// <param name="rotation">The rotation to spawn the object with.</param>
     /// <returns></returns>
-    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation)
+    public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
     {
-        var networkObject = m_PooledObjects[prefab].Get();
+        var networkObject = m_PooledObjects[prefabPath].Get();
 
         var noTransform = networkObject.transform;
         noTransform.position = position;
@@ -61,15 +61,18 @@ public class NetworkObjectPool : NetworkBehaviour
     /// </summary>
     public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)
     {
-        m_PooledObjects[prefab].Release(networkObject);
+        Poolable poolable = prefab.GetComponent<Poolable>();
+        m_PooledObjects[poolable.PollablePath].Release(networkObject);
     }
 
     /// <summary>
     /// Builds up the cache for a prefab.
     /// </summary>
-    public void RegisterPrefabInternal(GameObject prefab, int prewarmCount = 5)
+    public void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
     {
-        if(Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
+        GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
+
+        if (Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
         {
             Debug.Log($"{prefab.name} is not registed the NetworkManager");
             return;
@@ -77,11 +80,9 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab,Managers.VFX_Manager.VFX_Root_NGO).RemoveCloneText().GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab, Managers.VFX_Manager.VFX_Root_NGO).RemoveCloneText().GetComponent<NetworkObject>();
+            ngo.GetComponent<Poolable>().SetPoolableDirectory(prefabPath);
             return ngo;
-            //TODO: 아침에 와서 네트워크 풀링 다시 작성하기
-            //해쉬셋 필요없을 것 같고, 딕셔너리도 내가 만든 Instantiate를 사용하기위해서 Key를 전부 String(Path) 으로 바꿔야함
-            //위에 호스트가 생성한다음 부모 위치로 초기화 시키는 작업이 필요
         }
 
         void ActionOnGet(NetworkObject networkObject)
@@ -99,18 +100,18 @@ public class NetworkObjectPool : NetworkBehaviour
             Destroy(networkObject.gameObject);
         }
         // Create the pool
-        m_PooledObjects[prefab] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
+        m_PooledObjects[prefabPath] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
 
         // Populate the pool
         var prewarmNetworkObjects = new List<NetworkObject>();
         for (var i = 0; i < prewarmCount; i++)
         {
-            prewarmNetworkObjects.Add(m_PooledObjects[prefab].Get());
+            prewarmNetworkObjects.Add(m_PooledObjects[prefabPath].Get());
         }
         foreach (var networkObject in prewarmNetworkObjects)
         {
-            m_PooledObjects[prefab].Release(networkObject);
+            m_PooledObjects[prefabPath].Release(networkObject);
         }
-      
+
     }
 }

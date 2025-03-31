@@ -159,7 +159,10 @@ public class RelayManager
         if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
-            networkObj.SpawnWithOwnership(clientId, destroyOption);
+            if(networkObj.IsSpawned == false)
+            {
+                networkObj.SpawnWithOwnership(clientId, destroyOption);
+            }
             if (parent != null)
             {
                 networkObj.transform.SetParent(parent, false);

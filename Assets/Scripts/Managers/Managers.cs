@@ -19,6 +19,9 @@ public class Managers : MonoBehaviour
     private BufferManager _bufferManager = new BufferManager();
     public static BufferManager BufferManager { get => Instance._bufferManager; }
 
+    private CallBackManager _callBackManager = new CallBackManager();
+    public static CallBackManager CallBackManager { get => Instance._callBackManager; }
+
     private DataManager _dataManager = new DataManager();
     public static DataManager DataManager { get => Instance._dataManager; }
 
@@ -112,6 +115,7 @@ public class Managers : MonoBehaviour
             _instance._itemDataManaer.Init();
             _instance._bufferManager.Init();
             _instance._skillManager.Init();
+            _instance._callBackManager.Init();
         }
 
     }

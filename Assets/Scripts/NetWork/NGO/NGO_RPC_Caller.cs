@@ -117,7 +117,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
         obj.transform.position = position;
+        //if (Managers.NGO_PoolManager.NgoPool != null && Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey("Prefabs/"+path))//풀에 등록된 객체라면 넘겨주기
+        //{
+        //    return obj.GetComponent<NetworkObject>();
+        //}
         NetworkObject networkObj;
+
         if (isRequestingOwnershipByYou)
         {
             networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj, parentTr).GetComponent<NetworkObject>();
