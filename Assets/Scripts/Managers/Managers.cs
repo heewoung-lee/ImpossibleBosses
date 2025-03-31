@@ -132,5 +132,6 @@ public class Managers : MonoBehaviour
         _instance._ui_manager.Clear();
         _instance._sceneManagerEx.Clear();
         _instance._poolManager.Clear();
+        _instance._resourceManager.Clear();
     }
 }

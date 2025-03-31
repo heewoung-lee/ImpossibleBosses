@@ -4,7 +4,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ResourceManager
+public class ResourceManager : IManagerIResettable
 {
     Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
 
@@ -38,7 +38,7 @@ public class ResourceManager
         {
             if (isCheckNetworkPrefab(cachedPrefab))
             {
-                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(cachedPrefab, Vector3.zero, Quaternion.identity).gameObject;
+                return Managers.NGO_PoolManager.Pop(cachedPrefab);
             }
             else
             {
@@ -59,11 +59,7 @@ public class ResourceManager
             _cachingPoolableObject[path] = prefab;
             if (isCheckNetworkPrefab(prefab))
             {
-                if (Managers.NGO_PoolManager.NetworkObjectPool.PooledObjects.TryGetValue(prefab, out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool) == false)
-                { //등록이 안되어있으면 등록
-                    Managers.NGO_PoolManager.NetworkObjectPool.RegisterPrefabInternal(prefab);
-                }
-                return Managers.NGO_PoolManager.NetworkObjectPool.GetNetworkObject(prefab, Vector3.zero, Quaternion.identity).gameObject;
+                return Managers.NGO_PoolManager.Pop(prefab,parent);
             }
             else
             {
@@ -72,27 +68,59 @@ public class ResourceManager
         }
 
         GameObject go = Object.Instantiate(prefab, parent);
+
+        return RemoveCloneText(go);
+    }
+    public GameObject Instantiate(GameObject prefab, Transform parent = null)
+    {
+        if (prefab == null)
+            return null;
+
+        bool isNetworked = isCheckNetworkPrefab(prefab);
+
+        // Poolable이 붙어있다면 풀링 처리
+        if (prefab.TryGetComponent(out Poolable poolable))
+        {
+            if (isNetworked)
+            {
+                return Managers.NGO_PoolManager.Pop(prefab,parent); // NetworkObject + Poolable
+            }
+            else
+            {
+                return Managers.PoolManager.Pop(prefab, parent).gameObject; // 일반 Poolable
+            }
+        }
+
+        // 그냥 Instantiate
+        GameObject go = Object.Instantiate(prefab, parent);
+
+        return RemoveCloneText(go);
+    }
+    private GameObject RemoveCloneText(GameObject go)
+    {
         int index = go.name.IndexOf("(Clone)");
         if (index > 0)
             go.name = go.name.Substring(0, index);
 
-
         return go;
-
-        bool isCheckNetworkPrefab(GameObject prefab)
+    }
+    private bool isCheckNetworkPrefab(GameObject prefab)
+    {
+        if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
+        return false;
     }
 
 
     public GameObject InstantiatePrefab(string path, Transform parent = null)
     {
         return Instantiate("Prefabs/" + path, parent);
+    }
+    public GameObject InstantiatePrefab(GameObject go, Transform parent = null)
+    {
+        return Instantiate(go, parent);
     }
 
     public void DestroyObject(GameObject go, float duration = 0)
@@ -106,12 +134,17 @@ public class ResourceManager
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
             {
-                Debug.Log("이쪽에 호출");
-
+                Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
+                {
+                    Managers.NGO_PoolManager.Push(go);
+                }, duration));
             }
             else
             {
-                Managers.ManagersStartCoroutine(PushCoroutine(poolable, duration));
+                Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
+                {
+                    Managers.PoolManager.Push(poolable);
+                }, duration));
             }
             return;
         }
@@ -119,17 +152,21 @@ public class ResourceManager
     }
 
 
-    IEnumerator PushCoroutine(Poolable poolable, float duration)
+    IEnumerator PrefabPushCoroutine(System.Action prefabPushEvent,float duration)
     {
         if (duration <= 0)
         {
-            Managers.PoolManager.Push(poolable);
+            prefabPushEvent.Invoke();
+         
         }
         else
         {
             yield return new WaitForSeconds(duration);
-            Managers.PoolManager.Push(poolable);
+            prefabPushEvent.Invoke();
         }
     }
-
+    public void Clear()
+    {
+        _cachingPoolableObject.Clear();
+    }
 }
