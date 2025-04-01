@@ -42,11 +42,6 @@ public class NGO_PoolManager
 
     public void RegisterNGOPoolObjectDict(string path)
     {
-        if (path.Contains("Prefabs") == false)
-        {
-            path = "Prefabs/" + path;
-        }
-
         if (Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey(path) == false)
         {
             Managers.NGO_PoolManager.NgoPool.RegisterPrefabInternal(path);

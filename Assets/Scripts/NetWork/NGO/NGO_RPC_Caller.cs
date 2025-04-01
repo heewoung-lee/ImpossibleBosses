@@ -119,12 +119,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
         //서버에서 판단해서 
 
         GameObject obj = Managers.NGO_PoolManager.SpawnNetObjectFromPool(path);
-
-
         //여기까진 오브젝트 딕셔너리에 등록됐다면 꺼내 써라,
         if(obj == null)
         {
-            //obj = Managers.ResourceManager.Load<GameObject>(path);
             obj = Managers.ResourceManager.InstantiatePrefab(path);
             if (Managers.NGO_PoolManager.isNGOPoolObject(obj, out Poolable poolable))
             {
@@ -140,6 +137,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
         else
         {
+            Debug.Log("소환");
             networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
         }
         return networkObj;
