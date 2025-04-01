@@ -78,6 +78,7 @@ public class NetworkObjectPool : NetworkBehaviour
         NetworkObject CreateFunc()
         {
             NetworkObject ngo = Instantiate(prefab, Managers.VFX_Manager.VFX_Root_NGO).RemoveCloneText().GetComponent<NetworkObject>();
+            Debug.Log($"클라가 여길 거치나?{prefabPath}");
             ngo.GetComponent<Poolable>().SetPoolableDirectory(prefabPath);
             return ngo;
         }

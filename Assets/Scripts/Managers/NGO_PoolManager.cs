@@ -36,7 +36,10 @@ public class NGO_PoolManager
     {
         if (prefab.TryGetComponent(out NetworkObject ngo))
         {
-            _ngoPool.ReturnNetworkObject(ngo, prefab);
+            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            {
+                _ngoPool.ReturnNetworkObject(ngo, prefab);
+            }
         }
     }
 
@@ -45,6 +48,7 @@ public class NGO_PoolManager
         if (Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey(path) == false)
         {
             Managers.NGO_PoolManager.NgoPool.RegisterPrefabInternal(path);
+            Debug.Log(Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey(path));
         }
     }
 
