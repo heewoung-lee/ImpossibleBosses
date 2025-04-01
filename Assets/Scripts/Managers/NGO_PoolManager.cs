@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
@@ -37,4 +39,40 @@ public class NGO_PoolManager
             _ngoPool.ReturnNetworkObject(ngo, prefab);
         }
     }
+
+    public void RegisterNGOPoolObjectDict(string path)
+    {
+        if (path.Contains("Prefabs") == false)
+        {
+            path = "Prefabs/" + path;
+        }
+
+        if (Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey(path) == false)
+        {
+            Managers.NGO_PoolManager.NgoPool.RegisterPrefabInternal(path);
+        }
+    }
+
+
+    public bool isNGOPoolObject(GameObject obj,out Poolable poolable)
+    {
+        return obj.TryGetComponent(out poolable);
+    }
+
+
+
+    public GameObject SpawnNetObjectFromPool(string path)
+    {
+        if (NgoPool == null)
+        {
+            return null;
+        }
+        GameObject poolNGO = null;
+        if (Managers.NGO_PoolManager.NgoPool.PooledObjects.TryGetValue(path, out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool))
+        {
+            poolNGO = Pop(path);
+        }
+        return poolNGO;
+    }
+
 }

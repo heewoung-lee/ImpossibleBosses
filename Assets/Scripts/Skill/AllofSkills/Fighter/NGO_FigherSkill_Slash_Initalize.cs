@@ -10,6 +10,7 @@ public class NGO_FigherSkill_Slash_Initalize : NGO_Skill_Initailize_Base
     public override NetworkObject TargetNgo => _targetNGO;
     public override NetworkObject ParticleNGO => _particleNGO;
 
+
     public override void SetInitalze(NetworkObject obj)
     {
         _particleNGO = obj;

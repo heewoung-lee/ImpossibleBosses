@@ -30,8 +30,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
         base.OnNetworkSpawn();
         Managers.RelayManager.SetRPCCaller(gameObject);
         Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
-
-
     }
 
 
@@ -44,7 +42,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         ngo.Despawn(true);
     }
 
-    [Rpc(SendTo.Server,RequireOwnership =false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     public void DeSpawnByReferenceServerRpc(NetworkObjectReference ngoRef, RpcParams rpcParams = default)
     {
         if (ngoRef.TryGet(out NetworkObject ngo))
@@ -90,7 +88,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void SpawnPrefabNeedToInitalizeRpc(string path,bool isRequestingOwnershipByYou = false,RpcParams rpcParams= default)
+    public void SpawnPrefabNeedToInitalizeRpc(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default)
     {
         NetworkObject networkObj = SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams);
         NotifyPrefabSpawnedClientRpc(networkObj.NetworkObjectId);
@@ -101,28 +99,41 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject obj))
         {
-            if(obj.TryGetComponent(out NGO_InitailizeBase ngoInitalize))
+            if (obj.TryGetComponent(out NGO_InitailizeBase ngoInitalize))
             {
                 ngoInitalize.SetInitalze(obj);
             }
         }
     }
 
-    private NetworkObject SpawnVFXObjectToResources(string path,bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default,Vector3 position = default)
+    private NetworkObject SpawnVFXObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default)
     {
-        return SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams, position,Managers.VFX_Manager.VFX_Root_NGO);
+        return SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 
-    private NetworkObject SpawnObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default,Transform parentTr=null)
-    {
-        GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
-        obj.transform.position = position;
-        //if (Managers.NGO_PoolManager.NgoPool != null && Managers.NGO_PoolManager.NgoPool.PooledObjects.ContainsKey("Prefabs/"+path))//풀에 등록된 객체라면 넘겨주기
-        //{
-        //    return obj.GetComponent<NetworkObject>();
-        //}
-        NetworkObject networkObj;
 
+    private NetworkObject SpawnObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default, Transform parentTr = null)
+    {
+        //참고로 여기는 서버만 들어옴 주의할것
+        //목표 이 오브젝트가 풀객체면 생성을 하지 말아야함.
+        //서버에서 판단해서 
+
+        GameObject obj = Managers.NGO_PoolManager.SpawnNetObjectFromPool(path);
+
+
+        //여기까진 오브젝트 딕셔너리에 등록됐다면 꺼내 써라,
+        if(obj == null)
+        {
+            //obj = Managers.ResourceManager.Load<GameObject>(path);
+            obj = Managers.ResourceManager.InstantiatePrefab(path);
+            if (Managers.NGO_PoolManager.isNGOPoolObject(obj, out Poolable poolable))
+            {
+                Managers.NGO_PoolManager.RegisterNGOPoolObjectDict(path);
+                obj = Managers.NGO_PoolManager.Pop(path);
+            }
+        }
+        obj.transform.position = position;
+        NetworkObject networkObj;
         if (isRequestingOwnershipByYou)
         {
             networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj, parentTr).GetComponent<NetworkObject>();
@@ -144,19 +155,19 @@ public class NGO_RPC_Caller : NetworkBehaviour
             pariclePos = targetNgo.transform.position;
         }
         NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
-        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId,targetNgo.transform.position, path,duration,targerObjectID);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, targetNgo.transform.position, path, duration, targerObjectID);
     }
     [Rpc(SendTo.Server)]
     public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
     {
         Vector3 pariclePos = spawnPosition;
-        NetworkObject vfxObj = SpawnVFXObjectToResources(path,position: pariclePos);
-        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path,duration);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
+        SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path, duration);
     }
 
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void SpawnVFXPrefabClientRpc(ulong particleNGOID,Vector3 particleGeneratePos,string path,float duration, ulong targetNGOID = INVALIDOBJECTID)
+    public void SpawnVFXPrefabClientRpc(ulong particleNGOID, Vector3 particleGeneratePos, string path, float duration, ulong targetNGOID = INVALIDOBJECTID)
     {
         Action<GameObject> positionAndBehaviorSetterEvent = null;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
@@ -166,35 +177,35 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 skillInitailze.SetInitalze(paricleNgo);
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
                 {
-                   skillInitailze.SetTargetInitalze(targetNgo);
+                    skillInitailze.SetTargetInitalze(targetNgo);
                     positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFX_Manager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
                 }
-                skillInitailze.StartParticle(path,duration,positionAndBehaviorSetterEvent);
+                skillInitailze.StartParticle(path, duration, positionAndBehaviorSetterEvent);
             }
         }
     }
 
     [Rpc(SendTo.Server)]
-    public void Call_InitBuffer_ServerRpc(StatEffect effect,string buffIconImagePath = null,float duration = -1)
+    public void Call_InitBuffer_ServerRpc(StatEffect effect, string buffIconImagePath = null, float duration = -1)
     {
         Call_InitBuffer_ClicentRpc(effect, buffIconImagePath, duration);
     }
 
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void Call_InitBuffer_ClicentRpc(StatEffect effect, string buffIconImagePath = null,float duration = -1)
+    private void Call_InitBuffer_ClicentRpc(StatEffect effect, string buffIconImagePath = null, float duration = -1)
     {
         PlayerStats playerstats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
 
-        if(Managers.BufferManager.GetModifier(effect) is Duration_Buff durationbuff)
+        if (Managers.BufferManager.GetModifier(effect) is Duration_Buff durationbuff)
         {
-            Sprite buffImageIcon =  Managers.ResourceManager.Load<Sprite>(buffIconImagePath);
+            Sprite buffImageIcon = Managers.ResourceManager.Load<Sprite>(buffIconImagePath);
             durationbuff.SetBuffIconImage(buffImageIcon);
-            Managers.BufferManager.InitBuff(playerstats,duration,durationbuff, effect.value);
+            Managers.BufferManager.InitBuff(playerstats, duration, durationbuff, effect.value);
         }
         else
         {
-            Managers.BufferManager.InitBuff(playerstats,duration,effect);
+            Managers.BufferManager.InitBuff(playerstats, duration, effect);
         }
 
 

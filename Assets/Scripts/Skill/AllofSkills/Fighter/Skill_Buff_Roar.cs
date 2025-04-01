@@ -59,7 +59,7 @@ public class Skill_Buff_Roar : Skill_Duration
 
             (playerNgo) =>
             {
-                Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
+                Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
             }
             ,
             () =>

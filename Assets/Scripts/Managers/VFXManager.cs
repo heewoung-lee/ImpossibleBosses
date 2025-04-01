@@ -176,7 +176,7 @@ public class VFXManager
 
     private void CashingisCheckNGODict(string path)
     {
-        GameObject particleOBJ = Managers.ResourceManager.Load<GameObject>("Prefabs/" + path);
+        GameObject particleOBJ = Managers.ResourceManager.Load<GameObject>(path);
         if (particleOBJ.TryGetComponent(out NetworkObject ngo))
         {
             _isCheckNGODict.Add(path, new ParticleInfo()

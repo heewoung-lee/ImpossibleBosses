@@ -17,9 +17,6 @@ public class NetworkObjectPool : NetworkBehaviour
     Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
 
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
-    public override void OnNetworkSpawn()
-    {
-    }
 
     public override void OnNetworkDespawn()
     {
@@ -27,7 +24,7 @@ public class NetworkObjectPool : NetworkBehaviour
         // Unregisters all objects in PooledPrefabsList from the cache.
         foreach (string prefabPath in m_PooledObjects.Keys)
         {
-            m_PooledObjects[prefabPath].Clear(); // <-- 여기서 ActionOnDestroy 호출됨!
+            m_PooledObjects[prefabPath].Clear();
         }
         m_PooledObjects.Clear();
     }

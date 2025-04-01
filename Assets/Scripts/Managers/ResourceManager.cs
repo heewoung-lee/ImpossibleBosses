@@ -91,7 +91,12 @@ public class ResourceManager : IManagerIResettable
 
     public GameObject InstantiatePrefab(string path, Transform parent = null)
     {
-        return Instantiate("Prefabs/" + path, parent);
+        if (path.Contains("Prefabs") == false)
+        {
+            path = "Prefabs/" + path;
+        }
+
+        return Instantiate(path, parent);
     }
 
     public void DestroyObject(GameObject go, float duration = 0)

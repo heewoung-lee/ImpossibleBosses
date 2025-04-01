@@ -161,6 +161,7 @@ public class RelayManager
             NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
             if(networkObj.IsSpawned == false)
             {
+                //이쪽에서 풀 객체면 스폰이 아닌 문제는 여기구역은 
                 networkObj.SpawnWithOwnership(clientId, destroyOption);
             }
             if (parent != null)

@@ -50,7 +50,7 @@ public class Skill_Buff_Determination : Skill_Duration
         Managers.BufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
         (playerNgo) =>
         {
-                Managers.VFX_Manager.GenerateParticle("Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDuration);
+                Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDuration);
             }
             ,
             () =>
