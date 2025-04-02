@@ -4,13 +4,17 @@ using UnityEngine;
 using static PlaySceneMockUnitTest;
 using static UnityEngine.Rendering.DebugUI;
 
-public class NGO_FigherSkill_Determination_Initalize : NGO_Skill_Initailize_Base
+public class NGO_FigherSkill_Determination_Initalize : NGO_PoolingInitalize_Base
 {
     NetworkObject _particleNGO;
     NetworkObject _targetNGO;
 
     public override NetworkObject TargetNgo => _targetNGO;
     public override NetworkObject ParticleNGO => _particleNGO;
+
+    public override string PoolingNGO_PATH => "Prefabs/Player/SkillVFX/Shield_Determination";
+
+    public override int PoolingCapacity => 5;
 
     public override void SetInitalze(NetworkObject particleOBJ)
     {

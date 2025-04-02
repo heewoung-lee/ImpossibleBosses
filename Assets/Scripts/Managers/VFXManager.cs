@@ -60,7 +60,7 @@ public class VFXManager
         return particleObject;
     }
 
-    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
+    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null,bool isPoolable = false)//쫒아가는 파티클을 위해 나눠놓음
     {
         void FindTargetNGO_Spawn()
         {
@@ -74,7 +74,7 @@ public class VFXManager
                 Debug.Log("targetNGOID isn't Found NGO");
                 return;
             }
-            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID, isPoolable);
         }
 
         void SetPositionAndChasetoTagetParticle(GameObject particleOBJ)
@@ -89,7 +89,7 @@ public class VFXManager
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
-        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, SetPositionAndChasetoTagetParticle);
+        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionAndChasetoTagetParticle);
         addParticleActionEvent?.Invoke(particleObject);
     }
 
@@ -109,13 +109,12 @@ public class VFXManager
         if (particleObject == null)// NULL 이면 네트워크가 처리
             return;
 
-        particleObject = SetPariclePosAndLifeCycle(particleObject, VFX_Root, path, settingDuration, SetPositionParticle);
+        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
         addParticleActionEvent?.Invoke(particleObject);
     }
 
-    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, Transform parentTr, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)
+    public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)
     {
-
         positionAndBehaviorSetterEvent?.Invoke(particleObject);
         if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
         {

@@ -88,9 +88,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void SpawnPrefabNeedToInitalizeRpc(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default)
+    public void SpawnPrefabNeedToInitalizeRpc(string path)
     {
-        NetworkObject networkObj = SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams);
+        NetworkObject networkObj = SpawnObjectToResources(path);
         NotifyPrefabSpawnedClientRpc(networkObj.NetworkObjectId);
     }
 
@@ -106,60 +106,45 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
     }
 
-    private NetworkObject SpawnVFXObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default)
+
+
+    private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default, bool isPoolable = false)
     {
-        return SpawnObjectToResources(path, isRequestingOwnershipByYou, rpcParams, position, Managers.VFX_Manager.VFX_Root_NGO);
+
+        if (isPoolable == true)
+        {
+            return SpawnObjectToResources(path, position, Managers.NGO_PoolManager.NGO_Tr);
+        }
+        return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 
 
-    private NetworkObject SpawnObjectToResources(string path, bool isRequestingOwnershipByYou = false, RpcParams rpcParams = default, Vector3 position = default, Transform parentTr = null)
+    private NetworkObject SpawnObjectToResources(string path, Vector3 position = default, Transform parentTr = null)
     {
-        //참고로 여기는 서버만 들어옴 주의할것
-        //목표 이 오브젝트가 풀객체면 생성을 하지 말아야함.
-        //서버에서 판단해서 
-
-        GameObject obj = Managers.NGO_PoolManager.SpawnNetObjectFromPool(path);
-        //여기까진 오브젝트 딕셔너리에 등록됐다면 꺼내 써라,
-        if(obj == null)
-        {
-            obj = Managers.ResourceManager.InstantiatePrefab(path);
-            if (Managers.NGO_PoolManager.isNGOPoolObject(obj, out Poolable poolable))
-            {
-                Managers.NGO_PoolManager.RegisterNGOPoolObjectDict(path);
-                obj = Managers.NGO_PoolManager.Pop(path);
-            }
-        }
+        GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
         obj.transform.position = position;
         NetworkObject networkObj;
-        if (isRequestingOwnershipByYou)
-        {
-            networkObj = Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(rpcParams.Receive.SenderClientId, obj, parentTr).GetComponent<NetworkObject>();
-        }
-        else
-        {
-            Debug.Log("소환");
-            networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
-        }
+        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
         return networkObj;
     }
 
 
     [Rpc(SendTo.Server)]
-    public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = INVALIDOBJECTID)
+    public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = INVALIDOBJECTID, bool isPoolable = false)
     {
         Vector3 pariclePos = Vector3.zero;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targerObjectID, out NetworkObject targetNgo))
         {
             pariclePos = targetNgo.transform.position;
         }
-        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos, isPoolable);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, targetNgo.transform.position, path, duration, targerObjectID);
     }
     [Rpc(SendTo.Server)]
-    public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
+    public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default, bool isPoolable = false)
     {
         Vector3 pariclePos = spawnPosition;
-        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos, isPoolable);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path, duration);
     }
 
@@ -205,7 +190,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             Managers.BufferManager.InitBuff(playerstats, duration, effect);
         }
-
-
     }
+
 }

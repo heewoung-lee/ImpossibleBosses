@@ -7,6 +7,7 @@ using UnityEngine;
 public class ResourceManager : IManagerIResettable
 {
     Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
+    public Dictionary<string, GameObject> CachingPoolableObjectDict => _cachingPoolableObject;
 
     public T Load<T>(string path) where T : Object
     {
@@ -108,11 +109,11 @@ public class ResourceManager : IManagerIResettable
 
         if (poolable != null)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.GetComponent<NetworkObject>())
+            if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.TryGetComponent(out NetworkObject ngo))
             {
                 Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
                 {
-                    Managers.NGO_PoolManager.Push(go);
+                    Managers.NGO_PoolManager.Push(ngo);
                 }, duration));
             }
             else

@@ -66,10 +66,12 @@ public class Skill_Slash : Skill_Immedialty
     }
     public override void SkillAction()
     {
-        Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Fighter_Slash", _playerController.transform, addParticleActionEvent: (slashParicle) =>
+        Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Fighter_Slash", 
+            _playerController.transform, 
+            addParticleActionEvent: (slashParicle) =>
         {
             slashParicle.transform.rotation = _playerController.transform.rotation;
-        });
+        },isPoolable:true);
         Managers.ManagersStartCoroutine(FrameInHit(PlayerStat, SlashAnimClip.length));
     }
     IEnumerator FrameInHit(PlayerStats stats, float animLength)

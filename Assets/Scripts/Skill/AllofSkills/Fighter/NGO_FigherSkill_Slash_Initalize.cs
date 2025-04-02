@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class NGO_FigherSkill_Slash_Initalize : NGO_Skill_Initailize_Base
+public class NGO_FigherSkill_Slash_Initalize : NGO_PoolingInitalize_Base
 {
     NetworkObject _particleNGO;
     NetworkObject _targetNGO;
@@ -10,6 +10,9 @@ public class NGO_FigherSkill_Slash_Initalize : NGO_Skill_Initailize_Base
     public override NetworkObject TargetNgo => _targetNGO;
     public override NetworkObject ParticleNGO => _particleNGO;
 
+    public override string PoolingNGO_PATH => "Prefabs/Player/SkillVFX/Fighter_Slash";
+
+    public override int PoolingCapacity => 5;
 
     public override void SetInitalze(NetworkObject obj)
     {
