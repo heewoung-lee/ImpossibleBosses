@@ -34,6 +34,7 @@ public class NetworkObjectPool : NetworkBehaviour
     public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)
     {
         prefab.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base);
+        networkObject.transform.position = Vector3.zero;
         m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
     }
 

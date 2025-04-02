@@ -31,32 +31,12 @@ public class NGO_PoolManager
         _ngoPool.RegisterPrefabInternal(poolingPath, capacity);
     }
 
-    public bool isNGOPoolObject(GameObject obj,out Poolable poolable)
-    {
-        return obj.TryGetComponent(out poolable);
-    }
-
-
     public void Push(NetworkObject ngo)
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             ngo.Despawn();
         }
-    }
-
-    public GameObject SpawnNetObjectFromPool(string path)
-    {
-        if (_ngoPool == null)
-        {
-            return null;
-        }
-        GameObject poolNGO = null;
-        if (_ngoPool.PooledObjects.TryGetValue(path, out UnityEngine.Pool.ObjectPool<NetworkObject> objectPool))
-        {
-            poolNGO = Pop(path);
-        }
-        return poolNGO;
     }
 
 }

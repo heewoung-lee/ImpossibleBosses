@@ -165,7 +165,7 @@ public class VFXManager
 
     public IEnumerator FollowingGenerator(Transform targetTr, GameObject particle)
     {
-        while (particle != null)
+        while (particle != null && particle.activeSelf == true)
         {
             particle.transform.position = new Vector3(targetTr.position.x, particle.transform.position.y, targetTr.position.z);
             yield return targetTr;
