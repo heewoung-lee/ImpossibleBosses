@@ -108,10 +108,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
 
-    private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default, bool isPoolable = false)
+    private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default)
     {
 
-        if (isPoolable == true)
+        if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
         {
             return SpawnObjectToResources(path, position, Managers.NGO_PoolManager.NGO_Tr);
         }
@@ -130,21 +130,21 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
     [Rpc(SendTo.Server)]
-    public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = INVALIDOBJECTID, bool isPoolable = false)
+    public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = INVALIDOBJECTID)
     {
         Vector3 pariclePos = Vector3.zero;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targerObjectID, out NetworkObject targetNgo))
         {
             pariclePos = targetNgo.transform.position;
         }
-        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos, isPoolable);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, targetNgo.transform.position, path, duration, targerObjectID);
     }
     [Rpc(SendTo.Server)]
-    public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default, bool isPoolable = false)
+    public void SpawnVFXPrefabServerRpc(string path, float duration, Vector3 spawnPosition = default)
     {
         Vector3 pariclePos = spawnPosition;
-        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos, isPoolable);
+        NetworkObject vfxObj = SpawnVFXObjectToResources(path, position: pariclePos);
         SpawnVFXPrefabClientRpc(vfxObj.NetworkObjectId, pariclePos, path, duration);
     }
 

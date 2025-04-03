@@ -60,7 +60,7 @@ public class VFXManager
         return particleObject;
     }
 
-    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null,bool isPoolable = false)//쫒아가는 파티클을 위해 나눠놓음
+    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
     {
         void FindTargetNGO_Spawn()
         {
@@ -74,7 +74,7 @@ public class VFXManager
                 Debug.Log("targetNGOID isn't Found NGO");
                 return;
             }
-            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID, isPoolable);
+            Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
         }
 
         void SetPositionAndChasetoTagetParticle(GameObject particleOBJ)

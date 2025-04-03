@@ -71,7 +71,7 @@ public class Skill_Slash : Skill_Immedialty
             addParticleActionEvent: (slashParicle) =>
         {
             slashParicle.transform.rotation = _playerController.transform.rotation;
-        },isPoolable:true);
+        });
         Managers.ManagersStartCoroutine(FrameInHit(PlayerStat, SlashAnimClip.length));
     }
     IEnumerator FrameInHit(PlayerStats stats, float animLength)

@@ -22,9 +22,13 @@ public class NetworkObjectPool : NetworkBehaviour
 
     public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
     {
-        var networkObject = m_PooledObjects[prefabPath].Get();
+        NetworkObject networkObject = m_PooledObjects[prefabPath].Get();
 
-        var noTransform = networkObject.transform;
+        if (networkObject.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize))
+        {
+            poolingInitalize.OnPoolGet();
+        }
+        Transform noTransform = networkObject.transform;
         noTransform.position = position;
         noTransform.rotation = rotation;
 
@@ -33,9 +37,11 @@ public class NetworkObjectPool : NetworkBehaviour
 
     public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)
     {
-        prefab.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base);
-        networkObject.transform.position = Vector3.zero;
-        m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
+        if (prefab.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
+        {
+            poolingInitalize_Base.OnPoolRelease();
+            m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
+        }
     }
 
 

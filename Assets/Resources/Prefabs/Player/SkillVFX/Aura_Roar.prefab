@@ -14717,7 +14717,7 @@ GameObject:
   - component: {fileID: 7952806900849739330}
   - component: {fileID: -7637125406615205649}
   - component: {fileID: 6447025990809965007}
-  - component: {fileID: 1728344539009835652}
+  - component: {fileID: -3007179779479136690}
   m_Layer: 0
   m_Name: Aura_Roar
   m_TagString: Untagged
@@ -19598,7 +19598,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1728344539009835652
+--- !u!114 &-3007179779479136690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19607,7 +19607,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2225211537932561964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c91f24de83d604e4bb058d3bca283928, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e52f713444ac1045a5e3c784660f169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1

@@ -6,10 +6,12 @@ using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class NGO_PoolManager
 {
     private NetworkObjectPool _ngoPool;
+    public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
     public Transform NGO_Tr => _ngoPool.transform;
 

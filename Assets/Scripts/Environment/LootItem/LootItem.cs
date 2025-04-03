@@ -98,11 +98,11 @@ private void ItemGradeEffect(IItem itemInfo)
 {
     string path = itemInfo.Item_Grade switch
     {
-        Item_Grade_Type.Normal  => "Paticle/LootingItemEffect/Lootbeams_Runic_Common",
-        Item_Grade_Type.Magic   => "Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
-        Item_Grade_Type.Rare    => "Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
-        Item_Grade_Type.Unique  => "Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
-        Item_Grade_Type.Epic    => "Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
+        Item_Grade_Type.Normal  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Common",
+        Item_Grade_Type.Magic   => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
+        Item_Grade_Type.Rare    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
+        Item_Grade_Type.Unique  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
+        Item_Grade_Type.Epic    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
         _ => null
     };
 

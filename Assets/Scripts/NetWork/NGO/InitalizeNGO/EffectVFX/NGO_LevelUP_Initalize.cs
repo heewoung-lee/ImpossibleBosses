@@ -1,8 +1,10 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using static PlaySceneMockUnitTest;
+using static UnityEngine.Rendering.DebugUI;
 
-public class NGO_FigherSkill_Slash_Initalize : NGO_PoolingInitalize_Base
+public class NGO_LevelUP_Initalize : NGO_PoolingInitalize_Base
 {
     NetworkObject _particleNGO;
     NetworkObject _targetNGO;
@@ -10,24 +12,14 @@ public class NGO_FigherSkill_Slash_Initalize : NGO_PoolingInitalize_Base
     public override NetworkObject TargetNgo => _targetNGO;
     public override NetworkObject ParticleNGO => _particleNGO;
 
-    public override string PoolingNGO_PATH => "Prefabs/Player/SkillVFX/Fighter_Slash";
+
+    public override string PoolingNGO_PATH => "Prefabs/Player/SkillVFX/Level_up";
 
     public override int PoolingCapacity => 5;
 
-    public override void OnPoolGet()
+    public override void SetInitalze(NetworkObject particleOBJ)
     {
-        base.OnPoolGet();
-    }
-
-    public override void OnPoolRelease()
-    {
-        base.OnPoolRelease();
-        //gameObject.transform.position = Vector3.zero;
-    }
-
-    public override void SetInitalze(NetworkObject obj)
-    {
-        _particleNGO = obj;
+        _particleNGO = particleOBJ;
     }
     public override void SetTargetInitalze(NetworkObject targetNgo)
     {
@@ -37,6 +29,6 @@ public class NGO_FigherSkill_Slash_Initalize : NGO_PoolingInitalize_Base
     public override void StartParticle(string path, float duration, Action<GameObject> positionAndBehaviorSetterEvent)
     {
         base.StartParticle(path, duration, positionAndBehaviorSetterEvent);
-        _particleNGO.transform.rotation = _targetNGO.transform.rotation;
     }
+
 }
