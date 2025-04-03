@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4535378813109015039}
-  - component: {fileID: 5789822676079542233}
-  - component: {fileID: -3196564419982207920}
-  - component: {fileID: 8676863285269831915}
+  - component: {fileID: 1983783796280845704}
+  - component: {fileID: 7685234559828243575}
   m_Layer: 0
   m_Name: NGO_Polling
   m_TagString: Untagged
@@ -34,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5789822676079542233
+--- !u!114 &1983783796280845704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3430563210
+  GlobalObjectIdHash: 2200524266
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -59,7 +58,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &-3196564419982207920
+--- !u!114 &7685234559828243575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,16 +71,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  PooledPrefabsList: []
---- !u!114 &8676863285269831915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6487113428443309402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 379c4e2c41db6ce4996746eae542b0e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  PooledPrefabsList:
+  - Prefab: {fileID: 2225211537932561964, guid: ddafae14d0ba86e4d8931cdc26bd8bb3, type: 3}
+    PrewarmCount: 0
+  - Prefab: {fileID: 6374462007525804478, guid: 2f886257d2c84a048a355196dfd667b3, type: 3}
+    PrewarmCount: 0
+  - Prefab: {fileID: 4557073698510574151, guid: 29c1d3d45109a4648807acfd137775b7, type: 3}
+    PrewarmCount: 0
+  - Prefab: {fileID: 4631137236932131032, guid: 1505b4ca293ea7247b11516a9b093ae6, type: 3}
+    PrewarmCount: 0
+  - Prefab: {fileID: 3015954096008161746, guid: 4703adbac34f2fb468d61c13e7be1bfe, type: 3}
+    PrewarmCount: 0
+  - Prefab: {fileID: 4360405640089636799, guid: b4014d274d5568848a95d28d9704593f, type: 3}
+    PrewarmCount: 0

@@ -1,64 +1,105 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Pool;
 
+/// <summary>
+/// Object Pool for networked objects, used for controlling how objects are spawned by Netcode. Netcode by default
+/// will allocate new memory when spawning new objects. With this Networked Pool, we're using the ObjectPool to
+/// reuse objects.
+/// Boss Room uses this for projectiles. In theory it should use this for imps too, but we wanted to show vanilla spawning vs pooled spawning.
+/// Hooks to NetworkManager's prefab handler to intercept object spawning and do custom actions.
+/// </summary>
 public class NetworkObjectPool : NetworkBehaviour
 {
-    Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
+    HashSet<GameObject> m_Prefabs = new HashSet<GameObject>();
 
-    public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
-    public override void OnNetworkDespawn()
+    Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
+
+    public void Awake()
     {
-        foreach (string prefabPath in m_PooledObjects.Keys)
+        Managers.NGO_PoolManager.Set_NGO_Pool(this);
+    }
+    public override void OnNetworkSpawn()
+    {
+        // Registers all objects in PooledPrefabsList to the cache.
+        List<(string, int)> poolList = Managers.NGO_PoolManager.AutoRegisterFromFolder();
+
+
+        foreach ((string, int) poolItem in poolList)
         {
-            m_PooledObjects[prefabPath].Clear();
+            GameObject poolgo = Managers.ResourceManager.Load<GameObject>(poolItem.Item1);
+            RegisterPrefabInternal(poolgo, poolItem.Item2);
         }
-        m_PooledObjects.Clear();
     }
 
-    public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
+    public override void OnNetworkDespawn()
     {
-        NetworkObject networkObject = m_PooledObjects[prefabPath].Get();
-
-        if (networkObject.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize))
+        // Unregisters all objects in PooledPrefabsList from the cache.
+        foreach (var prefab in m_Prefabs)
         {
-            poolingInitalize.OnPoolGet();
+            // Unregister Netcode Spawn handlers
+            NetworkManager.Singleton.PrefabHandler.RemoveHandler(prefab);
+            m_PooledObjects[prefab].Clear();
         }
-        Transform noTransform = networkObject.transform;
+        m_PooledObjects.Clear();
+        m_Prefabs.Clear();
+    }
+
+    //public void OnValidate()
+    //{
+    //    for (var i = 0; i < PooledPrefabsList.Count; i++)
+    //    {
+    //        var prefab = PooledPrefabsList[i].Prefab;
+    //        if (prefab != null)
+    //        {
+    //            Assert.IsNotNull(prefab.GetComponent<NetworkObject>(), $"{nameof(NetworkObjectPool)}: Pooled prefab \"{prefab.name}\" at index {i.ToString()} has no {nameof(NetworkObject)} component.");
+    //        }
+    //    }
+    //}
+
+    /// <summary>
+    /// Gets an instance of the given prefab from the pool. The prefab must be registered to the pool.
+    /// </summary>
+    /// <remarks>
+    /// To spawn a NetworkObject from one of the pools, this must be called on the server, then the instance
+    /// returned from it must be spawned on the server. This method will then also be called on the client by the
+    /// PooledPrefabInstanceHandler when the client receives a spawn message for a prefab that has been registered
+    /// here.
+    /// </remarks>
+    /// <param name="prefab"></param>
+    /// <param name="position">The position to spawn the object at.</param>
+    /// <param name="rotation">The rotation to spawn the object with.</param>
+    /// <returns></returns>
+    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        var networkObject = m_PooledObjects[prefab].Get();
+
+        var noTransform = networkObject.transform;
         noTransform.position = position;
         noTransform.rotation = rotation;
 
         return networkObject;
     }
 
+    /// <summary>
+    /// Return an object to the pool (reset objects before returning).
+    /// </summary>
     public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)
     {
-        if (prefab.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
-        {
-            poolingInitalize_Base.OnPoolRelease();
-            m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
-        }
+        m_PooledObjects[prefab].Release(networkObject);
     }
 
-
-    public void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
+    /// <summary>
+    /// Builds up the cache for a prefab.
+    /// </summary>
+    void RegisterPrefabInternal(GameObject prefab, int prewarmCount)
     {
-        GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
-
-        if (Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
-        {
-            Debug.Log($"{prefab.name} is not registed the NetworkManager");
-            return;
-        }
-
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab,transform).RemoveCloneText().GetComponent<NetworkObject>();
-            return ngo;
+            return Instantiate(prefab).GetComponent<NetworkObject>();
         }
 
         void ActionOnGet(NetworkObject networkObject)
@@ -75,41 +116,59 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             Destroy(networkObject.gameObject);
         }
-        m_PooledObjects[prefabPath] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
 
+        m_Prefabs.Add(prefab);
+
+        // Create the pool
+        m_PooledObjects[prefab] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
+
+        // Populate the pool
         var prewarmNetworkObjects = new List<NetworkObject>();
         for (var i = 0; i < prewarmCount; i++)
         {
-            prewarmNetworkObjects.Add(m_PooledObjects[prefabPath].Get());
+            prewarmNetworkObjects.Add(m_PooledObjects[prefab].Get());
         }
         foreach (var networkObject in prewarmNetworkObjects)
         {
-            m_PooledObjects[prefabPath].Release(networkObject);
+            m_PooledObjects[prefab].Release(networkObject);
         }
 
-        PooledPrefabInstanceHandler handler = new PooledPrefabInstanceHandler(this, prefabPath);
-
-        Managers.RelayManager.NetworkManagerEx.PrefabHandler.AddHandler(prefab, handler);
-
+        // Register Netcode Spawn handlers
+        NetworkManager.Singleton.PrefabHandler.AddHandler(prefab, new PooledPrefabInstanceHandler(prefab, this));
     }
 }
-public class PooledPrefabInstanceHandler : INetworkPrefabInstanceHandler
-{
-    private readonly NetworkObjectPool m_NetworkObjectPool;
-    private readonly string m_PrefabPath;
 
-    public PooledPrefabInstanceHandler(NetworkObjectPool pool, string prefabPath)
+[Serializable]
+struct PoolConfigObject
+{
+    public GameObject Prefab;
+    public int PrewarmCount;
+
+    public PoolConfigObject(GameObject prefab, int prewarmCount)
     {
-        m_NetworkObjectPool = pool;
-        m_PrefabPath = prefabPath;
+        Prefab = prefab;
+        PrewarmCount = prewarmCount;
     }
-    public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
+}
+
+class PooledPrefabInstanceHandler : INetworkPrefabInstanceHandler
+{
+    GameObject m_Prefab;
+    NetworkObjectPool m_Pool;
+
+    public PooledPrefabInstanceHandler(GameObject prefab, NetworkObjectPool pool)
     {
-        return m_NetworkObjectPool.GetNetworkObject(m_PrefabPath, position, rotation);
+        m_Prefab = prefab;
+        m_Pool = pool;
     }
-    public void Destroy(NetworkObject networkObject)
+
+    NetworkObject INetworkPrefabInstanceHandler.Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
     {
-        GameObject prefab = Managers.ResourceManager.Load<GameObject>(m_PrefabPath);
-        m_NetworkObjectPool.ReturnNetworkObject(networkObject, prefab);
+        return m_Pool.GetNetworkObject(m_Prefab, position, rotation);
+    }
+
+    void INetworkPrefabInstanceHandler.Destroy(NetworkObject networkObject)
+    {
+        m_Pool.ReturnNetworkObject(networkObject, m_Prefab);
     }
 }

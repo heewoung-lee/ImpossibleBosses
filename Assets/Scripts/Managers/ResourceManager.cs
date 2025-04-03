@@ -39,7 +39,7 @@ public class ResourceManager : IManagerIResettable
         {
             if (isCheckNetworkPrefab(cachedPrefab))
             {
-                return Managers.NGO_PoolManager.Pop(path);
+                //return Managers.NGO_PoolManager.Pop(path);
             }
             else
             {

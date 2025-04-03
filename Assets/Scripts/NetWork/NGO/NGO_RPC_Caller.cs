@@ -111,10 +111,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
     private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default)
     {
 
-        if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
-        {
-            return SpawnObjectToResources(path, position, Managers.NGO_PoolManager.NGO_Tr);
-        }
+        //if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
+        //{
+        //    return SpawnObjectToResources(path, position, Managers.NGO_PoolManager.NGO_Tr);
+        //}
         return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 
