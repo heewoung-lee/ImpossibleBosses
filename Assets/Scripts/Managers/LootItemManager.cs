@@ -27,7 +27,7 @@ public class LootItemManager
         {
             if(_temporaryInventory == null)
             {
-                _temporaryInventory = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/LootItemRootNetwork");
+                _temporaryInventory = Managers.ResourceManager.Instantiate("Prefabs/NGO/LootItemRootNetwork");
             }
             return _temporaryInventory.transform;  
         }
@@ -42,7 +42,6 @@ public class LootItemManager
         }
         return TemporaryInventory;
     }
-
 
 
     public void LoadItemsFromLootStorage(Transform itemInventoryTr)

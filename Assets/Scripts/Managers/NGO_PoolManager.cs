@@ -13,7 +13,6 @@ public class NGO_PoolManager
 {
     private NetworkObjectPool _ngoPool;
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
-
     public Transform NGO_Tr => _ngoPool.transform;
 
     public void Set_NGO_Pool(NetworkObjectPool ngo)
@@ -53,5 +52,17 @@ public class NGO_PoolManager
         }
         return poolingOBJ_Path;
     }
+
+    //public Transform getPoolOBjectTr(string prefabPath)
+    //{
+    //    if(_poolObjectTr.TryGetValue(prefabPath,out Transform poolOBJTr))
+    //    {
+    //        return poolOBJTr;
+    //    }
+
+    //    GameObject go = Managers.ResourceManager.Load<GameObject>(prefabPath);
+
+        
+    //}
 
 }

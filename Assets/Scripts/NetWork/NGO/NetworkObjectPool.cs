@@ -9,7 +9,6 @@ using UnityEngine.Pool;
 public class NetworkObjectPool : NetworkBehaviour
 {
     Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
-
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
     public override void OnNetworkDespawn()
     {
@@ -26,9 +25,9 @@ public class NetworkObjectPool : NetworkBehaviour
 
         Managers.NGO_PoolManager.Set_NGO_Pool(this);
 
-        foreach ((string, int) poolingPath in Managers.NGO_PoolManager.AutoRegisterFromFolder())
+        foreach ((string, int) poolingPrefabInfo in Managers.NGO_PoolManager.AutoRegisterFromFolder())
         {
-            RegisterPrefabInternal(poolingPath.Item1, poolingPath.Item2);
+            RegisterPrefabInternal(poolingPrefabInfo.Item1, poolingPrefabInfo.Item2);
         }
     }
 
@@ -69,7 +68,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab,transform).RemoveCloneText().GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab, transform).RemoveCloneText().GetComponent<NetworkObject>();
             return ngo;
         }
 

@@ -279,4 +279,19 @@ public class RelayManager
         NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
     }
 
+
+
+    public T SearchNetworkObject<T>(GameObject go)
+    {
+        foreach(NetworkObject ngo in _netWorkManager.SpawnManager.SpawnedObjectsList)
+        {
+            if(ngo.TryGetComponent(out go))
+            {
+                Debug.Log("Ã£¾Ò´Ù");
+                return go.GetComponent<T>();
+            }
+            break;
+        }
+        return default(T);
+    }
 }
