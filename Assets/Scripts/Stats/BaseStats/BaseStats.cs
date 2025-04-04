@@ -55,22 +55,16 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     public Action<float> MoveSpeedValueChangedEvent;
 
 
-    [SerializeField]
     private NetworkVariable<CharacterBaseStat> _characterBaseStatValue = new NetworkVariable<CharacterBaseStat>
          (new CharacterBaseStat(0,0,0,0,0f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
     private NetworkVariable<int> _characterHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
     private NetworkVariable<int> _characterMaxHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
     private NetworkVariable<int> _characterAttackValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
     private NetworkVariable<int> _characterDefenceValue = new NetworkVariable<int>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
     private NetworkVariable<float> _characterMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
