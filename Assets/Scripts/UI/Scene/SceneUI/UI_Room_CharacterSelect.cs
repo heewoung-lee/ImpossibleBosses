@@ -63,7 +63,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         Bind<Transform>(typeof(Transforms));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
-        _chooseCameraTr = Managers.ResourceManager.InstantiatePrefab("Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
+        _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
@@ -167,7 +167,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         if (_netWorkManager.IsHost)
         {
-            GameObject characterSelector = Managers.ResourceManager.InstantiatePrefab("NGO/Character_Select_Rect");
+            GameObject characterSelector = Managers.ResourceManager.Instantiate("Prefabs/NGO/Character_Select_Rect");
             characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
             if (characterSelector.GetComponent<NetworkObject>().IsOwner)
             {
@@ -194,15 +194,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         GameObject targetFrame = _ui_RoomPlayerFrames[playerframeindex].gameObject;
         RectTransform targetFrame_Rect = targetFrame.GetComponent<RectTransform>();
 
-        RectTransform chractorSeletor_Rect = characterSelector.GetComponent<RectTransform>();
-
         Vector2 frame_size = GetUISize(targetFrame);
         Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
 
-        chractorSeletor_Rect.sizeDelta = frame_size;
-        chractorSeletor_Rect.position = frame_screenPos;
         //TODO: 크기 조절 되도록 수정
-        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex, characterSelector, Managers.RelayManager.NGO_ROOT_UI.transform,true);
+        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex,characterSelector,frame_screenPos, parent:Managers.RelayManager.NGO_ROOT_UI.transform,destroyOption:true);
         return characterSelector;
     }
     public async Task LoadScenePlayGames()

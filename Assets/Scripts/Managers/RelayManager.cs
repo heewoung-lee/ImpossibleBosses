@@ -7,6 +7,7 @@ using UnityEngine;
 using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
 using UnityEditor.PackageManager;
+using UnityEngine.UIElements;
 
 public class RelayManager
 {
@@ -39,7 +40,8 @@ public class RelayManager
             }
             else
             {
-                Managers.ResourceManager.InstantiatePrefab("NGO/NetworkManager");
+                Managers.ResourceManager.Instantiate("Prefabs/NGO/NetworkManager");
+                //자꾸 어디서 네트워크종료될때 간헐적으로 하이어라키에 이인스턴스 생기는데 이거 의심 해볼것 
                 NetworkManager.Singleton.SetSingleton();
                 return NetworkManager.Singleton;
             }
@@ -51,10 +53,9 @@ public class RelayManager
     {
         get
         {
-            if (_nGO_ROOT_UI == null)
+            if (_nGO_ROOT_UI == null && _netWorkManager.IsHost)
             {
-                _nGO_ROOT_UI = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT_UI");
-                SpawnNetworkOBJ(_nGO_ROOT_UI);
+                _nGO_ROOT_UI = SpawnNetworkOBJ("Prefabs/NGO/NGO_ROOT_UI");
             }
             return _nGO_ROOT_UI;
         }
@@ -64,10 +65,9 @@ public class RelayManager
     {
         get
         {
-            if (_nGO_ROOT == null)
+            if (_nGO_ROOT == null && _netWorkManager.IsHost)
             {
-                _nGO_ROOT = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_ROOT");
-                SpawnNetworkOBJ(_nGO_ROOT);
+                _nGO_ROOT = SpawnNetworkOBJ("Prefabs/NGO/NGO_ROOT");
             }
             return _nGO_ROOT;
         }
@@ -79,21 +79,12 @@ public class RelayManager
         {
             if (_nGO_RPC_Caller == null)
             {
-                if (NetworkManagerEx.IsHost)
+                foreach (NetworkObject netWorkOBJ in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
                 {
-                    GameObject ngo_RPC_Caller_OBJ = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
-                    SpawnNetworkOBJ(ngo_RPC_Caller_OBJ);
-                    _nGO_RPC_Caller = ngo_RPC_Caller_OBJ.GetComponent<NGO_RPC_Caller>();
-                }
-                else
-                {
-                    foreach(NetworkObject netWorkOBJ in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
+                    if (netWorkOBJ.TryGetComponent(out NGO_RPC_Caller rpccaller))
                     {
-                        if (netWorkOBJ.TryGetComponent(out NGO_RPC_Caller rpccaller))
-                        {
-                            _nGO_RPC_Caller = rpccaller;
-                            break;
-                        }
+                        _nGO_RPC_Caller = rpccaller;
+                        break;
                     }
                 }
             }
@@ -105,8 +96,7 @@ public class RelayManager
 
     public GameObject Load_NGO_ROOT_UI_Module(string path)
     {
-        GameObject networkOBJ = Managers.ResourceManager.InstantiatePrefab(path);
-        SpawnNetworkOBJ(networkOBJ, NGO_ROOT_UI.transform);
+        GameObject networkOBJ = SpawnNetworkOBJ(path, NGO_ROOT_UI.transform);
         return networkOBJ;
     }
 
@@ -115,6 +105,16 @@ public class RelayManager
         _nGO_RPC_Caller = ngo.GetComponent<NGO_RPC_Caller>();
     }
 
+    public void SpawnToRPC_Caller()
+    {
+        if (_netWorkManager.IsHost == false)
+            return;
+
+        if (NGO_RPC_Caller != null)
+            return;
+
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller");
+    }
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
         try
@@ -150,16 +150,37 @@ public class RelayManager
         Debug.Log("GameObject hasn't a BaseStats");
         return default;
     }
-    public GameObject SpawnNetworkOBJ(GameObject obj, Transform parent = null, bool destroyOption = true)
+
+    public GameObject SpawnNetworkOBJ(string ngoPath, Transform parent = null, Vector3 position = default, bool destroyOption = true)
     {
-        return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, obj, parent, destroyOption);
+        return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, ngoPath, position, parent, destroyOption);
     }
-    public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject obj, Transform parent = null, bool destroyOption = true)
+    public GameObject SpawnNetworkOBJ(GameObject ngo, Transform parent = null, Vector3 position = default, bool destroyOption = true)
+    {
+        return SpawnAndInjectionNGO(ngo, NetworkManagerEx.LocalClientId, position, parent, destroyOption);
+    }
+
+
+
+
+    public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
+    {
+        GameObject instanceObj = Managers.ResourceManager.Instantiate(ngoPath, parent);
+        return SpawnAndInjectionNGO(instanceObj, clientId, position, parent, destroyOption);
+    }
+    public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
+    {
+        return SpawnAndInjectionNGO(ngo, clientId, position, parent, destroyOption);
+    }
+
+
+    private GameObject SpawnAndInjectionNGO(GameObject instanceObj, ulong clientId, Vector3 position, Transform parent = null, bool destroyOption = true)
     {
         if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
         {
-            NetworkObject networkObj = obj.GetOrAddComponent<NetworkObject>();
-            if(networkObj.IsSpawned == false)
+            instanceObj.transform.position = position;
+            NetworkObject networkObj = instanceObj.GetOrAddComponent<NetworkObject>();
+            if (networkObj.IsSpawned == false)
             {
                 //이쪽에서 풀 객체면 스폰이 아닌 문제는 여기구역은 
                 networkObj.SpawnWithOwnership(clientId, destroyOption);
@@ -169,8 +190,12 @@ public class RelayManager
                 networkObj.transform.SetParent(parent, false);
             }
         }
-        return obj;
+        return instanceObj;
     }
+
+
+
+
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
         NGO_RPC_Caller.DeSpawnByIDServerRpc(networkObjectID);
@@ -253,4 +278,5 @@ public class RelayManager
         NetworkManagerEx.OnClientDisconnectCallback -= OnClientconnectEvent;
         NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
     }
+
 }

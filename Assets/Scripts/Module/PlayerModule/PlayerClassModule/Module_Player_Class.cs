@@ -36,7 +36,7 @@ public abstract class Module_Player_Class : MonoBehaviour
     {
         foreach (BaseSkill skill in _playerSkill.Values)
         {
-            GameObject skillPrefab = Managers.ResourceManager.InstantiatePrefab("UI/Skill/UI_SkillComponent");
+            GameObject skillPrefab = Managers.ResourceManager.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
             SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
             skillcomponent.SetSkillComponent(skill);
             Transform skillLocation = Managers.SkillManager.UI_SkillBar.SetLocationSkillSlot(skillcomponent);

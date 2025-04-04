@@ -12,8 +12,7 @@ public class LootItemManager
         {
             if(_itemRoot == null)
             {
-                _itemRoot = Managers.ResourceManager.InstantiatePrefab("NGO/ItemRootNetwork");
-                Managers.RelayManager.SpawnNetworkOBJ(_itemRoot);
+                _itemRoot = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/ItemRootNetwork");
             }
             return _itemRoot.transform;
         }
@@ -28,8 +27,7 @@ public class LootItemManager
         {
             if(_temporaryInventory == null)
             {
-                _temporaryInventory = Managers.ResourceManager.InstantiatePrefab("NGO/LootItemRootNetwork");
-                Managers.RelayManager.SpawnNetworkOBJ(_temporaryInventory);
+                _temporaryInventory = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/LootItemRootNetwork");
             }
             return _temporaryInventory.transform;  
         }

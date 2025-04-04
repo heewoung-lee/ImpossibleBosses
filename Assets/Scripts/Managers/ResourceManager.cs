@@ -29,6 +29,7 @@ public class ResourceManager : IManagerIResettable
         else
             return true;
     }
+
     public GameObject Instantiate(string path, Transform parent = null)
     {
 
@@ -47,7 +48,12 @@ public class ResourceManager : IManagerIResettable
             }
         }
 
-        GameObject prefab = Load<GameObject>(path);
+        GameObject prefab = Load<GameObject>(path); // 먼저 path를 시도 하고 없으면 prefab붙여서 시도
+        if(prefab == null)
+        {
+            string prefabPath = "Prefabs/" + path;
+            prefab = Load<GameObject>(prefabPath);
+        }
 
         if (prefab == null)
         {
@@ -57,7 +63,7 @@ public class ResourceManager : IManagerIResettable
 
         if (prefab.GetComponent<Poolable>() != null)
         {
-            _cachingPoolableObject[path] = prefab;
+            _cachingPoolableObject[path] = prefab;//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
             if (isCheckNetworkPrefab(prefab))
             {
                 return Managers.NGO_PoolManager.Pop(path, parent);
@@ -90,15 +96,15 @@ public class ResourceManager : IManagerIResettable
     }
 
 
-    public GameObject InstantiatePrefab(string path, Transform parent = null)
-    {
-        if (path.Contains("Prefabs") == false)
-        {
-            path = "Prefabs/" + path;
-        }
+    //public GameObject InstantiatePrefab(string path, Transform parent = null)
+    //{
+    //    if (path.Contains("Prefabs") == false)
+    //    {
+    //        path = "Prefabs/" + path;
+    //    }
 
-        return Instantiate(path, parent);
-    }
+    //    return Instantiate(path, parent);
+    //}
 
     public void DestroyObject(GameObject go, float duration = 0)
     {

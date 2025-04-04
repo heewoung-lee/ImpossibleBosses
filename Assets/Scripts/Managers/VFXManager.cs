@@ -55,7 +55,7 @@ public class VFXManager
             Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
             return null;
         }
-        GameObject particleObject = Managers.ResourceManager.InstantiatePrefab(path);
+        GameObject particleObject = Managers.ResourceManager.Instantiate(path);
 
         return particleObject;
     }

@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class PlaySceneSpawnNGO : NetworkBehaviourBase
 {
@@ -47,15 +48,13 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
 
     private void HostSpawnObject()
     {
-        GameObject rpcCaller = Managers.ResourceManager.InstantiatePrefab("NGO/NGO_RPC_Caller");
-        Managers.RelayManager.SpawnNetworkOBJ(rpcCaller);
-
-        GameObject vfx_root_ngo = Managers.ResourceManager.InstantiatePrefab("NGO/VFX_Root_NGO");
-        Managers.RelayManager.SpawnNetworkOBJ(vfx_root_ngo);
-
+        if (IsHost == false)
+            return;
+        Managers.RelayManager.SpawnToRPC_Caller();
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
         RequestSpawnToNPC(new List<(string, Vector3)>() //데미지 테스트용 더미 큐브
         {
-           {("Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
+           {("Prefabs/Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
         });
     }
 
@@ -66,24 +65,17 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
 
     private void RequestSpawnToNPC(List<(string, Vector3)> npcPathAndTr)
     {
-        if (IsHost == false)
-            return;
-
         foreach ((string, Vector3) npcdata in npcPathAndTr)
         {
-            GameObject dummy_cube = Managers.ResourceManager.InstantiatePrefab($"{npcdata.Item1}");
-            dummy_cube.transform.position = npcdata.Item2;
-            Managers.RelayManager.SpawnNetworkOBJ(dummy_cube,Managers.RelayManager.NGO_ROOT.transform);
+            Managers.RelayManager.SpawnNetworkOBJ($"{npcdata.Item1}", Managers.RelayManager.NGO_ROOT.transform, position: npcdata.Item2);
         }
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
     public void RequestSpawnPlayerServerRpc(ulong requestingClientId, string choicePlayer)
     {
-        _player = Managers.ResourceManager.InstantiatePrefab($"Player/{choicePlayer}Base");
         Vector3 targetPosition = new Vector3(1 * requestingClientId, 0, 1);
-        _player.GetComponent<NavMeshAgent>().Warp(targetPosition);
-        _relayManager.SpawnNetworkOBJInjectionOnwer(requestingClientId, _player,_relayManager.NGO_ROOT.transform);
+        _relayManager.SpawnNetworkOBJInjectionOnwer(requestingClientId, $"Prefabs/Player/{choicePlayer}Base", targetPosition, _relayManager.NGO_ROOT.transform);
     }
 
     private bool IsAvailableMockUnitTest()

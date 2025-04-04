@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4535378813109015039}
   - component: {fileID: 5789822676079542233}
   - component: {fileID: -3196564419982207920}
-  - component: {fileID: 8676863285269831915}
   m_Layer: 0
   m_Name: NGO_Polling
   m_TagString: Untagged
@@ -72,16 +71,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  PooledPrefabsList: []
---- !u!114 &8676863285269831915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6487113428443309402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 379c4e2c41db6ce4996746eae542b0e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -20,6 +20,18 @@ public class NetworkObjectPool : NetworkBehaviour
         m_PooledObjects.Clear();
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        Managers.NGO_PoolManager.Set_NGO_Pool(this);
+
+        foreach ((string, int) poolingPath in Managers.NGO_PoolManager.AutoRegisterFromFolder())
+        {
+            RegisterPrefabInternal(poolingPath.Item1, poolingPath.Item2);
+        }
+    }
+
     public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
     {
         NetworkObject networkObject = m_PooledObjects[prefabPath].Get();
@@ -45,7 +57,7 @@ public class NetworkObjectPool : NetworkBehaviour
     }
 
 
-    public void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
+    private void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
     {
         GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
 

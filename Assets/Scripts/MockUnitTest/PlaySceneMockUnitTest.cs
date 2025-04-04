@@ -19,7 +19,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         None
     }
     
-    string LobbyID = "TestLobby312";
+    string LobbyID = "TestLobby317";
     string _playerType = null;
     GameObject _ngoRoot;
     
@@ -48,7 +48,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 }
                 if (NetworkManager.Singleton.IsListening == true)
                 {
-                    Managers.RelayManager.Load_NGO_ROOT_UI_Module("NGO/PlayerSpawner");
+                    Managers.RelayManager.Load_NGO_ROOT_UI_Module("Prefabs/NGO/PlayerSpawner");
                 }
             }
             else

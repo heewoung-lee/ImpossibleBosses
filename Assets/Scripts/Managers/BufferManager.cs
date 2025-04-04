@@ -34,14 +34,14 @@ public class BufferManager:IManagerInitializable
     }
     public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
     {
-        BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+        BufferComponent buffer = Managers.ResourceManager.Instantiate("Prefabs/Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, effect);
         return buffer;
     }
 
     public BufferComponent InitBuff(BaseStats targetStat, float duration, Buff_Modifier buffer_modifier,float value)
     {
-        BufferComponent buffer = Managers.ResourceManager.InstantiatePrefab("Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+        BufferComponent buffer = Managers.ResourceManager.Instantiate("Prefabs/Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, buffer_modifier, value);
         return buffer;
     }

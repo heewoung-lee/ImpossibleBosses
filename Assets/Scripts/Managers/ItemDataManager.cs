@@ -114,13 +114,13 @@ public class ItemDataManager : IManagerInitializable
         {
             case Equipment_Slot_Type.Helmet:
             case Equipment_Slot_Type.Armor:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Shield");
+                lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Shield");
                 break;
             case Equipment_Slot_Type.Weapon:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Sword");
+                lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Sword");
                 break;
             default:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Bag");
+                lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Bag");
                 break;
         }
         lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -129,7 +129,7 @@ public class ItemDataManager : IManagerInitializable
 
     public GameObject GetConsumableLootItem(IItem iteminfo)
     {
-        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("NGO/LootingItem/Potion");
+        GameObject lootitem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Potion");
         lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
         return lootitem;
     }

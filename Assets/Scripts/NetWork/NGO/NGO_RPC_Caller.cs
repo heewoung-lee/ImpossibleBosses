@@ -64,7 +64,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 networkLootItem = Managers.ItemDataManager.GetEquipLootItem(iteminfo);
                 break;
             case ItemType.Consumable:
-                networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo);
+                networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo); 
                 break;
             case ItemType.ETC:
                 break;
@@ -121,7 +121,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
     private NetworkObject SpawnObjectToResources(string path, Vector3 position = default, Transform parentTr = null)
     {
-        GameObject obj = Managers.ResourceManager.InstantiatePrefab(path);
+        GameObject obj = Managers.ResourceManager.Instantiate(path);
         obj.transform.position = position;
         NetworkObject networkObj;
         networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();

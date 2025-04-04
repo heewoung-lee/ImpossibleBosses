@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
@@ -15,30 +16,42 @@ public class NGO_PoolManager
 
     public Transform NGO_Tr => _ngoPool.transform;
 
-    public void Set_NGO_Pool(NetworkObject ngo)
+    public void Set_NGO_Pool(NetworkObjectPool ngo)
     {
-        _ngoPool = ngo.gameObject.GetComponent<NetworkObjectPool>();
+        _ngoPool = ngo;
     }
     public void Create_NGO_Pooling_Object()
     {
-        Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
+        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        {
+            Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
+        }
     }
 
     public GameObject Pop(string prefabPath,Transform parantTr = null)
     {
         return _ngoPool.GetNetworkObject(prefabPath, Vector3.zero, Quaternion.identity).gameObject;
     }
-    public void RegisterPoolingPrefab(string poolingPath,int capacity)
-    {
-        _ngoPool.RegisterPrefabInternal(poolingPath, capacity);
-    }
-
     public void Push(NetworkObject ngo)
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             ngo.Despawn();
         }
+    }
+
+    public List<(string, int)> AutoRegisterFromFolder()
+    {
+        GameObject[] poolableNGOList = Managers.ResourceManager.LoadAll<GameObject>("Prefabs");
+        List<(string, int)> poolingOBJ_Path = new List<(string, int)>();
+        foreach (GameObject go in poolableNGOList)
+        {
+            if (go.TryGetComponent(out Poolable poolable) && go.TryGetComponent(out NGO_PoolingInitalize_Base poolingOBJ))
+            {
+                poolingOBJ_Path.Add((poolingOBJ.PoolingNGO_PATH, poolingOBJ.PoolingCapacity));
+            }
+        }
+        return poolingOBJ_Path;
     }
 
 }

@@ -165,7 +165,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
 
     public override GameObject GetLootingItemObejct(IItem iteminfo)
     {
-        GameObject lootitem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+        GameObject lootitem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Potion", Managers.LootItemManager.ItemRoot);
         lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
         return lootitem;
     }

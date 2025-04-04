@@ -8,11 +8,6 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.UI;
-public enum SelecterDirection
-{
-    LeftClick,
-    RightClick
-}
 public class CharacterSelectorNGO : NetworkBehaviourBase
 {
     private readonly Color PLAYER_FRAME_COLOR = "#143658".HexCodetoConvertColor();

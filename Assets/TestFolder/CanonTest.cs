@@ -26,7 +26,7 @@ public class CanonShooter : MonoBehaviour
         targetTransform = Managers.GameManagerEx.Player.transform;
 
         // 발사체 생성
-        GameObject projectile = Managers.ResourceManager.InstantiatePrefab("Enemy/Boss/AttackPattren/BossSkill1");
+        GameObject projectile = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
 
         projectile.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO);
         projectile.transform.position += Vector3.up * GetComponent<Collider>().bounds.max.y;

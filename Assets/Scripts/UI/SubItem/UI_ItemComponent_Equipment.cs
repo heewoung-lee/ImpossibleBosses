@@ -98,13 +98,13 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
         {
             case Equipment_Slot_Type.Helmet:
             case Equipment_Slot_Type.Armor:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Shield", Managers.LootItemManager.ItemRoot);
                 break;
             case Equipment_Slot_Type.Weapon:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Sword", Managers.LootItemManager.ItemRoot);
                 break;
             default:
-                lootItem = Managers.ResourceManager.InstantiatePrefab("LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+                lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Bag", Managers.LootItemManager.ItemRoot);
                 break;
         }
         lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
