@@ -25,10 +25,30 @@ public class NetworkObjectPool : NetworkBehaviour
 
         Managers.NGO_PoolManager.Set_NGO_Pool(this);
 
+        if (IsHost == false)
+            return;
+
+
         foreach ((string, int) poolingPrefabInfo in Managers.NGO_PoolManager.AutoRegisterFromFolder())
         {
-            RegisterPrefabInternal(poolingPrefabInfo.Item1, poolingPrefabInfo.Item2);
+            //경로에 맞게 Root가져올 것
+
+            GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
+
+            if (pollingNgo_Root != null)
+            {
+               Managers.RelayManager.SpawnNetworkOBJ(pollingNgo_Root,transform);
+            }
+
+            if (pollingNgo_Root.TryGetComponent(out NGO_Pool_RootInitailize initalilze))
+            {
+                initalilze.SetRootObjectName(poolingPrefabInfo.Item1);
+            }
+
+            //이쪽에서 등록하면 안됨 여기는 오로지 호스트 영역 호스트는 ROot까지만 만들어 줘야함.
         }
+
+
     }
 
     public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
@@ -56,7 +76,7 @@ public class NetworkObjectPool : NetworkBehaviour
     }
 
 
-    private void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
+    public void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
     {
         GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
 
@@ -68,7 +88,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab, transform).RemoveCloneText().GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab, Managers.NGO_PoolManager.Pool_NGO_Root_Dict[prefabPath]).RemoveCloneText().GetComponent<NetworkObject>();
             return ngo;
         }
 

@@ -105,15 +105,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
             }
         }
     }
-
-
-
     private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default)
     {
 
         if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
         {
-            return SpawnObjectToResources(path, position,parentTr:Managers.NGO_PoolManager.NGO_Tr);
+            return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
         }
         return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
@@ -190,12 +187,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             Managers.BufferManager.InitBuff(playerstats, duration, effect);
         }
-    }
-
-    [Rpc(SendTo.Server)]
-    public void Call_Create_NGOServerRpc(string prefabPath)
-    {
-
     }
 
 }

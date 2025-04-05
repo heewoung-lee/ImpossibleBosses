@@ -13,7 +13,10 @@ public class NGO_PoolManager
 {
     private NetworkObjectPool _ngoPool;
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
-    public Transform NGO_Tr => _ngoPool.transform;
+
+    private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
+
+    public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
 
     public void Set_NGO_Pool(NetworkObjectPool ngo)
     {
@@ -26,7 +29,10 @@ public class NGO_PoolManager
             Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
         }
     }
-
+    public void SetPool_NGO_ROOT_Dict(string poolNgoPath,Transform RootTr)
+    {
+        _pool_NGO_Root_Dict.Add(poolNgoPath, RootTr);
+    }
     public GameObject Pop(string prefabPath,Transform parantTr = null)
     {
         return _ngoPool.GetNetworkObject(prefabPath, Vector3.zero, Quaternion.identity).gameObject;
@@ -53,6 +59,12 @@ public class NGO_PoolManager
         return poolingOBJ_Path;
     }
 
+    public void NGO_Pool_RegisterPrefab(string path,int capacity = 5)
+    {
+        _ngoPool.RegisterPrefabInternal(path, capacity);
+    }
+
+
     //public Transform getPoolOBjectTr(string prefabPath)
     //{
     //    if(_poolObjectTr.TryGetValue(prefabPath,out Transform poolOBJTr))
@@ -62,7 +74,7 @@ public class NGO_PoolManager
 
     //    GameObject go = Managers.ResourceManager.Load<GameObject>(prefabPath);
 
-        
+
     //}
 
 }
