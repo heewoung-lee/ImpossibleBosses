@@ -64,17 +64,4 @@ public class NGO_PoolManager
         _ngoPool.RegisterPrefabInternal(path, capacity);
     }
 
-
-    //public Transform getPoolOBjectTr(string prefabPath)
-    //{
-    //    if(_poolObjectTr.TryGetValue(prefabPath,out Transform poolOBJTr))
-    //    {
-    //        return poolOBJTr;
-    //    }
-
-    //    GameObject go = Managers.ResourceManager.Load<GameObject>(prefabPath);
-
-
-    //}
-
 }

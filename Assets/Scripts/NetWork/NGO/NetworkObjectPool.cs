@@ -32,7 +32,6 @@ public class NetworkObjectPool : NetworkBehaviour
         foreach ((string, int) poolingPrefabInfo in Managers.NGO_PoolManager.AutoRegisterFromFolder())
         {
             //경로에 맞게 Root가져올 것
-
             GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
 
             if (pollingNgo_Root != null)
@@ -44,11 +43,7 @@ public class NetworkObjectPool : NetworkBehaviour
             {
                 initalilze.SetRootObjectName(poolingPrefabInfo.Item1);
             }
-
-            //이쪽에서 등록하면 안됨 여기는 오로지 호스트 영역 호스트는 ROot까지만 만들어 줘야함.
         }
-
-
     }
 
     public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)

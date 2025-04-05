@@ -22,9 +22,7 @@ public class NGO_FigherSkill_Slash_Initalize : NGO_PoolingInitalize_Base
     public override void OnPoolRelease()
     {
         base.OnPoolRelease();
-        //gameObject.transform.position = Vector3.zero;
     }
-
     public override void SetInitalze(NetworkObject obj)
     {
         _particleNGO = obj;

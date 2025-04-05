@@ -57,8 +57,4 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
         pathName += "_Root";
         _rootName.Value = pathName;
     }
-
-
-
-
 }
