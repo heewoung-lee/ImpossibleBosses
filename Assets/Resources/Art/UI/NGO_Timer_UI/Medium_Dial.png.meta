@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b1f557757037ae640af2123f9db3bbdd
+guid: 0304ee1b93f11c744af3f0b6e1b2653a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -94,10 +94,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 212589
-  packageName: Timers Made Easy Lite
-  packageVersion: 1.0.0
-  assetPath: Assets/GolemiteGames/TimersMadeEasyLite/Sprites/MediumDial_HiRes.png
-  uploadId: 478131
