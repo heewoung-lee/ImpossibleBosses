@@ -193,9 +193,6 @@ public class RelayManager
         return instanceObj;
     }
 
-
-
-
     public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
     {
         NGO_RPC_Caller.DeSpawnByIDServerRpc(networkObjectID);
@@ -277,21 +274,5 @@ public class RelayManager
     {
         NetworkManagerEx.OnClientDisconnectCallback -= OnClientconnectEvent;
         NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
-    }
-
-
-
-    public T SearchNetworkObject<T>(GameObject go)
-    {
-        foreach(NetworkObject ngo in _netWorkManager.SpawnManager.SpawnedObjectsList)
-        {
-            if(ngo.TryGetComponent(out go))
-            {
-                Debug.Log("Ã£¾Ò´Ù");
-                return go.GetComponent<T>();
-            }
-            break;
-        }
-        return default(T);
     }
 }
