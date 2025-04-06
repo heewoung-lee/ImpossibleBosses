@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class PlaySceneSpawnNGO : NetworkBehaviourBase
+public class NGO_PlaySceneSpawn : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
@@ -56,6 +56,7 @@ public class PlaySceneSpawnNGO : NetworkBehaviourBase
         {
            {("Prefabs/Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
         });
+        Managers.RelayManager.Load_NGO_UI_Prefab<NGO_UI_Stage_Timer>();
     }
 
     protected override void OnNetworkPostSpawn()

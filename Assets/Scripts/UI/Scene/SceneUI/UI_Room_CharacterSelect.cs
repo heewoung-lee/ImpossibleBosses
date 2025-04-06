@@ -206,7 +206,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         // Managers.RelayManager.
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        await Managers.SceneManagerEx.NetworkLoadSceneAsync(_netWorkManager, Define.Scene.GamePlayScene);
+        await Managers.SceneManagerEx.NetworkLoadSceneAsync(Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)

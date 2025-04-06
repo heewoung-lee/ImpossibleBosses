@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4038516793385507301}
   - component: {fileID: 1775793252160039574}
-  - component: {fileID: 1490681431201235467}
+  - component: {fileID: 9109088248773603285}
   m_Layer: 0
-  m_Name: PlayerSpawner
+  m_Name: NGO_PlaySceneSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1490681431201235467
+--- !u!114 &9109088248773603285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

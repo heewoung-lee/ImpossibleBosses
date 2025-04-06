@@ -48,7 +48,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 }
                 if (NetworkManager.Singleton.IsListening == true)
                 {
-                    Managers.RelayManager.Load_NGO_ROOT_UI_Module("Prefabs/NGO/PlayerSpawner");
+                    Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
                 }
             }
             else
