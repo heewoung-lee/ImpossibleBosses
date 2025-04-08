@@ -19,13 +19,15 @@ public class RelayManager
     private GameObject _nGO_ROOT;
     private NGO_RPC_Caller _nGO_RPC_Caller;
 
-
     public Define.PlayerClass ChoicePlayerCharacter;
 
     public Func<Task> DisconnectPlayerAsyncEvent;
     public Action DisconnectPlayerEvent;
 
     public Action ConnectPlayerEvent;
+
+
+    public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
 
     public NetworkManager NetworkManagerEx
     {

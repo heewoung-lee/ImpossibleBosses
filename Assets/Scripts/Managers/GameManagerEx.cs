@@ -12,7 +12,6 @@ public class GameManagerEx : IManagerInitializable
     private GameObject _spawnPoint;
     private HashSet<GameObject> _enemy = new HashSet<GameObject>();
 
-
     public Action<int> SpawnEvent;
     public GameObject Player { get => _player; }
     public GameObject BossMonster { get => _bossMonster; }

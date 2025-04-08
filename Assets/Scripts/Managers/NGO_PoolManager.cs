@@ -15,7 +15,6 @@ public class NGO_PoolManager
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
     private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
-
     public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
 
     public void Set_NGO_Pool(NetworkObjectPool ngo)
