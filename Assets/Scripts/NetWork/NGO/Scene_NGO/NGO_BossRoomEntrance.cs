@@ -24,7 +24,6 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
 
         _playerCountInPortal.OnValueChanged -= OnChangedCountPlayer;
         _playerCountInPortal.OnValueChanged += OnChangedCountPlayer;
-
     }
 
 

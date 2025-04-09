@@ -53,7 +53,17 @@ public class UI_DamageText : UI_Base
     public void SetTextAndPosition(Transform parantTransform,int Damage)
     {
         _damageText.text = Damage.ToString();
-        transform.position = parantTransform.position+Vector3.up*1.5f;
+        Vector3 damageTextPos = default;
+
+        if (parantTransform.TryGetComponent(out Collider collider))
+        {
+            damageTextPos = parantTransform.position + Vector3.up * collider.bounds.max.y;
+        }
+        else
+        {
+            damageTextPos = parantTransform.position + Vector3.up * 1.5f;
+        }
+        transform.position = damageTextPos;
     }
 
     public void LateUpdate()

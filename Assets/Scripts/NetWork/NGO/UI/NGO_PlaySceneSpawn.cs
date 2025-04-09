@@ -54,10 +54,10 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
         RequestSpawnToNPC(new List<(string, Vector3)>() //데미지 테스트용 더미 큐브
         {
-           {("Prefabs/Dummy_Test_Cube",new Vector3(10f,0.72f,-2.5f))}
+           {("Prefabs/NPC/Damage_Test_Dummy",new Vector3(10f,0,-2.5f))}
         });
         Managers.RelayManager.Load_NGO_UI_Prefab<NGO_UI_Stage_Timer>();
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_BossRoomEntrance");
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_BossRoomEntrance",Managers.RelayManager.NGO_ROOT.transform);
     }
 
     protected override void OnNetworkPostSpawn()
