@@ -96,28 +96,11 @@ public class RelayManager
 
     public string JoinCode { get => _joinCode; }
 
-    public GameObject Load_NGO_UI_Prefab<T>(string name = null,string path = null)
+    public GameObject Load_NGO_Scene_UI_Prefab<T>(string name = null,string path = null) where T : UI_Scene
     {
-        if (name == null)
-            name = typeof(T).Name;
-
-        GameObject go = null;
-        if (path == null)
-        {
-            go = Managers.ResourceManager.Instantiate($"Prefabs/NGO/UI/{name}");
-        }
-        else
-        {
-            go = Managers.ResourceManager.Instantiate($"{path}");
-        }
-        
-        if(go.TryGetComponent(out T component) == false)
-        {
-            go.AddComponent(typeof(T));
-        }
-
-        go = SpawnNetworkOBJ(go, NGO_ROOT_UI.transform);
-        return go;
+        Managers.UI_Manager.GetSceneUIFromResource<T>(name, path);
+        T ui_obj = Managers.UI_Manager.Get_Scene_UI<T>();
+        return SpawnNetworkOBJ(ui_obj.gameObject, NGO_ROOT_UI.transform);
     }
     public GameObject Load_NGO_Prefab<T>(string name = null, string path = null)
     {

@@ -134,6 +134,11 @@ public static class UIExtension
 
     public static Color HexCodetoConvertColor(this string hexCode)
     {
+        if(hexCode.Contains("#")== false)
+        {
+            hexCode = "#" + hexCode;
+        }
+
         if(UnityEngine.ColorUtility.TryParseHtmlString(hexCode,out Color color))
         {
             return color;

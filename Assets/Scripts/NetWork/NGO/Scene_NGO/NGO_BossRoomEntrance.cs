@@ -9,9 +9,26 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
 
     private Collider _portalTrigger;
 
+    private NGO_UI_Stage_Timer _timer;
+
+    public NGO_UI_Stage_Timer Timer
+    {
+        get
+        {
+            if (_timer == null)
+            {
+                _timer = Managers.UI_Manager.Get_Scene_UI<NGO_UI_Stage_Timer>();
+            }
+            return _timer;
+        }
+    }
+
 
     NetworkVariable<int> _playerCountInPortal = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+
+
 
     public override void OnNetworkSpawn()
     {
@@ -30,9 +47,15 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
 
     private void OnChangedCountPlayer(int previousValue, int newValue)
     {
-        //플레이어가 참여하면, UI업데이트
-
-        //모든 플레이어가 다들어왔으면 코루틴 돌리기
+       if(newValue == Managers.RelayManager.NetworkManagerEx.ConnectedClientsList.Count)
+        {
+            Timer.SetIscheckPlayerInPortal(true);
+        }
+        else
+        {
+            Timer.SetIscheckPlayerInPortal(false);
+        }
+        //newValue가 현재 있는 플레이어 수와 같은지 확인.
     }
 
     protected override void StartInit()

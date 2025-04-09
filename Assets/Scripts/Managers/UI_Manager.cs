@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -164,8 +165,10 @@ public class UI_Manager : IManagerIResettable
         {
             go = Managers.ResourceManager.Instantiate($"{path}");
         }
-        T scene = Utill.GetOrAddComponent<T>(go);
+         T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T), scene);
+
+        if(go.TryGetComponent(out NetworkObject ngo) == false)
         go.transform.SetParent(Root.transform);
 
         return scene;
