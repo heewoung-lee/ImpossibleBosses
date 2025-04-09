@@ -48,7 +48,11 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
         if (other.GetComponent<PlayerStats>() != null)
         {
             _playerCountInPortal.Value++;
-            Debug.Log(_playerCountInPortal.Value+"현재 유저수" + Managers.RelayManager.CurrentUserCount+"전체유저수");
+
+            if (other.TryGetComponent(out NetworkObject playerngo))
+            {
+                EnteredPlayerInPortalRpc(playerngo.NetworkObjectId);
+            }
         }
     }
 
@@ -61,12 +65,37 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
         if (other.GetComponent<PlayerStats>() != null)
         {
             _playerCountInPortal.Value--;
-            Debug.Log(_playerCountInPortal.Value + "현재 유저수" + Managers.RelayManager.CurrentUserCount + "전체유저수");
-
+            if (other.TryGetComponent(out NetworkObject playerngo))
+            {
+                ExitedPlayerInPortalRpc(playerngo.NetworkObjectId);
+            }
         }
     }
 
     protected override void AwakeInit()
     {
+    }
+
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void EnteredPlayerInPortalRpc(ulong playerIndex)
+    {
+        if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex,out NetworkObject player))
+        {
+            player.gameObject.TryGetComponentInChildren(out UI_PortalIndicator indicator);
+            indicator.SetIndicatorOn();
+        }
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ExitedPlayerInPortalRpc(ulong playerIndex)
+    {
+        if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex, out NetworkObject player))
+        {
+            player.gameObject.TryGetComponentInChildren(out UI_PortalIndicator indicator);
+            indicator.SetIndicatorOff();
+        }
     }
 }

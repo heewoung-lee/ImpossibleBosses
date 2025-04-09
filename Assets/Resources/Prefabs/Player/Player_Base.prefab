@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: -5300060477282626606}
   - component: {fileID: -1808355189203613986}
   - component: {fileID: 7582657134656083413}
+  - component: {fileID: 1094766068064972185}
   m_Layer: 0
   m_Name: Player_Base
   m_TagString: Untagged
@@ -376,16 +377,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _characterHpValue:
-    m_InternalValue: 0
-  _characterMaxHpValue:
-    m_InternalValue: 0
-  _characterAttackValue:
-    m_InternalValue: 0
-  _characterDefenceValue:
-    m_InternalValue: 0
-  _characterMoveSpeedValue:
-    m_InternalValue: 0
   _currentexp: 0
 --- !u!114 &6318345427645833407
 MonoBehaviour:
@@ -455,6 +446,18 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &1094766068064972185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94351885454998009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf89de532f8bdc94f9541ad79d1fac89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &111029586966444443
 GameObject:
   m_ObjectHideFlags: 0
