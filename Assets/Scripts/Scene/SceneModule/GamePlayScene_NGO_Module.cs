@@ -4,6 +4,7 @@ public class GamePlayScene_NGO_Module : MonoBehaviour
 {
     protected void Start()
     {
+        Managers.UI_Manager.GetSceneUIFromResource<NGO_UI_Stage_Timer>();
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();

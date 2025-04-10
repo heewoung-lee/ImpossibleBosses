@@ -98,14 +98,6 @@ public class RelayManager
 
     public string JoinCode { get => _joinCode; }
 
-
-    public GameObject Load_NGO_UI_Prefab<T>(Func<T> getUIMethod,string name = null, string path = null) where T : UI_Base
-    {
-        T ui_obj = getUIMethod.Invoke();
-        return SpawnNetworkOBJ(ui_obj.gameObject, NGO_ROOT_UI.transform);
-    }
-
-
     public GameObject Load_NGO_Prefab<T>(string name = null, string path = null)
     {
         if (name == null)
