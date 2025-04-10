@@ -61,6 +61,8 @@ public class NGO_UI_Stage_Timer : UI_Scene
         _timerFillAmount.OnValueChanged += OnChangedTimeFillAmount;
         _isCheckAllPlayerinPortal.OnValueChanged -= OnChangedIscheckPlayerInPortal;
         _isCheckAllPlayerinPortal.OnValueChanged += OnChangedIscheckPlayerInPortal;
+
+        _tmpTimerFillAmount.OnValueChanged += (oldvalue, newvalue) => Debug.Log(newvalue+"새로운값");
         SetTimer();
     }
 
