@@ -169,9 +169,6 @@ public class UI_Manager : IManagerIResettable
          T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T), scene);
 
-        if(go.TryGetComponent(out NetworkObject ngo) == false)
-        go.transform.SetParent(Root.transform);
-
         return scene;
     }
 

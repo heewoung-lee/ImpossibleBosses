@@ -25,6 +25,9 @@ public class NGO_UI_Stage_Timer : UI_Scene
     private NetworkVariable<bool> _isCheckAllPlayerinPortal = new NetworkVariable<bool>
         (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    private NetworkVariable<Color> _timerColor = new NetworkVariable<Color>
+        ("FF9300".HexCodetoConvertColor(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
 
     private Image _timerDial;
     private TMP_Text _timerText;
@@ -59,9 +62,16 @@ public class NGO_UI_Stage_Timer : UI_Scene
         _timerFillAmount.OnValueChanged += OnChangedTimeFillAmount;
         _isCheckAllPlayerinPortal.OnValueChanged -= OnChangedIscheckPlayerInPortal;
         _isCheckAllPlayerinPortal.OnValueChanged += OnChangedIscheckPlayerInPortal;
+        _timerColor.OnValueChanged -= OnChangedTimerColor;
+        _timerColor.OnValueChanged += OnChangedTimerColor;
+
         SetTimer();
     }
 
+    private void OnChangedTimerColor(Color previousValue, Color newValue)
+    {
+        _timerDial.color = newValue;
+    }
 
     public void SetIscheckPlayerInPortal(bool ischeckAllPlayerInPortal)
     {
@@ -86,17 +96,22 @@ public class NGO_UI_Stage_Timer : UI_Scene
 
         void AllPlayerInPortalAndStartCount()
         {
+            if (IsHost == false)
+                return;
+
             _tmpTimer.Value = _timer.Value;//임시데이터에 보관
 
             _timer.Value = AllPlayerinPortalCount;
             _timerFillAmount.Value = 0;
-            _timerDial.color = _allPlayerInPortalColor;
+            _timerColor.Value = _allPlayerInPortalColor;
             StartTimer(AllPlayerinPortalCount);
         }
         void ReturnToNormalCountdown()
         {
+            if (IsHost == false)
+                return;
             _timer.Value = _tmpTimer.Value;
-            _timerDial.color = _normalClockColor;
+            _timerColor.Value = _normalClockColor;
             StartTimer(VillageStayTime);
         }
 
