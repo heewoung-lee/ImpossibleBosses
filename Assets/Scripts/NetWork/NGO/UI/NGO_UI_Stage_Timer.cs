@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class NGO_UI_Stage_Timer : UI_Scene
 {
-    private const float VillageStayTime = 20f;
+    private const float VillageStayTime = 300f;
     private const float BossRoomStayTime = 60f;
     private const float AllPlayerinPortalCount = 7f;
     private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
@@ -71,10 +71,20 @@ public class NGO_UI_Stage_Timer : UI_Scene
 
     private void OnChangedIscheckPlayerInPortal(bool previousValue, bool newValue)
     {
+
         //새로운 밸류가 true이면,
         //시간을 보관해야하고,
         //7초로 다시 SetTimer()가 돌아가야한다.
-        if(newValue == true)
+        if (newValue == true)
+        {
+            AllPlayerInPortalAndStartCount();
+        }
+        else
+        {
+            ReturnToNormalCountdown();
+        }
+
+        void AllPlayerInPortalAndStartCount()
         {
             _tmpTimer.Value = _timer.Value;//임시데이터에 보관
 
@@ -83,7 +93,7 @@ public class NGO_UI_Stage_Timer : UI_Scene
             _timerDial.color = _allPlayerInPortalColor;
             StartTimer(AllPlayerinPortalCount);
         }
-        else
+        void ReturnToNormalCountdown()
         {
             _timer.Value = _tmpTimer.Value;
             _timerDial.color = _normalClockColor;

@@ -32,6 +32,14 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
+    public async Task NetworkLoadSceneWithLoadingScreenAsync(Define.Scene scene)
+    {
+        Managers.Clear();
+        _currentSceneName = scene;
+        await Managers.LobbyManager.LeaveCurrentLobby();
+        Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
     public string GetEnumName(Define.Scene type)
     {
         string name = System.Enum.GetName(typeof(Define.Scene), type);
