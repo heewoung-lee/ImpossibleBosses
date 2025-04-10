@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public class NGO_UI_Stage_Timer : UI_Scene
 {
-    private const float VillageStayTime = 300f;
+    private const float VillageStayTime = 20f;
     private const float BossRoomStayTime = 60f;
+    private const float AllPlayerinPortalCount = 7f;
     private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
     private Color _allPlayerInPortalColor = "0084FF".HexCodetoConvertColor();
 
@@ -21,16 +22,13 @@ public class NGO_UI_Stage_Timer : UI_Scene
     private NetworkVariable<float> _timerFillAmount = new NetworkVariable<float>
       (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    private NetworkVariable<float> _tmpTimerFillAmount = new NetworkVariable<float>
-     (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
     private NetworkVariable<bool> _isCheckAllPlayerinPortal = new NetworkVariable<bool>
         (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
     private Image _timerDial;
     private TMP_Text _timerText;
-    private Coroutine _playcount; 
+    private Coroutine _playcountCoroutine; 
 
 
     enum TimerImage
@@ -61,8 +59,6 @@ public class NGO_UI_Stage_Timer : UI_Scene
         _timerFillAmount.OnValueChanged += OnChangedTimeFillAmount;
         _isCheckAllPlayerinPortal.OnValueChanged -= OnChangedIscheckPlayerInPortal;
         _isCheckAllPlayerinPortal.OnValueChanged += OnChangedIscheckPlayerInPortal;
-
-        _tmpTimerFillAmount.OnValueChanged += (oldvalue, newvalue) => Debug.Log(newvalue+"새로운값");
         SetTimer();
     }
 
@@ -80,19 +76,18 @@ public class NGO_UI_Stage_Timer : UI_Scene
         //7초로 다시 SetTimer()가 돌아가야한다.
         if(newValue == true)
         {
-            _tmpTimer.Value = _timer.Value;
-            _tmpTimerFillAmount.Value = _timerFillAmount.Value;
-            _timer.Value = 7;
+            _tmpTimer.Value = _timer.Value;//임시데이터에 보관
+
+            _timer.Value = AllPlayerinPortalCount;
             _timerFillAmount.Value = 0;
             _timerDial.color = _allPlayerInPortalColor;
-            StartTimer();
+            StartTimer(AllPlayerinPortalCount);
         }
         else
         {
             _timer.Value = _tmpTimer.Value;
-            _timerFillAmount.Value = _tmpTimerFillAmount.Value;
             _timerDial.color = _normalClockColor;
-            StartTimer();
+            StartTimer(VillageStayTime);
         }
 
     }
@@ -118,24 +113,24 @@ public class NGO_UI_Stage_Timer : UI_Scene
         BaseScene baseScene = Managers.SceneManagerEx.GetCurrentScene;
         _timer.Value = baseScene.CurrentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
       
-        StartTimer();
+        StartTimer(VillageStayTime);
     }
 
 
 
-    private void StartTimer()
+    private void StartTimer(float totalTimer)
     {
 
-        if (_playcount != null)
+        if (_playcountCoroutine != null)
         {
-            StopCoroutine(_playcount);
+            StopCoroutine(_playcountCoroutine);
         }
 
-        _playcount = StartCoroutine(playCount(_timer.Value));
+        _playcountCoroutine = StartCoroutine(playCount(totalTimer, _timer.Value));
 
     }
 
-    private IEnumerator playCount(float time)
+    private IEnumerator playCount(float totalTimer,float time)
     {
 
         float elapsedTime = time;
@@ -151,7 +146,7 @@ public class NGO_UI_Stage_Timer : UI_Scene
 
             if (timeSinceLastSync >= syncInterval)
             {
-                _timerFillAmount.Value = Mathf.Clamp01(elapsedTime / time); // 0.1초마다 전송
+                _timerFillAmount.Value = Mathf.Clamp01(elapsedTime / totalTimer); // 0.1초마다 전송
                 timeSinceLastSync = 0f;
             }
 

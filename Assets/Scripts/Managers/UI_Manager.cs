@@ -147,7 +147,8 @@ public class UI_Manager : IManagerIResettable
         T popup = Utill.GetOrAddComponent<T>(go);
         _ui_Popups.Push(popup);
 
-        go.transform.SetParent(Root.transform);
+        if (go.TryGetComponent(out NetworkObject ngo) == false)
+            go.transform.SetParent(Root.transform);
 
         return popup;
     }
