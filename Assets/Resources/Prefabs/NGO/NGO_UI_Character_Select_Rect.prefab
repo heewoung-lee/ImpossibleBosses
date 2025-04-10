@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3405596405991351386}
   - component: {fileID: 5958979602131744907}
   m_Layer: 0
-  m_Name: Character_Select_Rect
+  m_Name: NGO_UI_Character_Select_Rect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

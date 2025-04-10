@@ -14,6 +14,8 @@ public class NGO_PoolManager
     private NetworkObjectPool _ngoPool;
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
+    public NetworkObjectPool NGOPool => _ngoPool;
+
     private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
 
@@ -23,7 +25,14 @@ public class NGO_PoolManager
     }
     public void Create_NGO_Pooling_Object()
     {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            return;
+
+        if (Managers.RelayManager.NGO_RPC_Caller == null)
+        {
+            Managers.RelayManager.Spwan_RpcCaller_Event += () => { Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling"); };
+        }
+        else
         {
             Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
         }

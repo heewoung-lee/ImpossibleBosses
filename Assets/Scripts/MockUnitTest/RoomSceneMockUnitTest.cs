@@ -7,7 +7,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class RoomSceneMockUnitTest : MonoBehaviour
+public class RoomSceneMockUnitTest : BaseScene
 {
     public enum PlayersTag
     {
@@ -18,18 +18,25 @@ public class RoomSceneMockUnitTest : MonoBehaviour
         None
     }
 
-    string LobbyID = "TestLobby";
+    string LobbyID = "TestLobby03";
     string _playerType = null;
     GameObject _ngoRoot;
 
     public bool isSoloTest;
-    private async void Start()
+
+    public override Define.Scene CurrentScene => Define.Scene.RoomScene;
+
+
+
+    protected override async void StartInit()
     {
+        base.StartInit();
         await JoinChannel();
         Managers.RelayManager.SpawnToRPC_Caller();
         UI_Room_CharacterSelect uI_CharacterSelect = Managers.UI_Manager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
         UI_RoomChat ui_Chatting = Managers.UI_Manager.GetSceneUIFromResource<UI_RoomChat>();
     }
+
     private async Task JoinChannel()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
@@ -90,4 +97,11 @@ public class RoomSceneMockUnitTest : MonoBehaviour
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
     }
 
+    protected override void AwakeInit()
+    {
+    }
+
+    public override void Clear()
+    {
+    }
 }

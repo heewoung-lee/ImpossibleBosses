@@ -25,7 +25,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         Managers.NGO_PoolManager.Set_NGO_Pool(this);
 
-        if (IsHost == false)
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
 
 
@@ -33,10 +33,9 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             //경로에 맞게 Root가져올 것
             GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
-
             if (pollingNgo_Root != null)
             {
-               Managers.RelayManager.SpawnNetworkOBJ(pollingNgo_Root,transform);
+               Managers.RelayManager.SpawnNetworkOBJ(pollingNgo_Root);
             }
 
             if (pollingNgo_Root.TryGetComponent(out NGO_Pool_RootInitailize initalilze))

@@ -29,7 +29,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         Managers.RelayManager.SetRPCCaller(gameObject);
-        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+
+        Managers.RelayManager.Spwan_RpcCaller_Event?.Invoke();
+        //Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
     }
 
 

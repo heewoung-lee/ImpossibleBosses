@@ -12,6 +12,8 @@ using UnityEngine.UIElements;
 public class RelayManager
 {
 
+    public Action Spwan_RpcCaller_Event;
+
     private NetworkManager _netWorkManager;
     private string _joinCode;
     private Allocation _allocation;

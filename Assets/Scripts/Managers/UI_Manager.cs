@@ -147,8 +147,8 @@ public class UI_Manager : IManagerIResettable
         T popup = Utill.GetOrAddComponent<T>(go);
         _ui_Popups.Push(popup);
 
-        if (go.TryGetComponent(out NetworkObject ngo) == false)
-            go.transform.SetParent(Root.transform);
+
+        go.transform.SetParent(Root.transform);
 
         return popup;
     }
@@ -168,6 +168,8 @@ public class UI_Manager : IManagerIResettable
         }
          T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T), scene);
+
+        go.transform.SetParent(Root.transform);
 
         return scene;
     }

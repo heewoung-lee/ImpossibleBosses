@@ -29,6 +29,7 @@ public class PlaySceneMockUnitTest : MonoBehaviour
     private async void Start()
     {
        await JoinChannel();
+        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
     }
     private async Task JoinChannel()
     {

@@ -53,10 +53,15 @@ public class UI_Room_CharacterSelect : UI_Scene
     private TMP_Text _button_Text;
     private CharacterSelectorNGO _chracterSelectorNGO;
     private bool _readyButtonState;
+    private Transform _ngo_UI_Root_Character_Select;
 
     private ReadyButtonImages[] _readyButtonStateValue;
 
     public Transform ChooseCameraTr { get => _chooseCameraTr; }
+
+    public Action Spawn_Character_Select_Event;
+
+
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -85,7 +90,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         _button_Text = _button_Ready.GetComponentInChildren<TMP_Text>();
         ReadyButtonInitalize();
     }
-
+    public void Set_NGO_UI_Root_Character_Select(Transform chracterRootTr)
+    {
+        _ngo_UI_Root_Character_Select = chracterRootTr;
+        Spawn_Character_Select_Event?.Invoke();
+    }
     private void ReadyButtonInitalize()
     {
         _readyButtonStateValue = new ReadyButtonImages[Enum.GetValues(typeof(readyButtonStateEnum)).Length];
@@ -159,15 +168,25 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
+        Create_NGO_Character_Selecter_Rect_Root();
         SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
     }
 
+    private void Create_NGO_Character_Selecter_Rect_Root()
+    {
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            return;
+
+
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select",parent:Managers.RelayManager.NGO_ROOT_UI.transform);
+
+    }
 
     private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
     {
         if (_netWorkManager.IsHost)
         {
-            GameObject characterSelector = Managers.ResourceManager.Instantiate("Prefabs/NGO/Character_Select_Rect");
+            GameObject characterSelector = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_UI_Character_Select_Rect");
             characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
             if (characterSelector.GetComponent<NetworkObject>().IsOwner)
             {
@@ -197,9 +216,28 @@ public class UI_Room_CharacterSelect : UI_Scene
         Vector2 frame_size = GetUISize(targetFrame);
         Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
 
+        GameObject character_Rect = 
+            Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex, characterSelector, frame_screenPos, destroyOption: true);
+
+        if(_ngo_UI_Root_Character_Select == null)
+        {
+            Spawn_Character_Select_Event += SetParentPosition;
+        }
+        else
+        {
+            characterSelector.transform.SetParent(_ngo_UI_Root_Character_Select, worldPositionStays: false);
+        }
+
         //TODO: 크기 조절 되도록 수정
-        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex,characterSelector,frame_screenPos, parent:Managers.RelayManager.NGO_ROOT_UI.transform,destroyOption:true);
         return characterSelector;
+
+
+
+        void SetParentPosition()
+        {
+            characterSelector.transform.SetParent(_ngo_UI_Root_Character_Select, worldPositionStays: false);
+        }
+
     }
     public async Task LoadScenePlayGames()
     {
