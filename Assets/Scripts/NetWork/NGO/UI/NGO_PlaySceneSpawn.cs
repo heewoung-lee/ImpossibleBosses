@@ -57,6 +57,7 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
            {("Prefabs/NPC/Damage_Test_Dummy",new Vector3(10f,0,-2.5f))}
         });
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_BossRoomEntrance",Managers.RelayManager.NGO_ROOT.transform);
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller", Managers.RelayManager.NGO_ROOT.transform);
     }
 
     protected override void OnNetworkPostSpawn()
