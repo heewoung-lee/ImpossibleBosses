@@ -173,6 +173,16 @@ public class UI_Manager : IManagerIResettable
 
         return scene;
     }
+    public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UI_Scene
+    {
+        if(_ui_sceneDict.TryGetValue(typeof(T),out UI_Scene value))
+        {
+            return value as T;
+        }
+        return GetSceneUIFromResource<T>(name,path);
+    }
+
+
 
     public T MakeUIWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
     {

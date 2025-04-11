@@ -26,15 +26,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public async Task NetworkLoadSceneAsync(Define.Scene scene)
     {
-        Managers.Clear();
-        _currentSceneName = scene;
-        await Managers.LobbyManager.LeaveCurrentLobby();
-        Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);
-    }
-
-    public async Task NetworkLoadSceneWithLoadingScreenAsync(Define.Scene scene)
-    {
-        Managers.Clear();
+        //Managers.Clear();
         _currentSceneName = scene;
         await Managers.LobbyManager.LeaveCurrentLobby();
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(scene), UnityEngine.SceneManagement.LoadSceneMode.Single);

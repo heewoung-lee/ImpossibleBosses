@@ -37,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom316";
+    private const string LOBBYID = "WaitLobbyRoom320";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
@@ -412,6 +412,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
+            Debug.Log($"{System.Environment.StackTrace}");
             return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
     }

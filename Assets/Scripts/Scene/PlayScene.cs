@@ -12,7 +12,6 @@ public class PlayScene : BaseScene
     public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
 
     private UI_Stage_Timer _ui_stage_timer;
-    public UI_Stage_Timer UI_Stage_Timer => _ui_stage_timer;
 
     protected override void AwakeInit()
     {
@@ -20,7 +19,7 @@ public class PlayScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
-        _ui_stage_timer = Managers.UI_Manager.GetSceneUIFromResource<UI_Stage_Timer>();
+        _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
     }
 
     public override void Clear()

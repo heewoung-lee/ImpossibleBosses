@@ -17,8 +17,9 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
         _relayManager = Managers.RelayManager;
     }
 
-    protected override void StartInit()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         if (IsAvailableMockUnitTest())
         {
             SpawnPlayerCharacter();
@@ -33,7 +34,6 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             HostSpawnObject();
         }
     }
-
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
         if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
@@ -60,11 +60,6 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller", Managers.RelayManager.NGO_ROOT.transform);
     }
 
-    protected override void OnNetworkPostSpawn()
-    {
-        base.OnNetworkPostSpawn();
-    }
-
     private void RequestSpawnToNPC(List<(string, Vector3)> npcPathAndTr)
     {
         foreach ((string, Vector3) npcdata in npcPathAndTr)
@@ -88,5 +83,9 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             return true;
         }
         return false;
+    }
+
+    protected override void StartInit()
+    {
     }
 }

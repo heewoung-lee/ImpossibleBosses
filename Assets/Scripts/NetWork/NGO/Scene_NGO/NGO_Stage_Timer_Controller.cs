@@ -21,7 +21,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
         {
             if (_ui_Stage_Timer == null)
             {
-                _ui_Stage_Timer = Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>();
+                _ui_Stage_Timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
             }
             return _ui_Stage_Timer;
         }
@@ -31,7 +31,6 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        SetTotalCount();
         SetHostTimer();
         if (IsHost == false) //클라이언트가 서버에 도는 시간을 가져와야 한다.
         {
@@ -39,16 +38,12 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
         }
     }
 
-    private void SetTotalCount()
-    {
-        BaseScene baseScene = Managers.SceneManagerEx.GetCurrentScene;
-        _totalTime = baseScene.CurrentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
-    }
     private void SetHostTimer()
     {
         if (IsHost == false)
             return;
 
+        SetHostTotalCount();
         UI_Stage_Timer.SetTimer(_totalTime);
     }
 
@@ -83,5 +78,18 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     public void SetNormalCountRpc()
     {
         UI_Stage_Timer.SetTimer(_totalTime,_currentTime, _normalClockColor);
+    }
+
+    private void SetHostTotalCount()
+    {
+        Define.Scene currentScene = Managers.SceneManagerEx.CurrentSceneName;
+        _totalTime = currentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
+        SetTotalCountAllClientRpc(_totalTime);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetTotalCountAllClientRpc(float totalCount)
+    {
+        _totalTime = totalCount;
     }
 }
