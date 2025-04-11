@@ -7,17 +7,26 @@ using UnityEngine.UI;
 
 public class UI_Stage_Timer : UI_Scene
 {
-    private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
-    private Color _allPlayerInPortalColor = "0084FF".HexCodetoConvertColor();
-
 
     private Image _timerDial;
     private TMP_Text _timerText;
     private Coroutine _playcountCoroutine;
 
     private float _totalCount;
-    [SerializeField]private float _currentTime;
-    [SerializeField] private float _timerFillAmount;
+    private float _currentTime;
+    private float _timerFillAmount;
+
+    public float TimerFillAmount
+    {
+        get
+        {
+            return _timerFillAmount;
+        }
+        private set
+        {
+            _timerDial.fillAmount = value;
+        }
+    }
 
     public float CurrentTime => _currentTime;
 
@@ -41,28 +50,39 @@ public class UI_Stage_Timer : UI_Scene
         _timerFillAmount = _timerDial.fillAmount;   
     }
 
-    public void SetTimer(float totalCount)
+    public void SetTimer(float totalCount,Color counterColor = default)
     {
+        if (counterColor.Equals(default) == false)
+        {
+            _timerDial.color = counterColor;
+        }
         _currentTime = totalCount;
+        _totalCount = totalCount;
+
+        if(_playcountCoroutine != null)
+            StopCoroutine( _playcountCoroutine);
 
         _playcountCoroutine = StartCoroutine(playCount());
-       
     }
-    public void SetTimer(float totalCount,float currentCount)
+    public void SetTimer(float totalCount,float currentCount, Color counterColor = default)
     {
+        if (counterColor.Equals(default) == false)
+        {
+            _timerDial.color = counterColor;
+        }
         _currentTime = currentCount;
-        playCount();
+        _totalCount = totalCount;
+
+        if (_playcountCoroutine != null)
+            StopCoroutine(_playcountCoroutine);
+
+        _playcountCoroutine = StartCoroutine(playCount());
     }
 
-    private void OnChangedTimerColor(Color previousValue, Color newValue)
+    private void onChangedTimerValue(float currentTime)
     {
-        _timerDial.color = newValue;
-    }
-
-    private void onChangedTimerValue(float previousValue, float newValue)
-    {
-        int second = (int)newValue % 60;
-        int minute = (int)newValue / 60;
+        int second = (int)currentTime % 60;
+        int minute = (int)currentTime / 60;
 
         _timerText.text = $"{minute} : {second:D2}"; 
     }
@@ -74,17 +94,9 @@ public class UI_Stage_Timer : UI_Scene
 
         while (_currentTime > 0)
         {
-            float delta = Time.deltaTime;
-            _currentTime -= delta;
-            _timerFillAmount = Mathf.Clamp01(_currentTime / _totalCount); // 0.1초마다 전송
-
-            int currentSecond = Mathf.FloorToInt(_currentTime);
-            if (currentSecond != lastSecond)
-            {
-                _currentTime = currentSecond;
-                lastSecond = currentSecond;
-            }
-
+            _currentTime -= Time.unscaledDeltaTime;
+            TimerFillAmount = Mathf.Clamp01(_currentTime / _totalCount);
+            onChangedTimerValue(_currentTime);
             yield return null;
         }
 

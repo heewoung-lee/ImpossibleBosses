@@ -1,42 +1,60 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class NGO_Stage_Timer_Controller : NetworkBehaviourBase
+public class NGO_Stage_Timer_Controller : NetworkBehaviour
 {
+    private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
+    private Color _allPlayerInPortalColor = "0084FF".HexCodetoConvertColor();
+
 
     private const float VillageStayTime = 300f;
     private const float BossRoomStayTime = 60f;
     private const float AllPlayerinPortalCount = 7f;
-    private float _totalCount = 0;
-    private float _currenntCount = 0;
+    private float _totalTime = 0;
+    private float _currentTime = 0;
+
+    private UI_Stage_Timer _ui_Stage_Timer;
+
+    public UI_Stage_Timer UI_Stage_Timer
+    {
+        get
+        {
+            if (_ui_Stage_Timer == null)
+            {
+                _ui_Stage_Timer = Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>();
+            }
+            return _ui_Stage_Timer;
+        }
+    }
+
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        SetTotalCount();
         SetHostTimer();
-        RequestTimeFromServerRpc();
+        if (IsHost == false) //클라이언트가 서버에 도는 시간을 가져와야 한다.
+        {
+            RequestTimeFromServerRpc();
+        }
     }
 
+    private void SetTotalCount()
+    {
+        BaseScene baseScene = Managers.SceneManagerEx.GetCurrentScene;
+        _totalTime = baseScene.CurrentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
+    }
     private void SetHostTimer()
     {
         if (IsHost == false)
             return;
 
-        BaseScene baseScene = Managers.SceneManagerEx.GetCurrentScene;
-        _totalCount = baseScene.CurrentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
-        Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>().SetTimer(_totalCount);
+        UI_Stage_Timer.SetTimer(_totalTime);
     }
 
-
-    protected override void AwakeInit()
-    {
-    }
-
-    protected override void StartInit()
-    {
-    }
 
     [Rpc(SendTo.Server)]
-    public void RequestTimeFromServerRpc(RpcParams rpcParams = default)
+    private void RequestTimeFromServerRpc(RpcParams rpcParams = default)
     {
         float currentCount = Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>().CurrentTime;
         ulong clientId = rpcParams.Receive.SenderClientId;
@@ -48,10 +66,22 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviourBase
     [Rpc(SendTo.SpecifiedInParams)]
     private void SendTimeRpcToSpecificClientRpc(float currentCount, RpcParams rpcParams = default)
     {
-        _currenntCount = currentCount;
-        Debug.Log($"클라이언트가 받은 서버 시간: {currentCount}");
-        Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>().SetTimer(_totalCount, _currenntCount);
+        _currentTime = currentCount;
+        UI_Stage_Timer.SetTimer(_totalTime, _currentTime);
     }
 
 
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetPortalInAllPlayersCountRpc()
+    {
+        _currentTime = UI_Stage_Timer.CurrentTime;
+        UI_Stage_Timer.SetTimer(AllPlayerinPortalCount, _allPlayerInPortalColor);
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetNormalCountRpc()
+    {
+        UI_Stage_Timer.SetTimer(_totalTime,_currentTime, _normalClockColor);
+    }
 }

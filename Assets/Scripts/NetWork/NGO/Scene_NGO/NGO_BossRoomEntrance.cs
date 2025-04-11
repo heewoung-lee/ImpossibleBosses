@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NGO_BossRoomEntrance : NetworkBehaviourBase
@@ -7,28 +8,37 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
     private Vector3 _town_Portal_Position = new Vector3(15f, 0.15f, 32);
     public Vector3 Town_Portal_Position => _town_Portal_Position;
 
-    private Collider _portalTrigger;
 
-    private NGO_UI_Stage_Timer _timer;
+    private NGO_Stage_Timer_Controller _timer_controller;
 
-    public NGO_UI_Stage_Timer Timer
+
+    public NGO_Stage_Timer_Controller Timer_controller
     {
         get
         {
-            if (_timer == null)
+            if(_timer_controller == null)
             {
-                _timer = Managers.UI_Manager.Get_Scene_UI<NGO_UI_Stage_Timer>();
+                
+                foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+                {
+                    if(ngo.TryGetComponent(out NGO_Stage_Timer_Controller stage_Timer_controller))
+                    {
+                        _timer_controller = stage_Timer_controller;
+                        break;
+                    }
+                }
             }
-            return _timer;
+            return _timer_controller;
         }
     }
-
+    private Collider _portalTrigger;
 
     NetworkVariable<int> _playerCountInPortal = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
-
+    NetworkVariable<bool> _isAllplayersinPortal = new NetworkVariable<bool>
+        (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
     {
@@ -47,15 +57,20 @@ public class NGO_BossRoomEntrance : NetworkBehaviourBase
 
     private void OnChangedCountPlayer(int previousValue, int newValue)
     {
+
        if(newValue == Managers.RelayManager.NetworkManagerEx.ConnectedClientsList.Count)
         {
-            Timer.SetIscheckPlayerInPortal(true);
+            _isAllplayersinPortal.Value = true;
+            Timer_controller.SetPortalInAllPlayersCountRpc();
         }
         else
         {
-            Timer.SetIscheckPlayerInPortal(false);
+            if (_isAllplayersinPortal.Value == false)
+                return;
+
+            _isAllplayersinPortal.Value = false;
+            Timer_controller.SetNormalCountRpc();
         }
-        //newValue가 현재 있는 플레이어 수와 같은지 확인.
     }
 
     protected override void StartInit()
