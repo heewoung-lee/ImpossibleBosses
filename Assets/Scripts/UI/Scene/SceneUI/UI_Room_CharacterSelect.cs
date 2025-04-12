@@ -179,8 +179,7 @@ public class UI_Room_CharacterSelect : UI_Scene
 
 
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select",parent:Managers.RelayManager.NGO_ROOT_UI.transform);
-
-    }
+    }                   
 
     private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
     {
@@ -241,10 +240,11 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public async Task LoadScenePlayGames()
     {
-        // Managers.RelayManager.
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        await Managers.SceneManagerEx.NetworkLoadSceneAsync(Define.Scene.GamePlayScene);
+        //await Managers.SceneManagerEx.NetworkLoadSceneAsync(Define.Scene.GamePlayScene);
+        Debug.Log("호출 되나?");//여긴 호스트의 영역이라 클라이언트에 표시가 안됨.
+        await Managers.SceneManagerEx.NetworkLoadSceneAsyncWithLoadingScene(Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)

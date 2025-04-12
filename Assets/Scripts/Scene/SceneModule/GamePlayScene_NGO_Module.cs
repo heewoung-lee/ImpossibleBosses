@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class GamePlayScene_NGO_Module : MonoBehaviour
 {
+    private void Awake()
+    {
+    }
     protected void Start()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)

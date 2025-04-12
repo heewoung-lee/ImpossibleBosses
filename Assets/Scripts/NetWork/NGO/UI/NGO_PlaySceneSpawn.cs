@@ -11,6 +11,8 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
+    private bool[] _isCheckTask;
+    private int playerindex = 0;
 
     protected override void AwakeInit()
     {
@@ -20,13 +22,20 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+       
+        int playerCount = Managers.RelayManager.CurrentUserCount;
+        _isCheckTask = new bool[playerCount];
+
+
+
         if (IsAvailableMockUnitTest())
         {
             SpawnPlayerCharacter();
             HostSpawnObject();
             return;
         }
-
+        Debug.Log("이거 클라한테 뜰까?");
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
         {
@@ -37,7 +46,11 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
         if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
+        {
             SpawnPlayerCharacter();
+            _isCheckTask[playerindex] = true;
+            playerindex++;
+        }
     }
 
     private void SpawnPlayerCharacter()

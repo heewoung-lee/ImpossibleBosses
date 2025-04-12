@@ -135,7 +135,7 @@ public class RelayManager
         if (NGO_RPC_Caller != null)
             return;
 
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller");
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller",destroyOption: false);
     }
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
