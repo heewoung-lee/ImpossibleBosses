@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,11 +9,13 @@ public class NetworkLoadingScene : BaseNetworkScene
 {
     UI_Loading _ui_loding;
 
-    private static Define.Scene _nextScene;
+    private Define.Scene _nextScene;
     public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
     public bool IsErrorOccurred { get; set; } = false;
 
-    private static bool[] _isCheckTaskChecker;
+    private bool[] _isCheckTaskChecker;
+    private int taskIndex = 0;
+    
 
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -20,9 +23,12 @@ public class NetworkLoadingScene : BaseNetworkScene
     {
         _nextScene = (Define.Scene)Enum.Parse(typeof(Define.Scene), nextSceneName);
     }
-    protected override void StartInit()
+
+    public override void OnNetworkSpawn()
     {
-        base.StartInit();
+        base.OnNetworkSpawn();
+        CallLoadNextSceneRpc(Managers.SceneManagerEx.NextSceneName.ToString());
+        _isCheckTaskChecker = new bool[Managers.RelayManager.NetworkManagerEx.ConnectedClientsList.Count];
         StartCoroutine(LoadingSceneProcess());
     }
 
@@ -35,9 +41,18 @@ public class NetworkLoadingScene : BaseNetworkScene
         _ui_loding = Managers.UI_Manager.GetSceneUIFromResource<UI_Loading>();
     }
 
-    public static void SetCheckTaskChecker(bool[] CheckTaskChecker)
+    [Rpc(SendTo.Server)]
+    public void DoneMyTaskCalltoHostRpc()
     {
-        _isCheckTaskChecker = CheckTaskChecker;
+        _isCheckTaskChecker[taskIndex] = true;
+        UserTaskDoneClientRpc(taskIndex);
+        taskIndex++;
+
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UserTaskDoneClientRpc(int taskdoneIndex)
+    {
+        _isCheckTaskChecker[taskIndex] = true;
     }
 
     private IEnumerator LoadingSceneProcess()
@@ -66,7 +81,7 @@ public class NetworkLoadingScene : BaseNetworkScene
                 {
                     if (OperationSucess is true)
                     {
-                        sucessCount++;
+                        DoneMyTaskCalltoHostRpc();
                     }
                 }
                 _ui_loding.LoaingSliderValue = sucessCount * processLength;

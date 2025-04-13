@@ -37,7 +37,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom320";
+    private const string LOBBYID = "WaitLobbyRoom324";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
@@ -59,7 +59,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public async Task<bool> InitLobbyScene()
     {
         _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
-        LoadingScene.SetCheckTaskChecker(_taskChecker);
+        Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
         Managers.RelayManager.SceneLoadInitalizeRelayServer();
         InitalizeVivoxEvent();
         InitalizeLobbyEvent();

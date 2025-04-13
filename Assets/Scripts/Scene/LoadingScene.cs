@@ -9,20 +9,15 @@ public class LoadingScene : BaseScene
 {
     UI_Loading _ui_loding;
 
-    private static Define.Scene _nextScene;
     public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
     public bool IsErrorOccurred { get; set; } = false;
 
-    private static bool[] _isCheckTaskChecker;
-
-    public static void LoadNextScene(Define.Scene nextScene)
-    {
-        _nextScene = nextScene;
-    }
+    private bool[] _isCheckTaskChecker;
 
     protected override void StartInit()
     {
         base.StartInit();
+        _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
         StartCoroutine(LoadingSceneProcess());
     }
 
@@ -35,15 +30,9 @@ public class LoadingScene : BaseScene
         _ui_loding = Managers.UI_Manager.GetSceneUIFromResource<UI_Loading>();
     }
 
-    public static void SetCheckTaskChecker(bool[] CheckTaskChecker)
-    {
-        _isCheckTaskChecker = CheckTaskChecker;
-    }
-
-
     private IEnumerator LoadingSceneProcess()
     {
-         AsyncOperation operation = SceneManager.LoadSceneAsync(_nextScene.ToString());
+         AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextSceneName.ToString());
         operation.allowSceneActivation = false;
         while(_isCheckTaskChecker == null)
         {

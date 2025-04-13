@@ -244,6 +244,7 @@ public class RelayManager
         catch (Exception ex)
         {
             Debug.LogException(ex);
+            Debug.LogWarning("로비에 릴레이코드가 없는코드란다 나중에 수정해야겠지?");
             return false;
         }
     }
