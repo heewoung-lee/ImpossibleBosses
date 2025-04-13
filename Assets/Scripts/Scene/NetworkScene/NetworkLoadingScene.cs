@@ -10,7 +10,7 @@ public class NetworkLoadingScene : BaseNetworkScene
     UI_Loading _ui_loding;
 
     private Define.Scene _nextScene;
-    public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
+    public override Define.Scene CurrentScene => Define.Scene.NetworkLoadingScene;
     public bool IsErrorOccurred { get; set; } = false;
 
     private bool[] _isCheckTaskChecker;
