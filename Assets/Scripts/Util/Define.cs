@@ -40,7 +40,8 @@ public class Define
         RoomScene,
         GamePlayScene,
         BattleScene,
-        LoadingScene
+        LoadingScene,
+        NetworkLoadingScene
     }
     public enum CurrentMouseType
     {
