@@ -32,7 +32,7 @@ public class LoadingScene : BaseScene
 
     private IEnumerator LoadingSceneProcess()
     {
-         AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextSceneName.ToString());
+         AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());
         operation.allowSceneActivation = false;
         while(_isCheckTaskChecker == null)
         {

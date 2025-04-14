@@ -82,7 +82,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
 
     private void SetHostTotalCount()
     {
-        Define.Scene currentScene = Managers.SceneManagerEx.CurrentSceneName;
+        Define.Scene currentScene = Managers.SceneManagerEx.CurrentScene;
         _totalTime = currentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
         SetTotalCountAllClientRpc(_totalTime);
     }

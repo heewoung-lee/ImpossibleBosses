@@ -94,18 +94,6 @@ public class ResourceManager : IManagerIResettable
         }
         return false;
     }
-
-
-    //public GameObject InstantiatePrefab(string path, Transform parent = null)
-    //{
-    //    if (path.Contains("Prefabs") == false)
-    //    {
-    //        path = "Prefabs/" + path;
-    //    }
-
-    //    return Instantiate(path, parent);
-    //}
-
     public void DestroyObject(GameObject go, float duration = 0)
     {
         if (go == null)

@@ -72,7 +72,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
-        _button_Start.onClick.AddListener(async()=> await LoadScenePlayGames());
+        _button_Start.onClick.AddListener(LoadScenePlayGames);
         _button_Start.gameObject.SetActive(false);
         _backToLobbyButton.onClick.AddListener(async () =>
         {
@@ -238,13 +238,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
 
     }
-    public async Task LoadScenePlayGames()
+    public void LoadScenePlayGames()
     {
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        //await Managers.SceneManagerEx.NetworkLoadSceneAsync(Define.Scene.GamePlayScene);
-        Debug.Log("호출 되나?");//여긴 호스트의 영역이라 클라이언트에 표시가 안됨.
-        await Managers.SceneManagerEx.NetworkLoadSceneAsyncWithLoadingScene(Define.Scene.GamePlayScene);
+        Managers.SceneManagerEx.NetworkLoadSceneAsyncWithLoadingScene(Define.Scene.GamePlayScene);
     }
 
     public void ButtonState(bool state)
