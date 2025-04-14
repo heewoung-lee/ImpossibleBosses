@@ -16,9 +16,12 @@ public class NetworkLoadingScene : BaseScene
 
     private bool[] _isCheckTaskChecker;
     private int taskIndex = 0;
+
+    private GameObject _networkLoadingRpc;
     protected override async void StartInit()
     {
         base.StartInit();
+        HostSpawn();
         await LeaveLobbyAndVivox();
         Managers.SceneManagerEx.SetCurrentScene(CurrentScene);
         Managers.SceneManagerEx.SetNextScene(Define.Scene.GamePlayScene);
@@ -26,6 +29,10 @@ public class NetworkLoadingScene : BaseScene
         {
             await Managers.LobbyManager.LeaveCurrentLobby();
             await Managers.VivoxManager.LogoutOfVivoxAsync();
+        }
+        void HostSpawn()
+        {
+            _networkLoadingRpc = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_LoadingScene_RPC_Caller");
         }
     }
 

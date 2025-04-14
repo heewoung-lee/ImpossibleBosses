@@ -69,7 +69,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         _currentScene = scene;
         _nextScene = Define.Scene.GamePlayScene;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(Define.Scene.NetworkLoadingScene.ToString(), UnityEngine.SceneManagement.LoadSceneMode.Single);
-        Managers.RelayManager.SpawnNetworkOBJ("NGO_NetworkLoadingScene");
         //먼저 모든 클라이언트가 로딩씬에 로드 되게 한 다음
         //로딩이 끝나면 
     }
