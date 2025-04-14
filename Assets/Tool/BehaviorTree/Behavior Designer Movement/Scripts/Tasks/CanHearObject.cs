@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Check to see if the any objects are within hearing range of the current agent.")]
+    [TaskDescription("Determines if there are any objects are within hearing range of the current agent.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("a464405df8e82b24db602534724b5e6f", "941bd88188259374d885440560f1a29d")]

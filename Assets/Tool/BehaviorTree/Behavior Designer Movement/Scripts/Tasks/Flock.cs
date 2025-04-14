@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Flock around the scene using the Unity NavMesh.")]
+    [TaskDescription("Moves a group of agents in a flocking behavior using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("5c4c8ca7a2b26d648ad1b3009d8ee3d6", "29465febf85da33499a039c8ec393d64")]

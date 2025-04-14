@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Check to see if the any objects are within sight of the agent.")]
+    [TaskDescription("Determines if there are any objects are within sight of the agent.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("c3873913d6f08e44d8f24b80257edf45", "7f2d1486b1b44ec4b8c213df246534c5")]

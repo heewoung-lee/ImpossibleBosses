@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Wander using the Unity NavMesh.")]
+    [TaskDescription("Wander using the Unity NavMesh. Wander will determine the next location to move to based on a random angle from the current look rotation.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("c8e612848487a184f9090d416c932c47", "cc64e7434e679324c8cb39430f19eda8")]

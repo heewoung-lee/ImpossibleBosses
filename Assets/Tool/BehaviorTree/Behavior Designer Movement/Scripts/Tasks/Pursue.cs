@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Pursue the target specified using the Unity NavMesh.")]
+    [TaskDescription("Pursue the target specified using the Unity NavMesh. Pursue will predict where the target is headed based on the Target Distance Prediction value.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("e1387dd5098c1f7449253a17b3b39784", "c29eb3ccdfa67a744971276c325e44ea")]

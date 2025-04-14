@@ -2,7 +2,7 @@
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Check to see if the any object specified by the object list or tag is within the distance specified of the current agent.")]
+    [TaskDescription("Determines if there are any objects within the distance specified of the current agent.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("62dc1c328b5c4eb45a90ec7a75cfb747", "0e2ffa7c5e610214eb6d5c71613bbdec")]
@@ -96,14 +96,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     if (m_Overlap2DColliders == null) {
                         m_Overlap2DColliders = new Collider2D[m_MaxCollisionCount];
                     }
-
-
-                    m_Overlap2DColliders = Physics2D.OverlapCircleAll(transform.position, m_Magnitude.Value, m_TargetLayerMask.Value);
-                    foreach(Collider2D Overlap2DCollider in m_Overlap2DColliders)
-                    {
-                        if (IsWithinDistance(Overlap2DCollider.gameObject))
-                        {
-                            m_ReturnedObject.Value = Overlap2DCollider.gameObject;
+#if UNITY_6000_0_OR_NEWER
+                    var count = Physics2D.OverlapCircle(transform.position, m_Magnitude.Value, new ContactFilter2D() { layerMask = m_TargetLayerMask.Value }, m_Overlap2DColliders);
+#else
+                    var count = Physics2D.OverlapCircleNonAlloc(transform.position, m_Magnitude.Value, m_Overlap2DColliders, m_TargetLayerMask.Value);
+#endif
+                    for (int i = 0; i < count; ++i) {
+                        // All it takes is one object to be within distance.
+                        if (IsWithinDistance(m_Overlap2DColliders[i].gameObject)) {
+                            m_ReturnedObject.Value = m_Overlap2DColliders[i].gameObject;
                             break;
                         }
                     }
@@ -140,7 +141,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if (Vector3.SqrMagnitude(direction) < m_SqrMagnitude) {
                 // the magnitude is less. If lineOfSight is true do one more check
                 if (m_LineOfSight.Value) {
-                    var hitTransform = MovementUtility.LineOfSight(transform, m_Offset.Value, target, m_TargetOffset.Value, m_UsePhysics2D, m_IgnoreLayerMask.value, m_DrawDebugRay.Value);
+                    var hitTransform = MovementUtility.LineOfSight(transform, m_Offset.Value, target, m_TargetOffset.Value, m_UsePhysics2D, m_IgnoreLayerMask.value);
                     if (hitTransform != null && MovementUtility.IsAncestor(hitTransform, target.transform)) {
                         // The object has a magnitude less than the specified magnitude and is within sight. Return true.
                         return true;

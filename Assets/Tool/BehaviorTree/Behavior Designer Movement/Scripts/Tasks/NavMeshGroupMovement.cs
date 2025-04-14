@@ -49,7 +49,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             // Disable the nav mesh
             for (int i = 0; i < m_NavMeshAgents.Length; ++i) {
-                if (m_NavMeshAgents[i] != null) {
+                if (m_NavMeshAgents[i] != null && m_NavMeshAgents[i].hasPath) {
                     m_NavMeshAgents[i].isStopped = true;
                 }
             }

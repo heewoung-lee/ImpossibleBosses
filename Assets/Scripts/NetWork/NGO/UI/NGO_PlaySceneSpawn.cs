@@ -13,21 +13,20 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     GameObject _player;
     private bool[] _isCheckTask;
     private int playerindex = 0;
+    private NGO_LoadingManager loadingManager;
 
     protected override void AwakeInit()
     {
         _relayManager = Managers.RelayManager;
+        loadingManager = GetComponent<NGO_LoadingManager>();
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-       
         int playerCount = Managers.RelayManager.CurrentUserCount;
         _isCheckTask = new bool[playerCount];
-
-
 
         if (IsAvailableMockUnitTest())
         {
@@ -35,7 +34,7 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             HostSpawnObject();
             return;
         }
-        Debug.Log("ÀÌ°Å Å¬¶óÇÑÅ× ¶ã±î?");
+        Debug.Log("ï¿½Ì°ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?");
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
         {
@@ -50,6 +49,9 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             SpawnPlayerCharacter();
             _isCheckTask[playerindex] = true;
             playerindex++;
+            
+            // ë¡œë”© ì™„ë£Œë¥¼ ì„œë²„ì— ë³´ê³ 
+            loadingManager.ReportLoadingCompleteServerRpc();
         }
     }
 
@@ -65,7 +67,7 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             return;
         Managers.RelayManager.SpawnToRPC_Caller();
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
-        RequestSpawnToNPC(new List<(string, Vector3)>() //µ¥¹ÌÁö Å×½ºÆ®¿ë ´õ¹Ì Å¥ºê
+        RequestSpawnToNPC(new List<(string, Vector3)>() //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½
         {
            {("Prefabs/NPC/Damage_Test_Dummy",new Vector3(10f,0,-2.5f))}
         });

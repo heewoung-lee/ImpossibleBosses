@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Evade the target specified using the Unity NavMesh.")]
+    [TaskDescription("Evade the target specified using the Unity NavMesh. Evade will predict where the target is headed based on the Look Ahead Distance. " +
+                     "Evade is similar to Flee except Evade uses the target's velocity to predict where to move towards whereas Flee only uses the target's position.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("cecc9277e75f9964e98d167be763695c", "992feefbe2d39f945b808bed5b4f0986")]

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Flee from the target specified using the Unity NavMesh.")]
+    [TaskDescription("Flee from the target specified using the Unity NavMesh. Flee will predict where the target is headed based on the Look Ahead Distance.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("e5f0ffa5bd82433428ba4d2dd58d57d8", "e1a2340aca5184f4ba0f3e3163864b8e")]

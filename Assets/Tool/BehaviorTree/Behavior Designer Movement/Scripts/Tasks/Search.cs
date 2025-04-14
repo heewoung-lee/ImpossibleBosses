@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Search for a target by combining the wander, within hearing range, and the within seeing range tasks using the Unity NavMesh.")]
+    [TaskDescription("Search for a target by combining the Wander, Can See Object, and Can Hear Object using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("0ebd85be99a56804b9b63041ad4a7d42", "6e61dc457d90a294783c6cae5443b5f6")]

@@ -3,7 +3,8 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
     [TaskDescription("Move towards the specified position. The position can either be specified by a transform or position. If the transform " +
-                     "is used then the position will not be used.")]
+                     "is used then the position will not be used. The Move Towards task does not use any underlying pathfinding implementation and " +
+                     "moves the agent with Vector3.MoveTowards.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("c8e612848487a184f9090d416c932c47", "812dc79fe1e417548959f61845528372")]
