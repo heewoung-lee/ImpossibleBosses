@@ -41,7 +41,6 @@ public class NetworkLoadingScene : BaseScene
         }
     }
 
-    private int taskIndex = 0;
     public override void Clear()
     {
     }
@@ -68,45 +67,58 @@ public class NetworkLoadingScene : BaseScene
         _ui_loding = Managers.UI_Manager.GetSceneUIFromResource<UI_Loading>();
     }
 
-    public IEnumerator LoadingSceneProcess(Action doneAction)
-    {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());
-        operation.allowSceneActivation = false;
-        float processLength = 0.9f / Managers.RelayManager.CurrentUserCount;
-        bool ischeckSendtoDoneLoaded = false;
-        float pretimer = 0f;
-        float aftertimer = 0f;
-        while (operation.isDone == false)
-        {
-            yield return null;
+    //public IEnumerator LoadingSceneProcess()
+    //{
+    //    float processLength = 0.9f / Managers.RelayManager.CurrentUserCount;
+    //    float pretimer = 0f;
+    //    float aftertimer = 0f;
 
-            if (_ui_loding.LoaingSliderValue < 0.9f)
-            {
-                if (operation.progress >= 0.9f && ischeckSendtoDoneLoaded == false) //나는 로딩이 다됐으니 서버에게 다 됐다고 호출
-                {
-                    NGO_Loading_RPC_Caller.CalltoDoneLoadingRpc();
-                    ischeckSendtoDoneLoaded = true;
-                    Debug.Log("신호보냈슴");
-                }
-                _ui_loding.LoaingSliderValue = DoneLoadScenePlayerCount * processLength;
-                pretimer += Time.deltaTime / 5f;
-                _ui_loding.LoaingSliderValue = Mathf.Lerp(_ui_loding.LoaingSliderValue - processLength, _ui_loding.LoaingSliderValue + processLength, pretimer);
-            }
-            else
-            {
-                aftertimer += Time.deltaTime / 5f;
-                _ui_loding.LoaingSliderValue = Mathf.Lerp(0.9f, 1, aftertimer);
-                if (_ui_loding.LoaingSliderValue >= 1.0f)
-                {
-                    operation.allowSceneActivation = true;
-                    yield break;
-                }
-            }
-        }
-    }
+
+    //    while (DoneLoadScenePlayerCount != Managers.RelayManager.CurrentUserCount)
+    //    {
+
+    //    }
+
+
+    //    //콜백받으면 채우고
+    //}
 }
 
+//public IEnumerator LoadingSceneProcess(Action doneAction)
+//{
+//    float processLength = 0.9f / Managers.RelayManager.CurrentUserCount;
+//    bool ischeckSendtoDoneLoaded = false;
+//    float pretimer = 0f;
+//    float aftertimer = 0f;
+//    while (operation.isDone == false)
+//    {
+//        yield return null;
 
+//        if (_ui_loding.LoaingSliderValue < 0.9f)
+//        {
+//            if (ischeckSendtoDoneLoaded == false) //나는 로딩이 다됐으니 서버에게 다 됐다고 호출
+//            {
+//                NGO_Loading_RPC_Caller.CalltoDoneLoadingRpc();
+//                ischeckSendtoDoneLoaded = true;
+//                Debug.Log("신호보냈슴");
+//            }
+//            _ui_loding.LoaingSliderValue = DoneLoadScenePlayerCount * processLength;
+//            pretimer += Time.deltaTime / 5f;
+//            _ui_loding.LoaingSliderValue = Mathf.Lerp(_ui_loding.LoaingSliderValue - processLength, _ui_loding.LoaingSliderValue + processLength, pretimer);
+//        }
+//        else
+//        {
+//            aftertimer += Time.deltaTime / 5f;
+//            _ui_loding.LoaingSliderValue = Mathf.Lerp(0.9f, 1, aftertimer);
+//            if (_ui_loding.LoaingSliderValue >= 1.0f)
+//            {
+//                operation.allowSceneActivation = true;
+//                yield break;
+//            }
+//        }
+//    }
+//}
+//}
 //public IEnumerator LoadingSceneProcess(Action doneAction)
 //{
 //    AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());

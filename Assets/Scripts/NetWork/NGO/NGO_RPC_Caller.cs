@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.Rendering.DebugUI;
+using Scene = UnityEngine.SceneManagement.Scene;
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
@@ -192,9 +195,14 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void Call_NextSceneNameClientRpc(string sceneName)
+    public void NextSceneMainCameraOFFRpc(string nextSceneName)//additive ¾ÀÀÌ¸é ¾ÀÀÌ °ãÃÄº¸ÀÌ´Ï Ä«¸Þ¶ó¸¦ ²û
     {
-
+        Scene nextSceneinfo = SceneManager.GetSceneByName(nextSceneName);
+        Camera mainCamera = Managers.SceneManagerEx.FindMainCameraInScene(nextSceneinfo);
+        AudioListener audioListener = mainCamera.GetComponent<AudioListener>();
+        Debug.Log($"{mainCamera.name}Ä«¸Þ¶ó °¡Á®¿È?");
+        mainCamera.enabled = false;
+        audioListener.enabled = false;
     }
 
 }

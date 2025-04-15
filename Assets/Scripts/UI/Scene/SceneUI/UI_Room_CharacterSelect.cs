@@ -240,9 +240,23 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public void LoadScenePlayGames()
     {
+        //여긴 호스트만 옴
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        Managers.SceneManagerEx.NetworkLoadSceneAsyncWithLoadingScene(Define.Scene.GamePlayScene);
+        Managers.SceneManagerEx.NetworkLoadSceneAsyncWithLoadingScene(Define.Scene.GamePlayScene, NotifyLoadingSceneReady, NotifyNextSceneReady);
+        void NotifyLoadingSceneReady(NetworkLoadingScene networkLoadingScene)
+        {
+            networkLoadingScene.DoneLoadScenePlayerCount++;
+            Debug.Log(networkLoadingScene.DoneLoadScenePlayerCount+"이게계속 찍혀야함");
+        }
+
+        void NotifyNextSceneReady(BaseScene scene)
+        {
+            //여기서 다음씬의 카메라가 꺼지도록 설정
+            string sceneName = scene.CurrentScene.ToString();
+            Managers.RelayManager.NGO_RPC_Caller.NextSceneMainCameraOFFRpc(sceneName);
+        }
+
     }
 
     public void ButtonState(bool state)
