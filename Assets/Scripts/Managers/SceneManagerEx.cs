@@ -17,11 +17,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     public Define.Scene CurrentScene => _currentScene;
     public Define.Scene NextScene => _nextScene;
 
-    public void SetCurrentScene(Define.Scene currentScene)
-    {
-        _currentScene = currentScene;
-    }
-
     public void SetNextScene(Define.Scene nextScene)
     {
         _nextScene = nextScene;
