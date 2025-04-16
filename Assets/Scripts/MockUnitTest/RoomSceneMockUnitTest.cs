@@ -18,7 +18,7 @@ public class RoomSceneMockUnitTest : BaseScene
         None
     }
 
-    string LobbyID = "TestLobby08";
+    string LobbyID = "TestLobby09";
     string _playerType = null;
     GameObject _ngoRoot;
 

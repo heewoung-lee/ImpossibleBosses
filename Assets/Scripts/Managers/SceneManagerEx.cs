@@ -16,11 +16,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     public Define.Scene CurrentScene => _currentScene;
     public Define.Scene NextScene => _nextScene;
 
-    public void SetNextScene(Define.Scene nextScene)
-    {
-        _nextScene = nextScene;
-    }
-
     public bool[] LoadingSceneTaskChecker
     {
         get
@@ -45,11 +40,21 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public void NetworkLoadSceneAsync(Define.Scene nextscene)
+    public void NetworkLoadScene(Define.Scene nextscene)
     {
         Managers.Clear();
         Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadComplete;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+
+        void SceneManager_OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+        {
+            if(sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
+            {
+                Debug.Log($"{clientId}유저 로딩 완료");
+                Managers.RelayManager.NGO_RPC_Caller.SpawnLoadingUIRpc(clientId);
+            }
+        }
     }
 
     public string GetEnumName(Define.Scene type)

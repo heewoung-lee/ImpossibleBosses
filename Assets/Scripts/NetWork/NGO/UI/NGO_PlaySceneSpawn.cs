@@ -35,7 +35,6 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             HostSpawnObject();
             return;
         }
-        Debug.Log("이거 클라한테 뜰까?");
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
         if (IsHost)
         {

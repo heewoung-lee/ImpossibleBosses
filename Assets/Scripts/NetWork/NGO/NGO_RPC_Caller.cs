@@ -4,6 +4,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +17,20 @@ public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
+    private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
+        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    public int LoadedPlayerCount
+    {
+        get { return _loadedPlayerCount.Value; }
+        set
+        {
+            if (IsHost == false)
+                return;
+            //TODO:여기 안옴 메모
+            _loadedPlayerCount.Value = value;
+        }
+    }
     NetworkManager _networkManager;
     NetworkManager RelayNetworkManager
     {
@@ -35,11 +50,15 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.RelayManager.SetRPCCaller(gameObject);
 
         Managers.RelayManager.Spwan_RpcCaller_Event?.Invoke();
+
+        _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
         //Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
     }
 
-
-
+    private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
+    {
+        LoadedPlayerCountRpc();
+    }
 
     [Rpc(SendTo.Server)]
     public void DeSpawnByIDServerRpc(ulong networkID, RpcParams rpcParams = default)
@@ -70,7 +89,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 networkLootItem = Managers.ItemDataManager.GetEquipLootItem(iteminfo);
                 break;
             case ItemType.Consumable:
-                networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo); 
+                networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo);
                 break;
             case ItemType.ETC:
                 break;
@@ -211,6 +230,31 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             Debug.LogError($"[Disconneted NetWorkError] Error: {e}");
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    public void SpawnLoadingUIRpc(ulong clientId)
+    {
+        ShowLoadingUIToClientRpc(RpcTarget.Single(clientId, RpcTargetUse.Temp));
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void ShowLoadingUIToClientRpc(RpcParams rpcParams = default)
+    {
+        UI_Loading ui_loading = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        GameSceneLoadingProgress progress = ui_loading.AddComponent<GameSceneLoadingProgress>();
+        progress.SetLoadedPlayerCount(Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount);
+        Debug.Log("초기화 카운트" + Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount);
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void LoadedPlayerCountRpc()
+    {
+        UI_Loading loading = Managers.UI_Manager.Get_Scene_UI<UI_Loading>();
+        GameSceneLoadingProgress progress = loading.GetComponent<GameSceneLoadingProgress>();
+        progress.SetLoadedPlayerCount(LoadedPlayerCount);
+        Debug.Log($"현재까지 완료된 카운트수{progress.LoadedPlayerCount}");
     }
 
 }

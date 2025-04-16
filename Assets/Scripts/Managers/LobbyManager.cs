@@ -386,10 +386,8 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         _isDoneInitEvent = false;
         try
         {
-            Task inputplayerDataTask = InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
-            Task vivoxChanelTask = Managers.VivoxManager.JoinChannel(lobby.Id);
-
-            await Task.WhenAll(inputplayerDataTask, vivoxChanelTask);
+            await InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
+            await Managers.VivoxManager.JoinChannel(lobby.Id);
             InitalizeRelayEvent();
             InitDoneEvent?.Invoke();
             _isDoneInitEvent = true;

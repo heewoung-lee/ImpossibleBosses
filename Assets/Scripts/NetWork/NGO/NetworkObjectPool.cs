@@ -43,6 +43,8 @@ public class NetworkObjectPool : NetworkBehaviour
                 initalilze.SetRootObjectName(poolingPrefabInfo.Item1);
             }
         }
+
+        gameObject.RemoveCloneText();
     }
 
     public NetworkObject GetNetworkObject(string prefabPath, Vector3 position, Quaternion rotation)
