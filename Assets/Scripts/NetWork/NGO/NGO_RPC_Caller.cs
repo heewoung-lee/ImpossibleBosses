@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEditor.SearchService;
@@ -195,14 +196,21 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void NextSceneMainCameraOFFRpc(string nextSceneName)//additive ¾ÀÀÌ¸é ¾ÀÀÌ °ãÃÄº¸ÀÌ´Ï Ä«¸Þ¶ó¸¦ ²û
+    public void AllClientDisconnetedVivoxAndLobbyRpc()
     {
-        Scene nextSceneinfo = SceneManager.GetSceneByName(nextSceneName);
-        Camera mainCamera = Managers.SceneManagerEx.FindMainCameraInScene(nextSceneinfo);
-        AudioListener audioListener = mainCamera.GetComponent<AudioListener>();
-        Debug.Log($"{mainCamera.name}Ä«¸Þ¶ó °¡Á®¿È?");
-        mainCamera.enabled = false;
-        audioListener.enabled = false;
+        _ = DisconnectFromVivoxAndLobby();
+    }
+    private async Task DisconnectFromVivoxAndLobby()
+    {
+        try
+        {
+            await Managers.LobbyManager.LeaveCurrentLobby();
+            await Managers.VivoxManager.LogoutOfVivoxAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Disconneted NetWorkError] Error: {e}");
+        }
     }
 
 }
