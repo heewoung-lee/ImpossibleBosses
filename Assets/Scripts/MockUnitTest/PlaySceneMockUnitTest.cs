@@ -8,7 +8,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class PlaySceneMockUnitTest : MonoBehaviour
+public class PlaySceneMockUnitTest : BaseScene
 {
     public enum PlayersTag
     {
@@ -26,10 +26,13 @@ public class PlaySceneMockUnitTest : MonoBehaviour
 
     public Define.PlayerClass PlayerClass;
     public bool isSoloTest;
-    private async void Start()
+
+    public override Define.Scene CurrentScene => throw new NotImplementedException();
+
+    protected override async void StartInit()
     {
+        base.StartInit();
        await JoinChannel();
-        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
     }
     private async Task JoinChannel()
     {
@@ -49,7 +52,8 @@ public class PlaySceneMockUnitTest : MonoBehaviour
                 }
                 if (NetworkManager.Singleton.IsListening == true)
                 {
-                    Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
+                    Debug.Log("호스트만 오나?");
+                    Init_NGO_PlayScene_OnHost();
                 }
             }
             else
@@ -83,7 +87,14 @@ public class PlaySceneMockUnitTest : MonoBehaviour
         Managers.SocketEventManager.DisconnectApiEvent += Managers.LobbyManager.LogoutAndAllLeaveLobby;
     }
 
-
+    private void Init_NGO_PlayScene_OnHost()
+    {
+        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        {
+            Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
+            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
+        }
+    }
     public string GetPlayerTag()
     {
         string[] tagValue = CurrentPlayer.ReadOnlyTags();
@@ -94,6 +105,14 @@ public class PlaySceneMockUnitTest : MonoBehaviour
             currentPlayer = (PlayersTag)parsedEnum;
         }
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
+    }
+
+    protected override void AwakeInit()
+    {
+    }
+
+    public override void Clear()
+    {
     }
 
 
