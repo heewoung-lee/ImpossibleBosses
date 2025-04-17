@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -27,7 +28,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             if (IsHost == false)
                 return;
-            //TODO:여기 안옴 메모
+
             _loadedPlayerCount.Value = value;
         }
     }
@@ -48,11 +49,8 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         Managers.RelayManager.SetRPCCaller(gameObject);
-
-        Managers.RelayManager.Spwan_RpcCaller_Event?.Invoke();
-
+        Managers.RelayManager.Spawn_RpcCaller_Event?.Invoke();
         _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
-        //Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
     }
 
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
@@ -232,29 +230,28 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
     }
 
-    [Rpc(SendTo.Server)]
-    public void SpawnLoadingUIRpc(ulong clientId)
-    {
-        ShowLoadingUIToClientRpc(RpcTarget.Single(clientId, RpcTargetUse.Temp));
-    }
-
-    [Rpc(SendTo.SpecifiedInParams)]
-    public void ShowLoadingUIToClientRpc(RpcParams rpcParams = default)
-    {
-        UI_Loading ui_loading = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
-        GameSceneLoadingProgress progress = ui_loading.AddComponent<GameSceneLoadingProgress>();
-        progress.SetLoadedPlayerCount(Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount);
-        Debug.Log("초기화 카운트" + Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount);
-    }
-
 
     [Rpc(SendTo.ClientsAndHost)]
     public void LoadedPlayerCountRpc()
     {
-        UI_Loading loading = Managers.UI_Manager.Get_Scene_UI<UI_Loading>();
-        GameSceneLoadingProgress progress = loading.GetComponent<GameSceneLoadingProgress>();
-        progress.SetLoadedPlayerCount(LoadedPlayerCount);
-        Debug.Log($"현재까지 완료된 카운트수{progress.LoadedPlayerCount}");
+        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Loading loading))
+        {
+           if(loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
+            {
+                loadingProgress.SetLoadedPlayerCount(LoadedPlayerCount);
+            }
+        }
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetisAllPlayerLoadedRpc(bool isAllplayerLoaded)
+    {
+        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Loading loading))
+        {
+            if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
+            {
+                loadingProgress.SetisAllPlayerLoaded(isAllplayerLoaded);
+            }
+        }
+    }
 }

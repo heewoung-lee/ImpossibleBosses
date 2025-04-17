@@ -22,12 +22,8 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
-       
         int playerCount = Managers.RelayManager.CurrentUserCount;
         _isCheckTask = new bool[playerCount];
-
-
 
         if (IsAvailableMockUnitTest())
         {
@@ -35,17 +31,20 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             HostSpawnObject();
             return;
         }
+
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
-        if (IsHost)
-        {
-            SpawnPlayerCharacter();
-            HostSpawnObject();
-        }
+        //if (IsHost)
+        //{
+        //    SpawnPlayerCharacter();
+        //    HostSpawnObject();
+        //}
     }
     private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
+        Debug.Log("로드 한 씬 네임" + sceneName);
         if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
         {
+            Debug.Log($"스폰{clientId}");
             SpawnPlayerCharacter();
             _isCheckTask[playerindex] = true;
             playerindex++;
@@ -90,10 +89,9 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     private bool IsAvailableMockUnitTest()
     {
         PlaySceneMockUnitTest mockUnitTest = FindAnyObjectByType<PlaySceneMockUnitTest>();
-        if (mockUnitTest == null || mockUnitTest.enabled)
-        {
+        if (mockUnitTest != null && mockUnitTest.enabled == true)
             return true;
-        }
+
         return false;
     }
 

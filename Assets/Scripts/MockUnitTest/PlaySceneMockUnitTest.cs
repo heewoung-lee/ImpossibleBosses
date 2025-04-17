@@ -22,8 +22,8 @@ public class PlaySceneMockUnitTest : BaseScene
     string LobbyID = "TestLobby322";
     string _playerType = null;
     GameObject _ngoRoot;
-    
 
+    private UI_Loading _ui_Loading_Scene;
     public Define.PlayerClass PlayerClass;
     public bool isSoloTest;
 
@@ -32,7 +32,8 @@ public class PlaySceneMockUnitTest : BaseScene
     protected override async void StartInit()
     {
         base.StartInit();
-       await JoinChannel();
+        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        await JoinChannel();
     }
     private async Task JoinChannel()
     {
@@ -52,7 +53,6 @@ public class PlaySceneMockUnitTest : BaseScene
                 }
                 if (NetworkManager.Singleton.IsListening == true)
                 {
-                    Debug.Log("호스트만 오나?");
                     Init_NGO_PlayScene_OnHost();
                 }
             }
@@ -69,10 +69,15 @@ public class PlaySceneMockUnitTest : BaseScene
                 await Managers.RelayManager.JoinGuestRelay(joinCode);
             }
         }
+        LoadGamePlayScene();
         Managers.LobbyManager.InitalizeLobbyEvent();
         Managers.LobbyManager.InitalizeRelayEvent();
     }
 
+    private void LoadGamePlayScene()
+    {
+        _ui_Loading_Scene.gameObject.SetActive(false);
+    }
     private async Task SetAuthenticationService()
     {
 

@@ -410,7 +410,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.Log($"{System.Environment.StackTrace}");
             return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
         }
     }

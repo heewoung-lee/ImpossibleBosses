@@ -243,7 +243,11 @@ public class UI_Room_CharacterSelect : UI_Scene
         //여긴 호스트만 옴
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, AllPlayerLoadedEvent);
+        void AllPlayerLoadedEvent()
+        {
+            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+        }
     }
 
     public void ButtonState(bool state)

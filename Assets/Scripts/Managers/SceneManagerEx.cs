@@ -40,7 +40,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public void NetworkLoadScene(Define.Scene nextscene)
+    public void NetworkLoadScene(Define.Scene nextscene,Action allPlayerLoadedEvent)
     {
         Managers.Clear();
         Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
@@ -49,14 +49,18 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
         void SceneManager_OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
         {
-            if(sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
+            if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
             {
-                Debug.Log($"{clientId}유저 로딩 완료");
-                Managers.RelayManager.NGO_RPC_Caller.SpawnLoadingUIRpc(clientId);
+                Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount++;
+            }
+
+            if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
+            {
+                Managers.RelayManager.NGO_RPC_Caller.SetisAllPlayerLoadedRpc(true);
+                allPlayerLoadedEvent?.Invoke();
             }
         }
     }
-
     public string GetEnumName(Define.Scene type)
     {
         string name = System.Enum.GetName(typeof(Define.Scene), type);

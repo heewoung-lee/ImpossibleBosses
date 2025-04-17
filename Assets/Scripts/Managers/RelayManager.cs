@@ -8,11 +8,12 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine.UIElements;
+using System.IO;
 
 public class RelayManager
 {
 
-    public Action Spwan_RpcCaller_Event;
+    public Action Spawn_RpcCaller_Event;
 
     private NetworkManager _netWorkManager;
     private string _joinCode;

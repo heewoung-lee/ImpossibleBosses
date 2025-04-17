@@ -15,6 +15,15 @@ MonoBehaviour:
   pages:
   - items:
     - globalId:
+        globalObjectIdString: GlobalObjectId_V1-1-a7795b65ce06cae4abf76b51bca8af84-102900000-0
+      _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      _obj: {fileID: 102900000, guid: a7795b65ce06cae4abf76b51bca8af84, type: 3}
+      isSceneGameObject: 0
+      isFolder: 0
+      isAsset: 1
+      _id: 1054256506
+    - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-b62b0c43614e16341b635cfaa1b77a88-11500000-0
       _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
@@ -50,15 +59,6 @@ MonoBehaviour:
       isFolder: 0
       isAsset: 1
       _id: 1062377202
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-2-b350600a9803dbe4e9fdd63029fc2f34-1701164428-0
-      _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 0}
-      isSceneGameObject: 1
-      isFolder: 0
-      isAsset: 0
-      _id: 1062488172
     - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-72bddfc5c1497af46953f6a1f9881cf8-11500000-0
       _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
@@ -96,14 +96,14 @@ MonoBehaviour:
       isAsset: 1
       _id: 1062565026
     - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-a7795b65ce06cae4abf76b51bca8af84-102900000-0
+        globalObjectIdString: GlobalObjectId_V1-1-b350600a9803dbe4e9fdd63029fc2f34-102900000-0
       _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: a7795b65ce06cae4abf76b51bca8af84, type: 3}
+      _obj: {fileID: 102900000, guid: b350600a9803dbe4e9fdd63029fc2f34, type: 3}
       isSceneGameObject: 0
       isFolder: 0
       isAsset: 1
-      _id: 1054256506
+      _id: 1055795782
     name: Page 1
     _id: 1059962769
   - items: []
