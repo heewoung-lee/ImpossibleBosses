@@ -11,9 +11,6 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
-    private bool[] _isCheckTask;
-    private int playerindex = 0;
-
     protected override void AwakeInit()
     {
         _relayManager = Managers.RelayManager;
@@ -22,38 +19,35 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        int playerCount = Managers.RelayManager.CurrentUserCount;
-        _isCheckTask = new bool[playerCount];
-
-        if (IsAvailableMockUnitTest())
+        if (IsAvailableMockUnitTest(out PlaySceneMockUnitTest mockUnitTest))
         {
-            SpawnPlayerCharacter();
+            MockUnitSpawnPlayerCharacter(mockUnitTest.PlayerClass);
             HostSpawnObject();
             return;
         }
 
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
+        //Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
+
+
         //if (IsHost)
         //{
         //    SpawnPlayerCharacter();
         //    HostSpawnObject();
         //}
     }
-    private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
-    {
-        Debug.Log("로드 한 씬 네임" + sceneName);
-        if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
-        {
-            Debug.Log($"스폰{clientId}");
-            SpawnPlayerCharacter();
-            _isCheckTask[playerindex] = true;
-            playerindex++;
-        }
-    }
+    //private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
+    //{
+    //    Debug.Log("로드 한 씬 네임" + sceneName);
+    //    if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
+    //    {
+    //        Debug.Log($"스폰{clientId}");
+    //        SpawnPlayerCharacter();
+    //    }
+    //}
 
-    private void SpawnPlayerCharacter()
+    private void MockUnitSpawnPlayerCharacter(Define.PlayerClass playerclass)
     {
-        string choicePlayer = Managers.RelayManager.ChoicePlayerCharacter.ToString();
+        string choicePlayer = playerclass.ToString();
         RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
     }
 
@@ -86,9 +80,9 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
         _relayManager.SpawnNetworkOBJInjectionOnwer(requestingClientId, $"Prefabs/Player/{choicePlayer}Base", targetPosition, _relayManager.NGO_ROOT.transform);
     }
 
-    private bool IsAvailableMockUnitTest()
+    private bool IsAvailableMockUnitTest(out PlaySceneMockUnitTest mockUnitTest)
     {
-        PlaySceneMockUnitTest mockUnitTest = FindAnyObjectByType<PlaySceneMockUnitTest>();
+        mockUnitTest = FindAnyObjectByType<PlaySceneMockUnitTest>();
         if (mockUnitTest != null && mockUnitTest.enabled == true)
             return true;
 

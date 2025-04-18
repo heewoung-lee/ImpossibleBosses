@@ -40,27 +40,28 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public void NetworkLoadScene(Define.Scene nextscene,Action allPlayerLoadedEvent)
+    public void NetworkLoadScene(Define.Scene nextscene,Action<ulong> clientLoadedEvent,Action allPlayerLoadedEvent)
     {
         Managers.Clear();
         Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadComplete;
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadCompleteAsync;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
 
-        void SceneManager_OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+        void SceneManager_OnLoadCompleteAsync(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
         {
             if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
             {
+                clientLoadedEvent.Invoke(clientId);
                 Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount++;
             }
 
             if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
             {
-                Managers.RelayManager.NGO_RPC_Caller.SetisAllPlayerLoadedRpc(true);
+                Managers.RelayManager.NGO_RPC_Caller.SetisAllPlayerLoadedRpc(true);//로딩창 90% 이후로 넘어가게끔
                 allPlayerLoadedEvent?.Invoke();
             }
         }
-    }
+    } 
     public string GetEnumName(Define.Scene type)
     {
         string name = System.Enum.GetName(typeof(Define.Scene), type);

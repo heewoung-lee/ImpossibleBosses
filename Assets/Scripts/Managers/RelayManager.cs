@@ -9,6 +9,7 @@ using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine.UIElements;
 using System.IO;
+using System.Collections.Generic;
 
 public class RelayManager
 {
@@ -21,15 +22,14 @@ public class RelayManager
     private GameObject _nGO_ROOT_UI;
     private GameObject _nGO_ROOT;
     private NGO_RPC_Caller _nGO_RPC_Caller;
+    private Define.PlayerClass _choicePlayerCharacter;
+    private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
-    public Define.PlayerClass ChoicePlayerCharacter;
-
+    public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
+    public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
     public Func<Task> DisconnectPlayerAsyncEvent;
     public Action DisconnectPlayerEvent;
-
     public Action ConnectPlayerEvent;
-
-
     public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
 
     public NetworkManager NetworkManagerEx
@@ -98,6 +98,18 @@ public class RelayManager
     }
 
     public string JoinCode { get => _joinCode; }
+
+    public void SetSelectPlayerCharacterInLocal(string selectCharacterName)
+    {
+        _choicePlayerCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
+    }
+
+    public void AddSelectPlayerCharacter(ulong clientId,Define.PlayerClass playerClass)
+    {
+        Debug.Log($"{clientId}님이 {playerClass}를 선택하였습니다");
+        _choicePlayerCharactersDict[clientId] = playerClass;
+    }
+
 
     public GameObject Load_NGO_Prefab<T>(string name = null, string path = null)
     {

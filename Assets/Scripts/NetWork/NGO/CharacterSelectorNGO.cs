@@ -8,6 +8,7 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.UI;
+using static Define;
 public class CharacterSelectorNGO : NetworkBehaviourBase
 {
     private readonly Color PLAYER_FRAME_COLOR = "#143658".HexCodetoConvertColor();
@@ -151,9 +152,10 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             if (IsOwner)
             {
                 SetActiveCharacterSelectionArrow(!newValue);
-                Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)Module_ChooseCharacter_Move.PlayerChooseIndex;
-                Debug.Log(Managers.RelayManager.ChoicePlayerCharacter);
-                //TODO: 캐릭터 선택까지 정해둠, RelayManager를 근거로 캐릭터 스폰할것
+                string selectCharacterName = ((Define.PlayerClass)Module_ChooseCharacter_Move.PlayerChooseIndex).ToString();
+                Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, selectCharacterName);
+                Managers.RelayManager.SetSelectPlayerCharacterInLocal(selectCharacterName);
+
             }
         };
         // UI 초기화

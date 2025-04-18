@@ -238,14 +238,22 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
 
     }
-    public void LoadScenePlayGames()
+    public void LoadScenePlayGames()//호스트가 Start버튼을 클릭했을때
     {
         //여긴 호스트만 옴
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-        Managers.RelayManager.ChoicePlayerCharacter = (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, AllPlayerLoadedEvent);
+
+        Managers.RelayManager.AddSelectPlayerCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, AllPlayerLoadedEvent);
+
+        void ClientLoadedEvent(ulong clientId)
+        {
+            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
+        }
+
         void AllPlayerLoadedEvent()
         {
+            Debug.Log("모든 캐릭터 생성 완료");
             Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
         }
     }
@@ -264,6 +272,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         _button_Text.text = buttonimages.readyButtonText;
         _button_Text.color = buttonimages.readyButtonTextColor;
     }
+
+
     //TODO:테스트하면 이거 지워야함
     private void OnGUI()
     {

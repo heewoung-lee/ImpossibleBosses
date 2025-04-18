@@ -41,7 +41,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
     public void SetOwnerPlayerADD_Module()
     {
         gameObject.name = "OnwerPlayer";
-        // gameObject.GetComponent<PlayerStats>().enabled = true;
+        gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
         gameObject.AddComponent<PlayerController>();
         gameObject.AddComponent<Module_Player_TextureCamera>();

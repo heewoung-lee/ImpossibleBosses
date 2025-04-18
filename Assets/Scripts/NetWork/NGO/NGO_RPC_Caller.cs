@@ -10,6 +10,7 @@ using UnityEditor.PackageManager;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Define;
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.Rendering.DebugUI;
 using Scene = UnityEngine.SceneManagement.Scene;
@@ -43,6 +44,13 @@ public class NGO_RPC_Caller : NetworkBehaviour
             }
             return _networkManager;
         }
+    }
+    [Rpc(SendTo.Server)]
+    public void GetPlayerChoiceCharacterRpc(ulong clientId)
+    {
+        string choiceCharacterName = Managers.RelayManager.ChoicePlayerCharactersDict[clientId].ToString();
+        Vector3 targetPosition = new Vector3(1 * clientId, 0, 1);
+        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform);
     }
 
     public override void OnNetworkSpawn()
@@ -254,4 +262,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
             }
         }
     }
+
+    [Rpc(SendTo.Server)]
+    public void SubmitSelectedCharactertoServerRpc(ulong clientId,string selectCharacterName)
+    {
+        Define.PlayerClass selectCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
+        Managers.RelayManager.AddSelectPlayerCharacter(clientId, selectCharacter);
+    }
+
 }

@@ -27,7 +27,7 @@ public class PlaySceneMockUnitTest : BaseScene
     public Define.PlayerClass PlayerClass;
     public bool isSoloTest;
 
-    public override Define.Scene CurrentScene => throw new NotImplementedException();
+    public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
 
     protected override async void StartInit()
     {
@@ -37,7 +37,7 @@ public class PlaySceneMockUnitTest : BaseScene
     }
     private async Task JoinChannel()
     {
-        Managers.RelayManager.ChoicePlayerCharacter = PlayerClass;
+        Managers.RelayManager.AddSelectPlayerCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, PlayerClass);
         if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
         {
             await SetAuthenticationService();
