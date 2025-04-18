@@ -16,15 +16,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     public Define.Scene CurrentScene => _currentScene;
     public Define.Scene NextScene => _nextScene;
 
-    public bool[] LoadingSceneTaskChecker
-    {
-        get
-        {
-            bool[] loadingChecker = _loadingSceneTaskChecker;
-            _loadingSceneTaskChecker = null;
-            return loadingChecker;
-        }
-    }
+    public bool[] LoadingSceneTaskChecker => _loadingSceneTaskChecker;
     public void LoadScene(Define.Scene nextscene)
     {
         Managers.Clear();
@@ -58,6 +50,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
             if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
             {
                 Managers.RelayManager.NGO_RPC_Caller.SetisAllPlayerLoadedRpc(true);//로딩창 90% 이후로 넘어가게끔
+                Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
                 allPlayerLoadedEvent?.Invoke();
             }
         }

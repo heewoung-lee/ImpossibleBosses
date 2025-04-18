@@ -243,7 +243,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         //여긴 호스트만 옴
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
 
-        Managers.RelayManager.AddSelectPlayerCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
+        Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, AllPlayerLoadedEvent);
 
         void ClientLoadedEvent(ulong clientId)
@@ -254,7 +254,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         void AllPlayerLoadedEvent()
         {
             Debug.Log("모든 캐릭터 생성 완료");
-            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+            PlayScene playscene = Managers.SceneManagerEx.GetCurrentScene as PlayScene;
+            playscene.Init_NGO_PlayScene_OnHost();
         }
     }
 

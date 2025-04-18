@@ -21,36 +21,20 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
         base.OnNetworkSpawn();
         if (IsAvailableMockUnitTest(out PlaySceneMockUnitTest mockUnitTest))
         {
+            Debug.Log($"{mockUnitTest.PlayerClass}캐릭터이름");
             MockUnitSpawnPlayerCharacter(mockUnitTest.PlayerClass);
             HostSpawnObject();
             return;
+
+            void MockUnitSpawnPlayerCharacter(Define.PlayerClass playerclass)
+            {
+                string choicePlayer = playerclass.ToString();
+                Managers.RelayManager.SetPlayerClassforMockUnitTest(playerclass);
+                RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
+            }
         }
-
-        //Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SpawnPlayer_OnLoadComplete;
-
-
-        //if (IsHost)
-        //{
-        //    SpawnPlayerCharacter();
-        //    HostSpawnObject();
-        //}
+        HostSpawnObject();
     }
-    //private void SpawnPlayer_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
-    //{
-    //    Debug.Log("로드 한 씬 네임" + sceneName);
-    //    if (clientId == _relayManager.NetworkManagerEx.LocalClientId)
-    //    {
-    //        Debug.Log($"스폰{clientId}");
-    //        SpawnPlayerCharacter();
-    //    }
-    //}
-
-    private void MockUnitSpawnPlayerCharacter(Define.PlayerClass playerclass)
-    {
-        string choicePlayer = playerclass.ToString();
-        RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
-    }
-
     private void HostSpawnObject()
     {
         if (IsHost == false)

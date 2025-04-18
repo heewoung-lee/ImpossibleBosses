@@ -25,7 +25,7 @@ public struct PlayerIngameLoginInfo
     }
 }
 
-public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
+public class LobbyManager : IManagerEventInitailize
 {
     enum LoadingProcess
     {
@@ -37,13 +37,13 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom324";
+    private const string LOBBYID = "WaitLobbyRoom345";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
     private bool isRefreshing = false;
     private bool isalready = false;
-    private bool[] _taskChecker;
+    [SerializeField]private bool[] _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
 
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
@@ -54,7 +54,6 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     public string PlayerID => _currentPlayerInfo.Id;
     public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
-    public bool[] TaskChecker => _taskChecker;
 
     public async Task<bool> InitLobbyScene()
     {
@@ -85,6 +84,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
                 return true;
             }
             _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
+
             await TryJoinLobbyByNameOrCreateWaitLobby();
             _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
             return false;
@@ -103,6 +103,7 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
     private void SetVivoxTaskCheker()
     {
         _taskChecker[(int)LoadingProcess.VivoxLogin] = true;
+        Debug.Log("(int)LoadingProcess.VivoxLogin");
     }
 
     private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
@@ -186,7 +187,11 @@ public class LobbyManager : IManagerEventInitailize, ILoadingSceneTaskChecker
         catch (KeyNotFoundException exception)
         {
             Debug.Log($"릴레이 코드가 존재하지 않습니다.{exception}");
-            await Utill.RateLimited(async () => await InitLobbyScene());
+            await Utill.RateLimited(async () =>
+            {
+                Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);
+                await CheckClientRelay(currentLobby);
+            });
         }
     }
     private void StopHeartbeat()

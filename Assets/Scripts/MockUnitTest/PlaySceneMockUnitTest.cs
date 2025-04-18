@@ -37,7 +37,6 @@ public class PlaySceneMockUnitTest : BaseScene
     }
     private async Task JoinChannel()
     {
-        Managers.RelayManager.AddSelectPlayerCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, PlayerClass);
         if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
         {
             await SetAuthenticationService();

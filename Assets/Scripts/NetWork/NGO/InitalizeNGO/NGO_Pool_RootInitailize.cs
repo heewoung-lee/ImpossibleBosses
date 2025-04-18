@@ -12,7 +12,6 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
     NetworkVariable<FixedString64Bytes> _rootName = new NetworkVariable<FixedString64Bytes>
     ("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    [SerializeField]
     NetworkVariable<FixedString128Bytes> _poolingNgoPath = new NetworkVariable<FixedString128Bytes>
     ("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 

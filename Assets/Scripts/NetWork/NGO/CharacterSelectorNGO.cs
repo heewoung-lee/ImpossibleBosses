@@ -152,10 +152,8 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             if (IsOwner)
             {
                 SetActiveCharacterSelectionArrow(!newValue);
-                string selectCharacterName = ((Define.PlayerClass)Module_ChooseCharacter_Move.PlayerChooseIndex).ToString();
-                Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, selectCharacterName);
-                Managers.RelayManager.SetSelectPlayerCharacterInLocal(selectCharacterName);
-
+                Define.PlayerClass selectCharacter = (Define.PlayerClass)Module_ChooseCharacter_Move.PlayerChooseIndex;
+                Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, selectCharacter);
             }
         };
         // UI √ ±‚»≠

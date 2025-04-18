@@ -32,6 +32,7 @@ public class RelayManager
     public Action ConnectPlayerEvent;
     public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
 
+
     public NetworkManager NetworkManagerEx
     {
         get
@@ -99,18 +100,19 @@ public class RelayManager
 
     public string JoinCode { get => _joinCode; }
 
-    public void SetSelectPlayerCharacterInLocal(string selectCharacterName)
+
+
+    public void RegisterSelectedCharacter(ulong clientId, Define.PlayerClass playerClass)
     {
-        _choicePlayerCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
+        Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
+        _choicePlayerCharacter = playerClass;
     }
 
-    public void AddSelectPlayerCharacter(ulong clientId,Define.PlayerClass playerClass)
+
+    public void RegisterSelectedCharacterinDict(ulong clientId, Define.PlayerClass playerClass)
     {
-        Debug.Log($"{clientId}님이 {playerClass}를 선택하였습니다");
         _choicePlayerCharactersDict[clientId] = playerClass;
     }
-
-
     public GameObject Load_NGO_Prefab<T>(string name = null, string path = null)
     {
         if (name == null)
@@ -311,4 +313,13 @@ public class RelayManager
         NetworkManagerEx.OnClientDisconnectCallback -= OnClientconnectEvent;
         NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
     }
+
+
+
+    #region 테스트용 함수
+    public void SetPlayerClassforMockUnitTest(Define.PlayerClass playerClass)
+    {
+        _choicePlayerCharacter = playerClass;
+    }
+    #endregion 
 }

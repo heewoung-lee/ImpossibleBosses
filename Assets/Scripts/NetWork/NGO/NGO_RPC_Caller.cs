@@ -267,7 +267,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
     public void SubmitSelectedCharactertoServerRpc(ulong clientId,string selectCharacterName)
     {
         Define.PlayerClass selectCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
-        Managers.RelayManager.AddSelectPlayerCharacter(clientId, selectCharacter);
+        Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
     }
-
 }

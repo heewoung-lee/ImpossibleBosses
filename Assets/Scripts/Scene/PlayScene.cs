@@ -27,14 +27,14 @@ public class PlayScene : BaseScene
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
         _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
-        Init_NGO_PlayScene_OnHost();
     }
 
-    private void Init_NGO_PlayScene_OnHost()
+    public void Init_NGO_PlayScene_OnHost()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
+            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
         }
     }
 
