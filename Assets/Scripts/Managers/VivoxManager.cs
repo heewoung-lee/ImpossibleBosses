@@ -198,7 +198,7 @@ public class VivoxManager : IManagerEventInitailize
 
     public void InitalizeVivoxEvent()
     {
-        Managers.SocketEventManager.OnApplicationQuitEvent += LogoutOfVivoxAsync;
+        Managers.SocketEventManager.LogoutVivoxEvent += LogoutOfVivoxAsync;
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutOfVivoxAsync;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutOfVivoxAsync;
     }

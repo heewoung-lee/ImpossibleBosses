@@ -7,7 +7,9 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.Services.Relay;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 
 public struct PlayerIngameLoginInfo
@@ -37,13 +39,16 @@ public class LobbyManager : IManagerEventInitailize
         VivoxLogin
     }
 
-    private const string LOBBYID = "WaitLobbyRoom345";
+    private const string LOBBYID = "WaitLobbyRoom353";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
     private bool isRefreshing = false;
     private bool isalready = false;
-    [SerializeField]private bool[] _taskChecker;
+    private bool[] _taskChecker;
+
+
+    public bool[] TaskChecker => _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
 
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
@@ -57,26 +62,12 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<bool> InitLobbyScene()
     {
-        _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
-        Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
-        Managers.RelayManager.SceneLoadInitalizeRelayServer();
-        InitalizeVivoxEvent();
-        InitalizeLobbyEvent();
-        _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
+        SetLoadingTask();
+        SubscribeSceneEvent();
         try
         {
+            await JoinAuthenticationService();
             // Unity Services 초기화
-            await UnityServices.InitializeAsync();
-            _taskChecker[(int)LoadingProcess.UnityServices] = true;
-            if (AuthenticationService.Instance.IsSignedIn)
-            {
-                await LogoutAndAllLeaveLobby();
-                Debug.Log("Logging out from previous session...");
-                AuthenticationService.Instance.SignOut();
-
-            }
-            await SignInAnonymouslyAsync();
-            _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
             isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
             if (isalready is true)
             {
@@ -84,7 +75,6 @@ public class LobbyManager : IManagerEventInitailize
                 return true;
             }
             _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
-
             await TryJoinLobbyByNameOrCreateWaitLobby();
             _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
             return false;
@@ -98,12 +88,39 @@ public class LobbyManager : IManagerEventInitailize
             }
             throw;
         }
+
+        void SetLoadingTask()
+        {
+            _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
+            Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
+        }
+
+        void SubscribeSceneEvent()
+        {
+            Managers.RelayManager.SceneLoadInitalizeRelayServer();
+            InitalizeVivoxEvent();
+            InitalizeLobbyEvent();
+            _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
+        }
+        async Task JoinAuthenticationService()
+        {
+            await UnityServices.InitializeAsync();
+            _taskChecker[(int)LoadingProcess.UnityServices] = true;
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                await LogoutAndAllLeaveLobby();
+                Debug.Log("Logging out from previous session...");
+                AuthenticationService.Instance.SignOut();
+            }
+            await SignInAnonymouslyAsync();
+            _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
+        }
     }
 
     private void SetVivoxTaskCheker()
     {
         _taskChecker[(int)LoadingProcess.VivoxLogin] = true;
-        Debug.Log("(int)LoadingProcess.VivoxLogin");
+        Debug.Log("VivoxLogin켜짐");
     }
 
     private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
@@ -128,7 +145,7 @@ public class LobbyManager : IManagerEventInitailize
             Managers.RelayManager.ShutDownRelay();
             await CheckHostAndGuestEvent?.Invoke(lobby);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log(e);
         }
@@ -168,7 +185,7 @@ public class LobbyManager : IManagerEventInitailize
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
-        catch(LobbyServiceException TimeLimmitException) when(TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
+        catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
         {
             await Utill.RateLimited(async () => await CheckHostRelay(lobby));
             return;
@@ -196,11 +213,12 @@ public class LobbyManager : IManagerEventInitailize
     }
     private void StopHeartbeat()
     {
-        if (_heartBeatCoroutine != null)
-        {
-            Managers.ManagersStopCoroutine(_heartBeatCoroutine);
-            _heartBeatCoroutine = null;
-        }
+        if (_heartBeatCoroutine == null)
+            return;
+
+
+        Managers.ManagersStopCoroutine(_heartBeatCoroutine);
+        _heartBeatCoroutine = null;
     }
 
 
@@ -243,6 +261,7 @@ public class LobbyManager : IManagerEventInitailize
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
             Debug.Log("플레이어가 이미 접속중입니다. 정보삭제후 재진입을 시도 합니다.");
+            Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
             await InitLobbyScene();
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
@@ -283,11 +302,16 @@ public class LobbyManager : IManagerEventInitailize
     }
     public async Task LeaveLobby(Lobby lobby)
     {
+        if (lobby == null)
+            return;
+
+        StopHeartbeat();
+
+
         if (lobby != null)
         {
             await RemovePlayerData(lobby);
             DeleteRelayCodefromLobby();
-            StopHeartbeat();
         }
     }
     public async Task CreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions options)
@@ -310,8 +334,6 @@ public class LobbyManager : IManagerEventInitailize
             throw;
         }
     }
-
-
     public async Task<Lobby> CreateLobbyID(string lobbyID, string lobbyName, int maxPlayers, CreateLobbyOptions options = null)
     {
         try
@@ -370,20 +392,20 @@ public class LobbyManager : IManagerEventInitailize
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)
     {
-        
-            if (joincode == null || lobby == null)
-            {
-                Debug.Log($"Data has been NULL, is Check Lobby Null?: {lobby.Equals(null)} is Check JoinCode Null? {lobby.Equals(null)}");
-                return;
-            }
-            _currentLobby = await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions()
-            {
-                Data = new Dictionary<string, DataObject>
+
+        if (joincode == null || lobby == null)
+        {
+            Debug.Log($"Data has been NULL, is Check Lobby Null?: {lobby.Equals(null)} is Check JoinCode Null? {lobby.Equals(null)}");
+            return;
+        }
+        _currentLobby = await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions()
+        {
+            Data = new Dictionary<string, DataObject>
                 {
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
-            });
-            await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
+        });
+        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby)
@@ -633,11 +655,11 @@ public class LobbyManager : IManagerEventInitailize
     {
         Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
         Managers.VivoxManager.VivoxDoneLoginEvent += SetVivoxTaskCheker;
-   
+
     }
     public void InitalizeLobbyEvent()
     {
-        Managers.SocketEventManager.OnApplicationQuitEvent += LogoutAndAllLeaveLobby;
+        Managers.SocketEventManager.LogoutAllLeaveLobbyEvent += LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }

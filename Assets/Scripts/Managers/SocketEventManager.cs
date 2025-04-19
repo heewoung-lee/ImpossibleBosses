@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class SocketEventManager
 {
-    public Func<Task> OnApplicationQuitEvent;
     public Func<Task> DisconnectApiEvent;
+
+
+    public Func<Task> DisconnectRelayEvent;
+    public Func<Task> LogoutVivoxEvent;
+    public Func<Task> LogoutAllLeaveLobbyEvent;
+
 
 
     public Action<GameObject> DonePlayerSpawnEvent;

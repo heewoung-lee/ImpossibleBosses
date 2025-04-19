@@ -14,10 +14,14 @@ public class LoadingScene : BaseScene
 
     private bool[] _isCheckTaskChecker;
 
+
+    public bool[] LobbyTask;
+
     protected override void StartInit()
     {
         base.StartInit();
         _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
+        LobbyTask = Managers.LobbyManager.TaskChecker;
         StartCoroutine(LoadingSceneProcess());
     }
 

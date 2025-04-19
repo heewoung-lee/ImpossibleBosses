@@ -150,7 +150,7 @@ public class RelayManager
         if (NGO_RPC_Caller != null)
             return;
 
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller",destroyOption: false);
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller", destroyOption: false);
     }
     public async Task<string> StartHostWithRelay(int maxConnections)
     {
@@ -256,24 +256,25 @@ public class RelayManager
             Debug.Log("소켓에러");
             return false;
         }
+        catch (RelayServiceException ex) when (ex.Message.Contains("join code not found"))
+        {
+            Debug.LogWarning("로비에 릴레이코드가 유효하지 않음 새로 만들어야함");
+            return false;
+        }
         catch (Exception ex)
         {
             Debug.LogException(ex);
-            Debug.LogWarning("로비에 릴레이코드가 없는코드란다 나중에 수정해야겠지?");
             return false;
         }
     }
 
     public void ShutDownRelay()
     {
-        if (_netWorkManager != null)
-        {
-            NetworkManager.Singleton.Shutdown();
-            _joinCode = null;
-        }
+        NetworkManagerEx.Shutdown();
+        _joinCode = null;
     }
 
-    private Task WarpperDisConntion()
+    private Task WarpperDisConntionRelay()
     {
         ShutDownRelay();
         return Task.CompletedTask;
@@ -303,9 +304,9 @@ public class RelayManager
     public void SceneLoadInitalizeRelayServer()
     {
         NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
-        Managers.SocketEventManager.OnApplicationQuitEvent += WarpperDisConntion;
-        Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntion;
-        Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntion;
+        Managers.SocketEventManager.DisconnectRelayEvent += WarpperDisConntionRelay;
+        Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntionRelay;
+        Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntionRelay;
     }
 
     public void UnSubscribeCallBackEvent()
