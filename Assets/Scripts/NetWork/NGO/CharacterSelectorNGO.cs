@@ -133,10 +133,9 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         if (IsHost && IsOwner)//호스트 최초 1번 호출부
         {
             _ui_Room_CharacterSelect.SetHostButton();
-            Managers.RelayManager.ConnectPlayerEvent -= DisableHostStartButton;
-            Managers.RelayManager.ConnectPlayerEvent += DisableHostStartButton;
-            Managers.RelayManager.DisconnectPlayerEvent -= CheckHostIsAlone;
-            Managers.RelayManager.DisconnectPlayerEvent += CheckHostIsAlone;
+
+            Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
+            Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback += CheckHostIsAlone;
             _ui_Room_CharacterSelect.SetHostStartButton(true);
         }
         DisPlayHostMarker();
@@ -161,18 +160,21 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _readyPanel.SetActive(_isReady.Value);
     }
 
-    private void CheckHostIsAlone()
+    private void CheckHostIsAlone(ulong clientId)
     {
-        if (Managers.RelayManager.NetworkManagerEx.ConnectedClientsIds.Count == 1 && IsHost)
+        if (IsHost == false)
+            return;
+
+        if (Managers.RelayManager.NetworkManagerEx.ConnectedClientsIds.Count == 1)
         {
             _ui_Room_CharacterSelect.SetHostStartButton(true);
         }
+        else
+        {
+            _ui_Room_CharacterSelect.SetHostStartButton(false);
+        }
     }
 
-    private void DisableHostStartButton()
-    {
-        _ui_Room_CharacterSelect.SetHostStartButton(false);
-    }
 
     public void SelecterCameraOnValueChanged(Vector3 oldValue, Vector3 newValue)
     {

@@ -114,7 +114,6 @@ public class UI_Room_CharacterSelect : UI_Scene
         _loadingPanel.SetActive(false);
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
         _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
-        Managers.RelayManager.DisconnectPlayerAsyncEvent = Managers.LobbyManager.DisconnetPlayerinRoom;
     }
 
     public void SetButtonEvent(UnityAction action)
@@ -140,7 +139,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             _loadingPanel.SetActive(true);
             _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
             _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
-            Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
+            //Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");

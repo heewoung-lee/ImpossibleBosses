@@ -70,7 +70,7 @@ public class PlaySceneMockUnitTest : BaseScene
         }
         LoadGamePlayScene();
         Managers.LobbyManager.InitalizeLobbyEvent();
-        Managers.LobbyManager.InitalizeRelayEvent();
+        Managers.LobbyManager.SubScribeRelayCallBack();
     }
 
     private void LoadGamePlayScene()

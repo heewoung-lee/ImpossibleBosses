@@ -10,6 +10,7 @@ using UnityEditor.PackageManager;
 using UnityEngine.UIElements;
 using System.IO;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class RelayManager
 {
@@ -27,12 +28,8 @@ public class RelayManager
 
     public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
     public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
-    public Func<Task> DisconnectPlayerAsyncEvent;
-    public Action DisconnectPlayerEvent;
-    public Action ConnectPlayerEvent;
+
     public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
-
-
     public NetworkManager NetworkManagerEx
     {
         get
@@ -161,6 +158,7 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
             NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
+            Debug.Log($"호출 됐나요 릴레이코드: {_joinCode}");
             if (NetworkManagerEx.StartHost())
             {
                 return _joinCode;
@@ -278,26 +276,6 @@ public class RelayManager
         return Task.CompletedTask;
     }
 
-    public void OnClientDisconnectEvent(ulong disconntedIndex)
-    {
-        Debug.Log("OnClickentDisconnectEvent 발생");
-        DisconnectPlayerAsyncEvent?.Invoke();
-        DisconnectPlayerEvent?.Invoke();
-    }
-    public void OnClientconnectEvent(ulong disconntedIndex)
-    {
-        Debug.Log("OnClientconnectEvent 발생");
-        ConnectPlayerEvent?.Invoke();
-    }
-
-
-    public void InitalizeRelayServer()
-    {
-        NetworkManagerEx.OnClientDisconnectCallback -= OnClientDisconnectEvent;
-        NetworkManagerEx.OnClientDisconnectCallback += OnClientDisconnectEvent;
-        NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
-        NetworkManagerEx.OnClientConnectedCallback += OnClientconnectEvent;
-    }
 
     public void SceneLoadInitalizeRelayServer()
     {
@@ -306,14 +284,6 @@ public class RelayManager
         Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntionRelay;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntionRelay;
     }
-
-    public void UnSubscribeCallBackEvent()
-    {
-        NetworkManagerEx.OnClientDisconnectCallback -= OnClientconnectEvent;
-        NetworkManagerEx.OnClientConnectedCallback -= OnClientconnectEvent;
-    }
-
-
 
     #region 테스트용 함수
     public void SetPlayerClassforMockUnitTest(Define.PlayerClass playerClass)

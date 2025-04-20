@@ -135,7 +135,6 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         try
         {
-            Managers.RelayManager.UnSubscribeCallBackEvent();
             await Managers.SocketEventManager.DisconnectApiEvent.Invoke();
         }
         catch (Exception e)
