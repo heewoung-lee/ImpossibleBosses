@@ -240,9 +240,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public void LoadScenePlayGames()//호스트가 Start버튼을 클릭했을때
     {
-        //여긴 호스트만 옴
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-
         Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, AllPlayerLoadedEvent);
 
@@ -253,9 +251,16 @@ public class UI_Room_CharacterSelect : UI_Scene
 
         void AllPlayerLoadedEvent()
         {
-            Debug.Log("모든 캐릭터 생성 완료");
-            PlayScene playscene = Managers.SceneManagerEx.GetCurrentScene as PlayScene;
-            playscene.Init_NGO_PlayScene_OnHost();
+            PlayScene playScene = null;
+            foreach(BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
+            {
+                if(scene is PlayScene outPlayScene)
+                {
+                    playScene = outPlayScene;
+                    break;
+                }
+            }
+            playScene.Init_NGO_PlayScene_OnHost();
         }
     }
 

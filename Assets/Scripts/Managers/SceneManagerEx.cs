@@ -13,6 +13,8 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     private bool[] _loadingSceneTaskChecker;
 
     public BaseScene GetCurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
+
+    public BaseScene[] GetCurrentScenes { get => GameObject.FindObjectsByType<BaseScene>(FindObjectsSortMode.None); }
     public Define.Scene CurrentScene => _currentScene;
     public Define.Scene NextScene => _nextScene;
 
@@ -49,8 +51,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
             if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
             {
-                Managers.RelayManager.NGO_RPC_Caller.SetisAllPlayerLoadedRpc(true);//로딩창 90% 이후로 넘어가게끔
-                Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
+                Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded = true;//로딩창 90% 이후로 넘어가게끔
                 allPlayerLoadedEvent?.Invoke();
             }
         }

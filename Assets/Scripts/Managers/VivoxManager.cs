@@ -73,7 +73,7 @@ public class VivoxManager : IManagerEventInitailize
             }
             if (_currentChanel != null)
             {
-                Debug.Log($"채널{_currentChanel}지워짐");
+                Debug.Log($"Vivox 채널{_currentChanel}지워짐");
                 await LeaveEchoChannelAsyncCustom(_currentChanel);
             }
             _currentChanel = chanelID;

@@ -19,8 +19,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
-    private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
+    [SerializeField]private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+
+    private NetworkVariable<bool> _isAllPlayerLoaded = new NetworkVariable<bool>
+        (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public int LoadedPlayerCount
     {
@@ -31,6 +35,18 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 return;
 
             _loadedPlayerCount.Value = value;
+        }
+    }
+
+    public bool IsAllPlayerLoaded
+    {
+        get { return _isAllPlayerLoaded.Value; }
+        set
+        {
+            if(IsHost == false)
+                return;
+
+            _isAllPlayerLoaded.Value = value;
         }
     }
     NetworkManager _networkManager;
@@ -59,10 +75,17 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.RelayManager.SetRPCCaller(gameObject);
         Managers.RelayManager.Spawn_RpcCaller_Event?.Invoke();
         _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
+        _isAllPlayerLoaded.OnValueChanged += IsAllPlayerLoadedValueChanged;
     }
 
+
+    public void IsAllPlayerLoadedValueChanged(bool previosValue,bool newValue)
+    {
+        SetisAllPlayerLoadedRpc(newValue);
+    }
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
+        Debug.Log($"이전값{previousValue} 이후값{newValue}");
         LoadedPlayerCountRpc();
     }
 
@@ -224,12 +247,13 @@ public class NGO_RPC_Caller : NetworkBehaviour
     public void AllClientDisconnetedVivoxAndLobbyRpc()
     {
         _ = DisconnectFromVivoxAndLobby();
+        //씬 전환을 위해 로비와 비복스만 연결을 끊는 로직이 필요
     }
     private async Task DisconnectFromVivoxAndLobby()
     {
         try
         {
-            await Managers.LobbyManager.LeaveCurrentLobby();
+            await Managers.LobbyManager.ExitLobbyAsync(Managers.LobbyManager.CurrentLobby,false);
             await Managers.VivoxManager.LogoutOfVivoxAsync();
         }
         catch (Exception e)

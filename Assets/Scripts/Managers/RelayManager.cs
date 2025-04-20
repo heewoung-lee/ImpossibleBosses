@@ -100,8 +100,6 @@ public class RelayManager
 
     public string JoinCode { get => _joinCode; }
 
-
-
     public void RegisterSelectedCharacter(ulong clientId, Define.PlayerClass playerClass)
     {
         Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());

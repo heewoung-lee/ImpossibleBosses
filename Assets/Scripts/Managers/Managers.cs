@@ -122,9 +122,18 @@ public class Managers : MonoBehaviour
 
     public async void OnApplicationQuit()
     {
-        await _socketEventManager.DisconnectRelayEvent?.Invoke();
-        await _socketEventManager.LogoutVivoxEvent?.Invoke();
-        await _socketEventManager.LogoutAllLeaveLobbyEvent?.Invoke();
+        if (_socketEventManager == null) return;
+        try
+        {
+            await (_socketEventManager.DisconnectRelayEvent?.Invoke() ?? Task.CompletedTask);
+            await (_socketEventManager.LogoutVivoxEvent?.Invoke() ?? Task.CompletedTask);
+            await (_socketEventManager.LogoutAllLeaveLobbyEvent?.Invoke() ?? Task.CompletedTask);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+        //순서대로 끊어야 함
     }
 
     public static void Clear()
