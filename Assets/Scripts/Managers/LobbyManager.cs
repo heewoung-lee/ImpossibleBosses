@@ -135,7 +135,7 @@ public class LobbyManager : IManagerEventInitailize
     }
 
     public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)
-    {//비복스 등록때문에 얘가 빨리 JoinChanel이 되야함.
+    {
         try
         {
             if (lobby == null || _currentPlayerInfo.Id == null)
@@ -184,7 +184,6 @@ public class LobbyManager : IManagerEventInitailize
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
             Debug.Log(lobby.Name+"로비의 이름");
 
-            //이 사이에 조인채널을 호출해야한다.
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
