@@ -817,10 +817,9 @@ public class LobbyManager : IManagerEventInitailize
         LobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         Debug.Log($"{_currentLobby.Name}");
-        _currentLobby = await GetLobbyAsyncCustom((await GetCurrentLobby()).Id);
+        _currentLobby = await GetCurrentLobby();
         if (_heartBeatCoroutine == null)
         {
-            Debug.Log($"하트 비트가 없음{_currentLobby}");
             await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
         }
         LobbyLoading?.Invoke(false);
@@ -829,7 +828,7 @@ public class LobbyManager : IManagerEventInitailize
     public async Task RefreshClientPlayer()
     {
         LobbyLoading?.Invoke(true);
-        _currentLobby = await GetLobbyAsyncCustom((await GetCurrentLobby()).Id);
+        _currentLobby = await GetCurrentLobby();
         await CheckClientRelay(_currentLobby);
         LobbyLoading?.Invoke(false);
     }
