@@ -55,8 +55,13 @@ public class LobbyManager : IManagerEventInitailize
     public Action<int> PlayerDeleteEvent;
     public Action<bool> LobbyLoading;
     public string PlayerID => _currentPlayerInfo.Id;
-    public Lobby CurrentLobby => _currentLobby;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
+
+    public async Task<Lobby> GetCurrentLobby()
+    {
+        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
+        return _currentLobby;
+    }
 
     public async Task<bool> InitLobbyScene()
     {
@@ -93,7 +98,6 @@ public class LobbyManager : IManagerEventInitailize
             _taskChecker = new bool[taskLength];
             Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
         }
-
         void SubscribeSceneEvent()
         {
             Managers.RelayManager.SceneLoadInitalizeRelayServer();
@@ -114,7 +118,6 @@ public class LobbyManager : IManagerEventInitailize
             await SignInAnonymouslyAsync();
             _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
         }
-
         async Task<bool> IsAlreadyLogInNickNameinLobby(string usernickName)
         {
             try
@@ -207,9 +210,9 @@ public class LobbyManager : IManagerEventInitailize
                 return;
 
             CheckHostAndSendHeartBeat(lobby, interval);
-            Managers.RelayManager.ShutDownRelay();
             await JoinLobbyInitalize(lobby);
             await CheckHostAndGuestEvent?.Invoke(lobby);
+            JoinRelayInitalize();
         }
         catch (Exception e)
         {
@@ -217,6 +220,10 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
+    private void JoinRelayInitalize()
+    {
+        SubScribeRelayCallBack();//릴레이 이벤트 연결
+    }
     private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
     {
         try
@@ -291,7 +298,8 @@ public class LobbyManager : IManagerEventInitailize
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
         if (_currentLobby != null)
-            await ExitLobbyAsync(_currentLobby); //이쪽은 문제 없음
+            await ExitLobbyAsync(await GetCurrentLobby()); //이쪽은 문제 없음
+
         try
         {
             CreateLobbyOptions waitLobbyoption = new CreateLobbyOptions()
@@ -349,7 +357,7 @@ public class LobbyManager : IManagerEventInitailize
                 continue;
 
 
-            if(await Managers.RelayManager.IsValidRelayJoinCode(joincode) == true)
+            if(await Managers.RelayManager.IsValidRelayJoinCode(joincode) == true) //조인코드가 유효한지 확인
             {
                 return (true, lobby);
             }
@@ -376,7 +384,7 @@ public class LobbyManager : IManagerEventInitailize
                 _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyResult.Item2.Id);
             }
             //
-            await CheckPlayerHostAndClient(_currentLobby, CheckHostOrClientRelay);
+            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostOrClientRelay);
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
@@ -445,7 +453,7 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            await ExitLobbyAsync(_currentLobby);
+            await ExitLobbyAsync(await GetCurrentLobby());
             //먼저 등록된 콜백 없어지는지 확인.
 
             _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
@@ -453,7 +461,7 @@ public class LobbyManager : IManagerEventInitailize
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
 
-            await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
         }
 
         catch (Exception e)
@@ -468,7 +476,7 @@ public class LobbyManager : IManagerEventInitailize
         {
             if (_currentLobby != null)
             {
-                await ExitLobbyAsync(_currentLobby);
+                await ExitLobbyAsync(await GetCurrentLobby());
             }
             Lobby lobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(lobbyID, lobbyName, maxPlayers, options);
             await CheckPlayerHostAndClient(lobby, CheckHostRelay);
@@ -514,7 +522,7 @@ public class LobbyManager : IManagerEventInitailize
             await ExitLobbyAsync(preLobby);
 
         _currentLobby = nextLobby;
-        await CheckPlayerHostAndClient(_currentLobby, CheckClientRelay);
+        await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckClientRelay);
         return _currentLobby;
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)
@@ -543,7 +551,6 @@ public class LobbyManager : IManagerEventInitailize
             await InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
             Debug.Log("조인채널호출");
             await Managers.VivoxManager.JoinChannel(lobby.Id);//비복스 연결
-            SubScribeRelayCallBack();//릴레이 이벤트 연결
             InitDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백
             Debug.Log("여기까지 호출?");
             _isDoneInitEvent = true;
@@ -810,11 +817,11 @@ public class LobbyManager : IManagerEventInitailize
         LobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         Debug.Log($"{_currentLobby.Name}");
-        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
+        _currentLobby = await GetLobbyAsyncCustom((await GetCurrentLobby()).Id);
         if (_heartBeatCoroutine == null)
         {
             Debug.Log($"하트 비트가 없음{_currentLobby}");
-            await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
+            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
         }
         LobbyLoading?.Invoke(false);
     }
@@ -822,7 +829,7 @@ public class LobbyManager : IManagerEventInitailize
     public async Task RefreshClientPlayer()
     {
         LobbyLoading?.Invoke(true);
-        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
+        _currentLobby = await GetLobbyAsyncCustom((await GetCurrentLobby()).Id);
         await CheckClientRelay(_currentLobby);
         LobbyLoading?.Invoke(false);
     }

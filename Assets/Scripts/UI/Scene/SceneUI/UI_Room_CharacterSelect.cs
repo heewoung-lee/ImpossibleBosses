@@ -142,8 +142,6 @@ public class UI_Room_CharacterSelect : UI_Scene
             //Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
-            Debug.Log($"{Managers.LobbyManager.CurrentLobby.Name}");
-           
         }
         catch (Exception error)
         {
@@ -280,13 +278,12 @@ public class UI_Room_CharacterSelect : UI_Scene
 
 
     //TODO:테스트하면 이거 지워야함
-    private void OnGUI()
+    private async void OnGUI()
     {
         if (GUI.Button(new Rect(0, 0, 100, 100), "GetJoinCode"))
         {
             Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
-            Debug.Log($"로비의 조인코드는{Managers.LobbyManager.CurrentLobby.Data["RelayCode"].Value}");
+            Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
         }
     }
-
 }

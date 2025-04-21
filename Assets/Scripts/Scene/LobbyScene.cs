@@ -22,12 +22,12 @@ public class LobbyScene : BaseScene
         _uI_LobbyScene = Managers.UI_Manager.GetSceneUIFromResource<UI_LobbyScene>();
 
     }
-    private void OnGUI()
+    private async void OnGUI()
     {
         if (GUI.Button(new Rect(0, 0, 100, 100), "GetJoinCode"))
         {
             Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
-            Debug.Log($"로비의 조인코드는{Managers.LobbyManager.CurrentLobby.Data["RelayCode"].Value}");
+            Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
         }
     }
 }
