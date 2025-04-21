@@ -170,7 +170,6 @@ public class Utill
 
     public static async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
     {
-        Debug.Log(System.Environment.StackTrace);
         Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
         await Task.Delay(millisecondsDelay); // 대기
         return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환

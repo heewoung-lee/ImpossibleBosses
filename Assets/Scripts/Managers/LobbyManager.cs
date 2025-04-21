@@ -9,6 +9,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
 
@@ -38,19 +39,16 @@ public class LobbyManager : IManagerEventInitailize
         TryJoinLobby,
         VivoxLogin
     }
-
-    private const string LOBBYID = "WaitLobbyRoom367";
+    private const string WAIT_LOBBY_NAME = "WaitLobby";
     private PlayerIngameLoginInfo _currentPlayerInfo;
     private bool _isDoneInitEvent = false;
     private Lobby _currentLobby;
-    private bool isRefreshing = false;
-    private bool isalready = false;
+    private bool _isRefreshing = false;
     private bool[] _taskChecker;
+    private Coroutine _heartBeatCoroutine = null;
 
 
     public bool[] TaskChecker => _taskChecker;
-    private Coroutine _heartBeatCoroutine = null;
-
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
     public Action InitDoneEvent;
     public Action<string> PlayerAddDataInputEvent;
@@ -62,19 +60,20 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task<bool> InitLobbyScene()
     {
-        SetLoadingTask();
+        bool isalready = false;
+        SetLoadingTask(Enum.GetValues(typeof(LoadingProcess)).Length);
         SubscribeSceneEvent();
         try
         {
             await JoinAuthenticationService();
             // Unity Services 초기화
-            isalready = await IsAlreadyLogInID(_currentPlayerInfo.PlayerNickName);
+            isalready = await IsAlreadyLogInNickNameinLobby(_currentPlayerInfo.PlayerNickName);
+            _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
             if (isalready is true)
             {
                 Debug.Log("이미 접속되어있음");
                 return true;
             }
-            _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
             await TryJoinLobbyByNameOrCreateWaitLobby();
             _taskChecker[(int)LoadingProcess.TryJoinLobby] = true;
             return false;
@@ -89,9 +88,9 @@ public class LobbyManager : IManagerEventInitailize
             throw;
         }
 
-        void SetLoadingTask()
+        void SetLoadingTask(int taskLength)
         {
-            _taskChecker = new bool[Enum.GetValues(typeof(LoadingProcess)).Length];
+            _taskChecker = new bool[taskLength];
             Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
         }
 
@@ -114,6 +113,72 @@ public class LobbyManager : IManagerEventInitailize
             }
             await SignInAnonymouslyAsync();
             _taskChecker[(int)LoadingProcess.SignInAnonymously] = true;
+        }
+
+        async Task<bool> IsAlreadyLogInNickNameinLobby(string usernickName)
+        {
+            try
+            {
+
+                QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync();
+
+                if (response.Results.Count <= 0)
+                    return false;
+
+                foreach (Lobby lobby in response.Results)
+                {
+                    foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
+                    {
+                        if (player.Data == null && _currentPlayerInfo.Id == player.Id)//나인데 데이터를 할당 못받았으면,다시 초기화
+                        {
+                            Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
+                            return await Utill.RateLimited(() => InitLobbyScene(), 5000); // 재시도
+                        }
+                        foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
+                        {
+                            if (player.Data == null)
+                                continue;
+
+                            if (_currentPlayerInfo.Id == player.Id) //자기자신은 건너뛰기
+                                continue;
+
+                            if (data.Key != "NickName")
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                if (data.Value.Value != usernickName)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    await LogoutAndAllLeaveLobby();
+                                    return true;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
+            {
+                return await Utill.RateLimited(() => IsAlreadyLogInNickNameinLobby(usernickName)); // 재시도
+            }
+
+            catch (Exception notSetObjectException) when (notSetObjectException.Message.Equals("Object reference not set to an instance of an object"))
+            {
+                Debug.Log("The Lobby hasnt reference so We Rate Secend");
+                return await Utill.RateLimited(() => IsAlreadyLogInNickNameinLobby(usernickName));
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to query lobbies: {ex.Message}");
+                return false;
+            }
         }
     }
 
@@ -182,7 +247,7 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
-            Debug.Log(lobby.Name+"로비의 이름");
+            Debug.Log(lobby.Name + "로비의 이름");
 
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
@@ -229,16 +294,16 @@ public class LobbyManager : IManagerEventInitailize
             await ExitLobbyAsync(_currentLobby); //이쪽은 문제 없음
         try
         {
-            await TryJoinLobbyByNameOrCreateLobby("WaitLobby", 100, new CreateLobbyOptions()
+            CreateLobbyOptions waitLobbyoption = new CreateLobbyOptions()
             {
                 IsPrivate = false,
                 Data = new Dictionary<string, DataObject>
                 {
-                    {"WaitLobby",new DataObject(DataObject.VisibilityOptions.Public,"PlayerWaitLobbyRoom") }
+                    {WAIT_LOBBY_NAME,new DataObject(DataObject.VisibilityOptions.Public,"PlayerWaitLobbyRoom") }
                 }
-            });
+            };
+            await TryJoinLobbyByNameOrCreateLobby(WAIT_LOBBY_NAME, 100, waitLobbyoption);
         }
-
         catch (LobbyServiceException playerNotFound) when (playerNotFound.Message.Contains("player not found"))
         {
             Debug.Log("Player Not Found");
@@ -251,11 +316,66 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    public async Task TryJoinLobbyByNameOrCreateLobby(string lobbyName, int MaxPlayers, CreateLobbyOptions lobbyOption)
+    public async Task<(bool, Lobby)> AvailableLobby(string lobbyname)
+    {
+
+        List<Lobby> fillteredLobbyList = null;
+        QueryLobbiesOptions lobbyNameFillter = new QueryLobbiesOptions()
+        {
+            Filters = new List<QueryFilter>
+            {
+             new QueryFilter(
+                field: QueryFilter.FieldOptions.Name,
+                op: QueryFilter.OpOptions.EQ, // EQ는 "같은 이름"일 때만
+                value: lobbyname)        // 이 이름과 정확히 일치하는 로비만 검색
+            }
+        };
+        QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom(lobbyNameFillter);
+
+        if (queryResponse is null) //이름으로 못찾았다.
+        {
+            return (false, null);
+        }
+
+        fillteredLobbyList = queryResponse.Results;
+
+        fillteredLobbyList = fillteredLobbyList.Where(lobby=>lobby.Players.Count >= 1).ToList();
+
+        foreach (Lobby lobby in fillteredLobbyList)
+        {
+            string joincode = lobby.Data["RelayCode"].Value;
+
+            if (String.IsNullOrEmpty(joincode))//조인 코드 있는지 확인.
+                continue;
+
+
+            if(await Managers.RelayManager.IsValidRelayJoinCode(joincode) == true)
+            {
+                return (true, lobby);
+            }
+        }
+        return (false, null);
+    }
+
+
+
+    public async Task TryJoinLobbyByNameOrCreateLobby(string lobbyName, int maxPlayers, CreateLobbyOptions lobbyOption)
     {
         try
         {
-            _currentLobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(LOBBYID, lobbyName, MaxPlayers, lobbyOption);
+            //_currentLobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(LOBBYID, lobbyName, maxPlayers, lobbyOption);
+            (bool, Lobby) lobbyResult = await AvailableLobby(lobbyName);
+            if (lobbyResult.Item1 == false)
+            {
+                Debug.Log("There is not WaitLobby, so Create Wait Lobby");
+                _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, lobbyOption);
+            }
+            else
+            {
+                Debug.Log("Find WaitLobby, Join to Lobby");
+                _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyResult.Item2.Id);
+            }
+            //
             await CheckPlayerHostAndClient(_currentLobby, CheckHostOrClientRelay);
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
@@ -266,7 +386,13 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
         {
-            await Utill.RateLimited(() => TryJoinLobbyByNameOrCreateLobby(lobbyName, MaxPlayers, lobbyOption));
+            await Utill.RateLimited(() => TryJoinLobbyByNameOrCreateLobby(lobbyName, maxPlayers, lobbyOption));
+        }
+
+        catch (KeyNotFoundException keynotFoundExceoption) when (keynotFoundExceoption.Message.Contains("The given key 'RelayCode' was not present in the dictionary"))
+        {
+            Debug.Log("릴레이코드가 없습니다. 다시 찾습니다");
+            await Utill.RateLimited(() => TryJoinLobbyByNameOrCreateLobby(lobbyName, maxPlayers, lobbyOption));
         }
         catch (Exception ex)
         {
@@ -274,7 +400,7 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    public async Task ExitLobbyAsync(Lobby lobby,bool disconnectRelayOption = true)
+    public async Task ExitLobbyAsync(Lobby lobby, bool disconnectRelayOption = true)
     {
         if (lobby == null)
             return;
@@ -282,8 +408,9 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             StopHeartbeat();//하트비트 제거
-            bool ischeckUserIsHost = lobby.HostId == _currentPlayerInfo.Id;
-            bool ischeckUserAloneInLobby = lobby.Players.Count <= 1;
+            Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//현재의 로비를 가져와야한다.
+            bool ischeckUserIsHost = currentLobby.HostId == _currentPlayerInfo.Id;
+            bool ischeckUserAloneInLobby = currentLobby.Players.Count <= 1;
             UnScribeRelayCallBack();
             if (disconnectRelayOption == true)
             {
@@ -361,7 +488,7 @@ public class LobbyManager : IManagerEventInitailize
         Lobby nextLobby;
         try
         {
-            JoinLobbyByIdOptions options = new JoinLobbyByIdOptions(){ Password = password};
+            JoinLobbyByIdOptions options = new JoinLobbyByIdOptions() { Password = password };
             nextLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyID, options);
         }
         catch (LobbyServiceException wrongPw) when (wrongPw.Reason == LobbyExceptionReason.IncorrectPassword)
@@ -383,7 +510,7 @@ public class LobbyManager : IManagerEventInitailize
             return null;
         }
 
-        if(preLobby != null)
+        if (preLobby != null)
             await ExitLobbyAsync(preLobby);
 
         _currentLobby = nextLobby;
@@ -417,7 +544,8 @@ public class LobbyManager : IManagerEventInitailize
             Debug.Log("조인채널호출");
             await Managers.VivoxManager.JoinChannel(lobby.Id);//비복스 연결
             SubScribeRelayCallBack();//릴레이 이벤트 연결
-            InitDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백 
+            InitDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백
+            Debug.Log("여기까지 호출?");
             _isDoneInitEvent = true;
         }
 
@@ -430,15 +558,15 @@ public class LobbyManager : IManagerEventInitailize
 
     }
 
-    public async Task<Lobby> GetLobbyAsyncCustom(string lobbyID)
+    public async Task<Lobby> GetLobbyAsyncCustom(string lobbyId)
     {
         try
         {
-            return await LobbyService.Instance.GetLobbyAsync(lobbyID);
+            return await LobbyService.Instance.GetLobbyAsync(lobbyId);
         }
         catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
         {
-            return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyID));
+            return await Utill.RateLimited(() => GetLobbyAsyncCustom(lobbyId));
         }
     }
 
@@ -486,10 +614,9 @@ public class LobbyManager : IManagerEventInitailize
 
     private async Task<List<Lobby>> CheckAllLobbyinPlayer()
     {
+        //필터 옵션에서 모든 플레이어를 검사하는 필터 옵션은 없으므로 따로 만듦
         List<Lobby> lobbyinPlayerList = new List<Lobby>();
         QueryResponse allLobbyResponse = await GetQueryLobbiesAsyncCustom();
-
-
         foreach (Lobby lobby in allLobbyResponse.Results)
         {
             if (lobby.Players.Any(player => player.Id == _currentPlayerInfo.Id))
@@ -499,6 +626,8 @@ public class LobbyManager : IManagerEventInitailize
         }
         return lobbyinPlayerList;
     }
+
+
     async Task<string> SignInAnonymouslyAsync()
     {
         try
@@ -526,73 +655,6 @@ public class LobbyManager : IManagerEventInitailize
             // Notify the player with the proper error message
             Debug.LogException(ex);
             return null;
-        }
-    }
-
-    public async Task<bool> IsAlreadyLogInID(string usernickName)
-    {
-        try
-        {
-
-            QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync();
-
-            if (response.Results.Count <= 0)
-                return false;
-
-            foreach (Lobby lobby in response.Results)
-            {
-                foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
-                {
-                    if (player.Data == null && _currentPlayerInfo.Id == player.Id)//나인데 데이터를 할당 못받았으면,다시 초기화
-                    {
-                        Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
-                        return await Utill.RateLimited(() => InitLobbyScene(), 5000); // 재시도
-                    }
-                    foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
-                    {
-                        if (player.Data == null)
-                            continue;
-
-                        if (_currentPlayerInfo.Id == player.Id) //자기자신은 건너뛰기
-                            continue;
-
-                        if (data.Key != "NickName")
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            if (data.Value.Value != usernickName)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                await LogoutAndAllLeaveLobby();
-                                return true;
-                            }
-
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-        catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
-        {
-            return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName)); // 재시도
-        }
-
-        catch (Exception notSetObjectException) when (notSetObjectException.Message.Equals("Object reference not set to an instance of an object"))
-        {
-            Debug.Log("The Lobby hasnt reference so We Rate Secend");
-            return await Utill.RateLimited(() => IsAlreadyLogInID(usernickName));
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Failed to query lobbies: {ex.Message}");
-            return false;
         }
     }
 
@@ -685,12 +747,12 @@ public class LobbyManager : IManagerEventInitailize
             return;
 
 
-        if (isRefreshing || Managers.UI_Manager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
+        if (_isRefreshing || Managers.UI_Manager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
         {
             return;
         }
 
-        isRefreshing = true;
+        _isRefreshing = true;
 
         try
         {
@@ -720,10 +782,10 @@ public class LobbyManager : IManagerEventInitailize
         catch (LobbyServiceException e)
         {
             Debug.Log($"에러발생:{e}");
-            isRefreshing = false;
+            _isRefreshing = false;
             throw;
         }
-        isRefreshing = false;
+        _isRefreshing = false;
     }
 
     public void CreateRoomInitalize(Lobby lobby)
@@ -752,17 +814,6 @@ public class LobbyManager : IManagerEventInitailize
         if (_heartBeatCoroutine == null)
         {
             Debug.Log($"하트 비트가 없음{_currentLobby}");
-            await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
-        }
-        LobbyLoading?.Invoke(false);
-    }
-
-    public async Task DisconnetPlayerinRoom()
-    {
-        LobbyLoading?.Invoke(true);
-        _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
-        if (_heartBeatCoroutine == null)
-        {
             await CheckPlayerHostAndClient(_currentLobby, CheckHostRelay);
         }
         LobbyLoading?.Invoke(false);

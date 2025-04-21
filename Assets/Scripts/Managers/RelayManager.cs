@@ -237,6 +237,31 @@ public class RelayManager
         NGO_RPC_Caller.DeSpawnByReferenceServerRpc(despawnNgo);
     }
 
+    public async Task<bool> IsValidRelayJoinCode(string joinCode)
+    {
+        try
+        {
+            // 유효한 경우 할당 객체를 받아옴
+            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            return true;
+        }
+        catch (RelayServiceException ex) when (ex.Message.Contains("join code not found"))
+        {
+            Debug.LogWarning($"RelayCode not Found: {joinCode}");
+            return false;
+        }
+        catch (RelayServiceException ex) when (ex.ErrorCode == 404)
+        {
+            Debug.LogWarning("RelayCode hasnt Available");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Exception: {ex}");
+            return false;
+        }
+    }
+
     public async Task<bool> JoinGuestRelay(string joinCode)
     {
         try
@@ -279,7 +304,8 @@ public class RelayManager
 
     public void SceneLoadInitalizeRelayServer()
     {
-        NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
+        //NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
+        //4.21일 주석처리함 과거의 내가 왜 이부분을 넣었는지 이해 안감.
         Managers.SocketEventManager.DisconnectRelayEvent += WarpperDisConntionRelay;
         Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntionRelay;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntionRelay;
