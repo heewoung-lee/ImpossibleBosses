@@ -175,17 +175,13 @@ public class UI_Room_CharacterSelect : UI_Scene
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
         Create_NGO_Character_Selecter_Rect_Root();
         SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
-        //Managers.LobbyManager.HostChangeEvent += OnHostChanged;
     }
 
-    //private void OnHostChanged()
-    //{
-    //    if (IsHost)
-    //    {
-    //        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
-    //    }
-    //    SubScribeRelayCallback();
-    //}
+    private void OnHostChanged()
+    {
+        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+        SubScribeRelayCallback();
+    }
 
     private void Create_NGO_Character_Selecter_Rect_Root()
     {

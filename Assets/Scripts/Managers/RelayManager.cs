@@ -26,7 +26,6 @@ public class RelayManager
     private Define.PlayerClass _choicePlayerCharacter;
     private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
-
     public event Action Spawn_RpcCaller_Event
     {
         add
