@@ -125,9 +125,9 @@ public class Managers : MonoBehaviour
         if (_socketEventManager == null) return;
         try
         {
-            await (_socketEventManager.DisconnectRelayEvent?.Invoke() ?? Task.CompletedTask);
-            await (_socketEventManager.LogoutVivoxEvent?.Invoke() ?? Task.CompletedTask);
-            await (_socketEventManager.LogoutAllLeaveLobbyEvent?.Invoke() ?? Task.CompletedTask);
+            await _socketEventManager.InvokeDisconnectRelayEvent();
+            await _socketEventManager.InvokeLogoutVivoxEvent();
+            await _socketEventManager.InvokeLogoutAllLeaveLobbyEvent();
         }
         catch (Exception e)
         {

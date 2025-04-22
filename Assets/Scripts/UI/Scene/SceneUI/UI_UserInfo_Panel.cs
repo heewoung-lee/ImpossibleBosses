@@ -97,7 +97,6 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         if (Managers.LobbyManager.IsDoneInitEvent == false)
         {
-            Managers.LobbyManager.InitDoneEvent -= ButtonInteractable;
             Managers.LobbyManager.InitDoneEvent += ButtonInteractable;
         }
         else
@@ -135,7 +134,7 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         try
         {
-            await Managers.SocketEventManager.DisconnectApiEvent.Invoke();
+            await Managers.SocketEventManager.InvokeDisconnectApiEvent();
         }
         catch (Exception e)
         {

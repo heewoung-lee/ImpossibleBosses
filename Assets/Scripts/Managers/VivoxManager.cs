@@ -11,7 +11,28 @@ using static System.Net.WebRequestMethods;
 
 public class VivoxManager : IManagerEventInitailize
 {
-    public Action VivoxDoneLoginEvent;
+
+    private Action _vivoxDoneLoginEvent;
+
+    public event Action VivoxDoneLoginEvent
+    {
+        add
+        {
+            if (_vivoxDoneLoginEvent != null && _vivoxDoneLoginEvent.GetInvocationList().Contains(value) == true)
+                return;
+
+            _vivoxDoneLoginEvent += value;
+        }
+        remove
+        {
+            if (_vivoxDoneLoginEvent == null || _vivoxDoneLoginEvent.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+            _vivoxDoneLoginEvent -= value;
+        }
+    }
     private bool _checkDoneLoginProcess = false;
     public bool CheckDoneLoginProcess => _checkDoneLoginProcess;
     LoginOptions _loginOptions;
@@ -54,7 +75,7 @@ public class VivoxManager : IManagerEventInitailize
             _loginOptions.EnableTTS = true;
             await VivoxService.Instance.LoginAsync(_loginOptions);
             _checkDoneLoginProcess = true;
-            VivoxDoneLoginEvent?.Invoke();
+            _vivoxDoneLoginEvent?.Invoke();
             Debug.Log("ViVox 로그인완료");
         }
         catch (Exception ex)

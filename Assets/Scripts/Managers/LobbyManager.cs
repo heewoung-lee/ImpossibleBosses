@@ -46,23 +46,83 @@ public class LobbyManager : IManagerEventInitailize
     private bool _isRefreshing = false;
     private bool[] _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
-
+    private Action _hostChangeEvent;
+    private Action<bool> _lobbyLoading;
+    private Action _initDoneEvent;
 
     public bool[] TaskChecker => _taskChecker;
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
-    public Action InitDoneEvent;
-    public Action<string> PlayerAddDataInputEvent;
-    public Action<int> PlayerDeleteEvent;
-    public Action<bool> LobbyLoading;
+
+    public event Action HostChangeEvent
+    {
+        add
+        {
+            if (_hostChangeEvent != null && _hostChangeEvent.GetInvocationList().Contains(value) == true)
+                return;
+
+            _hostChangeEvent += value;
+        }
+        remove
+        {
+            if (_hostChangeEvent == null || _hostChangeEvent.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+            _hostChangeEvent -= value;
+        }
+    }
+    public event Action<bool> LobbyLoadingEvent
+    {
+        add
+        {
+
+            if (_lobbyLoading != null && _lobbyLoading.GetInvocationList().Contains(value) == true)
+                return;
+
+            _lobbyLoading += value;
+        }
+        remove
+        {
+            if (_lobbyLoading == null || _lobbyLoading.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+            _lobbyLoading -= value;
+        }
+    }
+    public event Action InitDoneEvent
+    {
+        add
+        {
+            if (_initDoneEvent != null && _initDoneEvent.GetInvocationList().Contains(value) == true)
+                return;
+
+            _initDoneEvent += value;
+        }
+        remove
+        {
+            if (_initDoneEvent == null || _initDoneEvent.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+            _initDoneEvent -= value;
+        }
+    }
+
     public string PlayerID => _currentPlayerInfo.Id;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
-
+    public void TriggerLobbyLoadingEvent(bool lobbyState)
+    {
+        _lobbyLoading?.Invoke(lobbyState);
+    }
     public async Task<Lobby> GetCurrentLobby()
     {
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         return _currentLobby;
     }
-
     public async Task<bool> InitLobbyScene()
     {
         bool isalready = false;
@@ -251,11 +311,11 @@ public class LobbyManager : IManagerEventInitailize
     {
         if (lobby.HostId != _currentPlayerInfo.Id)
             return;
+
         try
         {
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
             Debug.Log(lobby.Name + "로비의 이름");
-
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
@@ -551,8 +611,7 @@ public class LobbyManager : IManagerEventInitailize
             await InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
             Debug.Log("조인채널호출");
             await Managers.VivoxManager.JoinChannel(lobby.Id);//비복스 연결
-            InitDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백
-            Debug.Log("여기까지 호출?");
+            _initDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백
             _isDoneInitEvent = true;
         }
 
@@ -607,7 +666,7 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task LeaveAllLobby()
     {
-        LobbyLoading?.Invoke(true);
+        _lobbyLoading?.Invoke(true);
         List<Lobby> lobbyinPlayerList = await CheckAllLobbyinPlayer();
         foreach (Lobby lobby in lobbyinPlayerList)
         {
@@ -615,7 +674,7 @@ public class LobbyManager : IManagerEventInitailize
             Debug.Log($"{lobby}에서 나갔습니다.");
             StopHeartbeat();
         }
-        LobbyLoading?.Invoke(false);
+        _lobbyLoading?.Invoke(false);
     }
 
 
@@ -723,14 +782,11 @@ public class LobbyManager : IManagerEventInitailize
 
     public void InitalizeVivoxEvent()
     {
-        Managers.VivoxManager.VivoxDoneLoginEvent -= SetVivoxTaskCheker;
         Managers.VivoxManager.VivoxDoneLoginEvent += SetVivoxTaskCheker;
-
     }
     public void InitalizeLobbyEvent()
     {
         Managers.SocketEventManager.LogoutAllLeaveLobbyEvent += LogoutAndAllLeaveLobby;
-        Managers.SocketEventManager.DisconnectApiEvent -= LogoutAndAllLeaveLobby;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
     public void SubScribeRelayCallBack()
@@ -814,7 +870,7 @@ public class LobbyManager : IManagerEventInitailize
     {
 
         Debug.Log(clientid + "너가 호출함??");
-        LobbyLoading?.Invoke(true);
+        _lobbyLoading?.Invoke(true);
         await ReFreshRoomList();
         Debug.Log($"{_currentLobby.Name}");
         _currentLobby = await GetCurrentLobby();
@@ -822,15 +878,15 @@ public class LobbyManager : IManagerEventInitailize
         {
             await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
         }
-        LobbyLoading?.Invoke(false);
+        _lobbyLoading?.Invoke(false);
     }
 
-    public async Task RefreshClientPlayer()
+    public async Task JoinRelayOfNewHost()
     {
-        LobbyLoading?.Invoke(true);
+        _lobbyLoading?.Invoke(true);
         _currentLobby = await GetCurrentLobby();
         await CheckClientRelay(_currentLobby);
-        LobbyLoading?.Invoke(false);
+        _lobbyLoading?.Invoke(false);
     }
 
     public async Task<bool> isCheckLobbyInClientPlayer(string LobbyId, string playerID)
@@ -861,9 +917,9 @@ public class LobbyManager : IManagerEventInitailize
 
     public async Task LoadingPanel(Func<Task> process)
     {
-        LobbyLoading?.Invoke(true);
+        _lobbyLoading?.Invoke(true);
         await process.Invoke();
-        LobbyLoading?.Invoke(false);
+        _lobbyLoading?.Invoke(false);
     }
     public void DeleteRelayCodefromLobby(Lobby lobby)
     {

@@ -30,9 +30,14 @@ public class NGO_PoolManager
 
         if (Managers.RelayManager.NGO_RPC_Caller == null)
         {
-            Managers.RelayManager.Spawn_RpcCaller_Event += () => { Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling"); };
+            Managers.RelayManager.Spawn_RpcCaller_Event += Spawn_Ngo_Polling;
         }
         else
+        {
+            Spawn_Ngo_Polling();
+        }
+
+        void Spawn_Ngo_Polling()
         {
             Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
         }

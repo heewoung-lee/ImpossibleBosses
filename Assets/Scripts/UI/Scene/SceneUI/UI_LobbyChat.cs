@@ -63,7 +63,6 @@ public class UI_LobbyChat : UI_Scene
     {
         if (Managers.VivoxManager.CheckDoneLoginProcess == false)
         {
-            Managers.VivoxManager.VivoxDoneLoginEvent -= ButtonInteractable;
             Managers.VivoxManager.VivoxDoneLoginEvent += ButtonInteractable;
         }
         else
@@ -104,7 +103,7 @@ public class UI_LobbyChat : UI_Scene
             return;
 
         await Managers.LobbyManager.ExecuteSystemMessageAction(messageChannel, messageText, 
-            "호스트가 변경되었습니다.",Managers.LobbyManager.RefreshClientPlayer);
+            "호스트가 변경되었습니다.",Managers.LobbyManager.JoinRelayOfNewHost);
     }
 
     private void ButtonInteractable()

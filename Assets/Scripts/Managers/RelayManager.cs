@@ -11,12 +11,12 @@ using UnityEngine.UIElements;
 using System.IO;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class RelayManager
 {
 
-    public Action Spawn_RpcCaller_Event;
-
+    private Action _spawn_RpcCaller_Event;
     private NetworkManager _netWorkManager;
     private string _joinCode;
     private Allocation _allocation;
@@ -26,9 +26,35 @@ public class RelayManager
     private Define.PlayerClass _choicePlayerCharacter;
     private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
+
+    public event Action Spawn_RpcCaller_Event
+    {
+        add
+        {
+            if (_spawn_RpcCaller_Event != null && _spawn_RpcCaller_Event.GetInvocationList().Contains(value) == false)
+                return;
+
+            _spawn_RpcCaller_Event += value;
+        }
+        remove
+        {
+            if(_spawn_RpcCaller_Event == null || _spawn_RpcCaller_Event.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+
+            _spawn_RpcCaller_Event -= value;
+        }
+    }
+
+    public void Invoke_Spawn_RPCCaller_Event()
+    {
+        _spawn_RpcCaller_Event?.Invoke();
+    }
+
     public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
     public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
-
     public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
     public NetworkManager NetworkManagerEx
     {

@@ -73,7 +73,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         Managers.RelayManager.SetRPCCaller(gameObject);
-        Managers.RelayManager.Spawn_RpcCaller_Event?.Invoke();
+        Managers.RelayManager.Invoke_Spawn_RPCCaller_Event();
         _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
         _isAllPlayerLoaded.OnValueChanged += IsAllPlayerLoadedValueChanged;
     }

@@ -29,7 +29,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             _interactionTr = Get<Transform>((int)Transforms.Interaction);
             Managers.GameManagerEx.SetPlayer(gameObject);
             SetOwnerPlayerADD_Module();
-            Managers.SocketEventManager.DonePlayerSpawnEvent?.Invoke(gameObject);
+            Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
         }
     }
 

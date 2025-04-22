@@ -112,10 +112,19 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.OnEnableInit();
         _loadingPanel.SetActive(false);
+        SubScribeRelayCallback();
+    }
+
+    private void SubScribeRelayCallback()
+    {
         _netWorkManager.OnClientConnectedCallback += EntetedPlayerinLobby;
         _netWorkManager.OnClientDisconnectCallback += DisConnetedPlayerinLobby;
     }
-
+    private void UnscribeRelayCallback()
+    {
+        _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
+        _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
+    }
     public void SetButtonEvent(UnityAction action)
     {
         _button_Ready.onClick.AddListener(action);
@@ -137,8 +146,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         try
         {
             _loadingPanel.SetActive(true);
-            _netWorkManager.OnClientConnectedCallback -= EntetedPlayerinLobby;
-            _netWorkManager.OnClientDisconnectCallback -= DisConnetedPlayerinLobby;
+            UnscribeRelayCallback();
             //Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
@@ -167,14 +175,22 @@ public class UI_Room_CharacterSelect : UI_Scene
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
         Create_NGO_Character_Selecter_Rect_Root();
         SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+        //Managers.LobbyManager.HostChangeEvent += OnHostChanged;
     }
+
+    //private void OnHostChanged()
+    //{
+    //    if (IsHost)
+    //    {
+    //        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+    //    }
+    //    SubScribeRelayCallback();
+    //}
 
     private void Create_NGO_Character_Selecter_Rect_Root()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
-
-
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select",parent:Managers.RelayManager.NGO_ROOT_UI.transform);
     }                   
 

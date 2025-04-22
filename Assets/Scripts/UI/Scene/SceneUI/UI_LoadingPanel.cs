@@ -15,8 +15,7 @@ public class UI_LoadingPanel : UI_Scene
         Bind<GameObject>(typeof(LoadingPanel));
         _loadingPanel = Get<GameObject>(((int)LoadingPanel.LoadingPanel));
         _loadingPanelImage = _loadingPanel.GetComponentInChildren<Image>();
-        Managers.LobbyManager.LobbyLoading -= LobbyLoading;
-        Managers.LobbyManager.LobbyLoading += LobbyLoading;
+        Managers.LobbyManager.LobbyLoadingEvent += LobbyLoading;
     }
 
 
