@@ -291,6 +291,11 @@ public class RelayManager
     {
         try
         {
+            if (NetworkManagerEx.IsClient || NetworkManagerEx.IsServer)
+            {
+                Debug.LogWarning("Client or Server is already running.");
+                return false;
+            }
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
             NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
@@ -332,7 +337,6 @@ public class RelayManager
         //NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
         //4.21일 주석처리함 과거의 내가 왜 이부분을 넣었는지 이해 안감.
         Managers.SocketEventManager.DisconnectRelayEvent += WarpperDisConntionRelay;
-        Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntionRelay;
     }
 
     #region 테스트용 함수

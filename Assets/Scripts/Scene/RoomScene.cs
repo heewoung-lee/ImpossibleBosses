@@ -18,7 +18,7 @@ public class RoomScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
-        Managers.RelayManager.SpawnToRPC_Caller();
+      
         UI_Room_CharacterSelect uI_CharacterSelect = Managers.UI_Manager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
         UI_RoomChat ui_Chatting = Managers.UI_Manager.GetSceneUIFromResource<UI_RoomChat>();
     }

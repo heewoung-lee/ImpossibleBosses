@@ -146,7 +146,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             _loadingPanel.SetActive(true);
             UnscribeRelayCallback();
-            //Managers.RelayManager.DisconnectPlayerAsyncEvent = null;
+            Managers.LobbyManager.HostChangeEvent -= InitializeCharacterSelectionAsHost;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
         }
@@ -174,13 +174,14 @@ public class UI_Room_CharacterSelect : UI_Scene
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
 
         InitializeCharacterSelectionAsHost();
+        Managers.LobbyManager.HostChangeEvent += InitializeCharacterSelectionAsHost;
     }
 
     private void InitializeCharacterSelectionAsHost()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
-
+        Managers.RelayManager.SpawnToRPC_Caller();
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: Managers.RelayManager.NGO_ROOT_UI.transform);
         SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
         SubScribeRelayCallback();

@@ -5,30 +5,10 @@ using System.Linq;
 
 public class SocketEventManager
 {
-    private Func<Task> _disconnectApiEvent;
     private Func<Task> _disconnectRelayEvent;
     private Func<Task> _logoutVivoxEvent;
     private Func<Task> _logoutAllLeaveLobbyEvent;
-
     private Action<GameObject> _donePlayerSpawnEvent;
-
-    public event Func<Task> DisconnectApiEvent
-    {
-        add
-        {
-            if (_disconnectApiEvent == null || !_disconnectApiEvent.GetInvocationList().Contains(value))
-                _disconnectApiEvent += value;
-        }
-        remove
-        {
-            if (_disconnectApiEvent == null || !_disconnectApiEvent.GetInvocationList().Contains(value))
-            {
-                Debug.LogWarning($"[SocketEvent] Remove 실패: {value?.Method.Name}");
-                return;
-            }
-            _disconnectApiEvent -= value;
-        }
-    }
 
     public event Func<Task> DisconnectRelayEvent
     {
@@ -102,8 +82,6 @@ public class SocketEventManager
         }
     }
 
-    public Task InvokeDisconnectApiEvent() => _disconnectApiEvent?.Invoke() ?? Task.CompletedTask;
-    //호출 할께 없으면 태스크를 끝난상태로 되돌려야함
     public Task InvokeDisconnectRelayEvent() => _disconnectRelayEvent?.Invoke() ?? Task.CompletedTask;
     public Task InvokeLogoutVivoxEvent() => _logoutVivoxEvent?.Invoke() ?? Task.CompletedTask;
     public Task InvokeLogoutAllLeaveLobbyEvent() => _logoutAllLeaveLobbyEvent?.Invoke() ?? Task.CompletedTask;

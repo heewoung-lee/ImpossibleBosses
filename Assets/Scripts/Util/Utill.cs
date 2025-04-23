@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -168,17 +169,76 @@ public class Utill
         return Regex.IsMatch(input, "^[A-Za-z0-9]+$");
     }
 
-    public static async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
+    //public static async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
+    //{
+    //    Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+    //    await Task.Delay(millisecondsDelay); // 대기
+    //    return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+    //}
+    //public static async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
+    //{
+    //    Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
+    //    await Task.Delay(millisecondsDelay); // 대기
+    //    await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+    //}
+
+    private static CancellationTokenSource _retryCts;
+    private static CancellationTokenSource _retryCtsVoid;
+    public static async Task<T> RateLimited<T>(Func<Task<T>> action, int delayMs = 1000)
     {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        return await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+        _retryCts?.Cancel();
+
+        var cts = new CancellationTokenSource();
+        _retryCts = cts;
+
+        try
+        {
+            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} seconds…");
+            await Task.Delay(delayMs, cts.Token);   
+            return await action();                 
+        }
+        catch (TaskCanceledException exception)
+        {
+            Debug.Log($"{exception}RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
+            return default;
+        }
+        finally
+        {
+            // 내 토큰이면 정리
+            if (ReferenceEquals(_retryCts, cts))
+            {
+                _retryCts = null;
+            }
+            cts.Dispose();
+        }
     }
-    public static async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
+    public static async Task RateLimited(Func<Task> action,int delayMs = 1_000)
     {
-        Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-        await Task.Delay(millisecondsDelay); // 대기
-        await action.Invoke(); // 전달받은 작업 실행 및 결과 반환
+        _retryCtsVoid?.Cancel();
+        _retryCtsVoid?.Dispose();
+
+        var cts = new CancellationTokenSource();
+        _retryCtsVoid = cts;
+
+        try
+        {
+            Debug.LogWarning( $"Rate limit exceeded. Retrying in {delayMs / 1000} seconds…");
+            await Task.Delay(delayMs, cts.Token);
+            await action().ConfigureAwait(false);
+        }
+        catch (TaskCanceledException exception)
+        {
+            Debug.Log($"{exception}RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
+        }
+        finally
+        {
+            // 내 토큰이면 정리
+            if (ReferenceEquals(_retryCtsVoid, cts))
+            {
+                _retryCtsVoid = null;
+            }
+            cts.Dispose();
+        }
     }
 
 

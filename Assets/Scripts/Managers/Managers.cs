@@ -105,7 +105,10 @@ public class Managers : MonoBehaviour
                 go = new GameObject() { name = "@Managers" };
                 go.AddComponent<Managers>();
             }
-            DontDestroyOnLoad(go);
+            if (Application.isPlaying)
+            {
+                DontDestroyOnLoad(go);
+            }
             _instance = go.GetComponent<Managers>();
             _instance._inputManager.Init();
             _instance._dataManager.Init();

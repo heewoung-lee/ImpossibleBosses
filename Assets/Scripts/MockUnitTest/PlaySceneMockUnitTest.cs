@@ -88,7 +88,6 @@ public class PlaySceneMockUnitTest : BaseScene
         }
         string playerID = AuthenticationService.Instance.PlayerId;
         Managers.LobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
-        Managers.SocketEventManager.DisconnectApiEvent += Managers.LobbyManager.LogoutAndAllLeaveLobby;
     }
 
     private void Init_NGO_PlayScene_OnHost()

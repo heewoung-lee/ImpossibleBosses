@@ -318,6 +318,7 @@ public class LobbyManager : IManagerEventInitailize
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
             Debug.Log(lobby.Name + "로비의 이름");
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
+            _hostChangeEvent?.Invoke();
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
         {
@@ -788,7 +789,6 @@ public class LobbyManager : IManagerEventInitailize
     public void InitalizeLobbyEvent()
     {
         Managers.SocketEventManager.LogoutAllLeaveLobbyEvent += LogoutAndAllLeaveLobby;
-        Managers.SocketEventManager.DisconnectApiEvent += LogoutAndAllLeaveLobby;
     }
     public void SubScribeRelayCallBack()
     {
@@ -893,6 +893,8 @@ public class LobbyManager : IManagerEventInitailize
     public async Task<bool> isCheckLobbyInClientPlayer(string LobbyId, string playerID)
     {
         Lobby lobby = await GetLobbyAsyncCustom(LobbyId);
+
+        if (lobby == null) return false;
 
         foreach (Player player in lobby.Players)
         {

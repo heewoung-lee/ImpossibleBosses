@@ -276,6 +276,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
+        Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
     }
     public void SetSelectPlayerRawImage(Texture texture)
     {
