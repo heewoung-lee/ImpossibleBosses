@@ -134,7 +134,9 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         try
         {
-            await Managers.SocketEventManager.InvokeDisconnectApiEvent();
+            await Managers.SocketEventManager.InvokeLogoutAllLeaveLobbyEvent();
+            await Managers.SocketEventManager.InvokeDisconnectRelayEvent();
+            await Managers.SocketEventManager.InvokeLogoutVivoxEvent();
         }
         catch (Exception e)
         {

@@ -112,7 +112,6 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.OnEnableInit();
         _loadingPanel.SetActive(false);
-        SubScribeRelayCallback();
     }
 
     private void SubScribeRelayCallback()
@@ -173,23 +172,19 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-        Create_NGO_Character_Selecter_Rect_Root();
-        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+
+        InitializeCharacterSelectionAsHost();
     }
 
-    private void OnHostChanged()
-    {
-        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
-        SubScribeRelayCallback();
-    }
-
-    private void Create_NGO_Character_Selecter_Rect_Root()
+    private void InitializeCharacterSelectionAsHost()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select",parent:Managers.RelayManager.NGO_ROOT_UI.transform);
-    }                   
 
+        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: Managers.RelayManager.NGO_ROOT_UI.transform);
+        SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+        SubScribeRelayCallback();
+    }
     private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
     {
         if (_netWorkManager.IsHost)

@@ -288,6 +288,7 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
+            Debug.Log($"로비의 호스트 ID:{lobby.HostId} 나의 아이디{_currentPlayerInfo.Id}");
             StopHeartbeat();
             if (lobby.HostId == _currentPlayerInfo.Id)
             {
@@ -871,13 +872,13 @@ public class LobbyManager : IManagerEventInitailize
 
         Debug.Log(clientid + "너가 호출함??");
         _lobbyLoading?.Invoke(true);
-        await ReFreshRoomList();
         Debug.Log($"{_currentLobby.Name}");
         _currentLobby = await GetCurrentLobby();
         if (_heartBeatCoroutine == null)
         {
             await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
         }
+        await ReFreshRoomList();
         _lobbyLoading?.Invoke(false);
     }
 

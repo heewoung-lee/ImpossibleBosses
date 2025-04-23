@@ -332,7 +332,6 @@ public class RelayManager
         //NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
         //4.21일 주석처리함 과거의 내가 왜 이부분을 넣었는지 이해 안감.
         Managers.SocketEventManager.DisconnectRelayEvent += WarpperDisConntionRelay;
-        Managers.SocketEventManager.DisconnectApiEvent -= WarpperDisConntionRelay;
         Managers.SocketEventManager.DisconnectApiEvent += WarpperDisConntionRelay;
     }
 

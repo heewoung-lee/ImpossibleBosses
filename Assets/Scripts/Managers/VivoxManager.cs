@@ -220,7 +220,6 @@ public class VivoxManager : IManagerEventInitailize
     public void InitalizeVivoxEvent()
     {
         Managers.SocketEventManager.LogoutVivoxEvent += LogoutOfVivoxAsync;
-        Managers.SocketEventManager.DisconnectApiEvent -= LogoutOfVivoxAsync;
         Managers.SocketEventManager.DisconnectApiEvent += LogoutOfVivoxAsync;
     }
 }
