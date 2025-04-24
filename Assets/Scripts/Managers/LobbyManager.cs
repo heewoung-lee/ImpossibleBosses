@@ -308,6 +308,33 @@ public class LobbyManager : IManagerEventInitailize
         await CheckClientRelay(lobby);
     }
 
+
+    private async void RegisteLobbyCallBack(Lobby lobby)
+    {
+        Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);
+        LobbyEventCallbacks lobbycallbacks = new LobbyEventCallbacks();
+        lobbycallbacks.LobbyChanged += OnLobbyChange;
+        lobbycallbacks.PlayerJoined += OnPlayerJoined;
+        lobbycallbacks.PlayerLeft += OnPlayerLeft;
+
+
+        void OnLobbyChange(ILobbyChanges changes)
+        {
+        }
+
+
+        void OnPlayerJoined(List<LobbyPlayerJoined> list)
+        {
+            Debug.Log("플레이어가 접속했습니다");
+        }
+
+        void OnPlayerLeft(List<int> list)
+        {
+            Debug.Log("플레이어가 나갔습니다");
+        }
+
+    }
+
     private async Task CheckHostRelay(Lobby lobby)
     {
         if (lobby.HostId != _currentPlayerInfo.Id)
