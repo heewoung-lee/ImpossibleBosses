@@ -273,6 +273,7 @@ public class LobbyManager : IManagerEventInitailize
             await JoinLobbyInitalize(lobby);
             await CheckHostAndGuestEvent?.Invoke(lobby);
             JoinRelayInitalize();
+            RegisteLobbyCallBack(lobby);
         }
         catch (Exception e)
         {
@@ -317,12 +318,28 @@ public class LobbyManager : IManagerEventInitailize
         lobbycallbacks.PlayerJoined += OnPlayerJoined;
         lobbycallbacks.PlayerLeft += OnPlayerLeft;
 
+        try
+        {
+           await LobbyService.Instance.SubscribeToLobbyEventsAsync(currentLobby.Id, lobbycallbacks);
+        }
+        catch (LobbyServiceException ex)
+        {
+            switch (ex.Reason)
+            {
+                case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{currentLobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
+                case LobbyExceptionReason.SubscriptionToLobbyLostWhileBusy: Debug.LogError($"Subscription to lobby events was lost while it was busy trying to subscribe. Exception Message: {ex.Message}"); throw;
+                case LobbyExceptionReason.LobbyEventServiceConnectionError: Debug.LogError($"Failed to connect to lobby events. Exception Message: {ex.Message}"); throw;
+                default: throw;
+            }
+        }
 
         void OnLobbyChange(ILobbyChanges changes)
         {
+            if(changes.HostId.Value == _currentPlayerInfo.Id)
+            {
+                Debug.Log("내가 호스트가 되었습니다.");
+            }
         }
-
-
         void OnPlayerJoined(List<LobbyPlayerJoined> list)
         {
             Debug.Log("플레이어가 접속했습니다");
