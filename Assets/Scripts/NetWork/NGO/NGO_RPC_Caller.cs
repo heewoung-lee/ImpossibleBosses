@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -253,7 +254,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         try
         {
-            await Managers.LobbyManager.ExitLobbyAsync(await Managers.LobbyManager.GetCurrentLobby(),false);
+            await Managers.LobbyManager.ExitLobbyAsync(await Managers.LobbyManager.GetCurrentLobby(), false);
             await Managers.VivoxManager.LogoutOfVivoxAsync();
         }
         catch (Exception e)

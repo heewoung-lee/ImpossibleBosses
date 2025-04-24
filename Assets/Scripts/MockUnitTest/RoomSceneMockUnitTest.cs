@@ -18,10 +18,10 @@ public class RoomSceneMockUnitTest : BaseScene
         None
     }
 
-    string LobbyID = "TestLobby11";
     string _playerType = null;
     GameObject _ngoRoot;
 
+    private const string LobbyName = "TestLobby";
     public bool isSoloTest;
 
     public override Define.Scene CurrentScene => Define.Scene.RoomScene;
@@ -50,13 +50,13 @@ public class RoomSceneMockUnitTest : BaseScene
                 }
                 else
                 {
-                    await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
+                    await Managers.LobbyManager.CreateLobby(LobbyName, 8,null);
                 }
             }
             else
             {
                 await Task.Delay(1000);
-                (bool ischeckLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
+                (bool ischeckLobby, Lobby lobby) = await Managers.LobbyManager.AvailableLobby(LobbyName);
                 if (ischeckLobby == false || lobby.Data == null)
                 {
                     await Utill.RateLimited(async () => await JoinChannel(), 1000);

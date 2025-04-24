@@ -97,17 +97,6 @@ public class VivoxManager : IManagerEventInitailize
                 Debug.Log($"Vivox 채널{_currentChanel}지워짐");
                 await LeaveEchoChannelAsyncCustom(_currentChanel);
             }
-            Debug.Log(VivoxService.Instance.IsLoggedIn+"로그인 되어있나요?");
-
-            if (VivoxService.Instance.ActiveChannels.Any())
-            {
-                foreach (var kvp in VivoxService.Instance.ActiveChannels)
-                    Debug.Log($"[Vivox] 아직 살아있는 채널: {kvp.Key}  상태:{kvp.Value}");
-            }
-            else
-            {
-                Debug.Log("[Vivox] 현재 활성 채널 없음");
-            }
             _currentChanel = chanelID;
             await JoinGroupChannelAsyncCustom(_currentChanel, ChatCapability.TextOnly);
         }
@@ -206,24 +195,6 @@ public class VivoxManager : IManagerEventInitailize
         catch (Exception ex)
         {
             Debug.LogError($"SendMessageAsync 에러 발생{ex}");
-            throw;
-        }
-    }
-
-    public async Task SendSystemMessageAsync(string systemMessage)
-    {
-        try
-        {
-            if (VivoxService.Instance.IsLoggedIn == false || VivoxService.Instance.ActiveChannels.Any() == false)
-                return;
-
-            string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
-            Debug.Log(_currentChanel);
-            await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, formattedMessage);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"SendSystemMessageAsync 에러 발생{ex}");
             throw;
         }
     }

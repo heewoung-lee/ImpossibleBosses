@@ -48,7 +48,7 @@ public class PlaySceneMockUnitTest : BaseScene
                 }
                 else
                 {
-                    await Managers.LobbyManager.CreateLobbyID(LobbyID, "TestLobby", 8);
+                    await Managers.LobbyManager.CreateLobby("TestLobby", 8, null);
                 }
                 if (NetworkManager.Singleton.IsListening == true)
                 {

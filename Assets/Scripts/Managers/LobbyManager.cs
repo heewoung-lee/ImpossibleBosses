@@ -1,3 +1,5 @@
+using Google.Apis.Sheets.v4.Data;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,32 +48,12 @@ public class LobbyManager : IManagerEventInitailize
     private bool _isRefreshing = false;
     private bool[] _taskChecker;
     private Coroutine _heartBeatCoroutine = null;
-    private Action _hostChangeEvent;
     private Action<bool> _lobbyLoading;
     private Action _initDoneEvent;
+    private Action _hostChangeEvent;
 
     public bool[] TaskChecker => _taskChecker;
     public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
-
-    public event Action HostChangeEvent
-    {
-        add
-        {
-            if (_hostChangeEvent != null && _hostChangeEvent.GetInvocationList().Contains(value) == true)
-                return;
-
-            _hostChangeEvent += value;
-        }
-        remove
-        {
-            if (_hostChangeEvent == null || _hostChangeEvent.GetInvocationList().Contains(value) == false)
-            {
-                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
-                return;
-            }
-            _hostChangeEvent -= value;
-        }
-    }
     public event Action<bool> LobbyLoadingEvent
     {
         add
@@ -111,6 +93,26 @@ public class LobbyManager : IManagerEventInitailize
             _initDoneEvent -= value;
         }
     }
+    public event Action HostChageEvent
+    {
+        add
+        {
+            if (_hostChangeEvent != null && _hostChangeEvent.GetInvocationList().Contains(value) == true)
+                return;
+
+            _hostChangeEvent += value;
+        }
+        remove
+        {
+            if (_hostChangeEvent == null || _hostChangeEvent.GetInvocationList().Contains(value) == false)
+            {
+                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                return;
+            }
+            _hostChangeEvent -= value;
+        }
+    }
+
 
     public string PlayerID => _currentPlayerInfo.Id;
     public bool IsDoneInitEvent { get => _isDoneInitEvent; }
@@ -120,6 +122,9 @@ public class LobbyManager : IManagerEventInitailize
     }
     public async Task<Lobby> GetCurrentLobby()
     {
+        if (_currentLobby == null)
+            return null;
+
         _currentLobby = await GetLobbyAsyncCustom(_currentLobby.Id);
         return _currentLobby;
     }
@@ -262,30 +267,7 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-    public async Task CheckPlayerHostAndClient(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent, float interval = 15f)
-    {
-        try
-        {
-            if (lobby == null || _currentPlayerInfo.Id == null)
-                return;
-
-            CheckHostAndSendHeartBeat(lobby, interval);
-            await JoinLobbyInitalize(lobby);
-            await CheckHostAndGuestEvent?.Invoke(lobby);
-            JoinRelayInitalize();
-            RegisteLobbyCallBack(lobby);
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e);
-        }
-    }
-
-    private void JoinRelayInitalize()
-    {
-        SubScribeRelayCallBack();//릴레이 이벤트 연결
-    }
-    private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
+    public void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
     {
         try
         {
@@ -301,55 +283,57 @@ public class LobbyManager : IManagerEventInitailize
         {
             Debug.Log(e);
         }
-
-    }
-    private async Task CheckHostOrClientRelay(Lobby lobby)
-    {
-        await CheckHostRelay(lobby);
-        await CheckClientRelay(lobby);
     }
 
 
-    private async void RegisteLobbyCallBack(Lobby lobby)
+    public async Task JoinRelayServer(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent)
     {
-        Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);
+        await CheckHostAndGuestEvent?.Invoke(lobby);
+        //SubScribeRelayCallBack();
+    }
+
+    //private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
+    //{
+    //    try
+    //    {
+    //        Debug.Log($"로비의 호스트 ID:{lobby.HostId} 나의 아이디{_currentPlayerInfo.Id}");
+    //        StopHeartbeat();
+    //        if (lobby.HostId == _currentPlayerInfo.Id)
+    //        {
+    //            Debug.Log("하트비트 이식");
+    //            _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
+    //        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log(e);
+    //    }
+    //}
+
+    private async void RegisteLobbyCallBack(Lobby lobby,
+        Action<ILobbyChanges> OnLobbyChangeEvent,
+        Action<List<LobbyPlayerJoined>> OnPlayerJoinedEvent = null,
+        Action<List<int>> OnPlayerLeftEvent = null)
+    {
         LobbyEventCallbacks lobbycallbacks = new LobbyEventCallbacks();
-        lobbycallbacks.LobbyChanged += OnLobbyChange;
-        lobbycallbacks.PlayerJoined += OnPlayerJoined;
-        lobbycallbacks.PlayerLeft += OnPlayerLeft;
+        lobbycallbacks.LobbyChanged += OnLobbyChangeEvent;
+        lobbycallbacks.PlayerJoined += OnPlayerJoinedEvent;
+        lobbycallbacks.PlayerLeft += OnPlayerLeftEvent;
 
         try
         {
-           await LobbyService.Instance.SubscribeToLobbyEventsAsync(currentLobby.Id, lobbycallbacks);
+           await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, lobbycallbacks);
         }
         catch (LobbyServiceException ex)
         {
             switch (ex.Reason)
             {
-                case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{currentLobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
+                case LobbyExceptionReason.AlreadySubscribedToLobby: Debug.LogWarning($"Already subscribed to lobby[{lobby.Id}]. We did not need to try and subscribe again. Exception Message: {ex.Message}"); break;
                 case LobbyExceptionReason.SubscriptionToLobbyLostWhileBusy: Debug.LogError($"Subscription to lobby events was lost while it was busy trying to subscribe. Exception Message: {ex.Message}"); throw;
                 case LobbyExceptionReason.LobbyEventServiceConnectionError: Debug.LogError($"Failed to connect to lobby events. Exception Message: {ex.Message}"); throw;
                 default: throw;
             }
         }
-
-        void OnLobbyChange(ILobbyChanges changes)
-        {
-            if(changes.HostId.Value == _currentPlayerInfo.Id)
-            {
-                Debug.Log("내가 호스트가 되었습니다.");
-            }
-        }
-        void OnPlayerJoined(List<LobbyPlayerJoined> list)
-        {
-            Debug.Log("플레이어가 접속했습니다");
-        }
-
-        void OnPlayerLeft(List<int> list)
-        {
-            Debug.Log("플레이어가 나갔습니다");
-        }
-
     }
 
     private async Task CheckHostRelay(Lobby lobby)
@@ -362,7 +346,6 @@ public class LobbyManager : IManagerEventInitailize
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
             Debug.Log(lobby.Name + "로비의 이름");
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
-            _hostChangeEvent?.Invoke();
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
         {
@@ -453,21 +436,15 @@ public class LobbyManager : IManagerEventInitailize
 
         fillteredLobbyList = queryResponse.Results;
 
-        fillteredLobbyList = fillteredLobbyList.Where(lobby=>lobby.Players.Count >= 1).ToList();
 
-        foreach (Lobby lobby in fillteredLobbyList)
+        foreach(Lobby lobby in fillteredLobbyList)
         {
-            string joincode = lobby.Data["RelayCode"].Value;
-
-            if (String.IsNullOrEmpty(joincode))//조인 코드 있는지 확인.
-                continue;
-
-
-            if(await Managers.RelayManager.IsValidRelayJoinCode(joincode) == true) //조인코드가 유효한지 확인
+            if(lobby.Players.Count >= 1)
             {
                 return (true, lobby);
             }
         }
+
         return (false, null);
     }
 
@@ -477,7 +454,6 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            //_currentLobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(LOBBYID, lobbyName, maxPlayers, lobbyOption);
             (bool, Lobby) lobbyResult = await AvailableLobby(lobbyName);
             if (lobbyResult.Item1 == false)
             {
@@ -490,7 +466,10 @@ public class LobbyManager : IManagerEventInitailize
                 _currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyResult.Item2.Id);
             }
             //
-            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostOrClientRelay);
+            Lobby currentLobby = await GetCurrentLobby();
+
+            CheckHostAndSendHeartBeat(currentLobby);
+            await JoinLobbyInitalize(currentLobby, OnLobbyHostChangeEvent);
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
@@ -511,6 +490,15 @@ public class LobbyManager : IManagerEventInitailize
         catch (Exception ex)
         {
             Debug.Log(ex);
+        }
+
+        async void OnLobbyHostChangeEvent(ILobbyChanges lobbyChanges)
+        {
+            if (lobbyChanges.HostId.Value == _currentPlayerInfo.Id)
+            {
+                Lobby currentLobby = await GetCurrentLobby();
+                CheckHostAndSendHeartBeat(currentLobby);
+            }
         }
     }
 
@@ -559,7 +547,7 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            await ExitLobbyAsync(await GetCurrentLobby());
+            await ExitLobbyAsync(_currentLobby);
             //먼저 등록된 콜백 없어지는지 확인.
 
             _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
@@ -567,7 +555,9 @@ public class LobbyManager : IManagerEventInitailize
             if (_currentLobby != null)
                 Debug.Log($"로비 만들어짐{_currentLobby.Name}");
 
-            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
+            CheckHostAndSendHeartBeat(_currentLobby);
+            await JoinLobbyInitalize(_currentLobby, OnRoomLobbyChangeHostEventAsync);
+            await JoinRelayServer(_currentLobby, CheckHostRelay);
         }
 
         catch (Exception e)
@@ -576,29 +566,53 @@ public class LobbyManager : IManagerEventInitailize
             throw;
         }
     }
-    public async Task<Lobby> CreateLobbyID(string lobbyID, string lobbyName, int maxPlayers, CreateLobbyOptions options = null)
+    //public async Task<Lobby> CreateLobbyID(string lobbyID, string lobbyName, int maxPlayers, CreateLobbyOptions options = null)
+    //{
+    //    try
+    //    {
+    //        if (_currentLobby != null)
+    //        {
+    //            await ExitLobbyAsync(_currentLobby);
+    //        }
+    //        Lobby lobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(lobbyID, lobbyName, maxPlayers, options);
+    //        CheckHostAndSendHeartBeat(lobby);
+    //        await JoinLobbyInitalize(lobby, OnRoomLobbyChangeHostEventAsync);
+    //        await JoinRelayServer(lobby, CheckHostRelay);
+    //        return lobby;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log($"An error occurred while creating the room.{e}");
+    //        return null;
+    //        throw;
+    //    }
+    //}
+    private async void OnRoomLobbyChangeHostEventAsync(ILobbyChanges lobbyChanges)
     {
-        try
+        if (lobbyChanges.HostId.Value == _currentPlayerInfo.Id)
         {
-            if (_currentLobby != null)
-            {
-                await ExitLobbyAsync(await GetCurrentLobby());
-            }
-            Lobby lobby = await LobbyService.Instance.CreateOrJoinLobbyAsync(lobbyID, lobbyName, maxPlayers, options);
-            await CheckPlayerHostAndClient(lobby, CheckHostRelay);
-            return lobby;
+            _lobbyLoading?.Invoke(true);
+            Lobby currentLobby = await GetCurrentLobby();
+            await Managers.LobbyManager.CheckHostRelay(currentLobby);
+            CheckHostAndSendHeartBeat(currentLobby);
+            _hostChangeEvent?.Invoke();
+            _lobbyLoading?.Invoke(false);
         }
-        catch (Exception e)
+
+        if (lobbyChanges.Data.Value != null &&lobbyChanges.Data.Value.TryGetValue("RelayCode", out var relayData) &&relayData.Changed)
         {
-            Debug.Log($"An error occurred while creating the room.{e}");
-            return null;
-            throw;
+            _lobbyLoading?.Invoke(true);
+            var newCode = relayData.Value;
+            Debug.Log($"새로운 릴레이코드 {newCode.Value}");
+            await CheckClientRelay(await GetCurrentLobby());
+            _lobbyLoading?.Invoke(false);
         }
+
     }
+  
     public async Task<Lobby> JoinLobbyByID(string lobbyID, string password = null)
     {
         Lobby preLobby = _currentLobby;
-
         Lobby nextLobby;
         try
         {
@@ -628,7 +642,9 @@ public class LobbyManager : IManagerEventInitailize
             await ExitLobbyAsync(preLobby);
 
         _currentLobby = nextLobby;
-        await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckClientRelay);
+        CheckHostAndSendHeartBeat(_currentLobby);
+        await JoinLobbyInitalize(_currentLobby, OnRoomLobbyChangeHostEventAsync);
+        await JoinRelayServer(_currentLobby, CheckClientRelay);
         return _currentLobby;
     }
     private async Task InjectionRelayJoinCodeintoLobby(Lobby lobby, string joincode)
@@ -646,10 +662,12 @@ public class LobbyManager : IManagerEventInitailize
                    {"RelayCode",new DataObject(DataObject.VisibilityOptions.Public,joincode)}
                 }
         });
-        await Managers.VivoxManager.SendSystemMessageAsync("호스트가 변경되었습니다.새로고침 합니다.");
     }
 
-    private async Task JoinLobbyInitalize(Lobby lobby)
+    private async Task JoinLobbyInitalize(Lobby lobby, 
+        Action<ILobbyChanges> OnLobbyChangeEvent,
+        Action<List<LobbyPlayerJoined>> OnPlayerJoinedEvent = null,
+        Action<List<int>> OnPlayerLeftEvent = null)
     {
         _isDoneInitEvent = false;
         try
@@ -657,6 +675,7 @@ public class LobbyManager : IManagerEventInitailize
             await InputPlayerDataIntoLobby(lobby);//로비에 있는 player에 닉네임추가
             Debug.Log("조인채널호출");
             await Managers.VivoxManager.JoinChannel(lobby.Id);//비복스 연결
+            RegisteLobbyCallBack(lobby, OnLobbyChangeEvent, OnPlayerJoinedEvent, OnPlayerLeftEvent);
             _initDoneEvent?.Invoke(); //호출이 완료되었을때 이벤트 콜백
             _isDoneInitEvent = true;
         }
@@ -846,7 +865,7 @@ public class LobbyManager : IManagerEventInitailize
     }
     private async void OnRelayClientDisconnected(ulong clientId)
     {
-        await DisconnectPlayer(clientId);
+        await DisconnectClientToRelay(clientId);
     }
 
     public async Task ReFreshRoomList()
@@ -911,18 +930,19 @@ public class LobbyManager : IManagerEventInitailize
     /// 그 사람들끼리 비교해서 현재 로비에 내가 호스트면 호스트 마이그레이션 작업을 해야함
     /// </summary>
     /// <returns></returns>
-    public async Task DisconnectPlayer(ulong clientid)
+    public async Task DisconnectClientToRelay(ulong clientid)
     {
-
         Debug.Log(clientid + "너가 호출함??");
         _lobbyLoading?.Invoke(true);
         Debug.Log($"{_currentLobby.Name}");
         _currentLobby = await GetCurrentLobby();
         if (_heartBeatCoroutine == null)
         {
-            await CheckPlayerHostAndClient(await GetCurrentLobby(), CheckHostRelay);
+            CheckHostAndSendHeartBeat(_currentLobby);
+            await JoinLobbyInitalize(_currentLobby, OnRoomLobbyChangeHostEventAsync);
+            await JoinRelayServer(_currentLobby,CheckHostRelay);
         }
-        await ReFreshRoomList();
+        //await ReFreshRoomList();
         _lobbyLoading?.Invoke(false);
     }
 
@@ -972,7 +992,6 @@ public class LobbyManager : IManagerEventInitailize
     {
         if (lobby.HostId == _currentPlayerInfo.Id)
         {
-            Debug.Log("나는 방장이니 릴레이 코드를 지울께");
             lobby.Data.Remove("RelayCode");
         }
     }
