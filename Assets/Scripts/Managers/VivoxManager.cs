@@ -181,6 +181,23 @@ public class VivoxManager : IManagerEventInitailize
             throw;
         }
     }
+    public async Task SendSystemMessageAsync(string systemMessage)
+    {
+        try
+        {
+            if (VivoxService.Instance.IsLoggedIn == false || VivoxService.Instance.ActiveChannels.Any() == false)
+                return;
+
+            string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
+            Debug.Log(_currentChanel);
+            await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, formattedMessage);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"SendSystemMessageAsync error:{ex}");
+            throw;
+        }
+    }
 
     public async Task SendMessageAsync(string message)
     {

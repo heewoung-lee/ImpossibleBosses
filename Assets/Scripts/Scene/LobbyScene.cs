@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Lobbies.Models;
 using Unity.Services.Vivox;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,8 +27,13 @@ public class LobbyScene : BaseScene
     {
         if (GUI.Button(new Rect(0, 0, 100, 100), "GetJoinCode"))
         {
-            Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
-            Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
+            Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby(); 
+
+            foreach(System.Collections.Generic.KeyValuePair<string, DataObject> lobbydata in currentLobby.Data)
+            {
+                Debug.Log($"LobbyKey{lobbydata.Key} 데이터{lobbydata.Value.Value}");
+            }
+
         }
     }
 }
