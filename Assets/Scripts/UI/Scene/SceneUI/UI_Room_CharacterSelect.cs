@@ -135,8 +135,23 @@ public class UI_Room_CharacterSelect : UI_Scene
     private void DisConnetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("플레이어가 나갔습니다.");
+        isCheckAllReadyToPlayers();
     }
+    private void isCheckAllReadyToPlayers()
+    {
+        SetHostStartButton(true);
+        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
+        {
+            if (playerNGO.IsOwnedByServer)
+                continue;
 
+            if (playerNGO.ISReady == false)
+            {
+                SetHostStartButton(false);
+                return;
+            }
+        }
+    }
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
