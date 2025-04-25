@@ -140,6 +140,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
+        SetHostStartButton(false);
         SpawnChractorSeletorAndSetPosition(playerIndex);
     }
 

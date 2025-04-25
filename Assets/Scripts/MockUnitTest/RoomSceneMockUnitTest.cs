@@ -56,8 +56,8 @@ public class RoomSceneMockUnitTest : BaseScene
             else
             {
                 await Task.Delay(1000);
-                (bool ischeckLobby, Lobby lobby) = await Managers.LobbyManager.AvailableLobby(LobbyName);
-                if (ischeckLobby == false || lobby.Data == null)
+                Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
+                if (lobby.Data == null)
                 {
                     await Utill.RateLimited(async () => await JoinChannel(), 1000);
                     return;

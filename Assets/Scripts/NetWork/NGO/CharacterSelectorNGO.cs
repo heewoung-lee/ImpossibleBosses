@@ -233,7 +233,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _isReady.Value = !_isReady.Value;
         _readyPanel.SetActive(_isReady.Value);
 
-        isCheckReadyToPlayers();
+        isCheckAllReadyToPlayers();
 
         NotifyButtonStateClientRpc(_isReady.Value, rpcParams.Receive.SenderClientId);
     }
@@ -245,7 +245,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _ui_Room_CharacterSelect.ButtonState(state); // 본인의 클라이언트에서만 실행
         }
     }
-    private void isCheckReadyToPlayers()
+    private void isCheckAllReadyToPlayers()
     {
         foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
         {

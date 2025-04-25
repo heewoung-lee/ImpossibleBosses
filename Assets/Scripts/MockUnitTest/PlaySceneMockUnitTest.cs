@@ -18,11 +18,9 @@ public class PlaySceneMockUnitTest : BaseScene
         Player4,
         None
     }
-    
-    string LobbyID = "TestLobby322";
     string _playerType = null;
     GameObject _ngoRoot;
-
+    private const string LobbyName = "TestLobby";
     private UI_Loading _ui_Loading_Scene;
     public Define.PlayerClass PlayerClass;
     public bool isSoloTest;
@@ -58,10 +56,10 @@ public class PlaySceneMockUnitTest : BaseScene
             else
             {
                 await Task.Delay(1000);
-                (bool ischeckLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
-                if (ischeckLobby == false|| lobby.Data == null)
+                Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
+                if (lobby.Data == null)
                 {
-                    await Utill.RateLimited(async() => await JoinChannel(),1000);
+                    await Utill.RateLimited(async () => await JoinChannel(), 1000);
                     return;
                 }
                 string joinCode = lobby.Data["RelayCode"].Value;
