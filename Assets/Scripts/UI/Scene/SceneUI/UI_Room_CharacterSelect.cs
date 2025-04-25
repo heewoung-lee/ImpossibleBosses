@@ -135,13 +135,15 @@ public class UI_Room_CharacterSelect : UI_Scene
     private void DisConnetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("플레이어가 나갔습니다.");
-        isCheckAllReadyToPlayers();
+        isCheckAllReadyToPlayers(playerIndex);
     }
-    private void isCheckAllReadyToPlayers()
+    public void isCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
     {
-        SetHostStartButton(true);
         foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
         {
+            if (playerNGO.GetComponent<NetworkObject>().OwnerClientId == playerIndex)
+                continue;
+
             if (playerNGO.IsOwnedByServer)
                 continue;
 
@@ -151,6 +153,7 @@ public class UI_Room_CharacterSelect : UI_Scene
                 return;
             }
         }
+        SetHostStartButton(true);
     }
     public void EntetedPlayerinLobby(ulong playerIndex)
     {

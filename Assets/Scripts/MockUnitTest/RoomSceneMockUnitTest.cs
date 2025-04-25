@@ -67,7 +67,7 @@ public class RoomSceneMockUnitTest : BaseScene
             }
         }
         Managers.LobbyManager.InitalizeLobbyEvent();
-        Managers.LobbyManager.SubScribeRelayCallBack();
+       // Managers.LobbyManager.SubScribeRelayCallBack();
     }
 
     private async Task SetAuthenticationService()
