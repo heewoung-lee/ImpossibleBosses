@@ -70,12 +70,13 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
-        void TestButtonClick()
+        async void TestButtonClick()
         {
             TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
+            await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
         }
 
         _scoreButton.onClick.AddListener(TestButtonClick);

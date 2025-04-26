@@ -624,7 +624,6 @@ public class LobbyManager : IManagerEventInitailize
             _lobbyLoading?.Invoke(true);
             var newCode = relayData.Value;
             Lobby currentLobby = await GetCurrentLobby();
-            Debug.Log($"새로운 릴레이코드 {newCode.Value} + 현재 로비 이름{currentLobby.Name}");
             await CheckClientRelay(currentLobby);
             _lobbyLoading?.Invoke(false);
         }
