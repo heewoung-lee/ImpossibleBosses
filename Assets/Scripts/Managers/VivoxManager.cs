@@ -173,7 +173,6 @@ public class VivoxManager : IManagerEventInitailize
             await VivoxService.Instance.LogoutAsync();
             _checkDoneLoginProcess = false;
             _currentChanel = null;
-            Debug.Log("채널로비" + _currentChanel);
         }
         catch (Exception ex)
         {
