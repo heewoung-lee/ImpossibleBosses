@@ -71,17 +71,17 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
-        void TestButtonClick()
+        async void TestButtonClickAsync()
         {
             TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
-            //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
-            _ = FindMyJoinCodeAsync();
+            await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            //_ = FindMyJoinCodeAsync();
         }
 
-        _scoreButton.onClick.AddListener(TestButtonClick);
+        _scoreButton.onClick.AddListener(TestButtonClickAsync);
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>
         {
             _scoreImage.gameObject.transform.position = PointerEventData.position;

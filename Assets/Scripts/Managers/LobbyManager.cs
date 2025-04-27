@@ -528,6 +528,20 @@ public class LobbyManager : IManagerEventInitailize
 
     }
 
+    public async Task RemoveLobbyAsync(Lobby lobby)
+    {
+        if (ReferenceEquals(_currentLobby, lobby))
+            _currentLobby = null;
+
+        if (lobby.HostId != CurrentPlayerInfo.Id)
+            return;
+
+        StopHeartbeat();//하트비트 제거
+        Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//현재의 로비를 가져와야한다.
+        await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
+    }
+
+
     public async Task ExitLobbyAsync(Lobby lobby, bool disconnectRelayOption = true)
     {
         if (lobby == null)
@@ -546,6 +560,7 @@ public class LobbyManager : IManagerEventInitailize
             if (ischeckUserAloneInLobby && ischeckUserIsHost)
             {//내가 호스트도 로비에 나만 남았다면 로비삭제
                 await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
+                Debug.Log("로비삭제");
             }
             else
             {

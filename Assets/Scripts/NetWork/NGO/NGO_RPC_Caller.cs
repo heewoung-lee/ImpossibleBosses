@@ -254,7 +254,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         try
         {
-            await Managers.LobbyManager.ExitLobbyAsync(await Managers.LobbyManager.GetCurrentLobby(), false);
+            await Managers.LobbyManager.RemoveLobbyAsync(await Managers.LobbyManager.GetCurrentLobby());
             await Managers.VivoxManager.LogoutOfVivoxAsync();
         }
         catch (Exception e)
