@@ -128,7 +128,6 @@ public class RelayManager
         _choicePlayerCharacter = playerClass;
     }
 
-
     public void RegisterSelectedCharacterinDict(ulong clientId, Define.PlayerClass playerClass)
     {
         _choicePlayerCharactersDict[clientId] = playerClass;

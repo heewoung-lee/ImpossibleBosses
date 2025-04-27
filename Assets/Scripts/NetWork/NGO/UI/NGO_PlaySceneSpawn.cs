@@ -19,20 +19,6 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (IsAvailableMockUnitTest(out PlaySceneMockUnitTest mockUnitTest))
-        {
-            Debug.Log($"{mockUnitTest.PlayerClass}캐릭터이름");
-            MockUnitSpawnPlayerCharacter(mockUnitTest.PlayerClass);
-            HostSpawnObject();
-            return;
-
-            void MockUnitSpawnPlayerCharacter(Define.PlayerClass playerclass)
-            {
-                string choicePlayer = playerclass.ToString();
-                Managers.RelayManager.SetPlayerClassforMockUnitTest(playerclass);
-                RequestSpawnPlayerServerRpc(_relayManager.NetworkManagerEx.LocalClientId, choicePlayer);
-            }
-        }
         HostSpawnObject();
     }
     private void HostSpawnObject()

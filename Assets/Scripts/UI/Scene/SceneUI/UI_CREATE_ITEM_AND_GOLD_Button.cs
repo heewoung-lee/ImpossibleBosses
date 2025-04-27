@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -70,13 +71,14 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
-        async void TestButtonClick()
+        void TestButtonClick()
         {
             TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
-            await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            _ = FindMyJoinCodeAsync();
         }
 
         _scoreButton.onClick.AddListener(TestButtonClick);
@@ -114,5 +116,11 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
                 IItem item = Managers.ItemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent();
                 break;
         }
+    }
+
+    private async Task FindMyJoinCodeAsync()
+    {
+        Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
+        Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
     }
 }

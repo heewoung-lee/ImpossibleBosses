@@ -6,6 +6,7 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class PlaySceneMockUnitTest : BaseScene
@@ -35,6 +36,8 @@ public class PlaySceneMockUnitTest : BaseScene
     }
     private async Task JoinChannel()
     {
+        Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClicent;
+        Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClicent;
         if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
         {
             await SetAuthenticationService();
@@ -55,6 +58,7 @@ public class PlaySceneMockUnitTest : BaseScene
             }
             else
             {
+
                 await Task.Delay(1000);
                 Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
                 if (lobby.Data == null)
@@ -66,8 +70,27 @@ public class PlaySceneMockUnitTest : BaseScene
                 await Managers.RelayManager.JoinGuestRelay(joinCode);
             }
         }
-        LoadGamePlayScene();
-        Managers.LobbyManager.InitalizeLobbyEvent();
+    }
+
+    private void ConnectClicent(ulong clientID)
+    {
+        if (Managers.RelayManager.NGO_RPC_Caller == null)
+        {
+            Managers.RelayManager.Spawn_RpcCaller_Event += SpawnPlayer;
+        }
+        else
+        {
+            SpawnPlayer();
+        }
+        void SpawnPlayer()
+        {
+            if (Managers.RelayManager.NetworkManagerEx.LocalClientId != clientID)
+                return;
+
+            Managers.RelayManager.RegisterSelectedCharacter(clientID, PlayerClass);
+            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientID);
+            LoadGamePlayScene();
+        }
     }
 
     private void LoadGamePlayScene()
@@ -114,27 +137,4 @@ public class PlaySceneMockUnitTest : BaseScene
     public override void Clear()
     {
     }
-
-
-    //public async void OnGUI()
-    //{
-    //   if(GUI.Button(new Rect(0, 0, 100, 100), "GetLobby"))
-    //    {
-
-    //        (bool isgetLobby, Lobby lobby) = await Managers.LobbyManager.TryGetLobbyAsyncCustom(LobbyID);
-
-    //        if(isgetLobby == false)
-    //        {
-    //            Debug.Log("로비가 존재하지 않습니다");
-    //            return;
-    //        }
-
-    //        string joinCode = lobby.Data["RelayCode"].Value;
-    //        Debug.Log($"조인코드: {joinCode}");
-    //        foreach (NetworkClient player in Managers.RelayManager.NetworkManagerEx.ConnectedClientsList)
-    //        {
-    //            Debug.Log($"플레이어의 아이디: {player.ClientId}");
-    //        }
-    //    }
-    //}
 }

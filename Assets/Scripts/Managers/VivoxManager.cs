@@ -189,7 +189,6 @@ public class VivoxManager : IManagerEventInitailize
                 return;
 
             string formattedMessage = $"<color=#FFD700>[SYSTEM]</color> {systemMessage}";
-            Debug.Log(_currentChanel);
             await VivoxService.Instance.SendChannelTextMessageAsync(_currentChanel, formattedMessage);
         }
         catch (Exception ex)
