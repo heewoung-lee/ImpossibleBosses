@@ -2574,8 +2574,8 @@ GameObject:
   - component: {fileID: -1599382503089000507}
   - component: {fileID: -746486937222958321}
   - component: {fileID: 90570183752701390}
-  - component: {fileID: -7922592636331287374}
   - component: {fileID: 3853475374522755921}
+  - component: {fileID: -2092898722948717655}
   m_Layer: 7
   m_Name: StoneGolem
   m_TagString: Untagged
@@ -2841,21 +2841,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &-7922592636331287374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3937754838849691090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 5908237013915011362}
 --- !u!114 &3853475374522755921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2869,6 +2854,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-2092898722948717655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937754838849691090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23794edc3565e1f4f97ed9a8021ec557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 5908237013915011362}
 --- !u!1 &4260736896436125915
 GameObject:
   m_ObjectHideFlags: 0

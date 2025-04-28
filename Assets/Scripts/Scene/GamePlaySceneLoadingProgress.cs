@@ -115,8 +115,7 @@ public class GamePlaySceneLoadingProgress : UI_Base
             loadsceneImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
         }
 
-        if (IsHost)
-            Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
+        Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
 
         _loadedPlayerCount = 0;
     }
