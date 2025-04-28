@@ -196,6 +196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestPlayerCube
       objectReference: {fileID: 0}
+    - target: {fileID: 3050672328403300738, guid: 3dce488d9079fbe498afb9b6fa5f3c1e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4191001303137095563, guid: 3dce488d9079fbe498afb9b6fa5f3c1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.8
@@ -251,6 +255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666791450}
   - component: {fileID: 1666791449}
+  - component: {fileID: 1666791451}
   m_Layer: 0
   m_Name: '@Scene'
   m_TagString: Untagged
@@ -265,12 +270,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666791448}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a635ffc12bae5247b56230831ea6227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnPlayerClass: 1
 --- !u!4 &1666791450
 Transform:
   m_ObjectHideFlags: 0
@@ -286,6 +290,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1666791451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666791448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bab1d3506ec234ea68ad8f17cfd698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerClass: 1
+  isSoloTest: 0
 --- !u!1 &1770151641
 GameObject:
   m_ObjectHideFlags: 0

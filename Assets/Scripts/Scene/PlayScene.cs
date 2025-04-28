@@ -16,7 +16,6 @@ public class PlayScene : BaseScene
     private UI_Stage_Timer _ui_stage_timer;
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-    public GamePlaySceneLoadingProgress GamePlaySceneLoadingProgress => _gamePlaySceneLoadingProgress;
 
     protected override void AwakeInit()
     {

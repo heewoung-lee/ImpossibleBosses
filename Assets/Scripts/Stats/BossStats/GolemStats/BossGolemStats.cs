@@ -13,6 +13,7 @@ public class BossGolemStats : BossStats
     {
         base.StartInit();
         _golemController = GetComponent<BossGolemController>();
+        UpdateStat();
     }
     protected override void AwakeInit()
     {

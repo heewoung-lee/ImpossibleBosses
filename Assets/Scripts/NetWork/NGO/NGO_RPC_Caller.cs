@@ -165,8 +165,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
         if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
         {
-            return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
+            //return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
+            return SpawnObjectToResources(path, position);
         }
+        //4.28일 NGO_CALLER가 부모까지 지정하는건 책임소재에서 문제가 될 수 있어서 이부분은 각자 풀 오브젝트 초기화 부분에서 부모를 지정하도록 함
         return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 

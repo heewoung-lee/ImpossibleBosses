@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class NGO_PlaySceneSpawn : NetworkBehaviourBase
+public class NGO_BattleSceneSpawn : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
@@ -27,12 +27,10 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
             return;
         Managers.RelayManager.SpawnToRPC_Caller();
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
-        RequestSpawnToNPC(new List<(string, Vector3)>() //데미지 테스트용 더미 큐브
+        RequestSpawnToNPC(new List<(string, Vector3)>
         {
-           {("Prefabs/NPC/Damage_Test_Dummy",new Vector3(10f,0,-2.5f))}
+           ("Prefabs/Enemy/Boss/Character/StoneGolem",new Vector3(40f,0f,25f))
         });
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_BossRoomEntrance",Managers.RelayManager.NGO_ROOT.transform);
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller", Managers.RelayManager.NGO_ROOT.transform);
     }
 
     private void RequestSpawnToNPC(List<(string, Vector3)> npcPathAndTr)

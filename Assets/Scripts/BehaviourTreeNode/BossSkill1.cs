@@ -59,7 +59,8 @@ public class BossSkill1 : Action
     private void SpawnProjector(Collider targetPlayer)
     {
         Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
-        projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
+        Managers.RelayManager.SpawnNetworkOBJ(projector.gameObject);
+        //projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
         projector.transform.position = targetPlayer.transform.position;
         projector.SetValue(2, 360);
         projector.FillProgress = 0;

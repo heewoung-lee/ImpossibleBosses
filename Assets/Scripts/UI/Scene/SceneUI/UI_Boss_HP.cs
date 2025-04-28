@@ -29,13 +29,24 @@ public class UI_Boss_HP : UI_Scene
 
     protected override void StartInit()
     {
-        _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
-        _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
+        if(Managers.GameManagerEx.BossMonster != null)
+        {
+            SetBossStatUI();
+        }
+        else
+        {
+           Managers.GameManagerEx.OnBossSpawnEvent += SetBossStatUI;
+        }
 
-        _stats.Event_Attacked -= SetHpUI;
-        _stats.Event_Attacked += SetHpUI;
+        void SetBossStatUI()
+        {
+            _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
+            _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
+
+            _stats.Event_Attacked -= SetHpUI;
+            _stats.Event_Attacked += SetHpUI;
+        }
     }
-
 
     public void SetHpUI(int damage, int currentHp)
     {

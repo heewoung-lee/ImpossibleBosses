@@ -184,60 +184,60 @@ public class Utill
 
     private static CancellationTokenSource _retryCts;
     private static CancellationTokenSource _retryCtsVoid;
-    public static async Task<T> RateLimited<T>(Func<Task<T>> action, int delayMs = 1000)
+    public static async Task<T> RateLimited<T>(Func<Task<T>> action, int delayMs = 1_000)
     {
-        _retryCts?.Cancel();
+        // 1) 먼저 새 CTS를 만든다.
+        var newCts = new CancellationTokenSource();
 
-        var cts = new CancellationTokenSource();
-        _retryCts = cts;
+        // 2) 이전 CTS를 원자적으로 취소·폐기하고
+        var prevCts = Interlocked.Exchange(ref _retryCts, newCts);
+        prevCts?.Cancel();
+        prevCts?.Dispose();
 
         try
         {
             Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} seconds…");
-            await Task.Delay(delayMs, cts.Token);   
-            return await action();                 
+            await Task.Delay(delayMs, newCts.Token);
+
+            return await action();
         }
-        catch (TaskCanceledException exception)
+        catch (TaskCanceledException)
         {
-            Debug.Log($"{exception}RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
+            Debug.Log("RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
             return default;
         }
         finally
         {
-            // 내 토큰이면 정리
-            if (ReferenceEquals(_retryCts, cts))
-            {
-                _retryCts = null;
-            }
-            cts.Dispose();
+            // 내가 마지막으로 등록한 CTS라면 null 로 초기화
+            Interlocked.CompareExchange(ref _retryCts, null, newCts);
+            newCts.Dispose();
         }
     }
-    public static async Task RateLimited(Func<Task> action,int delayMs = 1_000)
-    {
-        _retryCtsVoid?.Cancel();
-        _retryCtsVoid?.Dispose();
 
-        var cts = new CancellationTokenSource();
-        _retryCtsVoid = cts;
+    public static async Task RateLimited(Func<Task> action,int delayMs = 1_000)
+    {  // 1) 먼저 새 CTS를 만든다.
+        var newCts = new CancellationTokenSource();
+
+        // 2) 이전 CTS를 원자적으로 취소·폐기하고
+        var prevCts = Interlocked.Exchange(ref _retryCtsVoid, newCts);
+        prevCts?.Cancel();
+        prevCts?.Dispose();
 
         try
         {
-            Debug.LogWarning( $"Rate limit exceeded. Retrying in {delayMs / 1000} seconds…");
-            await Task.Delay(delayMs, cts.Token);
-            await action().ConfigureAwait(false);
+            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} seconds…");
+            await Task.Delay(delayMs, newCts.Token);
+            await action();
         }
-        catch (TaskCanceledException exception)
+        catch (TaskCanceledException)
         {
-            Debug.Log($"{exception}RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
+            Debug.Log("RateLimited<T>: 이전 예약이 취소되어 실행하지 않습니다.");
         }
         finally
         {
-            // 내 토큰이면 정리
-            if (ReferenceEquals(_retryCtsVoid, cts))
-            {
-                _retryCtsVoid = null;
-            }
-            cts.Dispose();
+            // 내가 마지막으로 등록한 CTS라면 null 로 초기화
+            Interlocked.CompareExchange(ref _retryCtsVoid, null, newCts);
+            newCts.Dispose();
         }
     }
 
