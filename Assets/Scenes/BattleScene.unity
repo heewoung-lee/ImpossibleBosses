@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerClass: 1
-  isSoloTest: 1
+  isSoloTest: 0
 --- !u!1 &1770151641
 GameObject:
   m_ObjectHideFlags: 0

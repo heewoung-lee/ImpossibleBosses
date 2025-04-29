@@ -29,12 +29,11 @@ public class BossAttack : Action
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _attack_indicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
-        
-        
-       GameObject attackIndicator = Managers.RelayManager.SpawnNetworkOBJ(_attack_indicator.Value.gameObject);
-        _attack_indicator.Value.SetValue(_stats.ViewDistance, _stats.ViewAngle);
-        _attack_indicator.Value.transform.SetParent(_controller.transform, false);
-        _attack_indicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
+        Indicator_Controller attackIndicator = Managers.RelayManager.SpawnNetworkOBJ(_attack_indicator.Value.gameObject).GetComponent<Indicator_Controller>();
+        attackIndicator.SetValue(_stats.ViewDistance, _stats.ViewAngle);
+        attackIndicator.transform.position += new Vector3(_controller.transform.position.x, 0f, _controller.transform.position.z);
+        attackIndicator.transform.rotation = _controller.transform.rotation;
+        attackIndicator.GetComponent<Poolable>().WorldPositionStays = false;
 
         _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
                _controller.GetComponent<IAttackRange>().ViewAngle,
