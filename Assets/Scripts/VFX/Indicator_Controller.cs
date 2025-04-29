@@ -24,7 +24,6 @@ public class Indicator_Controller : NetworkBehaviour
         (10f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
-
     private DecalProjector _decal_Circle_projector;
     private DecalProjector _decal_CircleBorder_projector;
     private GameObject _circle;

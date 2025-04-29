@@ -1,6 +1,4 @@
-using System;
-using System.Linq;
-using UnityEngine;
+using BehaviorDesigner.Runtime;
 
 public class BossMonsterInitalizeNGO : NetworkBehaviourBase
 {
@@ -17,5 +15,12 @@ public class BossMonsterInitalizeNGO : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         Managers.GameManagerEx.SetBossMonster(gameObject);
+
+        if (IsHost == false)
+        {
+            GetComponent<BossController>().enabled = false;
+            GetComponent<BossGolemStats>().enabled = false;
+            GetComponent<BehaviorTree>().enabled = false;
+        }
     }
 }
