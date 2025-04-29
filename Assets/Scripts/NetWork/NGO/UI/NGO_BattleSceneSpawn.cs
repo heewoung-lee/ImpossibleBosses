@@ -29,7 +29,7 @@ public class NGO_BattleSceneSpawn : NetworkBehaviourBase
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
         RequestSpawnToNPC(new List<(string, Vector3)>
         {
-           ("Prefabs/Enemy/Boss/Character/StoneGolem",new Vector3(40f,0f,25f))
+           ("Prefabs/Enemy/Boss/Character/StoneGolem",new Vector3(0f,0f,0f))
         });
     }
 

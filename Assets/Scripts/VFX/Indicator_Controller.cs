@@ -1,81 +1,81 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SocialPlatforms;
 
-public class Indicator_Controller : MonoBehaviour
+public class Indicator_Controller : NetworkBehaviour
 {
-
-    DecalProjector _decal_Circle_projector;
-    DecalProjector _decal_CircleBorder_projector;
-    GameObject _circle;
-    GameObject _circleBoader;
-
-    [Header("Properties")]
-    /// <summary>
-    /// The length of the arc.
-    /// </summary>
     [SerializeField]
-    [Min(0f)]
-    private float _radius = 1.0f;
-
-    /// <summary>
-    /// The angle offset for the cone in euler angles.
-    /// </summary>
+    private NetworkVariable<float> _radius = new NetworkVariable<float>
+        (1.0f,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server);
     [SerializeField]
-    private float _angle;
-
-    /// <summary>
-    /// The arc in euler angles. This is the amount that it's opened, 0 being closed and 360 being fully open.
-    /// </summary>
+    private NetworkVariable<float> _angle = new NetworkVariable<float>
+        (0f,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    [Range(0, 360)]
-    private float _arc = 30.0f;
-
-    /// <summary>
-    /// The progress of the fill.
-    /// </summary>
+    private NetworkVariable<float> _arc = new NetworkVariable<float>
+        (30f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    [Range(0, 1)]
-    private float _fillProgress;
-
-    /// <summary>
-    /// Depth to project the object.
-    /// </summary>
+    private NetworkVariable<float> _fillProgress = new NetworkVariable<float>
+        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    [Min(0)]
-    private float _depth = 10;
+    private NetworkVariable<float> _depth = new NetworkVariable<float>
+        (10f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+
+
+    private DecalProjector _decal_Circle_projector;
+    private DecalProjector _decal_CircleBorder_projector;
+    private GameObject _circle;
+    private GameObject _circleBoader;
 
     public float Radius
     {
-        get => _radius;
-        set => _radius = Mathf.Max(value, 0f);
+        get => _radius.Value;
+
+        set
+        {
+            if (IsHost == false) return;
+            _radius.Value = Mathf.Max(value, 0f);
+        }
     }
     public float Angle
     {
-        get => _angle;
-        set => _angle = value;
+        get => _angle.Value;
+        set
+        {
+            if (IsHost == false) return;
+            _angle.Value = value;
+        }
     }
     public float Arc
     {
-        get => _arc;
-        set => _arc = Mathf.Clamp(value, 0f, 360f);
+        get => _arc.Value;
+        set
+        {
+            if (IsHost == false) return;
+            _arc.Value = Mathf.Clamp(value, 0f, 360f);
+        }
     }
     public float FillProgress
     {
-        get => _fillProgress;
+        get => _fillProgress.Value;
         set
         {
-            _fillProgress = value;
-            _decal_Circle_projector.material.SetFloat(FillProgressShaderID, _fillProgress);
+            if (IsHost == false) return;
+            _fillProgress.Value = value;
+            _decal_Circle_projector.material.SetFloat(FillProgressShaderID, _fillProgress.Value);
         }
     }
 
-    public float Depth { 
-        get => _depth; 
-        set => _depth = value; 
+    public float Depth {
+        get => _depth.Value;
+        set
+        {
+            if (IsHost == false) return;
+            _depth.Value = value;
+        }
     }
 
     private static readonly int ColorShaderID = Shader.PropertyToID("_Color");
@@ -103,8 +103,8 @@ public class Indicator_Controller : MonoBehaviour
             return;
         
         Vector3 currentSize;
-        currentSize.x = _radius*2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
-        currentSize.y = _radius*2;
+        currentSize.x = _radius.Value*2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+        currentSize.y = _radius.Value *2;
         currentSize.z = Depth;
 
         decalProjector.size = currentSize;
@@ -114,9 +114,9 @@ public class Indicator_Controller : MonoBehaviour
 
         float arcAngleNormalized = 1f - Arc / 360;
         decalProjector.material.SetFloat(ArcShaderID, arcAngleNormalized);
-        float normalizedAngle = Mathf.Repeat((_angle - 90) % 360, 360) / 360;
+        float normalizedAngle = Mathf.Repeat((_angle.Value - 90) % 360, 360) / 360;
         decalProjector.material.SetFloat(AngleShaderID, normalizedAngle);
-        decalProjector.material.SetFloat(FillProgressShaderID, _fillProgress);
+        decalProjector.material.SetFloat(FillProgressShaderID, _fillProgress.Value);
     }
     private void ReassignMaterials()
     {

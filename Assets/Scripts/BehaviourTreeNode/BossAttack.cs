@@ -21,12 +21,17 @@ public class BossAttack : Action
     public override void OnStart()
     {
         base.OnStart();
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            return;
+
         _controller = Owner.GetComponent<BossGolemController>();
         _controller.UpdateAttack();
         _stats = _controller.GetComponent<BossStats>();
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _attack_indicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
-
+        
+        
+       GameObject attackIndicator = Managers.RelayManager.SpawnNetworkOBJ(_attack_indicator.Value.gameObject);
         _attack_indicator.Value.SetValue(_stats.ViewDistance, _stats.ViewAngle);
         _attack_indicator.Value.transform.SetParent(_controller.transform, false);
         _attack_indicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
