@@ -56,10 +56,7 @@ public class UI_Player_Info : UI_Scene
 
     private void InitalizePlayerInfo()
     {
-        _playerStats.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
         _playerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
-
-        _playerStats.Done_Base_Stats_Loading -= UpdateUIInfo;
         _playerStats.Done_Base_Stats_Loading += UpdateUIInfo;
     }
 

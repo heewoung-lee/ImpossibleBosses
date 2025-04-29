@@ -17,6 +17,7 @@ public class UI_Boss_HP : UI_Scene
     private Slider _hp_Slider;
     private TMP_Text _hp_Text;
     private BossStats _stats;
+    private int _currentHP;
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -43,8 +44,10 @@ public class UI_Boss_HP : UI_Scene
             _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
             _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
 
-            _stats.Event_Attacked -= SetHpUI;
             _stats.Event_Attacked += SetHpUI;
+
+            _stats.CurrentHPValueChangedEvent += SetCurrentHPUI;
+
         }
     }
 
@@ -54,6 +57,12 @@ public class UI_Boss_HP : UI_Scene
         _hp_Text.text = $"{currentHp} / {_stats.MaxHp}";
     }
 
+
+    public void SetCurrentHPUI(int currentHP)
+    {
+        StartCoroutine(AnimationHP(_stats.MaxHp - ));
+        _hp_Text.text = $"{currentHP} / {_stats.MaxHp}";
+    }
 
     IEnumerator AnimationHP(int damage)
     {

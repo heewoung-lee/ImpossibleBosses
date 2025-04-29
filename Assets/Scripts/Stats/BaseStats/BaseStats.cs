@@ -22,7 +22,7 @@ public struct CharacterBaseStat : INetworkSerializable
             speed = firstValue.speed - SecondValue.speed
         };
     }
-    public CharacterBaseStat(int hp, int maxHp,int attack, int defence, float speed)
+    public CharacterBaseStat(int hp, int maxHp, int attack, int defence, float speed)
     {
         this.hp = hp;
         this.maxHp = maxHp;
@@ -45,18 +45,98 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
     private bool _isCheckDead = false;
 
-    public Action<int,int> Event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
-    public Action<CharacterBaseStat> Done_Base_Stats_Loading;
 
-    public Action<int> CurrentHPValueChangedEvent;
-    public Action<int> MaxHPValueChangedEvent;
-    public Action<int> AttackValueChangedEvent;
-    public Action<int> DefenceValueChangedEvent;
-    public Action<float> MoveSpeedValueChangedEvent;
+    private Action<int, int> _event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
+    private Action<CharacterBaseStat> _done_Base_Stats_Loading;
 
+    private Action<int> _currentHPValueChangedEvent;
+    private Action<int> _maxHPValueChangedEvent;
+    private Action<int> _attackValueChangedEvent;
+    private Action<int> _defenceValueChangedEvent;
+    private Action<float> _moveSpeedValueChangedEvent;
+
+    public event Action<int, int> Event_Attacked
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _event_Attacked, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _event_Attacked, value);
+        }
+
+    }
+    public event Action<CharacterBaseStat> Done_Base_Stats_Loading
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _done_Base_Stats_Loading, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _done_Base_Stats_Loading, value);
+        }
+    }
+    
+    public event Action<int> CurrentHPValueChangedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _currentHPValueChangedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _currentHPValueChangedEvent, value);
+        }
+    }
+    public event Action<int> MaxHPValueChangedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _maxHPValueChangedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _maxHPValueChangedEvent, value);
+        }
+    }
+    public event Action<int> AttackValueChangedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _attackValueChangedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _attackValueChangedEvent, value);
+        }
+    }
+    public event Action<int> DefenceValueChangedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _defenceValueChangedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _defenceValueChangedEvent, value);
+        }
+    }
+    public event Action<float> MoveSpeedValueChangedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _moveSpeedValueChangedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _moveSpeedValueChangedEvent, value);
+        }
+    }
 
     private NetworkVariable<CharacterBaseStat> _characterBaseStatValue = new NetworkVariable<CharacterBaseStat>
-         (new CharacterBaseStat(0,0,0,0,0f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+         (new CharacterBaseStat(0, 0, 0, 0, 0f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> _characterHpValue = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> _characterMaxHpValue = new NetworkVariable<int>
@@ -77,7 +157,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
     [Rpc(SendTo.Server)]
-    public void SetPlayerBaseStatRpc(CharacterBaseStat baseStats,RpcParams rpcParams = default)
+    public void SetPlayerBaseStatRpc(CharacterBaseStat baseStats, RpcParams rpcParams = default)
     {
         _characterBaseStatValue.Value = baseStats;
     }
@@ -224,34 +304,34 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         Defence += addValue.defence;
         MoveSpeed += addValue.speed;
 
-        if(IsOwner)
-        DoneInitalizeCharacterBaseStatRpc(newValue); 
+        if (IsOwner)
+            DoneInitalizeCharacterBaseStatRpc(newValue);
     }
     private void HpValueChanged(int previousValue, int newValue)
     {
-        CurrentHPValueChangedEvent?.Invoke(newValue);
+        _currentHPValueChangedEvent?.Invoke(newValue);
         int damage = previousValue - newValue;
         if (damage > 0)
         {
-            if(IsHost)
-            OnAttackedClientRpc(damage, newValue);
+            if (IsHost)
+                OnAttackedClientRpc(damage, newValue);
         }
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
     {
-        MaxHPValueChangedEvent?.Invoke(newValue);
+        _maxHPValueChangedEvent?.Invoke(newValue);
     }
     private void AttackValueChanged(int previousValue, int newValue)
     {
-        AttackValueChangedEvent?.Invoke(newValue);
+        _attackValueChangedEvent?.Invoke(newValue);
     }
     private void DefenceValueChanged(int previousValue, int newValue)
     {
-        DefenceValueChangedEvent?.Invoke(newValue);
+        _defenceValueChangedEvent?.Invoke(newValue);
     }
     private void MoveSpeedValueChanged(float previousValue, float newValue)
     {
-        MoveSpeedValueChangedEvent?.Invoke(newValue);
+        _moveSpeedValueChangedEvent?.Invoke(newValue);
     }
     public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {
@@ -283,16 +363,16 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
     [Rpc(SendTo.ClientsAndHost)]
-    public void OnAttackedClientRpc(int damage,int currentHp)
+    public void OnAttackedClientRpc(int damage, int currentHp)
     {
-        Event_Attacked?.Invoke(damage,currentHp);
+        _event_Attacked?.Invoke(damage, currentHp);
     }
 
 
     [Rpc(SendTo.Owner)]
     public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat) //UI가 이벤트를 걸기도 전에 실행이 되어버린다.
     {
-        Done_Base_Stats_Loading?.Invoke(stat);
+        _done_Base_Stats_Loading?.Invoke(stat);
     }
 
     public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
