@@ -49,11 +49,11 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     private Action<int, int> _event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
     private Action<CharacterBaseStat> _done_Base_Stats_Loading;
 
-    private Action<int> _currentHPValueChangedEvent;
-    private Action<int> _maxHPValueChangedEvent;
-    private Action<int> _attackValueChangedEvent;
-    private Action<int> _defenceValueChangedEvent;
-    private Action<float> _moveSpeedValueChangedEvent;
+    private Action<int, int> _currentHPValueChangedEvent;
+    private Action<int, int> _maxHPValueChangedEvent;
+    private Action<int, int> _attackValueChangedEvent;
+    private Action<int, int> _defenceValueChangedEvent;
+    private Action<float, float> _moveSpeedValueChangedEvent;
 
     public event Action<int, int> Event_Attacked
     {
@@ -79,7 +79,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         }
     }
     
-    public event Action<int> CurrentHPValueChangedEvent
+    public event Action<int,int> CurrentHPValueChangedEvent
     {
         add
         {
@@ -90,7 +90,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             UniqueEventRegister.RemovedEvent(ref _currentHPValueChangedEvent, value);
         }
     }
-    public event Action<int> MaxHPValueChangedEvent
+    public event Action<int,int> MaxHPValueChangedEvent
     {
         add
         {
@@ -101,7 +101,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             UniqueEventRegister.RemovedEvent(ref _maxHPValueChangedEvent, value);
         }
     }
-    public event Action<int> AttackValueChangedEvent
+    public event Action<int,int> AttackValueChangedEvent
     {
         add
         {
@@ -112,7 +112,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             UniqueEventRegister.RemovedEvent(ref _attackValueChangedEvent, value);
         }
     }
-    public event Action<int> DefenceValueChangedEvent
+    public event Action<int,int> DefenceValueChangedEvent
     {
         add
         {
@@ -123,7 +123,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             UniqueEventRegister.RemovedEvent(ref _defenceValueChangedEvent, value);
         }
     }
-    public event Action<float> MoveSpeedValueChangedEvent
+    public event Action<float,float> MoveSpeedValueChangedEvent
     {
         add
         {
@@ -309,7 +309,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     private void HpValueChanged(int previousValue, int newValue)
     {
-        _currentHPValueChangedEvent?.Invoke(newValue);
+        _currentHPValueChangedEvent?.Invoke(previousValue,newValue);
         int damage = previousValue - newValue;
         if (damage > 0)
         {
@@ -319,19 +319,19 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
     {
-        _maxHPValueChangedEvent?.Invoke(newValue);
+        _maxHPValueChangedEvent?.Invoke(previousValue, newValue);
     }
     private void AttackValueChanged(int previousValue, int newValue)
     {
-        _attackValueChangedEvent?.Invoke(newValue);
+        _attackValueChangedEvent?.Invoke(previousValue, newValue);
     }
     private void DefenceValueChanged(int previousValue, int newValue)
     {
-        _defenceValueChangedEvent?.Invoke(newValue);
+        _defenceValueChangedEvent?.Invoke(previousValue,newValue);
     }
     private void MoveSpeedValueChanged(float previousValue, float newValue)
     {
-        _moveSpeedValueChangedEvent?.Invoke(newValue);
+        _moveSpeedValueChangedEvent?.Invoke(previousValue,newValue);
     }
     public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {

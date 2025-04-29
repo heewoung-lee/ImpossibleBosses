@@ -14,17 +14,11 @@ public class SocketEventManager
     {
         add
         {
-            if (_disconnectRelayEvent == null || !_disconnectRelayEvent.GetInvocationList().Contains(value))
-                _disconnectRelayEvent += value;
+          UniqueEventRegister.AddSingleEvent(ref _disconnectRelayEvent, value);
         }
         remove
         {
-            if (_disconnectRelayEvent == null || !_disconnectRelayEvent.GetInvocationList().Contains(value))
-            {
-                Debug.LogWarning($"[SocketEvent] Remove 실패: {value?.Method.Name}");
-                return;
-            }
-            _disconnectRelayEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _disconnectRelayEvent, value);
         }
     }
 
@@ -32,17 +26,11 @@ public class SocketEventManager
     {
         add
         {
-            if (_logoutVivoxEvent == null || !_logoutVivoxEvent.GetInvocationList().Contains(value))
-                _logoutVivoxEvent += value;
+            UniqueEventRegister.AddSingleEvent(ref _logoutVivoxEvent, value);
         }
         remove
         {
-            if (_logoutVivoxEvent == null || !_logoutVivoxEvent.GetInvocationList().Contains(value))
-            {
-                Debug.LogWarning($"[SocketEvent] Remove 실패: {value?.Method.Name}");
-                return;
-            }
-            _logoutVivoxEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _logoutVivoxEvent, value);
         }
     }
 
@@ -50,17 +38,11 @@ public class SocketEventManager
     {
         add
         {
-            if (_logoutAllLeaveLobbyEvent == null || !_logoutAllLeaveLobbyEvent.GetInvocationList().Contains(value))
-                _logoutAllLeaveLobbyEvent += value;
+            UniqueEventRegister.AddSingleEvent(ref _logoutAllLeaveLobbyEvent, value);
         }
         remove
         {
-            if (_logoutAllLeaveLobbyEvent == null || !_logoutAllLeaveLobbyEvent.GetInvocationList().Contains(value))
-            {
-                Debug.LogWarning($"[SocketEvent] Remove 실패: {value?.Method.Name}");
-                return;
-            }
-            _logoutAllLeaveLobbyEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _logoutAllLeaveLobbyEvent, value);
         }
     }
 
@@ -68,17 +50,11 @@ public class SocketEventManager
     {
         add
         {
-            if (_donePlayerSpawnEvent == null || !_donePlayerSpawnEvent.GetInvocationList().Contains(value))
-                _donePlayerSpawnEvent += value;
+            UniqueEventRegister.AddSingleEvent(ref _donePlayerSpawnEvent, value);
         }
         remove
         {
-            if (_donePlayerSpawnEvent == null || !_donePlayerSpawnEvent.GetInvocationList().Contains(value))
-            {
-                Debug.LogWarning($"[SocketEvent] Remove 실패: {value?.Method.Name}");
-                return;
-            }
-            _donePlayerSpawnEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _donePlayerSpawnEvent, value);
         }
     }
 

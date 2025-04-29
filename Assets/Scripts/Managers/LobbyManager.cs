@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -55,58 +56,33 @@ public class LobbyManager : IManagerEventInitailize
     {
         add
         {
-
-            if (_lobbyLoading != null && _lobbyLoading.GetInvocationList().Contains(value) == true)
-                return;
-
-            _lobbyLoading += value;
+            UniqueEventRegister.AddSingleEvent(ref _lobbyLoading, value);
         }
         remove
         {
-            if (_lobbyLoading == null || _lobbyLoading.GetInvocationList().Contains(value) == false)
-            {
-                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
-                return;
-            }
-            _lobbyLoading -= value;
+            UniqueEventRegister.RemovedEvent(ref _lobbyLoading, value);
         }
     }
     public event Action InitDoneEvent
     {
         add
         {
-            if (_initDoneEvent != null && _initDoneEvent.GetInvocationList().Contains(value) == true)
-                return;
-
-            _initDoneEvent += value;
+            UniqueEventRegister.AddSingleEvent(ref _initDoneEvent, value);
         }
         remove
         {
-            if (_initDoneEvent == null || _initDoneEvent.GetInvocationList().Contains(value) == false)
-            {
-                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
-                return;
-            }
-            _initDoneEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _initDoneEvent, value);
         }
     }
     public event Action HostChageEvent
     {
         add
         {
-            if (_hostChangeEvent != null && _hostChangeEvent.GetInvocationList().Contains(value) == true)
-                return;
-
-            _hostChangeEvent += value;
+            UniqueEventRegister.AddSingleEvent(ref _hostChangeEvent, value);
         }
         remove
         {
-            if (_hostChangeEvent == null || _hostChangeEvent.GetInvocationList().Contains(value) == false)
-            {
-                Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
-                return;
-            }
-            _hostChangeEvent -= value;
+            UniqueEventRegister.RemovedEvent(ref _hostChangeEvent, value);
         }
     }
 
@@ -947,7 +923,6 @@ public class LobbyManager : IManagerEventInitailize
         }
     }
 
-
     #region TestDebugCode
     public void SetPlayerLoginInfo(PlayerIngameLoginInfo info)
     {
@@ -988,5 +963,8 @@ public class LobbyManager : IManagerEventInitailize
             Debug.Log($"¿¡·¯{ex}");
         }
     }
+
+
+
     #endregion
 }

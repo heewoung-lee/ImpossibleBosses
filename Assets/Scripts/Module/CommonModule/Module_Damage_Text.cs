@@ -7,7 +7,6 @@ public class Module_Damage_Text : MonoBehaviour
     private void Start()
     {
         BaseStats stat = GetComponent<BaseStats>();
-        stat.Event_Attacked -= ShowDamageText_UI;
         stat.Event_Attacked += ShowDamageText_UI;
     }
     public void ShowDamageText_UI(int damage, int currentHp)

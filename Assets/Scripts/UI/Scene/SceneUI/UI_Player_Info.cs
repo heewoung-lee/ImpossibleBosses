@@ -60,7 +60,7 @@ public class UI_Player_Info : UI_Scene
         _playerStats.Done_Base_Stats_Loading += UpdateUIInfo;
     }
 
-    private void UpdateCurrentHPValue(int currentHP)
+    private void UpdateCurrentHPValue(int preCurrentHp, int currentHP)
     {
         if (_playerStats.MaxHp == default)
             return;

@@ -44,24 +44,14 @@ public class UI_Boss_HP : UI_Scene
             _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
             _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
 
-            _stats.Event_Attacked += SetHpUI;
-
-            _stats.CurrentHPValueChangedEvent += SetCurrentHPUI;
-
+            _stats.CurrentHPValueChangedEvent += _stats_CurrentHPValueChangedEvent;
         }
     }
 
-    public void SetHpUI(int damage, int currentHp)
+    private void _stats_CurrentHPValueChangedEvent(int preCurrentHp, int currentHp)
     {
-        StartCoroutine(AnimationHP(damage));
+        StartCoroutine(AnimationHP(preCurrentHp- currentHp));
         _hp_Text.text = $"{currentHp} / {_stats.MaxHp}";
-    }
-
-
-    public void SetCurrentHPUI(int currentHP)
-    {
-        StartCoroutine(AnimationHP(_stats.MaxHp - ));
-        _hp_Text.text = $"{currentHP} / {_stats.MaxHp}";
     }
 
     IEnumerator AnimationHP(int damage)
