@@ -34,7 +34,7 @@ public class BossSkill2 : Action
             _controller.TryGetComponent(out BossStats stats);
             Attack_Range = stats.ViewDistance;
         }
-        _attackIndicator.Value.SetValue(Attack_Range, 360);
+        //_attackIndicator.Value.SetValue(Attack_Range, 360);
         _attackIndicator.Value.transform.SetParent(_controller.transform, false);
         _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
 

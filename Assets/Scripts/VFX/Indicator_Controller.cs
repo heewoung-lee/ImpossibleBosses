@@ -1,33 +1,43 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SocialPlatforms;
 
-public class Indicator_Controller : NetworkBehaviour
+public class Indicator_Controller : NetworkBehaviourBase
 {
+    enum DecalProjectors
+    {
+        Circle,
+        CircleBorder
+    }
+
+
+    Action doneEvent;
+
     [SerializeField]
     private NetworkVariable<float> _radius = new NetworkVariable<float>
-        (1.0f,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server);
+        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
     private NetworkVariable<float> _angle = new NetworkVariable<float>
-        (0f,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
     private NetworkVariable<float> _arc = new NetworkVariable<float>
-        (30f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
     private NetworkVariable<float> _fillProgress = new NetworkVariable<float>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
-    private NetworkVariable<float> _depth = new NetworkVariable<float>
-        (10f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+    private NetworkVariable<Vector3> _callerPosition = new NetworkVariable<Vector3>
+        (Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField]
+    private NetworkVariable<Quaternion> _callerLotation = new NetworkVariable<Quaternion>
+    (Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private DecalProjector _decal_Circle_projector;
     private DecalProjector _decal_CircleBorder_projector;
-    private GameObject _circle;
-    private GameObject _circleBoader;
 
     public float Radius
     {
@@ -67,13 +77,26 @@ public class Indicator_Controller : NetworkBehaviour
             _decal_Circle_projector.material.SetFloat(FillProgressShaderID, _fillProgress.Value);
         }
     }
+    public Vector3 CallerPosition
+    {
+        get => _callerPosition.Value;
 
-    public float Depth {
-        get => _depth.Value;
         set
         {
             if (IsHost == false) return;
-            _depth.Value = value;
+            _callerPosition.Value = value;
+        }
+    }
+    public Quaternion CallerLocation
+    {
+        get
+        {
+            return _callerLotation.Value;
+        }
+        set
+        {
+            if (IsHost == false) return;
+            _callerLotation.Value = value;
         }
     }
 
@@ -87,12 +110,40 @@ public class Indicator_Controller : NetworkBehaviour
 
     private static readonly int AngleShaderID = Shader.PropertyToID("_Angle");
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
-        _circle = transform.Find("Circle").gameObject;
-        _decal_Circle_projector = _circle.GetComponent<DecalProjector>();
-         _circleBoader = transform.Find("CircleBorder").gameObject;
-        _decal_CircleBorder_projector = _circleBoader.GetComponent<DecalProjector>();
+        base.OnNetworkSpawn();
+        UpdateProjectors();
+        _fillProgress.OnValueChanged += ONChangedFillProgressValue;
+        _callerPosition.OnValueChanged += ONChangedCallerPositionValue;
+        _callerLotation.OnValueChanged += ONChangedCallerRotationValue;
+    }
+
+    private void ONChangedCallerRotationValue(Quaternion previousValue, Quaternion newValue)
+    {
+        transform.rotation = newValue;
+    }
+
+    private void ONChangedCallerPositionValue(Vector3 previousValue, Vector3 newValue)
+    {
+        transform.position += newValue;
+    }
+
+    private void ONChangedFillProgressValue(float previousValue, float newValue)
+    {
+        UpdateProjectors();
+    }
+
+    protected override void StartInit()
+    {
+    }
+
+    protected override void AwakeInit()
+    {
+        Bind<DecalProjector>(typeof(DecalProjectors));
+        _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
+        _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
+        GetComponent<Poolable>().WorldPositionStays = false;
         ReassignMaterials();
     }
 
@@ -100,11 +151,11 @@ public class Indicator_Controller : NetworkBehaviour
     {
         if (decalProjector == null)
             return;
-        
+
         Vector3 currentSize;
-        currentSize.x = _radius.Value*2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
-        currentSize.y = _radius.Value *2;
-        currentSize.z = Depth;
+        currentSize.x = Radius * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+        currentSize.y = Radius * 2;
+        currentSize.z = Radius;
 
         decalProjector.size = currentSize;
 
@@ -113,9 +164,9 @@ public class Indicator_Controller : NetworkBehaviour
 
         float arcAngleNormalized = 1f - Arc / 360;
         decalProjector.material.SetFloat(ArcShaderID, arcAngleNormalized);
-        float normalizedAngle = Mathf.Repeat((_angle.Value - 90) % 360, 360) / 360;
+        float normalizedAngle = Mathf.Repeat((Angle - 90) % 360, 360) / 360;
         decalProjector.material.SetFloat(AngleShaderID, normalizedAngle);
-        decalProjector.material.SetFloat(FillProgressShaderID, _fillProgress.Value);
+        decalProjector.material.SetFloat(FillProgressShaderID, FillProgress);
     }
     private void ReassignMaterials()
     {
@@ -132,30 +183,48 @@ public class Indicator_Controller : NetworkBehaviour
         UpdateDecalProjector(_decal_CircleBorder_projector);
     }
 
-    public void SetValue(float radius, float arc)
+    public void SetValue(float radius, float arc, Transform callerTr, Action anotherOption = null)
     {
         Radius = radius;
         Arc = arc;
+
+        //Vector3 currentSize;
+        //currentSize.x = radius * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+        //currentSize.y = radius * 2;
+        //currentSize.z = Depth;
+        CallerPosition = callerTr.position;
+        CallerLocation = callerTr.rotation;
+        doneEvent += anotherOption;
+        StartCoroutine(Play_Indicator());
+    }
+
+    IEnumerator Play_Indicator()
+    {
+        float _charging = 0f;
+        while(FillProgress < 1)
+        {
+            _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
+            FillProgress = _charging;
+            UpdateProjectors();
+            yield return null;
+        }
+        doneEvent?.Invoke();
+        FillProgress = 0f;
+        _charging = 0f;
+        Managers.ResourceManager.DestroyObject(gameObject);
+
     }
     private void OnValidate() => UpdateProjectors();
 #if UNITY_EDITOR
     // 에디터에서만 유효한 코드
     private void Reset()
     {
-
-        // 오브젝트 참조 초기화 (원하는 방식으로 초기화)
-        _circle = transform.Find("Circle").gameObject;
-        _decal_Circle_projector = _circle.GetComponent<DecalProjector>();
-        _circleBoader = transform.Find("CircleBorder").gameObject;
-        _decal_CircleBorder_projector = _circleBoader.GetComponent<DecalProjector>();
-
-        if (_circle)
-            _decal_Circle_projector = _circle.GetOrAddComponent<DecalProjector>();
-        if (_circleBoader)
-            _decal_CircleBorder_projector = _circleBoader.GetOrAddComponent<DecalProjector>();
-
+        Bind<DecalProjector>(typeof(DecalProjectors));
+        _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
+        _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
         // Reset 후, 바로 Projector 업데이트
         UpdateProjectors();
     }
+
 #endif
 }

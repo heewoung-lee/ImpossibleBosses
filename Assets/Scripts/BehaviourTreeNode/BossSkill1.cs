@@ -62,7 +62,7 @@ public class BossSkill1 : Action
         Managers.RelayManager.SpawnNetworkOBJ(projector.gameObject);
         //projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
         projector.transform.position = targetPlayer.transform.position;
-        projector.SetValue(2, 360);
+        //projector.SetValue(2, 360);
         projector.FillProgress = 0;
         StartCoroutine(startProjector(projector, targetPlayer));
     }

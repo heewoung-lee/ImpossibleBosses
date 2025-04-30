@@ -162,6 +162,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _radius:
+    m_InternalValue: 0
+  _angle:
+    m_InternalValue: 0
+  _arc:
+    m_InternalValue: 0
+  _fillProgress:
+    m_InternalValue: 0
+  _depth:
+    m_InternalValue: 0
+  _callerPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  _callerLotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &7763281975654128504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2606788948
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
