@@ -31,11 +31,8 @@ public class BossAttack : Action
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
         _attack_indicator.Value = _indicator_controller;
-        Indicator_Controller attackIndicator = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
-        //여기에 호출자의 정보도 집어넣는다. Host만
-
-        attackIndicator.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
-
+        _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
+        _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
 
         _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
                _controller.GetComponent<IAttackRange>().ViewAngle,

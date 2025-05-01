@@ -53,8 +53,8 @@ public class BossSkill2 : Action
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
         _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
 
-        _attackIndicator.Value.FillProgress = _charging;
-        _attackIndicator.Value.UpdateProjectors();
+        //_attackIndicator.Value.FillProgress = _charging;
+        //_attackIndicator.Value.UpdateProjectors();
 
         _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill2State);
         if (_isAttackReady && _charging >= 1)

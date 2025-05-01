@@ -63,7 +63,7 @@ public class BossSkill1 : Action
         //projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
         projector.transform.position = targetPlayer.transform.position;
         //projector.SetValue(2, 360);
-        projector.FillProgress = 0;
+        //projector.FillProgress = 0;
         StartCoroutine(startProjector(projector, targetPlayer));
     }
 
@@ -80,8 +80,8 @@ public class BossSkill1 : Action
             float fillRatio = Mathf.Clamp01(elaspedTime / _attackDelayTime);
 
             // 인디케이터 채우기
-            projector.FillProgress = fillRatio;
-            projector.UpdateProjectors();
+            //projector.FillProgress = fillRatio;
+            //projector.UpdateProjectors();
 
             yield return null;
         }
