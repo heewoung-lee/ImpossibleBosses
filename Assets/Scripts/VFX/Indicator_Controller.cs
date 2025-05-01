@@ -18,7 +18,6 @@ public class Indicator_Controller : NetworkBehaviourBase
         CircleBorder
     }
 
-
     Action doneEvent;
 
     [SerializeField]
@@ -30,9 +29,6 @@ public class Indicator_Controller : NetworkBehaviourBase
     [SerializeField]
     private NetworkVariable<float> _arc = new NetworkVariable<float>
         (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
-    private NetworkVariable<float> _fillProgress = new NetworkVariable<float>
-        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField]
     private NetworkVariable<Vector3> _callerPosition = new NetworkVariable<Vector3>
         (Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -66,15 +62,6 @@ public class Indicator_Controller : NetworkBehaviourBase
         {
             if (IsServer == false) return;
             _arc.Value = Mathf.Clamp(value, 0f, 360f);
-        }
-    }
-    public float FillProgress
-    {
-        get => _fillProgress.Value;
-        private set
-        {
-            if (IsServer == false) return;
-            _fillProgress.Value = value;
         }
     }
     public Vector3 CallerPosition
@@ -131,22 +118,13 @@ public class Indicator_Controller : NetworkBehaviourBase
         _arc.OnValueChanged += OnArcValueChagned;
         _angle.OnValueChanged += OnAngleValueChanged;
         _callerPosition.OnValueChanged += OnCallerPositionChanged;
-        _fillProgress.OnValueChanged += OnFillProgressValueChanged;
     }
-    private void OnFillProgressValueChanged(float previousValue, float newValue)
-    {
-        UpdateDecalFillProgressProjector();
-        _decal_Circle_projector.material.SetFloat(FillProgressShaderID, _fillProgress.Value);
-    }
-
     private void OnArcValueChagned(float previousValue, float newValue)
     {
         float arcAngleNormalized = 1f - newValue / 360;
         _decal_Circle_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
         _decal_CircleBorder_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
     }
-
-
     private void OnCallerPositionChanged(Vector3 previousValue, Vector3 newValue)
     {
         transform.position = newValue;
@@ -174,10 +152,10 @@ public class Indicator_Controller : NetworkBehaviourBase
             _decal_CircleBorder_projector.material = new Material(_decal_CircleBorder_projector.material);
     }
 
-    private void UpdateDecalFillProgressProjector()
+    private void UpdateDecalFillProgressProjector(float fillAmount)
     {
-        _decal_Circle_projector.material.SetFloat(FillProgressShaderID, FillProgress);
-        _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, FillProgress);
+        _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
+        _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
     public void SetValue(float radius, float arc, Transform callerTr, Action anotherOption = null)
     {
@@ -190,59 +168,14 @@ public class Indicator_Controller : NetworkBehaviourBase
 
     IEnumerator Play_Indicator()
     {
-        float _charging = 0f;
-        while (FillProgress < 1)
+        float fillAmount = 0f;
+        while (fillAmount < 1)
         {
-            _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
-            FillProgress = _charging;
+            fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
+            UpdateDecalFillProgressProjector(fillAmount);
             yield return null;
         }
         doneEvent?.Invoke();
         Managers.ResourceManager.DestroyObject(gameObject);
     }
-
-    private void OnDisable()
-    {
-        if (IsServer)           // 서버(호스트)에서만 변수 값을 건드린다
-        {
-            _radius.Value = 0;
-            _arc.Value = 0;
-            _angle.Value = 0;
-            _callerPosition.Value = Vector3.zero;
-            _fillProgress.Value = 0;
-        }
-
-        // 시각효과도 같이 리셋
-        OnRadiusValueChanged(0, 0);
-        OnArcValueChagned(0, 0);
-        OnAngleValueChanged(0, 0);
-        OnCallerPositionChanged(Vector3.zero, Vector3.zero);
-        OnFillProgressValueChanged(0, 0);
-    }
-    //public override void OnNetworkDespawn()
-    //{
-    //    base.OnNetworkDespawn();
-    //    CallerPosition = Vector3.zero;
-    //    transform.position = Vector3.zero;
-    //    FillProgress = 0f;
-    //    Radius = 0;
-    //    Arc = 0;
-    //    Angle = 0;
-    //}
-    //private void OnDisable()
-    //{
-    //    CallerPosition = Vector3.zero;
-    //    transform.position = Vector3.zero;
-    //    FillProgress = 0f;
-    //    Radius = 0;
-    //    Arc = 0;
-    //    Angle = 0;
-
-
-    //    //OnCallerPositionChanged(CallerPosition, Vector3.zero);
-    //    //OnRadiusValueChanged(Radius, 0f);
-    //    //OnArcValueChagned(Arc,0f);
-    //    //OnAngleValueChanged(Angle, 0f);
-    //    //OnFillProgressValueChanged(FillProgress, 0f);
-    //}
 }

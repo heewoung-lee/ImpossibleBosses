@@ -34,6 +34,8 @@ public class BossAttack : Action
         _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
         _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
 
+
+
         _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
                _controller.GetComponent<IAttackRange>().ViewAngle,
                _controller.GetComponent<IAttackRange>().ViewDistance,

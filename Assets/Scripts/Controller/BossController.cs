@@ -11,6 +11,21 @@ public abstract class BossController : BaseController
 
     protected BehaviorTree tree;
 
+    private Action<float> _animationSpeedChanged;
+
+    public event Action<float> AnimationSpeedChanged
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _animationSpeedChanged,value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _animationSpeedChanged, value);
+        }
+    }
+
+
     protected override void AwakeInit()
     {
         tree = GetComponent<BehaviorTree>();
@@ -27,6 +42,7 @@ public abstract class BossController : BaseController
         float attack_Pre_Time = attackPreTime;
 
         Anim.speed = Mathf.Lerp(startAnimSpeed, 0, elapsedTime / (animLength * attack_Pre_Time));
+        _animationSpeedChanged?.Invoke(Anim.speed);
         if (Anim.speed <= 0.05f)
         {
             Anim.speed = 0;
