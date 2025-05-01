@@ -168,6 +168,14 @@ public class Indicator_Controller : NetworkBehaviourBase
         decalProjector.material.SetFloat(AngleShaderID, normalizedAngle);
         decalProjector.material.SetFloat(FillProgressShaderID, FillProgress);
     }
+
+    private void UpdateDecalFillProgressProjector()
+    {
+        _decal_Circle_projector.material.SetFloat(FillProgressShaderID, FillProgress);
+        _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, FillProgress);
+    }
+
+
     private void ReassignMaterials()
     {
         if (_decal_Circle_projector != null)
@@ -205,7 +213,7 @@ public class Indicator_Controller : NetworkBehaviourBase
         {
             _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
             FillProgress = _charging;
-            UpdateProjectors();
+            UpdateDecalFillProgressProjector();
             yield return null;
         }
         doneEvent?.Invoke();
