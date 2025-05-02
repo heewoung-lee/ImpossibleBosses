@@ -83,29 +83,11 @@ public class Indicator_Controller : NetworkBehaviourBase
     private static readonly int ArcShaderID = Shader.PropertyToID("_Arc");
 
     private static readonly int AngleShaderID = Shader.PropertyToID("_Angle");
-    private void OnRadiusValueChanged(float previousValue, float newValue)
-    {
-        Vector3 currentSize;
-        currentSize.x = newValue * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
-        currentSize.y = newValue * 2;
-        currentSize.z = DEPTH;
 
-        _decal_Circle_projector.size = currentSize;
-        _decal_CircleBorder_projector.size = currentSize;
-    }
-
-    private void OnAngleValueChanged(float previousValue, float newValue)
-    {
-        float normalizedAngle = Mathf.Repeat((newValue - 90) % 360, 360) / 360;
-        _decal_CircleBorder_projector.material.SetFloat(AngleShaderID, normalizedAngle);
-        _decal_Circle_projector.material.SetFloat(AngleShaderID, normalizedAngle);
-    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         SubscribeValueEvents();
-
-        var net = GetComponent<NetworkObject>();
 
         OnCallerPositionChanged(Vector3.zero, CallerPosition);
         OnRadiusValueChanged(0f, Radius);
@@ -131,7 +113,23 @@ public class Indicator_Controller : NetworkBehaviourBase
     {
         transform.position = newValue;
     }
+    private void OnRadiusValueChanged(float previousValue, float newValue)
+    {
+        Vector3 currentSize;
+        currentSize.x = newValue * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+        currentSize.y = newValue * 2;
+        currentSize.z = DEPTH;
 
+        _decal_Circle_projector.size = currentSize;
+        _decal_CircleBorder_projector.size = currentSize;
+    }
+
+    private void OnAngleValueChanged(float previousValue, float newValue)
+    {
+        float normalizedAngle = Mathf.Repeat((newValue - 90) % 360, 360) / 360;
+        _decal_CircleBorder_projector.material.SetFloat(AngleShaderID, normalizedAngle);
+        _decal_Circle_projector.material.SetFloat(AngleShaderID, normalizedAngle);
+    }
     protected override void StartInit()
     {
     }
@@ -142,6 +140,7 @@ public class Indicator_Controller : NetworkBehaviourBase
         _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
         _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
         GetComponent<Poolable>().WorldPositionStays = false;
+        GetComponent<NGO_PoolingInitalize_Base>().PoolObjectReleaseEvent += ReleseProjector;
         ReassignMaterials();
     }
 
@@ -179,5 +178,17 @@ public class Indicator_Controller : NetworkBehaviourBase
         }
         doneEvent?.Invoke();
         Managers.ResourceManager.DestroyObject(gameObject);
+    }
+
+
+    private void ReleseProjector()
+    {
+        Debug.Log("이거 찍힘?");
+        CallerPosition = Vector3.zero;
+        Radius = 0f;
+        Arc = 0f;
+        Angle = 0f;
+        UpdateDecalFillProgressProjector(0f);
+        transform.position = Vector3.zero;
     }
 }

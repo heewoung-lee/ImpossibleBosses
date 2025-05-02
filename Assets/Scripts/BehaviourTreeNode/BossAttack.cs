@@ -31,8 +31,8 @@ public class BossAttack : Action
         _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
         _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
         _attack_indicator.Value = _indicator_controller;
-        _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
         _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
+        _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
 
 
 
