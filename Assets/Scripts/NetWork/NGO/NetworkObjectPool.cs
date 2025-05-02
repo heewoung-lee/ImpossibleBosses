@@ -62,9 +62,9 @@ public class NetworkObjectPool : NetworkBehaviour
         return networkObject;
     }
 
-    public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)
+    public void ReturnNetworkObject(NetworkObject networkObject)
     {
-        if (prefab.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
+        if (networkObject.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
         {
             poolingInitalize_Base.OnPoolRelease();
             m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
@@ -136,7 +136,6 @@ public class PooledPrefabInstanceHandler : INetworkPrefabInstanceHandler
     }
     public void Destroy(NetworkObject networkObject)
     {
-        GameObject prefab = Managers.ResourceManager.Load<GameObject>(m_PrefabPath);
-        m_NetworkObjectPool.ReturnNetworkObject(networkObject, prefab);
+        m_NetworkObjectPool.ReturnNetworkObject(networkObject);
     }
 }
