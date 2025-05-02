@@ -51,7 +51,7 @@ public class Indicator_Controller : NetworkBehaviourBase
         get => _angle.Value;
         private set
         {
-           if (IsServer == false) return;
+            if (IsServer == false) return;
             _angle.Value = value;
         }
     }
@@ -105,7 +105,9 @@ public class Indicator_Controller : NetworkBehaviourBase
         base.OnNetworkSpawn();
         SubscribeValueEvents();
 
-        OnCallerPositionChanged(Vector3.zero,CallerPosition);
+        var net = GetComponent<NetworkObject>();
+
+        OnCallerPositionChanged(Vector3.zero, CallerPosition);
         OnRadiusValueChanged(0f, Radius);
         OnArcValueChagned(0f, Arc);
         OnAngleValueChanged(0f, Angle);
@@ -140,9 +142,9 @@ public class Indicator_Controller : NetworkBehaviourBase
         _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
         _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
         GetComponent<Poolable>().WorldPositionStays = false;
-
         ReassignMaterials();
     }
+
     private void ReassignMaterials()
     {
         if (_decal_Circle_projector != null)
@@ -171,9 +173,9 @@ public class Indicator_Controller : NetworkBehaviourBase
         float fillAmount = 0f;
         while (fillAmount < 1)
         {
+            yield return null;
             fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
             UpdateDecalFillProgressProjector(fillAmount);
-            yield return null;
         }
         doneEvent?.Invoke();
         Managers.ResourceManager.DestroyObject(gameObject);

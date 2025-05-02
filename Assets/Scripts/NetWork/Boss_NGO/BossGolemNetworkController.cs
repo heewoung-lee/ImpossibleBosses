@@ -1,7 +1,9 @@
 using BehaviorDesigner.Runtime;
+using JetBrains.Annotations;
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BossGolemNetworkController : NetworkBehaviourBase
 {
@@ -45,9 +47,16 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 
         if (IsHost == false)
         {
+            InitBossOnClient();
+        }
+
+
+        void InitBossOnClient()
+        {
             GetComponent<BossController>().enabled = false;
             GetComponent<BossGolemStats>().enabled = false;
             GetComponent<BehaviorTree>().enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
         }
     }
 
@@ -55,4 +64,5 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     {
         _controller.HostAnimChange(newValue);
     }
+
 }

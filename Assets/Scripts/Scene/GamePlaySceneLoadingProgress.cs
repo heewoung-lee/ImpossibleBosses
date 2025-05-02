@@ -61,7 +61,6 @@ public class GamePlaySceneLoadingProgress : UI_Base
 
     private IEnumerator LoadingSceneProcess(int playerCount)
     {
-        Debug.Log("프로그레스 호출");
         float pretimer = 0f;
         float aftertimer = 0f;
         float processLength = 0.9f / _totalPlayerCount;

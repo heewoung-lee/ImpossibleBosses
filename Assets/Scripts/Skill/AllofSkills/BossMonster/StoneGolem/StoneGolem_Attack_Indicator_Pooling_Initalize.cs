@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -18,6 +19,11 @@ public class StoneGolem_Attack_Indicator_Pooling_Initalize : NGO_PoolingInitaliz
     public override void SetTargetInitalze(NetworkObject targetNgo)
     {
         _targetNGO = targetNgo;
+    }
+    public override void OnPoolRelease()
+    {
+        base.OnPoolRelease();
+
     }
 
 }
