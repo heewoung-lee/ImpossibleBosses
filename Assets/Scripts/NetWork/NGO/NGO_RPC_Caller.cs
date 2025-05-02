@@ -178,7 +178,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         GameObject obj = Managers.ResourceManager.Instantiate(path);
         obj.transform.position = position;
         NetworkObject networkObj;
-        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
+        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj,parentTr,position).GetComponent<NetworkObject>();
         return networkObj;
     }
 

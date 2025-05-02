@@ -105,7 +105,7 @@ public class BossGolemController : BossController
     {
     }
 
-    public void HostAnimChange(float animSpeed)
+    public void HostAnimSpeedChange(float animSpeed)
     {
         Anim.speed = animSpeed;
     }

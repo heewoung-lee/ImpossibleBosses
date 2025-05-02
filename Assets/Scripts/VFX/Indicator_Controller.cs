@@ -183,7 +183,6 @@ public class Indicator_Controller : NetworkBehaviourBase
 
     private void ReleseProjector()
     {
-        Debug.Log("ÀÌ°Å ÂïÈû?");
         CallerPosition = Vector3.zero;
         Radius = 0f;
         Arc = 0f;

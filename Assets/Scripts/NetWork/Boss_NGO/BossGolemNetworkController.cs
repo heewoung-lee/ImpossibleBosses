@@ -7,15 +7,19 @@ using UnityEngine.AI;
 
 public class BossGolemNetworkController : NetworkBehaviourBase
 {
-    private BossGolemController _controller;
+    private BehaviorTree _bossBehaviourTree;
+    private BossAttack _bossAttackNode;
+    private BossGolemController _bossController;
 
     private NetworkVariable<float> _animSpeed = new NetworkVariable<float>
     (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
     protected override void AwakeInit()
     {
-        _controller = GetComponent<BossGolemController>();
-        _controller.AnimationSpeedChanged += AnimationSpeedChanged;
+        _bossController= GetComponent<BossGolemController>();
+        _bossBehaviourTree = GetComponent<BehaviorTree>();
+        _bossAttackNode = _bossBehaviourTree.FindTask<BossAttack>();
+        _bossAttackNode.AnimationSpeedChanged += AnimationSpeedChanged;
+
     }
     public float AnimSpeed
     {
@@ -42,15 +46,12 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         Managers.GameManagerEx.SetBossMonster(gameObject);
-        //_animSpeed.OnValueChanged += OnAnimSpeedValueChanged;
-
+        _animSpeed.OnValueChanged += OnAnimSpeedValueChanged;
 
         if (IsHost == false)
         {
             InitBossOnClient();
         }
-
-
         void InitBossOnClient()
         {
             GetComponent<BossController>().enabled = false;
@@ -62,7 +63,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 
     private void OnAnimSpeedValueChanged(float previousValue, float newValue)
     {
-        _controller.HostAnimChange(newValue);
+        _bossController.HostAnimSpeedChange(newValue);
     }
 
 }

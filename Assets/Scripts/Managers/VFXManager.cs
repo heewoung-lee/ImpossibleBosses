@@ -95,6 +95,15 @@ public class VFXManager
 
     public void GenerateParticle(string path, Vector3 spawnPos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
     {
+        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindNgo_Spawn);
+
+        if (particleObject == null)// NULL 이면 네트워크가 처리
+            return;
+
+        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
+        addParticleActionEvent?.Invoke(particleObject);
+
+
         void FindNgo_Spawn()
         {
             Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
@@ -103,14 +112,6 @@ public class VFXManager
         {
             ParticleObjectSetPosition(particleOBJ, spawnPos, VFX_Root);
         }
-
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindNgo_Spawn);
-
-        if (particleObject == null)// NULL 이면 네트워크가 처리
-            return;
-
-        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
-        addParticleActionEvent?.Invoke(particleObject);
     }
 
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)

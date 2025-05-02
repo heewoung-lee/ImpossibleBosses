@@ -56,7 +56,7 @@ public class BossSkill2 : Action
         //_attackIndicator.Value.FillProgress = _charging;
         //_attackIndicator.Value.UpdateProjectors();
 
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill2State);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
         if (_isAttackReady && _charging >= 1)
         {
             _controller.Anim.speed = 1;

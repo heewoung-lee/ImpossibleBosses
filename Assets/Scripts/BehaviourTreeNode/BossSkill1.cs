@@ -46,7 +46,7 @@ public class BossSkill1 : Action
                 SpawnProjector(targetPlayer);
             }
         }
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State, START_SKILL1_ANIM_SPEED);
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State,out float animSpeed, START_SKILL1_ANIM_SPEED);
         if (_isAttackReady)
         {
             return TaskStatus.Success;

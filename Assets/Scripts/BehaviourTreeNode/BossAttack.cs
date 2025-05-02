@@ -1,9 +1,10 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossAttack : Action
+public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
 
     private BossGolemController _controller;
@@ -16,6 +17,20 @@ public class BossAttack : Action
 
     [SerializeField] private SharedProjector _attack_indicator;
     private Indicator_Controller _indicator_controller;
+
+    private Action<float> _animationSpeedChanged;
+    public event Action<float> AnimationSpeedChanged
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _animationSpeedChanged, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _animationSpeedChanged, value);
+        }
+    }
+
 
     public int radius_Step = 0;
     public int Angle_Step = 0;
@@ -34,8 +49,6 @@ public class BossAttack : Action
         _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
         _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
 
-
-
         _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
                _controller.GetComponent<IAttackRange>().ViewAngle,
                _controller.GetComponent<IAttackRange>().ViewDistance,
@@ -52,23 +65,18 @@ public class BossAttack : Action
     public override TaskStatus OnUpdate()
     {
         _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-        //_charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
-        //_attack_indicator.Value.FillProgress = _charging;
-        //_attack_indicator.Value.UpdateProjectors();
-
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate);
-        if (_isAttackReady== true && _ischargingDone == true)
+        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
+        _animationSpeedChanged?.Invoke(animSpeed);
+        if (_isAttackReady == true && _ischargingDone == true)
         {
             _controller.Anim.speed = 1;
+            _animationSpeedChanged?.Invoke(_controller.Anim.speed);
 
-            if (_attack_indicator.Value.gameObject.activeSelf)
+            foreach (Vector3 pos in _attackRangeParticlePos)
             {
-                foreach (Vector3 pos in _attackRangeParticlePos)
-                {
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos,1f);
-                }
-                TargetInSight.AttackTargetInSector(_stats);
+                Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
             }
+            //TargetInSight.AttackTargetInSector(_stats);
         }
         if (_elapsedTime >= _animLength)
         {

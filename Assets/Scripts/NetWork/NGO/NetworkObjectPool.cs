@@ -69,6 +69,7 @@ public class NetworkObjectPool : NetworkBehaviour
             poolingInitalize_Base.OnPoolRelease();
             m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
         }
+
     }
 
 
