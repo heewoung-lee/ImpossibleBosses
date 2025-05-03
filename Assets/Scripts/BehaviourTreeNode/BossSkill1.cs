@@ -25,12 +25,16 @@ public class BossSkill1 : Action
     public override void OnStart()
     {
         base.OnStart();
-        _controller = Owner.GetComponent<BossGolemController>();
-        _stats = _controller.GetComponent<BossStats>();
-        _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
-        allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
+        ChechedField();
 
-        _controller.CurrentStateType = _controller.BossSkill1State;
+        void ChechedField()
+        {
+            _controller = Owner.GetComponent<BossGolemController>();
+            _stats = _controller.GetComponent<BossStats>();
+            _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
+            allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
+            _controller.CurrentStateType = _controller.BossSkill1State;
+        }
     }
 
     public override TaskStatus OnUpdate()
@@ -47,11 +51,8 @@ public class BossSkill1 : Action
             }
         }
         _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State,out float animSpeed, START_SKILL1_ANIM_SPEED);
-        if (_isAttackReady)
-        {
-            return TaskStatus.Success;
-        }
-        return TaskStatus.Running;
+        
+        return _isAttackReady == true ? TaskStatus.Success : TaskStatus.Running;
     }
 
 
@@ -60,9 +61,7 @@ public class BossSkill1 : Action
     {
         Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
         Managers.RelayManager.SpawnNetworkOBJ(projector.gameObject);
-        //projector.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
-        projector.transform.position = targetPlayer.transform.position;
-        //projector.SetValue(2, 360);
+        projector.SetValue(2, 360, targetPlayer.transform);
         //projector.FillProgress = 0;
         StartCoroutine(startProjector(projector, targetPlayer));
     }
@@ -86,7 +85,6 @@ public class BossSkill1 : Action
             yield return null;
         }
         TargetInSight.AttackTargetInCircle(projector.GetComponent<ProjectorAttack>(), projector.Radius, Damage.Value);
-        Managers.ResourceManager.DestroyObject(projector.gameObject);
     }
 
 

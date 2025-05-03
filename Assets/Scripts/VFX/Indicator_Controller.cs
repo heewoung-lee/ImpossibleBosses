@@ -158,12 +158,12 @@ public class Indicator_Controller : NetworkBehaviourBase
         _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
         _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
-    public void SetValue(float radius, float arc, Transform callerTr, Action anotherOption = null)
+    public void SetValue(float radius, float arc, Transform targetTr, Action anotherOption = null)
     {
         Radius = radius;
         Arc = arc;
-        CallerPosition = callerTr.position;
-        Angle = callerTr.eulerAngles.y;
+        CallerPosition = targetTr.position;
+        Angle = targetTr.eulerAngles.y;
         doneEvent += anotherOption;
     }
 

@@ -3,7 +3,7 @@
 {
 "bossID":"101",
 "hp":"1000",
-"attack":"1000",
+"attack":"10",
 "defence":"1",
 "speed":"15.0",
 "viewAngle":"100",

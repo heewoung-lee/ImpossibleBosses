@@ -16,5 +16,7 @@ public class ProjectorAttack : MonoBehaviour, IAttackRange
 
     public Transform Owner_Transform => gameObject.transform;
 
-    public LayerMask TarGetLayer { get => LayerMask.GetMask("Player"); }
+    public LayerMask TarGetLayer { get => LayerMask.GetMask(
+        Utill.GetLayerID(Define.ControllerLayer.Player),
+        Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)); }
 }

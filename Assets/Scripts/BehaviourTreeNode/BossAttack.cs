@@ -76,6 +76,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     {
         UpdateChargingElapsedTime();
         return _elapsedTime >= _animLength ? TaskStatus.Success: TaskStatus.Running;
+
         void UpdateChargingElapsedTime()
         {
             _elapsedTime += Time.deltaTime * _controller.Anim.speed;
