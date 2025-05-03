@@ -1,8 +1,15 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 [RequireComponent(typeof(Poolable))]
-public abstract class NGO_PoolingInitalize_Base : NGO_Skill_Initailize_Base
+public abstract class NGO_PoolingInitalize_Base : NGO_Particle_Initailize_Base
 {
+    private NetworkObject _particleNGO;
+    private NetworkObject _targetNGO;
+
+    public override NetworkObject TargetNgo => _targetNGO;
+    public override NetworkObject ParticleNGO => _particleNGO;
+
     private Action _poolObjectReleaseEvent;
     private Action _poolObjectGetEvent;
 
@@ -29,8 +36,16 @@ public abstract class NGO_PoolingInitalize_Base : NGO_Skill_Initailize_Base
             UniqueEventRegister.RemovedEvent(ref _poolObjectGetEvent, value);
         }
     }
-
     public abstract string PoolingNGO_PATH { get; }
+
+    public override void SetInitalze(NetworkObject particleOBJ)
+    {
+        _particleNGO = particleOBJ;
+    }
+    public override void SetTargetInitalze(NetworkObject targetNgo)
+    {
+        _targetNGO = targetNgo;
+    }
     public virtual void OnPoolGet()
     {
         _poolObjectGetEvent?.Invoke();
@@ -52,5 +67,11 @@ public abstract class NGO_PoolingInitalize_Base : NGO_Skill_Initailize_Base
             transform.SetParent(parentTr,false);
         }
     }
-
+    public override void StartParticle(string path, float duration, Action<GameObject> positionAndBehaviorSetterEvent)
+    {
+        base.StartParticle(path, duration, positionAndBehaviorSetterEvent);
+        StartParticleOption();
+    }
+    
+    protected virtual void StartParticleOption(){}
 }

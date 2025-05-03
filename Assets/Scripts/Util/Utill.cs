@@ -241,5 +241,8 @@ public class Utill
         }
     }
 
-
+    public static string GetLayerID(Enum enumvalue)
+    {
+        return enumvalue.ToString();
+    }
 }

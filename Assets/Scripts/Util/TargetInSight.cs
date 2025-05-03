@@ -23,7 +23,6 @@ public class TargetInSight
         Debug.DrawRay(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _rightBoundary * _stats.ViewDistance, Color.red, 1f);
 
         Collider[] _targets = Physics.OverlapSphere(_stats.Owner_Transform.position, _stats.ViewDistance, _stats.TarGetLayer);
-
         foreach (Collider _target in _targets)
         {
             Transform _targetTr = _target.transform;

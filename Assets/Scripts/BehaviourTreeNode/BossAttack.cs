@@ -1,7 +1,9 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
@@ -10,10 +12,9 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private BossGolemController _controller;
     private float _elapsedTime = 0f;
     private float _animLength = 0f;
-    private bool _ischargingDone = false;
-    private bool _isAttackReady = false;
     private List<Vector3> _attackRangeParticlePos;
     private BossStats _stats;
+    private bool _hasSpawnedParticles;
 
     [SerializeField] private SharedProjector _attack_indicator;
     private Indicator_Controller _indicator_controller;
@@ -21,16 +22,9 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private Action<float> _animationSpeedChanged;
     public event Action<float> AnimationSpeedChanged
     {
-        add
-        {
-            UniqueEventRegister.AddSingleEvent(ref _animationSpeedChanged, value);
-        }
-        remove
-        {
-            UniqueEventRegister.RemovedEvent(ref _animationSpeedChanged, value);
-        }
+        add => UniqueEventRegister.AddSingleEvent(ref _animationSpeedChanged, value);
+        remove => UniqueEventRegister.RemovedEvent(ref _animationSpeedChanged, value);
     }
-
 
     public int radius_Step = 0;
     public int Angle_Step = 0;
@@ -38,51 +32,61 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     public override void OnStart()
     {
         base.OnStart();
-        _controller = Owner.GetComponent<BossGolemController>();
-        _controller.UpdateAttack();
-        _stats = _controller.GetComponent<BossStats>();
+        ChechedBossAttackField();
+        SpawnAttackIndicator();
+        CalculateBossAttackRange();
 
 
-        _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
-        _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
-        _attack_indicator.Value = _indicator_controller;
-        _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
-        _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneCharging);
-
-        _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
-               _controller.GetComponent<IAttackRange>().ViewAngle,
-               _controller.GetComponent<IAttackRange>().ViewDistance,
-               Angle_Step, radius_Step);
-
-
-        void DoneCharging()
+        void ChechedBossAttackField()
         {
-            _ischargingDone = true;
+            _controller = Owner.GetComponent<BossGolemController>();
+            _controller.UpdateAttack();
+            _stats = _controller.GetComponent<BossStats>();
+            _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
+            _hasSpawnedParticles = false;
+        }
+        void SpawnAttackIndicator()
+        {
+            _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
+            _attack_indicator.Value = _indicator_controller;
+            _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
+            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneBossCharging);
+            void DoneBossCharging()
+            {
+                if (_hasSpawnedParticles) return;
+                foreach (var pos in _attackRangeParticlePos)
+                {
+                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
+                }
+                TargetInSight.AttackTargetInSector(_stats);
+                _hasSpawnedParticles = true;
+            }
+        }
+        void CalculateBossAttackRange()
+        {
+            _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
+            _controller.GetComponent<IAttackRange>().ViewAngle,
+            _controller.GetComponent<IAttackRange>().ViewDistance,
+            Angle_Step, radius_Step);
         }
     }
 
 
     public override TaskStatus OnUpdate()
     {
-        _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
-        _animationSpeedChanged?.Invoke(animSpeed);
-        if (_isAttackReady == true && _ischargingDone == true)
+        UpdateChargingElapsedTime();
+        return _elapsedTime >= _animLength ? TaskStatus.Success: TaskStatus.Running;
+        void UpdateChargingElapsedTime()
         {
-            _controller.Anim.speed = 1;
-            _animationSpeedChanged?.Invoke(_controller.Anim.speed);
-
-            foreach (Vector3 pos in _attackRangeParticlePos)
+            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
+            _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
+            _animationSpeedChanged?.Invoke(animSpeed);
+            if (_hasSpawnedParticles)
             {
-                Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
+                _controller.Anim.speed = 1;
+                _animationSpeedChanged?.Invoke(_controller.Anim.speed);
             }
-            //TargetInSight.AttackTargetInSector(_stats);
         }
-        if (_elapsedTime >= _animLength)
-        {
-            return TaskStatus.Success;
-        }
-        return TaskStatus.Running;
     }
 
 
@@ -90,8 +94,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     {
         base.OnEnd();
         _elapsedTime = 0f;
-        _ischargingDone = false;
-        _isAttackReady = false;
         _attackRangeParticlePos = null;
+        _hasSpawnedParticles = false;
     }
 }

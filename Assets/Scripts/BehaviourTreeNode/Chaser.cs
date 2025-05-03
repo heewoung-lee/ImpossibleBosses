@@ -1,4 +1,5 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+﻿using BaseStates;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -51,10 +52,19 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if(targetOBject == null)
             {
-                Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, float.MaxValue, LayerMask.GetMask("Player"));
+                Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, float.MaxValue, LayerMask.GetMask(
+                    Utill.GetLayerID(Define.ControllerLayer.Player), Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)
+                    ));
                 float findClosePlayer = float.MaxValue;
                 foreach (Collider collider in checkedPlayer)
                 {
+
+                    if (collider.TryGetComponent(out BaseController basecontroller))
+                    {
+                        if (basecontroller.CurrentStateType is DieState)
+                            continue;
+                    }
+
                     float distance = (transform.position - collider.transform.position).sqrMagnitude;
                     findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
                     if (findClosePlayer == distance)

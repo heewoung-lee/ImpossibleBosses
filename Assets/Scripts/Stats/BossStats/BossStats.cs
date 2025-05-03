@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public abstract class BossStats : BaseStats, IAttackRange
     }
     protected override void StartInit()
     {
-        _targetLayer = LayerMask.GetMask("Player");
+        _targetLayer = LayerMask.GetMask(Utill.GetLayerID(Define.ControllerLayer.Player), Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer));
         _statDict = Managers.DataManager.AllDataDict[typeof(BossStat)] as Dictionary<int, BossStat>;
     }
 

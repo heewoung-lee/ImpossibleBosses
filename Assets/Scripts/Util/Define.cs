@@ -18,12 +18,11 @@ public class Define
         Monk,
         Necromancer,
     }
-    public enum State
+    public enum ControllerLayer
     {
-        Idle,
-        Move,
-        Attack,
-        Die,
+        Player,
+        AnotherPlayer,
+        Moster
     }
     public enum WorldObject
     {

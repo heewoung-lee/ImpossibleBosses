@@ -209,7 +209,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Action<GameObject> positionAndBehaviorSetterEvent = null;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
         {
-            if (paricleNgo.TryGetComponent(out NGO_Skill_Initailize_Base skillInitailze))
+            if (paricleNgo.TryGetComponent(out NGO_Particle_Initailize_Base skillInitailze))
             {
                 skillInitailze.SetInitalze(paricleNgo);
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
