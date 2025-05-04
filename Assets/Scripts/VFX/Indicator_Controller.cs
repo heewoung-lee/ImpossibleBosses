@@ -18,7 +18,7 @@ public class Indicator_Controller : NetworkBehaviourBase
         CircleBorder
     }
 
-    Action doneEvent;
+    private Action onIndicatorDone;
 
     [SerializeField]
     private NetworkVariable<float> _radius = new NetworkVariable<float>
@@ -158,13 +158,13 @@ public class Indicator_Controller : NetworkBehaviourBase
         _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
         _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
-    public void SetValue(float radius, float arc, Transform targetTr, Action anotherOption = null)
+    public void SetValue(float radius, float arc, Transform targetTr, Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
-        doneEvent += anotherOption;
+        onIndicatorDone += indicatorDoneEvent;
     }
 
     IEnumerator Play_Indicator()
@@ -176,7 +176,7 @@ public class Indicator_Controller : NetworkBehaviourBase
             fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
             UpdateDecalFillProgressProjector(fillAmount);
         }
-        doneEvent?.Invoke();
+        onIndicatorDone?.Invoke();
         Managers.ResourceManager.DestroyObject(gameObject);
     }
 

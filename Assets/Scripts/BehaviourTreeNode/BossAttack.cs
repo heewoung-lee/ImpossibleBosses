@@ -50,8 +50,8 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
             _attack_indicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
-            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, DoneBossCharging);
-            void DoneBossCharging()
+            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, IndicatorDoneEvent);
+            void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles) return;
                 foreach (var pos in _attackRangeParticlePos)
@@ -74,13 +74,20 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 
     public override TaskStatus OnUpdate()
     {
-        UpdateChargingElapsedTime();
+        float elaspedTime = UpdateElapsedTime();
+        UpdateAnimationSpeed(elaspedTime);
+
         return _elapsedTime >= _animLength ? TaskStatus.Success: TaskStatus.Running;
 
-        void UpdateChargingElapsedTime()
+        float UpdateElapsedTime()
         {
             _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-            _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
+            return _elapsedTime;
+           
+        }
+        void UpdateAnimationSpeed(float elapsedTime)
+        {
+            _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
             _animationSpeedChanged?.Invoke(animSpeed);
             if (_hasSpawnedParticles)
             {

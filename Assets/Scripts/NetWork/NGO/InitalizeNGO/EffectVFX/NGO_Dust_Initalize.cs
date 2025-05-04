@@ -6,6 +6,6 @@ public class NGO_Dust_Initalize : NGO_PoolingInitalize_Base
 {
     public override string PoolingNGO_PATH => "Prefabs/Paticle/AttackEffect/Dust_Paticle";
 
-    public override int PoolingCapacity => 200;
+    public override int PoolingCapacity => 100;
 
 }
