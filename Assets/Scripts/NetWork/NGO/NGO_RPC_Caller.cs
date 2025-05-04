@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
@@ -297,4 +298,15 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
 
     }
+
+    public void SpawnObjectToLocal(List<Vector3> pos,string objectPath)
+    {
+
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList512Bytes<Vector3>> posList,FixedString512Bytes objectPath)
+    {
+        
+    }
+
 }

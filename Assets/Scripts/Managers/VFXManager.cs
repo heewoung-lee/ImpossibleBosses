@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEngine;
@@ -203,4 +204,5 @@ public class VFXManager
             _isCheckNGODict[path] = particleinfo;
         }
     }
+
 }

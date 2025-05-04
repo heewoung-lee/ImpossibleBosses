@@ -54,6 +54,8 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles) return;
+
+
                 foreach (var pos in _attackRangeParticlePos)
                 {
                     Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
