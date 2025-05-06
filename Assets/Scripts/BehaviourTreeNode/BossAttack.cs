@@ -54,12 +54,19 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles) return;
+                string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
+
+                SpawnParamBase param = SpawnParamBase.Create(argFloat:1f);
+                Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(_attackRangeParticlePos, dustPath, param);
+
+                //foreach (var pos in _attackRangeParticlePos)
+                //{
+                //    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
+                //}
 
 
-                foreach (var pos in _attackRangeParticlePos)
-                {
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
-                }
+
+
                 TargetInSight.AttackTargetInSector(_stats);
                 _hasSpawnedParticles = true;
             }

@@ -16,6 +16,16 @@ using static Define;
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.Rendering.DebugUI;
 using Scene = UnityEngine.SceneManagement.Scene;
+public struct SpawnParamsStruct<T> : INetworkSerializable where T : struct, INetworkSerializable
+{
+    public T spawnParam;
+
+    public void NetworkSerialize<TWriter>(BufferSerializer<TWriter> serializer) where TWriter : IReaderWriter
+    {
+        serializer.SerializeValue(ref spawnParam);
+    }
+}
+
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
@@ -299,14 +309,97 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
     }
 
-    public void SpawnObjectToLocal(List<Vector3> pos,string objectPath)
+    public void SpawnObjectToLocal(List<Vector3> pos, string objectPath,SpawnParamBase spawnParamBase)
     {
-
+        int posCount = pos.Count;
+        switch (posCount)
+        {
+            case <= 2:
+                {
+                    FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 5:
+                {
+                    FixedList64Bytes<Vector3> list = new FixedList64Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 10:
+                {
+                    FixedList128Bytes<Vector3> list = new FixedList128Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 42:
+                {
+                    FixedList512Bytes<Vector3> list = new FixedList512Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 340:
+                {
+                    FixedList4096Bytes<Vector3> list = new FixedList4096Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            default:
+                Debug.LogError("Too many positions! Maximum supported is 340.");
+                break;
+        }
     }
     [Rpc(SendTo.ClientsAndHost)]
-    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList512Bytes<Vector3>> posList,FixedString512Bytes objectPath)
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList32Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
     {
-        
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList64Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList128Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList512Bytes<Vector3>> posList,FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList4096Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+
+    private void ProcessLocalSpawn<TList>(TList posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    where TList : struct, INativeList<Vector3>
+    {
+        string objectPath = path.ConvertToString();
+        GameObject spawnGo = Managers.ResourceManager.Load<GameObject>(objectPath);
+
+        if (spawnGo.TryGetComponent<ISpawnBehavior>(out var spawnBehaviour))
+        {
+            TList fixedList = posList; // 값 타입이라 복사됨
+            for (int i = 0; i < fixedList.Length; i++)
+            {
+                SpawnParamBase spawnParams = spawnParamBase;
+                spawnParams.argVector3 = fixedList[i];
+                spawnBehaviour.SpawnObjectToLocal(spawnParams, objectPath);
+            }
+        }
+        else
+        {
+            Debug.LogError($"ISpawnBehavior not found on prefab: {objectPath}");
+        }
     }
 
 }
