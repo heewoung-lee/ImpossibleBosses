@@ -7,8 +7,8 @@ using static UnityEditor.PlayerSettings;
 
 public class DustParticleInitalize : Poolable,ISpawnBehavior
 {
-    public void SpawnObjectToLocal(in SpawnParamBase param,string path)
+    public void SpawnObjectToLocal(in SpawnParamBase param,string path = null)
     {
-        Managers.VFX_Manager.GenerateParticle(path, param.argVector3, param.argFloat);
+        Managers.VFX_Manager.GenerateParticle(path, param.argPosVector3, param.argFloat);
     }
 }

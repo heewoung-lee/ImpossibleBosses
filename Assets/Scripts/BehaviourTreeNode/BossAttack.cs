@@ -55,18 +55,17 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             {
                 if (_hasSpawnedParticles) return;
                 string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
-
                 SpawnParamBase param = SpawnParamBase.Create(argFloat:1f);
                 Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(_attackRangeParticlePos, dustPath, param);
-
+                #region 5.6일 파티클 스폰방식 수정
                 //foreach (var pos in _attackRangeParticlePos)
                 //{
                 //    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
-                //}
-
-
-
-
+                //} 5.6일 Update 이전 파티클들은 네트워크 스폰 + 네트워크 오브젝트 풀링으로 최적화를 했는데
+                // 많은 오브젝트 풀링을 네트워크로 하다보니, 네트워크에 과부하가 걸림
+                // 해결방반으로 RPC_Caller에게 스폰할 오브젝트 경로,위치,공통 파라미터만 보내고
+                // RPC_Caller는 ISpawnBehavior인터페이스를 상속받은 오브젝트를 스폰하게끔 수정
+                #endregion
                 TargetInSight.AttackTargetInSector(_stats);
                 _hasSpawnedParticles = true;
             }
@@ -92,7 +91,6 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         {
             _elapsedTime += Time.deltaTime * _controller.Anim.speed;
             return _elapsedTime;
-           
         }
         void UpdateAnimationSpeed(float elapsedTime)
         {

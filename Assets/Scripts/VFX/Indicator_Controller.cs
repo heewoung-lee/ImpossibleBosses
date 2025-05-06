@@ -140,7 +140,10 @@ public class Indicator_Controller : NetworkBehaviourBase
         _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
         _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
         GetComponent<Poolable>().WorldPositionStays = false;
-        GetComponent<NGO_PoolingInitalize_Base>().PoolObjectReleaseEvent += ReleseProjector;
+        if (TryGetComponent(out NGO_PoolingInitalize_Base initbase))
+        {
+            initbase.PoolObjectReleaseEvent += ReleseProjector;
+        }
         ReassignMaterials();
     }
 
@@ -164,6 +167,14 @@ public class Indicator_Controller : NetworkBehaviourBase
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
+        onIndicatorDone += indicatorDoneEvent;
+    }
+    public void SetValue(float radius, float arc, Vector3 targetPos,Vector3 targetEulerAngle , Action indicatorDoneEvent = null)
+    {
+        Radius = radius;
+        Arc = arc;
+        CallerPosition = targetPos;
+        Angle = targetEulerAngle.y;
         onIndicatorDone += indicatorDoneEvent;
     }
 

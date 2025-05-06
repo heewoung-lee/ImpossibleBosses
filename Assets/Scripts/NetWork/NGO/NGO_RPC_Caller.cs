@@ -308,7 +308,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
 
     }
-
+    public void SpawnObjectToLocal(Vector3 pos,string objectPath,SpawnParamBase spawnParamBase)
+    {
+        FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
+        list.Add(pos);                          // 한 개만 담기
+        SpwanLocalObjectRpc(list,new FixedString512Bytes(objectPath),spawnParamBase);
+    }
     public void SpawnObjectToLocal(List<Vector3> pos, string objectPath,SpawnParamBase spawnParamBase)
     {
         int posCount = pos.Count;
@@ -392,7 +397,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
             for (int i = 0; i < fixedList.Length; i++)
             {
                 SpawnParamBase spawnParams = spawnParamBase;
-                spawnParams.argVector3 = fixedList[i];
+                spawnParams.argPosVector3 = fixedList[i];
                 spawnBehaviour.SpawnObjectToLocal(spawnParams, objectPath);
             }
         }

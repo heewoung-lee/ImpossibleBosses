@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossSkill1 : Action
@@ -39,54 +40,30 @@ public class BossSkill1 : Action
 
     public override TaskStatus OnUpdate()
     {
-        _elapsedTime += Time.deltaTime * _controller.Anim.speed;
+        float elaspedTime = UpdateElapsedTime();
         _tickCounter++;
-
         if (_tickCounter >= 20)
         {
             _tickCounter = 0;
             foreach (Collider targetPlayer in allTargets)
             {
-                SpawnProjector(targetPlayer);
+                string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
+                Vector3 targetPos = targetPlayer.transform.position;
+                Vector3 indicatorAngle = transform.eulerAngles;
+                SpawnParamBase param = SpawnParamBase.Create(argPosVector3: targetPos, argEulerAnglesVector3: indicatorAngle,argInteger: Damage.Value);
+                Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(targetPos, skill1_indicator_Path, param);
+                //5.6 수정 SpawnProjector(targetPlayer);
             }
         }
         _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State,out float animSpeed, START_SKILL1_ANIM_SPEED);
-        
+
         return _isAttackReady == true ? TaskStatus.Success : TaskStatus.Running;
-    }
-
-
-
-    private void SpawnProjector(Collider targetPlayer)
-    {
-        Indicator_Controller projector = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator").GetComponent<Indicator_Controller>();
-        Managers.RelayManager.SpawnNetworkOBJ(projector.gameObject);
-        projector.SetValue(2, 360, targetPlayer.transform);
-        //projector.FillProgress = 0;
-        StartCoroutine(startProjector(projector, targetPlayer));
-    }
-
-
-
-
-    private IEnumerator startProjector(Indicator_Controller projector, Collider targetPlayer)
-    {
-        SpawnStone(targetPlayer);
-        float elaspedTime = 0f;
-        while (elaspedTime < _attackDelayTime)
+        float UpdateElapsedTime()
         {
-            elaspedTime += Time.deltaTime;
-            float fillRatio = Mathf.Clamp01(elaspedTime / _attackDelayTime);
-
-            // 인디케이터 채우기
-            //projector.FillProgress = fillRatio;
-            //projector.UpdateProjectors();
-
-            yield return null;
+            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
+            return _elapsedTime;
         }
-        TargetInSight.AttackTargetInCircle(projector.GetComponent<ProjectorAttack>(), projector.Radius, Damage.Value);
     }
-
 
     private void SpawnStone(Collider targetPlayer)
     {

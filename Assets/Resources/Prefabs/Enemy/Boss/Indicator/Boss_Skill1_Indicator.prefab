@@ -66,10 +66,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6797174007356546829}
   - component: {fileID: 1558025802352316828}
-  - component: {fileID: 1873168904585742388}
   - component: {fileID: 6239396224138929201}
-  - component: {fileID: 1715749141448728929}
-  - component: {fileID: 434699201470637851}
+  - component: {fileID: -8647989429531131493}
   m_Layer: 0
   m_Name: Boss_Skill1_Indicator
   m_TagString: Untagged
@@ -106,23 +104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d5d4458b74ab6499cfeff95acef22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 5
-  _angle: 0
-  _arc: 30
-  _fillProgress: 0
-  _depth: 10
---- !u!114 &1873168904585742388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2045787460491325318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 194baf7c4a0948441be1f5344f61f239, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _radius:
+    m_InternalValue: 0
+  _angle:
+    m_InternalValue: 0
+  _arc:
+    m_InternalValue: 0
+  _callerPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
 --- !u!114 &6239396224138929201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,32 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25005f469d081b5478873d5d84e6dc44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1715749141448728929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2045787460491325318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3986286832
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &434699201470637851
+--- !u!114 &-8647989429531131493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acd33cee490c6445b9caede8e327bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8748405392956891788
 GameObject:
   m_ObjectHideFlags: 0
