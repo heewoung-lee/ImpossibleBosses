@@ -15,6 +15,7 @@ public abstract class BossStats : BaseStats, IAttackRange
 
     public LayerMask TarGetLayer => _targetLayer;
 
+    public Vector3 AttackPosition => transform.position;
     protected override void AwakeInit()
     {
         base.AwakeInit();

@@ -1,17 +1,21 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossSkill1 : Action
 {
-    private const float MAX_HEIGHT = 3f;
-    private const float START_SKILL1_ANIM_SPEED = 0.8f;
-
     public SharedInt Damage;
 
+    private const float MAX_HEIGHT = 3f;
+    private const float START_SKILL1_ANIM_SPEED = 0.8f;
+    private const int SPAWN_BOSS_SKILL1_TICK = 20;
+
     private BossGolemController _controller;
+    private BossGolemNetworkController _networkController;
     private BossStats _stats;
 
     private float _elapsedTime = 0f;
@@ -35,33 +39,43 @@ public class BossSkill1 : Action
             _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
             allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
             _controller.CurrentStateType = _controller.BossSkill1State;
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
         }
     }
 
     public override TaskStatus OnUpdate()
     {
         float elaspedTime = UpdateElapsedTime();
-        _tickCounter++;
-        if (_tickCounter >= 20)
-        {
-            _tickCounter = 0;
-            foreach (Collider targetPlayer in allTargets)
-            {
-                string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
-                Vector3 targetPos = targetPlayer.transform.position;
-                Vector3 indicatorAngle = transform.eulerAngles;
-                SpawnParamBase param = SpawnParamBase.Create(argPosVector3: targetPos, argEulerAnglesVector3: indicatorAngle,argInteger: Damage.Value);
-                Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(targetPos, skill1_indicator_Path, param);
-                //5.6 수정 SpawnProjector(targetPlayer);
-            }
-        }
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill1State,out float animSpeed, START_SKILL1_ANIM_SPEED);
-
+        _isAttackReady = UpdateAnimSpeed(elaspedTime);
+        SpawnIndicator();
         return _isAttackReady == true ? TaskStatus.Success : TaskStatus.Running;
+        
         float UpdateElapsedTime()
         {
             _elapsedTime += Time.deltaTime * _controller.Anim.speed;
             return _elapsedTime;
+        }
+        bool UpdateAnimSpeed(float elaspedTime)
+        {
+            bool isAttackReady =  _controller.SetAnimationSpeed(elaspedTime, _animLength, _controller.BossSkill1State, out float animSpeed, START_SKILL1_ANIM_SPEED);
+            _networkController.AnimSpeed = animSpeed;
+            return isAttackReady;
+        }
+        void SpawnIndicator()
+        {
+            _tickCounter++;
+            if (_tickCounter >= SPAWN_BOSS_SKILL1_TICK)
+            {
+                _tickCounter = 0;
+                foreach (Collider targetPlayer in allTargets)
+                {
+                    string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
+                    Vector3 targetPos = targetPlayer.transform.position;
+                    SpawnParamBase param = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: Damage.Value);
+                    Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(targetPos, skill1_indicator_Path, param);
+                    //5.6 수정 SpawnProjector(targetPlayer);
+                }
+            }
         }
     }
 

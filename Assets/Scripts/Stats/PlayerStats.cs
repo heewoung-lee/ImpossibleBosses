@@ -44,6 +44,7 @@ public class PlayerStats : BaseStats, IAttackRange
     public int Level { get => _level; }
     public Transform Owner_Transform => transform;
     public LayerMask TarGetLayer => _targetLayer;
+    public Vector3 AttackPosition => transform.position;
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -89,7 +90,6 @@ public class PlayerStats : BaseStats, IAttackRange
     }
 
 
-    
     protected override void OnDead(BaseStats attacker)
     {
         PlayerDeadEvent.Invoke();

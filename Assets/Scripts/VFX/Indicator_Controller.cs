@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SocialPlatforms;
+using UnityEngine.Splines.ExtrusionShapes;
 
-public class Indicator_Controller : NetworkBehaviourBase
+public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
 {
-
     private const float DEPTH = 10f;
+
+    public int ID = 0;
 
     enum DecalProjectors
     {
@@ -18,59 +19,61 @@ public class Indicator_Controller : NetworkBehaviourBase
         CircleBorder
     }
 
-    private Action onIndicatorDone;
-
-    [SerializeField]
-    private NetworkVariable<float> _radius = new NetworkVariable<float>
-        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
-    private NetworkVariable<float> _angle = new NetworkVariable<float>
-        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
-    private NetworkVariable<float> _arc = new NetworkVariable<float>
-        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]
-    private NetworkVariable<Vector3> _callerPosition = new NetworkVariable<Vector3>
-        (Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField]private float _radius;
+    [SerializeField] private float _angle;
+    [SerializeField] private float _arc;
+    [SerializeField] private Vector3 _callerPosition;
 
     private DecalProjector _decal_Circle_projector;
     private DecalProjector _decal_CircleBorder_projector;
 
+    private Action _doneIndicatorEvent;
+
     public float Radius
     {
-        get => _radius.Value;
+        get => _radius;
 
         private set
         {
-            if (IsServer == false) return;
-            _radius.Value = Mathf.Max(value, 0f);
+            _radius = Mathf.Max(value, 0f);
+            Vector3 currentSize;
+            currentSize.x = _radius * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
+            currentSize.y = _radius * 2;
+            currentSize.z = DEPTH;
+
+            _decal_Circle_projector.size = currentSize;
+            _decal_CircleBorder_projector.size = currentSize;
         }
     }
     public float Angle
     {
-        get => _angle.Value;
+        get => _angle;
         private set
         {
-            if (IsServer == false) return;
-            _angle.Value = value;
+            _angle = value;
+            float normalizedAngle = Mathf.Repeat((_angle - 90) % 360, 360) / 360;
+            _decal_CircleBorder_projector.material.SetFloat(AngleShaderID, normalizedAngle);
+            _decal_Circle_projector.material.SetFloat(AngleShaderID, normalizedAngle);
         }
     }
     public float Arc
     {
-        get => _arc.Value;
+        get => _arc;
         private set
         {
-            if (IsServer == false) return;
-            _arc.Value = Mathf.Clamp(value, 0f, 360f);
+            _arc = Mathf.Clamp(value, 0f, 360f);
+            float arcAngleNormalized = 1f - _arc / 360;
+            _decal_Circle_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
+            _decal_CircleBorder_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
         }
     }
     public Vector3 CallerPosition
     {
-        get => _callerPosition.Value;
+        get => _callerPosition;
         private set
         {
-            if (IsServer == false) return;
-            _callerPosition.Value = value;
+            _callerPosition = value;
+            transform.position = _callerPosition;
         }
     }
 
@@ -84,69 +87,13 @@ public class Indicator_Controller : NetworkBehaviourBase
 
     private static readonly int AngleShaderID = Shader.PropertyToID("_Angle");
 
-    public override void OnNetworkSpawn()
+    protected void Awake()
     {
-        base.OnNetworkSpawn();
-        SubscribeValueEvents();
-
-        OnCallerPositionChanged(Vector3.zero, CallerPosition);
-        OnRadiusValueChanged(0f, Radius);
-        OnArcValueChagned(0f, Arc);
-        OnAngleValueChanged(0f, Angle);
-        StartCoroutine(Play_Indicator());
-    }
-
-    private void SubscribeValueEvents()
-    {
-        _radius.OnValueChanged += OnRadiusValueChanged;
-        _arc.OnValueChanged += OnArcValueChagned;
-        _angle.OnValueChanged += OnAngleValueChanged;
-        _callerPosition.OnValueChanged += OnCallerPositionChanged;
-    }
-    private void OnArcValueChagned(float previousValue, float newValue)
-    {
-        float arcAngleNormalized = 1f - newValue / 360;
-        _decal_Circle_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
-        _decal_CircleBorder_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
-    }
-    private void OnCallerPositionChanged(Vector3 previousValue, Vector3 newValue)
-    {
-        transform.position = newValue;
-    }
-    private void OnRadiusValueChanged(float previousValue, float newValue)
-    {
-        Vector3 currentSize;
-        currentSize.x = newValue * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
-        currentSize.y = newValue * 2;
-        currentSize.z = DEPTH;
-
-        _decal_Circle_projector.size = currentSize;
-        _decal_CircleBorder_projector.size = currentSize;
-    }
-
-    private void OnAngleValueChanged(float previousValue, float newValue)
-    {
-        float normalizedAngle = Mathf.Repeat((newValue - 90) % 360, 360) / 360;
-        _decal_CircleBorder_projector.material.SetFloat(AngleShaderID, normalizedAngle);
-        _decal_Circle_projector.material.SetFloat(AngleShaderID, normalizedAngle);
-    }
-    protected override void StartInit()
-    {
-    }
-
-    protected override void AwakeInit()
-    {
-        Bind<DecalProjector>(typeof(DecalProjectors));
-        _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
-        _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
+        _decal_Circle_projector = transform.Find(DecalProjectors.Circle.ToString()).GetComponent<DecalProjector>();
+        _decal_CircleBorder_projector = transform.Find(DecalProjectors.CircleBorder.ToString()).GetComponent<DecalProjector>();
         GetComponent<Poolable>().WorldPositionStays = false;
-        if (TryGetComponent(out NGO_PoolingInitalize_Base initbase))
-        {
-            initbase.PoolObjectReleaseEvent += ReleseProjector;
-        }
         ReassignMaterials();
     }
-
     private void ReassignMaterials()
     {
         if (_decal_Circle_projector != null)
@@ -155,7 +102,6 @@ public class Indicator_Controller : NetworkBehaviourBase
         if (_decal_CircleBorder_projector != null)
             _decal_CircleBorder_projector.material = new Material(_decal_CircleBorder_projector.material);
     }
-
     private void UpdateDecalFillProgressProjector(float fillAmount)
     {
         _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
@@ -167,15 +113,16 @@ public class Indicator_Controller : NetworkBehaviourBase
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
-        onIndicatorDone += indicatorDoneEvent;
+        _doneIndicatorEvent += indicatorDoneEvent;
+        StartCoroutine(Play_Indicator());
     }
-    public void SetValue(float radius, float arc, Vector3 targetPos,Vector3 targetEulerAngle , Action indicatorDoneEvent = null)
+    public void SetValue(float radius, float arc, Vector3 targetPos, Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetPos;
-        Angle = targetEulerAngle.y;
-        onIndicatorDone += indicatorDoneEvent;
+        _doneIndicatorEvent += indicatorDoneEvent;
+        StartCoroutine(Play_Indicator());
     }
 
     IEnumerator Play_Indicator()
@@ -187,18 +134,10 @@ public class Indicator_Controller : NetworkBehaviourBase
             fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
             UpdateDecalFillProgressProjector(fillAmount);
         }
-        onIndicatorDone?.Invoke();
+        _doneIndicatorEvent?.Invoke();
+        _doneIndicatorEvent = null;
+        UpdateDecalFillProgressProjector(0f);
         Managers.ResourceManager.DestroyObject(gameObject);
     }
 
-
-    private void ReleseProjector()
-    {
-        CallerPosition = Vector3.zero;
-        Radius = 0f;
-        Arc = 0f;
-        Angle = 0f;
-        UpdateDecalFillProgressProjector(0f);
-        transform.position = Vector3.zero;
-    }
 }

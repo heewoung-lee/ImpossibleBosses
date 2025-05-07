@@ -18,8 +18,6 @@ public class BossGolemNetworkController : NetworkBehaviourBase
         _bossController= GetComponent<BossGolemController>();
         _bossBehaviourTree = GetComponent<BehaviorTree>();
         _bossAttackNode = _bossBehaviourTree.FindTask<BossAttack>();
-        _bossAttackNode.AnimationSpeedChanged += AnimationSpeedChanged;
-
     }
     public float AnimSpeed
     {
@@ -31,12 +29,6 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             _animSpeed.Value = value;
         }
     }
-    private void AnimationSpeedChanged(float animSpeed)
-    {
-        AnimSpeed = animSpeed;
-    }
-
-
     protected override void StartInit()
     {
     }

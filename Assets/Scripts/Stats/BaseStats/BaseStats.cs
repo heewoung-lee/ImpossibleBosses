@@ -337,7 +337,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     {
         if (_isCheckDead) return;
 
-        NetworkObjectReference netWorkRef = GetOnAttackedOwner(attacker);
+        NetworkObjectReference netWorkRef = TryGetOnAttackedOwner(attacker);
         OnAttackedRpc(netWorkRef, spacialDamage);
     }
 
@@ -362,6 +362,10 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             _isCheckDead = true;
         }
     }
+
+
+
+
     [Rpc(SendTo.ClientsAndHost)]
     public void OnAttackedClientRpc(int damage, int currentHp)
     {
@@ -375,7 +379,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         _done_Base_Stats_Loading?.Invoke(stat);
     }
 
-    public NetworkObjectReference GetOnAttackedOwner(IAttackRange attacker)
+    public NetworkObjectReference TryGetOnAttackedOwner(IAttackRange attacker)
     {
         if (attacker.Owner_Transform.TryGetComponent(out NetworkObject ngo))
         {

@@ -10,6 +10,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
 
     private BossGolemController _controller;
+    private BossGolemNetworkController _networkController;
     private float _elapsedTime = 0f;
     private float _animLength = 0f;
     private List<Vector3> _attackRangeParticlePos;
@@ -17,14 +18,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private bool _hasSpawnedParticles;
 
     [SerializeField] private SharedProjector _attack_indicator;
-    private Indicator_Controller _indicator_controller;
-
-    private Action<float> _animationSpeedChanged;
-    public event Action<float> AnimationSpeedChanged
-    {
-        add => UniqueEventRegister.AddSingleEvent(ref _animationSpeedChanged, value);
-        remove => UniqueEventRegister.RemovedEvent(ref _animationSpeedChanged, value);
-    }
+    private NGO_Indicator_Controller _indicator_controller;
 
     public int radius_Step = 0;
     public int Angle_Step = 0;
@@ -43,13 +37,14 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _controller.UpdateAttack();
             _stats = _controller.GetComponent<BossStats>();
             _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
             _hasSpawnedParticles = false;
         }
         void SpawnAttackIndicator()
         {
-            _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<Indicator_Controller>();
+            _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attack_indicator.Value = _indicator_controller;
-            _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<Indicator_Controller>();
+            _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
             _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, IndicatorDoneEvent);
             void IndicatorDoneEvent()
             {
@@ -95,11 +90,11 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         void UpdateAnimationSpeed(float elapsedTime)
         {
             _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
-            _animationSpeedChanged?.Invoke(animSpeed);
+            _networkController.AnimSpeed = animSpeed;
             if (_hasSpawnedParticles)
             {
                 _controller.Anim.speed = 1;
-                _animationSpeedChanged?.Invoke(_controller.Anim.speed);
+                _networkController.AnimSpeed = _controller.Anim.speed;
             }
         }
     }

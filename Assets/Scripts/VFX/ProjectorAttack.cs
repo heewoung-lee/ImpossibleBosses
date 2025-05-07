@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class ProjectorAttack : MonoBehaviour, IAttackRange
 {
-    Indicator_Controller projector;
+    IIndicatorBahaviour projector;
     private void Start()
     {
-        projector = GetComponent<Indicator_Controller>();
+        projector = GetComponent<IIndicatorBahaviour>();
     }
 
     public float ViewAngle => projector.Angle;
 
     public float ViewDistance => projector.Arc;
 
-    public Transform Owner_Transform => gameObject.transform;
+    public Transform Owner_Transform => Managers.GameManagerEx.BossMonster.transform;
+    //여기에서 Owner_Transform을 보스로 바꿔야하는데 어떻게 바꿔야하나..
+    public Vector3 AttackPosition => transform.position;
 
     public LayerMask TarGetLayer { get => LayerMask.GetMask(
         Utill.GetLayerID(Define.ControllerLayer.Player),
         Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)); }
+
 }
