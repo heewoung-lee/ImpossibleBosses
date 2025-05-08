@@ -140,4 +140,25 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         Managers.ResourceManager.DestroyObject(gameObject);
     }
 
+    //TODO: 여길 메인으로 사용할것 현재 fillAmount가 하드코딩 되어있음
+    private IEnumerator Play_Indicator(float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            // 0~1 로 정규화된 진행 비율
+            float fillAmount = Mathf.Clamp01(elapsed / duration);
+            UpdateDecalFillProgressProjector(fillAmount);
+
+            yield return null;
+        }
+
+        _doneIndicatorEvent?.Invoke();
+        _doneIndicatorEvent = null;
+        UpdateDecalFillProgressProjector(0f);       // 다음 재사용 대비
+        Managers.ResourceManager.DestroyObject(gameObject);
+    }
 }
