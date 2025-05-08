@@ -51,7 +51,7 @@ public class TargetInSight
     public static void AttackTargetInCircle(IAttackRange _stats, float radius,int ?damage = null)
     {
         Collider[] _targets = Physics.OverlapSphere(_stats.AttackPosition, radius, _stats.TarGetLayer);
-        //DebugDrawUtill.DrawCircle(_stats.AttackPosition, radius, 96, Color.yellow, 5f);
+        DebugDrawUtill.DrawCircle(_stats.AttackPosition, radius, 96, Color.yellow, 5f);
         foreach (Collider _target in _targets)
         {
             Transform _targetTr = _target.transform;

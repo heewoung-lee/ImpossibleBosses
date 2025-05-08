@@ -16,16 +16,6 @@ using static Define;
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.Rendering.DebugUI;
 using Scene = UnityEngine.SceneManagement.Scene;
-public struct SpawnParamsStruct<T> : INetworkSerializable where T : struct, INetworkSerializable
-{
-    public T spawnParam;
-
-    public void NetworkSerialize<TWriter>(BufferSerializer<TWriter> serializer) where TWriter : IReaderWriter
-    {
-        serializer.SerializeValue(ref spawnParam);
-    }
-}
-
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
@@ -308,7 +298,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
 
     }
-    public void SpawnNonNetworkObject(Vector3 pos,string objectPath,SpawnParamBase spawnParamBase)
+    public void SpawnLocalObject(Vector3 pos,string objectPath,SpawnParamBase spawnParamBase)
     {
         FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
         list.Add(pos);                          // 한 개만 담기
@@ -390,10 +380,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         string objectPath = path.ConvertToString();
         GameObject spawnGo = Managers.ResourceManager.Load<GameObject>(objectPath);
-
         if (spawnGo.TryGetComponent<ISpawnBehavior>(out var spawnBehaviour))
         {
-            TList fixedList = posList; // 값 타입이라 복사됨
+            TList fixedList = posList;
             for (int i = 0; i < fixedList.Length; i++)
             {
                 SpawnParamBase spawnParams = spawnParamBase;

@@ -160,7 +160,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<float> _characterMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField]private NetworkVariable<bool> _isDead = new NetworkVariable<bool>
+    private NetworkVariable<bool> _isDeadValue = new NetworkVariable<bool>
        (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
@@ -259,7 +259,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     public bool IsDead
     {
-        get => _isDead.Value;
+        get => _isDeadValue.Value;
         protected set
         {
             IsDeadValueChangedRpc(value);
@@ -268,7 +268,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server)]
     public void IsDeadValueChangedRpc(bool value)
     {
-        _isDead.Value = value;
+        _isDeadValue.Value = value;
     }
 
 
@@ -327,7 +327,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         _characterAttackValue.OnValueChanged += AttackValueChanged;
         _characterDefenceValue.OnValueChanged += DefenceValueChanged;
         _characterMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
-        _isDead.OnValueChanged += IsDeadValueChange;
+        _isDeadValue.OnValueChanged += IsDeadValueChange;
     }
     private void PlayerValueChanged(CharacterBaseStat previousValue, CharacterBaseStat newValue)
     {
@@ -378,7 +378,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
     public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {
-        if (_isDead.Value == true) return;
+        if (_isDeadValue.Value == true) return;
 
         NetworkObjectReference netWorkRef = TryGetOnAttackedOwner(attacker);
         OnAttackedRpc(netWorkRef, spacialDamage);
@@ -404,7 +404,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         {
             Hp = 0;
             OnDeadRpc(attackerRef,RpcTarget.Single(ownetClientId, RpcTargetUse.Temp));
-            _isDead.Value = true;
+            _isDeadValue.Value = true;
         }
     }//서버니깐 서버에서 내가 죽으면 누구한테 죽었는지 죽었다고 호출하기 
 

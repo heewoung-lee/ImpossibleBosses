@@ -21,7 +21,6 @@ public class PoolableTransformResetter : MonoBehaviour
     private void OnDisable()
     {
         transform.position = Vector3.zero;
-
         for (int i = 0; i < _originPositions.Count; i++)
         {
             Transform childTR = transform.GetChild(i);
@@ -34,7 +33,6 @@ public class PoolableTransformResetter : MonoBehaviour
             childRigidbody.linearVelocity = Vector3.zero;
             childRigidbody.angularVelocity = Vector3.zero;
         }
-
 
         GetComponent<Collider>().enabled = true;
         

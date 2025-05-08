@@ -81,7 +81,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
-            if (targetOBject == null)
+            if (targetOBject == null) // 타겟이 없는 경우 ex) 타겟이 다 죽은 경우
             {
                 _controller.UpdateIdle();
                 return TaskStatus.Failure;
