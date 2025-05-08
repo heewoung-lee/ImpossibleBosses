@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -43,9 +45,6 @@ public struct CharacterBaseStat : INetworkSerializable
 [DisallowMultipleComponent]
 public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
-    private bool _isCheckDead = false;
-
-
     private Action<int, int> _event_Attacked; //현재 HP가 바로 안넘어와서 두번쨰 매개변수에 현재 HP값 전달
     private Action<CharacterBaseStat> _done_Base_Stats_Loading;
 
@@ -54,6 +53,9 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     private Action<int, int> _attackValueChangedEvent;
     private Action<int, int> _defenceValueChangedEvent;
     private Action<float, float> _moveSpeedValueChangedEvent;
+    private Action<bool, bool> _isDeadValueChagneEvent;
+
+
 
     public event Action<int, int> Event_Attacked
     {
@@ -134,6 +136,17 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             UniqueEventRegister.RemovedEvent(ref _moveSpeedValueChangedEvent, value);
         }
     }
+    public event Action<bool,bool> IsDeadValueChagneEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _isDeadValueChagneEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _isDeadValueChagneEvent, value);
+        }
+    }
 
     private NetworkVariable<CharacterBaseStat> _characterBaseStatValue = new NetworkVariable<CharacterBaseStat>
          (new CharacterBaseStat(0, 0, 0, 0, 0f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -147,6 +160,11 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<float> _characterMoveSpeedValue = new NetworkVariable<float>
        (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField]private NetworkVariable<bool> _isDead = new NetworkVariable<bool>
+       (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+
+
 
     public CharacterBaseStat CharacterBaseStats
     {
@@ -239,6 +257,22 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         _characterMoveSpeedValue.Value = Mathf.Clamp(value, 0, float.MaxValue);
     }
 
+    public bool IsDead
+    {
+        get => _isDead.Value;
+        protected set
+        {
+            IsDeadValueChangedRpc(value);
+        }   
+    }
+    [Rpc(SendTo.Server)]
+    public void IsDeadValueChangedRpc(bool value)
+    {
+        _isDead.Value = value;
+    }
+
+
+
     public void Plus_Current_Hp_Abillity(int value)
     {
         Hp += value;
@@ -293,6 +327,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         _characterAttackValue.OnValueChanged += AttackValueChanged;
         _characterDefenceValue.OnValueChanged += DefenceValueChanged;
         _characterMoveSpeedValue.OnValueChanged += MoveSpeedValueChanged;
+        _isDead.OnValueChanged += IsDeadValueChange;
     }
     private void PlayerValueChanged(CharacterBaseStat previousValue, CharacterBaseStat newValue)
     {
@@ -314,7 +349,9 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (damage > 0)
         {
             if (IsHost)
+            {
                 OnAttackedClientRpc(damage, newValue);
+            }
         }
     }
     private void MaxHpValueChanged(int previousValue, int newValue)
@@ -333,9 +370,15 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     {
         _moveSpeedValueChangedEvent?.Invoke(previousValue,newValue);
     }
+    private void IsDeadValueChange(bool previousValue, bool newValue)
+    {
+        _isDeadValueChagneEvent?.Invoke(previousValue,newValue);
+    }
+
+
     public void OnAttacked(IAttackRange attacker, int spacialDamage = -1)
     {
-        if (_isCheckDead) return;
+        if (_isDead.Value == true) return;
 
         NetworkObjectReference netWorkRef = TryGetOnAttackedOwner(attacker);
         OnAttackedRpc(netWorkRef, spacialDamage);
@@ -345,6 +388,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
     [Rpc(SendTo.Server, RequireOwnership = false)]
     public void OnAttackedRpc(NetworkObjectReference attackerRef, int spacialDamage = -1)
     {
+        ulong ownetClientId = OwnerClientId;
+
         int damage = 0;
         attackerRef.TryGet(out NetworkObject attackerNGO);
         attackerNGO.TryGetComponent(out BaseStats attackerStats);
@@ -358,13 +403,19 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         if (Hp <= 0)
         {
             Hp = 0;
-            OnDead(attackerStats);
-            _isCheckDead = true;
+            OnDeadRpc(attackerRef,RpcTarget.Single(ownetClientId, RpcTargetUse.Temp));
+            _isDead.Value = true;
         }
+    }//서버니깐 서버에서 내가 죽으면 누구한테 죽었는지 죽었다고 호출하기 
+
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void OnDeadRpc(NetworkObjectReference attackerRef, RpcParams rpcParams = default)
+    {
+        attackerRef.TryGet(out NetworkObject attackerNGO);
+        attackerNGO.TryGetComponent(out BaseStats attackerStats);
+        OnDead(attackerStats);
     }
-
-
-
 
     [Rpc(SendTo.ClientsAndHost)]
     public void OnAttackedClientRpc(int damage, int currentHp)
@@ -388,6 +439,8 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
         Debug.Log("Attacker hasn't a BaseStats");
         return default;
     }
+
+
 
     protected abstract void OnDead(BaseStats attacker);
 }

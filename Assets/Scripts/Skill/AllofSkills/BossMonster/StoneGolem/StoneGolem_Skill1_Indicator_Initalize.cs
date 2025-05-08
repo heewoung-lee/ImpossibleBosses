@@ -11,7 +11,7 @@ public class StoneGolem_Skill1_Indicator_Initalize : Poolable, ISpawnBehavior
 
     public void SpawnObjectToLocal(in SpawnParamBase spawnparam, string runtimePath = null)
     {
-        IIndicatorBahaviour projector = Managers.ResourceManager.Instantiate(runtimePath).GetComponent<IIndicatorBahaviour>();
+        IIndicatorBahaviour projector = Managers.ResourceManager.Instantiate(runtimePath,Managers.VFX_Manager.VFX_Root).GetComponent<IIndicatorBahaviour>();
         IAttackRange attacker = (projector as Component).GetComponent<IAttackRange>();
         int attackDamage = spawnparam.argInteger;
         projector.SetValue(SKILL1_RADIUS, SKILL1_ARC, spawnparam.argPosVector3, Attack);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -78,14 +79,21 @@ public class ResourceManager : IManagerIResettable
 
         return go;
     }
-    private GameObject RemoveCloneText(GameObject go)
-    {
-        int index = go.name.IndexOf("(Clone)");
-        if (index > 0)
-            go.name = go.name.Substring(0, index);
 
-        return go;
+
+    private Transform GetCashedParentTr(Transform parent,string path)
+    {
+        Transform parentTr = parent;
+        if (parent == null)
+        {
+            if (_cachingPoolableObject.TryGetValue(path, out GameObject cachedTransform))
+            {
+                parentTr = cachedTransform.transform;
+            }
+        }
+        return parentTr;
     }
+
     private bool isCheckNetworkPrefab(GameObject prefab)
     {
         if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))

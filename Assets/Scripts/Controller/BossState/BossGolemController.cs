@@ -74,6 +74,10 @@ public class BossGolemController : BossController
 
     public override void UpdateIdle()
     {
+        if (CurrentStateType != Base_IDleState)
+        {
+            CurrentStateType = Base_IDleState;
+        }
     }
 
     public override void UpdateMove()

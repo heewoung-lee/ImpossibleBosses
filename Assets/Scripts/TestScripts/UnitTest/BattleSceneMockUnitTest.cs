@@ -86,8 +86,6 @@ public class BattleSceneMockUnitTest : BaseScene
         {
             if (Managers.RelayManager.NetworkManagerEx.LocalClientId != clientID)
                 return;
-
-
             Define.PlayerClass playerClass =
                 (int)PlayerClass + (int)clientID < Enum.GetValues(typeof(Define.PlayerClass)).Length 
                 ? (Define.PlayerClass)((int)PlayerClass + (int)clientID): Define.PlayerClass.Archer;

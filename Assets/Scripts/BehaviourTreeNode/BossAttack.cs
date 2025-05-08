@@ -51,7 +51,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
                 if (_hasSpawnedParticles) return;
                 string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
                 SpawnParamBase param = SpawnParamBase.Create(argFloat:1f);
-                Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(_attackRangeParticlePos, dustPath, param);
+                Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath, param);
                 #region 5.6일 파티클 스폰방식 수정
                 //foreach (var pos in _attackRangeParticlePos)
                 //{

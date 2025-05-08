@@ -71,17 +71,17 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
-        async void TestButtonClickAsync()
+        void TestButtonClick()
         {
             TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
-            await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
         }
 
-        _scoreButton.onClick.AddListener(TestButtonClickAsync);
+        _scoreButton.onClick.AddListener(TestButtonClick);
         BindEvent(_scoreImage.gameObject, (PointerEventData) =>
         {
             _scoreImage.gameObject.transform.position = PointerEventData.position;
@@ -89,7 +89,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
-    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats, 5);
+    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats,60);
     public void TestGetExp() => PlayerStats.Exp += 5;
 
     public void TestGenerateBossSkill1()

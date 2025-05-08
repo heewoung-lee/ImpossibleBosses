@@ -5,7 +5,7 @@ public class PlayerStats : BaseStats, IAttackRange
 {
     private Dictionary<int, PlayerStat> _statDict;
     private int _level;
-    [SerializeField]private int _currentexp;
+    private int _currentexp;
     private int _gold;
     private float _viewAngle;
     private float _viewDistance;
@@ -92,7 +92,10 @@ public class PlayerStats : BaseStats, IAttackRange
 
     protected override void OnDead(BaseStats attacker)
     {
-        PlayerDeadEvent.Invoke();
+        if (IsOwner)
+        {
+            PlayerDeadEvent.Invoke();
+        }
     }
 
     protected override void SetStats()

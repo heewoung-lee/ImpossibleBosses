@@ -1,3 +1,4 @@
+using BaseStates;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using JetBrains.Annotations;
@@ -31,7 +32,6 @@ public class BossSkill1 : Action
     {
         base.OnStart();
         ChechedField();
-
         void ChechedField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
@@ -69,10 +69,16 @@ public class BossSkill1 : Action
                 _tickCounter = 0;
                 foreach (Collider targetPlayer in allTargets)
                 {
+                    if (targetPlayer.TryGetComponent(out BaseController basecontroller))
+                    {
+                        if (basecontroller.CurrentStateType is DieState)
+                            continue;
+                    }
+
                     string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
                     Vector3 targetPos = targetPlayer.transform.position;
                     SpawnParamBase param = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: Damage.Value);
-                    Managers.RelayManager.NGO_RPC_Caller.SpawnObjectToLocal(targetPos, skill1_indicator_Path, param);
+                    Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(targetPos, skill1_indicator_Path, param);
                     //5.6 ¼öÁ¤ SpawnProjector(targetPlayer);
                 }
             }
