@@ -89,7 +89,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
-    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats,60);
+    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats,2);
     public void TestGetExp() => PlayerStats.Exp += 5;
 
     public void TestGenerateBossSkill1()

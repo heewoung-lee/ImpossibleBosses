@@ -220,6 +220,10 @@ PrefabInstance:
       value: 3647165209
       objectReference: {fileID: 0}
     - target: {fileID: 881657431270591657, guid: 3dce488d9079fbe498afb9b6fa5f3c1e, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 881657431270591657, guid: 3dce488d9079fbe498afb9b6fa5f3c1e, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3021421277
       objectReference: {fileID: 0}
@@ -334,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerClass: 1
-  isSoloTest: 0
+  isSoloTest: 1
 --- !u!1 &1770151641
 GameObject:
   m_ObjectHideFlags: 0

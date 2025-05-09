@@ -125,22 +125,6 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         StartCoroutine(Play_Indicator(duration));
     }
 
-    //IEnumerator Play_Indicator()
-    //{
-    //    float fillAmount = 0f;
-    //    while (fillAmount < 1)
-    //    {
-    //        yield return null;
-    //        fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
-    //        UpdateDecalFillProgressProjector(fillAmount);
-    //    }
-    //    _doneIndicatorEvent?.Invoke();
-    //    _doneIndicatorEvent = null;
-    //    UpdateDecalFillProgressProjector(0f);
-    //    Managers.ResourceManager.DestroyObject(gameObject);
-    //}
-
-    //TODO: 여길 메인으로 사용할것 현재 fillAmount가 하드코딩 되어있음
     private IEnumerator Play_Indicator(float duration)
     {
         float elapsed = 0f;

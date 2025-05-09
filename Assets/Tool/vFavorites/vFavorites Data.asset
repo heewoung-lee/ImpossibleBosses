@@ -15,6 +15,15 @@ MonoBehaviour:
   pages:
   - items:
     - globalId:
+        globalObjectIdString: GlobalObjectId_V1-1-0237b8042ac57444dbc08514063d91c0-94351885454998009-0
+      _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      _obj: {fileID: 94351885454998009, guid: 0237b8042ac57444dbc08514063d91c0, type: 3}
+      isSceneGameObject: 0
+      isFolder: 0
+      isAsset: 1
+      _id: 1044773586
+    - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-2421fc243d7a7fa40a11830bb24d8425-3937754838849691090-0
       _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
@@ -41,15 +50,6 @@ MonoBehaviour:
       isFolder: 0
       isAsset: 1
       _id: 1045801314
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-b62b0c43614e16341b635cfaa1b77a88-11500000-0
-      _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 11500000, guid: b62b0c43614e16341b635cfaa1b77a88, type: 3}
-      isSceneGameObject: 0
-      isFolder: 0
-      isAsset: 1
-      _id: 1064930688
     - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-90c665426c21a7f4dbc68902b00c94ed-11500000-0
       _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
@@ -86,15 +86,6 @@ MonoBehaviour:
       isFolder: 0
       isAsset: 1
       _id: 1059201699
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-b85cec80049a61147a30a434779ff45a-11500000-0
-      _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 11500000, guid: b85cec80049a61147a30a434779ff45a, type: 3}
-      isSceneGameObject: 0
-      isFolder: 0
-      isAsset: 1
-      _id: 1057600635
     - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-bc68fd054de4e9d4093d0a3d1b92fd55-11500000-0
       _typeString: UnityEditor.MonoScript, UnityEditor.CoreModule, Version=0.0.0.0,
