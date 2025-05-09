@@ -17,6 +17,7 @@ public class BossSkill1 : Action
     
     private readonly string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
     private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
+    private readonly float skill1_DurationTime = 1f;
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
@@ -78,10 +79,10 @@ public class BossSkill1 : Action
                     }
                     Vector3 targetPos = targetPlayer.transform.position;
 
-                    SpawnParamBase skill1_indicator_param = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: Damage.Value);
+                    SpawnParamBase skill1_indicator_param = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: Damage.Value,argFloat: skill1_DurationTime);
                     Managers.RelayManager.NGO_RPC_Caller.SpawnLocalObject(targetPos, skill1_indicator_Path, skill1_indicator_param);
 
-                    SpawnParamBase skill1_stone_param = SpawnParamBase.Create();
+                    SpawnParamBase skill1_stone_param = SpawnParamBase.Create(argFloat: skill1_DurationTime);
                     Managers.RelayManager.NGO_RPC_Caller.SpawnLocalObject(targetPos, skill1_stone_Path, skill1_stone_param);
                     //5.6 ¼öÁ¤ SpawnProjector(targetPlayer);
                 }

@@ -32,6 +32,9 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
     [SerializeField]
     private NetworkVariable<Vector3> _callerPosition = new NetworkVariable<Vector3>
         (Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField]
+    private NetworkVariable<float> _durationTime = new NetworkVariable<float>
+        (0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private DecalProjector _decal_Circle_projector;
     private DecalProjector _decal_CircleBorder_projector;
@@ -42,7 +45,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
 
         private set
         {
-            if (IsServer == false) return;
+            if (IsHost == false) return;
             _radius.Value = Mathf.Max(value, 0f);
         }
     }
@@ -51,7 +54,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         get => _angle.Value;
         private set
         {
-            if (IsServer == false) return;
+            if (IsHost == false) return;
             _angle.Value = value;
         }
     }
@@ -60,7 +63,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         get => _arc.Value;
         private set
         {
-            if (IsServer == false) return;
+            if (IsHost == false) return;
             _arc.Value = Mathf.Clamp(value, 0f, 360f);
         }
     }
@@ -69,10 +72,20 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         get => _callerPosition.Value;
         private set
         {
-            if (IsServer == false) return;
+            if (IsHost == false) return;
             _callerPosition.Value = value;
         }
     }
+    public float DurationTime
+    {
+        get => _durationTime.Value;
+        set
+        {
+            if (IsHost == false) return;
+            _durationTime.Value = value;
+        }
+    }
+
 
     private static readonly int ColorShaderID = Shader.PropertyToID("_Color");
 
@@ -93,8 +106,8 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         OnRadiusValueChanged(0f, Radius);
         OnArcValueChagned(0f, Arc);
         OnAngleValueChanged(0f, Angle);
-        StartCoroutine(Play_Indicator());
     }
+
 
     private void SubscribeValueEvents()
     {
@@ -113,6 +126,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
     {
         transform.position = newValue;
     }
+
     private void OnRadiusValueChanged(float previousValue, float newValue)
     {
         Vector3 currentSize;
@@ -161,34 +175,48 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
         _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
-    public void SetValue(float radius, float arc, Transform targetTr, Action indicatorDoneEvent = null)
+    public void SetValue(float radius, float arc, Transform targetTr,float durationTime,Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
+        DurationTime = durationTime;
         _onIndicatorDone += indicatorDoneEvent;
+        StartProjectorCoroutineRpc();
     }
-   public void SetValue(float radius, float arc, Vector3 targetPos, Action indicatorDoneEvent = null)
+   public void SetValue(float radius, float arc, Vector3 targetPos, float durationTime,Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetPos;
+        DurationTime = durationTime;
         _onIndicatorDone += indicatorDoneEvent;
+        StartProjectorCoroutineRpc();
     }
 
-    IEnumerator Play_Indicator()
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartProjectorCoroutineRpc()
     {
-        float fillAmount = 0f;
-        while (fillAmount < 1)
+        StartCoroutine(Play_Indicator(DurationTime));
+    }
+    private IEnumerator Play_Indicator(float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
         {
-            yield return null;
-            fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
+            elapsed += Time.deltaTime;
+            // 0~1 로 정규화된 진행 비율
+            float fillAmount = Mathf.Clamp01(elapsed / duration);
             UpdateDecalFillProgressProjector(fillAmount);
+            yield return null;
         }
         _onIndicatorDone?.Invoke();
+        UpdateDecalFillProgressProjector(0f);       // 다음 재사용 대비
         Managers.ResourceManager.DestroyObject(gameObject);
     }
+
+
     private void ReleseProjector()
     {
         CallerPosition = Vector3.zero;

@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
+    private readonly float _attackDurationTime = 2f;
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
@@ -45,7 +46,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attack_indicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, IndicatorDoneEvent);
+            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, _attackDurationTime,IndicatorDoneEvent);
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles) return;

@@ -107,55 +107,51 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
         _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
-    public void SetValue(float radius, float arc, Transform targetTr, Action indicatorDoneEvent = null)
+    public void SetValue(float radius, float arc, Transform targetTr, float duration, Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
         _doneIndicatorEvent += indicatorDoneEvent;
-        StartCoroutine(Play_Indicator());
+        StartCoroutine(Play_Indicator(duration));
     }
-    public void SetValue(float radius, float arc, Vector3 targetPos, Action indicatorDoneEvent = null)
+    public void SetValue(float radius, float arc, Vector3 targetPos,float duration, Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetPos;
         _doneIndicatorEvent += indicatorDoneEvent;
-        StartCoroutine(Play_Indicator());
+        StartCoroutine(Play_Indicator(duration));
     }
 
-    IEnumerator Play_Indicator()
-    {
-        float fillAmount = 0f;
-        while (fillAmount < 1)
-        {
-            yield return null;
-            fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
-            UpdateDecalFillProgressProjector(fillAmount);
-        }
-        _doneIndicatorEvent?.Invoke();
-        _doneIndicatorEvent = null;
-        UpdateDecalFillProgressProjector(0f);
-        Managers.ResourceManager.DestroyObject(gameObject);
-    }
+    //IEnumerator Play_Indicator()
+    //{
+    //    float fillAmount = 0f;
+    //    while (fillAmount < 1)
+    //    {
+    //        yield return null;
+    //        fillAmount = Mathf.Clamp01(fillAmount += Time.deltaTime * 0.45f);
+    //        UpdateDecalFillProgressProjector(fillAmount);
+    //    }
+    //    _doneIndicatorEvent?.Invoke();
+    //    _doneIndicatorEvent = null;
+    //    UpdateDecalFillProgressProjector(0f);
+    //    Managers.ResourceManager.DestroyObject(gameObject);
+    //}
 
     //TODO: 여길 메인으로 사용할것 현재 fillAmount가 하드코딩 되어있음
     private IEnumerator Play_Indicator(float duration)
     {
         float elapsed = 0f;
-
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-
             // 0~1 로 정규화된 진행 비율
             float fillAmount = Mathf.Clamp01(elapsed / duration);
             UpdateDecalFillProgressProjector(fillAmount);
-
             yield return null;
         }
-
         _doneIndicatorEvent?.Invoke();
         _doneIndicatorEvent = null;
         UpdateDecalFillProgressProjector(0f);       // 다음 재사용 대비
