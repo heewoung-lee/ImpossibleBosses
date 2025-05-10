@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using JetBrains.Annotations;
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,26 +9,14 @@ using UnityEngine.AI;
 public class BossGolemNetworkController : NetworkBehaviourBase
 {
     private BehaviorTree _bossBehaviourTree;
-    private BossAttack _bossAttackNode;
     private BossGolemController _bossController;
+    public bool isDoneAttack = false;
 
-    [SerializeField]private NetworkVariable<float> _animSpeed = new NetworkVariable<float>
-    (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     protected override void AwakeInit()
     {
         _bossController= GetComponent<BossGolemController>();
         _bossBehaviourTree = GetComponent<BehaviorTree>();
-        _bossAttackNode = _bossBehaviourTree.FindTask<BossAttack>();
-    }
-    public float AnimSpeed
-    {
-        get => _animSpeed.Value;
-
-        set
-        {
-            if (IsHost == false) return;
-            _animSpeed.Value = value;
-        }
     }
     protected override void StartInit()
     {
@@ -38,8 +27,6 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         Managers.GameManagerEx.SetBossMonster(gameObject);
-        _animSpeed.OnValueChanged += OnAnimSpeedValueChanged;
-
         if (IsHost == false)
         {
             InitBossOnClient();
@@ -52,10 +39,34 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             GetComponent<NavMeshAgent>().enabled = false;
         }
     }
-
-    private void OnAnimSpeedValueChanged(float previousValue, float newValue)
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetParticleRpc(bool isSetParticle)
     {
-        _bossController.HostAnimSpeedChange(newValue);
+        isDoneAttack = isSetParticle;
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartAnimChagnedRpc(float animLength, float preTime)
+    {
+        StartCoroutine(UpdateAnimCorutine(animLength,preTime));
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartAnimChagnedRpc(float animLength, float preTime, float startAnimSpeed)
+    {
+        StartCoroutine(UpdateAnimCorutine(animLength, preTime, startAnimSpeed));
+    }
+
+    IEnumerator UpdateAnimCorutine(float animLength, float preTime, float startAnimSpeed = 1f)
+    {
+        float elaspedTime = 0f;
+        isDoneAttack = false;
+        while (elaspedTime <= animLength)
+        {
+            elaspedTime += Time.deltaTime * _bossController.Anim.speed;
+            isDoneAttack = _bossController.TryGetAnimationSpeed(elaspedTime, animLength, preTime,out float animspeed, startAnimSpeed);
+            yield return null;
+        }
+        _bossController.Anim.speed = 1;
+    }
 }

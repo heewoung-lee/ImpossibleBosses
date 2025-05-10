@@ -60,8 +60,8 @@ public class BossSkill1 : Action
         }
         bool UpdateAnimSpeed(float elaspedTime)
         {
-            bool isAttackReady =  _controller.SetAnimationSpeed(elaspedTime, _animLength, _controller.BossSkill1State, out float animSpeed, START_SKILL1_ANIM_SPEED);
-            _networkController.AnimSpeed = animSpeed;
+            bool isAttackReady =  _controller.TryGetAnimationSpeed(elaspedTime, _animLength, _controller.BossSkill1State, out float animSpeed, START_SKILL1_ANIM_SPEED);
+            //_networkController.AnimSpeed = animSpeed;
             return isAttackReady;
         }
         void SpawnIndicator()

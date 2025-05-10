@@ -82,13 +82,13 @@ public class BossSkill2 : Action
         }
         void UpdateAnimationSpeed(float elapsedTime)
         {
-            _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
-            _networkController.AnimSpeed = animSpeed;
-            if (_hasSpawnedParticles)
-            {
-                _controller.Anim.speed = 1;
-                _networkController.AnimSpeed = _controller.Anim.speed;
-            }
+            _controller.TryGetAnimationSpeed(elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
+            //    _networkController.AnimSpeed = animSpeed;
+            //    if (_hasSpawnedParticles)
+            //    {
+            //        _controller.Anim.speed = 1;
+            //        _networkController.AnimSpeed = _controller.Anim.speed;
+            //    }
         }
     }
 

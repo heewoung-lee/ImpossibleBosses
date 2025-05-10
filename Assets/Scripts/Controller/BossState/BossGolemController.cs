@@ -108,9 +108,4 @@ public class BossGolemController : BossController
     protected override void StartInit()
     {
     }
-
-    public void HostAnimSpeedChange(float animSpeed)
-    {
-        Anim.speed = animSpeed;
-    }
 }

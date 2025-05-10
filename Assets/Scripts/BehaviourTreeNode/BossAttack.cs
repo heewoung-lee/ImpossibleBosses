@@ -30,7 +30,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         ChechedBossAttackField();
         SpawnAttackIndicator();
         CalculateBossAttackRange();
-
+        StartAnimationSpeedChanged();
 
         void ChechedBossAttackField()
         {
@@ -64,6 +64,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
                 #endregion
                 TargetInSight.AttackTargetInSector(_stats);
                 _hasSpawnedParticles = true;
+                _networkController.SetParticleRpc(true);
             }
         }
         void CalculateBossAttackRange()
@@ -73,31 +74,45 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _controller.GetComponent<IAttackRange>().ViewDistance,
             Angle_Step, Radius_Step);
         }
+        void StartAnimationSpeedChanged()
+        {
+            if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float preTime) is false)
+                return;
+
+            _networkController.StartAnimChagnedRpc(_animLength,preTime);
+            //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
+
+        }
     }
 
 
     public override TaskStatus OnUpdate()
     {
-        float elaspedTime = UpdateElapsedTime();
-        UpdateAnimationSpeed(elaspedTime);
+        //_hasSpawnedParticles == true ? TaskStatus.Success : TaskStatus.Running;
+        return _hasSpawnedParticles == true ? TaskStatus.Success : TaskStatus.Running;
 
-        return _elapsedTime >= _animLength ? TaskStatus.Success: TaskStatus.Running;
 
-        float UpdateElapsedTime()
-        {
-            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-            return _elapsedTime;
-        }
-        void UpdateAnimationSpeed(float elapsedTime)
-        {
-            _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
-            _networkController.AnimSpeed = animSpeed;
-            if (_hasSpawnedParticles)
-            {
-                _controller.Anim.speed = 1;
-                _networkController.AnimSpeed = _controller.Anim.speed;
-            }
-        }
+
+        //float elaspedTime = UpdateElapsedTime();
+        //UpdateAnimationSpeed(elaspedTime);
+
+        //return _elapsedTime >= _animLength ? TaskStatus.Success : TaskStatus.Running;
+
+        //float UpdateElapsedTime()
+        //{
+        //    _elapsedTime += Time.deltaTime * _controller.Anim.speed;
+        //    return _elapsedTime;
+        //}
+        //void UpdateAnimationSpeed(float elapsedTime)
+        //{
+        //    _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
+        //    _networkController.AnimSpeed = animSpeed;
+        //    if (_hasSpawnedParticles)
+        //    {
+        //        _controller.Anim.speed = 1;
+        //        _networkController.AnimSpeed = _controller.Anim.speed;
+        //    }
+        //}
     }
 
 

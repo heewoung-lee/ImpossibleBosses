@@ -12,25 +12,43 @@ public abstract class BossController : BaseController
     protected override void AwakeInit()
     {
     }
-    public bool SetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed,float startAnimSpeed = 1f)
+    public bool TryGetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed,float startAnimSpeed = 1f)
     {
         animSpeed = 0f;
 
-        if (!AttackPreFrameDict.TryGetValue(attackType, out float preTime))
+        if(TryGetAttackTypePreTime(attackType,out float preTime) is false)
         {
-            Debug.LogError($"Attack type {attackType} not found in AttackPreFrameDict.");
-            return false;                  
+            return false;
         }
+        return TryGetAnimationSpeed(elapsedTime,animLength,preTime,out animSpeed,startAnimSpeed);
+    }
+    public bool TryGetAnimationSpeed(float elapsedTime, float animLength, float preTime, out float animSpeed, float startAnimSpeed = 1f)
+    {
+        animSpeed = 0f;
 
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
-        animSpeed = Mathf.Lerp(startAnimSpeed, 0f,elapsedTime / (animLength * preTime));
+        animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
         Anim.speed = animSpeed;
         bool finished = animSpeed <= 0.05f;
         if (finished)
         {
+            Debug.Log(finished);
             Anim.speed = 0f;
             animSpeed = 0f;
         }
         return finished;
+    }
+
+
+    public bool TryGetAttackTypePreTime(IState attackType,out float preTime)
+    {
+        if (AttackPreFrameDict.TryGetValue(attackType, out float preTimetoDict) == false)
+        {
+            Debug.LogError($"Attack type {attackType} not found in AttackPreFrameDict.");
+            preTime = default;
+            return false;
+        }
+        preTime = preTimetoDict;
+        return true;
     }
 }
