@@ -9,6 +9,7 @@ using UnityEngine;
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
     private readonly float _attackDurationTime = 2f;
+    private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
@@ -78,7 +79,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float preTime) is false)
                 return;
 
-            _networkController.StartAnimChagnedRpc(_animLength,preTime);
+            _networkController.StartAnimChagnedRpc(_animLength,preTime, _attackAnimStopThreshold);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 
         }

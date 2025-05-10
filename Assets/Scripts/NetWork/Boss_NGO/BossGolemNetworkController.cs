@@ -11,7 +11,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     private BehaviorTree _bossBehaviourTree;
     private BossGolemController _bossController;
     private bool _finishedAttack = false;
-
+    private Coroutine _animationCoroutine;
     public bool FinishAttack
     {
         get => _finishedAttack;
@@ -45,32 +45,40 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void StartAnimChagnedRpc(float animLength, float preTime)
+    public void StartAnimChagnedRpc(float animLength, float preTime, float animStopThreshold)
     {
-        StartCoroutine(UpdateAnimCorutine(animLength,preTime));
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
+
+        _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animLength,preTime, animStopThreshold));
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void StartAnimChagnedRpc(float animLength, float preTime, float startAnimSpeed)
+    public void StartAnimChagnedRpc(float animLength, float preTime, float startAnimSpeed, float animStopThreshold)
     {
-        StartCoroutine(UpdateAnimCorutine(animLength, preTime, startAnimSpeed));
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
+
+        _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animLength, preTime,animStopThreshold, startAnimSpeed));
     }
 
-    IEnumerator UpdateAnimCorutine(float animLength, float preTime, float startAnimSpeed = 1f)
+    IEnumerator UpdateAnimCorutine(float animLength, float preTime, float animStopThreshold,float startAnimSpeed = 1f)
     {
+        int id = GetHashCode();
+        Debug.Log($"Coroutine {id} START");
         float elaspedTime = 0f;
         FinishAttack = false;
 
-        Debug.Log($"{animLength}애님 렝스 {preTime}이전프레임{elaspedTime <= animLength}");
         while (elaspedTime <= animLength)
         {
-            elaspedTime += Time.deltaTime * _bossController.Anim.speed;
-            if (_bossController.TryGetAnimationSpeed(elaspedTime, animLength, preTime, out float animspeed, startAnimSpeed))
+            elaspedTime += Time.unscaledDeltaTime * _bossController.Anim.speed;
+            if (_bossController.TryGetAnimationSpeed(elaspedTime, animLength, preTime, out float animspeed, animStopThreshold, startAnimSpeed))
             {
                 _bossController.Anim.speed = 1;
             }
             yield return null;
         }
         FinishAttack = true;
+        Debug.Log($"Coroutine {id} END 애니메이션속도{_bossController.Anim.speed}");
     }
 }

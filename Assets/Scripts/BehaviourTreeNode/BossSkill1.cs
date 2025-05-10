@@ -9,16 +9,15 @@ using UnityEngine;
 
 public class BossSkill1 : Action
 {
-    public SharedInt Damage;
+    private readonly string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
+    private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
+    private readonly float skill1_DurationTime = 1f;
+    private readonly float skill1_animStopThreshold = 0.02f;
 
     private const float MAX_HEIGHT = 3f;
     private const float START_SKILL1_ANIM_SPEED = 0.8f;
     private const int SPAWN_BOSS_SKILL1_TICK = 20;
     
-    private readonly string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
-    private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
-    private readonly float skill1_DurationTime = 1f;
-
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
     private BossStats _stats;
@@ -28,6 +27,7 @@ public class BossSkill1 : Action
 
     private Collider[] allTargets;
 
+    public SharedInt Damage;
 
     public override void OnStart()
     {
@@ -49,7 +49,7 @@ public class BossSkill1 : Action
                 return;
 
 
-            _networkController.StartAnimChagnedRpc(_animLength, preTime);
+            _networkController.StartAnimChagnedRpc(_animLength, preTime, skill1_animStopThreshold);
         }
     }
 

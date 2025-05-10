@@ -2,18 +2,20 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public abstract class BossController : BaseController
 {
+    public int Tick = 0;
+
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Boss;
     public abstract Dictionary<IState, float> AttackPreFrameDict { get; }
 
     protected override void AwakeInit()
     {
     }
-    public bool TryGetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed,float startAnimSpeed = 1f,
-        float animStopThreshold = 0.06f)
+    public bool TryGetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed, float animStopThreshold,float startAnimSpeed = 1f)
     {
         animSpeed = 0f;
 
@@ -21,16 +23,17 @@ public abstract class BossController : BaseController
         {
             return false;
         }
-        return TryGetAnimationSpeed(elapsedTime,animLength,preTime,out animSpeed,startAnimSpeed);
+        return TryGetAnimationSpeed(elapsedTime,animLength,preTime,out animSpeed, animStopThreshold,startAnimSpeed);
     }
-    public bool TryGetAnimationSpeed(float elapsedTime, float animLength, float preTime, out float animSpeed, float startAnimSpeed = 1f
-        ,float animStopThreshold = 0.06f)
+    public bool TryGetAnimationSpeed(float elapsedTime, float animLength, float preTime, out float animSpeed, float animStopThreshold, float startAnimSpeed = 1f)
     {
-
         animSpeed = 0f;
-
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
+        Debug.Log($"틱{Tick++} 전타임{preTime} 애님랭스{animLength} 실제애님스피드{Anim.speed} 스레스홀드{animStopThreshold}{System.Environment.StackTrace}");
+        AnimatorStateInfo info = Anim.GetCurrentAnimatorStateInfo(0);
+        float normalized = info.normalizedTime;
+        Debug.Log($"애니메이션 시작지점{normalized}");
         Anim.speed = animSpeed;
         bool finished = animSpeed <= animStopThreshold;
         if (finished)
