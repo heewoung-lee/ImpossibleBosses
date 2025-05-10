@@ -10,8 +10,13 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 {
     private BehaviorTree _bossBehaviourTree;
     private BossGolemController _bossController;
-    public bool FinishAttack = false;
+    private bool _finishedAttack = false;
 
+    public bool FinishAttack
+    {
+        get => _finishedAttack;
+        private set => _finishedAttack = value;
+    }
     protected override void AwakeInit()
     {
         _bossController= GetComponent<BossGolemController>();
@@ -55,6 +60,8 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     {
         float elaspedTime = 0f;
         FinishAttack = false;
+
+        Debug.Log($"{animLength}æ÷¥‘ ∑¿Ω∫ {preTime}¿Ã¿¸«¡∑π¿”{elaspedTime <= animLength}");
         while (elaspedTime <= animLength)
         {
             elaspedTime += Time.deltaTime * _bossController.Anim.speed;

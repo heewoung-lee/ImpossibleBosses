@@ -12,7 +12,6 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
-    private float _elapsedTime = 0f;
     private float _animLength = 0f;
     private List<Vector3> _attackRangeParticlePos;
     private BossStats _stats;
@@ -88,38 +87,13 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 
     public override TaskStatus OnUpdate()
     {
-        //_hasSpawnedParticles == true ? TaskStatus.Success : TaskStatus.Running;
         return _networkController.FinishAttack == true ? TaskStatus.Success : TaskStatus.Running;
-
-
-
-        //float elaspedTime = UpdateElapsedTime();
-        //UpdateAnimationSpeed(elaspedTime);
-
-        //return _elapsedTime >= _animLength ? TaskStatus.Success : TaskStatus.Running;
-
-        //float UpdateElapsedTime()
-        //{
-        //    _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-        //    return _elapsedTime;
-        //}
-        //void UpdateAnimationSpeed(float elapsedTime)
-        //{
-        //    _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.Base_Attackstate, out float animSpeed);
-        //    _networkController.AnimSpeed = animSpeed;
-        //    if (_hasSpawnedParticles)
-        //    {
-        //        _controller.Anim.speed = 1;
-        //        _networkController.AnimSpeed = _controller.Anim.speed;
-        //    }
-        //}
     }
 
 
     public override void OnEnd()
     {
         base.OnEnd();
-        _elapsedTime = 0f;
         _attackRangeParticlePos = null;
         _hasSpawnedParticles = false;
     }

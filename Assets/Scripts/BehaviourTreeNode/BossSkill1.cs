@@ -23,11 +23,9 @@ public class BossSkill1 : Action
     private BossGolemNetworkController _networkController;
     private BossStats _stats;
 
-    private float _elapsedTime = 0f;
     private int _tickCounter = 0;
     private float _animLength = 0f;
 
-    private bool _isAttackReady = false;
     private Collider[] allTargets;
 
 
@@ -35,6 +33,7 @@ public class BossSkill1 : Action
     {
         base.OnStart();
         ChechedField();
+        StartAnimationSpeedChanged();
         void ChechedField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
@@ -44,26 +43,20 @@ public class BossSkill1 : Action
             _controller.CurrentStateType = _controller.BossSkill1State;
             _networkController = Owner.GetComponent<BossGolemNetworkController>();
         }
+        void StartAnimationSpeedChanged()
+        {
+            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float preTime) is false)
+                return;
+
+
+            _networkController.StartAnimChagnedRpc(_animLength, preTime);
+        }
     }
 
     public override TaskStatus OnUpdate()
     {
-        float elaspedTime = UpdateElapsedTime();
-        _isAttackReady = UpdateAnimSpeed(elaspedTime);
         SpawnIndicator();
-        return _isAttackReady == true ? TaskStatus.Success : TaskStatus.Running;
-        
-        float UpdateElapsedTime()
-        {
-            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-            return _elapsedTime;
-        }
-        bool UpdateAnimSpeed(float elaspedTime)
-        {
-            bool isAttackReady =  _controller.TryGetAnimationSpeed(elaspedTime, _animLength, _controller.BossSkill1State, out float animSpeed, START_SKILL1_ANIM_SPEED);
-            //_networkController.AnimSpeed = animSpeed;
-            return isAttackReady;
-        }
+        return _networkController.FinishAttack == true ? TaskStatus.Success : TaskStatus.Running;
         void SpawnIndicator()
         {
             _tickCounter++;
@@ -93,7 +86,5 @@ public class BossSkill1 : Action
     public override void OnEnd()
     {
         base.OnEnd();
-        _elapsedTime = 0;
-        _controller.Anim.speed = 1f;
     }
 }

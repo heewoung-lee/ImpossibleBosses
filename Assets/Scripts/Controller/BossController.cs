@@ -12,7 +12,8 @@ public abstract class BossController : BaseController
     protected override void AwakeInit()
     {
     }
-    public bool TryGetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed,float startAnimSpeed = 1f)
+    public bool TryGetAnimationSpeed(float elapsedTime,float animLength, IState attackType, out float animSpeed,float startAnimSpeed = 1f,
+        float animStopThreshold = 0.06f)
     {
         animSpeed = 0f;
 
@@ -22,14 +23,16 @@ public abstract class BossController : BaseController
         }
         return TryGetAnimationSpeed(elapsedTime,animLength,preTime,out animSpeed,startAnimSpeed);
     }
-    public bool TryGetAnimationSpeed(float elapsedTime, float animLength, float preTime, out float animSpeed, float startAnimSpeed = 1f)
+    public bool TryGetAnimationSpeed(float elapsedTime, float animLength, float preTime, out float animSpeed, float startAnimSpeed = 1f
+        ,float animStopThreshold = 0.06f)
     {
+
         animSpeed = 0f;
 
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
         Anim.speed = animSpeed;
-        bool finished = animSpeed <= 0.06f;
+        bool finished = animSpeed <= animStopThreshold;
         if (finished)
         {
             Anim.speed = 0f;
