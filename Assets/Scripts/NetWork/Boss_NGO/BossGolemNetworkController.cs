@@ -10,8 +10,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 {
     private BehaviorTree _bossBehaviourTree;
     private BossGolemController _bossController;
-    public bool isDoneAttack = false;
-
+    public bool FinishAttack = false;
 
     protected override void AwakeInit()
     {
@@ -39,11 +38,6 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             GetComponent<NavMeshAgent>().enabled = false;
         }
     }
-    [Rpc(SendTo.ClientsAndHost)]
-    public void SetParticleRpc(bool isSetParticle)
-    {
-        isDoneAttack = isSetParticle;
-    }
 
     [Rpc(SendTo.ClientsAndHost)]
     public void StartAnimChagnedRpc(float animLength, float preTime)
@@ -60,13 +54,16 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     IEnumerator UpdateAnimCorutine(float animLength, float preTime, float startAnimSpeed = 1f)
     {
         float elaspedTime = 0f;
-        isDoneAttack = false;
+        FinishAttack = false;
         while (elaspedTime <= animLength)
         {
             elaspedTime += Time.deltaTime * _bossController.Anim.speed;
-            isDoneAttack = _bossController.TryGetAnimationSpeed(elaspedTime, animLength, preTime,out float animspeed, startAnimSpeed);
+            if (_bossController.TryGetAnimationSpeed(elaspedTime, animLength, preTime, out float animspeed, startAnimSpeed))
+            {
+                _bossController.Anim.speed = 1;
+            }
             yield return null;
         }
-        _bossController.Anim.speed = 1;
+        FinishAttack = true;
     }
 }

@@ -32,6 +32,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         CalculateBossAttackRange();
         StartAnimationSpeedChanged();
 
+
         void ChechedBossAttackField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
@@ -64,7 +65,6 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
                 #endregion
                 TargetInSight.AttackTargetInSector(_stats);
                 _hasSpawnedParticles = true;
-                _networkController.SetParticleRpc(true);
             }
         }
         void CalculateBossAttackRange()
@@ -89,7 +89,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     public override TaskStatus OnUpdate()
     {
         //_hasSpawnedParticles == true ? TaskStatus.Success : TaskStatus.Running;
-        return _hasSpawnedParticles == true ? TaskStatus.Success : TaskStatus.Running;
+        return _networkController.FinishAttack == true ? TaskStatus.Success : TaskStatus.Running;
 
 
 

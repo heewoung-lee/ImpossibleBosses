@@ -29,10 +29,9 @@ public abstract class BossController : BaseController
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
         Anim.speed = animSpeed;
-        bool finished = animSpeed <= 0.05f;
+        bool finished = animSpeed <= 0.06f;
         if (finished)
         {
-            Debug.Log(finished);
             Anim.speed = 0f;
             animSpeed = 0f;
         }
