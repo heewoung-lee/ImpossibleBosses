@@ -18,10 +18,10 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private BossStats _stats;
     private bool _hasSpawnedParticles;
 
-    [SerializeField] private SharedProjector _attack_indicator;
     private NGO_Indicator_Controller _indicator_controller;
-
-    public int radius_Step = 0;
+    
+    public SharedProjector _attackIndicator;
+    public int Radius_Step = 0;
     public int Angle_Step = 0;
 
     public override void OnStart()
@@ -44,7 +44,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         void SpawnAttackIndicator()
         {
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
-            _attack_indicator.Value = _indicator_controller;
+            _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
             _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, _attackDurationTime,IndicatorDoneEvent);
             void IndicatorDoneEvent()
@@ -71,7 +71,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _attackRangeParticlePos = TargetInSight.GeneratePositionsInSector(_controller.transform,
             _controller.GetComponent<IAttackRange>().ViewAngle,
             _controller.GetComponent<IAttackRange>().ViewDistance,
-            Angle_Step, radius_Step);
+            Angle_Step, Radius_Step);
         }
     }
 

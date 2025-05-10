@@ -11,7 +11,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     private BossAttack _bossAttackNode;
     private BossGolemController _bossController;
 
-    private NetworkVariable<float> _animSpeed = new NetworkVariable<float>
+    [SerializeField]private NetworkVariable<float> _animSpeed = new NetworkVariable<float>
     (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     protected override void AwakeInit()
     {

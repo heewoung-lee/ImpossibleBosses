@@ -5,86 +5,98 @@ using UnityEngine;
 
 public class BossSkill2 : Action
 {
+    private readonly float _attackDurationTime = 3f;
+
     private BossGolemController _controller;
+    private BossGolemNetworkController _networkController;
 
     public SharedInt Damage;
     public float Attack_Range = 0f;
     public int Radius_Step = 0;
     public int Angle_Step = 0;
 
-    public SharedProjector _attackIndicator;
     private float _elapsedTime = 0f;
-    private float _charging = 0f;
     private float _animLength = 0f;
-    private bool _isAttackReady = false;
     private List<Vector3> _attackRangeCirclePos;
     private BossStats _stats;
+    private bool _hasSpawnedParticles;
 
-
+    [SerializeField] private SharedProjector _attackIndicator;
+    private NGO_Indicator_Controller _indicator_controller;
     public override void OnStart()
     {
         base.OnStart();
+        ChechedBossAttackField();
+        SpawnAttackIndicator();
+        CalculateBossAttackRange();
 
-        _controller = Owner.GetComponent<BossGolemController>();
-        _stats = _controller.GetComponent<BossStats>();
-        _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
-        _attackIndicator.Value = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
-        if (Attack_Range <= 0)
+
+        void ChechedBossAttackField()
         {
-            _controller.TryGetComponent(out BossStats stats);
-            Attack_Range = stats.ViewDistance;
+            _controller = Owner.GetComponent<BossGolemController>();
+            _stats = _controller.GetComponent<BossStats>();
+            _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
+            if (Attack_Range <= 0)
+            {
+                _controller.TryGetComponent(out BossStats stats);
+                Attack_Range = stats.ViewDistance;
+            }
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
+            _hasSpawnedParticles = false;
         }
-        //_attackIndicator.Value.SetValue(Attack_Range, 360);
-        _attackIndicator.Value.transform.SetParent(_controller.transform, false);
-        _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
-
-
-        _attackRangeCirclePos = TargetInSight.GeneratePositionsInCircle(_controller.transform,
-            Attack_Range,
-             Radius_Step, Angle_Step);
-
-
-        _controller.CurrentStateType = _controller.BossSkill2State;
+        void SpawnAttackIndicator()
+        {
+            _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
+            _attackIndicator.Value = _indicator_controller;
+            _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
+            _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
+            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _attackDurationTime, IndicatorDoneEvent);
+            _controller.CurrentStateType = _controller.BossSkill2State;
+            void IndicatorDoneEvent()
+            {
+                if (_hasSpawnedParticles) return;
+                string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle_Big";
+                SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
+                Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
+                TargetInSight.AttackTargetInCircle(_stats, Attack_Range, Damage.Value);
+                _hasSpawnedParticles = true;
+            }
+        }
+        void CalculateBossAttackRange()
+        {
+            _attackRangeCirclePos = TargetInSight.GeneratePositionsInCircle(_controller.transform, Attack_Range,Radius_Step,Angle_Step);
+        }
     }
 
     public override TaskStatus OnUpdate()
     {
+        float elaspedTime = UpdateElapsedTime();
+        UpdateAnimationSpeed(elaspedTime);
 
-        _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-        _charging = Mathf.Clamp01(_charging += Time.deltaTime * 0.45f);
+        return _elapsedTime >= _animLength ? TaskStatus.Success : TaskStatus.Running;
 
-        //_attackIndicator.Value.FillProgress = _charging;
-        //_attackIndicator.Value.UpdateProjectors();
-
-        _isAttackReady = _controller.SetAnimationSpeed(_elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
-        if (_isAttackReady && _charging >= 1)
+        float UpdateElapsedTime()
         {
-            _controller.Anim.speed = 1;
-
-            if (_attackIndicator.Value.gameObject.activeSelf)
+            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
+            return _elapsedTime;
+        }
+        void UpdateAnimationSpeed(float elapsedTime)
+        {
+            _controller.SetAnimationSpeed(elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
+            _networkController.AnimSpeed = animSpeed;
+            if (_hasSpawnedParticles)
             {
-                foreach (Vector3 pos in _attackRangeCirclePos)
-                {
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos,1f);
-                }
-                Managers.ResourceManager.DestroyObject(_attackIndicator.Value.gameObject);
-                TargetInSight.AttackTargetInCircle(_stats, Attack_Range,Damage.Value);
+                _controller.Anim.speed = 1;
+                _networkController.AnimSpeed = _controller.Anim.speed;
             }
         }
-        if (_elapsedTime >= _animLength)
-        {
-            return TaskStatus.Success;
-        }
-        return TaskStatus.Running;
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
         _elapsedTime = 0f;
-        _charging = 0f;
-        _animLength = 0f;
-        _isAttackReady = false;
         _attackRangeCirclePos = null;
+        _hasSpawnedParticles = false;
     }
 }
