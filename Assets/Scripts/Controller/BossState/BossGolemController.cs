@@ -12,7 +12,7 @@ public class BossGolemController : BossController
 {
 
     private const float ATTACK_PRE_FRAME = 0.35f;
-    private const float SKILL1_PRE_FRAME = 0.8f;
+    private const float SKILL1_PRE_FRAME = 0.6f;
     private const float SKILL2_PRE_FRAME = 0.3f;
     private const float SKILL1_Transition = 0.1f;
 
