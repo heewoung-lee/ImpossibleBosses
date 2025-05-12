@@ -48,7 +48,6 @@ public class BossSkill1 : Action
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float preTime) is false)
                 return;
 
-
             _networkController.StartAnimChagnedRpc(_animLength, preTime, skill1_animStopThreshold);
         }
     }

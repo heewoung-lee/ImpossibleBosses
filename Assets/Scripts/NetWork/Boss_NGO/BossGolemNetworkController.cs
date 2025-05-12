@@ -52,23 +52,10 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 
         _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animLength,preTime, animStopThreshold));
     }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    public void StartAnimChagnedRpc(float animLength, float preTime, float startAnimSpeed, float animStopThreshold)
-    {
-        if (_animationCoroutine != null)
-            StopCoroutine(_animationCoroutine);
-
-        _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animLength, preTime,animStopThreshold, startAnimSpeed));
-    }
-
     IEnumerator UpdateAnimCorutine(float animLength, float preTime, float animStopThreshold,float startAnimSpeed = 1f)
     {
-        int id = GetHashCode();
-        Debug.Log($"Coroutine {id} START");
         float elaspedTime = 0f;
         FinishAttack = false;
-
         while (elaspedTime <= animLength)
         {
             elaspedTime += Time.unscaledDeltaTime * _bossController.Anim.speed;
@@ -79,6 +66,5 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             yield return null;
         }
         FinishAttack = true;
-        Debug.Log($"Coroutine {id} END 애니메이션속도{_bossController.Anim.speed}");
     }
 }

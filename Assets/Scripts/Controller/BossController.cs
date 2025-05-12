@@ -30,10 +30,8 @@ public abstract class BossController : BaseController
         animSpeed = 0f;
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
-        Debug.Log($"틱{Tick++} 전타임{preTime} 애님랭스{animLength} 실제애님스피드{Anim.speed} 스레스홀드{animStopThreshold}{System.Environment.StackTrace}");
-        AnimatorStateInfo info = Anim.GetCurrentAnimatorStateInfo(0);
-        float normalized = info.normalizedTime;
-        Debug.Log($"애니메이션 시작지점{normalized}");
+        //Debug.Log($"틱{Tick++} 전타임{preTime} 애님랭스{animLength} 실제애님스피드{Anim.speed} 스레스홀드{animStopThreshold}{System.Environment.StackTrace}");
+
         Anim.speed = animSpeed;
         bool finished = animSpeed <= animStopThreshold;
         if (finished)
