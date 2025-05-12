@@ -64,6 +64,8 @@ public class BossGolemNetworkController : NetworkBehaviourBase
                 _bossController.Anim.speed = 1;
             }
             yield return null;
+
+            Debug.Log(_bossController.Anim.speed+"¾Ö´Ô ½ºÇÇµå");
         }
         FinishAttack = true;
     }
