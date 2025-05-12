@@ -6,6 +6,7 @@ using UnityEngine;
 public class BossSkill2 : Action
 {
     private readonly float _attackDurationTime = 3f;
+    private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
@@ -15,7 +16,6 @@ public class BossSkill2 : Action
     public int Radius_Step = 0;
     public int Angle_Step = 0;
 
-    private float _elapsedTime = 0f;
     private float _animLength = 0f;
     private List<Vector3> _attackRangeCirclePos;
     private BossStats _stats;
@@ -29,7 +29,7 @@ public class BossSkill2 : Action
         ChechedBossAttackField();
         SpawnAttackIndicator();
         CalculateBossAttackRange();
-
+        StartAnimationSpeedChanged();
 
         void ChechedBossAttackField()
         {
@@ -54,7 +54,7 @@ public class BossSkill2 : Action
             _controller.CurrentStateType = _controller.BossSkill2State;
             void IndicatorDoneEvent()
             {
-                if (_hasSpawnedParticles) return;
+                if (_hasSpawnedParticles == true) return;
                 string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle_Big";
                 SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
                 Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
@@ -66,36 +66,25 @@ public class BossSkill2 : Action
         {
             _attackRangeCirclePos = TargetInSight.GeneratePositionsInCircle(_controller.transform, Attack_Range,Radius_Step,Angle_Step);
         }
+        void StartAnimationSpeedChanged()
+        {
+            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill2State, out float preTime) is false)
+                return;
+
+            _networkController.StartAnimChagnedRpc(_animLength, preTime, _attackAnimStopThreshold);
+            //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
+
+        }
     }
 
     public override TaskStatus OnUpdate()
     {
-        float elaspedTime = UpdateElapsedTime();
-        UpdateAnimationSpeed(elaspedTime);
-
-        return _elapsedTime >= _animLength ? TaskStatus.Success : TaskStatus.Running;
-
-        float UpdateElapsedTime()
-        {
-            _elapsedTime += Time.deltaTime * _controller.Anim.speed;
-            return _elapsedTime;
-        }
-        void UpdateAnimationSpeed(float elapsedTime)
-        {
-            //_controller.TryGetAnimationSpeed(elapsedTime, _animLength, _controller.BossSkill2State, out float animSpeed);
-            //    _networkController.AnimSpeed = animSpeed;
-            //    if (_hasSpawnedParticles)
-            //    {
-            //        _controller.Anim.speed = 1;
-            //        _networkController.AnimSpeed = _controller.Anim.speed;
-            //    }
-        }
+        return _networkController.FinishAttack == true ? TaskStatus.Success : TaskStatus.Running;
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
-        _elapsedTime = 0f;
         _attackRangeCirclePos = null;
         _hasSpawnedParticles = false;
     }
