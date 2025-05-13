@@ -12,7 +12,8 @@ public class BossSkill1 : Action
     private readonly string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
     private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
     private readonly float skill1_DurationTime = 1f;
-    private readonly float skill1_animStopThreshold = 0.02f;
+    private readonly float skill1_AnimStopThreshold = 0.02f;
+    private readonly float skill1_StartAnimSpeed = 0.8f;
 
     private const float MAX_HEIGHT = 3f;
     private const float START_SKILL1_ANIM_SPEED = 0.8f;
@@ -45,10 +46,11 @@ public class BossSkill1 : Action
         }
         void StartAnimationSpeedChanged()
         {
-            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float preTime) is false)
+            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float decelerationRatio) is false)
                 return;
 
-            _networkController.StartAnimChagnedRpc(_animLength, preTime, skill1_animStopThreshold);
+            AnimChangeInfo animinfo = new AnimChangeInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold, skill1_DurationTime, skill1_StartAnimSpeed);
+            _networkController.StartAnimChagnedRpc(animinfo);
         }
     }
 

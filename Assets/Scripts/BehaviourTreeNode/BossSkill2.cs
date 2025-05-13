@@ -68,10 +68,12 @@ public class BossSkill2 : Action
         }
         void StartAnimationSpeedChanged()
         {
-            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill2State, out float preTime) is false)
+            if (_controller.TryGetAttackTypePreTime(_controller.BossSkill2State, out float decelerationRatio) is false)
                 return;
 
-            _networkController.StartAnimChagnedRpc(_animLength, preTime, _attackAnimStopThreshold);
+
+            AnimChangeInfo animinfo = new AnimChangeInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime);
+            _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 
         }
