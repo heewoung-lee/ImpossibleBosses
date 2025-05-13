@@ -30,8 +30,7 @@ public abstract class BossController : BaseController
         animSpeed = 0f;
         startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animLength * preTime));
-        Debug.Log($"∆Ω{Tick++} ¿¸≈∏¿”{preTime} æ÷¥‘∑©Ω∫{animLength} Ω«¡¶æ÷¥‘Ω∫««µÂ{Anim.speed} Ω∫∑πΩ∫»¶µÂ{animStopThreshold}{System.Environment.StackTrace}");
-
+        //Debug.Log($"∆Ω{Tick++} ¿¸≈∏¿”{preTime} æ÷¥‘∑©Ω∫{animLength} Ω«¡¶æ÷¥‘Ω∫««µÂ{Anim.speed} Ω∫∑πΩ∫»¶µÂ{animStopThreshold}{System.Environment.StackTrace}");
         Anim.speed = animSpeed;
         bool finished = animSpeed <= animStopThreshold;
         if (finished)
