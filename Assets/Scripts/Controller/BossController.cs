@@ -16,7 +16,7 @@ public abstract class BossController : BaseController
     {
     }
 
-    public bool TryGetAnimationSpeed(float elapsedTime, out float animSpeed, AnimChangeInfo animinfo,bool isCheckattackIndicatorFinish)
+    public bool TryGetAnimationSpeed(float elapsedTime, out float animSpeed, CurrentAnimInfo animinfo,bool isCheckattackIndicatorFinish)
     {
         animSpeed = 0f;
         float startAnimSpeed = Mathf.Clamp01(animinfo.StartAnimationSpeed);

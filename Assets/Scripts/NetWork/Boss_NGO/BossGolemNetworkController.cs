@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public struct AnimChangeInfo : INetworkSerializable
+public struct CurrentAnimInfo : INetworkSerializable
 {
     public float AnimLength;
     public float DecelerationRatio;
@@ -22,7 +22,7 @@ public struct AnimChangeInfo : INetworkSerializable
         serializer.SerializeValue(ref StartAnimationSpeed);
     }
 
-    public AnimChangeInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,float startAnimSpeed = 1f)
+    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,float startAnimSpeed = 1f)
     {
         AnimLength = animLength;
         DecelerationRatio = decelerationRatio;
@@ -74,7 +74,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void StartAnimChagnedRpc(AnimChangeInfo animinfo)
+    public void StartAnimChagnedRpc(CurrentAnimInfo animinfo)
     {
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
@@ -83,7 +83,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     }
 
 
-    IEnumerator UpdateAnimCorutine(AnimChangeInfo animinfo)
+    IEnumerator UpdateAnimCorutine(CurrentAnimInfo animinfo)
     {
         float elaspedTime = 0f;
         FinishAttack = false;
