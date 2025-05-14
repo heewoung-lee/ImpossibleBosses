@@ -181,24 +181,25 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
-        DurationTime = durationTime;
         _onIndicatorDone += indicatorDoneEvent;
-        StartProjectorCoroutineRpc();
+        float clampDuration = Mathf.Max(durationTime, 0.1f);
+        DurationTime = clampDuration;
+        StartProjectorCoroutineRpc(clampDuration);
     }
    public void SetValue(float radius, float arc, Vector3 targetPos, float durationTime,Action indicatorDoneEvent = null)
     {
         Radius = radius;
         Arc = arc;
         CallerPosition = targetPos;
-        DurationTime = durationTime;
-        _onIndicatorDone += indicatorDoneEvent;
-        StartProjectorCoroutineRpc();
+        float clampDuration = Mathf.Max(durationTime, 0.1f);
+        DurationTime = clampDuration;
+        StartProjectorCoroutineRpc(clampDuration);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    public void StartProjectorCoroutineRpc()
+    public void StartProjectorCoroutineRpc(float durationTime)
     {
-        StartCoroutine(Play_Indicator(DurationTime));
+        StartCoroutine(Play_Indicator(durationTime));
     }
     private IEnumerator Play_Indicator(float duration)
     {

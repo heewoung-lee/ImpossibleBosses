@@ -79,6 +79,13 @@ public class BossGolemNetworkController : NetworkBehaviourBase
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
 
+        if (animinfo.IndicatorDuration < 0f)        // faster swing
+        {
+            float speedScale = animinfo.AnimLength / Mathf.Max(animinfo.AnimLength + animinfo.IndicatorDuration, 0.1f);
+            animinfo.StartAnimationSpeed *= speedScale;
+            animinfo.AnimStopThreshold *= speedScale;
+        }
+
         _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animinfo));
     }
 
@@ -87,22 +94,30 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     {
         float elaspedTime = 0f;
         FinishAttack = false;
-        StartCoroutine(UpdateIndicatorDurationTime(animinfo.IndicatorDuration));
+
+        double prevNetTime = NetworkManager.Singleton.ServerTime.Time;
+
+        StartCoroutine(UpdateIndicatorDurationTime(animinfo.IndicatorDuration,animinfo.AnimLength));
         while (elaspedTime <= animinfo.AnimLength)
         {
+            double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+            float deltaTime = (float)(currentNetTime - prevNetTime);
+            prevNetTime = currentNetTime;
+
             _bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration);
-            elaspedTime += Time.unscaledDeltaTime * animspeed;
+            elaspedTime += deltaTime * animspeed;
             yield return null;
         }
         FinishAttack = true;
+        _bossController.Anim.speed = 1;
     }
 
 
-    IEnumerator UpdateIndicatorDurationTime(float duration)
+    IEnumerator UpdateIndicatorDurationTime(float indicatorAddduration,float animLength)
     {
         _finishedIndicatorDuration = false;
         float elapsedTime = 0f;
-        while (elapsedTime <= duration)
+        while (elapsedTime <= indicatorAddduration+ animLength)
         {
             elapsedTime += Time.unscaledDeltaTime;
             yield return null;

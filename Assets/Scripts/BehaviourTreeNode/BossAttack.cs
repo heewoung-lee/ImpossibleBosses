@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
-    private readonly float _attackDurationTime = 2f;
+    private readonly float _IndicatorAddDurationTime = -1f;
     private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
@@ -47,7 +47,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, _attackDurationTime,IndicatorDoneEvent);
+            _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, _IndicatorAddDurationTime+_animLength,IndicatorDoneEvent);
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles) return;
@@ -79,8 +79,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float decelerationRatio) is false)
                 return;
 
-
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _IndicatorAddDurationTime);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
         }

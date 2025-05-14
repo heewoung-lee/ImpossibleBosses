@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BossSkill2 : Action
 {
-    private readonly float _attackDurationTime = 3f;
+    private readonly float _attackDurationTime = 2f;
     private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
@@ -50,7 +50,7 @@ public class BossSkill2 : Action
             _attackIndicator.Value = _indicator_controller;
             _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _attackDurationTime, IndicatorDoneEvent);
+            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _attackDurationTime + _animLength, IndicatorDoneEvent);
             _controller.CurrentStateType = _controller.BossSkill2State;
             void IndicatorDoneEvent()
             {
