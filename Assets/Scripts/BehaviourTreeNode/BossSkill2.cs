@@ -50,7 +50,8 @@ public class BossSkill2 : Action
             _attackIndicator.Value = _indicator_controller;
             _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _attackDurationTime + _animLength, IndicatorDoneEvent);
+            float totalIndicatorDurationTime = _attackDurationTime + _animLength;
+            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
             _controller.CurrentStateType = _controller.BossSkill2State;
             void IndicatorDoneEvent()
             {
