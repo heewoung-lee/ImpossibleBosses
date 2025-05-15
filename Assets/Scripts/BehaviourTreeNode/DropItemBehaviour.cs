@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public class DropItemBehaviour : MonoBehaviour,LootItemBehaviour
+public class DropItemBehaviour : NetworkBehaviour,LootItemBehaviour
 {
     private readonly float MAX_HEIGHT = 3f;
     private readonly float CircleRange = 30f;
@@ -10,8 +10,10 @@ public class DropItemBehaviour : MonoBehaviour,LootItemBehaviour
     public void SpawnBahaviour(Rigidbody rigid)
     {
         rigid.isKinematic = true;
-        StartCoroutine(ThrowStoneParabola(rigid, itemFlightDuration));
-       
+        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        {
+            StartCoroutine(ThrowStoneParabola(rigid, itemFlightDuration));
+        }
     }
     public IEnumerator ThrowStoneParabola(Rigidbody rb, float duration)
     {

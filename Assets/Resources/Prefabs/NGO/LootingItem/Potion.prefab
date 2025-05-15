@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1466580168938195017, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 339861980
+      objectReference: {fileID: 0}
     - target: {fileID: 5137051465787000960, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
       propertyPath: m_Height
       value: 3.3
@@ -90,6 +94,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8276403274525710667, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2609892887039443194}
+    - targetCorrespondingSourceObject: {fileID: 8276403274525710667, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1121640785824005093}
+    - targetCorrespondingSourceObject: {fileID: 8276403274525710667, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3900895598904967089}
   m_SourcePrefab: {fileID: 100100000, guid: 47c8fbe7be936ed42b8b35bbabfa6f67, type: 3}
 --- !u!1 &8923393352751583669 stripped
 GameObject:
@@ -149,3 +159,66 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-1121640785824005093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923393352751583669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 0
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &3900895598904967089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923393352751583669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 0
+  AutoSetKinematicOnDespawn: 0

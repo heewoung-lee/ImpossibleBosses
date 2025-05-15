@@ -34,12 +34,12 @@ public class LootItem : NetworkBehaviour,IInteraction
         _collider = GetComponent<CapsuleCollider>();
         _networkObject = GetComponent<NetworkObject>();
     }
-    public override void OnNetworkSpawn()
+
+    public void SpawnBahaviour()
     {
-        base.OnNetworkSpawn();
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
-       
+
         if (TryGetComponent(out LootItemBehaviour behaviour) == true)
         {
             behaviour.SpawnBahaviour(_rigidBody);
@@ -63,15 +63,20 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && _rigidBody.isKinematic == false)
-        {
-            _rigidBody.isKinematic = true;
-            transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
-            transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
-            StartCoroutine(RotationDropItem());
-            CreateLootingItemEffect();
-            _canInteraction = true;
-        }
+        if (!IsServer) return;                         // 충돌 판정은 서버만
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") == false || _rigidBody.isKinematic) return;
+        LandedLogicRpc();                                 // 서버 로컬 처리
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void LandedLogicRpc()
+    {
+        _rigidBody.isKinematic = true;
+        transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
+        transform.rotation = Quaternion.identity;
+        StartCoroutine(RotationDropItem());
+        CreateLootingItemEffect();
+        _canInteraction = true;
     }
 
 

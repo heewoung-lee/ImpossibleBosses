@@ -24,9 +24,8 @@ public class DropItems : Action
     {
         base.OnStart();
         _tree = Owner.GetComponent<BehaviorTree>();
-        _ngo_dropItemBehaviour = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_EmptyObject");
+        _ngo_dropItemBehaviour = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_BossDropItemBehaviour");
         Managers.RelayManager.SpawnNetworkOBJ(_ngo_dropItemBehaviour,Managers.RelayManager.NGO_ROOT.transform);
-        _ngo_dropItemBehaviour.AddComponent<DropItemBehaviour>();
         _index = 0;
         _isCallIndex = false;
 
