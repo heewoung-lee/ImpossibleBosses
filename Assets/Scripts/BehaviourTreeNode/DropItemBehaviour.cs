@@ -4,51 +4,45 @@ using UnityEngine;
 
 public class DropItemBehaviour : MonoBehaviour,LootItemBehaviour
 {
-    private readonly float TORQUE_FORCE_OFFSET = 10f;
     private readonly float MAX_HEIGHT = 3f;
     private readonly float CircleRange = 30f;
     private readonly float itemFlightDuration = 1.5f;
     public void SpawnBahaviour(Rigidbody rigid)
     {
-
-        Vector2 randomCircle = Random.insideUnitCircle * CircleRange;
-        Vector3 offset = new Vector3(randomCircle.x, 0f, randomCircle.y);
-        Vector3 spawnPos = rigid.transform.position + offset;
-        transform.position = rigid.transform.position + Vector3.up * 1.2f;
-
-        Vector3 randomTorque = new Vector3(
-           Random.Range(-1f, 1f),  // X축 회전
-           Random.Range(-1f, 1f),  // Y축 회전
-           Random.Range(-1f, 1f)   // Z축 회전
-       );
-        // 회전 힘 추가 (랜덤 값에 강도를 조절)
-        rigid.AddTorque(randomTorque * TORQUE_FORCE_OFFSET, ForceMode.Impulse);
-        StartCoroutine(ThrowStoneParabola(rigid.transform, spawnPos, itemFlightDuration));
+        rigid.isKinematic = true;
+        StartCoroutine(ThrowStoneParabola(rigid, itemFlightDuration));
        
     }
-    public IEnumerator ThrowStoneParabola(Transform lootItemTr, Vector3 targetPos, float duration)
+    public IEnumerator ThrowStoneParabola(Rigidbody rb, float duration)
     {
-        Vector3 startPos = lootItemTr.position;
-        Vector3 targetPoint = targetPos;
-        float elapsedTime = 0f;
-        while (elapsedTime < duration)
+        Transform tr = rb.transform;
+
+        Vector3 startPos = tr.position;                      // 시작점
+        Vector2 rndCircle = Random.insideUnitCircle * CircleRange;
+        Vector3 targetPos = startPos + new Vector3(rndCircle.x, 0, rndCircle.y);
+
+        Vector3 spinAxis = Random.onUnitSphere.normalized;   // 임의 축
+        float spinSpeed = Random.Range(180f, 540f);         // °/sec
+
+        float t = 0f;
+        while (t < 1f)
         {
-            elapsedTime += Time.deltaTime;
+            t += Time.deltaTime / duration;
 
-            // t: 진행 비율 (0~1)
-            float t = elapsedTime / duration;
+            /* ---------------- 위치(포물선) ---------------- */
+            Vector3 flat = Vector3.Lerp(startPos, targetPos, t);
+            float y = Mathf.Lerp(startPos.y, targetPos.y, t) +
+                           MAX_HEIGHT * Mathf.Sin(Mathf.PI * t);
+            tr.position = new Vector3(flat.x, y, flat.z);
 
-            // XZ 위치 보간
-            Vector3 currentXZ = Vector3.Lerp(startPos, targetPoint, t);
-
-            // Y 값은 포물선 계산
-            float currentY = Mathf.Lerp(startPos.y, targetPoint.y, t) + MAX_HEIGHT * Mathf.Sin(Mathf.PI * t);
-
-            // 최종 위치 설정
-            lootItemTr.position = new Vector3(currentXZ.x, currentY, currentXZ.z);
+            /* ---------------- 회전(랜덤 축 스핀) ---------------- */
+            tr.Rotate(spinAxis, spinSpeed * Time.deltaTime, Space.Self);
 
             yield return null;
         }
+
+        // 충돌·회전을 물리에 맡기고 싶다면 다시 동적 모드로
+        rb.isKinematic = false;
     }
 
 }

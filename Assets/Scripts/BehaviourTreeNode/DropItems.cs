@@ -8,7 +8,11 @@ using UnityEngine;
 
 public class DropItems : Action
 {
+    private int minimumTimeCount = 1;
+    private int maximumTimeCount = 3;
 
+
+    private int _spwanItemCount = 10;
     private List<int> _timeRandom;
     private int _index;
     private bool _isCallIndex;
@@ -27,11 +31,10 @@ public class DropItems : Action
         _isCallIndex = false;
 
         _timeRandom = new List<int>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _spwanItemCount; i++)
         {
-            int randomNumber = Random.Range(1, 3);
+            int randomNumber = Random.Range(minimumTimeCount, maximumTimeCount);
             _timeRandom.Add(randomNumber);
-            Debug.Log($"{i}번째 자리 입력완료 시간:{randomNumber}");
         }
         
     }
@@ -41,17 +44,16 @@ public class DropItems : Action
     {
         if(_index >= _timeRandom.Count)
         {
-            Debug.Log("성공");
             if (_tree != null)
             {
                 _tree.DisableBehavior(); // 내부적으로 정리하면서 비활성화
             }
+            
             return TaskStatus.Success;
         }
 
         if (_elapseTime >= _timeRandom[_index] && _isCallIndex == false)
         {
-            Debug.Log($"{_index}의 {_timeRandom[_index]}호출완료");
             _isCallIndex = true;
             _elapseTime = 0;
             _index++;
@@ -82,5 +84,6 @@ public class DropItems : Action
             _timeRandom.Clear();
             _timeRandom = null;
         }
+        Managers.RelayManager.DeSpawn_NetWorkOBJ(_ngo_dropItemBehaviour);
     }
 }

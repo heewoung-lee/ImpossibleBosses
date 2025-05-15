@@ -43,7 +43,6 @@ public class LootItem : NetworkBehaviour,IInteraction
         if (TryGetComponent(out LootItemBehaviour behaviour) == true)
         {
             behaviour.SpawnBahaviour(_rigidBody);
-            Debug.Log("비헤이비어 스폰");
             return;
         }
         //튀어오르면서 로테이션을 돌린다.
@@ -66,7 +65,6 @@ public class LootItem : NetworkBehaviour,IInteraction
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && _rigidBody.isKinematic == false)
         {
-            Debug.Log("땅에 닿았다");
             _rigidBody.isKinematic = true;
             transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
             transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
