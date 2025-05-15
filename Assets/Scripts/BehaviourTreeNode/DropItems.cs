@@ -1,6 +1,9 @@
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DropItems : Action
@@ -9,18 +12,28 @@ public class DropItems : Action
     private List<int> _timeRandom;
     private int _index;
     private bool _isCallIndex;
-
     float _elapseTime = 0;
+    BehaviorTree _tree;
+
+    GameObject _ngo_dropItemBehaviour;
     public override void OnStart()
     {
         base.OnStart();
+        _tree = Owner.GetComponent<BehaviorTree>();
+        _ngo_dropItemBehaviour = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_EmptyObject");
+        Managers.RelayManager.SpawnNetworkOBJ(_ngo_dropItemBehaviour,Managers.RelayManager.NGO_ROOT.transform);
+        _ngo_dropItemBehaviour.AddComponent<DropItemBehaviour>();
         _index = 0;
         _isCallIndex = false;
+
         _timeRandom = new List<int>();
         for (int i = 0; i < 10; i++)
         {
-            _timeRandom.Add(Random.Range(1,3));
+            int randomNumber = Random.Range(1, 3);
+            _timeRandom.Add(randomNumber);
+            Debug.Log($"{i}번째 자리 입력완료 시간:{randomNumber}");
         }
+        
     }
 
 
@@ -29,18 +42,33 @@ public class DropItems : Action
         if(_index >= _timeRandom.Count)
         {
             Debug.Log("성공");
+            if (_tree != null)
+            {
+                _tree.DisableBehavior(); // 내부적으로 정리하면서 비활성화
+            }
             return TaskStatus.Success;
         }
 
-        int time = _timeRandom[_index];
-
-        if(_elapseTime >= time && _isCallIndex == false)
+        if (_elapseTime >= _timeRandom[_index] && _isCallIndex == false)
         {
-            Debug.Log($"{_timeRandom[_index]}의 {time}호출완료");
+            Debug.Log($"{_index}의 {_timeRandom[_index]}호출완료");
             _isCallIndex = true;
             _elapseTime = 0;
-        }
+            _index++;
+            SpawnItem();
 
+            void SpawnItem()
+            {
+                if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+                    return;
+
+                IItem spawnItem = Managers.ItemDataManager.GetRandomItemFromAll();
+                IteminfoStruct itemStruct = new IteminfoStruct(spawnItem);
+                NetworkObjectReference dropItemBahaviour = Managers.RelayManager.GetNetworkObject(_ngo_dropItemBehaviour);
+                Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);
+            }
+        }
+        _isCallIndex = false;
         _elapseTime += Time.deltaTime;
         return TaskStatus.Running;
     }
@@ -48,5 +76,11 @@ public class DropItems : Action
     public override void OnEnd()
     {
         base.OnEnd();
+        _elapseTime = 0;
+        if (_timeRandom != null)
+        {
+            _timeRandom.Clear();
+            _timeRandom = null;
+        }
     }
 }

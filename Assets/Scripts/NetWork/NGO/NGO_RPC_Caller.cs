@@ -109,7 +109,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
     [Rpc(SendTo.Server)]
-    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true)
+    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true, NetworkObjectReference addLootItemBehaviour = default)
     {
         //여기에서 itemStruct를 IItem으로 변환
         GameObject networkLootItem = null;
@@ -128,6 +128,17 @@ public class NGO_RPC_Caller : NetworkBehaviour
         //여기에서는 어떤 아이템을 스폰할껀지 아이템의 형상만 가져올 것.
 
         networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
+        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false)
+        {
+            if (addLootItemBehaviour.TryGet(out NetworkObject ngo))
+            {
+                LootItemBehaviour lootItemBehaviour = ngo.GetComponent<LootItemBehaviour>();
+                if (lootItemBehaviour is MonoBehaviour monoBehaviour)
+                {
+                    networkLootItem.AddComponent(monoBehaviour.GetType());
+                }
+            }
+        }
         GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot);
         NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
         SetDropItemInfoRpc(itemStruct, rootItemRef);
