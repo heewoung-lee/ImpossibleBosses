@@ -36,7 +36,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
     public void NetworkLoadScene(Define.Scene nextscene,Action<ulong> clientLoadedEvent,Action allPlayerLoadedEvent)
     {
-        //Managers.Clear();
+        Managers.Clear();
         Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadCompleteAsync;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);

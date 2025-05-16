@@ -7,7 +7,7 @@ public class Module_UI_Description : MonoBehaviour
     UI_Description _description;
     void Awake()
     {
-        _description = Managers.UI_Manager.GetSceneUIFromResource<UI_Description>();
+        _description = Managers.UI_Manager.GetSceneUIFromResource<UI_Description>(isCheckDontDestroy: true);
         
     }
     private void Start()

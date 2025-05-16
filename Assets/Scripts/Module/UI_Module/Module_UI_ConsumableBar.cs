@@ -7,7 +7,7 @@ public class Module_UI_ConsumableBar : MonoBehaviour
 
     void Start()
     {
-        UI_ConsumableBar ui_ConsumableBar = Managers.UI_Manager.GetSceneUIFromResource<UI_ConsumableBar>();
+        UI_ConsumableBar ui_ConsumableBar = Managers.UI_Manager.GetSceneUIFromResource<UI_ConsumableBar>(isCheckDontDestroy:true);
     }
 
 }

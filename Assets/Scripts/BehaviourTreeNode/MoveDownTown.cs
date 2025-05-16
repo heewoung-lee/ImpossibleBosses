@@ -20,11 +20,30 @@ public class MoveDownTown : Action
         void MoveToDownTown()//호스트에게만 실행됨.
         {
             Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, (asd) => { }, () => { });
-            //void ClientLoadedEvent(ulong clientId)
-            //{
-            //    Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
-            //}
+            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
+            void ClientLoadedEvent(ulong clientId)
+            {
+                Debug.Log($"{clientId} 플레이어 로딩 완료");
+
+                foreach (NetworkObject clicentNgoObj in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+                {
+                    if (clicentNgoObj.OwnerClientId != clientId)
+                    {
+                        continue;
+                    }
+                    if(clicentNgoObj.TryGetComponent(out PlayerStats playerStats) == true)
+                    {
+                        Debug.Log($"{clientId}플레이어 찾았다");
+                        playerStats.transform.position = new Vector3(clientId,0,0);
+                        break;
+                    }
+                }
+                //TODO: 플레이어 스폰위치 조정
+                //TODO: 시계 UI 없애야함
+                //TODO: 각 플레이어들의 스폰위치를 정해줘야함.
+
+
+            }
 
             //void AllPlayerLoadedEvent()
             //{
