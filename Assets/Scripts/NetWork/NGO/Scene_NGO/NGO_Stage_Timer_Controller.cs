@@ -8,7 +8,8 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
 
 
     private const float VillageStayTime = 300f;
-    private const float BossRoomStayTime = 60f;
+    //private const float BossRoomStayTime = 60f;
+    private const float BossRoomStayTime = 2f;
     private const float AllPlayerinPortalCount = 7f;
     private float _totalTime = 0;
     private float _currentTime = 0;

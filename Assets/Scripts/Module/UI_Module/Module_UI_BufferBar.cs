@@ -10,5 +10,6 @@ public class Module_UI_BufferBar : MonoBehaviour
     void Start()
     {
         _ui_bufferbar = Managers.UI_Manager.GetSceneUIFromResource<UI_BufferBar>();
+        DontDestroyOnLoad(_ui_bufferbar.gameObject);
     }
 }

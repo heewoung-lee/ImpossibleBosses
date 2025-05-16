@@ -12,7 +12,7 @@ public class DropItems : Action
     private int maximumTimeCount = 3;
 
 
-    private int _spwanItemCount = 10;
+    private int _spwanItemCount = 1;
     private List<int> _timeRandom;
     private int _index;
     private bool _isCallIndex;
@@ -43,11 +43,6 @@ public class DropItems : Action
     {
         if(_index >= _timeRandom.Count)
         {
-            if (_tree != null)
-            {
-                _tree.DisableBehavior(); // 내부적으로 정리하면서 비활성화
-            }
-            
             return TaskStatus.Success;
         }
 

@@ -70,7 +70,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         string choiceCharacterName = Managers.RelayManager.ChoicePlayerCharactersDict[clientId].ToString();
         Vector3 targetPosition = new Vector3(1 * clientId, 0, 1);
-        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform);
+        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform,false);
     }
 
     public override void OnNetworkSpawn()
@@ -147,8 +147,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             return;
         }
-
-        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false)
+        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false) // 만약에 루트아이템의 행동동작에 대한 오브젝트가 있다면 설정
         {
             if (addLootItemBehaviour.TryGet(out NetworkObject ngo))
             {
@@ -160,7 +159,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 }
             }
         }
-
         IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
         rootItemngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
         rootItemngo.GetComponent<LootItem>().SpawnBahaviour();
@@ -280,7 +278,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         try
         {
-            await Managers.LobbyManager.RemoveLobbyAsync(await Managers.LobbyManager.GetCurrentLobby());
+            Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
+
+            if(currentLobby != null)
+            {
+                await Managers.LobbyManager.RemoveLobbyAsync(currentLobby);
+            }
             await Managers.VivoxManager.LogoutOfVivoxAsync();
         }
         catch (Exception e)

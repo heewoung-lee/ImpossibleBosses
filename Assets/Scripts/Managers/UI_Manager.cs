@@ -37,6 +37,7 @@ public class UI_Manager : IManagerIResettable
             if (go == null)
             {
                 go = new GameObject() { name = "@UI_ROOT" };
+                Managers.DontDestroyOnLoad(go);
             }
             return go;
         }
@@ -50,6 +51,7 @@ public class UI_Manager : IManagerIResettable
             if (go == null)
             {
                 go = new GameObject() { name = "@UI_DamageText" };
+                Managers.DontDestroyOnLoad(go);
             }
             return go;
         }
@@ -152,7 +154,7 @@ public class UI_Manager : IManagerIResettable
 
         return popup;
     }
-    public T GetSceneUIFromResource<T>(string name = null, string path = null) where T : UI_Scene
+    public T GetSceneUIFromResource<T>(string name = null, string path = null,bool isCheckDontDestroy = false) where T : UI_Scene
     {
         if (name == null)
             name = typeof(T).Name;
@@ -168,7 +170,10 @@ public class UI_Manager : IManagerIResettable
         }
          T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T), scene);
-
+        if(isCheckDontDestroy == true)
+        {
+            Managers.DontDestroyOnLoad(go);
+        }
         go.transform.SetParent(Root.transform);
 
         return scene;

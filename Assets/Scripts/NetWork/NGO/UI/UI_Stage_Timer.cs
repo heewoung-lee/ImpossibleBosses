@@ -16,6 +16,22 @@ public class UI_Stage_Timer : UI_Scene
     private float _currentTime;
     private float _timerFillAmount;
 
+    private Action _onTimerCompleted;
+
+
+    public event Action OnTimerCompleted
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onTimerCompleted, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onTimerCompleted, value);
+        }
+    }
+
+
     public float TimerFillAmount
     {
         get
@@ -103,7 +119,7 @@ public class UI_Stage_Timer : UI_Scene
         _timerFillAmount = 0f;
         _currentTime = 0f;
 
-        //TODO:타이머 다 됐을때 실행할 동작 만들기
+        _onTimerCompleted?.Invoke();
     }
 
 
