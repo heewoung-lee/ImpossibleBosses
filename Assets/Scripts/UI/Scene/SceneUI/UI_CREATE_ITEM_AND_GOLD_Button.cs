@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 {
     private Button _scoreButton;
+    private Button _moveSceneButton;
     private TMP_Text _scoreText;
-    private Image _scoreImage;
 
     private PlayerStats _playerStats;
 
@@ -30,15 +30,12 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
     enum Buttons
     {
-        ScoreButton
+        ScoreButton,
+        MoveDownTownScene
     }
     enum Texts
     {
         ScoreText,
-    }
-    enum Images
-    {
-        ScoreImage
     }
 
 
@@ -54,15 +51,15 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
         Bind<Button>(typeof(Buttons));
         Bind<TMP_Text>(typeof(Texts));
-        Bind<Image>(typeof(Images));
 
         _scoreButton = GetButton((int)Buttons.ScoreButton);
-        _scoreImage = GetImage((int)Images.ScoreImage);
+        _moveSceneButton = GetButton((int)Buttons.MoveDownTownScene);
         _scoreText = GetText((int)Texts.ScoreText);
     }
     protected override void StartInit()
     {
         InitalizeUI_Button();
+
     }
 
     public void IninitalizePlayerStats(GameObject player)
@@ -71,6 +68,10 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
+
+        _scoreButton.onClick.AddListener(TestButtonClick);
+        _moveSceneButton.onClick.AddListener(MoveScene);
+
         void TestButtonClick()
         {
             TestIteminInventort();
@@ -79,16 +80,13 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
             TestGetDamaged();
             //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
-
-
-            //MoveToDownTown();
         }
 
-        _scoreButton.onClick.AddListener(TestButtonClick);
-        BindEvent(_scoreImage.gameObject, (PointerEventData) =>
+        void MoveScene()
         {
-            _scoreImage.gameObject.transform.position = PointerEventData.position;
-        }, Define.UI_Event.Drag);
+            MoveToDownTown();
+
+        }
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
@@ -97,6 +95,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     
     public void MoveToDownTown()//호스트에게만 실행됨.
     {
+        Managers.Clear();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
         void ClientLoadedEvent(ulong clientId)

@@ -16,7 +16,6 @@ public class UI_Player_Inventory : UI_Popup
     private TMP_Text _hp_Stat_Text;
     private TMP_Text _attack_Stat_Text;
     private TMP_Text _defense_Stat_Text;
-    private Button _windowClose_Button;
     private GameObject _equipMent;
     private Transform _windowPanel;
     private Canvas _inventoryCanvas;

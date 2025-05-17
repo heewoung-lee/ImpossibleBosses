@@ -19,9 +19,9 @@ public class NGO_PoolManager : IManagerIResettable
     private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
 
-    public void Set_NGO_Pool(NetworkObjectPool ngo)
+    public void Set_NGO_Pool(GameObject ngo)
     {
-        _ngoPool = ngo;
+        _ngoPool = ngo.GetComponent<NetworkObjectPool>();
     }
     public void Create_NGO_Pooling_Object()
     {
@@ -79,7 +79,7 @@ public class NGO_PoolManager : IManagerIResettable
 
     public void Clear()
     {
-
         _pool_NGO_Root_Dict.Clear();
     }
+
 }

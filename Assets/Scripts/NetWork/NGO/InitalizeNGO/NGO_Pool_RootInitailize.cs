@@ -46,6 +46,7 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
 
     private void OnChangedPoolingNgoPath(FixedString128Bytes previousValue, FixedString128Bytes newValue)
     {
+        Debug.Log(newValue.ToString()+"»£√‚µ ");
         GeneratePoolOBJ(newValue.ToString());
     }
 

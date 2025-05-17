@@ -12,10 +12,11 @@ public class NetworkObjectPool : NetworkBehaviour
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
     public override void OnNetworkDespawn()
     {
-        Debug.Log("디스폰 호출됨?");
         foreach (string prefabPath in m_PooledObjects.Keys)
         {
             m_PooledObjects[prefabPath].Clear();
+            GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
+            NetworkManager.Singleton.PrefabHandler.RemoveHandler(prefab);//핸들러 제거 핸들러를 제거 안하면 구핸들러를 참조하는문제가 생김
         }
         m_PooledObjects.Clear();
     }
@@ -23,8 +24,7 @@ public class NetworkObjectPool : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
-        Managers.NGO_PoolManager.Set_NGO_Pool(this);
+        Managers.NGO_PoolManager.Set_NGO_Pool(gameObject);
 
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
@@ -68,7 +68,14 @@ public class NetworkObjectPool : NetworkBehaviour
         if (networkObject.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
         {
             poolingInitalize_Base.OnPoolRelease();
-            m_PooledObjects[poolingInitalize_Base.PoolingNGO_PATH].Release(networkObject);
+            if (m_PooledObjects.TryGetValue(poolingInitalize_Base.PoolingNGO_PATH,out ObjectPool<NetworkObject> poolObj))//씬 전환될때 오브젝트 풀이 비어지는데 이떄 풀로 반납되려는 객체가 있을때를 대비에 TryGet으로 수정
+            {
+                poolObj.Release(networkObject);
+            }
+            else
+            {
+                Debug.Log($"{networkObject.name} can't return the Pool");
+            }
         }
 
     }
@@ -83,6 +90,23 @@ public class NetworkObjectPool : NetworkBehaviour
             Debug.Log($"{prefab.name} is not registed the NetworkManager");
             return;
         }
+
+       
+        m_PooledObjects[prefabPath] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
+
+        var prewarmNetworkObjects = new List<NetworkObject>();
+        for (var i = 0; i < prewarmCount; i++)
+        {
+            prewarmNetworkObjects.Add(m_PooledObjects[prefabPath].Get());
+        }
+        foreach (var networkObject in prewarmNetworkObjects)
+        {
+            m_PooledObjects[prefabPath].Release(networkObject);
+        }
+
+        PooledPrefabInstanceHandler handler = new PooledPrefabInstanceHandler(this, prefabPath);
+
+        Managers.RelayManager.NetworkManagerEx.PrefabHandler.AddHandler(prefab, handler);
 
         NetworkObject CreateFunc()
         {
@@ -104,22 +128,6 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             Destroy(networkObject.gameObject);
         }
-        m_PooledObjects[prefabPath] = new ObjectPool<NetworkObject>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy, defaultCapacity: prewarmCount);
-
-        var prewarmNetworkObjects = new List<NetworkObject>();
-        for (var i = 0; i < prewarmCount; i++)
-        {
-            prewarmNetworkObjects.Add(m_PooledObjects[prefabPath].Get());
-        }
-        foreach (var networkObject in prewarmNetworkObjects)
-        {
-            m_PooledObjects[prefabPath].Release(networkObject);
-        }
-
-        PooledPrefabInstanceHandler handler = new PooledPrefabInstanceHandler(this, prefabPath);
-
-        Managers.RelayManager.NetworkManagerEx.PrefabHandler.AddHandler(prefab, handler);
-
     }
 }
 public class PooledPrefabInstanceHandler : INetworkPrefabInstanceHandler
