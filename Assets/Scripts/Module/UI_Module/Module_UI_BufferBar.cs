@@ -9,6 +9,6 @@ public class Module_UI_BufferBar : MonoBehaviour
 
     void Start()
     {
-        _ui_bufferbar = Managers.UI_Manager.GetSceneUIFromResource<UI_BufferBar>(isCheckDontDestroy:true);
+        _ui_bufferbar = Managers.UI_Manager.GetSceneUIFromResource<UI_BufferBar>();
     }
 }

@@ -34,6 +34,7 @@ public class MoveDownTown : Action
                     if(clicentNgoObj.TryGetComponent(out PlayerStats playerStats) == true)
                     {
                         Debug.Log($"{clientId}플레이어 찾았다");
+                        playerStats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
                         playerStats.transform.position = new Vector3(clientId,0,0);
                         break;
                     }
