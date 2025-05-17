@@ -12,6 +12,7 @@ public class NetworkObjectPool : NetworkBehaviour
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
     public override void OnNetworkDespawn()
     {
+        Debug.Log("디스폰 호출됨?");
         foreach (string prefabPath in m_PooledObjects.Keys)
         {
             m_PooledObjects[prefabPath].Clear();

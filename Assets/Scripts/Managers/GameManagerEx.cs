@@ -37,6 +37,20 @@ public class GameManagerEx : IManagerInitializable
     }
 
 
+    private Action<PlayerStats> _onPlayerSpawnEvent;
+    public event Action<PlayerStats> OnPlayerSpawnEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnEvent, value);
+        }
+    }
+
+
     public GameObject Player { get => _player; }
     public GameObject BossMonster { get => _bossMonster; }
     public Environment EnvironMent { get => _environment; }
@@ -70,6 +84,7 @@ public class GameManagerEx : IManagerInitializable
     public void SetPlayer(GameObject playerObject)
     {
         _player = playerObject;
+        _onPlayerSpawnEvent?.Invoke(playerObject.GetComponent<PlayerStats>());
     }
     public void SetBossMonster(GameObject bossMonster)
     {

@@ -39,7 +39,19 @@ public class VFXManager
 
     GameObject _vfx_Root_NGO;
 
-    public Transform VFX_Root_NGO { get => _vfx_Root_NGO.transform; }
+    public Transform VFX_Root_NGO
+    {
+        get
+        {
+            if(_vfx_Root_NGO == null)
+            {
+                _vfx_Root_NGO = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
+            }
+            return _vfx_Root_NGO.transform;
+        }
+    }
+
+
     public void Set_VFX_Root_NGO(NetworkObject ngo)
     {
         _vfx_Root_NGO = ngo.gameObject;

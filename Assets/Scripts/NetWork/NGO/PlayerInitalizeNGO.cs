@@ -44,17 +44,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
         gameObject.AddComponent<PlayerController>();
-        gameObject.AddComponent<Module_Player_TextureCamera>();
-        gameObject.AddComponent<Module_UI_BufferBar>();
-        gameObject.AddComponent<Module_UI_ConsumableBar>();
-        gameObject.AddComponent<Module_UI_ItemDragImage>();
-        gameObject.AddComponent<Module_UI_Player_Inventory>();
-        gameObject.AddComponent<Module_UI_PlayerInfo>();
-        gameObject.AddComponent<Module_UI_SkillBar>();
-        gameObject.AddComponent<Module_UI_Description>();
         gameObject.AddComponent<Module_MainCamera_CinemachineBrain>();
         gameObject.AddComponent<Module_Player_AnimInfo>();
-        gameObject.AddComponent<Module_UI_Player_TestButton>();
+        gameObject.AddComponent<Module_Player_TextureCamera>();
         gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
         _interactionTr.AddComponent<Module_Player_Interaction>();
         SetPlayerLayerMask();

@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class NGO_PoolManager
+public class NGO_PoolManager : IManagerIResettable
 {
     private NetworkObjectPool _ngoPool;
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
@@ -77,4 +77,9 @@ public class NGO_PoolManager
         _ngoPool.RegisterPrefabInternal(path, capacity);
     }
 
+    public void Clear()
+    {
+
+        _pool_NGO_Root_Dict.Clear();
+    }
 }
