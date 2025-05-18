@@ -17,8 +17,7 @@ public class BattleScene : BaseScene
         //Managers.UI_Manager.ShowUIPopupUI<Button_UI>();
         _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
-
-
+        Init_NGO_PlayScene_OnHost();
     }
     public override void Clear()
     {

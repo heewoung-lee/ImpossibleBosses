@@ -82,7 +82,6 @@ public class UI_Player_Info : UI_Scene
 
     public void UpdateUIInfo(CharacterBaseStat stat)
     {
-        Debug.Log("UpdateUIInfo");
         _hpText.text = $"{stat.hp}/{stat.maxHp}";
         _hpSlider.value = (float)stat.hp / (float)stat.maxHp;
         _levelText.text = _playerStats.Level.ToString();

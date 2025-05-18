@@ -7,7 +7,23 @@ public class SkillManager : IManagerInitializable
     Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
     public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
 
-    public Action Done_UI_SKilBar_Init_Event;
+
+    private Action _done_UI_SkillBar_Init_Event;
+
+    public event Action Done_UI_SKilBar_Init_Event
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _done_UI_SkillBar_Init_Event,value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _done_UI_SkillBar_Init_Event, value);
+        }
+    }
+
+
+
 
     List<Type> _skillType = new List<Type>();
 
@@ -47,5 +63,10 @@ public class SkillManager : IManagerInitializable
         {
             typeList.Add(type);
         }
+    }
+
+    public void Invoke_Done_UI_SKilBar_Init_Event()
+    {
+        _done_UI_SkillBar_Init_Event?.Invoke();
     }
 }

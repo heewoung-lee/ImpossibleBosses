@@ -422,4 +422,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ResetManagersRpc()
+    {
+        Managers.Clear();
+    }
+
 }

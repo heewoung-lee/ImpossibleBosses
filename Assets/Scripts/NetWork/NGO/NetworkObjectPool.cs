@@ -16,7 +16,7 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             m_PooledObjects[prefabPath].Clear();
             GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
-            NetworkManager.Singleton.PrefabHandler.RemoveHandler(prefab);//핸들러 제거 핸들러를 제거 안하면 구핸들러를 참조하는문제가 생김
+            Managers.RelayManager.NetworkManagerEx.PrefabHandler.RemoveHandler(prefab);
         }
         m_PooledObjects.Clear();
     }
@@ -24,7 +24,7 @@ public class NetworkObjectPool : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        Managers.NGO_PoolManager.Set_NGO_Pool(gameObject);
+        Managers.NGO_PoolManager.Set_NGO_Pool(this);
 
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;

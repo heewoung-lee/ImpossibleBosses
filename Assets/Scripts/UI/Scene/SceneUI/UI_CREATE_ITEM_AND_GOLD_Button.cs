@@ -81,11 +81,9 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
             //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
         }
-
         void MoveScene()
         {
             MoveToDownTown();
-
         }
     }
     
@@ -95,9 +93,10 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     
     public void MoveToDownTown()//호스트에게만 실행됨.
     {
-        Managers.Clear();
+        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
+
         void ClientLoadedEvent(ulong clientId)
         {
             Debug.Log($"{clientId} 플레이어 로딩 완료");
@@ -122,20 +121,6 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
 
         }
-
-        //void AllPlayerLoadedEvent()
-        //{
-        //    PlayScene playScene = null;
-        //    foreach (BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
-        //    {
-        //        if (scene is PlayScene outPlayScene)
-        //        {
-        //            playScene = outPlayScene;
-        //            break;
-        //        }
-        //    }
-        //    playScene.Init_NGO_PlayScene_OnHost();
-        //}
     }
 
 

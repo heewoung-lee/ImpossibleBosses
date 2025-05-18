@@ -29,9 +29,9 @@ public class Module_Fighter_Class : Module_Player_Class
     public TauntState TauntState { get => _tauntState; }
     public DeterminationState DeterminationState { get => _determinationState; }
 
-    public override void InitAwake()
+    public override void InitializeOnAwake()
     {
-        base.InitAwake();
+        base.InitializeOnAwake();
         _roarState = new RoarState(UpdateRoar);
         _determinationState = new DeterminationState(UpdateDetermination);
         _slashState = new SlashState(UpdateSlash);
@@ -39,9 +39,9 @@ public class Module_Fighter_Class : Module_Player_Class
     }
 
 
-    public override void InitStart()
+    public override void InitializeOnStart()
     {
-        base.InitStart();
+        base.InitializeOnStart();
 
         if(TryGetComponent(out PlayerController controller))
         {

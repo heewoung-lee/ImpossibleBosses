@@ -19,13 +19,13 @@ public class NGO_PoolManager : IManagerIResettable
     private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
 
-    public void Set_NGO_Pool(GameObject ngo)
+    public void Set_NGO_Pool(NetworkObjectPool ngo)
     {
-        _ngoPool = ngo.GetComponent<NetworkObjectPool>();
+        _ngoPool = ngo;
     }
     public void Create_NGO_Pooling_Object()
     {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false || _ngoPool != null)
             return;
 
         if (Managers.RelayManager.NGO_RPC_Caller == null)

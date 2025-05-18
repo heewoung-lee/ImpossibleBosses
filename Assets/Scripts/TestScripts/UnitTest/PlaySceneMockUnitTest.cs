@@ -33,6 +33,7 @@ public class PlaySceneMockUnitTest : BaseScene
         base.StartInit();
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         await JoinChannel();
+        Init_NGO_PlayScene_OnHost();
     }
     private async Task JoinChannel()
     {
@@ -50,10 +51,6 @@ public class PlaySceneMockUnitTest : BaseScene
                 else
                 {
                     await Managers.LobbyManager.CreateLobby("TestLobby", 8, null);
-                }
-                if (NetworkManager.Singleton.IsListening == true)
-                {
-                    Init_NGO_PlayScene_OnHost();
                 }
             }
             else

@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerClass: 1
-  isSoloTest: 1
+  isSoloTest: 0
 --- !u!114 &1666791452
 MonoBehaviour:
   m_ObjectHideFlags: 0
