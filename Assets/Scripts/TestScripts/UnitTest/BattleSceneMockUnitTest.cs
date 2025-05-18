@@ -117,7 +117,7 @@ public class BattleSceneMockUnitTest : BaseScene
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             Managers.RelayManager.Load_NGO_Prefab<NGO_BattleSceneSpawn>();
-            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
+            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
         }
     }
     public string GetPlayerTag()

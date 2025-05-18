@@ -28,7 +28,6 @@ public class BattleScene : BaseScene
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
-            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
         }
     }
 

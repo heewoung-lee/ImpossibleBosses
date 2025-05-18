@@ -15,7 +15,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     public BaseScene GetCurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
 
     public BaseScene[] GetCurrentScenes { get => GameObject.FindObjectsByType<BaseScene>(FindObjectsSortMode.None); }
-    public Define.Scene CurrentScene => _currentScene;
+    public Define.Scene CurrentScene => GetCurrentScene.CurrentScene;
     public Define.Scene NextScene => _nextScene;
 
     public bool[] LoadingSceneTaskChecker => _loadingSceneTaskChecker;
