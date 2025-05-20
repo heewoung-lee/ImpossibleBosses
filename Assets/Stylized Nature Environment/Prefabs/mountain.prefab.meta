@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 229d7fab587866f4c9a74f4a8a1f4707
+timeCreated: 1500949628
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96371
+  packageName: Free Stylized Nature Environment
+  packageVersion: 1.0
+  assetPath: Assets/Stylized Nature Environment/Prefabs/mountain.prefab
+  uploadId: 723553

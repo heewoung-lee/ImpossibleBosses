@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f8244925291293049a4f9db693e9e395
+timeCreated: 1500890736
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96371
+  packageName: Free Stylized Nature Environment
+  packageVersion: 1.0
+  assetPath: Assets/Stylized Nature Environment/Prefabs/tree_g.prefab
+  uploadId: 723553

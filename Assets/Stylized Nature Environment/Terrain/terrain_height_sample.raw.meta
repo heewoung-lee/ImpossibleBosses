@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c8eb43c8aba5d6542a70cd654944b973
+timeCreated: 1500886714
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96371
+  packageName: Free Stylized Nature Environment
+  packageVersion: 1.0
+  assetPath: Assets/Stylized Nature Environment/Terrain/terrain_height_sample.raw
+  uploadId: 723553

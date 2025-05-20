@@ -9,7 +9,7 @@ using UnityEngine.Splines.ExtrusionShapes;
 
 public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
 {
-    private const float DEPTH = 10f;
+    private const float DEPTH = 100f;
 
     public int ID = 0;
 

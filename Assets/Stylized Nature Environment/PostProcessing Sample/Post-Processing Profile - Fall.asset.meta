@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 4e35d91ccdd1e7444971f9d872669c45
+timeCreated: 1500950524
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: -1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 96371
+  packageName: Free Stylized Nature Environment
+  packageVersion: 1.0
+  assetPath: Assets/Stylized Nature Environment/PostProcessing Sample/Post-Processing
+    Profile - Fall.asset
+  uploadId: 723553

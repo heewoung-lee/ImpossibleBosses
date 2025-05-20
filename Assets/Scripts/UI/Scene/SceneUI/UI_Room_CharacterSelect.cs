@@ -71,7 +71,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         Bind<Transform>(typeof(Transforms));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
-        _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
+        _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
