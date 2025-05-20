@@ -61,6 +61,7 @@ sysinfo.txt
 *.unitypackage
 *.app
 *.json
+*.json.mata
 
 # Crashlytics generated file
 crashlytics-build.properties
