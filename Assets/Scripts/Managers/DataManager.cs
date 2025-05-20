@@ -37,7 +37,10 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         {
             if (_databaseStruct.Equals(default(GoogleDataBaseStruct)))
             {
-                _databaseStruct = new GoogleDataBaseStruct(Define.GOOGLE_CLIENT_ID, Define.GOOGLE_SECRET, Define.APPLICATIONNAME, SPREEDSHEETID);
+                GoogleAuthLogin authlogin = new GoogleAuthLogin();
+                TextAsset[] jsonTexts = authlogin.LoadJson();
+                GoogleLoginWrapper googleLoginData = authlogin.ParseJsontoGoogleAuth(jsonTexts);
+                _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.APPLICATIONNAME, SPREEDSHEETID);
             }
             return _databaseStruct;
         }
