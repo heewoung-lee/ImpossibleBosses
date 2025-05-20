@@ -14,7 +14,7 @@
 ---
 
 ## 📆 개발 기간
-🗓 **2024-12-11 ~ 진행 중**
+🗓 **2024-12-11 ~ **
 
 ---
 
@@ -26,7 +26,7 @@
 | **Voice & Chat** | `Vivox Service` |
 | **Auth / DB** | `Google OAuth 2`, `Google Spreadsheet` |
 | **AI Behavior** | `Behaviour Tree Designer` |
-| **Testing** | `Unity Play Mode Scenarios` |
+| **TestTool** | `Unity Play Mode Scenarios` |
 
 
 ## 🗝 핵심 로직 (개념 중심)
