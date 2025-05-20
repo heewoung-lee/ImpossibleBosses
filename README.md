@@ -1,4 +1,3 @@
-<img width="80%" src="https://github.com/heewoung-lee/AR_TeamProject/assets/154584396/55764f4e-a92e-4a71-82e1-cffeaa97ef63"/>
 
 ## **목차**
 - [프로젝트 소개](#프로젝트-소개)
