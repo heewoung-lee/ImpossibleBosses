@@ -30,6 +30,7 @@ public class PlayScene : BaseScene
     }
     public void MoveToBattleScene()//호스트에게만 실행됨.
     {
+        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, ClientLoadedEvent, () => { });
         void ClientLoadedEvent(ulong clientId)

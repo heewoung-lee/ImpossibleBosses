@@ -33,6 +33,7 @@ public class BattleSceneMockUnitTest : BaseScene
         base.StartInit();
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         await JoinChannel();
+        Managers.GameManagerEx.Player.GetComponent<Module_Player_Class>().InitializeSkillsFromManager();
     }
     private async Task JoinChannel()
     {
