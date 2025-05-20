@@ -20,7 +20,7 @@ public class MoveDownTown : Action
         void MoveToDownTown()//호스트에게만 실행됨.
         {
             Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
+            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, null);
             void ClientLoadedEvent(ulong clientId)
             {
                 Debug.Log($"{clientId} 플레이어 로딩 완료");
@@ -42,23 +42,7 @@ public class MoveDownTown : Action
                 //TODO: 플레이어 스폰위치 조정
                 //TODO: 시계 UI 없애야함
                 //TODO: 각 플레이어들의 스폰위치를 정해줘야함.
-
-
             }
-
-            //void AllPlayerLoadedEvent()
-            //{
-            //    PlayScene playScene = null;
-            //    foreach (BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
-            //    {
-            //        if (scene is PlayScene outPlayScene)
-            //        {
-            //            playScene = outPlayScene;
-            //            break;
-            //        }
-            //    }
-            //    playScene.Init_NGO_PlayScene_OnHost();
-            //}
         }
 
     }

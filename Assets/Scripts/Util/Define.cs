@@ -6,8 +6,6 @@ public class Define
 {
     public static readonly Vector3 DEFAULT_QUARTERVIEW_POSITION = new Vector3(0, 7, -6);
     public static readonly Quaternion DEFAULT_QUARTERVIEW_ROTATION = Quaternion.Euler(new Vector3(45, 0, 0));
-    public const string GOOGLE_CLIENT_ID = "411572221370-p179u26uvdk45lab1v2onj6ak21rlvbv.apps.googleusercontent.com";
-    public const string GOOGLE_SECRET = "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";
     public const string APPLICATIONNAME = "ItemDataSheet";
 
     public enum PlayerClass
