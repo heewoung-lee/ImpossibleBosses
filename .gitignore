@@ -51,7 +51,6 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
-*.json.mata
 
 # Unity3D generated file on crash reports
 sysinfo.txt
@@ -61,7 +60,6 @@ sysinfo.txt
 *.aab
 *.unitypackage
 *.app
-*.json
 
 
 # Crashlytics generated file
@@ -73,3 +71,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Ignore sensitive JSON files and their .meta files
+Assets/Resources/GoogleLoginData/*.json
+Assets/Resources/GoogleLoginData/*.json.meta
