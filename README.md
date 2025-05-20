@@ -7,14 +7,20 @@
 
 
 
+
+
 ## 🔍 프로젝트 소개
 **Impossible Bosses** 는 협동 PvE 보스 레이드에 초점을 둔 멀티플레이 액션 RPG입니다.  
 플레이어들은 힘을 합쳐 보스를 쓰러뜨리고, 더 강력한 **무기**와 **능력치**를 획득·강화하여 최종 보스에게 도전합니다.
 
 
 
+
+
 ## 📆 개발 기간
 🗓 **2024-12-11 ~ **
+
+
 
 
 
@@ -27,6 +33,8 @@
 | **Auth / DB** | `Google OAuth 2`, `Google Spreadsheet` |
 | **AI Behavior** | `Behaviour Tree Designer` |
 | **TestTool** | `Unity Play Mode Scenarios` |
+
+
 
 
 ## 🗝 핵심 로직 (개념 중심)
