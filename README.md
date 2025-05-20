@@ -14,13 +14,25 @@
 <br/>
 
 ## **개발 기간** 
-2024.12.11 ~ 
+- 2024.12.11 ~ 
 <br/>
 
 ## **사용 기술** 
-
+- 개발환경: Unity6
+- 네트워크 서비스: Unity NetCode
+- 음성 및 텍스트 채팅: Vivox Service
+- 인증 및 데이터 베이스: Google oauth2,Google SpreadSheet
+- AI 행동도구: Behaviour Tree Designer
+- 테스트 도구: Unity Play Mode Scenarios
 <br/>
 
 
 ## **핵심 로직** 
+- 로그인구현:
+- 로비구현: 
+- 릴레이서버 구현:
+- 로컬 오브젝트 풀, 네트워크 오브젝트 풀 구현
+- 플레이어 동기화
+- 오브젝트 동기화
+- 최적화 구현
 <br/>
