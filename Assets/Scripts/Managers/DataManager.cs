@@ -203,7 +203,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
             return spreadsheet;
         }
-        catch//구글 스프레드시트에 연결이 안될때 에러처리
+        catch
         {
             throw;
         }
