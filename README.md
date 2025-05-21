@@ -53,7 +53,7 @@
 3. `LogInManager`가 **Google 스프레드시트**(UserAuthenticateData)와 ID·PW 대조  
 4. **인증 성공 → 로비 씬**으로 이동  
 
-![Login](https://github.com/user-attachments/assets/acc72412-c500-49c4-8d64-7f26c8e4a62e)
+![Image](https://github.com/user-attachments/assets/7eb163cf-b974-4c41-b3d2-7f98444f15eb)
 
 ---
 
