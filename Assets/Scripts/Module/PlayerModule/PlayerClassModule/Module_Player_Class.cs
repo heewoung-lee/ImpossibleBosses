@@ -33,7 +33,7 @@ public abstract class Module_Player_Class : MonoBehaviour
         InitializeSkillsFromManager();
     }
 
-    public void InitializeSkillsFromManager()
+    private void InitializeSkillsFromManager()
     {
         _playerSkill = Managers.SkillManager.AllSKillDict
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
