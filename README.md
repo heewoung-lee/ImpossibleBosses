@@ -76,7 +76,7 @@
 - 실제 IP 노출 없이 **NAT / 방화벽** 문제 해결  
 - 호스트가 중도 이탈하면 **새 호스트가 Allocation 승계**
 
-![Relay](https://github.com/user-attachments/assets/24e4cb53-1ba9-4500-9ddb-59168fc3628e)
+![Image](https://github.com/user-attachments/assets/4d7df461-dbe3-4e5d-aeb1-72d5b26841ff)
 
 ---
 
