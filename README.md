@@ -65,7 +65,7 @@
 
 ### 🏠 로비
 1. **계정 인증** 후 **`LobbyScene`** 전환  
-2. `LobbyManager`가 Unity Services **초기화 → 익명 인증 → WaitLobby 접속**  
+2. `LobbyManager`가 Unity Services **초기화 → 익명 인증 → 로비 접속**  
 3. 플레이어는 글로벌 채팅으로 소통하고 방 **생성 / 참가** 가능  
 
 ---
