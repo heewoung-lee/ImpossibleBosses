@@ -33,7 +33,6 @@ public class PlaySceneMockUnitTest : BaseScene
         base.StartInit();
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         await JoinChannel();
-        Init_NGO_PlayScene_OnHost();
     }
     private async Task JoinChannel()
     {
@@ -105,15 +104,6 @@ public class PlaySceneMockUnitTest : BaseScene
         }
         string playerID = AuthenticationService.Instance.PlayerId;
         Managers.LobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
-    }
-
-    private void Init_NGO_PlayScene_OnHost()
-    {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
-        {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
-            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
-        }
     }
     public string GetPlayerTag()
     {

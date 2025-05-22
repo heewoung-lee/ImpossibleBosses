@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9109088248773603285}
   - component: {fileID: 2008588023665778795}
   m_Layer: 0
-  m_Name: NGO_PlaySceneSpawn
+  m_Name: NGO_GamePlaySceneSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

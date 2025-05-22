@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 1701164433}
   - component: {fileID: 1701164429}
   - component: {fileID: 1701164434}
+  - component: {fileID: 1701164435}
   m_Layer: 0
   m_Name: '@Scene'
   m_TagString: Untagged
@@ -400,6 +401,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b5a81103667294f9fbadbe82a77378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1701164435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701164428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a67c08b7e882b7f45926a3c473622a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1001 &1840241570
 PrefabInstance:
   m_ObjectHideFlags: 0

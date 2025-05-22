@@ -53,14 +53,6 @@ public class PlayScene : BaseScene
             }
         }
     }
-    public void Init_NGO_PlayScene_OnHost()
-    {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
-        {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_PlaySceneSpawn>();
-            Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
-        }
-    }
 
     public override void Clear()
     {

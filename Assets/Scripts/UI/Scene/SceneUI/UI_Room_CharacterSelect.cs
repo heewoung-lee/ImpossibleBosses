@@ -290,7 +290,6 @@ public class UI_Room_CharacterSelect : UI_Scene
                     break;
                 }
             }
-            playScene.Init_NGO_PlayScene_OnHost();
         }
     }
 

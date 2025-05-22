@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class NGO_PlaySceneSpawn : NetworkBehaviourBase
+public class NGO_GamePlaySceneSpawn : NetworkBehaviourBase
 {
     private RelayManager _relayManager;
     GameObject _player;
@@ -20,6 +20,7 @@ public class NGO_PlaySceneSpawn : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         HostSpawnObject();
+        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
     }
     private void HostSpawnObject()
     {
