@@ -55,8 +55,21 @@ public class GamePlaySceneLoadingProgress : UI_Base
     {
         _totalPlayerCount = Managers.RelayManager.CurrentUserCount;
 
-        LoadedPlayerCount = Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount;
-        SetisAllPlayerLoaded(Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded);
+
+        if(Managers.RelayManager.NGO_RPC_Caller == null)
+        {
+            Managers.RelayManager.Spawn_RpcCaller_Event += LoadPlayerInit;
+        }
+        else
+        {
+            LoadPlayerInit();
+        }
+        void LoadPlayerInit()
+        {
+            LoadedPlayerCount = Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount;
+            SetisAllPlayerLoaded(Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded);
+        }
+
     }
 
     private IEnumerator LoadingSceneProcess(int playerCount)

@@ -24,12 +24,14 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
+        Debug.Log("체인지 로드씬 호출");
         if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
             return;
 
         if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
             return;
 
+        Debug.Log("여기에 들어옴?");
         InitializeSkillsFromManager();
     }
 
