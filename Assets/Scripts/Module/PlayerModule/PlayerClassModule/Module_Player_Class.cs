@@ -19,19 +19,25 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnStart()//TODO: 씬전환될때 호출할것
     {
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
+        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        {
+            InitializeSkillsFromManager();
+        }
+        else
+        {
+            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
+        }
+
     }
 
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        Debug.Log("체인지 로드씬 호출");
         if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
             return;
 
         if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
             return;
 
-        Debug.Log("여기에 들어옴?");
         InitializeSkillsFromManager();
     }
 

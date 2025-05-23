@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayScene : BaseScene
+public class PlayScene : BaseScene,ISkillInit
 {
     public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
 
