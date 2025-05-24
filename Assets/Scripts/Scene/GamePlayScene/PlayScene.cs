@@ -33,7 +33,7 @@ public class PlayScene : BaseScene,ISkillInit
         }
         else
         {
-            _playSceneController = new PlaySceneController(new GamePlaySceneUnit());
+            _playSceneController = new PlaySceneController(new UnitGamePlayScene());
         }
         _playSceneController.InitGamePlayScene();
         _playSceneController.SpawnOBJ();

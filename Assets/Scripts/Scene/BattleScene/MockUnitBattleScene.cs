@@ -7,15 +7,14 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
+public class MockUnitBattleScene : IBattleSceneSpawnBehaviour
 {
-    public MockUnitGamePlayScene(Define.PlayerClass playerClass,UI_Loading ui_Loading,bool isSoloTest)
+    public MockUnitBattleScene(Define.PlayerClass playerClass, UI_Loading ui_Loading, bool isSoloTest)
     {
         _playerClass = playerClass;
         _ui_Loading_Scene = ui_Loading;
         _isSoloTest = isSoloTest;
     }
-
     public enum PlayersTag
     {
         Player1,
@@ -30,7 +29,24 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
     private UI_Loading _ui_Loading_Scene;
     private Define.PlayerClass _playerClass;
     private bool _isSoloTest;
-    private UI_Stage_Timer _ui_stage_timer;
+
+    public async void Init()
+    {
+        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        await JoinChannel();
+    }
+    public void SpawnOBJ()
+    {
+        Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_PlayScene_OnHost;
+        void Init_NGO_PlayScene_OnHost()
+        {
+            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            {
+                Managers.RelayManager.Load_NGO_Prefab<NGO_BattleSceneSpawn>();
+                Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+            }
+        }
+    }
     private async Task JoinChannel()
     {
         Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClicent;
@@ -64,7 +80,6 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
             }
         }
     }
-
     private void ConnectClicent(ulong clientID)
     {
         if (Managers.RelayManager.NGO_RPC_Caller == null)
@@ -79,14 +94,16 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
         {
             if (Managers.RelayManager.NetworkManagerEx.LocalClientId != clientID)
                 return;
-
-            Managers.RelayManager.RegisterSelectedCharacter(clientID, _playerClass);
+            Define.PlayerClass playerClass =
+                (int)_playerClass + (int)clientID < Enum.GetValues(typeof(Define.PlayerClass)).Length
+                ? (Define.PlayerClass)((int)_playerClass + (int)clientID) : Define.PlayerClass.Archer;
+            Managers.RelayManager.RegisterSelectedCharacter(clientID, playerClass);
             Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientID);
-            LoadGamePlayScene();
+            LoadBattleScene();
         }
     }
 
-    private void LoadGamePlayScene()
+    private void LoadBattleScene()
     {
         _ui_Loading_Scene.gameObject.SetActive(false);
     }
@@ -112,51 +129,5 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
             currentPlayer = (PlayersTag)parsedEnum;
         }
         return Enum.GetName(typeof(PlayersTag), currentPlayer);
-    }
-
-
-    public async void Init()
-    {
-        await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
-        _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
-        _ui_stage_timer.OnTimerCompleted += MoveToBattleScene;
-    }
-
-    public void SpawnOBJ()
-    {
-        Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_PlayScene_OnHost;
-        void Init_NGO_PlayScene_OnHost()
-        {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
-            {
-                Managers.RelayManager.Load_NGO_Prefab<NGO_GamePlaySceneSpawn>();
-            }
-        }
-    }
-    public void MoveToBattleScene()//호스트에게만 실행됨.
-    {
-        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
-        Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, ClientLoadedEvent, () => { });
-        void ClientLoadedEvent(ulong clientId)
-        {
-            Debug.Log($"{clientId} 플레이어 로딩 완료");
-
-            foreach (NetworkObject clicentNgoObj in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
-            {
-                if (clicentNgoObj.OwnerClientId != clientId)
-                {
-                    continue;
-                }
-                if (clicentNgoObj.TryGetComponent(out PlayerStats playerStats) == true)
-                {
-                    Debug.Log($"{clientId}플레이어 찾았다");
-                    playerStats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
-                    playerStats.transform.position = new Vector3(clientId, 0, 0);
-                    break;
-                }
-            }
-        }
-
     }
 }

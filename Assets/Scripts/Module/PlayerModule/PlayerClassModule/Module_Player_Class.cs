@@ -14,7 +14,6 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnAwake()
     {
-        
     }
 
     public virtual void InitializeOnStart()//TODO: 씬전환될때 호출할것
@@ -23,11 +22,7 @@ public abstract class Module_Player_Class : MonoBehaviour
         {
             InitializeSkillsFromManager();
         }
-        else
-        {
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
-        }
-
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
 
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)

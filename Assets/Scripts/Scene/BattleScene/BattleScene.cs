@@ -3,21 +3,34 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BattleScene : BaseScene
+public class BattleScene : BaseScene,ISkillInit
 {
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
+    private BattleSceneController _battleSceneController;
+
+    public bool isTest = false;
+    public bool isSoloTest = false;
+
+
 
     public override Define.Scene CurrentScene => Define.Scene.BattleScene;
 
     protected override void StartInit()
     {
         base.StartInit();
-
-        //Managers.UI_Manager.ShowUIPopupUI<Button_UI>();
-        _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
-        Init_NGO_PlayScene_OnHost();
+        _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
+        if (isTest == true)
+        {
+            _battleSceneController = new BattleSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
+        }
+        else
+        {
+            _battleSceneController = new BattleSceneController(new UnitBattleScene());
+        }
+        _battleSceneController.Init();
+        _battleSceneController.SpawnOBJ();
     }
     public override void Clear()
     {

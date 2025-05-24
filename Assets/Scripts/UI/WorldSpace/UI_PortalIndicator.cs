@@ -1,5 +1,8 @@
 using NUnit.Framework.Constraints;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_PortalIndicator : UI_Base
@@ -26,9 +29,21 @@ public class UI_PortalIndicator : UI_Base
     {
         Bind <Image>(typeof(Images));
         _indicatorIMG = Get<Image>((int)Images.PortalIndicatorIMG);
+
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += OnChangeSceneEvent;
     }
 
+    private void OnChangeSceneEvent(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
 
+        if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
+            return;
+
+        if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
+            return;
+
+        Managers.ResourceManager.DestroyObject(this.gameObject);
+    }
     private Vector3 SetPosition()
     {
         Transform parentTr = GetComponentInParent<PlayerStats>().transform;

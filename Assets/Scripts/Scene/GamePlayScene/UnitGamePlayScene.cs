@@ -2,7 +2,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GamePlaySceneUnit : IGamePlaySceneSpawnBehaviour
+public class UnitGamePlayScene : IGamePlaySceneSpawnBehaviour
 {
     private UI_Stage_Timer _ui_stage_timer;
     private UI_Loading _ui_Loading_Scene;
@@ -13,6 +13,13 @@ public class GamePlaySceneUnit : IGamePlaySceneSpawnBehaviour
         _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
         _ui_stage_timer.OnTimerCompleted += MoveToBattleScene;
+    }
+    public void SpawnOBJ()
+    {
+        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+        {
+            Managers.RelayManager.Load_NGO_Prefab<NGO_GamePlaySceneSpawn>();
+        }
     }
     public void MoveToBattleScene()//호스트에게만 실행됨.
     {
@@ -41,11 +48,5 @@ public class GamePlaySceneUnit : IGamePlaySceneSpawnBehaviour
 
     }
 
-    public void SpawnOBJ()
-    {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
-        {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_GamePlaySceneSpawn>();
-        }
-    }
+   
 }
