@@ -67,9 +67,9 @@ public class BossGolemNetworkController : NetworkBehaviourBase
         void InitBossOnClient()
         {
             GetComponent<BossController>().enabled = false;
-            GetComponent<BossGolemStats>().enabled = false;
+            //GetComponent<BossGolemStats>().enabled = false;
             GetComponent<BehaviorTree>().enabled = false;
-            GetComponent<NavMeshAgent>().enabled = false;
+            //GetComponent<NavMeshAgent>().enabled = false;
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BattleScene : BaseScene,ISkillInit
+public class BattleScene : BaseScene, ISkillInit
 {
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
@@ -30,25 +30,19 @@ public class BattleScene : BaseScene,ISkillInit
             _battleSceneController = new BattleSceneController(new UnitBattleScene());
         }
         _battleSceneController.Init();
-        _battleSceneController.SpawnOBJ();
+        _gamePlaySceneLoadingProgress.OnLoadingComplete += SpawnOBJ;
+        void SpawnOBJ()
+        {
+            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+                return;
+
+            _battleSceneController.SpawnOBJ();
+        }
     }
     public override void Clear()
     {
-
     }
-    public void Init_NGO_PlayScene_OnHost()
-    {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
-        {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_GamePlaySceneSpawn>();
-        }
-    }
-
-
     protected override void AwakeInit()
     {
-        //_player = Managers.GameManagerEx.Spawn($"Prefabs/Player/{SpawnPlayerClass}");
-        //_boss = Managers.GameManagerEx.Spawn("Prefabs/Enemy/Boss/Character/StoneGolem");
-
     }
 }

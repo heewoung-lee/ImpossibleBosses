@@ -8,22 +8,34 @@ using UnityEngine.UI;
 
 public class GamePlaySceneLoadingProgress : UI_Base
 {
-    UI_Loading _ui_loding;
-
+    private UI_Loading _ui_loding;
     private int _loadedPlayerCount = 0;
     private int _totalPlayerCount = 0;
-
-
     private bool _isAllPlayerLoaded = false;
+    private Coroutine _loadingProgressCoroutine;
+    private Action _onLoadingComplete;
 
 
-    Coroutine _loadingProgressCoroutine;
+    public event Action OnLoadingComplete
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onLoadingComplete, value); 
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onLoadingComplete, value);
+        }
+    }
 
     public int LoadedPlayerCount
     {
         get { return _loadedPlayerCount; }
         private set
         {
+            if (enabled == false || gameObject.activeInHierarchy == false) 
+                return;
+
             if (_loadedPlayerCount == value || value <= 0) // 같은 값이거나 0이면 리턴
                 return;
 
@@ -120,7 +132,7 @@ public class GamePlaySceneLoadingProgress : UI_Base
         }
 
         _ui_loding.gameObject.SetActive(false);
-
+        _onLoadingComplete?.Invoke();
         foreach (Image loadsceneImage in loadSceneImages)
         {
             Color currentColor = loadsceneImage.color;
@@ -128,7 +140,6 @@ public class GamePlaySceneLoadingProgress : UI_Base
         }
 
         Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
-
         _loadedPlayerCount = 0;
     }
 }

@@ -54,7 +54,7 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
 
                 await Task.Delay(1000);
                 Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
-                if (lobby.Data == null)
+                if (lobby == null || lobby.Data == null)
                 {
                     await Utill.RateLimited(async () => await JoinChannel(), 1000);
                     return;
@@ -135,6 +135,9 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
     }
     public void MoveToBattleScene()//호스트에게만 실행됨.
     {
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            return;
+
         Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, ClientLoadedEvent, () => { });

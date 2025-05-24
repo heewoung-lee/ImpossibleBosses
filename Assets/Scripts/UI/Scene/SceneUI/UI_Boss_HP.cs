@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class UI_Boss_HP : UI_Scene
 
     protected override void StartInit()
     {
+
         if(Managers.GameManagerEx.BossMonster != null)
         {
             SetBossStatUI();
@@ -42,13 +44,19 @@ public class UI_Boss_HP : UI_Scene
         void SetBossStatUI()
         {
             _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
+            //_stats.MaxHPValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
+            _stats.CurrentHPValueChangedEvent += Stats_CurrentHPValueChangedEvent;
             _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
-
-            _stats.CurrentHPValueChangedEvent += _stats_CurrentHPValueChangedEvent;
         }
     }
 
-    private void _stats_CurrentHPValueChangedEvent(int preCurrentHp, int currentHp)
+    private void Stats_CurrentMAXHPValueChangedEvent(int preCurrentMaxHp, int currentMaxHp)
+    {
+        _hp_Text.text = $"{_stats.Hp} / {currentMaxHp}";
+        _hp_Slider.value = ((float)_stats.Hp) / (float)_stats.MaxHp;
+    }
+
+    private void Stats_CurrentHPValueChangedEvent(int preCurrentHp, int currentHp)
     {
         StartCoroutine(AnimationHP(preCurrentHp- currentHp));
         _hp_Text.text = $"{currentHp} / {_stats.MaxHp}";

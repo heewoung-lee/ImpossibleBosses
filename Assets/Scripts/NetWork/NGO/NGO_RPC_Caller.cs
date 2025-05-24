@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -81,6 +82,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
         _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
         _isAllPlayerLoaded.OnValueChanged += IsAllPlayerLoadedValueChanged;
     }
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        _loadedPlayerCount.OnValueChanged -= LoadedPlayerCountValueChanged;
+        _isAllPlayerLoaded.OnValueChanged -= IsAllPlayerLoadedValueChanged;
+    }
 
 
     public void IsAllPlayerLoadedValueChanged(bool previosValue, bool newValue)
@@ -90,6 +97,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
         Debug.Log($"이전값{previousValue} 이후값{newValue}");
+
         LoadedPlayerCountRpc();
     }
 
@@ -280,7 +288,12 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
 
-            if(currentLobby != null)
+            if (currentLobby == null)
+            {
+                return;
+            }
+
+            if (currentLobby != null)
             {
                 await Managers.LobbyManager.RemoveLobbyAsync(currentLobby);
             }
@@ -425,6 +438,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void ResetManagersRpc()
     {
+        Debug.Log("클리어 호출됨");
         Managers.Clear();
     }
 
