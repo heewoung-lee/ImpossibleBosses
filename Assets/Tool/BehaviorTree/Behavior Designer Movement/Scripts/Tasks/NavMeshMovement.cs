@@ -32,7 +32,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             m_NavMeshAgent = GetComponent<NavMeshAgent>();
         }
-
+        
         /// <summary>
         /// Allow pathfinding to resume.
         /// </summary>

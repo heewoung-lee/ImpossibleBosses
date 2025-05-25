@@ -1,6 +1,9 @@
+using Google.Apis.Sheets.v4.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class Module_Player_Class : MonoBehaviour
 {
@@ -9,30 +12,48 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     private Dictionary<string, BaseSkill> _playerSkill;
 
-    public virtual void InitAwake()
+    public virtual void InitializeOnAwake()
     {
-
     }
 
-    public virtual void InitStart()
+    public virtual void InitializeOnStart()//TODO: 씬전환될때 호출할것
+    {
+        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        {
+            InitializeSkillsFromManager();
+        }
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
+    }
+
+    private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
+            return;
+
+        if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
+            return;
+
+        InitializeSkillsFromManager();
+    }
+
+    private void InitializeSkillsFromManager()
     {
         _playerSkill = Managers.SkillManager.AllSKillDict
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
             .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다
 
-        if(Managers.SkillManager.UI_SkillBar == null)
+        if (Managers.SkillManager.UI_SkillBar == null)
         {
-            Managers.SkillManager.Done_UI_SKilBar_Init_Event += InitlizeSkilintoSlot;
+            Managers.SkillManager.Done_UI_SKilBar_Init_Event += AssignSkillsToUISlots;
         }
         else
         {
-            InitlizeSkilintoSlot();
+            AssignSkillsToUISlots();
         }
     }
 
 
-
-    public void InitlizeSkilintoSlot()
+    public void AssignSkillsToUISlots()
     {
         foreach (BaseSkill skill in _playerSkill.Values)
         {
@@ -46,11 +67,11 @@ public abstract class Module_Player_Class : MonoBehaviour
     private void Awake()
     {
         _playerSkill = new Dictionary<string, BaseSkill>();
-        InitAwake();
+        InitializeOnAwake();
     }
 
     private void Start()
     {
-        InitStart();
+        InitializeOnStart();
     }
 }

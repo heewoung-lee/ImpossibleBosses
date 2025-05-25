@@ -1,4 +1,6 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+﻿using BaseStates;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -49,12 +51,21 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             base.OnStart();
             _hasArrived.Value = false;
 
-            if(targetOBject == null)
+            if (targetOBject == null)
             {
-                Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, float.MaxValue, LayerMask.GetMask("Player"));
+                Collider[] checkedPlayer = Physics.OverlapSphere(transform.position, float.MaxValue, LayerMask.GetMask(
+                    Utill.GetLayerID(Define.ControllerLayer.Player), Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)
+                    ));
                 float findClosePlayer = float.MaxValue;
                 foreach (Collider collider in checkedPlayer)
                 {
+
+                    if (collider.TryGetComponent(out BaseStats baseStats))
+                    {
+                        if (baseStats.IsDead == true)
+                            continue;
+                    }
+
                     float distance = (transform.position - collider.transform.position).sqrMagnitude;
                     findClosePlayer = findClosePlayer > distance ? distance : findClosePlayer;
                     if (findClosePlayer == distance)
@@ -70,8 +81,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
+            if (targetOBject == null) // 타겟이 없는 경우 ex) 타겟이 다 죽은 경우
+            {
+                _controller.UpdateIdle();
+                return TaskStatus.Failure;
+            }
+
             _controller.UpdateMove();
             _hasArrived.Value = HasArrived() && TargetInSight.IsTargetInSight(_controller.GetComponent<IAttackRange>(), targetOBject.transform, 0.2f);
+
             if (_hasArrived.Value)
             {
                 SetDestination(transform.position);
@@ -103,5 +121,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             base.OnEnd();
             targetOBject = null;
         }
+
     }
 }

@@ -16,7 +16,6 @@ public class UI_Player_Inventory : UI_Popup
     private TMP_Text _hp_Stat_Text;
     private TMP_Text _attack_Stat_Text;
     private TMP_Text _defense_Stat_Text;
-    private Button _windowClose_Button;
     private GameObject _equipMent;
     private Transform _windowPanel;
     private Canvas _inventoryCanvas;
@@ -205,19 +204,19 @@ public class UI_Player_Inventory : UI_Popup
         _currentGold.text = hasgold.ToString();
     }
 
-    private void UpdateCurrentHPValue(int currentHP)
+    private void UpdateCurrentHPValue(int preCurrentHpValue,int currentHP)
     {
         _hp_Stat_Text.text = $"{currentHP} / {_stat.MaxHp}";
     }
-    private void UpdateMaxHpValue(int maxHP)
+    private void UpdateMaxHpValue(int preMaxHpValue ,int maxHP)
     {
         _hp_Stat_Text.text = $"{_stat.Hp} / {maxHP}";
     }
-    private void UpdateAttackValue(int attack)
+    private void UpdateAttackValue(int preAttackValue, int attack)
     {
         _attack_Stat_Text.text = attack.ToString();
     }
-    private void UpdatedefenceValue(int defence)
+    private void UpdatedefenceValue(int preDefenceValue, int defence)
     {
         _defense_Stat_Text.text = defence.ToString();
     }

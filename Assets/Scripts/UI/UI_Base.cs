@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-public abstract class UI_Base : NetworkBehaviour
+public abstract class UI_Base : MonoBehaviour
 {
     Dictionary<Type, Object[]> _bindDictionary = new Dictionary<Type,Object[]>();
     protected abstract void StartInit();

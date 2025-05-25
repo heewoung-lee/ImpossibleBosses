@@ -42,28 +42,43 @@ public class UI_Player_Info : UI_Scene
     }
     protected override void StartInit()
     {
-        _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
-        InitalizePlayerInfo();
-        UpdateUI();
+
+        if(Managers.GameManagerEx.Player == null)
+        {
+
+            Managers.GameManagerEx.OnPlayerSpawnEvent += InitalizePlayerInfo;
+            Managers.GameManagerEx.OnPlayerSpawnEvent += UpdateUI;
+        }
+        else
+        {
+            _playerStats = Managers.GameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
+            InitalizePlayerInfo(_playerStats);
+            UpdateUI(_playerStats);
+        }
     }
 
-    private void UpdateUI()//이렇게 한 이유는 호스트는 CharacterBaseStat이 바로 넘어오는데 게스트는 못넘어옴 그래서 호스트는 이렇게 초기화 하고 게스트는 이벤트에서 처리
+    private void UpdateUI(PlayerStats stats)//이렇게 한 이유는 호스트는 CharacterBaseStat이 바로 넘어오는데 게스트는 못넘어옴 그래서 호스트는 이렇게 초기화 하고 게스트는 이벤트에서 처리
     {
-        if (_playerStats.CharacterBaseStats.Equals(default(CharacterBaseStat)))
+        if (stats.CharacterBaseStats.Equals(default(CharacterBaseStat)))
             return;
-        UpdateUIInfo(_playerStats.CharacterBaseStats);
+        UpdateUIInfo(stats.CharacterBaseStats);
     }
 
-    private void InitalizePlayerInfo()
+    private void InitalizePlayerInfo(PlayerStats stats)
     {
-        _playerStats.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
-        _playerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
-
-        _playerStats.Done_Base_Stats_Loading -= UpdateUIInfo;
-        _playerStats.Done_Base_Stats_Loading += UpdateUIInfo;
+        _playerStats = stats;
+        stats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
+        stats.MaxHPValueChangedEvent += UpdateCurrentMaxHpValue;
+        stats.Done_Base_Stats_Loading += UpdateUIInfo;
     }
 
-    private void UpdateCurrentHPValue(int currentHP)
+    private void UpdateCurrentMaxHpValue(int preCurrentMaxHp, int currentMaxHP)
+    {
+        _hpSlider.value = (float)_playerStats.Hp / (float)currentMaxHP;
+        _hpText.text = $"{_playerStats.Hp}/{currentMaxHP}";
+    }
+
+    private void UpdateCurrentHPValue(int preCurrentHp, int currentHP)
     {
         if (_playerStats.MaxHp == default)
             return;
@@ -72,9 +87,10 @@ public class UI_Player_Info : UI_Scene
         _hpText.text = $"{currentHP}/{_playerStats.MaxHp}";
     }
 
+
+
     public void UpdateUIInfo(CharacterBaseStat stat)
     {
-        Debug.Log("UpdateUIInfo");
         _hpText.text = $"{stat.hp}/{stat.maxHp}";
         _hpSlider.value = (float)stat.hp / (float)stat.maxHp;
         _levelText.text = _playerStats.Level.ToString();

@@ -12,13 +12,13 @@ public class BossGolemController : BossController
 {
 
     private const float ATTACK_PRE_FRAME = 0.35f;
-    private const float SKILL1_PRE_FRAME = 0.8f;
+    private const float SKILL1_PRE_FRAME = 0.6f;
     private const float SKILL2_PRE_FRAME = 0.3f;
     private const float SKILL1_Transition = 0.1f;
 
 
-    private Dictionary<IState, float> _attackPreFrameDict = new Dictionary<IState, float>();
-    public override Dictionary<IState, float> AttackPreFrameDict => _attackPreFrameDict;
+    private Dictionary<IState, float> _attackStopTimingRatioDict = new Dictionary<IState, float>();
+    public override Dictionary<IState, float> AttackStopTimingRatioDict => _attackStopTimingRatioDict;
 
 
     private int[] _golem_Attacks = new int[2]
@@ -60,9 +60,9 @@ public class BossGolemController : BossController
         _bossSkill1State = new BossSkill1State(UpdateAttack);
         _bossSkill2State = new BossSkill2State(UpdateAttack);
 
-        _attackPreFrameDict.Add(_base_Attackstate, ATTACK_PRE_FRAME);
-        _attackPreFrameDict.Add(_bossSkill1State, SKILL1_PRE_FRAME);
-        _attackPreFrameDict.Add(_bossSkill2State, SKILL2_PRE_FRAME);
+        _attackStopTimingRatioDict.Add(_base_Attackstate, ATTACK_PRE_FRAME);
+        _attackStopTimingRatioDict.Add(_bossSkill1State, SKILL1_PRE_FRAME);
+        _attackStopTimingRatioDict.Add(_bossSkill2State, SKILL2_PRE_FRAME);
     }
     public override void UpdateAttack()
     {
@@ -74,6 +74,10 @@ public class BossGolemController : BossController
 
     public override void UpdateIdle()
     {
+        if (CurrentStateType != Base_IDleState)
+        {
+            CurrentStateType = Base_IDleState;
+        }
     }
 
     public override void UpdateMove()

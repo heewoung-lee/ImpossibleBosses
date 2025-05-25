@@ -20,6 +20,7 @@ public class LootItem : NetworkBehaviour,IInteraction
     [SerializeField] private CapsuleCollider _collider;
     [SerializeField] private IItem _iteminfo;
 
+
     public bool CanInteraction => _canInteraction;
     public string InteractionName => _iteminfo.ItemName;
     public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.Item_Grade);
@@ -33,17 +34,22 @@ public class LootItem : NetworkBehaviour,IInteraction
         _collider = GetComponent<CapsuleCollider>();
         _networkObject = GetComponent<NetworkObject>();
     }
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
 
+    public void SpawnBahaviour()
+    {
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
-        transform.position = _dropPosition + Vector3.up * 1.2f;
+
+        if (TryGetComponent(out LootItemBehaviour behaviour) == true)
+        {
+            behaviour.SpawnBahaviour(_rigidBody);
+            return;
+        }
         //튀어오르면서 로테이션을 돌린다.
         //바닥에 닿으면 VFX효과를 킨다.
         //아이템을 회전시킨다.
         //상호작용을 하면
+        transform.position = _dropPosition + Vector3.up * 1.2f;
         _rigidBody.AddForce(Vector3.up * ADDFORCE_OFFSET, ForceMode.Impulse);
         // 임의의 회전을 위한 랜덤 값 생성
         Vector3 randomTorque = new Vector3(
@@ -57,15 +63,20 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && _rigidBody.isKinematic == false)
-        {
-            _rigidBody.isKinematic = true;
-            transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
-            transform.rotation = Quaternion.identity;//아이템이 땅이 닿으면 똑바로 세운다.
-            StartCoroutine(RotationDropItem());
-            CreateLootingItemEffect();
-            _canInteraction = true;
-        }
+        if (!IsServer) return;                         // 충돌 판정은 서버만
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") == false || _rigidBody.isKinematic) return;
+        LandedLogicRpc();                                 // 서버 로컬 처리
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void LandedLogicRpc()
+    {
+        _rigidBody.isKinematic = true;
+        transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
+        transform.rotation = Quaternion.identity;
+        StartCoroutine(RotationDropItem());
+        CreateLootingItemEffect();
+        _canInteraction = true;
     }
 
 

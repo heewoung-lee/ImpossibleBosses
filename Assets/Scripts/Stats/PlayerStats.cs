@@ -5,7 +5,7 @@ public class PlayerStats : BaseStats, IAttackRange
 {
     private Dictionary<int, PlayerStat> _statDict;
     private int _level;
-    [SerializeField]private int _currentexp;
+    private int _currentexp;
     private int _gold;
     private float _viewAngle;
     private float _viewDistance;
@@ -44,6 +44,7 @@ public class PlayerStats : BaseStats, IAttackRange
     public int Level { get => _level; }
     public Transform Owner_Transform => transform;
     public LayerMask TarGetLayer => _targetLayer;
+    public Vector3 AttackPosition => transform.position;
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -89,10 +90,12 @@ public class PlayerStats : BaseStats, IAttackRange
     }
 
 
-    
     protected override void OnDead(BaseStats attacker)
     {
-        PlayerDeadEvent.Invoke();
+        if (IsOwner)
+        {
+            PlayerDeadEvent.Invoke();
+        }
     }
 
     protected override void SetStats()

@@ -61,6 +61,7 @@ sysinfo.txt
 *.unitypackage
 *.app
 
+
 # Crashlytics generated file
 crashlytics-build.properties
 
@@ -70,3 +71,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Ignore sensitive JSON files and their .meta files
+Assets/Resources/GoogleLoginData/*.json
+Assets/Resources/GoogleLoginData/*.json.meta

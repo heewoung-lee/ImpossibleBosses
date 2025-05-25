@@ -37,7 +37,10 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         {
             if (_databaseStruct.Equals(default(GoogleDataBaseStruct)))
             {
-                _databaseStruct = new GoogleDataBaseStruct(Define.GOOGLE_CLIENT_ID, Define.GOOGLE_SECRET, Define.APPLICATIONNAME, SPREEDSHEETID);
+                GoogleAuthLogin authlogin = new GoogleAuthLogin();
+                TextAsset[] jsonTexts = authlogin.LoadJson();
+                GoogleLoginWrapper googleLoginData = authlogin.ParseJsontoGoogleAuth(jsonTexts);
+                _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.APPLICATIONNAME, SPREEDSHEETID);
             }
             return _databaseStruct;
         }
@@ -200,7 +203,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
             return spreadsheet;
         }
-        catch//구글 스프레드시트에 연결이 안될때 에러처리
+        catch
         {
             throw;
         }

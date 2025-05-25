@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class NGO_PoolManager
+public class NGO_PoolManager : IManagerIResettable
 {
     private NetworkObjectPool _ngoPool;
     public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
@@ -25,7 +25,7 @@ public class NGO_PoolManager
     }
     public void Create_NGO_Pooling_Object()
     {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+        if (Managers.RelayManager.NetworkManagerEx.IsHost == false || _ngoPool != null)
             return;
 
         if (Managers.RelayManager.NGO_RPC_Caller == null)
@@ -75,6 +75,11 @@ public class NGO_PoolManager
     public void NGO_Pool_RegisterPrefab(string path,int capacity = 5)
     {
         _ngoPool.RegisterPrefabInternal(path, capacity);
+    }
+
+    public void Clear()
+    {
+        _pool_NGO_Root_Dict.Clear();
     }
 
 }

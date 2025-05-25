@@ -49106,7 +49106,6 @@ GameObject:
   - component: {fileID: 4557073698510574144}
   - component: {fileID: -6764292914997730363}
   - component: {fileID: -4863812948092775617}
-  - component: {fileID: -733684084375463297}
   - component: {fileID: -7128643195200966234}
   m_Layer: 0
   m_Name: Level_up
@@ -54047,19 +54046,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &-733684084375463297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4557073698510574151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b842bb6823c99684e9072aa2fc0457dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &-7128643195200966234
 MonoBehaviour:
   m_ObjectHideFlags: 0

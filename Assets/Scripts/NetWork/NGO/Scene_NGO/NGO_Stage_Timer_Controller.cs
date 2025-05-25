@@ -8,7 +8,8 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
 
 
     private const float VillageStayTime = 300f;
-    private const float BossRoomStayTime = 60f;
+    //private const float BossRoomStayTime = 60f;
+   private const float BossRoomStayTime = 1f;
     private const float AllPlayerinPortalCount = 7f;
     private float _totalTime = 0;
     private float _currentTime = 0;
@@ -24,6 +25,19 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
                 _ui_Stage_Timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
             }
             return _ui_Stage_Timer;
+        }
+    }
+
+    public float TotalTime
+    {
+        get
+        {
+            if (_totalTime == default)
+            {
+                Define.Scene currentScene = Managers.SceneManagerEx.CurrentScene;
+                _totalTime = currentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
+            }
+            return _totalTime;  
         }
     }
 
@@ -43,8 +57,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
         if (IsHost == false)
             return;
 
-        SetHostTotalCount();
-        UI_Stage_Timer.SetTimer(_totalTime);
+        UI_Stage_Timer.SetTimer(TotalTime);
     }
 
 
@@ -54,7 +67,6 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
         float currentCount = Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>().CurrentTime;
         ulong clientId = rpcParams.Receive.SenderClientId;
 
-        // 해당 클라이언트에게만 응답
         SendTimeRpcToSpecificClientRpc(currentCount, RpcTarget.Single(clientId, RpcTargetUse.Temp));
     }
 
@@ -62,7 +74,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     private void SendTimeRpcToSpecificClientRpc(float currentCount, RpcParams rpcParams = default)
     {
         _currentTime = currentCount;
-        UI_Stage_Timer.SetTimer(_totalTime, _currentTime);
+        UI_Stage_Timer.SetTimer(TotalTime, _currentTime);
     }
 
 
@@ -77,19 +89,6 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void SetNormalCountRpc()
     {
-        UI_Stage_Timer.SetTimer(_totalTime,_currentTime, _normalClockColor);
-    }
-
-    private void SetHostTotalCount()
-    {
-        Define.Scene currentScene = Managers.SceneManagerEx.CurrentScene;
-        _totalTime = currentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
-        SetTotalCountAllClientRpc(_totalTime);
-    }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    private void SetTotalCountAllClientRpc(float totalCount)
-    {
-        _totalTime = totalCount;
+        UI_Stage_Timer.SetTimer(TotalTime, _currentTime, _normalClockColor);
     }
 }

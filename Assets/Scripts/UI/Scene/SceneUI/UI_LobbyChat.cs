@@ -90,7 +90,7 @@ public class UI_LobbyChat : UI_Scene
         _chattingInputField.ActivateInputField();
     }
 
-    private async void ChannelMessageReceived(VivoxMessage message)
+    private void ChannelMessageReceived(VivoxMessage message)
     {
         string messageText = message.MessageText;
         string senderID = message.SenderPlayerId;
@@ -98,12 +98,6 @@ public class UI_LobbyChat : UI_Scene
         string messageChannel = message.ChannelName;
 
         _chatLog.text += $"{messageText} \n";
-
-        if (messageText.Contains("[SYSTEM]") == false)
-            return;
-
-        await Managers.LobbyManager.ExecuteSystemMessageAction(messageChannel, messageText, 
-            "호스트가 변경되었습니다.",Managers.LobbyManager.JoinRelayOfNewHost);
     }
 
     private void ButtonInteractable()

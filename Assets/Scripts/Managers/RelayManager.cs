@@ -105,7 +105,7 @@ public class RelayManager
     {
         get
         {
-            if (_nGO_RPC_Caller == null)
+            if (_nGO_RPC_Caller == null && NetworkManagerEx.SpawnManager != null)
             {
                 foreach (NetworkObject netWorkOBJ in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
                 {
@@ -127,7 +127,6 @@ public class RelayManager
         Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
         _choicePlayerCharacter = playerClass;
     }
-
 
     public void RegisterSelectedCharacterinDict(ulong clientId, Define.PlayerClass playerClass)
     {

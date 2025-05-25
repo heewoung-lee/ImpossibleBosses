@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class UI_Boss_HP : UI_Scene
     private Slider _hp_Slider;
     private TMP_Text _hp_Text;
     private BossStats _stats;
+    private int _currentHP;
     protected override void AwakeInit()
     {
         base.AwakeInit();
@@ -29,20 +31,42 @@ public class UI_Boss_HP : UI_Scene
 
     protected override void StartInit()
     {
-        _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
-        _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
 
-        _stats.Event_Attacked -= SetHpUI;
-        _stats.Event_Attacked += SetHpUI;
+        if(Managers.GameManagerEx.BossMonster != null)
+        {
+            SetBossStatUI();
+        }
+        else
+        {
+           Managers.GameManagerEx.OnBossSpawnEvent += SetBossStatUI;
+        }
+
+        void SetBossStatUI()
+        {
+            _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
+            _stats.CurrentHPValueChangedEvent += Stats_CurrentHPValueChangedEvent;
+            _stats.MaxHPValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
+
+            if (_stats.MaxHp <= 0)
+                return;
+
+            _hp_Text.text = $"{_stats.Hp} / {_stats.MaxHp}";
+        }
     }
 
-
-    public void SetHpUI(int damage, int currentHp)
+    private void Stats_CurrentMAXHPValueChangedEvent(int preCurrentMaxHp, int currentMaxHp)
     {
-        StartCoroutine(AnimationHP(damage));
+        _hp_Text.text = $"{_stats.Hp} / {currentMaxHp}";
+        _hp_Slider.value = (float)_stats.Hp / (float)currentMaxHp;
+    }
+
+    private void Stats_CurrentHPValueChangedEvent(int preCurrentHp, int currentHp)
+    {
+        if (_stats.MaxHp <= 0)
+            return;
+        StartCoroutine(AnimationHP(preCurrentHp- currentHp));
         _hp_Text.text = $"{currentHp} / {_stats.MaxHp}";
     }
-
 
     IEnumerator AnimationHP(int damage)
     {

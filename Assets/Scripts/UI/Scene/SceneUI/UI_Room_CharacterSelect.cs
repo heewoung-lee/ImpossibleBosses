@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -54,6 +56,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     private CharacterSelectorNGO _chracterSelectorNGO;
     private bool _readyButtonState;
     private Transform _ngo_UI_Root_Character_Select;
+    private string _joincodeCache;
 
     private ReadyButtonImages[] _readyButtonStateValue;
 
@@ -68,7 +71,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         Bind<Transform>(typeof(Transforms));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
-        _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
+        _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<Module_ChooseCharactorTr>().ChooseCameraTr;
         _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
         _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
         _button_Start = Get<Button>((int)Buttons.Button_Start);
@@ -132,11 +135,30 @@ public class UI_Room_CharacterSelect : UI_Scene
     private void DisConnetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("플레이어가 나갔습니다.");
+        isCheckAllReadyToPlayers(playerIndex);
     }
+    public void isCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
+    {
+        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
+        {
+            if (playerNGO.GetComponent<NetworkObject>().OwnerClientId == playerIndex)
+                continue;
 
+            if (playerNGO.IsOwnedByServer)
+                continue;
+
+            if (playerNGO.ISReady == false)
+            {
+                SetHostStartButton(false);
+                return;
+            }
+        }
+        SetHostStartButton(true);
+    }
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
         Debug.Log("EnteredPlayerinLobby 이벤트 발생");
+        SetHostStartButton(false);
         SpawnChractorSeletorAndSetPosition(playerIndex);
     }
 
@@ -146,7 +168,8 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             _loadingPanel.SetActive(true);
             UnscribeRelayCallback();
-            Managers.LobbyManager.HostChangeEvent -= InitializeCharacterSelectionAsHost;
+            Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
+            Managers.LobbyManager.HostChageEvent -= OnHostMigrationEvent;
             await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
             Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
         }
@@ -154,9 +177,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         {
             Debug.Log($"에러코드{error}");
         }
-
     }
-
 
     public void SetHostButton()
     {
@@ -172,9 +193,13 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         base.StartInit();
         _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
-
         InitializeCharacterSelectionAsHost();
-        Managers.LobbyManager.HostChangeEvent += InitializeCharacterSelectionAsHost;
+        Managers.LobbyManager.HostChageEvent += OnHostMigrationEvent;
+    }
+
+    private void OnHostMigrationEvent()
+    {
+        InitializeCharacterSelectionAsHost();
     }
 
     private void InitializeCharacterSelectionAsHost()
@@ -265,7 +290,6 @@ public class UI_Room_CharacterSelect : UI_Scene
                     break;
                 }
             }
-            playScene.Init_NGO_PlayScene_OnHost();
         }
     }
 

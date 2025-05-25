@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UI_HPBar : UI_Base
 {
-    private readonly Vector3 OFFSET_HPBAR = new Vector3(0, 1.2f,0);
+    private readonly Vector3 OFFSET_HPBAR = new Vector3(0, 1.5f,0);
     BaseStats _stats;
     Slider _hpSlider;
     CanvasGroup _canvasGroup;
@@ -27,7 +27,6 @@ public class UI_HPBar : UI_Base
     {
         _stats = GetComponentInParent<BaseStats>();
         transform.position = _stats.transform.position+ OFFSET_HPBAR * (_stats.GetComponent<Collider>().bounds.size.y);
-        _stats.Event_Attacked -= SetHpUI;
         _stats.Event_Attacked += SetHpUI;
     }
 

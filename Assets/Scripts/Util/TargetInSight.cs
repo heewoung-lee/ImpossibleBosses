@@ -5,9 +5,11 @@ using static UnityEngine.GraphicsBuffer;
 using UnityEngine.InputSystem.XR;
 using System;
 using Unity.Netcode;
+using static Unity.Cinemachine.CinemachineTargetGroup;
 
 public class TargetInSight
 {
+    public static int ID = 0;
     public static Vector3 BoundaryAngle(float _angle, Transform playerTransform)
     {
         _angle += playerTransform.eulerAngles.y;
@@ -23,7 +25,6 @@ public class TargetInSight
         Debug.DrawRay(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _rightBoundary * _stats.ViewDistance, Color.red, 1f);
 
         Collider[] _targets = Physics.OverlapSphere(_stats.Owner_Transform.position, _stats.ViewDistance, _stats.TarGetLayer);
-
         foreach (Collider _target in _targets)
         {
             Transform _targetTr = _target.transform;
@@ -49,20 +50,20 @@ public class TargetInSight
 
     public static void AttackTargetInCircle(IAttackRange _stats, float radius,int ?damage = null)
     {
-        Collider[] _targets = Physics.OverlapSphere(_stats.Owner_Transform.position, radius, _stats.TarGetLayer);
+        Collider[] _targets = Physics.OverlapSphere(_stats.AttackPosition, radius, _stats.TarGetLayer);
+        DebugDrawUtill.DrawCircle(_stats.AttackPosition, radius, 96, Color.yellow, 5f);
         foreach (Collider _target in _targets)
         {
             Transform _targetTr = _target.transform;
             if (_target.TryGetComponent(out IDamageable idamaged))
             {
                 if(damage == null)
-                idamaged.OnAttacked(_stats);
+                    idamaged.OnAttacked(_stats);
                 else
-                idamaged.OnAttacked(_stats,damage.Value);
+                    idamaged.OnAttacked(_stats, damage.Value);
             }
         }
     }
-
     public static bool IsTargetInSight(IAttackRange _stats, Transform targetTr, float sightRange = 0.5f)
     {
         Vector3 direction = (targetTr.position - _stats.Owner_Transform.position).normalized;

@@ -1,8 +1,5 @@
 using BaseStates;
 using BehaviorDesigner.Runtime;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class BossGolemStats : BossStats
 {
@@ -13,6 +10,7 @@ public class BossGolemStats : BossStats
     {
         base.StartInit();
         _golemController = GetComponent<BossGolemController>();
+        UpdateStat();
     }
     protected override void AwakeInit()
     {
@@ -30,6 +28,8 @@ public class BossGolemStats : BossStats
         _viewAngle = stat.viewAngle;
         _viewDistance = stat.viewDistance;
     }
+
+    
 
     protected override void OnDead(BaseStats attacker)
     {

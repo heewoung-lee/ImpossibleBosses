@@ -131,5 +131,7 @@ public abstract class BaseController : MonoBehaviour
             return;
 
         _anim.CrossFade(HashCode, Transition_State, AnimLayer, 0f);
+        var info = Anim.GetCurrentAnimatorStateInfo(0);
+        float normalized = info.normalizedTime;
     }
 }

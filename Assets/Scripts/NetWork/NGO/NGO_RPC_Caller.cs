@@ -1,9 +1,13 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
+using Unity.Netcode.Components;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -19,7 +23,8 @@ public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
-    [SerializeField]private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
+    [SerializeField]
+    private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
@@ -43,7 +48,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         get { return _isAllPlayerLoaded.Value; }
         set
         {
-            if(IsHost == false)
+            if (IsHost == false)
                 return;
 
             _isAllPlayerLoaded.Value = value;
@@ -66,7 +71,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         string choiceCharacterName = Managers.RelayManager.ChoicePlayerCharactersDict[clientId].ToString();
         Vector3 targetPosition = new Vector3(1 * clientId, 0, 1);
-        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform);
+        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform,false);
     }
 
     public override void OnNetworkSpawn()
@@ -77,15 +82,22 @@ public class NGO_RPC_Caller : NetworkBehaviour
         _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
         _isAllPlayerLoaded.OnValueChanged += IsAllPlayerLoadedValueChanged;
     }
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        _loadedPlayerCount.OnValueChanged -= LoadedPlayerCountValueChanged;
+        _isAllPlayerLoaded.OnValueChanged -= IsAllPlayerLoadedValueChanged;
+    }
 
 
-    public void IsAllPlayerLoadedValueChanged(bool previosValue,bool newValue)
+    public void IsAllPlayerLoadedValueChanged(bool previosValue, bool newValue)
     {
         SetisAllPlayerLoadedRpc(newValue);
     }
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
         Debug.Log($"이전값{previousValue} 이후값{newValue}");
+
         LoadedPlayerCountRpc();
     }
 
@@ -107,7 +119,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
 
     [Rpc(SendTo.Server)]
-    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true)
+    public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true, NetworkObjectReference addLootItemBehaviour = default)
     {
         //여기에서 itemStruct를 IItem으로 변환
         GameObject networkLootItem = null;
@@ -124,21 +136,40 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 break;
         }
         //여기에서는 어떤 아이템을 스폰할껀지 아이템의 형상만 가져올 것.
-
         networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
-        GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot);
+        GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
         NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
-        SetDropItemInfoRpc(itemStruct, rootItemRef);
+        SetDropItemInfoRpc(itemStruct, rootItemRef, addLootItemBehaviour);
     }
 
+
     [Rpc(SendTo.ClientsAndHost)]
-    public void SetDropItemInfoRpc(IteminfoStruct itemStruct, NetworkObjectReference rootitemRef)
+    public void SetDropItemInfoRpc(IteminfoStruct itemStruct, NetworkObjectReference rootitemRef, NetworkObjectReference addLootItemBehaviour)
     {
-        if (rootitemRef.TryGet(out NetworkObject ngo))
+        NetworkObject rootitemNGO = null;
+        if (rootitemRef.TryGet(out NetworkObject rootItemngo) == true)
         {
-            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
-            ngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
+            rootitemNGO = rootItemngo;
         }
+        else
+        {
+            return;
+        }
+        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false) // 만약에 루트아이템의 행동동작에 대한 오브젝트가 있다면 설정
+        {
+            if (addLootItemBehaviour.TryGet(out NetworkObject ngo))
+            {
+                LootItemBehaviour lootItemBehaviour = ngo.GetComponent<LootItemBehaviour>();
+                if (lootItemBehaviour is MonoBehaviour monoBehaviour)
+                {
+                    Type monoBehaviourType = monoBehaviour.GetType();
+                    rootitemNGO.gameObject.AddComponent(monoBehaviourType);
+                }
+            }
+        }
+        IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
+        rootItemngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
+        rootItemngo.GetComponent<LootItem>().SpawnBahaviour();
     }
 
     [Rpc(SendTo.Server)]
@@ -164,8 +195,10 @@ public class NGO_RPC_Caller : NetworkBehaviour
 
         if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
         {
-            return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
+            //return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
+            return SpawnObjectToResources(path, position);
         }
+        //4.28일 NGO_CALLER가 부모까지 지정하는건 책임소재에서 문제가 될 수 있어서 이부분은 각자 풀 오브젝트 초기화 부분에서 부모를 지정하도록 함
         return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 
@@ -175,7 +208,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         GameObject obj = Managers.ResourceManager.Instantiate(path);
         obj.transform.position = position;
         NetworkObject networkObj;
-        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr).GetComponent<NetworkObject>();
+        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr, position).GetComponent<NetworkObject>();
         return networkObj;
     }
 
@@ -206,7 +239,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Action<GameObject> positionAndBehaviorSetterEvent = null;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
         {
-            if (paricleNgo.TryGetComponent(out NGO_Skill_Initailize_Base skillInitailze))
+            if (paricleNgo.TryGetComponent(out NGO_Particle_Initailize_Base skillInitailze))
             {
                 skillInitailze.SetInitalze(paricleNgo);
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
@@ -253,7 +286,17 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         try
         {
-            await Managers.LobbyManager.ExitLobbyAsync(await Managers.LobbyManager.GetCurrentLobby(),false);
+            Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
+
+            if (currentLobby == null)
+            {
+                return;
+            }
+
+            if (currentLobby != null)
+            {
+                await Managers.LobbyManager.RemoveLobbyAsync(currentLobby);
+            }
             await Managers.VivoxManager.LogoutOfVivoxAsync();
         }
         catch (Exception e)
@@ -268,7 +311,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Loading loading))
         {
-           if(loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
+            if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
             {
                 loadingProgress.SetLoadedPlayerCount(LoadedPlayerCount);
             }
@@ -288,9 +331,115 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void SubmitSelectedCharactertoServerRpc(ulong clientId,string selectCharacterName)
+    public void SubmitSelectedCharactertoServerRpc(ulong clientId, string selectCharacterName)
     {
         Define.PlayerClass selectCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
         Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
+
     }
+    public void SpawnLocalObject(Vector3 pos, string objectPath, SpawnParamBase spawnParamBase)
+    {
+        FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
+        list.Add(pos);                          // 한 개만 담기
+        SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+    }
+    public void SpawnNonNetworkObject(List<Vector3> pos, string objectPath, SpawnParamBase spawnParamBase)
+    {
+        int posCount = pos.Count;
+        switch (posCount)
+        {
+            case <= 2:
+                {
+                    FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 5:
+                {
+                    FixedList64Bytes<Vector3> list = new FixedList64Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 10:
+                {
+                    FixedList128Bytes<Vector3> list = new FixedList128Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 42:
+                {
+                    FixedList512Bytes<Vector3> list = new FixedList512Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            case <= 340:
+                {
+                    FixedList4096Bytes<Vector3> list = new FixedList4096Bytes<Vector3>();
+                    foreach (var p in pos) list.Add(p);
+                    SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
+                    break;
+                }
+            default:
+                Debug.LogError("Too many positions! Maximum supported is 340.");
+                break;
+        }
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList32Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList64Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList128Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList512Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpwanLocalObjectRpc(ForceNetworkSerializeByMemcpy<FixedList4096Bytes<Vector3>> posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    {
+        ProcessLocalSpawn(posList.Value, path, spawnParamBase);
+    }
+
+    private void ProcessLocalSpawn<TList>(TList posList, FixedString512Bytes path, SpawnParamBase spawnParamBase)
+    where TList : struct, INativeList<Vector3>
+    {
+        string objectPath = path.ConvertToString();
+        GameObject spawnGo = Managers.ResourceManager.Load<GameObject>(objectPath);
+        if (spawnGo.TryGetComponent<ISpawnBehavior>(out var spawnBehaviour))
+        {
+            TList fixedList = posList;
+            for (int i = 0; i < fixedList.Length; i++)
+            {
+                SpawnParamBase spawnParams = spawnParamBase;
+                spawnParams.argPosVector3 = fixedList[i];
+                spawnBehaviour.SpawnObjectToLocal(spawnParams, objectPath);
+            }
+        }
+        else
+        {
+            Debug.LogError($"ISpawnBehavior not found on prefab: {objectPath}");
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ResetManagersRpc()
+    {
+        Debug.Log("클리어 호출됨");
+        Managers.Clear();
+    }
+
 }

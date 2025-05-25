@@ -3,7 +3,7 @@
 {
 "monsterID":"1",
 "hp":"1000",
-"attack":"10",
+"attack":"1000",
 "exp":"5",
 "defence":"1",
 "speed":"5.0"

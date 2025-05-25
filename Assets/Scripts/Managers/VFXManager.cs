@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEngine;
@@ -38,12 +39,24 @@ public class VFXManager
 
     GameObject _vfx_Root_NGO;
 
-    public Transform VFX_Root_NGO { get => _vfx_Root_NGO.transform; }
+    public Transform VFX_Root_NGO
+    {
+        get
+        {
+            if(_vfx_Root_NGO == null)
+            {
+                _vfx_Root_NGO = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
+            }
+            return _vfx_Root_NGO.transform;
+        }
+    }
+
+
     public void Set_VFX_Root_NGO(NetworkObject ngo)
     {
         _vfx_Root_NGO = ngo.gameObject;
     }
-    public GameObject TrySpawnLocalVFXOrRequestNetwork(string path, float duration, Action rpcCallSpawnParticleEvent)
+    public GameObject SpawnVFXLocalOrNetwork(string path, float duration, Action rpcCallSpawnParticleEvent)
     {
         if (_isCheckNGODict.ContainsKey(path) == false)
         {
@@ -62,6 +75,14 @@ public class VFXManager
 
     public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//쫒아가는 파티클을 위해 나눠놓음
     {
+        GameObject particleObject = SpawnVFXLocalOrNetwork(path, settingDuration, FindTargetNGO_Spawn);
+
+        if (particleObject == null)// NULL 이면 네트워크가 처리
+            return;
+
+        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionAndChasetoTagetParticle);
+        addParticleActionEvent?.Invoke(particleObject);
+
         void FindTargetNGO_Spawn()
         {
             ulong targetNGOID = NGO_RPC_Caller.INVALIDOBJECTID;
@@ -76,25 +97,24 @@ public class VFXManager
             }
             Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
         }
-
         void SetPositionAndChasetoTagetParticle(GameObject particleOBJ)
         {
             ParticleObjectSetPosition(particleOBJ, spawnTr.position, VFX_Root);
             Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleOBJ));
         }
-
-
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindTargetNGO_Spawn);
-
-        if (particleObject == null)// NULL 이면 네트워크가 처리
-            return;
-
-        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionAndChasetoTagetParticle);
-        addParticleActionEvent?.Invoke(particleObject);
     }
 
     public void GenerateParticle(string path, Vector3 spawnPos = default, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)
     {
+        GameObject particleObject = SpawnVFXLocalOrNetwork(path, settingDuration, FindNgo_Spawn);
+
+        if (particleObject == null)// NULL 이면 네트워크가 처리
+            return;
+
+        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
+        addParticleActionEvent?.Invoke(particleObject);
+
+
         void FindNgo_Spawn()
         {
             Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
@@ -103,14 +123,6 @@ public class VFXManager
         {
             ParticleObjectSetPosition(particleOBJ, spawnPos, VFX_Root);
         }
-
-        GameObject particleObject = TrySpawnLocalVFXOrRequestNetwork(path, settingDuration, FindNgo_Spawn);
-
-        if (particleObject == null)// NULL 이면 네트워크가 처리
-            return;
-
-        particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
-        addParticleActionEvent?.Invoke(particleObject);
     }
 
     public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)
@@ -202,4 +214,5 @@ public class VFXManager
             _isCheckNGODict[path] = particleinfo;
         }
     }
+
 }

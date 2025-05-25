@@ -27,7 +27,9 @@ public class LootItemManager
         {
             if(_temporaryInventory == null)
             {
-                _temporaryInventory = Managers.ResourceManager.Instantiate("Prefabs/NGO/LootItemRootNetwork");
+                GameObject temporaryLoot = new GameObject();
+                temporaryLoot.name = "TemporaryInventoryRoot";
+                _temporaryInventory = temporaryLoot;
             }
             return _temporaryInventory.transform;  
         }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,8 +8,8 @@ using UnityEngine.UI;
 public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 {
     private Button _scoreButton;
+    private Button _moveSceneButton;
     private TMP_Text _scoreText;
-    private Image _scoreImage;
 
     private PlayerStats _playerStats;
 
@@ -29,15 +30,12 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
     enum Buttons
     {
-        ScoreButton
+        ScoreButton,
+        MoveDownTownScene
     }
     enum Texts
     {
         ScoreText,
-    }
-    enum Images
-    {
-        ScoreImage
     }
 
 
@@ -53,15 +51,15 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
         Bind<Button>(typeof(Buttons));
         Bind<TMP_Text>(typeof(Texts));
-        Bind<Image>(typeof(Images));
 
         _scoreButton = GetButton((int)Buttons.ScoreButton);
-        _scoreImage = GetImage((int)Images.ScoreImage);
+        _moveSceneButton = GetButton((int)Buttons.MoveDownTownScene);
         _scoreText = GetText((int)Texts.ScoreText);
     }
     protected override void StartInit()
     {
         InitalizeUI_Button();
+
     }
 
     public void IninitalizePlayerStats(GameObject player)
@@ -70,24 +68,61 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     }
     public void InitalizeUI_Button()
     {
+
+        _scoreButton.onClick.AddListener(TestButtonClick);
+        _moveSceneButton.onClick.AddListener(MoveScene);
+
         void TestButtonClick()
         {
             TestIteminInventort();
             TestGetGold();
             TestGetExp();
             TestGetDamaged();
+            //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+            //_ = FindMyJoinCodeAsync();
         }
-
-        _scoreButton.onClick.AddListener(TestButtonClick);
-        BindEvent(_scoreImage.gameObject, (PointerEventData) =>
+        void MoveScene()
         {
-            _scoreImage.gameObject.transform.position = PointerEventData.position;
-        }, Define.UI_Event.Drag);
+            MoveToDownTown();
+        }
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
-    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats, 5);
+    public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats,2);
     public void TestGetExp() => PlayerStats.Exp += 5;
+    
+    public void MoveToDownTown()//호스트에게만 실행됨.
+    {
+        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
+        Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
+
+        void ClientLoadedEvent(ulong clientId)
+        {
+            Debug.Log($"{clientId} 플레이어 로딩 완료");
+
+            foreach (NetworkObject clicentNgoObj in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+            {
+                if (clicentNgoObj.OwnerClientId != clientId)
+                {
+                    continue;
+                }
+                if (clicentNgoObj.TryGetComponent(out PlayerStats playerStats) == true)
+                {
+                    Debug.Log($"{clientId}플레이어 찾았다");
+                    playerStats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
+                    playerStats.transform.position = new Vector3(clientId, 0, 0);
+                    break;
+                }
+            }
+            //TODO: 플레이어 스폰위치 조정
+            //TODO: 시계 UI 없애야함
+            //TODO: 각 플레이어들의 스폰위치를 정해줘야함.
+
+
+        }
+    }
+
 
     public void TestGenerateBossSkill1()
     {
@@ -113,5 +148,11 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
                 IItem item = Managers.ItemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent();
                 break;
         }
+    }
+
+    private async Task FindMyJoinCodeAsync()
+    {
+        Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
+        Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
     }
 }

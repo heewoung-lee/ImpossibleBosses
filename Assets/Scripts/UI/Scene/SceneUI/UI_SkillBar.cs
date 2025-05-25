@@ -69,7 +69,13 @@ public class UI_SkillBar : UI_Scene
         _getEKey.started += GetKey;
         _getRKey.started += GetKey;
     }
-
+    private void OnDisable()
+    {
+        _getQKey.started -= GetKey;
+        _getWKey.started -= GetKey;
+        _getEKey.started -= GetKey;
+        _getRKey.started -= GetKey;
+    }
     public void GetKey(InputAction.CallbackContext context)
     {
         switch (context.control.name)

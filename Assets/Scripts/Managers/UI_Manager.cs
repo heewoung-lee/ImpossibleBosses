@@ -21,8 +21,7 @@ public class UI_Manager : IManagerIResettable
 
     public int DescriptionUI_Sorting => _descriptionUI_Sorting;
 
-    Stack<UI_Popup> _ui_Popups = new Stack<UI_Popup>();
-    public Stack<UI_Popup> UI_popup => _ui_Popups;
+    private Stack<UI_Popup> _ui_Popups = new Stack<UI_Popup>();
 
     private Dictionary<Type, UI_Scene> _ui_sceneDict = new Dictionary<Type, UI_Scene>();
     public Dictionary<Type, UI_Scene> UI_sceneDict => _ui_sceneDict;
@@ -168,7 +167,6 @@ public class UI_Manager : IManagerIResettable
         }
          T scene = Utill.GetOrAddComponent<T>(go);
         _ui_sceneDict.Add(typeof(T), scene);
-
         go.transform.SetParent(Root.transform);
 
         return scene;

@@ -2,36 +2,46 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public abstract class BossController : BaseController
 {
-    public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Boss;
-    public abstract Dictionary<IState, float> AttackPreFrameDict { get; }
+    public int Tick = 0;
 
-    protected BehaviorTree tree;
+    public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Boss;
+    public abstract Dictionary<IState, float> AttackStopTimingRatioDict { get; }
 
     protected override void AwakeInit()
     {
-        tree = GetComponent<BehaviorTree>();
     }
-    public bool SetAnimationSpeed(float elapsedTime, float animLength, IState attackType,float startAnimSpeed = 1f)
+
+    public bool TryGetAnimationSpeed(float elapsedTime, out float animSpeed, CurrentAnimInfo animinfo,bool isCheckattackIndicatorFinish)
     {
-        startAnimSpeed = Mathf.Clamp01(startAnimSpeed);
-        if (AttackPreFrameDict.TryGetValue(attackType, out float attackPreTime) == false)
+        animSpeed = 0f;
+        float startAnimSpeed =animinfo.StartAnimationSpeed;
+        animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animinfo.AnimLength * animinfo.DecelerationRatio));
+        Anim.speed = animSpeed;
+        bool finished = animSpeed <= animinfo.AnimStopThreshold&& isCheckattackIndicatorFinish == true;
+        if (finished)
         {
-            Debug.LogError($"Attack type {attackType} not found in AttackType dictionary.");
+            animSpeed = startAnimSpeed;
+            Anim.speed = animSpeed;
+        }
+        return finished;
+    }
+
+
+
+    public bool TryGetAttackTypePreTime(IState attackType,out float preTime)
+    {
+        if (AttackStopTimingRatioDict.TryGetValue(attackType, out float preTimetoDict) == false)
+        {
+            Debug.LogError($"Attack type {attackType} not found in AttackPreFrameDict.");
+            preTime = default;
             return false;
         }
-
-        float attack_Pre_Time = attackPreTime;
-
-        Anim.speed = Mathf.Lerp(startAnimSpeed, 0, elapsedTime / (animLength * attack_Pre_Time));
-        if (Anim.speed <= 0.05f)
-        {
-            Anim.speed = 0;
-            return true;
-        }
-        return false;
+        preTime = preTimetoDict;
+        return true;
     }
 }
