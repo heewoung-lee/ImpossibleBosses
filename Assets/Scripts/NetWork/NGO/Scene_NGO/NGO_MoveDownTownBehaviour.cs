@@ -12,22 +12,5 @@ public class NGO_MoveDownTownBehaviour : NetworkBehaviour
         {
             Managers.ResourceManager.DestroyObject(bossHP.gameObject);
         }
-        PlayerMoveSceneDownTownBehaviour();
-    }
-
-
-    public void PlayerMoveSceneDownTownBehaviour()
-    {
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneMoveInitalize;
-        void SceneMoveInitalize(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
-        {
-            if (sceneName != Define.Scene.GamePlayScene.ToString() || loadSceneMode != LoadSceneMode.Single)
-                return;
-
-            if(clientId == Managers.RelayManager.NetworkManagerEx.LocalClientId)
-            {
-                Managers.Clear();//씬이 이동되면 모든 UI 초기화
-            }
-        }
     }
 }

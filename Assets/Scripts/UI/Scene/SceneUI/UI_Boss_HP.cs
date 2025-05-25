@@ -45,7 +45,7 @@ public class UI_Boss_HP : UI_Scene
         {
             _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
             _stats.CurrentHPValueChangedEvent += Stats_CurrentHPValueChangedEvent;
-            _stats.CurrentHPValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
+            _stats.MaxHPValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
 
             if (_stats.MaxHp <= 0)
                 return;

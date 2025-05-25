@@ -4,7 +4,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveDownTown : Action
+public class MovePlayGameScene : Action
 {
     NGO_MoveDownTownBehaviour _ngo_MoveDownTownBehaviour;
     NGO_Stage_Timer_Controller _ngo_Timer_Controller;
@@ -19,6 +19,7 @@ public class MoveDownTown : Action
 
         void MoveToDownTown()//호스트에게만 실행됨.
         {
+            Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
             Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
             Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, null);
             void ClientLoadedEvent(ulong clientId)

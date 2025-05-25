@@ -12,7 +12,7 @@ public class DropItems : Action
     private int maximumTimeCount = 3;
 
 
-    private int _spwanItemCount = 10;
+    private int _spwanItemCount = 1;
     private List<int> _timeRandom;
     private int _index;
     private bool _isCallIndex;
