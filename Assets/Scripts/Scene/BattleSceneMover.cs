@@ -4,7 +4,6 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEditor;
 using UnityEngine;
-using static BattleSceneMover;
 
 public class BattleSceneMover : ISceneMover
 {
