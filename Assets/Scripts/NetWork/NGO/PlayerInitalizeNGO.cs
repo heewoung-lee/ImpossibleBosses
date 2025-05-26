@@ -1,10 +1,12 @@
 using System;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 
 public class PlayerInitalizeNGO : NetworkBehaviourBase
 {
@@ -14,7 +16,6 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
     }
 
     Transform _interactionTr;
-
     protected override void AwakeInit()
     {
 
@@ -32,7 +33,6 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
         }
     }
-
     protected override void StartInit()
     {
 

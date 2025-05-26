@@ -7,7 +7,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
+public class MockUnitGamePlayScene : ISceneSpawnBehaviour
 {
     public MockUnitGamePlayScene(Define.PlayerClass playerClass,UI_Loading ui_Loading,bool isSoloTest)
     {
@@ -32,7 +32,7 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
     private bool _isSoloTest;
     private UI_Stage_Timer _ui_stage_timer;
 
-    public ISceneMover sceneMover => new BattleSceneMover();
+    public ISceneMover nextscene => new BattleSceneMover();
 
     private async Task JoinChannel()
     {
@@ -122,11 +122,15 @@ public class MockUnitGamePlayScene : IGamePlaySceneSpawnBehaviour
     {
         await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
         _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
-        _ui_stage_timer.OnTimerCompleted += sceneMover.MoveScene;
+        _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
 
     public void SpawnOBJ()
     {
+        if (Managers.RelayManager.NetworkManagerEx.IsListening)
+        {
+            Init_NGO_PlayScene_OnHost();
+        }
         Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_PlayScene_OnHost;
         void Init_NGO_PlayScene_OnHost()
         {

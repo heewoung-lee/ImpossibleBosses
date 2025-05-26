@@ -15,7 +15,7 @@ public class PlayScene : BaseScene,ISkillInit
 
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-    private PlaySceneController _playSceneController;
+    private MoveSceneController _sceneController;
     [SerializeField] bool isTest = false;
     [SerializeField] bool isSoloTest = false;
     protected override void AwakeInit()
@@ -29,14 +29,14 @@ public class PlayScene : BaseScene,ISkillInit
 
         if (isTest == true)
         {
-            _playSceneController = new PlaySceneController(new MockUnitGamePlayScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
+            _sceneController = new MoveSceneController(new MockUnitGamePlayScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
         }
         else
         {
-            _playSceneController = new PlaySceneController(new UnitGamePlayScene());
+            _sceneController = new MoveSceneController(new UnitGamePlayScene());
         }
-        _playSceneController.InitGamePlayScene();
-        _playSceneController.SpawnOBJ();
+        _sceneController.InitGamePlayScene();
+        _sceneController.SpawnOBJ();
     }
 
     public override void Clear()

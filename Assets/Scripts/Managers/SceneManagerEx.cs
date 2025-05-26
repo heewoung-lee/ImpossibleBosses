@@ -34,7 +34,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         LoadScene(Define.Scene.LoadingScene);
     }
 
-    public void NetworkLoadScene(Define.Scene nextscene,Action<ulong> clientLoadedEvent,Action allPlayerLoadedEvent)
+    public void NetworkLoadScene(Define.Scene nextscene,Action<ulong> clientLoadedEvent, Action allPlayerLoadedEvent)
     {
         Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadCompleteAsync;
@@ -44,7 +44,7 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         {
             if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
             {
-                clientLoadedEvent.Invoke(clientId);
+                clientLoadedEvent?.Invoke(clientId);
                 Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount++;
             }
 

@@ -4,9 +4,8 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEditor;
 using UnityEngine;
-using static BattleSceneMover;
 
-public class BattleSceneMover : ISceneMover
+public class GamePlaySceneMover : ISceneMover
 {
     public void MoveScene()
     {
@@ -15,8 +14,6 @@ public class BattleSceneMover : ISceneMover
 
         Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, null, null);
-
-        //TODO: 여기에 씬이동이 완료되면 좌표로직 적기
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, null, null);
     }
 }

@@ -438,7 +438,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void ResetManagersRpc()
     {
-        Debug.Log("클리어 호출됨");
         Managers.Clear();
     }
 

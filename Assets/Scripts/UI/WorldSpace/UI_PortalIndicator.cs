@@ -42,7 +42,7 @@ public class UI_PortalIndicator : UI_Base
         if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
             return;
 
-        Managers.ResourceManager.DestroyObject(this.gameObject);
+        SetIndicatorOff();
     }
     private Vector3 SetPosition()
     {

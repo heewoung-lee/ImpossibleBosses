@@ -30,6 +30,6 @@ public abstract class BaseScene : MonoBehaviour,ISkillInit
     }
 
     protected abstract void AwakeInit();
-
+     
     public abstract void Clear();
 }

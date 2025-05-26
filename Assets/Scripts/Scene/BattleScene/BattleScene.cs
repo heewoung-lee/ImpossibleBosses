@@ -7,7 +7,7 @@ public class BattleScene : BaseScene, ISkillInit
 {
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-    private BattleSceneController _battleSceneController;
+    private MoveSceneController _battleSceneController;
 
     public bool isTest = false;
     public bool isSoloTest = false;
@@ -23,14 +23,16 @@ public class BattleScene : BaseScene, ISkillInit
         _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
         if (isTest == true)
         {
-            _battleSceneController = new BattleSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
+            _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
         }
         else
         {
-            _battleSceneController = new BattleSceneController(new UnitBattleScene());
+            _battleSceneController = new MoveSceneController(new UnitBattleScene());
         }
-        _battleSceneController.Init();
+        _battleSceneController.InitGamePlayScene();
+        //_battleSceneController.SpawnOBJ();
         _gamePlaySceneLoadingProgress.OnLoadingComplete += SpawnOBJ;
+
         void SpawnOBJ()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
