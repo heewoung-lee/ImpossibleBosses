@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BattleScene : BaseScene, ISkillInit
+public class BattleScene : BaseScene, ISkillInit, ISceneController
 {
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
@@ -16,6 +17,8 @@ public class BattleScene : BaseScene, ISkillInit
 
     public override Define.Scene CurrentScene => Define.Scene.BattleScene;
 
+    public MoveSceneController SceneMoverController => _battleSceneController;
+
     protected override void StartInit()
     {
         base.StartInit();
@@ -24,14 +27,17 @@ public class BattleScene : BaseScene, ISkillInit
         if (isTest == true)
         {
             _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
+            _battleSceneController.InitGamePlayScene();
+            _battleSceneController.SpawnOBJ();
         }
         else
         {
             _battleSceneController = new MoveSceneController(new UnitBattleScene());
+            _battleSceneController.InitGamePlayScene();
+            _gamePlaySceneLoadingProgress.OnLoadingComplete += SpawnOBJ;
         }
-        _battleSceneController.InitGamePlayScene();
-        //_battleSceneController.SpawnOBJ();
-        _gamePlaySceneLoadingProgress.OnLoadingComplete += SpawnOBJ;
+
+        Managers.GameManagerEx.Player.transform.position = new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0);
 
         void SpawnOBJ()
         {

@@ -47,10 +47,12 @@ public class RelayManager
         }
     }
 
+
     public void Invoke_Spawn_RPCCaller_Event()
     {
         _spawn_RpcCaller_Event?.Invoke();
     }
+
 
     public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
     public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
@@ -100,7 +102,6 @@ public class RelayManager
             return _nGO_ROOT;
         }
     }
-
     public NGO_RPC_Caller NGO_RPC_Caller
     {
         get

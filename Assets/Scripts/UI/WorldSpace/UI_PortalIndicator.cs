@@ -25,6 +25,13 @@ public class UI_PortalIndicator : UI_Base
         _indicatorIMG.gameObject.SetActive(true);
     }
 
+    public void OnDestroy()
+    {
+        Debug.Log("ÆÄ±« È£ÃâµÊ");
+        Debug.Log($"{System.Environment.StackTrace}");
+
+    }
+
     protected override void AwakeInit()
     {
         Bind <Image>(typeof(Images));

@@ -84,46 +84,13 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
         }
         void MoveScene()
         {
-            MoveToDownTown();
+            (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController.ISceneBehaviour.nextscene.MoveScene();
         }
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
     public void TestGetDamaged() => PlayerStats.OnAttacked(_playerStats,2);
     public void TestGetExp() => PlayerStats.Exp += 5;
-    
-    public void MoveToDownTown()//호스트에게만 실행됨.
-    {
-        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
-        Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, () => { });
-
-        void ClientLoadedEvent(ulong clientId)
-        {
-            Debug.Log($"{clientId} 플레이어 로딩 완료");
-
-            foreach (NetworkObject clicentNgoObj in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
-            {
-                if (clicentNgoObj.OwnerClientId != clientId)
-                {
-                    continue;
-                }
-                if (clicentNgoObj.TryGetComponent(out PlayerStats playerStats) == true)
-                {
-                    Debug.Log($"{clientId}플레이어 찾았다");
-                    playerStats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
-                    playerStats.transform.position = new Vector3(clientId, 0, 0);
-                    break;
-                }
-            }
-            //TODO: 플레이어 스폰위치 조정
-            //TODO: 시계 UI 없애야함
-            //TODO: 각 플레이어들의 스폰위치를 정해줘야함.
-
-
-        }
-    }
-
 
     public void TestGenerateBossSkill1()
     {

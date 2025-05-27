@@ -147,7 +147,10 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         {
             if (_dragImageIcon == null)
             {
-                _dragImageIcon = (Managers.UI_Manager.UI_sceneDict[typeof(UI_ItemDragImage)] as UI_ItemDragImage).ItemDragImage;
+                if(Managers.UI_Manager.UI_sceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
+                {
+                    _dragImageIcon = (itemDragIamge as UI_ItemDragImage).ItemDragImage;
+                }
             }
             return _dragImageIcon;
         }
@@ -184,6 +187,10 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected override void OnDisableInit()
     {
         base.OnDisableInit();
+
+        if (DragImageIcon == null)
+            return;
+
         if (DragImageIcon.gameObject.activeSelf)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
         {
             DragImageIcon.gameObject.SetActive(false);

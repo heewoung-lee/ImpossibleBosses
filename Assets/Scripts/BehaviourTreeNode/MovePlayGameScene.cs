@@ -9,14 +9,14 @@ public class MovePlayGameScene : Action
     NGO_MoveDownTownBehaviour _ngo_MoveDownTownBehaviour;
     NGO_Stage_Timer_Controller _ngo_Timer_Controller;
     BehaviorTree _tree;
-    SceneMoverController _sceneMoverController;
+    MoveSceneController _sceneMoverController;
     ISceneMover _sceneMover;
     public override void OnStart()
     {
         _ngo_MoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NGO_MoveDownTownBehaviour>();
         _ngo_Timer_Controller = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NGO_Stage_Timer_Controller>();
-        _sceneMoverController = new SceneMoverController(new GamePlaySceneMover());
-        _ngo_Timer_Controller.UI_Stage_Timer.OnTimerCompleted += _sceneMoverController.MoveScene;
+        _sceneMoverController = (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController;
+        _ngo_Timer_Controller.UI_Stage_Timer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.nextscene.MoveScene;
         _tree = Owner.GetComponent<BehaviorTree>();
         base.OnStart();
     }
