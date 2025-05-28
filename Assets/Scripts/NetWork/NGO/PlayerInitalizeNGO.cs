@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using Unity.VisualScripting;
@@ -32,7 +33,24 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.GameManagerEx.SetPlayer(gameObject);
             SetOwnerPlayerADD_Module();
             Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
+            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
         }
+    }
+
+    private void SetParentPosition(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        if (loadSceneMode != LoadSceneMode.Single)
+            return;
+
+        foreach(ulong clientId in clientsCompleted)
+        {
+            if (clientId != OwnerClientId)
+                continue;
+
+            transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
+            break;
+        }
+
     }
 
     protected override void StartInit()
