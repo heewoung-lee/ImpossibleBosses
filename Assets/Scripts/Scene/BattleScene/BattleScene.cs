@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BattleScene : BaseScene, ISkillInit, ISceneController
 {
@@ -34,17 +35,23 @@ public class BattleScene : BaseScene, ISkillInit, ISceneController
         {
             _battleSceneController = new MoveSceneController(new UnitBattleScene());
             _battleSceneController.InitGamePlayScene();
-            _gamePlaySceneLoadingProgress.OnLoadingComplete += SpawnOBJ;
+            _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnOBJ;
         }
-
-        Managers.GameManagerEx.Player.transform.position = new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0);
-
-        void SpawnOBJ()
+        SetPlayerPosition();
+        void SetPlayerPosition()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
-                return;
-
-            _battleSceneController.SpawnOBJ();
+            if (Managers.GameManagerEx.Player == null)
+            {
+                Managers.GameManagerEx.OnPlayerSpawnEvent += (PlayerStats) => { PlayerSpawnPosition(PlayerStats.GetComponent<NavMeshAgent>()); };
+            }
+            else
+            {
+                PlayerSpawnPosition(Managers.GameManagerEx.Player.GetComponent<NavMeshAgent>());
+            }
+        }
+        void PlayerSpawnPosition(NavMeshAgent navMesh)
+        {
+            navMesh.Warp(new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0));
         }
     }
     public override void Clear()

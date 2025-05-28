@@ -80,7 +80,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
             TestGetDamaged();
             //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
-            Managers.GameManagerEx.Player.transform.position = new Vector3(0,0,0); 
+            Debug.Log(Managers.GameManagerEx.Player.transform.position+"플레이어 좌표");
         }
         void MoveScene()
         {

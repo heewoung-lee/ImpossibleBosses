@@ -32,23 +32,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.GameManagerEx.SetPlayer(gameObject);
             SetOwnerPlayerADD_Module();
             Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SetPlayerTr;
         }
     }
 
-    private void SetPlayerTr(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
-    {
-        if (IsHost == false)
-            return;
-
-       foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.GetClientOwnedObjects(clientId))
-        {
-            if(ngo.TryGetComponent(out PlayerStats playerStats))
-            {
-                playerStats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
-            }
-        }
-    }
     protected override void StartInit()
     {
 
