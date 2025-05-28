@@ -33,8 +33,8 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             Managers.GameManagerEx.SetPlayer(gameObject);
             SetOwnerPlayerADD_Module();
             Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
         }
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
     }
 
     private void SetParentPosition(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -45,34 +45,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         if (loadSceneMode != LoadSceneMode.Single)
             return;
 
-        //foreach (ulong clientId in clientsCompleted)
-        //{
-        //    if (Managers.RelayManager.NetworkManagerEx.ConnectedClients.TryGetValue(clientId, out Unity.Netcode.NetworkClient networkClient))
-        //    {
-        //        NetworkObject playerNetworkObject = networkClient.PlayerObject;
-
-        //        if (playerNetworkObject != null)
-        //        {
-        //            if (playerNetworkObject.TryGetComponent(out PlayerStats stats))
-        //            {
-        //                stats.transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
-        //                Debug.Log($"플레이어 {clientId}가 NGO_ROOT의 자식으로 설정되었습니다.");
-        //            }
-        //            else
-        //            {
-        //                Debug.Log($"클라이언트 {clientId}의 PlayerObject에서 PlayerStats 컴포넌트를 찾을 수 없습니다.");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Debug.Log($"클라이언트 {clientId}의 PlayerObject가 null입니다. (아직 스폰되지 않았거나 주 플레이어 오브젝트가 아닐 수 있습니다.)");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Debug.Log($"ConnectedClients에서 클라이언트 {clientId}를 찾을 수 없습니다. (이미 연결이 끊겼을 수 있습니다.)");
-        //    }
-        //}
+       transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
     }
 
     protected override void StartInit()
