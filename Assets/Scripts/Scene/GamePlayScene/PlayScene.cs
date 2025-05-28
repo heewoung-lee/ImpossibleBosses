@@ -9,15 +9,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayScene : BaseScene,ISkillInit, ISceneController
+public class PlayScene : BaseScene,ISkillInit, ISceneController,IScenePlayerPositioner
 {
     public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
 
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
     private MoveSceneController _sceneController;
+    private PlayerPositionController _playerPositionController;
     MoveSceneController ISceneController.SceneMoverController => _sceneController;
 
+    public PlayerPositionController PositionController => _playerPositionController;
     [SerializeField] bool isTest = false;
     [SerializeField] bool isSoloTest = false;
     protected override void AwakeInit()
@@ -32,31 +34,16 @@ public class PlayScene : BaseScene,ISkillInit, ISceneController
         if (isTest == true)
         {
             _sceneController = new MoveSceneController(new MockUnitGamePlayScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
+            _playerPositionController = new PlayerPositionController(new MockUnitPlayScenePlayerPosition());
         }
         else
         {
             _sceneController = new MoveSceneController(new UnitGamePlayScene());
+            _playerPositionController = new PlayerPositionController(new UnitPlayScenePlayerPosition());
         }
         _sceneController.InitGamePlayScene();
         _sceneController.SpawnOBJ();
-        SetPlayerPosition();
-
-
-        void SetPlayerPosition()
-        {
-            if(Managers.GameManagerEx.Player == null)
-            {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += (PlayerStats) => { PlayerSpawnPosition(PlayerStats.GetComponent<NavMeshAgent>()); };
-            }
-            else
-            {
-                PlayerSpawnPosition(Managers.GameManagerEx.Player.GetComponent<NavMeshAgent>());
-            }
-        }
-        void PlayerSpawnPosition(NavMeshAgent navMesh)
-        {
-            navMesh.Warp(new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0));
-        }
+        _playerPositionController.SetPlayerPosition();
     }
 
    
