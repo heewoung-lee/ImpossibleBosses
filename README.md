@@ -202,7 +202,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
       <sub><strong>&lt;게임 방 목록&gt;</strong><br/>현재 참여 가능한 방들의 이름, 인원수 등의 정보를 보여줍니다.</sub>
     </td>
     <td align="center" style="border: none; width: 50%;">
-      <img src="https://github.com/user-attachments/assets/7ef4241f-fe63-49e4-8675-91a6ca7e26af" alt="비밀번호 입력" style="width:60%; max-width:300px;"/>
+      <img src="https://github.com/user-attachments/assets/7ef4241f-fe63-49e4-8675-91a6ca7e26af" alt="비밀번호 입력" style="width:60%; max-width:200px;"/>
       <br/>
       <sub><strong>&lt;비밀번호 입력창&gt;</strong><br/>비공개 방에 참여하기 위해 비밀번호를 입력하는 화면입니다.</sub>
     </td>
