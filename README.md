@@ -260,13 +260,14 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 * 방을 만든 플레이어(호스트)는 방이 갑자기 사라지지 않도록 주기적으로 서버에 "방이 아직 살아있음!"이라는 신호(하트비트)를 보냅니다.
 * 플레이어가 방에 새로 들어오거나 나가는 등의 변화는 즉시 모든 참가자에게 알려져 화면이 업데이트됩니다.
 
-  <img src="https://github.com/user-attachments/assets/0e9ef430-3ee3-4898-9ace-82f40f7425be" alt="하트비트" width="100%"/>
-  <br/>
-  <sub><strong>&lt;하트비트&gt;</strong><br/>하트비트를 통해 만든 방이 사라지지않도록 유지합니다.</sub>
-</p>
-
 <br/>
-
+<p align="center">
+  <strong>&lt;하트비트&gt;</strong>
+</p>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/0e9ef430-3ee3-4898-9ace-82f40f7425be" alt="하트비트" width="30%"/>
+</div>
+<br>
 ---
 
 ### 🔗 릴레이 서버
