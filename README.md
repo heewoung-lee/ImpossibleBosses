@@ -202,7 +202,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
         <figcaption>
           <br/>
           <strong>&lt;게임 방 목록&gt;</strong><br>
-          현재 참여 가능한 방들의 이름, 인원수 등의 정보를 보여줍니다.
+          현재 참여 가능한 방들의 이름,
+           <br/>
+          인원수 등의 정보를 보여줍니다.
         </figcaption>
       </figure>
     </td>
