@@ -144,15 +144,12 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 ### 🏠 로비 (Lobby)
 플레이어는 계정 인증 후 로비 화면으로 이동하여, 다른 플레이어와 소통하고 함께 게임을 즐길 방을 찾거나 만들 수 있습니다.
 
-&lt;br/>
-
-&lt;p align="center">
-&lt;img src="https://github.com/user-attachments/assets/09f319e5-735d-486d-a015-4e6265a05944" alt="로비 UI" width="80%"/>
-&lt;br/>
-&lt;sub>&lt;strong>&amp;lt;로비 메인 화면&amp;gt;&lt;/strong>&lt;br/>플레이어 정보, 현재 생성된 방 목록, 채팅 기능을 제공합니다.&lt;/sub>
-&lt;/p>
-
-&lt;br/>
+<p align="center">
+  <strong>&lt;로비화면&gt;</strong>
+</p>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/d5f2406a-94d1-4195-b565-dc231d12eea0" alt="로비화면" width="30%"/>
+</div>
 
 🚪 로비 입장 및 준비 과정
 게임에 접속하면 가장 먼저 로비로 입장하기 위한 준비를 시작합니다.
