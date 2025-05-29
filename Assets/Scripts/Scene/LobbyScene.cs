@@ -23,17 +23,4 @@ public class LobbyScene : BaseScene
         _uI_LobbyScene = Managers.UI_Manager.GetSceneUIFromResource<UI_LobbyScene>();
 
     }
-    private async void OnGUI()
-    {
-        if (GUI.Button(new Rect(0, 0, 100, 100), "GetJoinCode"))
-        {
-            Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby(); 
-
-            foreach(System.Collections.Generic.KeyValuePair<string, DataObject> lobbydata in currentLobby.Data)
-            {
-                Debug.Log($"LobbyKey{lobbydata.Key} ตฅภฬลอ{lobbydata.Value.Value}");
-            }
-
-        }
-    }
 }

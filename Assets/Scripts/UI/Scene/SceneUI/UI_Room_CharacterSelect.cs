@@ -307,15 +307,5 @@ public class UI_Room_CharacterSelect : UI_Scene
         _button_Text.text = buttonimages.readyButtonText;
         _button_Text.color = buttonimages.readyButtonTextColor;
     }
-
-
-    //TODO:테스트하면 이거 지워야함
-    private async void OnGUI()
-    {
-        if (GUI.Button(new Rect(0, 0, 100, 100), "GetJoinCode"))
-        {
-            Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
-            Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
-        }
-    }
+    
 }
