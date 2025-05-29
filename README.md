@@ -220,7 +220,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 * 설정을 완료하고 방을 만들면, 이 방은 다른 플레이어들의 방 목록에도 나타나 함께 플레이할 팀원을 모을 수 있습니다.
 
 <p align="center">
-  <img src="[방 생성 UI 이미지 링크 삽입 - 예시: UI_CreateRoom 팝업 스크린샷]" alt="방 생성" width="50%"/>
+  <img src="https://github.com/user-attachments/assets/adf8bd6f-3f22-4dff-89ba-5fbac08a2c82" alt="방 생성" width="50%"/>
   <br/>
   <sub><strong>&lt;게임 방 생성 설정&gt;</strong><br/>새로운 방의 이름, 최대 인원, 비밀번호 등을 설정합니다.</sub>
 </p>
