@@ -330,7 +330,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 
 <br/>
 
-### 3. 로비 콜백 및 데이터 동기화 문제 해결: Unity Lobby SDK 버그 식별 및 공식 해결
+#### 3. 로비 콜백 및 데이터 동기화 문제 해결: Unity Lobby SDK 버그 식별 및 공식 해결
 
 * **🤔 문제점:**
     * Unity Netcode 기반 멀티플레이 게임 개발 중, Unity Lobby 서비스에서 특정 시나리오(호스트 이전 후 이전 호스트 재접속)에서 플레이어의 로비 참가 및 행동 변화에 따른 이벤트 콜백이 정상적으로 호출되지 않는 `An item with the same key has already been added` 오류가 발생했습니다.
