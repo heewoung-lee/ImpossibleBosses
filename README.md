@@ -199,7 +199,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 </p>
 <br/>
 <p align="center">
-  <img src="[비밀번호 입력 UI 이미지 링크 삽입 - 예시: UI_InputRoomPassWord 팝업 스크린샷]" alt="비밀번호 입력" width="40%"/>
+  <img src="https://github.com/user-attachments/assets/adf8bd6f-3f22-4dff-89ba-5fbac08a2c82" alt="비밀번호 입력" width="40%"/>
   <br/>
   <sub><strong>&lt;비밀번호 입력창&gt;</strong><br/>비공개 방에 참여하기 위해 비밀번호를 입력하는 화면입니다.</sub>
 </p>
