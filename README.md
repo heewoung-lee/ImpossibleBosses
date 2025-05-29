@@ -135,7 +135,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <strong>&lt;데이터 변경 확인&gt;</strong>
 </p>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/56236faf-6a3d-4658-bc5e-fdad2c12e310" alt="데이터 캐싱" width="70%"/>
+  <img src="https://github.com/user-attachments/assets/56236faf-6a3d-4658-bc5e-fdad2c12e310" alt="데이터 캐싱" width="30%"/>
 </div>
 <br>
 
