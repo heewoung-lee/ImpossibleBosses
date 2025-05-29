@@ -92,6 +92,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
       <li><code>GetGoogleSheetData()</code> 메서드는 이 정보를 사용하여 Google Sheets API 인증 후, 지정된 스프레드시트 데이터를 가져옵니다.</li>
     </ul>
 
+<p align="center">
+  <strong>&lt;구글 스프레드시트 불러오기&gt;</strong>
+</p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/47be08dd-43b7-4740-9853-89e74ab992f3" alt="스프레드시트 연동" width="70%"/>
 </div>
