@@ -80,6 +80,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <p align="center">
   <img src="https://github.com/user-attachments/assets/f0fcfdb3-cd07-494a-9edd-267df547bfd1" alt="타입 스캔 이미지 1" width="70%"/>
 </p>
+
 2.  **Google 스프레드시트 연동**:
     * `DatabaseStruct`는 Google OAuth 2.0 인증 정보(클라이언트 ID, 시크릿 코드, 애플리케이션 이름, 스프레드시트 ID)를 관리합니다.
     * `GetGoogleSheetData()` 메서드는 이 정보를 사용하여 Google Sheets API 인증 후, 지정된 스프레드시트 데이터를 가져옵니다.
