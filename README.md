@@ -77,7 +77,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 1.  **초기화 및 타입 스캔**:
     * `Managers.DataManager.Init()` 메서드가 데이터 로딩을 시작합니다.
     * `LoadSerializableTypesFromFolder` 메서드는 지정된 경로에서 `[Serializable]` 어트리뷰트를 가진 클래스들을 리플렉션으로 스캔합니다. 이 클래스들은 스프레드시트의 각 시트 데이터 구조와 매핑됩니다.
-
+<p align="center">
+![image](https://github.com/user-attachments/assets/f0fcfdb3-cd07-494a-9edd-267df547bfd1)
+</p>
 2.  **Google 스프레드시트 연동**:
     * `DatabaseStruct`는 Google OAuth 2.0 인증 정보(클라이언트 ID, 시크릿 코드, 애플리케이션 이름, 스프레드시트 ID)를 관리합니다.
     * `GetGoogleSheetData()` 메서드는 이 정보를 사용하여 Google Sheets API 인증 후, 지정된 스프레드시트 데이터를 가져옵니다.
