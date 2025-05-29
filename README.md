@@ -78,6 +78,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
       <li><code>LoadSerializableTypesFromFolder</code> 메서드는 지정된 경로에서 <code>[Serializable]</code> 어트리뷰트를 가진 클래스들을 리플렉션으로 스캔합니다. 이 클래스들은 스프레드시트의 각 시트 데이터 구조와 매핑됩니다.</li>
     </ul>
 
+<p align="center">
+  <strong>&lt;DataManger의 타입스캔&gt;</strong>
+</p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/f0fcfdb3-cd07-494a-9edd-267df547bfd1" alt="타입 스캔 이미지 1" width="70%"/>
 </div>
