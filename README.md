@@ -107,6 +107,10 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
         * `GetTypeNameFromFileName()`은 시트 이름에서 데이터 타입을 결정합니다.
         * `FindGenericKeyType()`은 데이터 타입이 `Ikey<TKey>` 인터페이스를 구현했는지 확인하여 딕셔너리 키 타입을 결정합니다.
         * `DataToDictionary<TKey, TStat>` 클래스는 로드된 데이터 리스트를 `Dictionary<TKey, TStat>` 형태로 변환하여 `AllDataDict`에 저장합니다.
+
+<p align="center">
+  <strong>&lt;JSon 문자열 역직렬화&gt;</strong>
+</p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/5d878784-0047-4341-a7d5-eaf3cad0e707" alt="데이터 파싱" width="70%"/>
 </div>
