@@ -273,8 +273,12 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 * **호스트 마이그레이션 (Host Migration) 준비**:
     * 로비 시스템과 연동하여, 기존 호스트가 게임에서 나가면 새로운 호스트가 릴레이 서버의 할당(Allocation) 정보를 이어받아 게임 세션을 계속 유지할 수 있도록 설계되었습니다.
     * 이는 로비 매니저에서 호스트 변경 이벤트를 감지하고, 새로운 호스트에게 릴레이 서버 재설정 권한을 부여하는 방식으로 처리됩니다. (관련 로직은 LobbyManager.cs의 호스트 변경 콜백 및 RelayManager.cs의 호스트/클라이언트 연결 로직에 포함되어 있습니다.)
-
-    <호스트 마이그레이션 GIF>
+      
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ba3a59e4-f8af-4adb-94a1-db202a7630c2" alt="캐릭터 선택" width="80%"/>
+  <br/>
+  <sub><strong>&lt;캐릭터 선택 및 준비 완료&gt;</strong><br/>방에 참가한 플레이어들이 각자 플레이할 캐릭터를 고르고 "준비" 상태를 표시합니다.</sub>
+</p>
 
 * **릴레이 데이터와 로비 데이터 연동**:
     * 호스트가 릴레이 서버에 성공적으로 방을 할당받으면, 생성된 참여 코드(Join Code)는 로비 데이터의 일부로 저장됩니다.
