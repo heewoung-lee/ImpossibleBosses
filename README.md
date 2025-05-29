@@ -119,6 +119,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 4.  **데이터 캐싱 및 접근**:
     * 처리된 데이터는 `DataManager.AllDataDict` (`Dictionary<Type, object>` 타입)에 데이터 타입별로 캐싱되어, 게임 내 다른 시스템에서 사용됩니다.
     * `ItemDataManager`는 `DataManager.AllDataDict`에서 아이템 관련 타입의 데이터를 가져와 관리합니다.
+<p align="center">
+  <strong>&lt;데이터 캐싱&gt;</strong>
+</p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/3a36e9ed-a833-4e30-b9ac-41880a50a860" alt="데이터 캐싱" width="70%"/>
 </div>
