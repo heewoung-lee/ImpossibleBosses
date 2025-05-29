@@ -93,11 +93,6 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 
 ---
 
-
-
-
----
-
 ### 🏠 로비
 1. **계정 인증** 후 **`LobbyScene`** 전환  
 2. `LobbyManager`가 Unity Services **초기화 → 익명 인증 → 로비 접속**  
