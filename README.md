@@ -109,7 +109,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
         * `DataToDictionary<TKey, TStat>` 클래스는 로드된 데이터 리스트를 `Dictionary<TKey, TStat>` 형태로 변환하여 `AllDataDict`에 저장합니다.
 
 <p align="center">
-  <strong>&lt;JSon 문자열 역직렬화&gt;</strong>
+  <strong>&lt;JSON 문자열 역직렬화&gt;</strong>
 </p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/5d878784-0047-4341-a7d5-eaf3cad0e707" alt="데이터 파싱" width="70%"/>
