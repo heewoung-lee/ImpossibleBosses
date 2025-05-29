@@ -197,7 +197,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/7293c6f9-58be-414d-b6a3-7ca4ce1e4bcf" alt="방 목록" width="80%"/>
+      <img src="https://github.com/user-attachments/assets/7293c6f9-58be-414d-b6a3-7ca4ce1e4bcf" alt="방 목록" width="50%"/>
       <br/>
       <sub><strong>&lt;게임 방 목록&gt;</strong><br/>현재 참여 가능한 방들의 이름, 인원수 등의 정보를 보여줍니다.</sub>
     </td>
