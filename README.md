@@ -153,7 +153,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <strong>&lt;로비화면&gt;</strong>
 </p>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/d5f2406a-94d1-4195-b565-dc231d12eea0" alt="로비화면" width="70%"/>
+  <img src="https://github.com/user-attachments/assets/297cfa77-bdf1-4aa9-be74-cbf2ef054430" alt="로비화면" width="70%"/>
 </div>
 
 <br/>
