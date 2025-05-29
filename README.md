@@ -83,7 +83,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 <div align="center">
   <img src="https://github.com/user-attachments/assets/f0fcfdb3-cd07-494a-9edd-267df547bfd1" alt="타입 스캔 이미지 1" width="70%"/>
 </div>
-
+<li></li>
 
 2.  **Google 스프레드시트 연동**:
     <ul>
@@ -94,6 +94,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 <div align="center">
   <img src="https://github.com/user-attachments/assets/47be08dd-43b7-4740-9853-89e74ab992f3" alt="스프레드시트 연동" width="70%"/>
 </div>
+<li></li>
 
 3.  **데이터 파싱 및 구조화**:
     * `LoadDataFromGoogleSheets()`는 인증된 서비스와 스프레드시트 ID로 각 시트의 데이터를 요청합니다.
