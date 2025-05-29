@@ -248,7 +248,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 * 모든 플레이어가 "준비 완료" 상태가 되면, 방을 만든 방장이 게임을 시작할 수 있습니다.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fa348d9f-8902-4926-90ca-cb1fa22b9872" alt="캐릭터 선택" width="80%"/>
+  <img src="https://github.com/user-attachments/assets/494afb30-753a-4553-bd4f-158943e5877e" alt="캐릭터 선택" width="80%"/>
   <br/>
   <sub><strong>&lt;캐릭터 선택 및 준비 완료&gt;</strong><br/>방에 참가한 플레이어들이 각자 플레이할 캐릭터를 고르고 "준비" 상태를 표시합니다.</sub>
 </p>
