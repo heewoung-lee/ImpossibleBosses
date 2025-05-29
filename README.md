@@ -60,16 +60,16 @@
 ### 📥 데이터 불러오기
 ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이루어집니다. 이 매니저는 Google 스프레드시트에서 게임에 필요한 각종 데이터(플레이어 정보, 몬스터 정보, 아이템 목록 등)를 로드하고, 애플리케이션 내에서 효율적으로 사용할 수 있도록 처리합니다.
 
-&lt;p align="center">
-&lt;strong>&amp;lt;데이터 시트&amp;gt;&lt;/strong>
-&lt;/p>
-&lt;p align="center">
-&lt;img src="https://github.com/user-attachments/assets/5fa4ab70-ba04-403b-b229-c403439998e1" alt="데이터 시트 이미지 1" width="45%"/>
-&lt;img src="https://github.com/user-attachments/assets/66638094-07c2-48ad-b48e-744c3f8d9183" alt="데이터 시트 이미지 2" width="45%"/>
-&lt;/p>
-&lt;p align="center">
-&lt;img src="https://github.com/user-attachments/assets/8c104aa5-92eb-44ea-82e5-c77787290c39" alt="데이터 시트 이미지 3" width="45%"/>
-&lt;/p>
+<p align="center">
+  <strong>&lt;데이터 시트&gt;</strong>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5fa4ab70-ba04-403b-b229-c403439998e1" alt="데이터 시트 이미지 1" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/66638094-07c2-48ad-b48e-744c3f8d9183" alt="데이터 시트 이미지 2" width="45%"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8c104aa5-92eb-44ea-82e5-c77787290c39" alt="데이터 시트 이미지 3" width="45%"/>
+</p>
 
 
 **데이터 로딩 절차:**
