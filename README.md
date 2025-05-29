@@ -193,7 +193,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 * 만약 선택한 방에 비밀번호가 설정되어 있다면, 올바른 비밀번호를 입력해야만 들어갈 수 있습니다.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/7293c6f9-58be-414d-b6a3-7ca4ce1e4bcf" alt="방 목록" width="70%"/>
+  <img src="https://github.com/user-attachments/assets/7293c6f9-58be-414d-b6a3-7ca4ce1e4bcf" alt="방 목록" width="40%"/>
   <br/>
   <sub><strong>&lt;게임 방 목록&gt;</strong><br/>현재 참여 가능한 방들의 이름, 인원수 등의 정보를 보여줍니다.</sub>
 </p>
