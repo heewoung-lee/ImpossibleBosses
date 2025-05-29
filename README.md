@@ -47,13 +47,31 @@
 
 ## 🗝 핵심 로직
 
-### 🔐 로그인
-1. **`LoginScene`** 로드  
-2. 플레이어가 **로그인 / 회원가입** 선택  
-3. `LogInManager`가 **Google 스프레드시트**(UserAuthenticateData)와 ID·PW 대조  
-4. **인증 성공 → 로비 씬**으로 이동  
+### 🔐 로그인 (Google 계정 연동)
 
-![Image](https://github.com/user-attachments/assets/a63eec10-7526-4920-bd92-319d0a640e82)
+> Google 계정을 통해 간편하게 로그인하고, 게임 데이터를 스프레드시트에 안전하게 관리합니다.
+
+1.  **로그인 화면 로드**: 게임 시작 시 로그인 또는 회원가입을 할 수 있는 화면이 표시됩니다.
+2.  **회원가입 시**:
+    * 사용자로부터 희망 ID와 비밀번호를 입력받습니다.
+    * 입력된 ID가 기존에 사용 중인지 데이터베이스(Google 스프레드시트의 `UserAuthenticateData` 시트)에서 확인 후, 사용 가능하면 새 계정 정보를 저장합니다. (`LogInManager`가 처리)
+    * 이후 닉네임 설정 화면(`UI_CreateNickName` 팝업)을 통해 플레이어가 사용할 고유한 닉네임을 입력받아 저장합니다.
+3.  **로그인 시**:
+    * 입력된 ID와 비밀번호를 데이터베이스(Google 스프레드시트의 `UserAuthenticateData` 시트)에 저장된 정보와 비교하여 인증을 시도합니다. (`LogInManager`가 처리)
+    * 이 과정에서 Google의 인증 방식(OAuth 2.0) 및 스프레드시트 접근 기술(Sheets API)이 데이터 관리 시스템(`DataManager`의 `GetGoogleSheetData` 메서드 등)과 연동되어 사용됩니다.
+4.  **인증 결과에 따른 처리**:
+    * **성공**: 플레이어의 계정 정보(`PlayerLoginInfo`)가 게임 내에 임시 저장됩니다. 만약 해당 계정에 닉네임이 설정되어 있지 않다면, 닉네임 설정 화면(`UI_CreateNickName`)으로 안내합니다. 모든 정보가 확인되면 로비 화면으로 이동합니다.
+    * **실패**: ID 또는 비밀번호 불일치, 인터넷 연결 문제 등의 오류 발생 시 알림창(`UI_AlertDialog`)을 통해 사용자에게 상황을 안내합니다.
+
+**주요 기술:** Google 계정 인증(OAuth 2.0), Google 스프레드시트를 활용한 데이터 관리.
+
+<br/>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a63eec10-7526-4920-bd92-319d0a640e82" alt="로그인 흐름" width="70%"/>
+  <br/>
+  <sub><strong>&lt;로그인 및 회원가입 처리 흐름도&gt;</strong></sub>
+</p>
+<br/>
 
 ---
 
