@@ -103,6 +103,10 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
         * `GetTypeNameFromFileName()`은 시트 이름에서 데이터 타입을 결정합니다.
         * `FindGenericKeyType()`은 데이터 타입이 `Ikey<TKey>` 인터페이스를 구현했는지 확인하여 딕셔너리 키 타입을 결정합니다.
         * `DataToDictionary<TKey, TStat>` 클래스는 로드된 데이터 리스트를 `Dictionary<TKey, TStat>` 형태로 변환하여 `AllDataDict`에 저장합니다.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5d878784-0047-4341-a7d5-eaf3cad0e707" alt="데이터 파싱" width="70%"/>
+</div>
+<br>
 
 4.  **데이터 캐싱 및 접근**:
     * 처리된 데이터는 `DataManager.AllDataDict` (`Dictionary<Type, object>` 타입)에 데이터 타입별로 캐싱되어, 게임 내 다른 시스템에서 사용됩니다.
@@ -111,6 +115,8 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 5.  **로컬 데이터 활용**:
     * Google 스프레드시트 접근 불가 시, `LoadAllDataFromLocal()` 메서드가 로컬에 JSON 파일로 저장된 데이터를 로드합니다.
     * 스프레드시트에서 새 데이터를 가져오면, `SaveDataToFile()` 메서드가 기존 로컬 데이터와 비교 후 변경된 경우 최신 데이터로 덮어씁니다. `BinaryCheck<T>()`가 데이터 변경 여부를 확인합니다.
+
+
 
 ---
 
