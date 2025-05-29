@@ -391,6 +391,5 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 
 ---
 
----
 
 ![Boss Flow](https://github.com/user-attachments/assets/33e41408-493a-4778-830d-c0c69d4055a5)
