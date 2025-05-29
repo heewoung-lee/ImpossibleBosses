@@ -198,9 +198,9 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <!-- height를 같게 맞춰서 두 칸 높이를 통일 -->
         <img src="https://github.com/user-attachments/assets/50ed75db-9775-49b1-ab05-3fce2d648a9d" alt="방 목록" height="300">
         <figcaption>
+          <br/>
           <strong>&lt;게임 방 목록&gt;</strong><br>
           현재 참여 가능한 방들의 이름, 인원수 등의 정보를 보여줍니다.
         </figcaption>
@@ -210,6 +210,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/7ef4241f-fe63-49e4-8675-91a6ca7e26af" alt="비밀번호 입력" height="300">
         <figcaption>
+          <br/>
           <strong>&lt;비밀번호 입력창&gt;</strong><br>
           비공개 방에 참여하기 위해 비밀번호를 입력하는 화면입니다.
         </figcaption>
