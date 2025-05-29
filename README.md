@@ -79,7 +79,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
     </ul>
 
 <p align="center">
-  <strong>&lt;DataManger의 타입스캔&gt;</strong>
+  <strong>&lt;DataManger의 타입확인&gt;</strong>
 </p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/f0fcfdb3-cd07-494a-9edd-267df547bfd1" alt="타입 스캔 이미지 1" width="70%"/>
