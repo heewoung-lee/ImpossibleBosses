@@ -268,6 +268,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <img src="https://github.com/user-attachments/assets/0e9ef430-3ee3-4898-9ace-82f40f7425be" alt="하트비트" width="80%"/>
 </div>
 <br>
+
 ---
 
 ### 🔗 릴레이 서버
