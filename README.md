@@ -131,9 +131,13 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
 5.  **로컬 데이터 활용**:
     * Google 스프레드시트 접근 불가 시, `LoadAllDataFromLocal()` 메서드가 로컬에 JSON 파일로 저장된 데이터를 로드합니다.
     * 스프레드시트에서 새 데이터를 가져오면, `SaveDataToFile()` 메서드가 기존 로컬 데이터와 비교 후 변경된 경우 최신 데이터로 덮어씁니다. `BinaryCheck<T>()`가 데이터 변경 여부를 확인합니다.
-
-
-
+<p align="center">
+  <strong>&lt;데이터 변경 확인&gt;</strong>
+</p>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/56236faf-6a3d-4658-bc5e-fdad2c12e310" alt="데이터 캐싱" width="70%"/>
+</div>
+<br>
 ---
 
 ### 🏠 로비
