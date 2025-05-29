@@ -265,7 +265,7 @@ ImpossibleBosses의 데이터 관리는 Managers.DataManager를 중심으로 이
   <strong>&lt;하트비트&gt;</strong>
 </p>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/0e9ef430-3ee3-4898-9ace-82f40f7425be" alt="하트비트" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/0e9ef430-3ee3-4898-9ace-82f40f7425be" alt="하트비트" width="80%"/>
 </div>
 <br>
 ---
