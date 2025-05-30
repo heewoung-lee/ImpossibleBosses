@@ -472,10 +472,10 @@
         </figcaption>
       </figure>
     </td>
-    <td align="center" style="width:5%;">
+    <td align="center" valign="top"style="width:5%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
-             alt="유니티 멀티플레이 서비스팀 답변" height="100">
+             alt="유니티 멀티플레이 서비스팀 답변" height="80">
         <figcaption>
           <br/>
           &lt;<strong>유니티 멀티플레이 서비스팀 답변</strong>&gt;<br>
