@@ -483,7 +483,7 @@
     <td align="center" valign="top" style="width:5%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
-             alt="전략패턴" height="300">
+             alt="전략패턴" height="100">
         <figcaption>
           <br/>
           <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
