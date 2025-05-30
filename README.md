@@ -441,6 +441,16 @@
 
 <br/>
 
+<p align="center">
+  <strong>&lt;비헤이비어 트리&gt;</strong>
+</p>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/d8d387e4-433d-4c18-9c93-50162a3ec318" alt="비헤이비어 트리" width="70%"/>
+</div>
+
+<br/>
+
+
 #### 3. 로비 콜백 및 데이터 동기화 문제 해결: Unity Lobby SDK 버그 식별 및 공식 해결
 
 * **🤔 문제점:**
