@@ -348,47 +348,19 @@
 <br/>
 
 
-<table style="width:100%; border:0;">
-  <tr>
-    <td align="center" valign="top" style="width:50%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 동기화" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;이동 동기화&gt
-        </figcaption>
-      </figure>
-    </td>
-    <td align="center" valign="top" style="width:50%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/506415af-713b-4fa6-928b-96762fd55116" alt="오브젝트 동기화" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;오브젝트 동기화&gt;
-        </figcaption>
-      </figure>
-    </td>
-  </tr>
-   <tr>
-    <td align="center" valign="top" style="width:50%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/50ed75db-9775-49b1-ab05-3fce2d648a9d" alt="방 목록" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;게임 방 목록&gt;</strong><br>
-          현재 참여 가능한 방들의 이름,
-           <br/>
-          인원수 등의 정보를 보여줍니다.
-        </figcaption>
-      </figure>
-    </td>
-</table>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 동기화" width="80%"/>
+  <br/>
+  <sub><strong>&lt;이동 동기화를 통해 각 클라이언트 플레이어들의 위치를 확인할 수 있습니다.</sub>
+</p>
 
-
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/506415af-713b-4fa6-928b-96762fd55116" alt="오브젝트 동기화" width="80%"/>
+  <br/>
+  <sub><strong>&lt;오브젝트 동기화를 통해 각 오브젝트들을 동기화 할 수 있습니다.</sub>
+</p>
 
 <br/>
-
 
 
 ---
