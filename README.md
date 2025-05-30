@@ -483,10 +483,10 @@
     <td align="center" style="width:5%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
-             alt="유니티팀 답변" height="120">
+             alt="유니티 멀티플레이 서비스팀 답변" height="120">
         <figcaption>
           <br/>
-          <strong>&lt;유니티팀 답변&gt;</strong><br>
+          <strong>&lt;유니티 멀티플레이 서비스팀 답변&gt;</strong><br>
         </figcaption>
       </figure>
     </td>
