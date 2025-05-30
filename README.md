@@ -394,6 +394,30 @@
     * 코드의 가독성과 확장성이 크게 향상되었습니다. 새로운 플레이어 스킬이나 행동 상태를 추가할 때, `IState`를 구현하는 새 클래스를 만들고 `BaseController`에 등록하는 것만으로 확장이 가능해졌습니다.
     * 각 상태 로직이 분리되어 테스트와 디버깅이 용이해졌습니다.
 
+<br/>
+
+<table style="width:100%; border:0;">
+  <tr>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/957a7605-b327-47a6-8d63-3974d3362d9b" alt="FSM(유한상태머신)" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;FSM(유한상태머신) 다이어그램 ID&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/f6ff4b98-a188-44ec-a402-236324895f0e" alt="전략패턴" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
 
 <br/>
 
