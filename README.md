@@ -468,42 +468,25 @@
 
 <div align="center">
 
-<table style="border:0;">
+<table style="border:0; width:100%;">
   <tr>
-    <td align="center" valign="top" style="width:45%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/51c157c4-5627-47d6-8258-cc3f8ecd773f"
-             alt="FSM(유한상태머신)" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
-        </figcaption>
-      </figure>
+    <td style="text-align:center; width:33%; padding:0 8px;">
+      <img src="FSM1.png" height="260"><br>
+      <strong>&lt;FSM 다이어그램 1&gt;</strong>
     </td>
-    <td align="center" valign="top" style="width:5%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
-             alt="전략패턴" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
-        </figcaption>
-      </figure>
+    <td style="text-align:center; width:33%; padding:0 8px;">
+      <img src="Strategy.png" height="260"><br>
+      <strong>&lt;전략패턴 다이어그램&gt;</strong>
     </td>
-    <td align="center" valign="top" style="width:45%;">
-      <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/d22de9c8-279c-4085-8023-e221e82b8d91"
-             alt="FSM(유한상태머신)" height="300">
-        <figcaption>
-          <br/>
-          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
-        </figcaption>
-      </figure>
+    <td style="text-align:center; width:33%; padding:0 8px;">
+      <img src="FSM2.png" height="260"><br>
+      <strong>&lt;FSM 다이어그램 2&gt;</strong>
     </td>
   </tr>
 </table>
 
 </div>
+
 
 [ImpossibleBosses | Unity 콜백오류자료](https://blog.naver.com/hiwoong12/223742840805)
 
