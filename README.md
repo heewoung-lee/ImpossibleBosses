@@ -400,10 +400,10 @@
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/957a7605-b327-47a6-8d63-3974d3362d9b" alt="FSM(유한상태머신)" height="300">
+        <img src="https://github.com/user-attachments/assets/7db5efa6-e751-4425-8139-f5a0098af9da" alt="FSM(유한상태머신)" height="300">
         <figcaption>
           <br/>
-          <strong>&lt;FSM(유한상태머신) 다이어그램 ID&gt;</strong><br>
+          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
         </figcaption>
       </figure>
     </td>
