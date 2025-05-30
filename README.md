@@ -403,7 +403,7 @@
              alt="FSM(유한상태머신)" height="300">
         <figcaption>
           <br/>
-          &lt;FSM(유한상태머신) 다이어그램&gt;<br>
+          &lt;<strong>FSM(유한상태머신) 다이어그램</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
@@ -413,7 +413,7 @@
              alt="전략패턴" height="300">
         <figcaption>
           <br/>
-          &lt;전략패턴 다이어그램&gt;<br>
+          &lt;<strong>전략패턴 다이어그램</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
