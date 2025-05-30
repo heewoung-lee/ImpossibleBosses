@@ -526,6 +526,14 @@
 
 <br/>
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/4b127fa8-6ca3-4cb6-9020-13d97ffd9e67" alt="오브젝트 핸들러" width="80%"/>
+  <br/>
+  <sub><strong>&lt;네트워크 오브젝트 핸들러.&gt</strong></sub>
+</p>
+
+
+
 #### 5. 애니메이션 속도 동기화: 예측과 보간을 통한 부드러운 움직임 구현
 
 * 🤔 문제점:
