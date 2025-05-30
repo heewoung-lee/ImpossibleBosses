@@ -534,9 +534,13 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/4b127fa8-6ca3-4cb6-9020-13d97ffd9e67" alt="오브젝트 핸들러" width="80%"/>
   <br/>
-  <sub><strong>&lt;네트워크 오브젝트 핸들러.&gt</strong></sub>
+  <sub><strong>&lt;네트워크 오브젝트 핸들러&gt</strong></sub>
 </p>
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f276410b-8d07-4085-b43b-8f4a1d93eeb7" alt="오브젝트 풀링" width="80%"/>
+  <br/>
+  <sub><strong>&lt;오브젝트 풀링&gt</strong></sub>
+</p>
 
 ---
 
