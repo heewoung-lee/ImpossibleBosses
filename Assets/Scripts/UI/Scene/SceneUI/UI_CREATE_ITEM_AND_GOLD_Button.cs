@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
@@ -86,6 +87,16 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
         {
             (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController.ISceneBehaviour.nextscene.MoveScene();
         }
+
+        //void AllLevelup()
+        //{
+        //    int layerMask = LayerMask.GetMask("Player", "AnotherPlayer");
+        //    Collider[] hitColliders = Physics.OverlapSphere(Managers.GameManagerEx.Player.transform.position, 10f, layerMask);
+        //    foreach (var collider in hitColliders)
+        //    {
+        //      Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Level_up", collider.transform);
+        //    }
+        //}
     }
     
     public void TestGetGold() => PlayerStats.Gold += 5;
