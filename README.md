@@ -470,7 +470,7 @@
 
 <table style="border:0;">
   <tr>
-    <td align="center" valign="top" style="width:50%;">
+    <td align="center" valign="top" style="width:40%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/51c157c4-5627-47d6-8258-cc3f8ecd773f"
              alt="FSM(유한상태머신)" height="300">
@@ -480,7 +480,7 @@
         </figcaption>
       </figure>
     </td>
-    <td align="center" valign="top" style="width:50%;">
+    <td align="center" valign="top" style="width:20%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
              alt="전략패턴" height="300">
@@ -490,7 +490,7 @@
         </figcaption>
       </figure>
     </td>
-      <td align="center" valign="top" style="width:50%;">
+      <td align="center" valign="top" style="width:40%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/d22de9c8-279c-4085-8023-e221e82b8d91"
              alt="FSM(유한상태머신)" height="300">
