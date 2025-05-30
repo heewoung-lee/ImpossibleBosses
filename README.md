@@ -492,7 +492,7 @@
              alt="25년 2월 6일 업데이트 완료" height="300">
         <figcaption>
           <br/>
-          ;<strong>2025년 2월 6일 업데이트 완료</strong><br>
+          <strong>2025년 2월 6일 업데이트 완료</strong><br>
         </figcaption>
       </figure>
     </td>
