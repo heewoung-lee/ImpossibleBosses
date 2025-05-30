@@ -468,7 +468,9 @@
              alt="멀티플레이 서비스 SDK 오류발생" height="300">
         <figcaption>
           <br/>
-          &lt;<strong>멀티플레이 서비스 SDK 오류발생</strong>&gt;<br>
+          &lt;<strong>멀티플레이 서비스 
+             <br/>
+             SDK 오류발생</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
