@@ -394,12 +394,14 @@
     * 코드의 가독성과 확장성이 크게 향상되었습니다. 새로운 플레이어 스킬이나 행동 상태를 추가할 때, `IState`를 구현하는 새 클래스를 만들고 `BaseController`에 등록하는 것만으로 확장이 가능해졌습니다.
     * 각 상태 로직이 분리되어 테스트와 디버깅이 용이해졌습니다.
 
-<br/>
-<table style="border:0; margin-left: auto; margin-right: auto;">
+<div align="center">
+
+<table style="border:0;">
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/b9c02182-966e-491d-94fc-1f4f80e4b197" alt="FSM(유한상태머신)" height="300">
+        <img src="https://github.com/user-attachments/assets/b9c02182-966e-491d-94fc-1f4f80e4b197"
+             alt="FSM(유한상태머신)" height="300">
         <figcaption>
           <br/>
           <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
@@ -408,7 +410,8 @@
     </td>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/f6ff4b98-a188-44ec-a402-236324895f0e" alt="전략패턴" height="300">
+        <img src="https://github.com/user-attachments/assets/f6ff4b98-a188-44ec-a402-236324895f0e"
+             alt="전략패턴" height="300">
         <figcaption>
           <br/>
           <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
@@ -417,7 +420,9 @@
     </td>
   </tr>
 </table>
-<br/>
+
+</div>
+
 
 #### 2. 보스 AI 확장성 개선: 유한 상태 머신에서 비헤이비어 트리로 전환
 
