@@ -466,6 +466,45 @@
     * Unity의 공식 패치 이후, 로비 이벤트 콜백이 정상적으로 작동하게 되어 호스트 이전 및 플레이어 재접속 시에도 로비 데이터가 안정적으로 동기화됩니다.
     * 이 경험을 통해 외부 라이브러리 문제 발생 시에도 적극적으로 원인을 분석하고, 공식 채널을 통해 리포트하며, 때로는 임시적인 해결책을 모색하여 프로젝트를 진행시키는 문제 해결 능력을 경험했습니다.
 
+<div align="center">
+
+<table style="border:0;">
+  <tr>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/51c157c4-5627-47d6-8258-cc3f8ecd773f"
+             alt="FSM(유한상태머신)" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
+             alt="전략패턴" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+      <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/d22de9c8-279c-4085-8023-e221e82b8d91"
+             alt="FSM(유한상태머신)" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
+
+</div>
+
 [ImpossibleBosses | Unity 콜백오류자료](https://blog.naver.com/hiwoong12/223742840805)
 
 <br/>
