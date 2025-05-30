@@ -477,7 +477,7 @@
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
              alt="유니티 멀티플레이 서비스팀 답변" height="80">
           <img src="https://github.com/user-attachments/assets/977fbaa4-172a-493e-8d17-5eb2398fef8c"
-             alt="유니티 멀티플레이 서비스팀 답변" height="80">
+             alt="유니티 멀티플레이 서비스팀 답변" height="200">
         <figcaption>
           <br/>
           &lt;<strong>유니티 멀티플레이 서비스팀 답변</strong>&gt;<br>
