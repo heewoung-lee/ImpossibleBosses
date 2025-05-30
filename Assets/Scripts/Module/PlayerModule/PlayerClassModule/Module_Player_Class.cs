@@ -2,6 +2,7 @@ using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,6 +39,9 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     private void InitializeSkillsFromManager()
     {
+        if (GetComponent<NetworkObject>().IsOwner == false)
+            return;
+
         _playerSkill = Managers.SkillManager.AllSKillDict
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
             .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다

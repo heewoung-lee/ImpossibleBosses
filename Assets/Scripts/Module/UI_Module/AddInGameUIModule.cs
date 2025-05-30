@@ -5,7 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class AddInGameUIModule : MonoBehaviour
 {
-    void Start()
+
+    private void Start()
+    {
+        StartInit();
+    }
+
+    protected virtual void StartInit()
     {
         gameObject.AddComponent<Module_UI_BufferBar>();
         gameObject.AddComponent<Module_UI_ConsumableBar>();
@@ -16,8 +22,6 @@ public class AddInGameUIModule : MonoBehaviour
         gameObject.AddComponent<Module_UI_Description>();
 
         Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
-
-        gameObject.AddComponent<Module_UI_Player_TestButton>();
 
     }
 }
