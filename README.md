@@ -351,19 +351,19 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;캐릭터의 실시간 위치, 방향, 상태를 공유하여 합니다.&gt</sub>
+  <sub><strong>&lt;이동동기화: 캐릭터의 실시간 위치, 방향, 상태를 공유합니다.&gt</sub>
 </p>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/506415af-713b-4fa6-928b-96762fd55116" alt="오브젝트 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;게임 내 중요 객체의 생성, 소멸, 상태 변화를 모든 플레이어에게 실시간으로 동일하게 반영합니다.&gt</sub>
+  <sub><strong>&lt;오브젝트 동기화: 게임 내 중요 객체의 생성, 소멸, 상태 변화를 모든 플레이어에게 실시간으로 동일하게 반영합니다.&gt</sub>
 </p>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/93d9c3e4-3665-46d8-9fb8-b5c64922bfb6" alt="스킬 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;모든 스킬의 발동, 시각적 표현, 실제 효과를 일관되게 전달합니다.&gt</sub>
+  <sub><strong>&lt;이펙트 동기화: 모든 스킬의 발동, 시각적 표현을 실시간으로 동일하게 반영합니다.&gt</sub>
 </p>
 
 
