@@ -530,11 +530,6 @@
     * Unity Netcode의 기본 메커니즘을 프로젝트 특성에 맞게 커스터마이징하여 네트워크 부하를 줄이고, 오브젝트 재사용을 통해 반응 속도 또한 개선되었습니다.
 
 <br/>
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4b127fa8-6ca3-4cb6-9020-13d97ffd9e67" alt="오브젝트 핸들러" width="80%"/>
-  <br/>
-  <sub><strong>&lt;네트워크 오브젝트 핸들러&gt</strong></sub>
 </p>
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f276410b-8d07-4085-b43b-8f4a1d93eeb7" alt="오브젝트 풀링" width="80%"/>
