@@ -351,19 +351,19 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;이동 동기화를 통해 각 클라이언트 플레이어들의 위치를 확인할 수 있습니다.</sub>
+  <sub><strong>&lt;이동 동기화를 통해 각 클라이언트 플레이어들의 위치를 확인할 수 있습니다.&gt</sub>
 </p>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/506415af-713b-4fa6-928b-96762fd55116" alt="오브젝트 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;오브젝트 동기화를 통해 각 오브젝트들을 동기화 할 수 있습니다.</sub>
+  <sub><strong>&lt;오브젝트 동기화를 통해 각 오브젝트들을 동기화 할 수 있습니다.&gt</sub>
 </p>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/93d9c3e4-3665-46d8-9fb8-b5c64922bfb6" alt="스킬 동기화" width="80%"/>
   <br/>
-  <sub><strong>&lt;스킹 동기화를 통해 각 스킬들을 동기화 할 수 있습니다.</sub>
+  <sub><strong>&lt;스킬 동기화를 통해 각 스킬들을 동기화 할 수 있습니다.&gt</sub>
 </p>
 
 
