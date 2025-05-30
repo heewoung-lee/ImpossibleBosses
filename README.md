@@ -501,6 +501,11 @@
 </table>
 
 </div>
+<p align="center">
+  <a href="https://blog.naver.com/hiwoong12/223742840805">[개발일지] Unity Lobby SDK 콜백 오류 추적 및 해결 기록</a>
+</p>
+<div align="center">
+
 <br/>
 
 #### 4. 네트워크 파티클 최적화: GC 발생 최소화를 위한 네트워크 오브젝트 풀링
