@@ -395,8 +395,7 @@
     * 각 상태 로직이 분리되어 테스트와 디버깅이 용이해졌습니다.
 
 <br/>
-
-<table style="width:100%; border:0;">
+<table style="border:0; margin-left: auto; margin-right: auto;">
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
@@ -418,7 +417,6 @@
     </td>
   </tr>
 </table>
-
 <br/>
 
 #### 2. 보스 AI 확장성 개선: 유한 상태 머신에서 비헤이비어 트리로 전환
