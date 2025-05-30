@@ -504,8 +504,8 @@
 </table>
 
 </div>
-
-[ImpossibleBosses | Unity 콜백오류자료](https://blog.naver.com/hiwoong12/223742840805)
+<br/>
+[Unity Lobby Services 콜백오류](https://blog.naver.com/hiwoong12/223742840805)
 
 <br/>
 
