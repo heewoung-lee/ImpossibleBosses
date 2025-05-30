@@ -352,20 +352,19 @@
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 및 데미지 동기화" height="300">
+        <img src="https://github.com/user-attachments/assets/9abf36f1-7fe1-4f9a-85f1-89af8b17e58c" alt="이동 동기화" height="300">
         <figcaption>
           <br/>
-          <strong>&lt;이동 및 데미지 동기화
+          <strong>&lt;이동 동기화&gt
         </figcaption>
       </figure>
     </td>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/7ef4241f-fe63-49e4-8675-91a6ca7e26af" alt="비밀번호 입력" height="300">
+        <img src="https://github.com/user-attachments/assets/506415af-713b-4fa6-928b-96762fd55116" alt="오브젝트 동기화" height="300">
         <figcaption>
           <br/>
-          <strong>&lt;비밀번호 입력창&gt;</strong><br>
-          비공개 방에 참여하기 위해 비밀번호를 입력하는 화면입니다.
+          <strong>&lt;오브젝트 동기화&gt;
         </figcaption>
       </figure>
     </td>
@@ -384,6 +383,7 @@
       </figure>
     </td>
 </table>
+
 
 
 
