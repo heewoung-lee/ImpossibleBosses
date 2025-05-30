@@ -473,30 +473,30 @@
     <td align="center" valign="top" style="width:45%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/51c157c4-5627-47d6-8258-cc3f8ecd773f"
-             alt="FSM(유한상태머신)" height="300">
+             alt="멀티플레이 서비스 SDK 오류발생" height="300">
         <figcaption>
           <br/>
-          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
+          <strong>&lt;멀티플레이 서비스 SDK 오류발생&gt;</strong><br>
         </figcaption>
       </figure>
     </td>
     <td align="center" style="width:5%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
-             alt="전략패턴" height="120">
+             alt="유니티팀 답변" height="120">
         <figcaption>
           <br/>
-          <strong>&lt;전략패턴 다이어그램&gt;</strong><br>
+          <strong>&lt;유니티팀 답변&gt;</strong><br>
         </figcaption>
       </figure>
     </td>
     <td align="center" valign="top" style="width:45%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/d22de9c8-279c-4085-8023-e221e82b8d91"
-             alt="FSM(유한상태머신)" height="300">
+             alt="2025년 2월 6일 업데이트 완료" height="300">
         <figcaption>
           <br/>
-          <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
+          <strong>&lt;2025년 2월 6일 업데이트 완료&gt;</strong><br>
         </figcaption>
       </figure>
     </td>
