@@ -399,7 +399,7 @@
   <tr>
     <td align="center" valign="top" style="width:50%;">
       <figure style="margin:0;">
-        <img src="https://github.com/user-attachments/assets/7db5efa6-e751-4425-8139-f5a0098af9da" alt="FSM(유한상태머신)" height="300">
+        <img src="https://github.com/user-attachments/assets/b9c02182-966e-491d-94fc-1f4f80e4b197" alt="FSM(유한상태머신)" height="300">
         <figcaption>
           <br/>
           <strong>&lt;FSM(유한상태머신) 다이어그램&gt;</strong><br>
