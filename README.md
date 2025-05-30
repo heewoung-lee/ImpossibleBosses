@@ -440,7 +440,7 @@
 <br/>
 
 <p align="center">
-  &lt;비헤이비어 트리&gt;
+  &lt;<strong>비헤이비어 트리</strong>&gt;
 </p>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/d8d387e4-433d-4c18-9c93-50162a3ec318" alt="비헤이비어 트리" width="70%"/>
