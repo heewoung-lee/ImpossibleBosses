@@ -56,6 +56,38 @@
     * 사용자로부터 희망 ID와 비밀번호를 입력받습니다.
     * 입력된 ID가 기존에 사용 중인지 데이터베이스(Google 스프레드시트의 `UserAuthenticateData` 시트)에서 확인 후, 사용 가능하면 새 계정 정보를 저장합니다.
     * 이후 닉네임 설정 화면을 통해 플레이어가 사용할 고유한 닉네임을 입력받아 저장합니다.
+  
+<br/>
+
+<table style="width:100%; border:0;">
+  <tr>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/957a7605-b327-47a6-8d63-3974d3362d9b" alt="이미 가입된 ID" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;이미 가입된 ID&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+    <td align="center" valign="top" style="width:50%;">
+      <figure style="margin:0;">
+        <img src="https://github.com/user-attachments/assets/fd6953ff-8d11-43f3-b34a-72abe7985f77" alt="회원가입 성공" height="300">
+        <figcaption>
+          <br/>
+          <strong>&lt;회원가입 성공&gt;</strong><br>
+        </figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+
+
+
+
 3.  **로그인 시**:
     * 입력된 ID와 비밀번호를 데이터베이스(Google 스프레드시트의 `UserAuthenticateData` 시트)에 저장된 정보와 비교하여 인증을 시도합니다.
     * 이 과정에서 Google의 인증 방식(OAuth 2.0) 및 스프레드시트 접근 기술이 데이터 관리 시스템과 연동되어 사용됩니다.
