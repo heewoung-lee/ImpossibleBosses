@@ -468,9 +468,9 @@
              alt="멀티플레이 서비스 SDK 오류발생" height="300">
         <figcaption>
           <br/>
-          &lt;<strong>멀티플레이 서비스 
+          <strong>멀티플레이 서비스 
              <br/>
-             SDK 오류발생</strong>&gt;<br>
+             SDK 오류발생</strong><br>
         </figcaption>
       </figure>
     </td>
@@ -482,17 +482,17 @@
              alt="유니티 멀티플레이 서비스팀 답변" height="200">
         <figcaption>
           <br/>
-          &lt;<strong>유니티 멀티플레이 서비스팀 답변</strong>&gt;<br>
+          <strong>유니티 멀티플레이 서비스팀 답변</strong><br>
         </figcaption>
       </figure>
     </td>
     <td align="center" valign="top" style="width:45%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/d22de9c8-279c-4085-8023-e221e82b8d91"
-             alt="2025년 2월 6일 업데이트 완료" height="300">
+             alt="25년 2월 6일 업데이트 완료" height="300">
         <figcaption>
           <br/>
-          &lt;<strong>2025년 2월 6일 업데이트 완료</strong>&gt;<br>
+          ;<strong>2025년 2월 6일 업데이트 완료</strong>;<br>
         </figcaption>
       </figure>
     </td>
