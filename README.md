@@ -534,6 +534,10 @@
   <br/>
   <sub><strong>&lt;네트워크 오브젝트 풀링&gt</strong></sub>
 </p>
+<p align="center">
+  <a href="https://blog.naver.com/hiwoong12/223823345276">[개발일지] 커스텀 네트워크 오브젝트 풀링 제작</a>
+</p>
+<br/>
 
 #### 5. 애니메이션 속도 동기화: 예측과 보간을 통한 부드러운 움직임 구현
 
