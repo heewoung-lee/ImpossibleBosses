@@ -480,7 +480,7 @@
         </figcaption>
       </figure>
     </td>
-    <td align="center" valign="top" style="width:20%;">
+    <td align="center" valign="top" style="width:10%;">
       <figure style="margin:0;">
         <img src="https://github.com/user-attachments/assets/60b8ab1a-d86b-48db-ad13-c84293e5f6ae"
              alt="전략패턴" height="300">
