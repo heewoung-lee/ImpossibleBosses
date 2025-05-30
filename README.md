@@ -475,7 +475,7 @@
              alt="멀티플레이 서비스 SDK 오류발생" height="300">
         <figcaption>
           <br/>
-          &lt;멀티플레이 서비스 SDK 오류발생&gt;<br>
+          &lt;<strong>멀티플레이 서비스 SDK 오류발생</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
@@ -485,7 +485,7 @@
              alt="유니티 멀티플레이 서비스팀 답변" height="120">
         <figcaption>
           <br/>
-          &lt;유니티 멀티플레이 서비스팀 답변&gt;<br>
+          &lt;<strong>유니티 멀티플레이 서비스팀 답변</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
@@ -495,7 +495,7 @@
              alt="2025년 2월 6일 업데이트 완료" height="300">
         <figcaption>
           <br/>
-          &lt;2025년 2월 6일 업데이트 완료&gt;<br>
+          &lt;<strong>2025년 2월 6일 업데이트 완료</strong>&gt;<br>
         </figcaption>
       </figure>
     </td>
