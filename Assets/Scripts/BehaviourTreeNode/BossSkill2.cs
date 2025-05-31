@@ -73,7 +73,7 @@ public class BossSkill2 : Action
                 return;
 
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 

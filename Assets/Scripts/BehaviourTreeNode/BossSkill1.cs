@@ -49,7 +49,7 @@ public class BossSkill1 : Action
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float decelerationRatio) is false)
                 return;
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold, skill1_DurationTime, skill1_StartAnimSpeed);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold, skill1_DurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
             _networkController.StartAnimChagnedRpc(animinfo);
         }
     }

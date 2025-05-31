@@ -12,6 +12,7 @@ public struct CurrentAnimInfo : INetworkSerializable
     public float DecelerationRatio;
     public float AnimStopThreshold;
     public float IndicatorDuration;
+    public double ServerTime;
     public float StartAnimationSpeed;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
@@ -19,15 +20,17 @@ public struct CurrentAnimInfo : INetworkSerializable
         serializer.SerializeValue(ref DecelerationRatio);
         serializer.SerializeValue(ref AnimStopThreshold);
         serializer.SerializeValue(ref IndicatorDuration);
+        serializer.SerializeValue(ref ServerTime);
         serializer.SerializeValue(ref StartAnimationSpeed);
     }
 
-    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,float startAnimSpeed = 1f)
+    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,double serverTime,float startAnimSpeed = 1f)
     {
         AnimLength = animLength;
         DecelerationRatio = decelerationRatio;
         AnimStopThreshold = animStopThreshold;
         IndicatorDuration = duration;
+        ServerTime = serverTime;
         StartAnimationSpeed = startAnimSpeed;
     }
 }
@@ -35,6 +38,10 @@ public struct CurrentAnimInfo : INetworkSerializable
 
 public class BossGolemNetworkController : NetworkBehaviourBase
 {
+    private readonly float _normalAnimSpeed = 1f;
+    private readonly float _maxAnimSpeed = 3f;
+
+
     private BehaviorTree _bossBehaviourTree;
     private BossGolemController _bossController;
     private bool _finishedAttack = false;
@@ -92,20 +99,38 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 
     IEnumerator UpdateAnimCorutine(CurrentAnimInfo animinfo)
     {
+
         float elaspedTime = 0f;
         FinishAttack = false;
+        _bossController.Anim.speed = animinfo.StartAnimationSpeed;
 
-        double prevNetTime = NetworkManager.Singleton.ServerTime.Time;
+        double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+        //현재 서버가 간 시간 구하기
+        double serverPreTime =  animinfo.ServerTime- nowTime;
+        //서버를 따라잡으려면 어느정도 배속이 필요한지 구하기
+        float remainingAnimTime = (float)(animinfo.AnimLength-animinfo.AnimStopThreshold - serverPreTime);
+        float catchAnimSpeed = Mathf.Clamp(animinfo.AnimLength / remainingAnimTime, _normalAnimSpeed, _maxAnimSpeed);
 
-        StartCoroutine(UpdateIndicatorDurationTime(animinfo.IndicatorDuration,animinfo.AnimLength));
-        while (elaspedTime <= animinfo.AnimLength)
+        StartCoroutine(UpdateIndicatorDurationTime(animinfo.IndicatorDuration,animinfo.AnimLength, nowTime));
+        while (elaspedTime <= animinfo.AnimLength)//경과시간을 빠르게 돌려야함 
         {
             double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
-            float deltaTime = (float)(currentNetTime - prevNetTime);
-            prevNetTime = currentNetTime;
-
+            float deltaTime = (float)(currentNetTime - nowTime);
+            nowTime = currentNetTime;
             _bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration);
-            elaspedTime += deltaTime * animspeed;
+
+            
+
+            if((elaspedTime / animinfo.AnimLength) <= (animinfo.AnimStopThreshold/ animinfo.AnimLength))
+            {
+                elaspedTime += deltaTime * animspeed * catchAnimSpeed;
+                Debug.Log(animinfo.AnimStopThreshold / animinfo.AnimLength + "빨리 돌리기");
+            }
+            else
+            {
+                Debug.Log(animinfo.AnimStopThreshold / animinfo.AnimLength + "천천히 돌리기");
+                elaspedTime += deltaTime * animspeed;
+            }
             yield return null;
         }
         FinishAttack = true;
@@ -113,13 +138,15 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     }
 
 
-    IEnumerator UpdateIndicatorDurationTime(float indicatorAddduration,float animLength)
+    IEnumerator UpdateIndicatorDurationTime(float indicatorAddduration,float animLength,double prevNetTime)
     {
         _finishedIndicatorDuration = false;
         float elapsedTime = 0f;
         while (elapsedTime <= indicatorAddduration+ animLength)
         {
-            elapsedTime += Time.unscaledDeltaTime;
+            double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+            float deltaTime = (float)(currentNetTime - prevNetTime);
+            elapsedTime += deltaTime;
             yield return null;
         }
         _finishedIndicatorDuration = true;
