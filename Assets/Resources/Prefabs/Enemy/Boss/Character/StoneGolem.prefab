@@ -2575,7 +2575,7 @@ GameObject:
   - component: {fileID: -746486937222958321}
   - component: {fileID: 90570183752701390}
   - component: {fileID: 3853475374522755921}
-  - component: {fileID: -2092898722948717655}
+  - component: {fileID: -6594957297788468633}
   m_Layer: 7
   m_Name: StoneGolem
   m_TagString: Untagged
@@ -2869,7 +2869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &-2092898722948717655
+--- !u!114 &-6594957297788468633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

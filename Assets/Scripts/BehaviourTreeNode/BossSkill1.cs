@@ -13,7 +13,7 @@ public class BossSkill1 : Action
     private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
     private readonly float skill1_DurationTime = 1f;
     private readonly float skill1_AnimStopThreshold = 0.02f;
-    private readonly float skill1_StartAnimSpeed = 0.8f;
+    private readonly float skill1_StartAnimSpeed = 0.6f;
 
     private const float MAX_HEIGHT = 3f;
     private const float START_SKILL1_ANIM_SPEED = 0.8f;
@@ -49,7 +49,8 @@ public class BossSkill1 : Action
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float decelerationRatio) is false)
                 return;
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold, skill1_DurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
+            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.Base_Attackstate, out float preframe);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold,skill1_DurationTime,preframe,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
             _networkController.StartAnimChagnedRpc(animinfo);
         }
     }
@@ -87,5 +88,6 @@ public class BossSkill1 : Action
     public override void OnEnd()
     {
         base.OnEnd();
+        _controller.CurrentStateType = _controller.Base_IDleState;
     }
 }

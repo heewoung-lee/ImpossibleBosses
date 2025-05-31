@@ -80,7 +80,9 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float decelerationRatio) is false)
                 return;
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _IndicatorAddDurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+
+            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.Base_Attackstate,out float preframe);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _IndicatorAddDurationTime, preframe, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
         }

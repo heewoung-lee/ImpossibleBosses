@@ -12,6 +12,7 @@ public struct CurrentAnimInfo : INetworkSerializable
     public float DecelerationRatio;
     public float AnimStopThreshold;
     public float IndicatorDuration;
+    public float AnimationPreTime;
     public double ServerTime;
     public float StartAnimationSpeed;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -20,16 +21,18 @@ public struct CurrentAnimInfo : INetworkSerializable
         serializer.SerializeValue(ref DecelerationRatio);
         serializer.SerializeValue(ref AnimStopThreshold);
         serializer.SerializeValue(ref IndicatorDuration);
+        serializer.SerializeValue(ref AnimationPreTime);
         serializer.SerializeValue(ref ServerTime);
         serializer.SerializeValue(ref StartAnimationSpeed);
     }
 
-    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,double serverTime,float startAnimSpeed = 1f)
+    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,float animationPreTime,double serverTime,float startAnimSpeed = 1f)
     {
         AnimLength = animLength;
         DecelerationRatio = decelerationRatio;
         AnimStopThreshold = animStopThreshold;
         IndicatorDuration = duration;
+        AnimationPreTime = animationPreTime;
         ServerTime = serverTime;
         StartAnimationSpeed = startAnimSpeed;
     }
@@ -92,7 +95,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             animinfo.StartAnimationSpeed *= speedScale;
             animinfo.AnimStopThreshold *= speedScale;
         }
-
+        _bossController.Anim.speed = animinfo.StartAnimationSpeed;
         _animationCoroutine = StartCoroutine(UpdateAnimCorutine(animinfo));
     }
 
@@ -100,35 +103,39 @@ public class BossGolemNetworkController : NetworkBehaviourBase
     IEnumerator UpdateAnimCorutine(CurrentAnimInfo animinfo)
     {
 
-        float elaspedTime = 0f;
+        double elaspedTime = 0f;
         FinishAttack = false;
-        _bossController.Anim.speed = animinfo.StartAnimationSpeed;
 
         double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+
+        
         //현재 서버가 간 시간 구하기
         double serverPreTime =  animinfo.ServerTime- nowTime;
-        //서버를 따라잡으려면 어느정도 배속이 필요한지 구하기
-        float remainingAnimTime = (float)(animinfo.AnimLength-animinfo.AnimStopThreshold - serverPreTime);
-        float catchAnimSpeed = Mathf.Clamp(animinfo.AnimLength / remainingAnimTime, _normalAnimSpeed, _maxAnimSpeed);
+        Debug.Log($"{serverPreTime}현재 호스트앞서간 시간 차");
+
+        double totaldistance = animinfo.AnimLength * animinfo.AnimationPreTime;
+
+        double remainingAnimTime = totaldistance - serverPreTime;
+        Debug.Log($"{remainingAnimTime}클라이언트가 가야할 남은거리");//호스트는 0으로 나와야함
+
+        //호스트는 1이 나와야함
+        double catchAnimSpeed = Math.Clamp(totaldistance/ remainingAnimTime, _normalAnimSpeed, _maxAnimSpeed);
+        Debug.Log($"{catchAnimSpeed}애니메이션 스피드");
+
 
         StartCoroutine(UpdateIndicatorDurationTime(animinfo.IndicatorDuration,animinfo.AnimLength, nowTime));
         while (elaspedTime <= animinfo.AnimLength)//경과시간을 빠르게 돌려야함 
         {
             double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
-            float deltaTime = (float)(currentNetTime - nowTime);
+            double deltaTime = (currentNetTime - nowTime);
             nowTime = currentNetTime;
-            _bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration);
-
-            
-
-            if((elaspedTime / animinfo.AnimLength) <= (animinfo.AnimStopThreshold/ animinfo.AnimLength))
+            //Debug.Log($"경과시간{elaspedTime}");
+            if (_bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration) == false)
             {
                 elaspedTime += deltaTime * animspeed * catchAnimSpeed;
-                Debug.Log(animinfo.AnimStopThreshold / animinfo.AnimLength + "빨리 돌리기");
             }
             else
             {
-                Debug.Log(animinfo.AnimStopThreshold / animinfo.AnimLength + "천천히 돌리기");
                 elaspedTime += deltaTime * animspeed;
             }
             yield return null;
