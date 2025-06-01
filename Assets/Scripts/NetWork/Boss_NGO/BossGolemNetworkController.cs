@@ -24,12 +24,12 @@ public struct CurrentAnimInfo : INetworkSerializable
         serializer.SerializeValue(ref StartAnimationSpeed);
     }
 
-    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,double serverTime,float startAnimSpeed = 1f)
+    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float indicatorDuration,double serverTime,float startAnimSpeed = 1f)
     {
         AnimLength = animLength;
         DecelerationRatio = decelerationRatio;
         AnimStopThreshold = animStopThreshold;
-        IndicatorDuration = duration;
+        IndicatorDuration = indicatorDuration;
         ServerTime = serverTime;
         StartAnimationSpeed = startAnimSpeed;
     }
@@ -112,6 +112,8 @@ public class BossGolemNetworkController : NetworkBehaviourBase
 
         double totaldistance = animinfo.AnimLength * animinfo.DecelerationRatio;
 
+        Debug.Log($"{animinfo.AnimLength}애니메이션 길이 {animinfo.DecelerationRatio}애니메이션 줄어드는 한계점");
+
         double remainingAnimTime = totaldistance - serverPreTime;
         Debug.Log($"{remainingAnimTime}클라이언트가 가야할 남은거리");//호스트는 0으로 나와야함
 
@@ -126,7 +128,6 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
             double deltaTime = (currentNetTime - nowTime);
             nowTime = currentNetTime;
-            //Debug.Log($"경과시간{elaspedTime}");
             if (_bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration) == false)
             {
                 elaspedTime += deltaTime * animspeed * catchAnimSpeed;
@@ -135,6 +136,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             {
                 elaspedTime += deltaTime * animspeed;
             }
+
             yield return null;
         }
         FinishAttack = true;

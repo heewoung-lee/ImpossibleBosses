@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class BossSkill2 : Action
 {
-    private readonly float _attackDurationTime = 2f;
-    private readonly float _attackAnimStopThreshold = 0.06f;
+    private readonly float _attackDurationTime = 0f;
+    private readonly float _attackAnimStopThreshold = 0.05f;
 
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
@@ -20,46 +20,40 @@ public class BossSkill2 : Action
     private List<Vector3> _attackRangeCirclePos;
     private BossStats _stats;
     private bool _hasSpawnedParticles;
+    private float _totalIndicatorDurationTime;
 
     [SerializeField] private SharedProjector _attackIndicator;
     private NGO_Indicator_Controller _indicator_controller;
-    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
-    public override void OnAwake()
+    public override void OnStart()
     {
-        base.OnAwake();
+        base.OnStart();
         ChechedBossAttackField();
+        SpawnAttackIndicator();
+        CalculateBossAttackRange();
+        StartAnimationSpeedChanged();
+
         void ChechedBossAttackField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
             _stats = _controller.GetComponent<BossStats>();
             _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
-            _networkController = Owner.GetComponent<BossGolemNetworkController>();
-            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
-        }
-    }
-    public override void OnStart()
-    {
-        base.OnStart();
-        SpawnAttackIndicator();
-        CalculateBossAttackRange();
-        StartAnimationSpeedChanged();
-
-        void SpawnAttackIndicator()
-        {
-            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill2State);
-
-            _hasSpawnedParticles = false;
             if (Attack_Range <= 0)
             {
                 _controller.TryGetComponent(out BossStats stats);
                 Attack_Range = stats.ViewDistance;
             }
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
+            _hasSpawnedParticles = false;
+        }
+        void SpawnAttackIndicator()
+        {
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            float totalIndicatorDurationTime = _attackDurationTime + _animLength;
-            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
+            _totalIndicatorDurationTime = _attackDurationTime + _animLength;
+            _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _totalIndicatorDurationTime, IndicatorDoneEvent);
+            Owner.GetComponent<BossGolemAnimationNetworkController>().SyncBossStateToClients(_controller.BossSkill2State);
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles == true) return;
@@ -72,7 +66,7 @@ public class BossSkill2 : Action
         }
         void CalculateBossAttackRange()
         {
-            _attackRangeCirclePos = TargetInSight.GeneratePositionsInCircle(_controller.transform, Attack_Range,Radius_Step,Angle_Step);
+            _attackRangeCirclePos = TargetInSight.GeneratePositionsInCircle(_controller.transform, Attack_Range, Radius_Step, Angle_Step);
         }
         void StartAnimationSpeedChanged()
         {
@@ -80,7 +74,7 @@ public class BossSkill2 : Action
                 return;
 
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _totalIndicatorDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 
