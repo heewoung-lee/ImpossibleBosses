@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 {
-    private readonly float _IndicatorAddDurationTime = 0f;
+    private readonly float _addIndicatorAddDurationTime = 0f;
     private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
@@ -57,7 +57,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            float totalIndicatorDurationTime = _IndicatorAddDurationTime + _animLength;
+            float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
             _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
             void IndicatorDoneEvent()
             {
@@ -91,8 +91,8 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
                 return;
 
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _IndicatorAddDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
-            _networkController.StartAnimChagnedRpc(animinfo);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addIndicatorAddDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+            _networkController.StartAnimChagnedRpc(animinfo,Managers.RelayManager.GetNetworkObject(_indicator_controller.gameObject));
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
         }
     }

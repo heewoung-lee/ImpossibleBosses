@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTest: 1
-  isSoloTest: 1
+  isSoloTest: 0
 --- !u!4 &1666791450
 Transform:
   m_ObjectHideFlags: 0

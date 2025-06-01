@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BossSkill2 : Action
 {
-    private readonly float _attackDurationTime = 0f;
+    private readonly float _addAttackDurationTime = 0f;
     private readonly float _attackAnimStopThreshold = 0.05f;
 
     private BossGolemController _controller;
@@ -20,7 +20,6 @@ public class BossSkill2 : Action
     private List<Vector3> _attackRangeCirclePos;
     private BossStats _stats;
     private bool _hasSpawnedParticles;
-    private float _totalIndicatorDurationTime;
 
     [SerializeField] private SharedProjector _attackIndicator;
     private NGO_Indicator_Controller _indicator_controller;
@@ -51,7 +50,7 @@ public class BossSkill2 : Action
             _attackIndicator.Value = _indicator_controller;
             _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            _totalIndicatorDurationTime = _attackDurationTime + _animLength;
+            float _totalIndicatorDurationTime = _addAttackDurationTime + _animLength;
             _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, _totalIndicatorDurationTime, IndicatorDoneEvent);
             Owner.GetComponent<BossGolemAnimationNetworkController>().SyncBossStateToClients(_controller.BossSkill2State);
             void IndicatorDoneEvent()
@@ -74,8 +73,8 @@ public class BossSkill2 : Action
                 return;
 
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _totalIndicatorDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
-            _networkController.StartAnimChagnedRpc(animinfo);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addAttackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+            _networkController.StartAnimChagnedRpc(animinfo,Managers.RelayManager.GetNetworkObject(_indicator_controller.gameObject));
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 
         }

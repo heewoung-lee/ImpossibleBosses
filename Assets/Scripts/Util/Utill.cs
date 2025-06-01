@@ -245,9 +245,4 @@ public class Utill
     {
         return enumvalue.ToString();
     }
-
-    public static double Lerp(double a, double b, double t)
-    {
-        return a + (b - a) * t;
-    }
 }

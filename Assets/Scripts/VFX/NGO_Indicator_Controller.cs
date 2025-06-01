@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityTime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,17 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
     }
 
     private Action _onIndicatorDone;
+    public event Action OnIndicatorDone
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onIndicatorDone, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onIndicatorDone, value);
+        }
+    }
 
     [SerializeField]
     private NetworkVariable<float> _radius = new NetworkVariable<float>
@@ -38,6 +50,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
 
     private DecalProjector _decal_Circle_projector;
     private DecalProjector _decal_CircleBorder_projector;
+
 
     public float Radius
     {
@@ -181,7 +194,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         Arc = arc;
         CallerPosition = targetTr.position;
         Angle = targetTr.eulerAngles.y;
-        _onIndicatorDone += indicatorDoneEvent;
+        OnIndicatorDone += indicatorDoneEvent;
         float clampDuration = Mathf.Max(durationTime, 0.1f);
         DurationTime = clampDuration;
         StartProjectorCoroutineRpc(clampDuration);
@@ -196,17 +209,23 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         StartProjectorCoroutineRpc(clampDuration);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.ClientsAndHost)] 
     public void StartProjectorCoroutineRpc(float durationTime)
     {
         StartCoroutine(Play_Indicator(durationTime));
     }
     private IEnumerator Play_Indicator(float duration)
     {
+
         float elapsed = 0f;
+        double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+            double deltaTime = currentNetTime - nowTime;
+            nowTime = currentNetTime;
+
+            elapsed += (float)deltaTime;
             // 0~1 로 정규화된 진행 비율
             float fillAmount = Mathf.Clamp01(elapsed / duration);
             UpdateDecalFillProgressProjector(fillAmount);
