@@ -46,6 +46,8 @@ public class BossSkill2 : Action
 
         void SpawnAttackIndicator()
         {
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill2State);
+
             _hasSpawnedParticles = false;
             if (Attack_Range <= 0)
             {
@@ -58,7 +60,6 @@ public class BossSkill2 : Action
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
             float totalIndicatorDurationTime = _attackDurationTime + _animLength;
             _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
-            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill2State);
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles == true) return;
@@ -78,8 +79,8 @@ public class BossSkill2 : Action
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill2State, out float decelerationRatio) is false)
                 return;
 
-            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.BossSkill2State, out float preframe);
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime, preframe, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 

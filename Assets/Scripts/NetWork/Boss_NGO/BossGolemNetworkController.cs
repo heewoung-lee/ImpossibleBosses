@@ -12,7 +12,6 @@ public struct CurrentAnimInfo : INetworkSerializable
     public float DecelerationRatio;
     public float AnimStopThreshold;
     public float IndicatorDuration;
-    public float AnimationPreTime;
     public double ServerTime;
     public float StartAnimationSpeed;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -21,18 +20,16 @@ public struct CurrentAnimInfo : INetworkSerializable
         serializer.SerializeValue(ref DecelerationRatio);
         serializer.SerializeValue(ref AnimStopThreshold);
         serializer.SerializeValue(ref IndicatorDuration);
-        serializer.SerializeValue(ref AnimationPreTime);
         serializer.SerializeValue(ref ServerTime);
         serializer.SerializeValue(ref StartAnimationSpeed);
     }
 
-    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,float animationPreTime,double serverTime,float startAnimSpeed = 1f)
+    public CurrentAnimInfo(float animLength, float decelerationRatio, float animStopThreshold,float duration,double serverTime,float startAnimSpeed = 1f)
     {
         AnimLength = animLength;
         DecelerationRatio = decelerationRatio;
         AnimStopThreshold = animStopThreshold;
         IndicatorDuration = duration;
-        AnimationPreTime = animationPreTime;
         ServerTime = serverTime;
         StartAnimationSpeed = startAnimSpeed;
     }
@@ -113,7 +110,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
         double serverPreTime =  animinfo.ServerTime- nowTime;
         Debug.Log($"{serverPreTime}현재 호스트앞서간 시간 차");
 
-        double totaldistance = animinfo.AnimLength * animinfo.AnimationPreTime;
+        double totaldistance = animinfo.AnimLength * animinfo.DecelerationRatio;
 
         double remainingAnimTime = totaldistance - serverPreTime;
         Debug.Log($"{remainingAnimTime}클라이언트가 가야할 남은거리");//호스트는 0으로 나와야함

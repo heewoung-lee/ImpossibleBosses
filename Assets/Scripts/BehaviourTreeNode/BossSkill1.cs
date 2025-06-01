@@ -56,8 +56,7 @@ public class BossSkill1 : Action
 
             _allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
             _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill1State);
-            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.BossSkill1State, out float preframe);
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold,skill1_DurationTime,preframe,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold,skill1_DurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
             _networkController.StartAnimChagnedRpc(animinfo);
         }
     }

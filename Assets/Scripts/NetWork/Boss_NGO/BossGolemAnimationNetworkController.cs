@@ -23,7 +23,7 @@ public class BossGolemAnimationNetworkController : NetworkBehaviour
         }
     }
     [Rpc(SendTo.ClientsAndHost)]
-    public void SetBossStateRpc(FixedString512Bytes stateName)
+    private void SetBossStateRpc(FixedString512Bytes stateName)
     {
         _bossGolemController.CurrentStateType = _bossAttackStateDict[stateName.ToString()];
     }
