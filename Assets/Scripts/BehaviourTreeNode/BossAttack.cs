@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
@@ -19,31 +20,40 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private bool _hasSpawnedParticles;
 
     private NGO_Indicator_Controller _indicator_controller;
-    
+    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
+
     public SharedProjector _attackIndicator;
     public int Radius_Step = 0;
     public int Angle_Step = 0;
+    public override void OnAwake()
+    {
+        base.OnAwake();
+        ChechedBossAttackField();
+        void ChechedBossAttackField()
+        {
+            _controller = Owner.GetComponent<BossGolemController>();
+            _stats = _controller.GetComponent<BossStats>();
+            _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
+            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
+        }
+    }
+
 
     public override void OnStart()
     {
         base.OnStart();
-        ChechedBossAttackField();
         SpawnAttackIndicator();
         CalculateBossAttackRange();
         StartAnimationSpeedChanged();
 
-
-        void ChechedBossAttackField()
-        {
-            _controller = Owner.GetComponent<BossGolemController>();
-            _controller.UpdateAttack();
-            _stats = _controller.GetComponent<BossStats>();
-            _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
-            _networkController = Owner.GetComponent<BossGolemNetworkController>();
-            _hasSpawnedParticles = false;
-        }
         void SpawnAttackIndicator()
         {
+
+            //_controller.UpdateAttack();
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.Base_Attackstate);
+            _hasSpawnedParticles = false;
+
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();

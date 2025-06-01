@@ -22,40 +22,41 @@ public class BossSkill1 : Action
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
     private BossStats _stats;
+    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
 
     private int _tickCounter = 0;
     private float _animLength = 0f;
 
-    private Collider[] allTargets;
+    private Collider[] _allTargets;
 
     public SharedInt Damage;
 
-    public override void OnStart()
+    public override void OnAwake()
     {
-        base.OnStart();
+        base.OnAwake();
         ChechedField();
-        StartAnimationSpeedChanged();
         void ChechedField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
             _stats = _controller.GetComponent<BossStats>();
             _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
-            allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
-            //_controller.CurrentStateType = _controller.BossSkill1State;
-
-            //TODO:테스트중 잘 되면 리팩토링 필요
-            Owner.GetComponent<BossGolemAnimationNetworkController>().SetBossSkill1Rpc();
-
-
-
+            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
             _networkController = Owner.GetComponent<BossGolemNetworkController>();
         }
+    }
+
+    public override void OnStart()
+    {
+        base.OnStart();
+        StartAnimationSpeedChanged();
         void StartAnimationSpeedChanged()
         {
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill1State, out float decelerationRatio) is false)
                 return;
 
-            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.Base_Attackstate, out float preframe);
+            _allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill1State);
+            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.BossSkill1State, out float preframe);
             CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold,skill1_DurationTime,preframe,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
             _networkController.StartAnimChagnedRpc(animinfo);
         }
@@ -71,7 +72,7 @@ public class BossSkill1 : Action
             if (_tickCounter >= SPAWN_BOSS_SKILL1_TICK)
             {
                 _tickCounter = 0;
-                foreach (Collider targetPlayer in allTargets)
+                foreach (Collider targetPlayer in _allTargets)
                 {
                     if (targetPlayer.TryGetComponent(out BaseStats targetBaseStats))
                     {

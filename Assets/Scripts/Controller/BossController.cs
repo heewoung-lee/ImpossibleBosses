@@ -22,13 +22,6 @@ public abstract class BossController : BaseController
         float startAnimSpeed =animinfo.StartAnimationSpeed;
         animSpeed = Mathf.Lerp(startAnimSpeed, 0f, (float)(elapsedTime / (animinfo.AnimLength * animinfo.DecelerationRatio)));
         Anim.speed = (float)animSpeed;
-        
-        
-        AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(0); // 0: Base Layer
-        float normalizedTime = stateInfo.normalizedTime;
-        Debug.Log($"{normalizedTime}현재 애니메이션 진행도");
-
-
         bool finished = animSpeed <= animinfo.AnimStopThreshold&& isCheckattackIndicatorFinish == true;
         if (finished)
         {

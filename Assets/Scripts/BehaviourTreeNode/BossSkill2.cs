@@ -23,36 +23,42 @@ public class BossSkill2 : Action
 
     [SerializeField] private SharedProjector _attackIndicator;
     private NGO_Indicator_Controller _indicator_controller;
-    public override void OnStart()
+    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
+    public override void OnAwake()
     {
-        base.OnStart();
+        base.OnAwake();
         ChechedBossAttackField();
-        SpawnAttackIndicator();
-        CalculateBossAttackRange();
-        StartAnimationSpeedChanged();
-
         void ChechedBossAttackField()
         {
             _controller = Owner.GetComponent<BossGolemController>();
             _stats = _controller.GetComponent<BossStats>();
             _animLength = Utill.GetAnimationLength("Anim_Attack_AoE", _controller.Anim);
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
+            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
+        }
+    }
+    public override void OnStart()
+    {
+        base.OnStart();
+        SpawnAttackIndicator();
+        CalculateBossAttackRange();
+        StartAnimationSpeedChanged();
+
+        void SpawnAttackIndicator()
+        {
+            _hasSpawnedParticles = false;
             if (Attack_Range <= 0)
             {
                 _controller.TryGetComponent(out BossStats stats);
                 Attack_Range = stats.ViewDistance;
             }
-            _networkController = Owner.GetComponent<BossGolemNetworkController>();
-            _hasSpawnedParticles = false;
-        }
-        void SpawnAttackIndicator()
-        {
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
             float totalIndicatorDurationTime = _attackDurationTime + _animLength;
             _indicator_controller.SetValue(Attack_Range, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
-            _controller.CurrentStateType = _controller.BossSkill2State;
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill2State);
             void IndicatorDoneEvent()
             {
                 if (_hasSpawnedParticles == true) return;
@@ -72,7 +78,7 @@ public class BossSkill2 : Action
             if (_controller.TryGetAttackTypePreTime(_controller.BossSkill2State, out float decelerationRatio) is false)
                 return;
 
-            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.Base_Attackstate, out float preframe);
+            _controller.AttackStopTimingRatioDict.TryGetValue(_controller.BossSkill2State, out float preframe);
             CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _attackDurationTime, preframe, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo);
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
