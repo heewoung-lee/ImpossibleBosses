@@ -556,7 +556,7 @@
 <br/>
 
 <p align="center">
-  <a href="https://blog.naver.com/hiwoong12/223885556696">[개발일지] 멀티플레이 애니메이션 싱크를 맞추는방</a>
+  <a href="https://blog.naver.com/hiwoong12/223885556696">[개발일지] 애니메이션 싱크를 맞추는방법</a>
 </p>
 <br/>
 
