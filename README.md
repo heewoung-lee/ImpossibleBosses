@@ -575,10 +575,3 @@
     * 코드의 재사용성과 유연성이 향상되었습니다.
 
 ---
-<br/>
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/33e41408-493a-4778-830d-c0c69d4055a5" alt="플레이 영상" width="70%"/>
-  <br/>
-  <sub><strong>&lt;플레이 영상&gt;</strong></sub>
-</p>
-<br/>
