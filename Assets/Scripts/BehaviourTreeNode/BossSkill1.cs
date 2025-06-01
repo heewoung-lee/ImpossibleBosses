@@ -41,7 +41,13 @@ public class BossSkill1 : Action
             _stats = _controller.GetComponent<BossStats>();
             _animLength = Utill.GetAnimationLength("Anim_Hit", _controller.Anim);
             allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
-            _controller.CurrentStateType = _controller.BossSkill1State;
+            //_controller.CurrentStateType = _controller.BossSkill1State;
+
+            //TODO:테스트중 잘 되면 리팩토링 필요
+            Owner.GetComponent<BossGolemAnimationNetworkController>().SetBossSkill1Rpc();
+
+
+
             _networkController = Owner.GetComponent<BossGolemNetworkController>();
         }
         void StartAnimationSpeedChanged()
