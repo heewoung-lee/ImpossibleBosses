@@ -17,12 +17,12 @@ public abstract class Module_Player_Class : MonoBehaviour
     {
     }
 
-    public virtual void InitializeOnStart()//TODO: 씬전환될때 호출할것
+    public virtual void InitializeOnStart()
     {
-        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
-        {
-            InitializeSkillsFromManager();
-        }
+        //if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        //{
+        //    InitializeSkillsFromManager();
+        //}
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
 

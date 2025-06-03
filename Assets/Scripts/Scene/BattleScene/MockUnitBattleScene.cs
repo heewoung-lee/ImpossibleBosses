@@ -38,7 +38,6 @@ public class MockUnitBattleScene : ISceneSpawnBehaviour
     }
     public void SpawnOBJ()
     {
-        Debug.Log("이쪽 들어옴?");
         if (Managers.RelayManager.NetworkManagerEx.IsListening)
         {
             Init_NGO_BattleScene_OnHost();

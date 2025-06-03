@@ -264,15 +264,23 @@ public class LobbyManager : IManagerEventInitailize
         await CheckHostAndGuestEvent?.Invoke(lobby);
     }
     private async Task RegisteLobbyCallBack(Lobby lobby,
-        Action<ILobbyChanges> OnLobbyChangeEvent,
-        Action<List<LobbyPlayerJoined>> OnPlayerJoinedEvent = null,
-        Action<List<int>> OnPlayerLeftEvent = null)
+        Func<ILobbyChanges,Task> OnLobbyChangeEvent,
+        Func<List<LobbyPlayerJoined>,Task> OnPlayerJoinedEvent = null,
+        Func<List<int>,Task> OnPlayerLeftEvent = null)
     {
         LobbyEventCallbacks lobbycallbacks = new LobbyEventCallbacks();
-        lobbycallbacks.LobbyChanged += OnLobbyChangeEvent;
-        lobbycallbacks.PlayerJoined += OnPlayerJoinedEvent;
-        lobbycallbacks.PlayerLeft += OnPlayerLeftEvent;
-
+        lobbycallbacks.LobbyChanged += (ilobbyChagnges) =>
+        {
+            _ = OnLobbyChangeEvent.SafeFireAndForgetInvoke(ilobbyChagnges);
+        };
+        lobbycallbacks.PlayerJoined += (lobbyPlayerJoined) =>
+        {
+            _ = OnPlayerJoinedEvent.SafeFireAndForgetInvoke(lobbyPlayerJoined);
+        };
+        lobbycallbacks.PlayerLeft += (playerLeftList) =>
+        {
+            _ = OnPlayerLeftEvent.SafeFireAndForgetInvoke(playerLeftList);
+        };
         try
         {
             await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobby.Id, lobbycallbacks);
@@ -421,7 +429,7 @@ public class LobbyManager : IManagerEventInitailize
             //
             Lobby currentLobby = await GetCurrentLobby();
             CheckHostAndSendHeartBeat(currentLobby);
-            Action<ILobbyChanges> waitLobbyDataChangedEvent = null;
+            Func<ILobbyChanges,Task> waitLobbyDataChangedEvent = null;
             waitLobbyDataChangedEvent += ilobbychagnes => _ = OnLobbyHostChangeEvent(ilobbychagnes);
             waitLobbyDataChangedEvent += ilobbychagnes => _ = NotifyPlayerCreateRoomEvent(ilobbychagnes);
             await JoinLobbyInitalize(currentLobby, waitLobbyDataChangedEvent);
@@ -598,7 +606,7 @@ public class LobbyManager : IManagerEventInitailize
 
 
 
-    private async void OnRoomLobbyChangeHostEventAsync(ILobbyChanges lobbyChanges)
+    private async Task OnRoomLobbyChangeHostEventAsync(ILobbyChanges lobbyChanges)
     {
         if (lobbyChanges.HostId.Value == PlayerID)
         {
@@ -676,9 +684,9 @@ public class LobbyManager : IManagerEventInitailize
     }
 
     private async Task JoinLobbyInitalize(Lobby lobby,
-        Action<ILobbyChanges> OnLobbyChangeEvent,
-        Action<List<LobbyPlayerJoined>> OnPlayerJoinedEvent = null,
-        Action<List<int>> OnPlayerLeftEvent = null)
+        Func<ILobbyChanges,Task> OnLobbyChangeEvent,
+        Func<List<LobbyPlayerJoined>, Task> OnPlayerJoinedEvent = null,
+        Func<List<int>, Task> OnPlayerLeftEvent = null)
     {
         _isDoneInitEvent = false;
         try

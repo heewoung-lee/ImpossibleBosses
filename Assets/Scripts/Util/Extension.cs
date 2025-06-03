@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine.Events;
 using Unity.Netcode;
+using System.Threading.Tasks;
 
 public static class Extension
 {
@@ -54,5 +55,20 @@ public static class Extension
             go.name = go.name.Substring(0, index);
 
         return go;
+    }
+
+
+    public static async Task SafeFireAndForgetInvoke<T>(this Func<T,Task> asyncAction,T arg)
+    {
+        if (asyncAction == null) return;
+
+        try
+        {
+            await asyncAction.Invoke(arg);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);   // 예외 즉시 기록
+        }
     }
 }

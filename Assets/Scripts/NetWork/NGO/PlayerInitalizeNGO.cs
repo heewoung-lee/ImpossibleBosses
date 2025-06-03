@@ -45,7 +45,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
         if (loadSceneMode != LoadSceneMode.Single)
             return;
 
-       transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
+        transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
     }
 
     protected override void StartInit()
