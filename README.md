@@ -567,7 +567,7 @@
   <br/>
   <sub><strong>&lt;개선된 시스템 적용 후: 모든 환경에서 애니메이션이 일관되고 부드럽게 동기화되는 모습&gt;</strong></sub>
 </div>
-
+<br/>
 <p align="center">
   <a href="https://blog.naver.com/hiwoong12/223885556696">[개발일지] 애니메이션 싱크를 맞추는방법</a>
 </p>
