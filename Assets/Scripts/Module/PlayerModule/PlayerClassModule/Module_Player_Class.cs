@@ -19,15 +19,19 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnStart()
     {
-        //if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
-        //{
-        //    InitializeSkillsFromManager();
-        //}
+        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        {
+            InitializeSkillsFromManager();
+        }
+
+        Debug.Log("½ºÅ¸Æ® ºÎºÐ");
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
 
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
+        Debug.Log("¾ÀÀÌ º¯°æ µÆ´Âµ¥ ¿©±ä ¾Ë·ê¹Î");
+
         if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
             return;
 
