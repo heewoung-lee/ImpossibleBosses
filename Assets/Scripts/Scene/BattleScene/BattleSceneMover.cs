@@ -13,8 +13,6 @@ public class BattleSceneMover : ISceneMover
             return;
 
 
-        Debug.Log("¹«ºê ¾À È£Ãâ");
-
         Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, null, null);

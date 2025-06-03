@@ -27,6 +27,7 @@ public class BattleScene : BaseScene, ISkillInit, ISceneController,IScenePlayerP
         {
             _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
             _playerPositionController = new PlayerPositionController(new MockUnitPlayScenePlayerPosition());
+            gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
             _battleSceneController.InitGamePlayScene();
             _battleSceneController.SpawnOBJ();
         }
@@ -34,6 +35,7 @@ public class BattleScene : BaseScene, ISkillInit, ISceneController,IScenePlayerP
         {
             _battleSceneController = new MoveSceneController(new UnitBattleScene());
             _playerPositionController = new PlayerPositionController(new UnitPlayScenePlayerPosition());
+            gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
             _battleSceneController.InitGamePlayScene();
             _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnOBJ;
         }
