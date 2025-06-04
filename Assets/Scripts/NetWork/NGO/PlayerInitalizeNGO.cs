@@ -113,6 +113,9 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
 
     public void OnBeforeSceneUnload()
     {
+        if (IsOwner == false)
+            return;
+            
         gameObject.transform.SetParent(null, false);
     }
 }

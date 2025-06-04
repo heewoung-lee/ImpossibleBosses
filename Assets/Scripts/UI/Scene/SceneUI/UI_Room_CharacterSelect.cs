@@ -277,7 +277,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         void ClientLoadedEvent(ulong clientId)
         {
             Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
-            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene+"씬네임");
+            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene+"씬네임"+"플레이어 ID"+clientId);
         }
 
         void AllPlayerLoadedEvent()

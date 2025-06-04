@@ -23,7 +23,25 @@ MonoBehaviour:
     m_Role: 1
     m_PlayerTag: Player1
     m_InitialScene: {fileID: 102900000, guid: b350600a9803dbe4e9fdd63029fc2f34, type: 3}
-  m_EditorInstances: []
+  m_EditorInstances:
+  - Name: Player 2
+    <CorrespondingNodeId>k__BackingField: 
+    m_Nodes: []
+    m_Role: 1
+    m_PlayerTag: Player2
+    m_InitialScene: {fileID: 0}
+    m_AdvancedConfiguration:
+      StreamLogsToMainEditor: 0
+      LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
+  - Name: Player 3
+    <CorrespondingNodeId>k__BackingField: 
+    m_Nodes: []
+    m_Role: 1
+    m_PlayerTag: Player3
+    m_InitialScene: {fileID: 0}
+    m_AdvancedConfiguration:
+      StreamLogsToMainEditor: 0
+      LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
   m_LocalInstances: []
   m_RemoteInstances: []
   m_OverridePort: 0

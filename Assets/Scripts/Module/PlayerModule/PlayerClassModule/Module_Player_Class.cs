@@ -15,27 +15,32 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnAwake()
     {
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
 
     public virtual void InitializeOnStart()
     {
-        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
-        {
-            InitializeSkillsFromManager();
-        }
+        //    if(Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        //    {
+        //        InitializeSkillsFromManager();
+        //    }
+    }
 
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
+    public void OnDestroy()
+    {
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
     }
 
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
 
-        if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
+        if (Managers.SceneManagerEx.GetCurrentScene is not ISkillInit)
             return;
 
-        if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
+        if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)
             return;
 
+        Debug.Log("이건 씬변경시 호출");
         InitializeSkillsFromManager();
     }
 
