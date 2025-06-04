@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 
-public class PlayerInitalizeNGO : NetworkBehaviourBase
+public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
 {
     enum Transforms
     {
@@ -109,5 +109,10 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase
             childtr.gameObject.layer = layerMask;
             SetPlayerLayerMask(childtr, layerMask);
         }
+    }
+
+    public void OnBeforeSceneUnload()
+    {
+        gameObject.transform.SetParent(null, false);
     }
 }

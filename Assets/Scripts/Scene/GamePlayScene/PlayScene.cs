@@ -36,6 +36,7 @@ public class PlayScene : BaseScene,ISkillInit, ISceneController,IScenePlayerPosi
             _sceneController = new MoveSceneController(new MockUnitGamePlayScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
             _playerPositionController = new PlayerPositionController(new MockUnitPlayScenePlayerPosition());
             gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
+
         }
         else
         {

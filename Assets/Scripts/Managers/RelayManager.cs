@@ -198,7 +198,6 @@ public class RelayManager
         }
     }
 
-
     public NetworkObjectReference GetNetworkObject(GameObject gameobject)
     {
         if (gameobject.TryGetComponent(out NetworkObject ngo))
@@ -240,9 +239,7 @@ public class RelayManager
             NetworkObject networkObj = instanceObj.GetOrAddComponent<NetworkObject>();
             if (networkObj.IsSpawned == false)
             {
-                //이쪽에서 풀 객체면 스폰이 아닌 문제는 여기구역은 
                 networkObj.SpawnWithOwnership(clientId, destroyOption);
-
             }
             if (parent != null)
             {

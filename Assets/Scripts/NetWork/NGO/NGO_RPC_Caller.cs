@@ -96,8 +96,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
-        Debug.Log($"이전값{previousValue} 이후값{newValue}");
-
+        //Debug.Log($"이전값{previousValue} 이후값{newValue}");
         LoadedPlayerCountRpc();
     }
 
@@ -439,6 +438,18 @@ public class NGO_RPC_Caller : NetworkBehaviour
     public void ResetManagersRpc()
     {
         Managers.Clear();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void OnBeforeSceneUnloadRpc()
+    {
+        foreach(NetworkObject ownerNGo in Managers.RelayManager.NetworkManagerEx.SpawnManager.OwnershipToObjectsTable[Managers.RelayManager.NetworkManagerEx.LocalClientId].Values)
+        {
+            if(ownerNGo.TryGetComponent(out ISceneChangeBehaviour behaviour))
+            {
+                behaviour.OnBeforeSceneUnload();
+            }
+        }
     }
 
 }
