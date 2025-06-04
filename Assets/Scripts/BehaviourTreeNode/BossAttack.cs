@@ -7,7 +7,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
+public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action, IBossAnimationChanged
 {
     private readonly float _addIndicatorAddDurationTime = 0f;
     private readonly float _attackAnimStopThreshold = 0.06f;
@@ -25,6 +25,9 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     public SharedProjector _attackIndicator;
     public int Radius_Step = 0;
     public int Angle_Step = 0;
+
+    public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
+
     public override void OnAwake()
     {
         base.OnAwake();
@@ -49,11 +52,8 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
 
         void SpawnAttackIndicator()
         {
-
-            //_controller.UpdateAttack();
-            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.Base_Attackstate);
+            OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_Attackstate);
             _hasSpawnedParticles = false;
-
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
@@ -109,5 +109,10 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         base.OnEnd();
         _attackRangeParticlePos = null;
         _hasSpawnedParticles = false;
+    }
+
+    public void OnBossGolemAnimationChanged(BossGolemAnimationNetworkController bossAnimController, IState state)
+    {
+        bossAnimController.SyncBossStateToClients(state);
     }
 }

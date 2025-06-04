@@ -440,13 +440,14 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Managers.Clear();
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.Server)]
     public void OnBeforeSceneUnloadRpc()
     {
-        foreach(NetworkObject ownerNGo in Managers.RelayManager.NetworkManagerEx.SpawnManager.OwnershipToObjectsTable[Managers.RelayManager.NetworkManagerEx.LocalClientId].Values)
+        foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
         {
-            if(ownerNGo.TryGetComponent(out ISceneChangeBehaviour behaviour))
+            if(ngo.TryGetComponent(out ISceneChangeBehaviour behaviour))
             {
+                Debug.Log((behaviour as Component).name + "초기화 처리 됨");
                 behaviour.OnBeforeSceneUnload();
             }
         }

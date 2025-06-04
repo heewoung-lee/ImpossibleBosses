@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BossSkill1 : Action
+public class BossSkill1 : Action, IBossAnimationChanged
 {
     private readonly string skill1_indicator_Path = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
     private readonly string skill1_stone_Path = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
@@ -30,6 +30,8 @@ public class BossSkill1 : Action
     private Collider[] _allTargets;
 
     public SharedInt Damage;
+
+    public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
 
     public override void OnAwake()
     {
@@ -55,7 +57,7 @@ public class BossSkill1 : Action
                 return;
 
             _allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
-            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BossSkill1State);
+            OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BossSkill1State);
             CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, skill1_AnimStopThreshold,skill1_DurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, skill1_StartAnimSpeed);
             _networkController.StartAnimChagnedRpc(animinfo);
         }
@@ -95,5 +97,9 @@ public class BossSkill1 : Action
     {
         base.OnEnd();
         _controller.CurrentStateType = _controller.Base_IDleState;
+    }
+    public void OnBossGolemAnimationChanged(BossGolemAnimationNetworkController bossAnimController, IState state)
+    {
+        bossAnimController.SyncBossStateToClients(state);
     }
 }

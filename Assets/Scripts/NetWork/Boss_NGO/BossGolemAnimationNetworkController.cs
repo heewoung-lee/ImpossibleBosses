@@ -16,7 +16,7 @@ public class BossGolemAnimationNetworkController : NetworkBehaviour
         base.OnNetworkSpawn();
         _bossGolemController = GetComponent<BossGolemController>();
 
-        foreach(IState istate in _bossGolemController.AttackStopTimingRatioDict.Keys)
+        foreach(IState istate in _bossGolemController.StateAnimDict.StateDict.Keys)
         {
             string istateName = istate.GetType().Name;
             _bossAttackStateDict.Add(istateName, istate);
@@ -33,9 +33,9 @@ public class BossGolemAnimationNetworkController : NetworkBehaviour
             if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
                 return;
 
-            string name = typeof(T).Name;
+        string typename = state.GetType().Name;
 
-        SetBossStateRpc(name);
+        SetBossStateRpc(typename);
 
     }
 }

@@ -2,25 +2,35 @@ using BehaviorDesigner.Runtime.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BossDead : Action
+public class BossDead : Action, IBossAnimationChanged
 {
-    BaseController _ownerController;
-    [SerializeField]private SharedProjector _projector;
+    BossGolemController _controller;
+    [SerializeField] private SharedProjector _projector;
     private BossGolemNetworkController _networkController;
     private Animator _anim;
+    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
+
+    public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
+
+    public override void OnAwake()
+    {
+        base.OnAwake();
+        _controller = Owner.GetComponent<BossGolemController>();
+        _networkController = Owner.GetComponent<BossGolemNetworkController>();
+        _anim = Owner.GetComponent<Animator>();
+        _bossGolemAnimationNetworkController = Owner.GetComponent <BossGolemAnimationNetworkController>();
+    }
 
     public override void OnStart()
     {
         base.OnStart();
-        _ownerController = Owner.GetComponent<BaseController>();
-        _networkController = Owner.GetComponent<BossGolemNetworkController>();
-        _anim = Owner.GetComponent<Animator>();
+        OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_DieState);
     }
 
 
     public override TaskStatus OnUpdate()
     {
-        if (_ownerController.CurrentStateType == _ownerController.Base_DieState)
+        if (_controller.CurrentStateType == _controller.Base_DieState)
         {
             if (_projector.Value != null && _projector.Value.GetComponent<NetworkObject>().IsSpawned)
             {
@@ -42,5 +52,10 @@ public class BossDead : Action
     public override void OnEnd()
     {
         base.OnEnd();
+    }
+
+    public void OnBossGolemAnimationChanged(BossGolemAnimationNetworkController bossAnimController, IState state)
+    {
+        bossAnimController.SyncBossStateToClients(state);
     }
 }

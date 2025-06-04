@@ -5,6 +5,8 @@ public class StateAnimationDict
 {
     Dictionary<IState, Action> _stateDict = new Dictionary<IState, Action>();
 
+    public Dictionary<IState, Action> StateDict => _stateDict;
+
     public void RegisterState(IState iMoveableState ,Action stateStrategy)
     {
         if (!_stateDict.ContainsKey(iMoveableState))
