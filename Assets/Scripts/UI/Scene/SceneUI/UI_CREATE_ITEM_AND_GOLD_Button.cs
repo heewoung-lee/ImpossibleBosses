@@ -82,6 +82,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
             //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
             Debug.Log(Managers.GameManagerEx.Player.transform.position+"플레이어 좌표");
+            //Managers.GameManagerEx.Player.transform.position = Vector3.zero;
         }
         void MoveScene()
         {

@@ -15,9 +15,16 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnAwake()
     {
+        
+    }
+    public void OnEnable()
+    {
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
-
+    public void OnDisable()
+    {
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
+    }
     public virtual void InitializeOnStart()
     {
         //    if(Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
@@ -25,12 +32,7 @@ public abstract class Module_Player_Class : MonoBehaviour
         //        InitializeSkillsFromManager();
         //    }
     }
-
-    public void OnDestroy()
-    {
-        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
-    }
-
+  
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
 

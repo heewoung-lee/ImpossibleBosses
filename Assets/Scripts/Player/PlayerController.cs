@@ -105,6 +105,12 @@ public class PlayerController : MoveableController
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
+
+        Vector2 screenPos = _pointerAction.ReadValue<Vector2>();
+        if (screenPos.x < 0f || screenPos.x > Screen.width ||
+            screenPos.y < 0f || screenPos.y > Screen.height)
+            return;
+
         Vector3 clickPos = MouseRightClickPosEvent(context);
         _inputmanager.playerMouseClickPositionEvent?.Invoke(clickPos);
     }

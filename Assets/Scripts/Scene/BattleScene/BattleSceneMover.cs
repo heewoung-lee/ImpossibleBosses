@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BattleSceneMover : ISceneMover
 {
@@ -15,8 +17,19 @@ public class BattleSceneMover : ISceneMover
 
         Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, null, null);
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, null, SetPostion);
 
-        //TODO: 여기에 씬이동이 완료되면 좌표로직 적기
+
+        void SetPostion()
+        {
+            foreach (NetworkObject player in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+            {
+                if (player.TryGetComponent(out NavMeshAgent agent))
+                {
+                    agent.ResetPath();
+                    agent.Warp(new Vector3(player.OwnerClientId, 0, 0));
+                }
+            }
+        }
     }
 }

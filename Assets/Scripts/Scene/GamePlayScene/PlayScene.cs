@@ -9,17 +9,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayScene : BaseScene,ISkillInit, ISceneController,IScenePlayerPositioner
+public class PlayScene : BaseScene,ISkillInit, ISceneController
 {
     public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
 
     private UI_Loading _ui_Loading_Scene;
     private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
     private MoveSceneController _sceneController;
-    private PlayerPositionController _playerPositionController;
     MoveSceneController ISceneController.SceneMoverController => _sceneController;
 
-    public PlayerPositionController PositionController => _playerPositionController;
     [SerializeField] bool isTest = false;
     [SerializeField] bool isSoloTest = false;
     protected override void AwakeInit()
@@ -34,20 +32,16 @@ public class PlayScene : BaseScene,ISkillInit, ISceneController,IScenePlayerPosi
         if (isTest == true)
         {
             _sceneController = new MoveSceneController(new MockUnitGamePlayScene(Define.PlayerClass.Fighter, _ui_Loading_Scene, isSoloTest));
-            _playerPositionController = new PlayerPositionController(new MockUnitPlayScenePlayerPosition());
             gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
-
         }
         else
         {
             _sceneController = new MoveSceneController(new UnitGamePlayScene());
-            _playerPositionController = new PlayerPositionController(new UnitPlayScenePlayerPosition());
             gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
             // gameObject.AddComponent<UI_GamePlaySceneModule>(); TODO: 빌드시 테스트 모듈 제거할것
         }
         _sceneController.InitGamePlayScene();
         _sceneController.SpawnOBJ();
-        _playerPositionController.SetPlayerPosition();
     }
 
    

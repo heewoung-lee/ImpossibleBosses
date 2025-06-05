@@ -53,7 +53,6 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
             {
                 Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded = true;//로딩창 90% 이후로 넘어가게끔
                 allPlayerLoadedEvent?.Invoke();
-
                 Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete -= SceneManager_OnLoadCompleteAsync;
             }
         }

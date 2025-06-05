@@ -452,5 +452,4 @@ public class NGO_RPC_Caller : NetworkBehaviour
             }
         }
     }
-
 }
