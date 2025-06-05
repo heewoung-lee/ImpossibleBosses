@@ -48,6 +48,11 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= SetParentPosition;
+    }
     protected override void StartInit()
     {
 
