@@ -127,7 +127,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected string _itemIconSourceImageText;
     protected Image _itemIconSourceImage;
     protected Dictionary<string, Sprite> _imageSource;
-    protected Image _dragImageIcon;
+    protected UI_ItemDragImage _UI_dragImageIcon;
     protected UI_Description _decriptionObject;
     protected bool _isDragging = false;
 
@@ -141,18 +141,18 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     public Dictionary<string, Sprite> ImageSource => _imageSource;
 
     public abstract RectTransform ItemRectTr { get; }
-    public Image DragImageIcon
+    public UI_ItemDragImage UI_DragImageIcon
     {
         get
         {
-            if (_dragImageIcon == null)
+            if (_UI_dragImageIcon == null)
             {
-                if(Managers.UI_Manager.UI_sceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
+                if (Managers.UI_Manager.UI_sceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
                 {
-                    _dragImageIcon = (itemDragIamge as UI_ItemDragImage).ItemDragImage;
-                }
+                    _UI_dragImageIcon = itemDragIamge as UI_ItemDragImage;
+                }   
             }
-            return _dragImageIcon;
+            return _UI_dragImageIcon;
         }
 
     }
@@ -188,12 +188,12 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         base.OnDisableInit();
 
-        if (DragImageIcon == null)
+        if (UI_DragImageIcon == null)
             return;
 
-        if (DragImageIcon.gameObject.activeSelf)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
+        if (UI_DragImageIcon.IsDragImageActive == true)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
         {
-            DragImageIcon.gameObject.SetActive(false);
+            UI_DragImageIcon.SetItemImageDisable();
         }
         RevertImage();
     }
@@ -202,7 +202,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
         _isDragging = false;
-        DragImageIcon.gameObject.SetActive(false);
+        UI_DragImageIcon.SetItemImageDisable();
     }
 
 
@@ -228,18 +228,22 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     public void GetDragBegin(PointerEventData eventData)
     {
 
-        DragImageIcon.sprite = _itemIconSourceImage.sprite;
-        DragImageIcon.gameObject.SetActive(true);//드래그 될 이미지
-
+        UI_DragImageIcon.SetImageSprite(_itemIconSourceImage.sprite);
+        UI_DragImageIcon.SetItemImageEnable();
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 0f);
-        DragImageIcon.color = new Color(DragImageIcon.color.r, DragImageIcon.color.g, DragImageIcon.color.b, 0.5f);
+        UI_DragImageIcon.SetImageSpriteColor(new Color(
+            UI_DragImageIcon.ItemDragImage.color.r,
+            UI_DragImageIcon.ItemDragImage.color.g,
+            UI_DragImageIcon.ItemDragImage.color.b,
+            0.5f
+            ));
 
         _isDragging = true;
     }
 
     public void DraggingItem(PointerEventData eventData)
     {
-        DragImageIcon.transform.position = eventData.position;
+        UI_DragImageIcon.transform.position = eventData.position;
     }
     public abstract void GetDragEnd(PointerEventData eventData);
 

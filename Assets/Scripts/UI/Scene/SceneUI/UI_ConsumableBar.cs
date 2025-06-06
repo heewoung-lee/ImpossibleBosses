@@ -34,6 +34,20 @@ public class UI_ConsumableBar : UI_Scene
         }
     }
 
+    private UI_Description _ui_Description;
+
+    public UI_Description UI_Description
+    {
+        get
+        {
+            if(_ui_Description == null)
+            {
+                _ui_Description = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+            }
+            return _ui_Description;
+        }
+    }
+
     
     enum ConsumableIcons
     {
@@ -103,6 +117,14 @@ public class UI_ConsumableBar : UI_Scene
             }
         }
 
+        if (ItemDragImage.IsDragImageActive == true)
+        {
+            ItemDragImage.SetItemImageDisable();
+        }
+        if(UI_Description.isDescriptionActive == true)
+        {
+            UI_Description.UI_DescriptionDisable();
+        }
 
     }
 

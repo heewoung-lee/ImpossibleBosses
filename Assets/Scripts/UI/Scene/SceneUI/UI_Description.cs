@@ -42,13 +42,21 @@ public class UI_Description : UI_Scene
     private float _descriptionWidth;
     private float _descriptionHeight;
     private Canvas _descriptionCanvas;
-    public DescriptionWindow DescriptionWindow => _descriptionWindow;
-
+    private Direction _currnt_Dir = Direction.Right;
     private Color _item_GradeColor;
     private Vector3 _originPos;
-    public Vector3 OriginPos { get => _originPos; }
 
-    private Direction _currnt_Dir = Direction.Right;
+    public DescriptionWindow DescriptionWindow => _descriptionWindow;
+
+    public Vector3 OriginPos { get => _originPos; }
+    public bool isDescriptionActive
+    {
+        get
+        {
+            return gameObject.activeSelf;
+        }
+    }
+
 
     protected override void AwakeInit()
     {
@@ -71,7 +79,16 @@ public class UI_Description : UI_Scene
         gameObject.SetActive(false);
     }
 
+    public void UI_DescriptionEnable()
+    {
+        gameObject.SetActive(true);
+    }
 
+
+    public void UI_DescriptionDisable()
+    {
+        gameObject.SetActive(false);
+    }
 
     public void SetValue(IItem iteminfo)
     {
