@@ -24,11 +24,15 @@ public class BattleSceneMover : ISceneMover
         {
             foreach (NetworkObject player in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
             {
+                Vector3 pos = new Vector3(player.OwnerClientId, 0, 0);
+
                 if (player.TryGetComponent(out NavMeshAgent agent))
                 {
                     agent.ResetPath();
-                    agent.Warp(new Vector3(player.OwnerClientId, 0, 0));
+                    agent.Warp(pos);
+                    player.GetComponent<PlayerInitalizeNGO>().SetForcePositionFromNetworkRpc(pos);
                 }
+
             }
         }
     }

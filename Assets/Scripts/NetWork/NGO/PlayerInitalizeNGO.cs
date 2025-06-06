@@ -123,4 +123,18 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
             
         gameObject.transform.SetParent(null, false);
     }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetForcePositionFromNetworkRpc(Vector3 position)
+    {
+        if (IsOwner == false)
+            return;
+
+        GetComponent<NavMeshAgent>().ResetPath();//플레이어가 이동중이라면 경로를 없앤다
+        PlayerController controller = GetComponent<PlayerController>();// 상태를 IDLE로 강제로 바꾼다
+        controller.CurrentStateType = controller.Base_IDleState;
+        GetComponent<NetworkTransform>().Teleport(position,transform.rotation,transform.localScale);
+        //포지션을 호스트가 바꾸는데 NavMesh에 대한 포지션만 변경하므로 NEtwork에는 업데이트가 안될 수 도 있기에
+        //각자가 네트워크에서 포지션을 업데이트 해준다. 캐싱은 필요없음 씬전환시에만 호출 해서 쓸거기 때문에 캐싱은 안함
+    }
 }
