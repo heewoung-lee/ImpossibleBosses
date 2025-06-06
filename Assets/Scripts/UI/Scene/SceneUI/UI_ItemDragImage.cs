@@ -13,5 +13,13 @@ public class UI_ItemDragImage : UI_Scene
         GetComponent<Canvas>().sortingOrder = 50;
         _itemDragImage.gameObject.SetActive(false);
     }
+    public void SetItemImageEnable()
+    {
+        _itemDragImage.gameObject.SetActive(true);
+    }
+    public void SetItemImageDisable()
+    {
+        _itemDragImage.gameObject.SetActive(false);
+    }
 
 }

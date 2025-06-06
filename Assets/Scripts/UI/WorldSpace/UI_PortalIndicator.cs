@@ -16,11 +16,6 @@ public class UI_PortalIndicator : UI_Base
 
     private Image _indicatorIMG;
 
-    private void OnDestroy()
-    {
-        Debug.Log($"{System.Environment.StackTrace}온디스트로이");
-    }
-
 
     public void SetIndicatorOff()
     {

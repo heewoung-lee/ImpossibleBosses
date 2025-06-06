@@ -3,25 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_ConsumableBar : UI_Scene
 {
 
     private Image[] _consumableIcons;
-    private Transform[] _frameTrs;
+    [SerializeField]private Transform[] _frameTrs;
 
     public Transform[] FrameTrs => _frameTrs;
-
-    public Image ItemDragImage => _itemDragImage;
-
-    private Image _itemDragImage;
 
     private InputAction[] _comsumableGetKey;
 
     private UI_BufferBar _ui_BufferBar;
 
     private PlayerStats _playerStats;
+
+    private UI_ItemDragImage _itemDragImage;
+
+    public UI_ItemDragImage ItemDragImage
+    {
+        get
+        {
+            if(_itemDragImage == null)
+            {
+                _itemDragImage = Managers.UI_Manager.Get_Scene_UI<UI_ItemDragImage>();
+            }
+            return _itemDragImage;
+        }
+    }
 
     
     enum ConsumableIcons
@@ -42,7 +53,13 @@ public class UI_ConsumableBar : UI_Scene
 
     protected override void AwakeInit()
     {
+        Debug.Log("여기 울리지 않음?");
         base.AwakeInit();
+        InitalizeConsumable();
+    }
+
+    private void InitalizeConsumable()
+    {
         _consumableIcons = new Image[Enum.GetValues(typeof(ConsumableIcons)).Length];
         Bind<Image>(typeof(ConsumableIcons));
         ConsumableIcons[] consumableIcons = (ConsumableIcons[])System.Enum.GetValues(typeof(ConsumableIcons));
@@ -60,11 +77,11 @@ public class UI_ConsumableBar : UI_Scene
         _comsumableGetKey = new InputAction[_frameTrs.Length];
         for (int i = 0; i < _comsumableGetKey.Length; i++)
         {
-            _comsumableGetKey[i] = Managers.InputManager.GetInputAction(Define.ControllerType.UI, $"Consumabar_GetKey{i+1}");
+            _comsumableGetKey[i] = Managers.InputManager.GetInputAction(Define.ControllerType.UI, $"Consumabar_GetKey{i + 1}");
             _comsumableGetKey[i].Enable();
         }
-        _itemDragImage = Utill.FindChild<Image>(gameObject, "ItemDragImage");
     }
+
 
     public void UsedPosition(InputAction.CallbackContext context)
     {
@@ -86,31 +103,43 @@ public class UI_ConsumableBar : UI_Scene
             }
         }
 
+
     }
 
 
     protected override void StartInit()
     {
-        if(Managers.GameManagerEx.Player == null)
+        
+    }
+
+    private void OnEnable()
+    {
+        if (Managers.GameManagerEx.Player == null)
         {
             Managers.GameManagerEx.OnPlayerSpawnEvent += SetPlayerComsumableBarUI;
         }
         else
         {
-            SetPlayerComsumableBarUI(_playerStats);
-        }
-       
-        void SetPlayerComsumableBarUI(PlayerStats stats)
-        {
-
-            foreach (InputAction getKeyEvent in _comsumableGetKey)
-            {
-                getKeyEvent.performed += UsedPosition;
-                getKeyEvent.Enable();
-            }
+            SetPlayerComsumableBarUI(Managers.GameManagerEx.Player.GetComponent<PlayerStats>());
         }
     }
 
+    private void OnDisable()
+    {
+        foreach (InputAction getKeyEvent in _comsumableGetKey)
+        {
+            getKeyEvent.performed -= UsedPosition;
+            getKeyEvent.Disable();
+        }
+    }
 
-    
+    private void SetPlayerComsumableBarUI(PlayerStats stats)
+    {
+        _playerStats = stats;
+        foreach (InputAction getKeyEvent in _comsumableGetKey)
+        {
+            getKeyEvent.performed += UsedPosition;
+            getKeyEvent.Enable();
+        }
+    }
 }
