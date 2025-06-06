@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class UI_ItemDragImage : UI_Scene
 {
     private Image _itemDragImage;
-    public Image ItemDragImage => _itemDragImage;
 
     public bool IsDragImageActive
     {
@@ -25,9 +24,17 @@ public class UI_ItemDragImage : UI_Scene
     {
         _itemDragImage.sprite = sprite;
     }
-    public void SetImageSpriteColor(Color color)
+    public void SetDragImagePosition(Vector3 pos)
     {
-        _itemDragImage.color = color;
+        _itemDragImage.transform.position = pos;
+    }
+    public void SetImageSpriteColorAlpah(float alphaValue)
+    {
+        _itemDragImage.color = new Color(
+            _itemDragImage.color.r,
+            _itemDragImage.color.g,
+            _itemDragImage.color.b,
+            alphaValue);
     }
     public void SetItemImageEnable()
     {

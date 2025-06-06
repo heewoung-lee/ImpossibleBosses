@@ -146,7 +146,7 @@ public class UI_Player_Inventory : UI_Popup
         UI_Description description = null;
         if (description = Managers.UI_Manager.Get_Scene_UI<UI_Description>())
         {
-            description.gameObject.SetActive(false);
+            description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();
         }
     }

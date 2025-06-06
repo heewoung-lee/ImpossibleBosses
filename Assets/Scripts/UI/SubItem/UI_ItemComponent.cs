@@ -117,6 +117,8 @@ public struct IteminfoStruct : INetworkSerializable//TODO: 나중에 아이템 강화등 
 
 public abstract class UI_ItemComponent : UI_Base, IItem
 {
+    private readonly float ItemVisibleValue = 0.5f;
+
     protected IItem _iteminfo;
     protected int _itemNumber;
     protected ItemType _itemType;
@@ -175,7 +177,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         if (_isDragging)
             return;
-        _decriptionObject.gameObject.SetActive(true);
+        _decriptionObject.UI_DescriptionEnable();
 
         _decriptionObject.DescriptionWindow.transform.position
             = _decriptionObject.SetDecriptionPos(transform, ItemRectTr.rect.width, ItemRectTr.rect.height);
@@ -213,7 +215,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
 
     protected void CloseDescription()
     {
-        _decriptionObject.gameObject.SetActive(false);
+        _decriptionObject.UI_DescriptionDisable();
         _decriptionObject.SetdecriptionOriginPos();
     }
 
@@ -221,7 +223,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         if (_decriptionObject.gameObject.activeSelf)
         {
-            _decriptionObject.gameObject.SetActive(false);
+            _decriptionObject.UI_DescriptionDisable();  
         }
     }
 
@@ -231,20 +233,16 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         UI_DragImageIcon.SetImageSprite(_itemIconSourceImage.sprite);
         UI_DragImageIcon.SetItemImageEnable();
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 0f);
-        UI_DragImageIcon.SetImageSpriteColor(new Color(
-            UI_DragImageIcon.ItemDragImage.color.r,
-            UI_DragImageIcon.ItemDragImage.color.g,
-            UI_DragImageIcon.ItemDragImage.color.b,
-            0.5f
-            ));
-
+        UI_DragImageIcon.SetImageSpriteColorAlpah(ItemVisibleValue);
         _isDragging = true;
     }
 
     public void DraggingItem(PointerEventData eventData)
     {
-        UI_DragImageIcon.transform.position = eventData.position;
+        UI_DragImageIcon.SetDragImagePosition(eventData.position);
     }
+
+
     public abstract void GetDragEnd(PointerEventData eventData);
 
 

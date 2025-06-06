@@ -139,7 +139,7 @@ public class UI_Shop : UI_Popup
     {
         if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
         {
-            description.gameObject.SetActive(false);
+            description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();
         }
     }
