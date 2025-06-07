@@ -70,6 +70,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
 
     protected override void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult)
     {
+
         foreach (RaycastResult uiResult in uiraycastResult)
         {
             if (uiResult.gameObject.tag == "EquipSlot" && _iteminfo is ItemEquipment)
@@ -82,12 +83,21 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
                     EquipItemToSlot(equipment.Equipment_Slot);
                 }
             }
-            else if(uiResult.gameObject.TryGetComponentInChildren(out InventoryContentCoordinate contentTr) && _isEquipped == true)
+            else if (uiResult.gameObject.TryGetComponentInChildren(out InventoryContentCoordinate contentTr) && _isEquipped == true)
             {
                 GetComponentInParent<EquipMentSlot>().ItemUnEquip();
                 AttachItemToSlot(gameObject, contentTr.transform);
-
             }
+        }
+    }
+
+
+    protected override void DropItemOnGround()
+    {
+        base.DropItemOnGround();
+        if (_isEquipped == true)
+        {
+            GetComponentInParent<EquipMentSlot>().ItemUnEquip();
         }
     }
 

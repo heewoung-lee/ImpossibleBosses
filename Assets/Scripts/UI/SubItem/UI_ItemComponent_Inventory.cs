@@ -76,6 +76,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     protected abstract void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult);
 
+
     protected abstract void RemoveItemFromInventory();
 
     private bool IsPointerOverUI(PointerEventData eventData, out List<RaycastResult> uiraycastResult)
@@ -86,20 +87,11 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         return results.Count > 0;
     }
 
-    private void DropItemOnGround()
+    protected virtual void DropItemOnGround()
     {
         RemoveItemFromInventory();
         IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
         Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct,Managers.GameManagerEx.Player.transform.position);
-
-        //RemoveItemFromInventory();
-        //GameObject lootObject = GetLootingItemObejct(_iteminfo);
-        //lootObject.gameObject.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        //if(lootObject.TryGetComponent(out NetworkObject networkOBJ))
-        //{
-        //    networkOBJ.enabled = false;
-        //}
-        //return;
     }
 
     protected void AttachItemToSlot(GameObject go, Transform slot)
