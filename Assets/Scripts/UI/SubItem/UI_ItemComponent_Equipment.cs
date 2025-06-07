@@ -98,7 +98,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
         if (_isEquipped == true)
         {
             GetComponentInParent<EquipMentSlot>().ItemUnEquip();
-        }
+        }//장비한 아이템을 땅에 떨굴때 장비 벗음 효과 나오도록 수정
     }
 
     public override GameObject GetLootingItemObejct(IItem iteminfo)
