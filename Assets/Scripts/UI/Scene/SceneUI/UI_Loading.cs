@@ -36,7 +36,7 @@ public class UI_Loading : UI_Scene
     protected override void StartInit()
     {
         base.StartInit();
-        SetSortingOrder(15);
+        SetSortingOrder((int)Define.SpecialSortingOrder.LoadingScreen);
     }
 
     protected override void AwakeInit()

@@ -23,7 +23,7 @@ public class UI_LoadingPanel : UI_Scene
     {
         base.StartInit();
         _loadingPanelImage.enabled = false;
-        SetSortingOrder(100);
+        SetSortingOrder((int)Define.SpecialSortingOrder.LoadingPanel);
     }
 
     public void LobbyLoading(bool isLobbyLoading)

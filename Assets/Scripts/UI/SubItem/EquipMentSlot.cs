@@ -17,6 +17,19 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
     public Action slotEvent;
 
 
+    public BaseStats PlayerStats
+    {
+        get
+        {
+            if(_playerStats == null)
+            {
+                _playerStats = Managers.GameManagerEx.Player.GetComponent<BaseStats>();
+            }
+            return _playerStats;
+        }
+    }
+
+
     private bool _isEquipped = false;
     public bool IsEquipped
     {
@@ -61,7 +74,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         {
             StatType statType = effect.statType;
             float statValue = effect.value;
-            UpdateStatsFromEquippedItem(statType, statValue, _playerStats, IsEquipped);
+            UpdateStatsFromEquippedItem(statType, statValue, PlayerStats, IsEquipped);
         }
     }
 
@@ -96,7 +109,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         slotType = (Equipment_Slot_Type)Enum.Parse(typeof(Equipment_Slot_Type), slotTypeName);
         _player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         contentofInventoryTr = _player_Inventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
-        _playerStats = Managers.GameManagerEx.Player.GetComponent<BaseStats>();
+        //_playerStats = Managers.GameManagerEx.Player.GetComponent<BaseStats>();
     }
 
 

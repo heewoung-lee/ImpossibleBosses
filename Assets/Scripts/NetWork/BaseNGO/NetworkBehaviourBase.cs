@@ -45,10 +45,6 @@ public abstract class NetworkBehaviourBase : NetworkBehaviour
         _bindDictionary.Add(typeof(T), objects);
     }
 
-    protected void SetSortingOrder(int soringOrder)
-    {
-        gameObject.GetComponent<Canvas>().sortingOrder = soringOrder;
-    }
 
 
     private Object[] FindObjects<T>(Object[] objects, int startIndex, int endIndex, string[] names) where T : Object

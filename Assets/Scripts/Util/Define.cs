@@ -8,6 +8,15 @@ public class Define
     public static readonly Quaternion DEFAULT_QUARTERVIEW_ROTATION = Quaternion.Euler(new Vector3(45, 0, 0));
     public const string APPLICATIONNAME = "ItemDataSheet";
 
+
+    public enum SpecialSortingOrder
+    {
+        DragImage = 30,
+        Description = 50,
+        LoadingScreen = 70,
+        LoadingPanel = 100,
+
+    }
     public enum PlayerClass
     {
         Archer,

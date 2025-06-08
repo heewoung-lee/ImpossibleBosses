@@ -17,7 +17,7 @@ public class UI_ItemDragImage : UI_Scene
     void Start()
     {
         _itemDragImage = Utill.FindChild<Image>(gameObject, "ItemDragImage");
-        GetComponent<Canvas>().sortingOrder = 50;
+        SetSortingOrder((int)Define.SpecialSortingOrder.DragImage);
         _itemDragImage.gameObject.SetActive(false);
     }
     public void SetImageSprite(Sprite sprite)
