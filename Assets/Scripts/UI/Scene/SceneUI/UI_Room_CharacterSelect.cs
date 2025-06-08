@@ -14,15 +14,15 @@ using UnityEngine.UI;
 
 struct ReadyButtonImages
 {
-   public Sprite readyButtonImage;
-   public string readyButtonText;
-   public Color readyButtonTextColor;
+    public Sprite readyButtonImage;
+    public string readyButtonText;
+    public Color readyButtonTextColor;
 }
 
 public class UI_Room_CharacterSelect : UI_Scene
 {
     private const int MAX_PLAYER_COUNT = 8;
-   
+
     enum readyButtonStateEnum
     {
         cancelState,
@@ -82,7 +82,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             await BacktoLobby();
         });
         _loadingPanel = Get<GameObject>((int)GameObjects.LoadingPanel);
-        
+
         _ui_RoomPlayerFrames = new UI_RoomPlayerFrame[MAX_PLAYER_COUNT];
         for (int index = 0; index < _ui_RoomPlayerFrames.Length; index++)
         {
@@ -216,20 +216,20 @@ public class UI_Room_CharacterSelect : UI_Scene
         if (_netWorkManager.IsHost)
         {
             GameObject characterSelector = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_UI_Character_Select_Rect");
-            characterSelector = SetPositionCharacterSelector(characterSelector,playerIndex);
+            characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
             if (characterSelector.GetComponent<NetworkObject>().IsOwner)
             {
-                _chracterSelectorNGO =  characterSelector.GetComponent<CharacterSelectorNGO>();    
+                _chracterSelectorNGO = characterSelector.GetComponent<CharacterSelectorNGO>();
             }
         }
     }
 
 
 
-    private GameObject SetPositionCharacterSelector(GameObject characterSelector,ulong playerIndex)
+    private GameObject SetPositionCharacterSelector(GameObject characterSelector, ulong playerIndex)
     {
-        int playerframeindex = 0; 
-        for (int i = 0; i< _ui_RoomPlayerFrames.Length; i++)
+        int playerframeindex = 0;
+        for (int i = 0; i < _ui_RoomPlayerFrames.Length; i++)
         {
             if (_ui_RoomPlayerFrames[i].ChracterSelectorNGO == null)
             {
@@ -245,10 +245,10 @@ public class UI_Room_CharacterSelect : UI_Scene
         Vector2 frame_size = GetUISize(targetFrame);
         Vector2 frame_screenPos = GetUIScreenPosition(targetFrame_Rect);
 
-        GameObject character_Rect = 
+        GameObject character_Rect =
             Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex, characterSelector, frame_screenPos, destroyOption: true);
 
-        if(_ngo_UI_Root_Character_Select == null)
+        if (_ngo_UI_Root_Character_Select == null)
         {
             Spawn_Character_Select_Event += SetParentPosition;
         }
@@ -272,20 +272,22 @@ public class UI_Room_CharacterSelect : UI_Scene
     {
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, ClientLoadedEvent, AllPlayerLoadedEvent);
+        Managers.SceneManagerEx.OnClientLoadedEvent += ClientLoadedEvent;
+        Managers.SceneManagerEx.OnAllPlayerLoadedEvent += AllPlayerLoadedEvent;
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
 
         void ClientLoadedEvent(ulong clientId)
         {
             Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
-            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene+"씬네임"+"플레이어 ID"+clientId);
+            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene + "씬네임" + "플레이어 ID" + clientId);
         }
 
         void AllPlayerLoadedEvent()
         {
             PlayScene playScene = null;
-            foreach(BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
+            foreach (BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
             {
-                if(scene is PlayScene outPlayScene)
+                if (scene is PlayScene outPlayScene)
                 {
                     playScene = outPlayScene;
                     break;
@@ -308,5 +310,5 @@ public class UI_Room_CharacterSelect : UI_Scene
         _button_Text.text = buttonimages.readyButtonText;
         _button_Text.color = buttonimages.readyButtonTextColor;
     }
-    
+
 }

@@ -16,7 +16,8 @@ public class GamePlaySceneMover : ISceneMover
             return;
 
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene, null, SetPlayerPostion);
+        Managers.SceneManagerEx.OnAllPlayerLoadedEvent += SetPlayerPostion;
+        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
         Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
 
         void SetPlayerPostion()
