@@ -79,7 +79,7 @@ public class UI_Player_Inventory : UI_Popup
 
         _initialWindowPosition = (_equipMent.transform as RectTransform).localPosition;
 
-        _itemInventoryTr = Utill.FindChild<InventoryContentCoordinate>(gameObject,null,true).transform;
+        _itemInventoryTr = Utill.FindChild<InventoryContentCoordinate>(gameObject, null, true).transform;
         _inventoryCanvas = GetComponent<Canvas>();
 
         _ui_inventory_Raycaster = GetComponent<GraphicRaycaster>();
@@ -163,6 +163,7 @@ public class UI_Player_Inventory : UI_Popup
         }
         Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;
+
     }
     protected override void OnDisableInit()
     {
@@ -175,7 +176,7 @@ public class UI_Player_Inventory : UI_Popup
         CloseDecriptionWindow();
     }
 
-  
+
     private void SubscribePlayerEvent()
     {
         _stat.CurrentHPValueChangedEvent += UpdateCurrentHPValue;

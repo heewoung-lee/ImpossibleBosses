@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 public class UI_BufferBar : UI_Scene,ISceneChangeBehaviour
@@ -19,18 +20,20 @@ public class UI_BufferBar : UI_Scene,ISceneChangeBehaviour
     {
         base.AwakeInit();
     }
-    private void OnEnable()
+
+
+    protected override void OnEnableInit()
     {
+        base.OnEnableInit();
         Managers.SceneManagerEx.OnBeforeSceneUnloadLocalEvent += OnBeforeSceneUnload;
     }
 
-    private void OnDisable()
+    protected override void OnDisableInit()
     {
+        base.OnDisableInit();
         Managers.SceneManagerEx.OnBeforeSceneUnloadLocalEvent -= OnBeforeSceneUnload;
+
     }
-
-
-
     protected override void StartInit()
     {
         Bind<Transform>(typeof(BufferContextTr));

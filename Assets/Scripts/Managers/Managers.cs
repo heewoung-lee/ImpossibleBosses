@@ -51,7 +51,10 @@ public class Managers : MonoBehaviour
 
     private ResourceManager _resourceManager = new ResourceManager();
     public static ResourceManager ResourceManager { get => Instance._resourceManager; }
-    
+
+    private SceneDataSaveAndLoader _sceneDataSaveAndLoader = new SceneDataSaveAndLoader();
+    public static SceneDataSaveAndLoader SceneDataSaveAndLoader { get => Instance._sceneDataSaveAndLoader; }
+
     private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
     public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
 

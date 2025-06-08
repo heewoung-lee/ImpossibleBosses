@@ -11,6 +11,7 @@ public class Module_UI_Player_Inventory : MonoBehaviour
         _switch_Inventory_UI = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
         _switch_Inventory_UI.Enable();
         _inventory_UI = Managers.UI_Manager.GetPopupUIFromResource<UI_Player_Inventory>();
+
     }
 
     private void OnEnable()

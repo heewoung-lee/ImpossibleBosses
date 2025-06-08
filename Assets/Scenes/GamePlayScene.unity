@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTest: 1
-  isSoloTest: 1
+  isSoloTest: 0
 --- !u!4 &1701164430
 Transform:
   m_ObjectHideFlags: 0
@@ -980,6 +980,18 @@ PrefabInstance:
     - target: {fileID: 7558915786823973334, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647196974527708776, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647196974527708776, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647196974527708776, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.28
       objectReference: {fileID: 0}
     - target: {fileID: 7738751083157130159, guid: 9b11c36cab9e7b14fa433d9d65d27fda, type: 3}
       propertyPath: m_LocalPosition.y

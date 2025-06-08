@@ -15,9 +15,9 @@ public class BattleSceneMover : ISceneMover
             return;
 
 
-        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
         Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene, null, SetPostion);
+        Managers.RelayManager.NGO_RPC_Caller.ResetManagersRpc();
 
 
         void SetPostion()

@@ -85,7 +85,6 @@ public class ItemDataManager : IManagerInitializable
         Type randomType = _itemDataType[Random.Range(0, _itemDataType.Count)];
         return GetRandomItem(randomType);
     }
-
     private IDictionary BindImageSources(IDictionary missingImageItemsDict)
     {
         IDictionary itemDict;

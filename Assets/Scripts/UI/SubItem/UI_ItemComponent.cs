@@ -259,4 +259,15 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _imageSource = iteminfo.ImageSource;
         _iteminfo = iteminfo;//다른 클래스들이 형변환을 쉽게 하기 위해 인터페이스를 저장
     }
+
+
+    public virtual void SetINewteminfo(IteminfoStruct iteminfo)
+    {
+        _itemNumber = iteminfo.ItemNumber;
+        _itemType = iteminfo.Item_Type;
+        _item_Grade = iteminfo.Item_Grade_Type;
+        _Itemeffects = iteminfo.ItemEffects;
+        _itemName = iteminfo.ItemName;
+        _descriptionText = iteminfo.DescriptionText;
+    }
 }

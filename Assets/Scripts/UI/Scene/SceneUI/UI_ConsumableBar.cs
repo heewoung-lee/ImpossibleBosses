@@ -67,7 +67,6 @@ public class UI_ConsumableBar : UI_Scene
 
     protected override void AwakeInit()
     {
-        Debug.Log("여기 울리지 않음?");
         base.AwakeInit();
         InitalizeConsumable();
     }

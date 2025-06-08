@@ -20,8 +20,9 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected EquipSlotTrInfo _equipSlot;
     protected Image _backGroundImage;
     protected Image _itemGradeBorder;
-    protected bool _isEquipped = false;
+    private bool _isEquipped = false;
 
+    public bool IsEquipped => _isEquipped;
 
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
@@ -48,6 +49,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         _eventSystem = _inventory_UI.EventSystem;
 
         _itemGradeBorder.sprite = Managers.ItemDataManager.ItemGradeBorder[_item_Grade];
+
     }
 
     public void SetItemEquipedState(bool isEquiped)
