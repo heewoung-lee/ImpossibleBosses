@@ -37,7 +37,10 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
         {
             if(_ownerPlayerStats == null )
             {
-                _ownerPlayerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+                if (Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out PlayerStats stats) == true)
+                {
+                    _ownerPlayerStats = stats;
+                }
             }
             return _ownerPlayerStats;
         }

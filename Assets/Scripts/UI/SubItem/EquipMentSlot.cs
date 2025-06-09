@@ -23,7 +23,10 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         {
             if(_playerStats == null)
             {
-                _playerStats = Managers.GameManagerEx.Player.GetComponent<BaseStats>();
+                if(Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
+                {
+                    _playerStats = stats;
+                }
             }
             return _playerStats;
         }
@@ -61,9 +64,9 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
             IsEquipped = false;//이전 아이템으로 능력치 빼기
 
             UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
-            currentEquipItem.transform.SetParent(contentofInventoryTr);
+            currentEquipItem.transform.SetParent(null);
             currentEquipItem.SetItemEquipedState(false);//능력치 제거
-        }
+        } 
     }
 
     private void ApplyItemEffects()
@@ -110,7 +113,6 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         _player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         contentofInventoryTr = _player_Inventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
 
-        
         if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
         {
             IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
