@@ -37,5 +37,6 @@ public class Module_UI_Player_Inventory : MonoBehaviour
     public void Switch_Inventoy(InputAction.CallbackContext context)
     {
         Managers.UI_Manager.SwitchPopUpUI(_inventory_UI);
+        
     }
 }

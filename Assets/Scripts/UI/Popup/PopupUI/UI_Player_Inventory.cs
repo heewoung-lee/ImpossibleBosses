@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Player_Inventory : UI_Popup
+public class UI_Player_Inventory : UI_Popup, IPopupHandler
 {
     private PlayerStats _ownerPlayerStats;
     private TMP_Text _playerName;
@@ -19,7 +19,7 @@ public class UI_Player_Inventory : UI_Popup
     private GameObject _equipMent;
     private Transform _windowPanel;
     private Canvas _inventoryCanvas;
-
+    
     private Vector3 _initialEquipPosition;
     private Vector2 _initialMousePosition;
     private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
@@ -28,13 +28,9 @@ public class UI_Player_Inventory : UI_Popup
 
     private GraphicRaycaster _ui_inventory_Raycaster;
     private EventSystem _eventSystem;
-
     public Transform ItemInventoryTr => _itemInventoryTr;
     public GraphicRaycaster UI_Inventory_RayCaster=> _ui_inventory_Raycaster;
     public EventSystem EventSystem => _eventSystem;
-    public Transform InventoryOnwer => _ownerPlayerStats.transform;
-
-
     public PlayerStats OwnerPlayerStats
     {
         get
@@ -47,7 +43,8 @@ public class UI_Player_Inventory : UI_Popup
         }
     }
 
-    
+    public bool IsVisible => _inventoryCanvas.enabled;
+
     enum Equipment_Go
     {
         Equipment
@@ -134,9 +131,9 @@ public class UI_Player_Inventory : UI_Popup
         UpdateStats();
         UpdateGoldUI(OwnerPlayerStats.Gold);
 
+        ClosePopup();
+        //아이템을 로드하기 위해 게임오브젝트는 켜두는데 캔버스만 꺼둠.
 
-        //TODO: 
-        Managers.UI_Manager.ClosePopupUI(this);
     }
 
     private void UpdatePlayerLevelAndNickName(CharacterBaseStat stat)
@@ -235,4 +232,13 @@ public class UI_Player_Inventory : UI_Popup
         _defense_Stat_Text.text = defence.ToString();
     }
 
+    public void ShowPopup()
+    {
+      _inventoryCanvas.enabled = true;
+    }
+
+    public void ClosePopup()
+    {
+        _inventoryCanvas.enabled = false;
+    }
 }
