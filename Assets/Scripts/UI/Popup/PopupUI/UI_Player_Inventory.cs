@@ -133,6 +133,9 @@ public class UI_Player_Inventory : UI_Popup
         }, Define.UI_Event.Drag);
         UpdateStats();
         UpdateGoldUI(OwnerPlayerStats.Gold);
+
+
+        //TODO: 
         Managers.UI_Manager.ClosePopupUI(this);
     }
 

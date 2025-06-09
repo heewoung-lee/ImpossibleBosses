@@ -7,6 +7,12 @@ public class UI_ItemDragImage : UI_Scene
 {
     private Image _itemDragImage;
 
+    enum Images
+    {
+        ItemDragImage
+    }
+
+
     public bool IsDragImageActive
     {
         get
@@ -14,9 +20,11 @@ public class UI_ItemDragImage : UI_Scene
             return _itemDragImage.IsActive();
         }
     }
-    void Start()
+    void Awake()
     {
-        _itemDragImage = Utill.FindChild<Image>(gameObject, "ItemDragImage");
+        Bind<Image>(typeof(Images));
+
+        _itemDragImage = Get<Image>((int)Images.ItemDragImage);
         SetSortingOrder((int)Define.SpecialSortingOrder.DragImage);
         _itemDragImage.gameObject.SetActive(false);
     }

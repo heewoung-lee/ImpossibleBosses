@@ -62,7 +62,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
 
             UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
             currentEquipItem.transform.SetParent(contentofInventoryTr);
-            currentEquipItem.SetItemEquipedState(false);
+            currentEquipItem.SetItemEquipedState(false);//능력치 제거
         }
     }
 
@@ -110,29 +110,16 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         _player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         contentofInventoryTr = _player_Inventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
 
-    }
-
-
-    private void Awake()
-    {
-        LoadItemsAfterSceneChange();
-    }
-    private void LoadItemsAfterSceneChange()
-    {
-
-        if (Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType, out UI_ItemComponent_Inventory equipItem) == true)
+        
+        if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
         {
-            if((equipItem is UI_ItemComponent_Equipment equipment) == true)
-            {
-                gameObject.SetActive(true);
-                equipment.EquipItemToSlot(slotType);
-                gameObject.SetActive(false);
-
-            }
+            IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
+            UI_ItemComponent_Equipment equipItem = item.MakeInventoryItemComponent() as UI_ItemComponent_Equipment;
+            equipItem.SetINewteminfo(iteminfo);
+            equipItem.OnAfterStart += () => { equipItem.EquipItem(); };
+            
         }
     }
-
-
 
 
     public void ItemEquip(UI_ItemComponent_Inventory itemComponent)
