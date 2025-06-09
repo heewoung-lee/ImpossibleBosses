@@ -133,10 +133,6 @@ public class UI_Player_Inventory : UI_Popup
         }, Define.UI_Event.Drag);
         UpdateStats();
         UpdateGoldUI(OwnerPlayerStats.Gold);
-        UpdatePlayerLevelAndNickName(OwnerPlayerStats.CharacterBaseStats);
-
-
-        Debug.Log("여기까진 다 왔겠지?");
         Managers.UI_Manager.ClosePopupUI(this);
     }
 
@@ -194,6 +190,8 @@ public class UI_Player_Inventory : UI_Popup
         OwnerPlayerStats.AttackValueChangedEvent += UpdateAttackValue;
         OwnerPlayerStats.DefenceValueChangedEvent += UpdatedefenceValue;
         OwnerPlayerStats.PlayerHasGoldChangeEvent += UpdateGoldUI;
+        OwnerPlayerStats.Done_Base_Stats_Loading += UpdatePlayerLevelAndNickName;
+
     }
     private void DeSubscribePlayerEvent()
     {
@@ -202,6 +200,8 @@ public class UI_Player_Inventory : UI_Popup
         OwnerPlayerStats.AttackValueChangedEvent -= UpdateAttackValue;
         OwnerPlayerStats.DefenceValueChangedEvent -= UpdatedefenceValue;
         OwnerPlayerStats.PlayerHasGoldChangeEvent -= UpdateGoldUI;
+        OwnerPlayerStats.Done_Base_Stats_Loading -= UpdatePlayerLevelAndNickName;
+
     }
     public void UpdateStats()
     {
