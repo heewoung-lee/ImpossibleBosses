@@ -65,14 +65,14 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action, IBossAnimationC
                 string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
                 SpawnParamBase param = SpawnParamBase.Create(argFloat:1f);
                 Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath, param);
-                #region 5.6ÀÏ ÆÄÆ¼Å¬ ½ºÆù¹æ½Ä ¼öÁ¤
+                #region 5.6ì¼ íŒŒí‹°í´ ìŠ¤í°ë°©ì‹ ìˆ˜ì •
                 //foreach (var pos in _attackRangeParticlePos)
                 //{
                 //    Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/AttackEffect/Dust_Paticle", pos, 1f);
-                //} 5.6ÀÏ Update ÀÌÀü ÆÄÆ¼Å¬µéÀº ³×Æ®¿öÅ© ½ºÆù + ³×Æ®¿öÅ© ¿ÀºêÁ§Æ® Ç®¸µÀ¸·Î ÃÖÀûÈ­¸¦ Çß´Âµ¥
-                // ¸¹Àº ¿ÀºêÁ§Æ® Ç®¸µÀ» ³×Æ®¿öÅ©·Î ÇÏ´Ùº¸´Ï, ³×Æ®¿öÅ©¿¡ °úºÎÇÏ°¡ °É¸²
-                // ÇØ°á¹æ¹İÀ¸·Î RPC_Caller¿¡°Ô ½ºÆùÇÒ ¿ÀºêÁ§Æ® °æ·Î,À§Ä¡,°øÅë ÆÄ¶ó¹ÌÅÍ¸¸ º¸³»°í
-                // RPC_Caller´Â ISpawnBehaviorÀÎÅÍÆäÀÌ½º¸¦ »ó¼Ó¹ŞÀº ¿ÀºêÁ§Æ®¸¦ ½ºÆùÇÏ°Ô²û ¼öÁ¤
+                //} 5.6ì¼ Update ì´ì „ íŒŒí‹°í´ë“¤ì€ ë„¤íŠ¸ì›Œí¬ ìŠ¤í° + ë„¤íŠ¸ì›Œí¬ ì˜¤ë¸Œì íŠ¸ í’€ë§ìœ¼ë¡œ ìµœì í™”ë¥¼ í–ˆëŠ”ë°
+                // ë§ì€ ì˜¤ë¸Œì íŠ¸ í’€ë§ì„ ë„¤íŠ¸ì›Œí¬ë¡œ í•˜ë‹¤ë³´ë‹ˆ, ë„¤íŠ¸ì›Œí¬ì— ê³¼ë¶€í•˜ê°€ ê±¸ë¦¼
+                // í•´ê²°ë°©ë°˜ìœ¼ë¡œ RPC_Callerì—ê²Œ ìŠ¤í°í•  ì˜¤ë¸Œì íŠ¸ ê²½ë¡œ,ìœ„ì¹˜,ê³µí†µ íŒŒë¼ë¯¸í„°ë§Œ ë³´ë‚´ê³ 
+                // RPC_CallerëŠ” ISpawnBehaviorì¸í„°í˜ì´ìŠ¤ë¥¼ ìƒì†ë°›ì€ ì˜¤ë¸Œì íŠ¸ë¥¼ ìŠ¤í°í•˜ê²Œë” ìˆ˜ì •
                 #endregion
                 TargetInSight.AttackTargetInSector(_stats);
                 _hasSpawnedParticles = true;
@@ -93,7 +93,7 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action, IBossAnimationC
 
             CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addIndicatorAddDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo,Managers.RelayManager.GetNetworkObject(_indicator_controller.gameObject));
-            //È£½ºÆ®°¡ pretime »Ì¾Æ¼­ ¸ğµç Å¬¶óÀÌ¾ğÆ® µé¿¡°Ô ´øÁ®¾ßÇÔ.
+            //í˜¸ìŠ¤íŠ¸ê°€ pretime ë½‘ì•„ì„œ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ ë“¤ì—ê²Œ ë˜ì ¸ì•¼í•¨.
         }
     }
 

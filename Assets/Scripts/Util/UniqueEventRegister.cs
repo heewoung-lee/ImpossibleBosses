@@ -7,7 +7,7 @@ public static class UniqueEventRegister
 {
     public static void AddSingleEvent<T>(ref T eventSource,T toaddEvent, [CallerMemberName] string callerName = "") where T : Delegate
     {
-        //ActionÀÌ ³ÎÀÌ ¾Æ´Ï°í ÀÌ¹Ì action¿¡ µé¾î°¡ ÀÖ´Â µ¨¸®°ÔÀÌÆ® ¶ó¸é ¹İÈ¯
+        //Actionì´ ë„ì´ ì•„ë‹ˆê³  ì´ë¯¸ actionì— ë“¤ì–´ê°€ ìˆëŠ” ë¸ë¦¬ê²Œì´íŠ¸ ë¼ë©´ ë°˜í™˜
         if (eventSource != null && eventSource.GetInvocationList().Contains(toaddEvent) == true)
         {
             Debug.Log($"{callerName} is already registered");

@@ -48,7 +48,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         CombineConsumableItems();
     }
 
-    public bool CombineConsumableItems(Transform parentTr = null)//¼Òºñ ¾ÆÀÌÅÛ Á¾·ù¶ó¸é °°Àº ¼Òºñ¾ÆÀÌÅÛÀ» Ãß°¡ ÇÒ¶§ ÀÌ¹Ì ÀÖ´Â ¹°¾àÀÌ ÀÖ´Â °æ¿ì Ãß°¡ÇÏ±â.
+    public bool CombineConsumableItems(Transform parentTr = null)//ì†Œë¹„ ì•„ì´í…œ ì¢…ë¥˜ë¼ë©´ ê°™ì€ ì†Œë¹„ì•„ì´í…œì„ ì¶”ê°€ í• ë•Œ ì´ë¯¸ ìˆëŠ” ë¬¼ì•½ì´ ìˆëŠ” ê²½ìš° ì¶”ê°€í•˜ê¸°.
     {
         Transform searchingTr = parentTr;
         if (parentTr == null)
@@ -76,15 +76,15 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
     public override void ItemRightClick(PointerEventData eventdata)
     {
         base.ItemRightClick(eventdata);
-        //ÀåÂøÁßÀÌ ¾Æ´Ï¶ó¸é ½½·Ô¿¡ ³Ö°í
-        //ÀåÂøÁßÀÌ¶ó¸é ¾ÆÀÌÅÛÃ¢¿¡ µ¹·Á³õ°í
-        if (IsEquipped == false) // ¾ÆÀÌÅÛÀÌ ÀåÂøÁßÀÌ ¾Æ´Ï¶ó¸é ÀåÂøÇÏ´Â ·ÎÁ÷ ¼öÇà
+        //ì¥ì°©ì¤‘ì´ ì•„ë‹ˆë¼ë©´ ìŠ¬ë¡¯ì— ë„£ê³ 
+        //ì¥ì°©ì¤‘ì´ë¼ë©´ ì•„ì´í…œì°½ì— ëŒë ¤ë†“ê³ 
+        if (IsEquipped == false) // ì•„ì´í…œì´ ì¥ì°©ì¤‘ì´ ì•„ë‹ˆë¼ë©´ ì¥ì°©í•˜ëŠ” ë¡œì§ ìˆ˜í–‰
         {
             ItemConsumable consumable = _iteminfo as ItemConsumable;
             ConsumableItemEquip(this);
 
         }
-        else// ÀåÂøÁßÀÌ¶ó¸é ÀåÂøÇØÁ¦
+        else// ì¥ì°©ì¤‘ì´ë¼ë©´ ì¥ì°©í•´ì œ
         {
             gameObject.transform.SetParent(_contentofInventoryTr);
             SetItemEquipedState(false);
@@ -95,17 +95,17 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
     public void ConsumableItemEquip(UI_ItemComponent_Consumable itemcomponent)
     {
         bool isCheckCombine = false;
-        CloseDescription();//¶°ÀÖ´Â ¾ÆÀÌÅÛ ¼³¸íÃ¢ ´İ±â
+        CloseDescription();//ë– ìˆëŠ” ì•„ì´í…œ ì„¤ëª…ì°½ ë‹«ê¸°
 
         foreach (Transform parentTr in _consumableBar.FrameTrs)
         {
             if (isCheckCombine = CombineConsumableItems(parentTr))
                 return;
         }
-        //¼ÒºñÃ¢¿¡ °°Àº ¹°¾àÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
-        //°°Àº ¹°¾àÀÌ ÀÖÀ» °æ¿ì, °¹¼ö¸¦ ´õÇÏ°í ÇÏ³ª·Î ÇÕÄ£´Ù.
-        //ÀüºÎ µÑ·¯º¸¾Ò´Âµ¥µµ, °°Àº ¹°¾àÀÌ ¾ø´Ù¸é, ºñ¾îÀÖ´Â ¼ÒºñÃ¢À» È®ÀÎ
-        //ºñ¾îÀÖ´Â ¼ÒºñÃ¢¿¡ ¹°¾àÀ» ³Ö´Â´Ù.
+        //ì†Œë¹„ì°½ì— ê°™ì€ ë¬¼ì•½ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
+        //ê°™ì€ ë¬¼ì•½ì´ ìˆì„ ê²½ìš°, ê°¯ìˆ˜ë¥¼ ë”í•˜ê³  í•˜ë‚˜ë¡œ í•©ì¹œë‹¤.
+        //ì „ë¶€ ë‘˜ëŸ¬ë³´ì•˜ëŠ”ë°ë„, ê°™ì€ ë¬¼ì•½ì´ ì—†ë‹¤ë©´, ë¹„ì–´ìˆëŠ” ì†Œë¹„ì°½ì„ í™•ì¸
+        //ë¹„ì–´ìˆëŠ” ì†Œë¹„ì°½ì— ë¬¼ì•½ì„ ë„£ëŠ”ë‹¤.
         for (int i = 0; i < _consumableBar.FrameTrs.Length; i++)
         {
             if (_consumableBar.FrameTrs[i].childCount < 1)
@@ -119,33 +119,33 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
 
     protected override void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult)
     {
-        //µå·¡±× ½Ã UI½½·Ô ±ÙÃ³·Î µå¶øÇÑ´Ù¸é ½½·Ô¿¡ ³¢¿öÁö±â
-        //µå·¡±× ½Ã UI¹Û¿¡ µå¶øÀ» ÇÑ´Ù¸é ¾ÆÀÌÅÛÀÌ ¶³¾îÁöµµ·Ï
-        //µå·¡±× ½Ã ±×¿ÜÁö¿ª¿¡¼­ µå¶øÇÑ´Ù¸é ´Ù½Ã ¾ÆÀÌÅÛÃ¢À¸·Î°¡±â
+        //ë“œë˜ê·¸ ì‹œ UIìŠ¬ë¡¯ ê·¼ì²˜ë¡œ ë“œëí•œë‹¤ë©´ ìŠ¬ë¡¯ì— ë¼ì›Œì§€ê¸°
+        //ë“œë˜ê·¸ ì‹œ UIë°–ì— ë“œëì„ í•œë‹¤ë©´ ì•„ì´í…œì´ ë–¨ì–´ì§€ë„ë¡
+        //ë“œë˜ê·¸ ì‹œ ê·¸ì™¸ì§€ì—­ì—ì„œ ë“œëí•œë‹¤ë©´ ë‹¤ì‹œ ì•„ì´í…œì°½ìœ¼ë¡œê°€ê¸°
 
         foreach (RaycastResult uiResult in uiraycastResult)
         {
             if (uiResult.gameObject.tag == "ConsumableSlot" && _iteminfo is ItemConsumable)
             {
-                foreach (Transform frameTr in _consumableBar.FrameTrs)//°°Àº Á¾·ùÀÇ ¾ÆÀÌÅÛÀÌ ÀÖ´ÂÁö ¸ÕÀú Ã¼Å©
+                foreach (Transform frameTr in _consumableBar.FrameTrs)//ê°™ì€ ì¢…ë¥˜ì˜ ì•„ì´í…œì´ ìˆëŠ”ì§€ ë¨¼ì € ì²´í¬
                 {
                     if (frameTr.gameObject.TryGetComponentInChildren(out UI_ItemComponent_Consumable ui_consumableItem))
                     {
                         if (ui_consumableItem.ItemNumber != _iteminfo.ItemNumber)
                             continue;
 
-                        CombineConsumableItems(frameTr);//°°´Ù¸é ¼ö·®À» Ã¤¿öÁØ´Ù.
+                        CombineConsumableItems(frameTr);//ê°™ë‹¤ë©´ ìˆ˜ëŸ‰ì„ ì±„ì›Œì¤€ë‹¤.
                         break;
                     }
                 }
 
-                if (uiResult.gameObject.TryGetComponentInChildren(out UI_ItemComponent_Consumable ui_alreadyitem)//½½·Ô³¢¸®ÀÇ ½º¿ÒÀ» ÇÑ´Ù¸é
+                if (uiResult.gameObject.TryGetComponentInChildren(out UI_ItemComponent_Consumable ui_alreadyitem)//ìŠ¬ë¡¯ë¼ë¦¬ì˜ ìŠ¤ì™‘ì„ í•œë‹¤ë©´
                     && ui_alreadyitem.ItemNumber != _iteminfo.ItemNumber)
                 {
                     AttachItemToSlot(ui_alreadyitem.gameObject, transform.parent);
                 }
 
-                AttachItemToSlot(gameObject, uiResult.gameObject.transform);//Ä­ÀÌ ºñ¾îÀÖ´Ù¸é ¼³Á¤
+                AttachItemToSlot(gameObject, uiResult.gameObject.transform);//ì¹¸ì´ ë¹„ì–´ìˆë‹¤ë©´ ì„¤ì •
                 break;
             }
 

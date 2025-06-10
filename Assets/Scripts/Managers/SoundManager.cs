@@ -11,18 +11,18 @@ public class SoundManager : IManagerInitializable,IManagerIResettable
     Dictionary<string,AudioClip> _sfxDictionnary = new Dictionary<string,AudioClip>();
 
 
-    //Init()À¸·Î ÇöÀç ¾À¿¡¼­ @Sound ¸Å´ÏÀú°¡ ÀÖ´ÂÁö È®ÀÎ.
-    //¾ø´Ù¸é »õ·Î ¸¸µé°í ´Ù¸¥¾À¿¡¼­µµ ¾È ºÎ¼ÅÁö°Ô²û ¼³Á¤
+    //Init()ìœ¼ë¡œ í˜„ìž¬ ì”¬ì—ì„œ @Sound ë§¤ë‹ˆì €ê°€ ìžˆëŠ”ì§€ í™•ì¸.
+    //ì—†ë‹¤ë©´ ìƒˆë¡œ ë§Œë“¤ê³  ë‹¤ë¥¸ì”¬ì—ì„œë„ ì•ˆ ë¶€ì…”ì§€ê²Œë” ì„¤ì •
 
-    //¿Àµð¿À¼Ò½º ¹è¿­À» ¸¸µé¾î ÇÏ³ª´Â BGM¿ëÀ¸·Î
-    //³ª¸ÓÁö ÇÏ³ª´Â ÀÌÆåÆ®¿ëÀ¸·Î ¸¸µë
+    //ì˜¤ë””ì˜¤ì†ŒìŠ¤ ë°°ì—´ì„ ë§Œë“¤ì–´ í•˜ë‚˜ëŠ” BGMìš©ìœ¼ë¡œ
+    //ë‚˜ë¨¸ì§€ í•˜ë‚˜ëŠ” ì´íŽ™íŠ¸ìš©ìœ¼ë¡œ ë§Œë“¬
 
-    //¿Àµð¿ÀÅ¸ÀÔ¿¡ ´ëÇÑ ÀÌ¸§À» °¡Á®¿ÂµÚ
-    //@Sound°´Ã¼¿¡ ÀÚ½ÄÀ¸·Î
-    //BGM¿ë ÀÌ¸§ÀÇ °ÔÀÓ¿ÀºêÁ§Æ®¿Í
-    //ÀÌÆåÆ®¿ë °ÔÀÓ¿ÀºêÁ§Æ®¸¦ °¢°¢ ¸¸µé¾îÁÜ
+    //ì˜¤ë””ì˜¤íƒ€ìž…ì— ëŒ€í•œ ì´ë¦„ì„ ê°€ì ¸ì˜¨ë’¤
+    //@Soundê°ì²´ì— ìžì‹ìœ¼ë¡œ
+    //BGMìš© ì´ë¦„ì˜ ê²Œìž„ì˜¤ë¸Œì íŠ¸ì™€
+    //ì´íŽ™íŠ¸ìš© ê²Œìž„ì˜¤ë¸Œì íŠ¸ë¥¼ ê°ê° ë§Œë“¤ì–´ì¤Œ
 
-    //BGM¿ë »ç¿îµå´Â ¹Ýº¹Àç»ýÀ¸·Î ¼³Á¤
+    //BGMìš© ì‚¬ìš´ë“œëŠ” ë°˜ë³µìž¬ìƒìœ¼ë¡œ ì„¤ì •
 
 
     public void Init()

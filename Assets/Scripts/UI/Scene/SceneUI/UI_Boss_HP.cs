@@ -77,7 +77,7 @@ public class UI_Boss_HP : UI_Scene
 
         while(elapsedTime < duration)
         {
-            //Èê·¯°¡´Â °æ°ú½Ã°£
+            //í˜ëŸ¬ê°€ëŠ” ê²½ê³¼ì‹œê°„
             elapsedTime += Time.deltaTime * 3f;
             _hp_Slider.value = Mathf.Lerp(beforeHP, afterHp, elapsedTime);
             yield return null;

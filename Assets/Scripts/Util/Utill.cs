@@ -30,7 +30,7 @@ public class Utill
             case Item_Grade_Type.Magic:
                 return Color.green;
             case Item_Grade_Type.Rare:
-                return new Color(150 / 255f, 200 / 255f, 255 / 255f);//ÆÄ¶õ»ö;
+                return new Color(150 / 255f, 200 / 255f, 255 / 255f);//íŒŒë€ìƒ‰;
             case Item_Grade_Type.Unique:
                 return Color.red;
             case Item_Grade_Type.Epic:
@@ -46,7 +46,7 @@ public class Utill
 
         if (recursive == false)
         {
-            //Á¦ÀÏ ¹Ø¿¡ ÀÖ´Â ÀÚ½ÄÀ» Å½»öÇØ¼­ component¸¦ µ¹·ÁÁÖ¸é µÊ.
+            //ì œì¼ ë°‘ì— ìˆëŠ” ìì‹ì„ íƒìƒ‰í•´ì„œ componentë¥¼ ëŒë ¤ì£¼ë©´ ë¨.
             for (int i = 0; i < go.transform.childCount; i++)
             {
                 Transform child = go.transform.GetChild(i);
@@ -76,7 +76,7 @@ public class Utill
         List<T> list = new List<T>();
         if (recursive == false)
         {
-            //Á¦ÀÏ ¹Ø¿¡ ÀÖ´Â ÀÚ½ÄÀ» Å½»öÇØ¼­ component¸¦ µ¹·ÁÁÖ¸é µÊ.
+            //ì œì¼ ë°‘ì— ìˆëŠ” ìì‹ì„ íƒìƒ‰í•´ì„œ componentë¥¼ ëŒë ¤ì£¼ë©´ ë¨.
             for (int i = 0; i < go.transform.childCount; i++)
             {
                 Transform child = go.transform.GetChild(i);
@@ -133,15 +133,15 @@ public class Utill
         switch (itemGrade)
         {
             case Item_Grade_Type.Normal:
-                return "³ë¸Ö";
+                return "ë…¸ë©€";
             case Item_Grade_Type.Magic:
-                return "¸ÅÁ÷";
+                return "ë§¤ì§";
             case Item_Grade_Type.Rare:
-                return "·¹¾î";
+                return "ë ˆì–´";
             case Item_Grade_Type.Unique:
-                return "À¯´ÏÅ©";
+                return "ìœ ë‹ˆí¬";
             case Item_Grade_Type.Epic:
-                return "¿¡ÇÈ";
+                return "ì—í”½";
         }
 
         return "Unknown";
@@ -152,92 +152,92 @@ public class Utill
         switch (statType)
         {
             case StatType.MaxHP:
-                return "ÃÖ´ëÃ¼·Â";
+                return "ìµœëŒ€ì²´ë ¥";
             case StatType.CurrentHp:
-                return "Ã¼·Â";
+                return "ì²´ë ¥";
             case StatType.Attack:
-                return "°ø°İ·Â";
+                return "ê³µê²©ë ¥";
             case StatType.Defence:
-                return "¹æ¾î·Â";
+                return "ë°©ì–´ë ¥";
             case StatType.MoveSpeed:
-                return "ÀÌµ¿¼Óµµ";
+                return "ì´ë™ì†ë„";
         }
         return "Unknown";
     }
 
     public static bool IsAlphanumeric(string input)
     {
-        // ¿µ¹®°ú ¼ıÀÚ¸¸ Æ÷ÇÔµÈ ¹®ÀÚ¿­ÀÎÁö È®ÀÎ
+        // ì˜ë¬¸ê³¼ ìˆ«ìë§Œ í¬í•¨ëœ ë¬¸ìì—´ì¸ì§€ í™•ì¸
         return Regex.IsMatch(input, "^[A-Za-z0-9]+$");
     }
 
     //public static async Task<T> RateLimited<T>(Func<Task<T>> action, int millisecondsDelay = 1000)
     //{
     //    Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-    //    await Task.Delay(millisecondsDelay); // ´ë±â
-    //    return await action.Invoke(); // Àü´Ş¹ŞÀº ÀÛ¾÷ ½ÇÇà ¹× °á°ú ¹İÈ¯
+    //    await Task.Delay(millisecondsDelay); // ëŒ€ê¸°
+    //    return await action.Invoke(); // ì „ë‹¬ë°›ì€ ì‘ì—… ì‹¤í–‰ ë° ê²°ê³¼ ë°˜í™˜
     //}
     //public static async Task RateLimited(Func<Task> action, int millisecondsDelay = 1000)
     //{
     //    Debug.LogWarning($"Rate limit exceeded. Retrying in {millisecondsDelay / 1000} seconds...");
-    //    await Task.Delay(millisecondsDelay); // ´ë±â
-    //    await action.Invoke(); // Àü´Ş¹ŞÀº ÀÛ¾÷ ½ÇÇà ¹× °á°ú ¹İÈ¯
+    //    await Task.Delay(millisecondsDelay); // ëŒ€ê¸°
+    //    await action.Invoke(); // ì „ë‹¬ë°›ì€ ì‘ì—… ì‹¤í–‰ ë° ê²°ê³¼ ë°˜í™˜
     //}
 
     private static CancellationTokenSource _retryCts;
     private static CancellationTokenSource _retryCtsVoid;
     public static async Task<T> RateLimited<T>(Func<Task<T>> action, int delayMs = 1_000)
     {
-        // 1) ¸ÕÀú »õ CTS¸¦ ¸¸µç´Ù.
+        // 1) ë¨¼ì € ìƒˆ CTSë¥¼ ë§Œë“ ë‹¤.
         var newCts = new CancellationTokenSource();
 
-        // 2) ÀÌÀü CTS¸¦ ¿øÀÚÀûÀ¸·Î Ãë¼Ò¡¤Æó±âÇÏ°í
+        // 2) ì´ì „ CTSë¥¼ ì›ìì ìœ¼ë¡œ ì·¨ì†ŒÂ·íê¸°í•˜ê³ 
         var prevCts = Interlocked.Exchange(ref _retryCts, newCts);
         prevCts?.Cancel();
         prevCts?.Dispose();
 
         try
         {
-            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} seconds¡¦");
+            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} secondsâ€¦");
             await Task.Delay(delayMs, newCts.Token);
 
             return await action();
         }
         catch (TaskCanceledException)
         {
-            Debug.Log("RateLimited<T>: ÀÌÀü ¿¹¾àÀÌ Ãë¼ÒµÇ¾î ½ÇÇàÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.Log("RateLimited<T>: ì´ì „ ì˜ˆì•½ì´ ì·¨ì†Œë˜ì–´ ì‹¤í–‰í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             return default;
         }
         finally
         {
-            // ³»°¡ ¸¶Áö¸·À¸·Î µî·ÏÇÑ CTS¶ó¸é null ·Î ÃÊ±âÈ­
+            // ë‚´ê°€ ë§ˆì§€ë§‰ìœ¼ë¡œ ë“±ë¡í•œ CTSë¼ë©´ null ë¡œ ì´ˆê¸°í™”
             Interlocked.CompareExchange(ref _retryCts, null, newCts);
             newCts.Dispose();
         }
     }
 
     public static async Task RateLimited(Func<Task> action,int delayMs = 1_000)
-    {  // 1) ¸ÕÀú »õ CTS¸¦ ¸¸µç´Ù.
+    {  // 1) ë¨¼ì € ìƒˆ CTSë¥¼ ë§Œë“ ë‹¤.
         var newCts = new CancellationTokenSource();
 
-        // 2) ÀÌÀü CTS¸¦ ¿øÀÚÀûÀ¸·Î Ãë¼Ò¡¤Æó±âÇÏ°í
+        // 2) ì´ì „ CTSë¥¼ ì›ìì ìœ¼ë¡œ ì·¨ì†ŒÂ·íê¸°í•˜ê³ 
         var prevCts = Interlocked.Exchange(ref _retryCtsVoid, newCts);
         prevCts?.Cancel();
         prevCts?.Dispose();
 
         try
         {
-            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} seconds¡¦");
+            Debug.LogWarning($"Rate limit exceeded. Retrying in {delayMs / 1000} secondsâ€¦");
             await Task.Delay(delayMs, newCts.Token);
             await action();
         }
         catch (TaskCanceledException)
         {
-            Debug.Log("RateLimited<T>: ÀÌÀü ¿¹¾àÀÌ Ãë¼ÒµÇ¾î ½ÇÇàÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.Log("RateLimited<T>: ì´ì „ ì˜ˆì•½ì´ ì·¨ì†Œë˜ì–´ ì‹¤í–‰í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
         }
         finally
         {
-            // ³»°¡ ¸¶Áö¸·À¸·Î µî·ÏÇÑ CTS¶ó¸é null ·Î ÃÊ±âÈ­
+            // ë‚´ê°€ ë§ˆì§€ë§‰ìœ¼ë¡œ ë“±ë¡í•œ CTSë¼ë©´ null ë¡œ ì´ˆê¸°í™”
             Interlocked.CompareExchange(ref _retryCtsVoid, null, newCts);
             newCts.Dispose();
         }

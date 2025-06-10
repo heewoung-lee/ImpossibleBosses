@@ -59,7 +59,7 @@ public class PoolManager : IManagerInitializable,IManagerIResettable
                 popitem.transform.SetParent(Managers.SceneManagerEx.GetCurrentScene.transform);
 
 
-            popitem.transform.SetParent(parent);//parent°¡ NullÀÌ¶ó¸é BaseScene¿¡ ÇÏÀ§¿¡ ÀÖ´Â ÀÚ½ÄµéÀÌ ÀüºÎ ´Ù½Ã ºÎ¸ğ°¡ ¾ø°Ô µÇ¾î¹ö¸²
+            popitem.transform.SetParent(parent);//parentê°€ Nullì´ë¼ë©´ BaseSceneì— í•˜ìœ„ì— ìˆëŠ” ìì‹ë“¤ì´ ì „ë¶€ ë‹¤ì‹œ ë¶€ëª¨ê°€ ì—†ê²Œ ë˜ì–´ë²„ë¦¼
             popitem.IsUsing = true;
             popitem.gameObject.SetActive(true);
 

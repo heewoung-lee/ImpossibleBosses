@@ -8,7 +8,7 @@ public class Module_NPC_SHOP_Interaction : MonoBehaviour, IInteraction
 
     public bool CanInteraction => true;
 
-    public string InteractionName => "»óÀÎ";
+    public string InteractionName => "ìƒì¸";
 
     public Color InteractionNameColor => Color.white;
 

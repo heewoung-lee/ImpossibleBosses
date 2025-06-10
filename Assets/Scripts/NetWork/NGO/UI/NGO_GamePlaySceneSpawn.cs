@@ -20,7 +20,7 @@ public class NGO_GamePlaySceneSpawn : NetworkBehaviourBase
     {
         base.OnNetworkSpawn();
         HostSpawnObject();
-        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//³×Æ®¿öÅ© ¿ÀºêÁ§Æ® Ç®¸µ »ı¼º
+        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();//ë„¤íŠ¸ì›Œí¬ ì˜¤ë¸Œì íŠ¸ í’€ë§ ìƒì„±
     }
     private void HostSpawnObject()
     {
@@ -28,7 +28,7 @@ public class NGO_GamePlaySceneSpawn : NetworkBehaviourBase
             return;
         Managers.RelayManager.SpawnToRPC_Caller();
         Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
-        RequestSpawnToNPC(new List<(string, Vector3)>() //µ¥¹ÌÁö Å×½ºÆ®¿ë ´õ¹Ì Å¥ºê
+        RequestSpawnToNPC(new List<(string, Vector3)>() //ë°ë¯¸ì§€ í…ŒìŠ¤íŠ¸ìš© ë”ë¯¸ íë¸Œ
         {
            {("Prefabs/NPC/Damage_Test_Dummy",new Vector3(10f,0,-2.5f))}
         });

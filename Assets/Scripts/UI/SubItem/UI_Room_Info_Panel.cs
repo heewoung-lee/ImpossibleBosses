@@ -71,10 +71,10 @@ public class UI_Room_Info_Panel : UI_Base
             }
             catch (LobbyServiceException notFoundLobby) when(notFoundLobby.Message.Contains("lobby not found")) 
             {
-                string errorMsg = "¹æÀÌ ¾ø½À´Ï´Ù.";
+                string errorMsg = "ë°©ì´ ì—†ìŠµë‹ˆë‹¤.";
                 Debug.Log($"{errorMsg}");
                 Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                    .AlertSetText("¿À·ù",$"{errorMsg}")
+                    .AlertSetText("ì˜¤ë¥˜",$"{errorMsg}")
                     .AfterAlertEvent(async() =>
                     {
                         await Managers.LobbyManager.ReFreshRoomList();

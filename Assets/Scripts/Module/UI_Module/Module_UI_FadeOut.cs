@@ -26,7 +26,7 @@ public class Module_UI_FadeOut : MonoBehaviour
     {
         isPlayingFadeout = false;
         DoneFadeoutEvent?.Invoke();
-        // DisableµÉ ¶§ ÄÃ·¯¸¦ ¾ËÆÄ1·Î ÃÊ±âÈ­
+        // Disableë  ë•Œ ì»¬ëŸ¬ë¥¼ ì•ŒíŒŒ1ë¡œ ì´ˆê¸°í™”
         foreach (Graphic g in _graphics)
         {
             Color c = g.color;

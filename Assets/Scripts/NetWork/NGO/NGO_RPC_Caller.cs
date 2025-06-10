@@ -21,7 +21,7 @@ using Scene = UnityEngine.SceneManagement.Scene;
 
 public class NGO_RPC_Caller : NetworkBehaviour
 {
-    public const ulong INVALIDOBJECTID = ulong.MaxValue;//Å¸°Ù ¿ÀºêÁ§Æ®°¡ ÀÖ°í ¾ø°í¸¦ °¡·Á³»±â À§ÇÑ »ó¼ö
+    public const ulong INVALIDOBJECTID = ulong.MaxValue;//íƒ€ê²Ÿ ì˜¤ë¸Œì íŠ¸ê°€ ìˆê³  ì—†ê³ ë¥¼ ê°€ë ¤ë‚´ê¸° ìœ„í•œ ìƒìˆ˜
 
     private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -95,7 +95,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
-        //Debug.Log($"ÀÌÀü°ª{previousValue} ÀÌÈÄ°ª{newValue}");
+        //Debug.Log($"ì´ì „ê°’{previousValue} ì´í›„ê°’{newValue}");
         LoadedPlayerCountRpc();
     }
 
@@ -119,7 +119,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void Spawn_Loot_ItemRpc(IteminfoStruct itemStruct, Vector3 dropPosition, bool destroyOption = true, NetworkObjectReference addLootItemBehaviour = default)
     {
-        //¿©±â¿¡¼­ itemStruct¸¦ IItemÀ¸·Î º¯È¯
+        //ì—¬ê¸°ì—ì„œ itemStructë¥¼ IItemìœ¼ë¡œ ë³€í™˜
         GameObject networkLootItem = null;
         IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
         switch (itemStruct.Item_Type)
@@ -133,7 +133,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
             case ItemType.ETC:
                 break;
         }
-        //¿©±â¿¡¼­´Â ¾î¶² ¾ÆÀÌÅÛÀ» ½ºÆùÇÒ²«Áö ¾ÆÀÌÅÛÀÇ Çü»ó¸¸ °¡Á®¿Ã °Í.
+        //ì—¬ê¸°ì—ì„œëŠ” ì–´ë–¤ ì•„ì´í…œì„ ìŠ¤í°í• ê»€ì§€ ì•„ì´í…œì˜ í˜•ìƒë§Œ ê°€ì ¸ì˜¬ ê²ƒ.
         networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
         GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
         NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
@@ -153,7 +153,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             return;
         }
-        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false) // ¸¸¾à¿¡ ·çÆ®¾ÆÀÌÅÛÀÇ Çàµ¿µ¿ÀÛ¿¡ ´ëÇÑ ¿ÀºêÁ§Æ®°¡ ÀÖ´Ù¸é ¼³Á¤
+        if (addLootItemBehaviour.Equals(default(NetworkObjectReference)) == false) // ë§Œì•½ì— ë£¨íŠ¸ì•„ì´í…œì˜ í–‰ë™ë™ì‘ì— ëŒ€í•œ ì˜¤ë¸Œì íŠ¸ê°€ ìˆë‹¤ë©´ ì„¤ì •
         {
             if (addLootItemBehaviour.TryGet(out NetworkObject ngo))
             {
@@ -196,7 +196,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
             //return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
             return SpawnObjectToResources(path, position);
         }
-        //4.28ÀÏ NGO_CALLER°¡ ºÎ¸ğ±îÁö ÁöÁ¤ÇÏ´Â°Ç Ã¥ÀÓ¼ÒÀç¿¡¼­ ¹®Á¦°¡ µÉ ¼ö ÀÖ¾î¼­ ÀÌºÎºĞÀº °¢ÀÚ Ç® ¿ÀºêÁ§Æ® ÃÊ±âÈ­ ºÎºĞ¿¡¼­ ºÎ¸ğ¸¦ ÁöÁ¤ÇÏµµ·Ï ÇÔ
+        //4.28ì¼ NGO_CALLERê°€ ë¶€ëª¨ê¹Œì§€ ì§€ì •í•˜ëŠ”ê±´ ì±…ì„ì†Œì¬ì—ì„œ ë¬¸ì œê°€ ë  ìˆ˜ ìˆì–´ì„œ ì´ë¶€ë¶„ì€ ê°ì í’€ ì˜¤ë¸Œì íŠ¸ ì´ˆê¸°í™” ë¶€ë¶„ì—ì„œ ë¶€ëª¨ë¥¼ ì§€ì •í•˜ë„ë¡ í•¨
         return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
     }
 
@@ -331,7 +331,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     public void SpawnLocalObject(Vector3 pos, string objectPath, SpawnParamBase spawnParamBase)
     {
         FixedList32Bytes<Vector3> list = new FixedList32Bytes<Vector3>();
-        list.Add(pos);                          // ÇÑ °³¸¸ ´ã±â
+        list.Add(pos);                          // í•œ ê°œë§Œ ë‹´ê¸°
         SpwanLocalObjectRpc(list, new FixedString512Bytes(objectPath), spawnParamBase);
     }
     public void SpawnNonNetworkObject(List<Vector3> pos, string objectPath, SpawnParamBase spawnParamBase)
@@ -439,7 +439,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             if(ngo.TryGetComponent(out ISceneChangeBehaviour behaviour))
             {
-                Debug.Log((behaviour as Component).name + "ÃÊ±âÈ­ Ã³¸® µÊ");
+                Debug.Log((behaviour as Component).name + "ì´ˆê¸°í™” ì²˜ë¦¬ ë¨");
                 behaviour.OnBeforeSceneUnload();
             }
         }
@@ -451,6 +451,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         Managers.SceneManagerEx.InvokeOnBeforeSceneUnloadLocalEvent();
 
-        _ = DisconnectFromVivoxAndLobby();//ºñº¹½º ¹× ·Îºñ ¿¬°áÇØÁ¦
+        _ = DisconnectFromVivoxAndLobby();//ë¹„ë³µìŠ¤ ë° ë¡œë¹„ ì—°ê²°í•´ì œ
     }
 }

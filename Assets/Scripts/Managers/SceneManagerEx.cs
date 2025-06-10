@@ -76,13 +76,13 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     public void InvokeOnBeforeSceneUnloadLocalEvent()
     {
         _onBeforeSceneUnloadLocalEvent?.Invoke();
-        Debug.Log("¾À ·Îµå µÇ±âÀü È£Ãâ");
+        Debug.Log("ì”¬ ë¡œë“œ ë˜ê¸°ì „ í˜¸ì¶œ");
     }
 
     public void NetworkLoadScene(Define.Scene nextscene)
     {
-        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadLocalRpc();//¸ğµç ÇÃ·¹ÀÌ¾î°¡ ¾À È£ÃâÀü ½ÇÇàÇØ¾ßÇÒ ÀÌº¥Æ®(·ÎÄÃ °¢ÀÚ°¡ ¸ÃÀ½)
-        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadRpc();//¸ğµç ÇÃ·¹ÀÌ¾î°¡ ¾À È£ÃâÀü ½ÇÇàÇØ¾ßÇÒ ³İ¿öÅ© ¿ÀºêÁ§Æ® ÃÊ±âÈ­(È£½ºÆ®°¡ ¸ÃÀ½)
+        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadLocalRpc();//ëª¨ë“  í”Œë ˆì´ì–´ê°€ ì”¬ í˜¸ì¶œì „ ì‹¤í–‰í•´ì•¼í•  ì´ë²¤íŠ¸(ë¡œì»¬ ê°ìê°€ ë§¡ìŒ)
+        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadRpc();//ëª¨ë“  í”Œë ˆì´ì–´ê°€ ì”¬ í˜¸ì¶œì „ ì‹¤í–‰í•´ì•¼í•  ë„·ì›Œí¬ ì˜¤ë¸Œì íŠ¸ ì´ˆê¸°í™”(í˜¸ìŠ¤íŠ¸ê°€ ë§¡ìŒ)
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadCompleteAsync;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
 
@@ -96,10 +96,10 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
 
             if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
             {
-                Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded = true;//·ÎµùÃ¢ 90% ÀÌÈÄ·Î ³Ñ¾î°¡°Ô²û
+                Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded = true;//ë¡œë”©ì°½ 90% ì´í›„ë¡œ ë„˜ì–´ê°€ê²Œë”
                 _onAllPlayerLoadedEvent?.Invoke();
                 
-                _onClientLoadedEvent = null; // È£ÃâÀÌ ³¡³­µÚ ¸ğµç ÀÌº¥Æ® ±¸µ¶ ÀüºÎ »èÁ¦
+                _onClientLoadedEvent = null; // í˜¸ì¶œì´ ëë‚œë’¤ ëª¨ë“  ì´ë²¤íŠ¸ êµ¬ë… ì „ë¶€ ì‚­ì œ
                 _onAllPlayerLoadedEvent = null;
             }
         }

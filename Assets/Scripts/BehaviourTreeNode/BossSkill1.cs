@@ -87,7 +87,7 @@ public class BossSkill1 : Action, IBossAnimationChanged
 
                     SpawnParamBase skill1_stone_param = SpawnParamBase.Create(argFloat: skill1_DurationTime);
                     Managers.RelayManager.NGO_RPC_Caller.SpawnLocalObject(targetPos, skill1_stone_Path, skill1_stone_param);
-                    //5.6 ¼öÁ¤ SpawnProjector(targetPlayer);
+                    //5.6 ìˆ˜ì • SpawnProjector(targetPlayer);
                 }
             }
         }

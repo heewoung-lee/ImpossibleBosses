@@ -50,20 +50,20 @@ public class ItemConsumable : Ikey<int>, IItem, IInventoryItemMaker, IItemDescri
     {
         StringBuilder descriptionBuilder = new StringBuilder();
 
-        // ±âº» ¼³¸í Ãß°¡
+        // ê¸°ë³¸ ì„¤ëª… ì¶”ê°€
         descriptionBuilder.AppendLine(DescriptionText);
 
-        // È¿°úµé¿¡ ´ëÇÑ ¼³¸í Ãß°¡
+        // íš¨ê³¼ë“¤ì— ëŒ€í•œ ì„¤ëª… ì¶”ê°€
         foreach (StatEffect effect in ItemEffects)
         {
-            string actionText = (duration > 0) ? "Áõ°¡" : "È¸º¹";
+            string actionText = (duration > 0) ? "ì¦ê°€" : "íšŒë³µ";
             descriptionBuilder.AppendLine($"{Utill.StatTypeConvertToKorean(effect.statType)} {effect.value} {actionText}");
         }
 
-        // Áö¼Ó½Ã°£ Á¤º¸ Ãß°¡
+        // ì§€ì†ì‹œê°„ ì •ë³´ ì¶”ê°€
         if (duration > 0)
         {
-            descriptionBuilder.AppendLine($"Áö¼Ó½Ã°£: {duration}ÃÊ");
+            descriptionBuilder.AppendLine($"ì§€ì†ì‹œê°„: {duration}ì´ˆ");
         }
 
         return descriptionBuilder.ToString();

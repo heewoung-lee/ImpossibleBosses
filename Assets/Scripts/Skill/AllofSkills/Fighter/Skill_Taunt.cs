@@ -10,10 +10,10 @@ public class Skill_Taunt : Skill_Immedialty
     private Collider[] _monsters;
 
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
-    public override string SkillName => "µµ¹ß";
+    public override string SkillName => "ë„ë°œ";
     public override float CoolTime => 10f;
-    public override string EffectDescriptionText => $"Àûµé¿¡°Ô µµ¹ßÀ»ÇØ ³ª¸¦ ¦i¾Æ¿Àµµ·ÏÇÑ´Ù";
-    public override string ETCDescriptionText => "¸Þ·Õ";
+    public override string EffectDescriptionText => $"ì ë“¤ì—ê²Œ ë„ë°œì„í•´ ë‚˜ë¥¼ iì•„ì˜¤ë„ë¡í•œë‹¤";
+    public override string ETCDescriptionText => "ë©”ë¡±";
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Taunt");
     public override float Value => 0f;
     public override BaseController PlayerController { 

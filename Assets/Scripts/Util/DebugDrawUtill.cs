@@ -1,15 +1,15 @@
 using UnityEngine;
 
 /// <summary>
-/// Áß½É¡¤¹İÁö¸§¡¤¼¼±×¸ÕÆ® ¼ö¸¦ ¹Ş¾Æ Scene/Game ºä¿¡ ¿øÀ» ±×·Á Áİ´Ï´Ù.
+/// ì¤‘ì‹¬Â·ë°˜ì§€ë¦„Â·ì„¸ê·¸ë¨¼íŠ¸ ìˆ˜ë¥¼ ë°›ì•„ Scene/Game ë·°ì— ì›ì„ ê·¸ë ¤ ì¤ë‹ˆë‹¤.
 /// </summary>
 public static class DebugDrawUtill
 {
-    /// <param name="center">¿ø Áß½É</param>
-    /// <param name="radius">¹İÁö¸§</param>
-    /// <param name="segments">ºĞÇÒ ¼ö(¼±ºĞ °³¼ö, 3 ÀÌ»ó)</param>
-    /// <param name="color">¼± »ö»ó</param>
-    /// <param name="duration">Áö¼Ó ½Ã°£; 0 = ÇÑ ÇÁ·¹ÀÓ</param>
+    /// <param name="center">ì› ì¤‘ì‹¬</param>
+    /// <param name="radius">ë°˜ì§€ë¦„</param>
+    /// <param name="segments">ë¶„í•  ìˆ˜(ì„ ë¶„ ê°œìˆ˜, 3 ì´ìƒ)</param>
+    /// <param name="color">ì„  ìƒ‰ìƒ</param>
+    /// <param name="duration">ì§€ì† ì‹œê°„; 0 = í•œ í”„ë ˆì„</param>
     public static void DrawCircle(Vector3 center,
                                   float radius,
                                   int segments = 32,
@@ -20,16 +20,16 @@ public static class DebugDrawUtill
         Color lineColor = color ?? Color.white;
 
         float deltaAngle = 360f / segments;
-        // Ã¹ Á¡À» +Z Ãà ¹æÇâÀ¸·Î ÀâÀ½
+        // ì²« ì ì„ +Z ì¶• ë°©í–¥ìœ¼ë¡œ ì¡ìŒ
         Vector3 prev = center + Vector3.forward * radius;
 
         for (int i = 1; i <= segments; i++)
         {
-            // ´ÙÀ½ °¢µµ
+            // ë‹¤ìŒ ê°ë„
             float angle = deltaAngle * i * Mathf.Deg2Rad;
             Vector3 next = center + new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle)) * radius;
 
-            // prev ¡æ next ¹æÇâÀ¸·Î ·¹ÀÌ(¼±ºĞ) ±×¸®±â
+            // prev â†’ next ë°©í–¥ìœ¼ë¡œ ë ˆì´(ì„ ë¶„) ê·¸ë¦¬ê¸°
             Debug.DrawRay(prev, next - prev, lineColor, duration);
 
             prev = next;

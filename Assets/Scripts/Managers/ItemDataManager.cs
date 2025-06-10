@@ -17,14 +17,14 @@ public class ItemDataManager : IManagerInitializable
     public void Init()
     {
 
-        //Æú´õ³»¿¡ ÀÖ´Â Å¸ÀÔµéÀ» ±Ü¾î¿Í¼­ µ¥ÀÌÅÍ¸¦ ÀĞ´Â´Ù.
+        //í´ë”ë‚´ì— ìˆëŠ” íƒ€ì…ë“¤ì„ ê¸ì–´ì™€ì„œ ë°ì´í„°ë¥¼ ì½ëŠ”ë‹¤.
         _itemDataType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
             , Managers.DataManager.AddSerializableAttributeType);
 
         foreach (Type itemtype in _itemDataType)
         {
             IDictionary itemTypeIDict = Managers.DataManager.AllDataDict[itemtype] as IDictionary;
-            //IDictionary ÀÎÅÍÆäÀÌ½º·Î º¯È¯ÇÑ ÈÄ ¸ğµç Dictionaryµ¥ÀÌÅÍ¸¦ ¹Ş¾Æ¿Ã ¼ö ÀÖµµ·ÏÇÑ´Ù.
+            //IDictionary ì¸í„°í˜ì´ìŠ¤ë¡œ ë³€í™˜í•œ í›„ ëª¨ë“  Dictionaryë°ì´í„°ë¥¼ ë°›ì•„ì˜¬ ìˆ˜ ìˆë„ë¡í•œë‹¤.
             if (itemTypeIDict == null)
             {
                 Debug.Log($"Not Found Type:{itemtype}");
@@ -32,9 +32,9 @@ public class ItemDataManager : IManagerInitializable
             }
 
             Dictionary<int, IItem> itemDict = new Dictionary<int, IItem>();
-            foreach (int key in itemTypeIDict.Keys)//ÇØ´çÅ¸ÀÔÀÇ Å° °ª°ú ´ëÀÀ µÇ´Â µ¥ÀÌÅÍ¸¦ Ä³½ºÆÃÇÑ ÈÄ µñ¼Å³Ê¸®¿¡ ³Ö¾îÁØ´Ù.
+            foreach (int key in itemTypeIDict.Keys)//í•´ë‹¹íƒ€ì…ì˜ í‚¤ ê°’ê³¼ ëŒ€ì‘ ë˜ëŠ” ë°ì´í„°ë¥¼ ìºìŠ¤íŒ…í•œ í›„ ë”•ì…”ë„ˆë¦¬ì— ë„£ì–´ì¤€ë‹¤.
             {
-                IItem itemValue = itemTypeIDict[key] as IItem;//Å°¿¡ ´ëÀÀµÇ´Â IItem
+                IItem itemValue = itemTypeIDict[key] as IItem;//í‚¤ì— ëŒ€ì‘ë˜ëŠ” IItem
                 if (itemValue == null)
                 {
                     Debug.LogError($"Failed to cast item of type {itemtype} to IItem");
@@ -47,7 +47,7 @@ public class ItemDataManager : IManagerInitializable
             _allItemDataDict[itemtype] = BindImageSources(_allItemDataDict[itemtype]) as Dictionary<int, IItem>;
         }
 
-        _itemGradeBorder = new Dictionary<Item_Grade_Type, Sprite>//¾ÆÀÌÅÛ µî±Ş ÇÁ·¹ÀÓ ÃÊ±âÈ­
+        _itemGradeBorder = new Dictionary<Item_Grade_Type, Sprite>//ì•„ì´í…œ ë“±ê¸‰ í”„ë ˆì„ ì´ˆê¸°í™”
         {
             { Item_Grade_Type.Normal, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_White") },
             { Item_Grade_Type.Magic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Green") },
@@ -96,12 +96,12 @@ public class ItemDataManager : IManagerInitializable
             FindImageByKey(itemType);
         }
         return itemDict;
-    }//µñ¼Å³Ê¸®·Î ´øÁ®Áà¾ßÇÔ.
+    }//ë”•ì…”ë„ˆë¦¬ë¡œ ë˜ì ¸ì¤˜ì•¼í•¨.
 
     public void FindImageByKey(IItem items)
     {
         items.ImageSource[items.ItemIconSourceText] = Managers.ResourceManager.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
-        //TODO: ³ªÁß¿¡ »ç¿ëÇÏ´Â ¸ğµç ÀÌ¹ÌÁöÆÄÀÏÀ» ¸ğ¾Æ¼­ °æ·ÎÁöÁ¤À» ´Ù½Ã ÇØ¾ßÇÔ.
+        //TODO: ë‚˜ì¤‘ì— ì‚¬ìš©í•˜ëŠ” ëª¨ë“  ì´ë¯¸ì§€íŒŒì¼ì„ ëª¨ì•„ì„œ ê²½ë¡œì§€ì •ì„ ë‹¤ì‹œ í•´ì•¼í•¨.
     }
 
 

@@ -7,7 +7,7 @@ public class Buffer_Determination : Duration_Buff
         _iconImage = iconImage;
     }
     public override Sprite BuffIconImage => _iconImage;
-    public override string Buffname => "¹æ¾î·ÂÁõ°¡";
+    public override string Buffname => "ë°©ì–´ë ¥ì¦ê°€";
     public override StatType StatType => StatType.Defence;
     private Sprite _iconImage = null;
 

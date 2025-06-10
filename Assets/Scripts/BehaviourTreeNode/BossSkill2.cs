@@ -11,15 +11,16 @@ public class BossSkill2 : Action, IBossAnimationChanged
     private BossGolemController _controller;
     private BossGolemNetworkController _networkController;
     private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
-    public SharedInt Damage;
-    public float Attack_Range = 0f;
-    public int Radius_Step = 0;
-    public int Angle_Step = 0;
 
     private float _animLength = 0f;
     private List<Vector3> _attackRangeCirclePos;
     private BossStats _stats;
     private bool _hasSpawnedParticles;
+
+    public SharedInt Damage;
+    public float Attack_Range = 0f;
+    public int Radius_Step = 0;
+    public int Angle_Step = 0;
 
     [SerializeField] private SharedProjector _attackIndicator;
     private NGO_Indicator_Controller _indicator_controller;
@@ -84,7 +85,7 @@ public class BossSkill2 : Action, IBossAnimationChanged
 
             CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addAttackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animinfo, Managers.RelayManager.GetNetworkObject(_indicator_controller.gameObject));
-            //È£½ºÆ®°¡ pretime »Ì¾Æ¼­ ¸ğµç Å¬¶óÀÌ¾ğÆ® µé¿¡°Ô ´øÁ®¾ßÇÔ.
+            //í˜¸ìŠ¤íŠ¸ê°€ pretime ë½‘ì•„ì„œ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ ë“¤ì—ê²Œ ë˜ì ¸ì•¼í•¨.
 
         }
     }

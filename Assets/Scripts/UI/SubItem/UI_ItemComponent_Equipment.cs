@@ -25,21 +25,21 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
     public override void ItemRightClick(PointerEventData eventdata)
     {
         base.ItemRightClick(eventdata);
-        //ÀåÂøÁßÀÌ ¾Æ´Ï¶ó¸é ½½·Ô¿¡ ³Ö°í, ´É·ÂÄ¡ Àû¿ë
-        //ÀåÂøÁßÀÌ¶ó¸é ¾ÆÀÌÅÛÃ¢¿¡ µ¹·Á³õ°í, ´É·ÂÄ¡ °¨¼Ò
+        //ì¥ì°©ì¤‘ì´ ì•„ë‹ˆë¼ë©´ ìŠ¬ë¡¯ì— ë„£ê³ , ëŠ¥ë ¥ì¹˜ ì ìš©
+        //ì¥ì°©ì¤‘ì´ë¼ë©´ ì•„ì´í…œì°½ì— ëŒë ¤ë†“ê³ , ëŠ¥ë ¥ì¹˜ ê°ì†Œ
         EquipItem();
     }
 
 
     public void EquipItem()
     {
-        if (IsEquipped == false) // ¾ÆÀÌÅÛÀÌ ÀåÂøÁßÀÌ ¾Æ´Ï¶ó¸é ÀåÂøÇÏ´Â ·ÎÁ÷ ¼öÇà
+        if (IsEquipped == false) // ì•„ì´í…œì´ ì¥ì°©ì¤‘ì´ ì•„ë‹ˆë¼ë©´ ì¥ì°©í•˜ëŠ” ë¡œì§ ìˆ˜í–‰
         {
             ItemEquipment equip = _iteminfo as ItemEquipment;
             Equipment_Slot_Type eqiupSlot = equip.Equipment_Slot;
             EquipItemToSlot(eqiupSlot);
         }
-        else// ÀåÂøÁßÀÌ¶ó¸é ÀåÂøÇØÁ¦
+        else// ì¥ì°©ì¤‘ì´ë¼ë©´ ì¥ì°©í•´ì œ
         {
             GetComponentInParent<EquipMentSlot>().ItemUnEquip();
             AttachItemToSlot(gameObject, _contentofInventoryTr);
@@ -102,7 +102,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
     protected override void DropItemOnGround()
     {
         base.DropItemOnGround();
-        UnEquipItem();//ÀåºñÇÑ ¾ÆÀÌÅÛÀ» ¶¥¿¡ ¶³±¼¶§ Àåºñ ¹şÀ½ È¿°ú ³ª¿Àµµ·Ï ¼öÁ¤
+        UnEquipItem();//ì¥ë¹„í•œ ì•„ì´í…œì„ ë•…ì— ë–¨êµ´ë•Œ ì¥ë¹„ ë²—ìŒ íš¨ê³¼ ë‚˜ì˜¤ë„ë¡ ìˆ˜ì •
     }
 
     public override GameObject GetLootingItemObejct(IItem iteminfo)

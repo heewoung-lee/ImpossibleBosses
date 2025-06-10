@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HP_Position : Immediately_Buff
 {
-    public override string Buffname => "Ã¼·ÂÈ¸º¹";
+    public override string Buffname => "ì²´ë ¥íšŒë³µ";
 
     public override StatType StatType => StatType.CurrentHp;
 

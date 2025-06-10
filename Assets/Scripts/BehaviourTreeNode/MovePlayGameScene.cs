@@ -25,7 +25,7 @@ public class MovePlayGameScene : Action
     {
         if (_tree != null)
         {
-            _tree.DisableBehavior(); // ³»ºÎÀûÀ¸·Î Á¤¸®ÇÏ¸é¼­ ºñÈ°¼ºÈ­
+            _tree.DisableBehavior(); // ë‚´ë¶€ì ìœ¼ë¡œ ì •ë¦¬í•˜ë©´ì„œ ë¹„í™œì„±í™”
             Managers.RelayManager.DeSpawn_NetWorkOBJ(_ngo_MoveDownTownBehaviour.gameObject);
             return TaskStatus.Success;
         }

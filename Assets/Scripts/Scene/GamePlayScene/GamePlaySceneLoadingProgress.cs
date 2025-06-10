@@ -36,7 +36,7 @@ public class GamePlaySceneLoadingProgress : UI_Base
             if (enabled == false || gameObject.activeInHierarchy == false) 
                 return;
 
-            if (_loadedPlayerCount == value || value <= 0) // °°Àº °ªÀÌ°Å³ª 0ÀÌ¸é ¸®ÅÏ
+            if (_loadedPlayerCount == value || value <= 0) // ê°™ì€ ê°’ì´ê±°ë‚˜ 0ì´ë©´ ë¦¬í„´
                 return;
 
             _loadedPlayerCount = value;
@@ -106,7 +106,7 @@ public class GamePlaySceneLoadingProgress : UI_Base
                 if (_ui_loding.LoaingSliderValue >= 1.0f)
                 {
                     StartCoroutine(FadeOutLoadedScene());
-                    //¾ËÆÄ°ª ³»·Á°¡°í, ´Ù ³»·Á°¡¸é ¿­·Á¾ßÇÔ.
+                    //ì•ŒíŒŒê°’ ë‚´ë ¤ê°€ê³ , ë‹¤ ë‚´ë ¤ê°€ë©´ ì—´ë ¤ì•¼í•¨.
                     yield break;
                 }
             }

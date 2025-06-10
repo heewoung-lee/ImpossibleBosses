@@ -128,13 +128,13 @@ public abstract class UI_Base : MonoBehaviour
 
     protected GameObject GetObject(int idx) => Get<GameObject>(idx);
 
-    // UI_Base�� ��� UI���� ��ӹ޴� �����ӿ�ũ
-    //��ųʸ��� ���� UI_Base�� BindŸ�Ե��� Ű�� �����ϰ�, BINDŸ�Ծȿ� �ִ� �̸��� ���� ��ü���� �迭�� �����Ѵ�.
+    // UI_Base는 모든 UI들이 상속받는 프레임워크
+    //딕셔너리를 통해 UI_Base의 Bind타입들을 키로 저장하고, BIND타입안에 있는 이름과 같은 객체들을 배열로 저장한다.
 
-    //1) Bind�� ���� Enum Type�� ���ڷ� �ް� Enum type�ȿ� �ִ� ���ڵ��� �̸����� �޴´�.
-    //�ش�Ÿ���� Gameobject��� �ش簴ü�� �����ϰ�, �ƴ϶��, ���׸� TŸ���� �����޴´�.
-    //2) Get�� ���� ��ųʸ��� ����� Ÿ���� Enum�� �̸����� �����´�.
-    //3) BindEvent�� ���� �ش簴ü�� �̺�Ʈ �ڵ鷯�� �޾��ش�.
+    //1) Bind를 통해 Enum Type을 인자로 받고 Enum type안에 있는 인자들을 이름으로 받는다.
+    //해당타입이 Gameobject라면 해당객체를 저장하고, 아니라면, 제네릭 T타입을 돌려받는다.
+    //2) Get을 통해 딕셔너리에 저장된 타입을 Enum의 이름으로 꺼내온다.
+    //3) BindEvent를 통해 해당객체에 이벤트 핸들러를 달아준다.
 
     public static void BindEvent(GameObject go,Action<PointerEventData> action,Define.UI_Event mouseEvent = Define.UI_Event.LeftClick)
     {

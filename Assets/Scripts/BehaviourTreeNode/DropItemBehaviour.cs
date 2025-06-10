@@ -19,31 +19,31 @@ public class DropItemBehaviour : NetworkBehaviour,LootItemBehaviour
     {
         Transform tr = rb.transform;
 
-        Vector3 startPos = tr.position;                      // ½ÃÀÛÁ¡
+        Vector3 startPos = tr.position;                      // ì‹œì‘ì 
         Vector2 rndCircle = Random.insideUnitCircle * CircleRange;
         Vector3 targetPos = startPos + new Vector3(rndCircle.x, 0, rndCircle.y);
 
-        Vector3 spinAxis = Random.onUnitSphere.normalized;   // ÀÓÀÇ Ãà
-        float spinSpeed = Random.Range(180f, 540f);         // ¡Æ/sec
+        Vector3 spinAxis = Random.onUnitSphere.normalized;   // ì„ì˜ ì¶•
+        float spinSpeed = Random.Range(180f, 540f);         // Â°/sec
 
         float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime / duration;
 
-            /* ---------------- À§Ä¡(Æ÷¹°¼±) ---------------- */
+            /* ---------------- ìœ„ì¹˜(í¬ë¬¼ì„ ) ---------------- */
             Vector3 flat = Vector3.Lerp(startPos, targetPos, t);
             float y = Mathf.Lerp(startPos.y, targetPos.y, t) +
                            MAX_HEIGHT * Mathf.Sin(Mathf.PI * t);
             tr.position = new Vector3(flat.x, y, flat.z);
 
-            /* ---------------- È¸Àü(·£´ı Ãà ½ºÇÉ) ---------------- */
+            /* ---------------- íšŒì „(ëœë¤ ì¶• ìŠ¤í•€) ---------------- */
             tr.Rotate(spinAxis, spinSpeed * Time.deltaTime, Space.Self);
 
             yield return null;
         }
 
-        // Ãæµ¹¡¤È¸ÀüÀ» ¹°¸®¿¡ ¸Ã±â°í ½Í´Ù¸é ´Ù½Ã µ¿Àû ¸ğµå·Î
+        // ì¶©ëŒÂ·íšŒì „ì„ ë¬¼ë¦¬ì— ë§¡ê¸°ê³  ì‹¶ë‹¤ë©´ ë‹¤ì‹œ ë™ì  ëª¨ë“œë¡œ
         rb.isKinematic = false;
     }
 

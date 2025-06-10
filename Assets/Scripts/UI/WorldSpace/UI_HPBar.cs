@@ -20,7 +20,7 @@ public class UI_HPBar : UI_Base
         Bind<Slider>(typeof(HPBarSlider));
         _hpSlider = Get<Slider>((int)HPBarSlider.HPBar);
         _canvasGroup = GetComponent<CanvasGroup>();
-        _canvasGroup.alpha = 0;//Ã³À½¿¡´Â HP°¡ ¾Èº¸ÀÌ°Ô ¼³Á¤ ¸Â¾ÒÀ»¶§ º¸ÀÌ°Ô²û ¼³Á¤
+        _canvasGroup.alpha = 0;//ì²˜ìŒì—ëŠ” HPê°€ ì•ˆë³´ì´ê²Œ ì„¤ì • ë§ì•˜ì„ë•Œ ë³´ì´ê²Œë” ì„¤ì •
     }
 
     protected override void StartInit()

@@ -134,7 +134,7 @@ public class PlayerController : MoveableController
 
     public override void UpdateMove()
     {
-        Vector3 dir = new Vector3(_destPos.x, 0, _destPos.z) - new Vector3(transform.position.x, 0, transform.position.z);//³ôÀÌ¿¡ ´ëÇÑ °ªÀ» »©¾ß ±Ù»ç°ª¿¡ ´õ Á¤È®ÇÑ ¼öÄ¡¸¦ »ÌÀ» ¼ö ÀÖÀ½.
+        Vector3 dir = new Vector3(_destPos.x, 0, _destPos.z) - new Vector3(transform.position.x, 0, transform.position.z);//ë†’ì´ì— ëŒ€í•œ ê°’ì„ ë¹¼ì•¼ ê·¼ì‚¬ê°’ì— ë” ì •í™•í•œ ìˆ˜ì¹˜ë¥¼ ë½‘ì„ ìˆ˜ ìˆìŒ.
         if (dir.magnitude < 0.01f)
         {
             CurrentStateType = _base_IDleState;

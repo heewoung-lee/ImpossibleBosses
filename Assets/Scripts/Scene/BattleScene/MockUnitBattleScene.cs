@@ -61,7 +61,7 @@ public class MockUnitBattleScene : ISceneSpawnBehaviour
             await SetAuthenticationService();
             if (_playerType == "Player1")
             {
-                if (_isSoloTest == true)//³ªÈ¥ÀÚ Å×½ºÆ® ÇÒ¶§
+                if (_isSoloTest == true)//ë‚˜í˜¼ì í…ŒìŠ¤íŠ¸ í• ë•Œ
                 {
                     await Managers.RelayManager.StartHostWithRelay(8);
                 }

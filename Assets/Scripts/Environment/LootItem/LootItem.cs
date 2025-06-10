@@ -45,27 +45,27 @@ public class LootItem : NetworkBehaviour,IInteraction
             behaviour.SpawnBahaviour(_rigidBody);
             return;
         }
-        //Æ¢¾î¿À¸£¸é¼­ ·ÎÅ×ÀÌ¼ÇÀ» µ¹¸°´Ù.
-        //¹Ù´Ú¿¡ ´êÀ¸¸é VFXÈ¿°ú¸¦ Å²´Ù.
-        //¾ÆÀÌÅÛÀ» È¸Àü½ÃÅ²´Ù.
-        //»óÈ£ÀÛ¿ëÀ» ÇÏ¸é
+        //íŠ€ì–´ì˜¤ë¥´ë©´ì„œ ë¡œí…Œì´ì…˜ì„ ëŒë¦°ë‹¤.
+        //ë°”ë‹¥ì— ë‹¿ìœ¼ë©´ VFXíš¨ê³¼ë¥¼ í‚¨ë‹¤.
+        //ì•„ì´í…œì„ íšŒì „ì‹œí‚¨ë‹¤.
+        //ìƒí˜¸ì‘ìš©ì„ í•˜ë©´
         transform.position = _dropPosition + Vector3.up * 1.2f;
         _rigidBody.AddForce(Vector3.up * ADDFORCE_OFFSET, ForceMode.Impulse);
-        // ÀÓÀÇÀÇ È¸ÀüÀ» À§ÇÑ ·£´ı °ª »ı¼º
+        // ì„ì˜ì˜ íšŒì „ì„ ìœ„í•œ ëœë¤ ê°’ ìƒì„±
         Vector3 randomTorque = new Vector3(
-            Random.Range(-1f, 1f),  // XÃà È¸Àü
-            Random.Range(-1f, 1f),  // YÃà È¸Àü
-            Random.Range(-1f, 1f)   // ZÃà È¸Àü
+            Random.Range(-1f, 1f),  // Xì¶• íšŒì „
+            Random.Range(-1f, 1f),  // Yì¶• íšŒì „
+            Random.Range(-1f, 1f)   // Zì¶• íšŒì „
         );
-        // È¸Àü Èû Ãß°¡ (·£´ı °ª¿¡ °­µµ¸¦ Á¶Àı)
+        // íšŒì „ í˜ ì¶”ê°€ (ëœë¤ ê°’ì— ê°•ë„ë¥¼ ì¡°ì ˆ)
         _rigidBody.AddTorque(randomTorque * TORQUE_FORCE_OFFSET, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;                         // Ãæµ¹ ÆÇÁ¤Àº ¼­¹ö¸¸
+        if (!IsServer) return;                         // ì¶©ëŒ íŒì •ì€ ì„œë²„ë§Œ
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground") == false || _rigidBody.isKinematic) return;
-        LandedLogicRpc();                                 // ¼­¹ö ·ÎÄÃ Ã³¸®
+        LandedLogicRpc();                                 // ì„œë²„ ë¡œì»¬ ì²˜ë¦¬
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -135,14 +135,14 @@ private void ItemGradeEffect(IItem itemInfo)
     public void PlayerPickup(Module_Player_Interaction player)
     {
         PlayerController base_controller = player.PlayerController;
-        base_controller.CurrentStateType = base_controller.PickupState;//ÇÈ¾÷ ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+        base_controller.CurrentStateType = base_controller.PickupState;//í”½ì—… ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
 
         if (base_controller.CurrentStateType != base_controller.PickupState)
             return;
 
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
         inventory_item.transform.SetParent(_ui_player_Inventory.ItemInventoryTr);
-        player.DisEnable_Icon_UI();//»óÈ£ÀÛ¿ë ¾ÆÀÌÄÜ Á¦°Å
+        player.DisEnable_Icon_UI();//ìƒí˜¸ì‘ìš© ì•„ì´ì½˜ ì œê±°
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             DisEnble_Icon_UI_Rpc();

@@ -90,12 +90,12 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 if ((float)value / 10000000 < 1)
                 {
                     UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                   .AlertSetText("¿À·ù", "ºñ¹Ğ¹øÈ£´Â 8ÀÚ¸® ÀÌ»ó");
+                   .AlertSetText("ì˜¤ë¥˜", "ë¹„ë°€ë²ˆí˜¸ëŠ” 8ìë¦¬ ì´ìƒ");
                     _button_connect.interactable = true;
                     return;
                 }
 
-                Debug.Log($"ºñ¹Ğ¹øÈ£°¡ ÀÖÀ½{value}");
+                Debug.Log($"ë¹„ë°€ë²ˆí˜¸ê°€ ìˆìŒ{value}");
                 option = new CreateLobbyOptions()
                 {
                     IsPrivate = false,

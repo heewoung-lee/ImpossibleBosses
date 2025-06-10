@@ -115,16 +115,16 @@ public class BossGolemNetworkController : NetworkBehaviourBase
         double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
 
         
-        //ÇöÀç ¼­¹ö°¡ °£ ½Ã°£
+        //í˜„ì¬ ì„œë²„ê°€ ê°„ ì‹œê°„
         double serverPreTime =  animinfo.ServerTime- nowTime;
 
-        //¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ X ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ÁÙ¾îµé¾î¾ßÇÒ ÁöÁ¡
+        //ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ X ì• ë‹ˆë©”ì´ì…˜ì´ ì¤„ì–´ë“¤ì–´ì•¼í•  ì§€ì 
         double decelerationEndTime = animinfo.AnimLength * animinfo.DecelerationRatio;
 
-        //Å¬¶óÀÌ¾ğÆ®°¡ ¦i¾Æ°¡¾ßÇÒ ¾Ö´Ï¸ŞÀÌ¼Ç±æÀÌ
+        //í´ë¼ì´ì–¸íŠ¸ê°€ iì•„ê°€ì•¼í•  ì• ë‹ˆë©”ì´ì…˜ê¸¸ì´
         double remainingAnimTime = decelerationEndTime - serverPreTime;
 
-        //Å¬¶óÀÌ¾ğÆ®°¡ ¦i¾Æ°¡±â À§ÇØ¼­ È£½ºÆ®º¸´Ù ¾ó¸¸Å­ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ »¡¶ó¾ß ÇÏ´ÂÁö
+        //í´ë¼ì´ì–¸íŠ¸ê°€ iì•„ê°€ê¸° ìœ„í•´ì„œ í˜¸ìŠ¤íŠ¸ë³´ë‹¤ ì–¼ë§Œí¼ ì• ë‹ˆë©”ì´ì…˜ì´ ë¹¨ë¼ì•¼ í•˜ëŠ”ì§€
         double catchAnimSpeed = Math.Clamp(decelerationEndTime/ remainingAnimTime, _normalAnimSpeed, _maxAnimSpeed);
 
         if (indicatorCon != null)
@@ -141,7 +141,7 @@ public class BossGolemNetworkController : NetworkBehaviourBase
             double deltaTime = (currentNetTime - nowTime);
             nowTime = currentNetTime;
 
-            //¿©±â¼­ ÇöÀç ÀÎµğÄÉÀÌÅÍ°¡ ´Ù ¸¶ÃÆ´ÂÁö È®ÀÎÇØ¾ßÇÔ
+            //ì—¬ê¸°ì„œ í˜„ì¬ ì¸ë””ì¼€ì´í„°ê°€ ë‹¤ ë§ˆì³¤ëŠ”ì§€ í™•ì¸í•´ì•¼í•¨
             if (_bossController.TryGetAnimationSpeed(elaspedTime, out float animspeed, animinfo, _finishedIndicatorDuration) == false)
             {
                 elaspedTime += deltaTime * animspeed * catchAnimSpeed;

@@ -9,22 +9,22 @@ public class RenderTextureCreator : MonoBehaviour
     public RenderTexture RenderTexture { get { return _renderTexture; } }
     public RenderTexture CreateSelectPlayerRenderTexture()
     {
-        // 1. RenderTexture »ı¼º
+        // 1. RenderTexture ìƒì„±
         RenderTexture renderTexture = new RenderTexture(512, 512, 32, RenderTextureFormat.ARGB32);
 
-        // 2. ±íÀÌ ½ºÅÙ½Ç Æ÷¸Ë ¼³Á¤
+        // 2. ê¹Šì´ ìŠ¤í…ì‹¤ í¬ë§· ì„¤ì •
         renderTexture.depthStencilFormat = GraphicsFormat.D32_SFloat_S8_UInt;
 
-        // 3. Ãß°¡ ¼³Á¤
+        // 3. ì¶”ê°€ ì„¤ì •
         renderTexture.antiAliasing = 1;  // None (1x)
-        renderTexture.autoGenerateMips = false;  // Mipmap ºñÈ°¼ºÈ­
+        renderTexture.autoGenerateMips = false;  // Mipmap ë¹„í™œì„±í™”
         renderTexture.useMipMap = false;
-        renderTexture.enableRandomWrite = false; // Random Write ºñÈ°¼ºÈ­
+        renderTexture.enableRandomWrite = false; // Random Write ë¹„í™œì„±í™”
         renderTexture.wrapMode = TextureWrapMode.Clamp;
         renderTexture.filterMode = FilterMode.Bilinear;
         renderTexture.anisoLevel = 0;  // Aniso Level 0
 
-        // 4. RenderTexture È°¼ºÈ­
+        // 4. RenderTexture í™œì„±í™”
         renderTexture.Create();
 
         return renderTexture;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Module_PlayerRenderTextureCamara : MonoBehaviour
 {
-    private Transform _player; // ÇÃ·¹ÀÌ¾î Transform
+    private Transform _player; // í”Œë ˆì´ì–´ Transform
 
 
     void Start()
@@ -15,15 +15,15 @@ public class Module_PlayerRenderTextureCamara : MonoBehaviour
 
     void LateUpdate()
     {
-        // Ä«¸Ş¶óÀÇ À§Ä¡¸¦ ÇÃ·¹ÀÌ¾î ±âÁØÀ¸·Î Á¶Á¤
-        // (ÇÃ·¹ÀÌ¾îÀÇ Á¤¸é¿¡¼­ ¾à°£ À§ÂÊ¿¡¼­ ¹Ù¶óº¸´Â À§Ä¡·Î ¼³Á¤)
-        Vector3 cameraOffset = new Vector3(0f, 1.3f, -3f); // Á¤¸é¿¡¼­ ¾à°£ À§
+        // ì¹´ë©”ë¼ì˜ ìœ„ì¹˜ë¥¼ í”Œë ˆì´ì–´ ê¸°ì¤€ìœ¼ë¡œ ì¡°ì •
+        // (í”Œë ˆì´ì–´ì˜ ì •ë©´ì—ì„œ ì•½ê°„ ìœ„ìª½ì—ì„œ ë°”ë¼ë³´ëŠ” ìœ„ì¹˜ë¡œ ì„¤ì •)
+        Vector3 cameraOffset = new Vector3(0f, 1.3f, -3f); // ì •ë©´ì—ì„œ ì•½ê°„ ìœ„
         transform.position = _player.position - _player.forward * cameraOffset.z + Vector3.up * cameraOffset.y;
 
-        // ÇÃ·¹ÀÌ¾î¸¦ ¹Ù¶óº¸µµ·Ï ¼³Á¤
-        transform.LookAt(_player.position + Vector3.up * 1.3f); // ÇÃ·¹ÀÌ¾îÀÇ ¸Ó¸® ³ôÀÌ·Î Á¶Á¤
+        // í”Œë ˆì´ì–´ë¥¼ ë°”ë¼ë³´ë„ë¡ ì„¤ì •
+        transform.LookAt(_player.position + Vector3.up * 1.3f); // í”Œë ˆì´ì–´ì˜ ë¨¸ë¦¬ ë†’ì´ë¡œ ì¡°ì •
 
-        // ÇÊ¿äÇÏ¸é Ãß°¡ÀûÀÎ È¸Àü º¸Á¤
-        transform.rotation *= Quaternion.Euler(15f, 0f, 0f); // À§ÂÊ¿¡¼­ ¹Ù¶óº¸´Â ´À³¦ Ãß°¡
+        // í•„ìš”í•˜ë©´ ì¶”ê°€ì ì¸ íšŒì „ ë³´ì •
+        transform.rotation *= Quaternion.Euler(15f, 0f, 0f); // ìœ„ìª½ì—ì„œ ë°”ë¼ë³´ëŠ” ëŠë‚Œ ì¶”ê°€
     }
 }

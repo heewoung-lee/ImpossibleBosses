@@ -3,7 +3,7 @@ using UnityEngine;
 public class Buffer_AttackModifier : Duration_Buff
 {
     public override Sprite BuffIconImage => _iconImage;
-    public override string Buffname => "°ø°Ý·ÂÁõ°¡";
+    public override string Buffname => "ê³µê²©ë ¥ì¦ê°€";
     public override StatType StatType => StatType.Attack;
 
     private Sprite _iconImage = Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");

@@ -44,7 +44,7 @@ public class RoomSceneMockUnitTest : BaseScene
             await SetAuthenticationService();
             if (_playerType == "Player1")
             {
-                if (isSoloTest == true)//³ªÈ¥ÀÚ Å×½ºÆ® ÇÒ¶§
+                if (isSoloTest == true)//ë‚˜í˜¼ì í…ŒìŠ¤íŠ¸ í• ë•Œ
                 {
                     await Managers.RelayManager.StartHostWithRelay(8);
                 }

@@ -30,12 +30,12 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
         _poolingNgoPath.OnValueChanged -= OnChangedPoolingNgoPath;
         _poolingNgoPath.OnValueChanged += OnChangedPoolingNgoPath;
 
-        if (IsHost == false)//Å¬¶óÀÌ¾ğÆ®´Â ¹Ù²å´Ù´Â Äİ¹éÀ» ¸ø¹ŞÀ» ¼ö ÀÖÀ¸´Ï ¼öµ¿À¸·Î È®ÀÎ
+        if (IsHost == false)//í´ë¼ì´ì–¸íŠ¸ëŠ” ë°”ê¿¨ë‹¤ëŠ” ì½œë°±ì„ ëª»ë°›ì„ ìˆ˜ ìˆìœ¼ë‹ˆ ìˆ˜ë™ìœ¼ë¡œ í™•ì¸
         {
             string objectName = gameObject.name;
             string newName = _rootName.Value.ToString();
 
-            //µÎ °ªÀÌ ´Ù¸£¸é -> Áï ÀÌ¹Ì ¼­¹ö°¡ _rootNameÀ» ¼³Á¤ÇØµĞ »óÈ²
+            //ë‘ ê°’ì´ ë‹¤ë¥´ë©´ -> ì¦‰ ì´ë¯¸ ì„œë²„ê°€ _rootNameì„ ì„¤ì •í•´ë‘” ìƒí™©
             if (objectName != newName && string.IsNullOrEmpty(newName) == false)
             {
                 gameObject.name = newName;
@@ -58,12 +58,12 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
     {
         GameObject ngo = Managers.ResourceManager.Load<GameObject>(path);
 
-        //_poolingNgoPath°¡ ¾È¶ä
+        //_poolingNgoPathê°€ ì•ˆëœ¸
         if (ngo.TryGetComponent(out NGO_PoolingInitalize_Base poolingOBJ))
         {
             Managers.NGO_PoolManager.SetPool_NGO_ROOT_Dict(poolingOBJ.PoolingNGO_PATH, transform);
             Managers.NGO_PoolManager.NGO_Pool_RegisterPrefab(poolingOBJ.PoolingNGO_PATH, poolingOBJ.PoolingCapacity);
-            //µñ¼Å³Ê¸®¿¡ °¢ Ç®¸¶´Ù ¹İ³³Àå¼Ò µî·Ï
+            //ë”•ì…”ë„ˆë¦¬ì— ê° í’€ë§ˆë‹¤ ë°˜ë‚©ì¥ì†Œ ë“±ë¡
         }
     }
 

@@ -5,9 +5,9 @@ using UnityEngine;
 public class Module_Player_AnimInfo : MonoBehaviour
 {
     Dictionary<int, AnimationClip> _playerAnimaInfoDict;
-    //¾Ö´Ï¸ŞÀÌÅÍ ¸¦ °¡Á®¿Â´ÙÀ½
-    //¾Ö´Ï¸ŞÀÌÅÍ¸¦ ¹İº¹¹®À» µ¹·Á animClipÀ» °¡Á®¿È
-    //Å¬¸³¸¶´Ù ÇØ½¬ °ª°ú °°ÀÌ µñ¼Å³Ê¸®¿¡ ÀúÀå
+    //ì• ë‹ˆë©”ì´í„° ë¥¼ ê°€ì ¸ì˜¨ë‹¤ìŒ
+    //ì• ë‹ˆë©”ì´í„°ë¥¼ ë°˜ë³µë¬¸ì„ ëŒë ¤ animClipì„ ê°€ì ¸ì˜´
+    //í´ë¦½ë§ˆë‹¤ í•´ì‰¬ ê°’ê³¼ ê°™ì´ ë”•ì…”ë„ˆë¦¬ì— ì €ì¥
     private Animator _animator;
 
     private void Awake()
@@ -23,9 +23,9 @@ public class Module_Player_AnimInfo : MonoBehaviour
             AnimatorController animatorController = controller as AnimatorController;
 
             foreach (AnimatorControllerLayer layer in animatorController.layers)
-            {//°¢ ¾Ö´Ï¸ŞÀÌÅÍÀÇ ·¹ÀÌ¾î¿¡ Á¢±Ù
+            {//ê° ì• ë‹ˆë©”ì´í„°ì˜ ë ˆì´ì–´ì— ì ‘ê·¼
                 foreach (ChildAnimatorState state in layer.stateMachine.states)
-                {//·¹ÀÌ¾î¿¡ ÀÖ´Â state¸¦ Á¶»ç
+                {//ë ˆì´ì–´ì— ìˆëŠ” stateë¥¼ ì¡°ì‚¬
                     int stateAnimHash = Animator.StringToHash(state.state.name);
                     if (state.state.motion is AnimationClip clip)
                     {

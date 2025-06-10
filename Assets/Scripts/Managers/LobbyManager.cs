@@ -23,7 +23,7 @@ public struct PlayerIngameLoginInfo
 
     public PlayerIngameLoginInfo(string playerNickname, string playerId)
     {
-        _nickname = playerNickname; // ¸ğµç ÇÊµå¸¦ ÃÊ±âÈ­
+        _nickname = playerNickname; // ëª¨ë“  í•„ë“œë¥¼ ì´ˆê¸°í™”
         _Id = playerId;
     }
 }
@@ -109,12 +109,12 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             await JoinAuthenticationService();
-            // Unity Services ÃÊ±âÈ­
+            // Unity Services ì´ˆê¸°í™”
             isalready = await IsAlreadyLogInNickNameinLobby(_currentPlayerInfo.PlayerNickName);
             _taskChecker[(int)LoadingProcess.CheckAlreadyLogInID] = true;
             if (isalready is true)
             {
-                Debug.Log("ÀÌ¹Ì Á¢¼ÓµÇ¾îÀÖÀ½");
+                Debug.Log("ì´ë¯¸ ì ‘ì†ë˜ì–´ìˆìŒ");
                 return true;
             }
             await TryJoinLobbyByNameOrCreateWaitLobby();
@@ -170,17 +170,17 @@ public class LobbyManager : IManagerEventInitailize
                 {
                     foreach (Unity.Services.Lobbies.Models.Player player in lobby.Players)
                     {
-                        if (player.Data == null && PlayerID == player.Id)//³ªÀÎµ¥ µ¥ÀÌÅÍ¸¦ ÇÒ´ç ¸ø¹Ş¾ÒÀ¸¸é,´Ù½Ã ÃÊ±âÈ­
+                        if (player.Data == null && PlayerID == player.Id)//ë‚˜ì¸ë° ë°ì´í„°ë¥¼ í• ë‹¹ ëª»ë°›ì•˜ìœ¼ë©´,ë‹¤ì‹œ ì´ˆê¸°í™”
                         {
                             Debug.LogError($" Player {player.Id} in lobby {lobby.Id} has NULL Data!");
-                            return await Utill.RateLimited(() => InitLobbyScene(), 5000); // Àç½Ãµµ
+                            return await Utill.RateLimited(() => InitLobbyScene(), 5000); // ì¬ì‹œë„
                         }
                         foreach (KeyValuePair<string, PlayerDataObject> data in player.Data)
                         {
                             if (player.Data == null)
                                 continue;
 
-                            if (PlayerID == player.Id) //ÀÚ±âÀÚ½ÅÀº °Ç³Ê¶Ù±â
+                            if (PlayerID == player.Id) //ìê¸°ìì‹ ì€ ê±´ë„ˆë›°ê¸°
                                 continue;
 
                             if (data.Key != "NickName")
@@ -207,7 +207,7 @@ public class LobbyManager : IManagerEventInitailize
             }
             catch (LobbyServiceException e) when (e.Reason == LobbyExceptionReason.RateLimited)
             {
-                return await Utill.RateLimited(() => IsAlreadyLogInNickNameinLobby(usernickName)); // Àç½Ãµµ
+                return await Utill.RateLimited(() => IsAlreadyLogInNickNameinLobby(usernickName)); // ì¬ì‹œë„
             }
 
             catch (Exception notSetObjectException) when (notSetObjectException.Message.Equals("Object reference not set to an instance of an object"))
@@ -226,7 +226,7 @@ public class LobbyManager : IManagerEventInitailize
     private void SetVivoxTaskCheker()
     {
         _taskChecker[(int)LoadingProcess.VivoxLogin] = true;
-        Debug.Log("VivoxLoginÄÑÁü");
+        Debug.Log("VivoxLoginì¼œì§");
     }
 
     private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds)
@@ -244,11 +244,11 @@ public class LobbyManager : IManagerEventInitailize
     {
         try
         {
-            Debug.Log($"·ÎºñÀÇ È£½ºÆ® ID:{lobby.HostId} ³ªÀÇ ¾ÆÀÌµğ{PlayerID}");
+            Debug.Log($"ë¡œë¹„ì˜ í˜¸ìŠ¤íŠ¸ ID:{lobby.HostId} ë‚˜ì˜ ì•„ì´ë””{PlayerID}");
             StopHeartbeat();
             if (lobby.HostId == PlayerID)
             {
-                Debug.Log("ÇÏÆ®ºñÆ® ÀÌ½Ä");
+                Debug.Log("í•˜íŠ¸ë¹„íŠ¸ ì´ì‹");
                 _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
             }
         }
@@ -305,7 +305,7 @@ public class LobbyManager : IManagerEventInitailize
         try
         {
             string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
-            Debug.Log(lobby.Name + "·ÎºñÀÇ ÀÌ¸§");
+            Debug.Log(lobby.Name + "ë¡œë¹„ì˜ ì´ë¦„");
             await InjectionRelayJoinCodeintoLobby(lobby, joincode);
         }
         catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
@@ -326,7 +326,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (KeyNotFoundException exception)
         {
-            Debug.Log($"¸±·¹ÀÌ ÄÚµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.{exception}");
+            Debug.Log($"ë¦´ë ˆì´ ì½”ë“œê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.{exception}");
             await Utill.RateLimited(async () =>
             {
                 Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);
@@ -348,7 +348,7 @@ public class LobbyManager : IManagerEventInitailize
     public async Task TryJoinLobbyByNameOrCreateWaitLobby()
     {
         if (_currentLobby != null)
-            await ExitLobbyAsync(_currentLobby); //ÀÌÂÊÀº ¹®Á¦ ¾øÀ½
+            await ExitLobbyAsync(_currentLobby); //ì´ìª½ì€ ë¬¸ì œ ì—†ìŒ
 
         try
         {
@@ -370,7 +370,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (Exception e)
         {
-            Debug.Log("¿©±â¼­ ¹®Á¦°¡ ¹ß»ı" + e);
+            Debug.Log("ì—¬ê¸°ì„œ ë¬¸ì œê°€ ë°œìƒ" + e);
         }
     }
 
@@ -384,13 +384,13 @@ public class LobbyManager : IManagerEventInitailize
             {
              new QueryFilter(
                 field: QueryFilter.FieldOptions.Name,
-                op: QueryFilter.OpOptions.EQ, // EQ´Â "°°Àº ÀÌ¸§"ÀÏ ¶§¸¸
-                value: lobbyname)        // ÀÌ ÀÌ¸§°ú Á¤È®È÷ ÀÏÄ¡ÇÏ´Â ·Îºñ¸¸ °Ë»ö
+                op: QueryFilter.OpOptions.EQ, // EQëŠ” "ê°™ì€ ì´ë¦„"ì¼ ë•Œë§Œ
+                value: lobbyname)        // ì´ ì´ë¦„ê³¼ ì •í™•íˆ ì¼ì¹˜í•˜ëŠ” ë¡œë¹„ë§Œ ê²€ìƒ‰
             }
         };
         QueryResponse queryResponse = await GetQueryLobbiesAsyncCustom(lobbyNameFillter);
 
-        if (queryResponse is null) //ÀÌ¸§À¸·Î ¸øÃ£¾Ò´Ù.
+        if (queryResponse is null) //ì´ë¦„ìœ¼ë¡œ ëª»ì°¾ì•˜ë‹¤.
         {
             return null;
         }
@@ -433,11 +433,11 @@ public class LobbyManager : IManagerEventInitailize
             waitLobbyDataChangedEvent += ilobbychagnes => _ = OnLobbyHostChangeEvent(ilobbychagnes);
             waitLobbyDataChangedEvent += ilobbychagnes => _ = NotifyPlayerCreateRoomEvent(ilobbychagnes);
             await JoinLobbyInitalize(currentLobby, waitLobbyDataChangedEvent);
-            await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}´ÔÀÌ Á¢¼ÓÇÏ¼Ì½À´Ï´Ù");
+            await Managers.VivoxManager.SendSystemMessageAsync($"{CurrentPlayerInfo.PlayerNickName}ë‹˜ì´ ì ‘ì†í•˜ì…¨ìŠµë‹ˆë‹¤");
         }
         catch (LobbyServiceException alreayException) when (alreayException.Message.Contains("player is already a member of the lobby"))
         {
-            Debug.Log("ÇÃ·¹ÀÌ¾î°¡ ÀÌ¹Ì Á¢¼ÓÁßÀÔ´Ï´Ù. Á¤º¸»èÁ¦ÈÄ ÀçÁøÀÔÀ» ½Ãµµ ÇÕ´Ï´Ù.");
+            Debug.Log("í”Œë ˆì´ì–´ê°€ ì´ë¯¸ ì ‘ì†ì¤‘ì…ë‹ˆë‹¤. ì •ë³´ì‚­ì œí›„ ì¬ì§„ì…ì„ ì‹œë„ í•©ë‹ˆë‹¤.");
             Managers.SceneManagerEx.SetCheckTaskChecker(_taskChecker);
             await InitLobbyScene();
         }
@@ -448,7 +448,7 @@ public class LobbyManager : IManagerEventInitailize
 
         catch (KeyNotFoundException keynotFoundExceoption) when (keynotFoundExceoption.Message.Contains("The given key 'RelayCode' was not present in the dictionary"))
         {
-            Debug.Log("¸±·¹ÀÌÄÚµå°¡ ¾ø½À´Ï´Ù. ´Ù½Ã Ã£½À´Ï´Ù");
+            Debug.Log("ë¦´ë ˆì´ì½”ë“œê°€ ì—†ìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì°¾ìŠµë‹ˆë‹¤");
             await Utill.RateLimited(() => TryJoinLobbyByNameOrCreateLobby(lobbyName, maxPlayers, lobbyOption));
         }
         catch (Exception ex)
@@ -471,12 +471,12 @@ public class LobbyManager : IManagerEventInitailize
                 Debug.Log(errer);
             }
         }
-        // ¸ğµç LobbyChanged ÀÌº¥Æ®¿¡¼­ È£Ãâ
+        // ëª¨ë“  LobbyChanged ì´ë²¤íŠ¸ì—ì„œ í˜¸ì¶œ
         async Task NotifyPlayerCreateRoomEvent(ILobbyChanges lobbyChanges)
         {
             try
             {
-                // PlayerData ¿µ¿ª¿¡ º¯°æÀÌ ¾ø´Ù¸é Á¾·á
+                // PlayerData ì˜ì—­ì— ë³€ê²½ì´ ì—†ë‹¤ë©´ ì¢…ë£Œ
                 if (lobbyChanges.PlayerData.Value == null)
                     return;
 
@@ -485,21 +485,21 @@ public class LobbyManager : IManagerEventInitailize
                 {
                     LobbyPlayerChanges playerChanges = changedData.Value;
 
-                    //±× ÇÃ·¹ÀÌ¾îÀÇ Data Áß ½ÇÁ¦·Î °ªÀÌ ¹Ù²ï(Changed) Å° ¸ñ·Ï
+                    //ê·¸ í”Œë ˆì´ì–´ì˜ Data ì¤‘ ì‹¤ì œë¡œ ê°’ì´ ë°”ë€(Changed) í‚¤ ëª©ë¡
                     var dataChanges = playerChanges.ChangedData;
 
                     if (!dataChanges.Changed || dataChanges.Value == null)
-                        continue;                                   // µ¥ÀÌÅÍ º¯°æÀÌ ¾øÀ¸¸é ÆĞ½º
+                        continue;                                   // ë°ì´í„° ë³€ê²½ì´ ì—†ìœ¼ë©´ íŒ¨ìŠ¤
 
-                    //LastCreatedRoom ÇÊµå°¡ ¹Ù²î¾ú´ÂÁö È®ÀÎ
+                    //LastCreatedRoom í•„ë“œê°€ ë°”ë€Œì—ˆëŠ”ì§€ í™•ì¸
                     if (dataChanges.Value.TryGetValue("LastCreatedRoom", out var roomFieldChange) &&
-                        roomFieldChange.Changed)                   // ¡ç key °ªÀÌ º¯°æµÈ °æ¿ì¿¡¸¸
+                        roomFieldChange.Changed)                   // â† key ê°’ì´ ë³€ê²½ëœ ê²½ìš°ì—ë§Œ
                     {
                         // roomFieldChange.Value : PlayerDataObject
                         string newRoomId = roomFieldChange.Value.Value;
-                        Debug.Log($"´Ù¸¥ ÇÃ·¹ÀÌ¾î°¡ »õ ¹æÀ» ¸¸µé¾ú½À´Ï´Ù!  RoomId = {newRoomId}");
+                        Debug.Log($"ë‹¤ë¥¸ í”Œë ˆì´ì–´ê°€ ìƒˆ ë°©ì„ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤!  RoomId = {newRoomId}");
 
-                        // ÇÊ¿äÇÏ´Ù¸é Áï½Ã ¹æ ¸ñ·Ï °»½Å
+                        // í•„ìš”í•˜ë‹¤ë©´ ì¦‰ì‹œ ë°© ëª©ë¡ ê°±ì‹ 
                         await Managers.LobbyManager.ReFreshRoomList();
                     }
                 }
@@ -520,8 +520,8 @@ public class LobbyManager : IManagerEventInitailize
         if (lobby.HostId != CurrentPlayerInfo.Id)
             return;
 
-        StopHeartbeat();//ÇÏÆ®ºñÆ® Á¦°Å
-        Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//ÇöÀçÀÇ ·Îºñ¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
+        StopHeartbeat();//í•˜íŠ¸ë¹„íŠ¸ ì œê±°
+        Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//í˜„ì¬ì˜ ë¡œë¹„ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
         await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
     }
 
@@ -533,8 +533,8 @@ public class LobbyManager : IManagerEventInitailize
 
         try
         {
-            StopHeartbeat();//ÇÏÆ®ºñÆ® Á¦°Å
-            Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//ÇöÀçÀÇ ·Îºñ¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
+            StopHeartbeat();//í•˜íŠ¸ë¹„íŠ¸ ì œê±°
+            Lobby currentLobby = await GetLobbyAsyncCustom(lobby.Id);//í˜„ì¬ì˜ ë¡œë¹„ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
             bool ischeckUserIsHost = currentLobby.HostId == PlayerID;
             bool ischeckUserAloneInLobby = currentLobby.Players.Count <= 1;
             if (disconnectRelayOption == true)
@@ -542,14 +542,14 @@ public class LobbyManager : IManagerEventInitailize
                 Managers.RelayManager.ShutDownRelay();
             }
             if (ischeckUserAloneInLobby && ischeckUserIsHost)
-            {//³»°¡ È£½ºÆ®µµ ·Îºñ¿¡ ³ª¸¸ ³²¾Ò´Ù¸é ·Îºñ»èÁ¦
+            {//ë‚´ê°€ í˜¸ìŠ¤íŠ¸ë„ ë¡œë¹„ì— ë‚˜ë§Œ ë‚¨ì•˜ë‹¤ë©´ ë¡œë¹„ì‚­ì œ
                 await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
-                Debug.Log("·Îºñ»èÁ¦");
+                Debug.Log("ë¡œë¹„ì‚­ì œ");
             }
             else
             {
-                //¸¶Áö¸·¿¡ ³²Àº »ç¶÷ÀÌ ³ª¸»°í ´Ù¸¥ »ç¶÷µµ ÀÖ´Âµ¥, ³»°¡ È£½ºÆ®ÀÎ°æ¿ì
-                Debug.Log("·Îºñµ¥ÀÌÅÍ ³» ³» µ¥ÀÌÅÍ »èÁ¦");
+                //ë§ˆì§€ë§‰ì— ë‚¨ì€ ì‚¬ëŒì´ ë‚˜ë§ê³  ë‹¤ë¥¸ ì‚¬ëŒë„ ìˆëŠ”ë°, ë‚´ê°€ í˜¸ìŠ¤íŠ¸ì¸ê²½ìš°
+                Debug.Log("ë¡œë¹„ë°ì´í„° ë‚´ ë‚´ ë°ì´í„° ì‚­ì œ");
                 await RemovePlayerData(lobby);
                 DeleteRelayCodefromLobby(lobby);
             }
@@ -558,11 +558,11 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (System.ObjectDisposedException disposedException)
         {
-            Debug.Log($"ÀÌ¹Ì °´Ã¼°¡ Á¦°ÅµÇ¾ú½À´Ï´Ù.{disposedException.Message}");
+            Debug.Log($"ì´ë¯¸ ê°ì²´ê°€ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.{disposedException.Message}");
         }
         catch (Exception e)
         {
-            Debug.Log($"LeaveLobby ¸Ş¼­µå ¾È¿¡¼­ÀÇ ¿¡·¯{e}");
+            Debug.Log($"LeaveLobby ë©”ì„œë“œ ì•ˆì—ì„œì˜ ì—ëŸ¬{e}");
         }
     }
 
@@ -577,7 +577,7 @@ public class LobbyManager : IManagerEventInitailize
             _currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             if (_currentLobby != null && waitLobby != null)
             {
-                Debug.Log($"·Îºñ ¸¸µé¾îÁü{_currentLobby.Name}");
+                Debug.Log($"ë¡œë¹„ ë§Œë“¤ì–´ì§{_currentLobby.Name}");
                 await CreateRoomWriteinWaitLobby(waitLobby.Id, PlayerID);
                 await ExitLobbyAsync(waitLobby);
             }
@@ -691,18 +691,18 @@ public class LobbyManager : IManagerEventInitailize
         _isDoneInitEvent = false;
         try
         {
-            await InputPlayerDataIntoLobby(lobby);//·Îºñ¿¡ ÀÖ´Â player¿¡ ´Ğ³×ÀÓÃß°¡
-            await Managers.VivoxManager.JoinChannel(lobby.Id);//ºñº¹½º ¿¬°á
+            await InputPlayerDataIntoLobby(lobby);//ë¡œë¹„ì— ìˆëŠ” playerì— ë‹‰ë„¤ì„ì¶”ê°€
+            await Managers.VivoxManager.JoinChannel(lobby.Id);//ë¹„ë³µìŠ¤ ì—°ê²°
             await RegisteLobbyCallBack(lobby, OnLobbyChangeEvent, OnPlayerJoinedEvent, OnPlayerLeftEvent);
-            _initDoneEvent?.Invoke(); //È£ÃâÀÌ ¿Ï·áµÇ¾úÀ»¶§ ÀÌº¥Æ® Äİ¹é
+            _initDoneEvent?.Invoke(); //í˜¸ì¶œì´ ì™„ë£Œë˜ì—ˆì„ë•Œ ì´ë²¤íŠ¸ ì½œë°±
             _isDoneInitEvent = true;
         }
 
         catch (Exception ex)
         {
-            Debug.LogError($"JoinRoomInitalize Áß ¿À·ù ¹ß»ı: {ex}");
+            Debug.LogError($"JoinRoomInitalize ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {ex}");
             _isDoneInitEvent = false;
-            throw; // »óÀ§ È£ÃâºÎ¿¡ ¿¹¿Ü¸¦ Àü´Ş
+            throw; // ìƒìœ„ í˜¸ì¶œë¶€ì— ì˜ˆì™¸ë¥¼ ì „ë‹¬
         }
 
     }
@@ -740,7 +740,7 @@ public class LobbyManager : IManagerEventInitailize
         foreach (Lobby lobby in lobbyinPlayerList)
         {
             await ExitLobbyAsync(lobby);
-            Debug.Log($"{lobby}¿¡¼­ ³ª°¬½À´Ï´Ù.");
+            Debug.Log($"{lobby}ì—ì„œ ë‚˜ê°”ìŠµë‹ˆë‹¤.");
             StopHeartbeat();
         }
         _lobbyLoading?.Invoke(false);
@@ -749,7 +749,7 @@ public class LobbyManager : IManagerEventInitailize
 
     private async Task<List<Lobby>> CheckAllLobbyinPlayer()
     {
-        //ÇÊÅÍ ¿É¼Ç¿¡¼­ ¸ğµç ÇÃ·¹ÀÌ¾î¸¦ °Ë»çÇÏ´Â ÇÊÅÍ ¿É¼ÇÀº ¾øÀ¸¹Ç·Î µû·Î ¸¸µê
+        //í•„í„° ì˜µì…˜ì—ì„œ ëª¨ë“  í”Œë ˆì´ì–´ë¥¼ ê²€ì‚¬í•˜ëŠ” í•„í„° ì˜µì…˜ì€ ì—†ìœ¼ë¯€ë¡œ ë”°ë¡œ ë§Œë“¦
         List<Lobby> lobbyinPlayerList = new List<Lobby>();
         QueryResponse allLobbyResponse = await GetQueryLobbiesAsyncCustom();
         foreach (Lobby lobby in allLobbyResponse.Results)
@@ -771,7 +771,7 @@ public class LobbyManager : IManagerEventInitailize
             Debug.Log("Sign in anonymously succeeded!");
 
             string playerID = AuthenticationService.Instance.PlayerId;
-            Debug.Log($"ÇÃ·¹ÀÌ¾î ID ¸¸µé¾îÁü{playerID}");
+            Debug.Log($"í”Œë ˆì´ì–´ ID ë§Œë“¤ì–´ì§{playerID}");
             _currentPlayerInfo = new PlayerIngameLoginInfo(Managers.LogInManager.CurrentPlayerInfo.NickName, playerID);
 
             // Shows how to get the playerID
@@ -809,18 +809,18 @@ public class LobbyManager : IManagerEventInitailize
                 Data = updatedData
             });
 
-            Debug.Log($"·ÎºñID: {lobby.Id} \t ÇÃ·¹ÀÌ¾îID: {PlayerID} Á¤º¸°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+            Debug.Log($"ë¡œë¹„ID: {lobby.Id} \t í”Œë ˆì´ì–´ID: {PlayerID} ì •ë³´ê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
         catch (Exception error)
         {
-            Debug.LogError($"¿¡·¯ ¹ß»ı{error}");
+            Debug.LogError($"ì—ëŸ¬ ë°œìƒ{error}");
         }
     }
 
 
     private async Task RemovePlayerData(Lobby lobby)
     {
-        Debug.Log($"·ÎºñID{lobby.Id} \t ÇÃ·¹ÀÌ¾îID{PlayerID} Á¤º¸°¡ Á¦°ÅµÇ¾ú½À´Ï´Ù.");
+        Debug.Log($"ë¡œë¹„ID{lobby.Id} \t í”Œë ˆì´ì–´ID{PlayerID} ì •ë³´ê°€ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.");
         await LobbyService.Instance.RemovePlayerAsync(lobby.Id, PlayerID);
     }
     public async Task LogoutAndAllLeaveLobby()
@@ -836,14 +836,14 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException ex) when (ex.Reason == LobbyExceptionReason.RateLimited)
         {
-            Debug.Log($"Failed to remove player from lobby: {ex.Message} ´Ù½Ã ½ÃµµÁß");
+            Debug.Log($"Failed to remove player from lobby: {ex.Message} ë‹¤ì‹œ ì‹œë„ì¤‘");
             await Utill.RateLimited(() => LogoutAndAllLeaveLobby());
         }
         catch (Exception ex)
         {
-            Debug.Log($"¿¡·¯¹ß»ı: {ex}");
+            Debug.Log($"ì—ëŸ¬ë°œìƒ: {ex}");
         }
-        // »ç¿ëÀÚ ÀÎÁõ ·Î±×¾Æ¿ô
+        // ì‚¬ìš©ì ì¸ì¦ ë¡œê·¸ì•„ì›ƒ
         AuthenticationService.Instance.SignOut();
         AuthenticationService.Instance.ClearSessionToken();
         _currentPlayerInfo = default;
@@ -899,7 +899,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (LobbyServiceException e)
         {
-            Debug.Log($"¿¡·¯¹ß»ı:{e}");
+            Debug.Log($"ì—ëŸ¬ë°œìƒ:{e}");
             _isRefreshing = false;
             throw;
         }
@@ -940,7 +940,7 @@ public class LobbyManager : IManagerEventInitailize
     {
         foreach (var data in _currentLobby.Data)
         {
-            Debug.Log($"{data.Key}ÀÇ °ªÀº {data.Value.Value}");
+            Debug.Log($"{data.Key}ì˜ ê°’ì€ {data.Value.Value}");
         }
     }
     public async Task ShowUpdatedLobbyPlayers()
@@ -952,11 +952,11 @@ public class LobbyManager : IManagerEventInitailize
             {
                 Unity.Services.Lobbies.Models.Player hostPlayer = lobby.Players.FirstOrDefault(player => player.Id == lobby.HostId);
 
-                Debug.Log($"ÇöÀç ·ÎºñÀÌ¸§: {lobby.Name} ·ÎºñID: {lobby.Id} È£½ºÆ®´Ğ³×ÀÓ: {hostPlayer.Data["NickName"].Value} ·ÎºñÈ£½ºÆ®: {lobby.HostId} ");
+                Debug.Log($"í˜„ì¬ ë¡œë¹„ì´ë¦„: {lobby.Name} ë¡œë¹„ID: {lobby.Id} í˜¸ìŠ¤íŠ¸ë‹‰ë„¤ì„: {hostPlayer.Data["NickName"].Value} ë¡œë¹„í˜¸ìŠ¤íŠ¸: {lobby.HostId} ");
                 Debug.Log($"-----------------------------------");
                 foreach (var player in lobby.Players)
                 {
-                    Debug.Log($"ÇÃ·¹ÀÌ¾î ¾ÆÀÌµğ: {player.Id} ÇÃ·¹ÀÌ¾î ´Ğ³×ÀÓ:{player.Data["NickName"].Value}");
+                    Debug.Log($"í”Œë ˆì´ì–´ ì•„ì´ë””: {player.Id} í”Œë ˆì´ì–´ ë‹‰ë„¤ì„:{player.Data["NickName"].Value}");
                 }
                 Debug.Log($"-----------------------------------");
             }
@@ -968,7 +968,7 @@ public class LobbyManager : IManagerEventInitailize
         }
         catch (Exception ex)
         {
-            Debug.Log($"¿¡·¯{ex}");
+            Debug.Log($"ì—ëŸ¬{ex}");
         }
     }
 

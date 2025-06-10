@@ -14,7 +14,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     private readonly Color PLAYER_FRAME_COLOR = "#143658".HexCodetoConvertColor();
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
-    new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);// ¼­¹ö¸¸ ¼öÁ¤ °¡´ÉÇÏµµ·Ï ¼³Á¤
+    new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);// ì„œë²„ë§Œ ìˆ˜ì • ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì •
 
     private NetworkVariable<bool> _isReady = new NetworkVariable<bool>(
     false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -130,7 +130,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             _ui_Room_CharacterSelect.SetButtonEvent(() => PlayerReadyServerRpc());
             SetPositionCharacterChooseCamera();
         }
-        if (IsHost && IsOwner)//È£½ºÆ® ÃÖÃÊ 1¹ø È£ÃâºÎ
+        if (IsHost && IsOwner)//í˜¸ìŠ¤íŠ¸ ìµœì´ˆ 1ë²ˆ í˜¸ì¶œë¶€
         {
             _ui_Room_CharacterSelect.SetHostButton();
 
@@ -155,7 +155,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
                 Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, selectCharacter);
             }
         };
-        // UI ÃÊ±âÈ­
+        // UI ì´ˆê¸°í™”
         _playerNickNameText.text = _playerNickname.Value.ToString();
         _readyPanel.SetActive(_isReady.Value);
     }
@@ -240,7 +240,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     {
         if (NetworkManager.Singleton.LocalClientId == targetClientId)
         {
-            _ui_Room_CharacterSelect.ButtonState(state); // º»ÀÎÀÇ Å¬¶óÀÌ¾ğÆ®¿¡¼­¸¸ ½ÇÇà
+            _ui_Room_CharacterSelect.ButtonState(state); // ë³¸ì¸ì˜ í´ë¼ì´ì–¸íŠ¸ì—ì„œë§Œ ì‹¤í–‰
         }
     }
 

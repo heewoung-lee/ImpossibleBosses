@@ -32,7 +32,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         foreach ((string, int) poolingPrefabInfo in Managers.NGO_PoolManager.AutoRegisterFromFolder())
         {
-            //°æ·Î¿¡ ¸Â°Ô Root°¡Á®¿Ã °Í
+            //ê²½ë¡œì— ë§ê²Œ Rootê°€ì ¸ì˜¬ ê²ƒ
             GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
             if (pollingNgo_Root != null)
             {
@@ -68,7 +68,7 @@ public class NetworkObjectPool : NetworkBehaviour
         if (networkObject.TryGetComponent(out NGO_PoolingInitalize_Base poolingInitalize_Base))
         {
             poolingInitalize_Base.OnPoolRelease();
-            if (m_PooledObjects.TryGetValue(poolingInitalize_Base.PoolingNGO_PATH,out ObjectPool<NetworkObject> poolObj))//¾À ÀüÈ¯µÉ¶§ ¿ÀºêÁ§Æ® Ç®ÀÌ ºñ¾îÁö´Âµ¥ ÀÌ‹š Ç®·Î ¹İ³³µÇ·Á´Â °´Ã¼°¡ ÀÖÀ»¶§¸¦ ´ëºñ¿¡ TryGetÀ¸·Î ¼öÁ¤
+            if (m_PooledObjects.TryGetValue(poolingInitalize_Base.PoolingNGO_PATH,out ObjectPool<NetworkObject> poolObj))//ì”¬ ì „í™˜ë ë•Œ ì˜¤ë¸Œì íŠ¸ í’€ì´ ë¹„ì–´ì§€ëŠ”ë° ì´ í’€ë¡œ ë°˜ë‚©ë˜ë ¤ëŠ” ê°ì²´ê°€ ìˆì„ë•Œë¥¼ ëŒ€ë¹„ì— TryGetìœ¼ë¡œ ìˆ˜ì •
             {
                 poolObj.Release(networkObject);
             }

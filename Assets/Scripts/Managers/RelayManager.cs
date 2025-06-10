@@ -71,7 +71,7 @@ public class RelayManager
             else
             {
                 Managers.ResourceManager.Instantiate("Prefabs/NGO/NetworkManager");
-                //ÀÚ²Ù ¾îµğ¼­ ³×Æ®¿öÅ©Á¾·áµÉ¶§ °£ÇæÀûÀ¸·Î ÇÏÀÌ¾î¶óÅ°¿¡ ÀÌÀÎ½ºÅÏ½º »ı±â´Âµ¥ ÀÌ°Å ÀÇ½É ÇØº¼°Í 
+                //ìê¾¸ ì–´ë””ì„œ ë„¤íŠ¸ì›Œí¬ì¢…ë£Œë ë•Œ ê°„í—ì ìœ¼ë¡œ í•˜ì´ì–´ë¼í‚¤ì— ì´ì¸ìŠ¤í„´ìŠ¤ ìƒê¸°ëŠ”ë° ì´ê±° ì˜ì‹¬ í•´ë³¼ê²ƒ 
                 NetworkManager.Singleton.SetSingleton();
                 return NetworkManager.Singleton;
             }
@@ -183,7 +183,7 @@ public class RelayManager
             RelayServerData relaydata = AllocationUtils.ToRelayServerData(_allocation, "dtls");
             NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
-            Debug.Log($"È£Ãâ µÆ³ª¿ä ¸±·¹ÀÌÄÚµå: {_joinCode}");
+            Debug.Log($"í˜¸ì¶œ ëë‚˜ìš” ë¦´ë ˆì´ì½”ë“œ: {_joinCode}");
             if (NetworkManagerEx.StartHost())
             {
                 return _joinCode;
@@ -264,7 +264,7 @@ public class RelayManager
     {
         try
         {
-            // À¯È¿ÇÑ °æ¿ì ÇÒ´ç °´Ã¼¸¦ ¹Ş¾Æ¿È
+            // ìœ íš¨í•œ ê²½ìš° í• ë‹¹ ê°ì²´ë¥¼ ë°›ì•„ì˜´
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             return true;
         }
@@ -302,12 +302,12 @@ public class RelayManager
         }
         catch (RelayServiceException ex) when (ex.ErrorCode == 404)
         {
-            Debug.Log("¼ÒÄÏ¿¡·¯");
+            Debug.Log("ì†Œì¼“ì—ëŸ¬");
             return false;
         }
         catch (RelayServiceException ex) when (ex.Message.Contains("join code not found"))
         {
-            Debug.LogWarning("·Îºñ¿¡ ¸±·¹ÀÌÄÚµå°¡ À¯È¿ÇÏÁö ¾ÊÀ½ »õ·Î ¸¸µé¾î¾ßÇÔ");
+            Debug.LogWarning("ë¡œë¹„ì— ë¦´ë ˆì´ì½”ë“œê°€ ìœ íš¨í•˜ì§€ ì•ŠìŒ ìƒˆë¡œ ë§Œë“¤ì–´ì•¼í•¨");
             return false;
         }
         catch (Exception ex)
@@ -333,11 +333,11 @@ public class RelayManager
     public void SceneLoadInitalizeRelayServer()
     {
         //NetworkManagerEx.NetworkConfig.EnableSceneManagement = false;
-        //4.21ÀÏ ÁÖ¼®Ã³¸®ÇÔ °ú°ÅÀÇ ³»°¡ ¿Ö ÀÌºÎºĞÀ» ³Ö¾ú´ÂÁö ÀÌÇØ ¾È°¨.
+        //4.21ì¼ ì£¼ì„ì²˜ë¦¬í•¨ ê³¼ê±°ì˜ ë‚´ê°€ ì™œ ì´ë¶€ë¶„ì„ ë„£ì—ˆëŠ”ì§€ ì´í•´ ì•ˆê°.
         Managers.SocketEventManager.DisconnectRelayEvent += WarpperDisConntionRelay;
     }
 
-    #region Å×½ºÆ®¿ë ÇÔ¼ö
+    #region í…ŒìŠ¤íŠ¸ìš© í•¨ìˆ˜
     public void SetPlayerClassforMockUnitTest(Define.PlayerClass playerClass)
     {
         _choicePlayerCharacter = playerClass;

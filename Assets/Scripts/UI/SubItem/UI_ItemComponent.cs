@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public struct IteminfoStruct : INetworkSerializable//TODO: ³ªÁß¿¡ ¾ÆÀÌÅÛ °­È­µî °íÀ¯¾ÆÀÌÅÛÀÇ ´É·ÂÄ¡°¡ º¯È­ÇÒ¶§ ÀÌ°É·Î ´øÁú°Í
+public struct IteminfoStruct : INetworkSerializable//TODO: ë‚˜ì¤‘ì— ì•„ì´í…œ ê°•í™”ë“± ê³ ìœ ì•„ì´í…œì˜ ëŠ¥ë ¥ì¹˜ê°€ ë³€í™”í• ë•Œ ì´ê±¸ë¡œ ë˜ì§ˆê²ƒ
 {
     public int ItemNumber;
     public ItemType Item_Type;
@@ -44,11 +44,11 @@ public struct IteminfoStruct : INetworkSerializable//TODO: ³ªÁß¿¡ ¾ÆÀÌÅÛ °­È­µî 
         serializer.SerializeValue(ref ItemIconSourceText);
         if (serializer.IsWriter)
         {
-            // 1. ListÀÇ °³¼ö Á÷·ÄÈ­
+            // 1. Listì˜ ê°œìˆ˜ ì§ë ¬í™”
             int count = ItemEffects == null ? 0 : ItemEffects.Count;
             serializer.SerializeValue(ref count);
 
-            // 2. ¿ø¼Ò¸¦ ÇÏ³ª¾¿ Á÷·ÄÈ­
+            // 2. ì›ì†Œë¥¼ í•˜ë‚˜ì”© ì§ë ¬í™”
             if (ItemEffects != null)
             {
                 for (int i = 0; i < count; i++)
@@ -63,11 +63,11 @@ public struct IteminfoStruct : INetworkSerializable//TODO: ³ªÁß¿¡ ¾ÆÀÌÅÛ °­È­µî 
         }
         else
         {
-            // 1. ¼ö½Å Ãø¿¡¼­ °³¼ö ¿ªÁ÷·ÄÈ­
+            // 1. ìˆ˜ì‹  ì¸¡ì—ì„œ ê°œìˆ˜ ì—­ì§ë ¬í™”
             int count = 0;
             serializer.SerializeValue(ref count);
 
-            // 2. List¸¦ Àç»ı¼º ÈÄ ¿ø¼Ò Ã¤¿ì±â
+            // 2. Listë¥¼ ì¬ìƒì„± í›„ ì›ì†Œ ì±„ìš°ê¸°
             ItemEffects = new List<StatEffect>(count);
             for (int i = 0; i < count; i++)
             {
@@ -82,11 +82,11 @@ public struct IteminfoStruct : INetworkSerializable//TODO: ³ªÁß¿¡ ¾ÆÀÌÅÛ °­È­µî 
 
         if (serializer.IsWriter)
         {
-            // 1. °³¼ö ¸ÕÀú Á÷·ÄÈ­
+            // 1. ê°œìˆ˜ ë¨¼ì € ì§ë ¬í™”
             int pathCount = ItemSourcePath == null ? 0 : ItemSourcePath.Count;
             serializer.SerializeValue(ref pathCount);
 
-            // 2. ¿ø¼Ò(¹®ÀÚ¿­) ÇÏ³ª¾¿ Á÷·ÄÈ­
+            // 2. ì›ì†Œ(ë¬¸ìì—´) í•˜ë‚˜ì”© ì§ë ¬í™”
             if (ItemSourcePath != null)
             {
                 for (int i = 0; i < pathCount; i++)
@@ -98,15 +98,15 @@ public struct IteminfoStruct : INetworkSerializable//TODO: ³ªÁß¿¡ ¾ÆÀÌÅÛ °­È­µî 
         }
         else
         {
-            // 1. °³¼ö ¿ªÁ÷·ÄÈ­
+            // 1. ê°œìˆ˜ ì—­ì§ë ¬í™”
             int pathCount = 0;
             serializer.SerializeValue(ref pathCount);
 
-            // 2. List<string> Àç»ı¼º ÈÄ ÀĞ±â
+            // 2. List<string> ì¬ìƒì„± í›„ ì½ê¸°
             ItemSourcePath = new List<string>(pathCount);
             for (int i = 0; i < pathCount; i++)
             {
-                string path = string.Empty; // ±âº»°ª
+                string path = string.Empty; // ê¸°ë³¸ê°’
                 serializer.SerializeValue(ref path);
                 ItemSourcePath.Add(path);
             }
@@ -183,7 +183,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
             = _decriptionObject.SetDecriptionPos(transform, ItemRectTr.rect.width, ItemRectTr.rect.height);
 
         _decriptionObject.SetItemEffectText((_iteminfo as IItemDescriptionForm).GetItemEffectText());
-        _decriptionObject.SetValue(_iteminfo);//¿©±â¿¡ ºÎ¸ğÅ¬·¡½ºÀÎ IITemÀÌ ³ª¿Í¾ßÇÔ
+        _decriptionObject.SetValue(_iteminfo);//ì—¬ê¸°ì— ë¶€ëª¨í´ë˜ìŠ¤ì¸ IITemì´ ë‚˜ì™€ì•¼í•¨
         _decriptionObject.SetDescription(_descriptionText);
     }
     protected override void OnDisableInit()
@@ -193,7 +193,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         if (UI_DragImageIcon == null)
             return;
 
-        if (UI_DragImageIcon.IsDragImageActive == true)//µå·¡±× ÀÌ¹ÌÁö°¡ »ì¾ÆÀÖÀ»‹š »óÁ¡ÀÌ³ª, ÀÎº¥Åä¸®°¡ ´İÈú¶§
+        if (UI_DragImageIcon.IsDragImageActive == true)//ë“œë˜ê·¸ ì´ë¯¸ì§€ê°€ ì‚´ì•„ìˆì„ ìƒì ì´ë‚˜, ì¸ë²¤í† ë¦¬ê°€ ë‹«íë•Œ
         {
             UI_DragImageIcon.SetItemImageDisable();
         }
@@ -257,7 +257,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _itemIconSourceImageText = iteminfo.ItemIconSourceText;
         _itemIconSourceImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
         _imageSource = iteminfo.ImageSource;
-        _iteminfo = iteminfo;//´Ù¸¥ Å¬·¡½ºµéÀÌ Çüº¯È¯À» ½±°Ô ÇÏ±â À§ÇØ ÀÎÅÍÆäÀÌ½º¸¦ ÀúÀå
+        _iteminfo = iteminfo;//ë‹¤ë¥¸ í´ë˜ìŠ¤ë“¤ì´ í˜•ë³€í™˜ì„ ì‰½ê²Œ í•˜ê¸° ìœ„í•´ ì¸í„°í˜ì´ìŠ¤ë¥¼ ì €ì¥
     }
 
 

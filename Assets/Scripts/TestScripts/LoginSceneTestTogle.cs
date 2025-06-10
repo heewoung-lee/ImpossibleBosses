@@ -4,7 +4,7 @@ public class LoginSceneTestTogle : MonoBehaviour
 {
     void Start()
     {
-        //�׽�Ʈ�� UI
+        //ев╫╨ф╝©К UI
         LogInTestToggle testTogle = Managers.UI_Manager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
     }
 }

@@ -4,7 +4,7 @@ public class Buffer_MoveSpeedModifier : Duration_Buff
 {
     public override Sprite BuffIconImage => _iconImage;
 
-    public override string Buffname => "ÀÌµ¿¼ÓµµÁõ°¡";
+    public override string Buffname => "ì´ë™ì†ë„ì¦ê°€";
 
     public override StatType StatType => StatType.MoveSpeed;
 

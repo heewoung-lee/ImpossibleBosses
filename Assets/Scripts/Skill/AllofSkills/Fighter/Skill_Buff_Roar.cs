@@ -18,11 +18,11 @@ public class Skill_Buff_Roar : Skill_Duration
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
     public override Sprite BuffIconImage => _buffIconImage;
     public override float CoolTime => 5f;
-    public override string EffectDescriptionText => $"ÆÄÆ¼¿øµé¿¡°Ô 10ÀÇ °ø°İ·ÂÀ» ºÎ¿©ÇÕ´Ï´Ù";
+    public override string EffectDescriptionText => $"íŒŒí‹°ì›ë“¤ì—ê²Œ 10ì˜ ê³µê²©ë ¥ì„ ë¶€ì—¬í•©ë‹ˆë‹¤";
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
-    public override float SkillDuration => 10f;//Áö¼Ó½Ã°£
-    public override string SkillName => "ºĞ³ë";
-    public override string ETCDescriptionText => "È­°¡³­´Ù!";
+    public override float SkillDuration => 10f;//ì§€ì†ì‹œê°„
+    public override string SkillName => "ë¶„ë…¸";
+    public override string ETCDescriptionText => "í™”ê°€ë‚œë‹¤!";
     public override float Value => 10f;
     public override Buff_Modifier Buff_Modifier => _roarModifier;
     public override IState state => _fighter_Class.RoarState;

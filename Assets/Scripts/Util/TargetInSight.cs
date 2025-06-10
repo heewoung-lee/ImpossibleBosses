@@ -81,8 +81,8 @@ public class TargetInSight
 
     public static List<Vector3> GeneratePositionsInSector(Transform originTr, float totalAngle, float totalRadius, int angleSteps, int radiusStep)
     {
-        //ÇöÀç Ä³¸¯ÅÍÀÇ ÁÂÇ¥, ºÎÃ¤²ÃÀÇ °¢µµ, ¹İÁö¸§ ±æÀÌ, °¢µµ¿¡ µû¶ó ¸î°³·Î ³ª´­²«Áö, ±æÀÌ¿¡ µû¶ó ¸î°³·Î ³ª´­²«Áö
-        //Æ÷Áö¼ÇÀ» ´ãÀ» ¸®½ºÆ®, ´ÜÀ§´ç ±æÀÌ, ´ÜÀ§´ç °¢µµ
+        //í˜„ì¬ ìºë¦­í„°ì˜ ì¢Œí‘œ, ë¶€ì±„ê¼´ì˜ ê°ë„, ë°˜ì§€ë¦„ ê¸¸ì´, ê°ë„ì— ë”°ë¼ ëª‡ê°œë¡œ ë‚˜ëˆŒê»€ì§€, ê¸¸ì´ì— ë”°ë¼ ëª‡ê°œë¡œ ë‚˜ëˆŒê»€ì§€
+        //í¬ì§€ì…˜ì„ ë‹´ì„ ë¦¬ìŠ¤íŠ¸, ë‹¨ìœ„ë‹¹ ê¸¸ì´, ë‹¨ìœ„ë‹¹ ê°ë„
 
         List<Vector3> positions = new List<Vector3>();
         float anglePerUnit = totalAngle / (angleSteps - 1);
@@ -94,12 +94,12 @@ public class TargetInSight
             float currentRadius = radiusPerUnit * i;
             for (int j = 0; j < angleSteps; j++)
             {
-                //°¢µµ¸¦ ÃßÃâ 
+                //ê°ë„ë¥¼ ì¶”ì¶œ 
                 float currentAngle = -halfangle + anglePerUnit * j;//Degree -> Rad
                 float angleInRadian = (currentAngle + originTr.eulerAngles.y) * Mathf.Deg2Rad;
-                //»ï°¢ÇÔ¼ö¸¦ ÅëÇØ ´ÜÀ§ ¿ø¿¡ ´ëÇÑ ÁÂÇ¥¸¦ Ãâ·Â
+                //ì‚¼ê°í•¨ìˆ˜ë¥¼ í†µí•´ ë‹¨ìœ„ ì›ì— ëŒ€í•œ ì¢Œí‘œë¥¼ ì¶œë ¥
                 Vector3 perUnitPos = new Vector3(Mathf.Sin(angleInRadian), 0f, Mathf.Cos(angleInRadian));
-                //³»À§Ä¡¿Í ±æÀÌ´ÜÀ§¿¡ ¸Â°Ô Á¶Á¤
+                //ë‚´ìœ„ì¹˜ì™€ ê¸¸ì´ë‹¨ìœ„ì— ë§ê²Œ ì¡°ì •
                 Vector3 currentPos = originTr.position + perUnitPos * currentRadius;
                 positions.Add(currentPos);
             }

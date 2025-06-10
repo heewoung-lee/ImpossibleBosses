@@ -27,21 +27,21 @@ public class StoneGolem_Skill1_Stone_Initalize : Poolable, ISpawnBehavior
         {
             elapsedTime += Time.deltaTime;
 
-            // t: ÁøÇà ºñÀ² (0~1)
+            // t: ì§„í–‰ ë¹„ìœ¨ (0~1)
             float t = elapsedTime / duration;
 
-            // XZ À§Ä¡ º¸°£
+            // XZ ìœ„ì¹˜ ë³´ê°„
             Vector3 currentXZ = Vector3.Lerp(startPoint, targetPoint, t);
 
-            // Y °ªÀº Æ÷¹°¼± °è»ê
+            // Y ê°’ì€ í¬ë¬¼ì„  ê³„ì‚°
             float currentY = Mathf.Lerp(startPoint.y, targetPoint.y, t) +MAX_HEIGHT * Mathf.Sin(Mathf.PI * t);
 
-            // ÃÖÁ¾ À§Ä¡ ¼³Á¤
+            // ìµœì¢… ìœ„ì¹˜ ì„¤ì •
             projectile.position = new Vector3(currentXZ.x, currentY, currentXZ.z);
 
             yield return null;
         }
-        // Æ÷¹°¼± ÀÌµ¿ ¿Ï·á ÈÄ ÆÄ±«
+        // í¬ë¬¼ì„  ì´ë™ ì™„ë£Œ í›„ íŒŒê´´
         Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
     }
 }

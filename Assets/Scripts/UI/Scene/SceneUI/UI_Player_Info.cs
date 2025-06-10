@@ -57,7 +57,7 @@ public class UI_Player_Info : UI_Scene
         }
     }
 
-    private void UpdateUI(PlayerStats stats)//ÀÌ·¸°Ô ÇÑ ÀÌÀ¯´Â È£½ºÆ®´Â CharacterBaseStatÀÌ ¹Ù·Î ³Ñ¾î¿À´Âµ¥ °Ô½ºÆ®´Â ¸ø³Ñ¾î¿È ±×·¡¼­ È£½ºÆ®´Â ÀÌ·¸°Ô ÃÊ±âÈ­ ÇÏ°í °Ô½ºÆ®´Â ÀÌº¥Æ®¿¡¼­ Ã³¸®
+    private void UpdateUI(PlayerStats stats)//ì´ë ‡ê²Œ í•œ ì´ìœ ëŠ” í˜¸ìŠ¤íŠ¸ëŠ” CharacterBaseStatì´ ë°”ë¡œ ë„˜ì–´ì˜¤ëŠ”ë° ê²ŒìŠ¤íŠ¸ëŠ” ëª»ë„˜ì–´ì˜´ ê·¸ë˜ì„œ í˜¸ìŠ¤íŠ¸ëŠ” ì´ë ‡ê²Œ ì´ˆê¸°í™” í•˜ê³  ê²ŒìŠ¤íŠ¸ëŠ” ì´ë²¤íŠ¸ì—ì„œ ì²˜ë¦¬
     {
         if (stats.CharacterBaseStats.Equals(default(CharacterBaseStat)))
             return;

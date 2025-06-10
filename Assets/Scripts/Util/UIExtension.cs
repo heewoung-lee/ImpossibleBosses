@@ -39,10 +39,10 @@ public static class UIExtension
     {
         if (graphic != null)
         {
-            graphic.color = setColor; // MaskableGraphicÀÇ color ¼Ó¼º ¼³Á¤
-            return graphic.color; // ¼³Á¤µÈ »ö»óÀ» ¹İÈ¯
+            graphic.color = setColor; // MaskableGraphicì˜ color ì†ì„± ì„¤ì •
+            return graphic.color; // ì„¤ì •ëœ ìƒ‰ìƒì„ ë°˜í™˜
         }
-        return Color.white; // ±×·¡ÇÈÀÌ nullÀÌ¸é ±âº» »ö»ó ¹İÈ¯
+        return Color.white; // ê·¸ë˜í”½ì´ nullì´ë©´ ê¸°ë³¸ ìƒ‰ìƒ ë°˜í™˜
     }
     public static bool TryGetComponentInsChildren<T>(this GameObject origin, out T[] getComponent) where T : UnityEngine.Object
     {
@@ -107,9 +107,9 @@ public static class UIExtension
 
     public static UI_ItemComponent_Inventory MakeInventoryItemComponent(this IItem iteminfo, Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
     {
-        //iteminfoÀÇ Á¤º¸´Â ItemConsumable È¤Àº ItemEquipmentÀÌ±â¿¡ UI_ItemComponent Çüº¯È¯ÀÌ ¾ÈµÈ´Ù.
-        //ItemCOnsumableÀ» Ã£À¸¸é UI_ItemComponent_Consumable·Î ¿¬°áÇØÁÖ°í
-        //ItemEquipmentÀ» Ã£À¸¸é UI_ItemComponent_Equipment·Î ¿¬°áÇØ¾ßÇÑ´Ù.
+        //iteminfoì˜ ì •ë³´ëŠ” ItemConsumable í˜¹ì€ ItemEquipmentì´ê¸°ì— UI_ItemComponent í˜•ë³€í™˜ì´ ì•ˆëœë‹¤.
+        //ItemCOnsumableì„ ì°¾ìœ¼ë©´ UI_ItemComponent_Consumableë¡œ ì—°ê²°í•´ì£¼ê³ 
+        //ItemEquipmentì„ ì°¾ìœ¼ë©´ UI_ItemComponent_Equipmentë¡œ ì—°ê²°í•´ì•¼í•œë‹¤.
 
         UI_Player_Inventory inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
 

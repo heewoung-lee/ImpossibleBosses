@@ -1,4 +1,4 @@
-﻿using BaseStates;
+using BaseStates;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System.Collections;
 using System.Collections.Generic;

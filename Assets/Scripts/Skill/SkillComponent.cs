@@ -86,10 +86,10 @@ public class SkillComponent : UI_Base
     public void AttachItemToSlot(GameObject go, Transform slot)
     {
         go.transform.SetParent(slot);
-        go.GetComponent<RectTransform>().anchorMin = Vector2.zero; // ÁÂÃø ÇÏ´Ü (0, 0)
-        go.GetComponent<RectTransform>().anchorMax = Vector2.one;  // ¿ìÃø »ó´Ü (1, 1)
-        go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // ¿ÀÇÁ¼Â Á¦°Å
-        go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // ¿ÀÇÁ¼Â Á¦°Å
+        go.GetComponent<RectTransform>().anchorMin = Vector2.zero; // ì¢Œì¸¡ í•˜ë‹¨ (0, 0)
+        go.GetComponent<RectTransform>().anchorMax = Vector2.one;  // ìš°ì¸¡ ìƒë‹¨ (1, 1)
+        go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // ì˜¤í”„ì…‹ ì œê±°
+        go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // ì˜¤í”„ì…‹ ì œê±°
     }
     protected override void StartInit()
     {

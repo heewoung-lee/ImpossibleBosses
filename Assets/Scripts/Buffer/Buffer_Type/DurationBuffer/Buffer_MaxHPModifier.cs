@@ -7,7 +7,7 @@ public class Buffer_MaxHPModifier : Duration_Buff
 
     public override Sprite BuffIconImage => _iconImage;
 
-    public override string Buffname => "ÃÖ´ëÃ¼·ÂÁõ°¡";
+    public override string Buffname => "ìµœëŒ€ì²´ë ¥ì¦ê°€";
 
     public override StatType StatType => StatType.MaxHP;
 

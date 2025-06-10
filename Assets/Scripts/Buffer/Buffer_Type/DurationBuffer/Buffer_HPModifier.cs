@@ -7,7 +7,7 @@ public class Buffer_HPModifier : Duration_Buff
     public override Sprite BuffIconImage => _iconImage;
 
     public StatType statType => StatType.CurrentHp;
-    public override string Buffname => "Ã¼·ÂÁõ°¡";
+    public override string Buffname => "ì²´ë ¥ì¦ê°€";
     public override StatType StatType => StatType.CurrentHp;
     public override void ApplyStats(BaseStats stats, float value)
     {

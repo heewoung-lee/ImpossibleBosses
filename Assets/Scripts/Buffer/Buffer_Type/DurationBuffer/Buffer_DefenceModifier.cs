@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Buffer_DefenceModifier : Duration_Buff
 {
-    public override string Buffname => "¹æ¾î·ÂÁõ°¡";
+    public override string Buffname => "ë°©ì–´ë ¥ì¦ê°€";
 
     public override StatType StatType => StatType.Defence;
 

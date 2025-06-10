@@ -75,7 +75,7 @@ public class UI_InputRoomPassWord : UI_Popup
         }
         catch (Unity.Services.Lobbies.LobbyServiceException wrongPw) when (wrongPw.Reason == Unity.Services.Lobbies.LobbyExceptionReason.IncorrectPassword)
         {
-            _errorMessageText.text = "ºñ¹Ğ¹øÈ£°¡ Æ²·È½À´Ï´Ù";
+            _errorMessageText.text = "ë¹„ë°€ë²ˆí˜¸ê°€ í‹€ë ¸ìŠµë‹ˆë‹¤";
             _messageError.SetActive(true);
             _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () =>
             {
@@ -85,8 +85,8 @@ public class UI_InputRoomPassWord : UI_Popup
         }
         catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
         {
-            Debug.Log("·Îºñ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù");
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>().AlertSetText("¿À·ù", "·Îºñ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù")
+            Debug.Log("ë¡œë¹„ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤");
+            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>().AlertSetText("ì˜¤ë¥˜", "ë¡œë¹„ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤")
                 .AfterAlertEvent(async () =>
                 {
                     Managers.UI_Manager.ClosePopupUI(this);
@@ -97,7 +97,7 @@ public class UI_InputRoomPassWord : UI_Popup
         }
         catch (Exception error)
         {
-            Debug.Log($"¿¡·¯°¡ ¹ß»ıÇß½À´Ï´Ù{error}");
+            Debug.Log($"ì—ëŸ¬ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤{error}");
             return;
         }
         Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);

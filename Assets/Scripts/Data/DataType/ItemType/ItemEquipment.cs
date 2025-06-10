@@ -54,7 +54,7 @@ public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptio
     public string GetItemEffectText()
     {
         string descriptionText = "";
-        descriptionText = Utill.ItemGradeConvertToKorean(Item_Grade) + "µî±Þ\n";
+        descriptionText = Utill.ItemGradeConvertToKorean(Item_Grade) + "ë“±ê¸‰\n";
         foreach (StatEffect effect in ItemEffects)
         {
             descriptionText += $"{Utill.StatTypeConvertToKorean(effect.statType)} : {effect.value} \n";

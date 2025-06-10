@@ -50,7 +50,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
     {
         _requestDataTypes = LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType", AddSerializableAttributeType);
 
-        //µ¥ÀÌÅÍ ·Îµå
+        //ë°ì´í„° ë¡œë“œ
         LoadDataFromGoogleSheets(_requestDataTypes);
     }
 
@@ -62,17 +62,17 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
         foreach (string guid in guids)
         {
-            // GUID¸¦ ÅëÇØ ¿¡¼Â °æ·Î¸¦ °¡Á®¿È
+            // GUIDë¥¼ í†µí•´ ì—ì…‹ ê²½ë¡œë¥¼ ê°€ì ¸ì˜´
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            // MonoScript ¿¡¼Â ·Îµå
+            // MonoScript ì—ì…‹ ë¡œë“œ
             MonoScript monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
             if (monoScript != null)
             {
-                // ½ºÅ©¸³Æ®¿¡¼­ Á¤ÀÇµÈ Å¬·¡½º Å¸ÀÔ °¡Á®¿À±â
+                // ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ì •ì˜ëœ í´ë˜ìŠ¤ íƒ€ì… ê°€ì ¸ì˜¤ê¸°
                 Type type = monoScript.GetClass();
                 if (type != null)
                 {
-                    wantTypeFilter.Invoke(type, pathClasses);//¿øÇÏ´Â °´Ã¼¸¦ ÇÊÅÍÇØ¼­ °¡Á®¿À±â
+                    wantTypeFilter.Invoke(type, pathClasses);//ì›í•˜ëŠ” ê°ì²´ë¥¼ í•„í„°í•´ì„œ ê°€ì ¸ì˜¤ê¸°
                 }
             }
         }
@@ -153,20 +153,20 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             string existingJson = File.ReadAllText(filePath);
             if (existingJson == jsonString)
             {
-                Debug.Log($"{fileName} µ¥ÀÌÅÍ¿¡ º¯°æ »çÇ×ÀÌ ¾ø½À´Ï´Ù.");
+                Debug.Log($"{fileName} ë°ì´í„°ì— ë³€ê²½ ì‚¬í•­ì´ ì—†ìŠµë‹ˆë‹¤.");
                 return;
             }
         }
         File.WriteAllText(filePath, jsonString);
-        Debug.Log($"{fileName} µ¥ÀÌÅÍ¸¦ ·ÎÄÃ¿¡ ÀúÀåÇß½À´Ï´Ù.");
+        Debug.Log($"{fileName} ë°ì´í„°ë¥¼ ë¡œì»¬ì— ì €ì¥í–ˆìŠµë‹ˆë‹¤.");
     }
 
     public Spreadsheet GetGoogleSheetData(GoogleDataBaseStruct databaseStruct,out SheetsService service,out string spreadsheetId,bool isWrite = false)
     {
-        // ±¸±Û ½ºÇÁ·¹µå½ÃÆ®¿¡¼­ µ¥ÀÌÅÍ ·ÎµåÇÏ´Â ·ÎÁ÷
-        // ¹İÈ¯°ª: Dictionary<string, string> (sheetName, jsonString)
+        // êµ¬ê¸€ ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì—ì„œ ë°ì´í„° ë¡œë“œí•˜ëŠ” ë¡œì§
+        // ë°˜í™˜ê°’: Dictionary<string, string> (sheetName, jsonString)
 
-        // ±¸±Û ÀÎÁõ ¹× ¼­ºñ½º »ı¼º
+        // êµ¬ê¸€ ì¸ì¦ ë° ì„œë¹„ìŠ¤ ìƒì„±
         try
         {
             string[] readAndWriteOption;
@@ -199,7 +199,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
             spreadsheetId = databaseStruct._spreedSheetID;
 
-            // ½ºÇÁ·¹µå½ÃÆ® ¿äÃ»
+            // ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ìš”ì²­
             Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
             return spreadsheet;
         }
@@ -211,13 +211,13 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
     private void LoadDataFromGoogleSheets(List<Type> requestDataTypes)
     {
-        // ±¸±Û ½ºÇÁ·¹µå½ÃÆ®¿¡¼­ µ¥ÀÌÅÍ ·ÎµåÇÏ´Â ·ÎÁ÷
-        // ¹İÈ¯°ª: Dictionary<string, string> (sheetName, jsonString)
+        // êµ¬ê¸€ ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì—ì„œ ë°ì´í„° ë¡œë“œí•˜ëŠ” ë¡œì§
+        // ë°˜í™˜ê°’: Dictionary<string, string> (sheetName, jsonString)
 
-        // ±¸±Û ÀÎÁõ ¹× ¼­ºñ½º »ı¼º
+        // êµ¬ê¸€ ì¸ì¦ ë° ì„œë¹„ìŠ¤ ìƒì„±
         try
         {
-            // ½ºÇÁ·¹µå½ÃÆ® ¿äÃ»
+            // ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ìš”ì²­
             Spreadsheet spreadsheet = GetGoogleSheetData(DatabaseStruct, out SheetsService service,out string spreadsheetId);
             foreach (Type requestType in requestDataTypes)
             {
@@ -232,26 +232,26 @@ public class DataManager : IManagerInitializable,IManagerIResettable
                         break;
                     }
                 }
-                if (sheet != null) //ÇÊ¿äÇÑ µ¥ÀÌÅÍ Å¸ÀÔÀÇ ½ÃÆ®°¡ ÀÖ´Ù¸é DB¿¡ ÀÖ´Â°É ¾´´Ù.
+                if (sheet != null) //í•„ìš”í•œ ë°ì´í„° íƒ€ì…ì˜ ì‹œíŠ¸ê°€ ìˆë‹¤ë©´ DBì— ìˆëŠ”ê±¸ ì“´ë‹¤.
                 {
                     string sheetName = sheet.Properties.Title;
 
-                    string range = $"{sheetName}!A1:Z"; // ÇÊ¿äÇÑ ¹üÀ§ ÁöÁ¤ ÀüºÎ ´Ù ÀĞ°Ú´Ù.
+                    string range = $"{sheetName}!A1:Z"; // í•„ìš”í•œ ë²”ìœ„ ì§€ì • ì „ë¶€ ë‹¤ ì½ê² ë‹¤.
                     SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
                     ValueRange response = request.Execute();
 
                     string jsonString = ParseSheetData(response.Values);
 
-                    if (Managers.ResourceManager.TryGetLoad($"Data/{sheetName}", out TextAsset originJsonFile))//ÀÖ´Ù¸é.
+                    if (Managers.ResourceManager.TryGetLoad($"Data/{sheetName}", out TextAsset originJsonFile))//ìˆë‹¤ë©´.
                     {
                         if (BinaryCheck<string>(jsonString, originJsonFile.ToString()) == false)
                         {
-                            SaveDataToFile(sheetName, jsonString);//ÀÖ´Âµ¥ µÎ°³°¡ ´Ù¸£´Ù¸é ÃÖ½ÅÀ» ÀúÀå
+                            SaveDataToFile(sheetName, jsonString);//ìˆëŠ”ë° ë‘ê°œê°€ ë‹¤ë¥´ë‹¤ë©´ ìµœì‹ ì„ ì €ì¥
                         }
                     }
                     else
                     {
-                        SaveDataToFile(sheetName, jsonString);//¾ø´Ù¸é ÀúÀå
+                        SaveDataToFile(sheetName, jsonString);//ì—†ë‹¤ë©´ ì €ì¥
                     }
                     AddAllDataDictFromJsonData(sheetName, jsonString);
                 }
@@ -264,7 +264,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
                 }
             }
         }
-        catch (Exception error)//±¸±Û ½ºÇÁ·¹µå½ÃÆ®¿¡ ¿¬°áÀÌ ¾ÈµÉ¶§ ¿¡·¯Ã³¸®
+        catch (Exception error)//êµ¬ê¸€ ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì— ì—°ê²°ì´ ì•ˆë ë•Œ ì—ëŸ¬ì²˜ë¦¬
         {
             Debug.Log(error);
             Debug.Log("Load from LocalJson");
@@ -301,7 +301,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         {
             if (TypeInterface.IsGenericType && TypeInterface.GetGenericTypeDefinition() == typeof(Ikey<>))
             {
-                //Á¦³×¸¯Å¸ÀÔÀÇ Ã¹¹øÂ° ¸Å°³º¯¼ö¸¦ ´øÁø´Ù. = Å°°¡ µÇ´Â ¸Å°³º¯¼ö 
+                //ì œë„¤ë¦­íƒ€ì…ì˜ ì²«ë²ˆì§¸ ë§¤ê°œë³€ìˆ˜ë¥¼ ë˜ì§„ë‹¤. = í‚¤ê°€ ë˜ëŠ” ë§¤ê°œë³€ìˆ˜ 
                 return TypeInterface.GetGenericArguments()[0];
             }
         }
@@ -325,15 +325,15 @@ public class DataManager : IManagerInitializable,IManagerIResettable
             {
                 jsonBuilder.Append("\"" + columns[col] + "\"" + ":");
 
-                // ¹è¿­ÀÎÁö È®ÀÎÇÏ¿© µû¿ÈÇ¥ Ã³¸®
+                // ë°°ì—´ì¸ì§€ í™•ì¸í•˜ì—¬ ë”°ì˜´í‘œ ì²˜ë¦¬
                 if (data[col].ToString().StartsWith("["))
                 {
-                    // ¹è¿­Àº µû¿ÈÇ¥ ¾øÀÌ Ãß°¡
+                    // ë°°ì—´ì€ ë”°ì˜´í‘œ ì—†ì´ ì¶”ê°€
                     jsonBuilder.Append(data[col]);
                 }
                 else
                 {
-                    // ÀÏ¹İ ¹®ÀÚ¿­Àº µû¿ÈÇ¥·Î °¨½Î±â
+                    // ì¼ë°˜ ë¬¸ìì—´ì€ ë”°ì˜´í‘œë¡œ ê°ì‹¸ê¸°
                     jsonBuilder.Append("\"" + data[col] + "\"");
                 }
 
@@ -355,7 +355,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
     private bool BinaryCheck<T>(T src, T target)
     {
-        //µÎ ´ë»óÀ» ¹ÙÀÌ³Ê¸®·Î º¯È¯ÇØ¼­ ºñ±³, ´Ù¸£¸é false ¹İÈ¯
+        //ë‘ ëŒ€ìƒì„ ë°”ì´ë„ˆë¦¬ë¡œ ë³€í™˜í•´ì„œ ë¹„êµ, ë‹¤ë¥´ë©´ false ë°˜í™˜
         BinaryFormatter formatter1 = new BinaryFormatter();
         MemoryStream stream1 = new MemoryStream();
         formatter1.Serialize(stream1, src);

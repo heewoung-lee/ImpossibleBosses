@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class ParticleLifetimeSync : MonoBehaviour
 {
-    //ÀÌ Å¬·¡½º´Â ÆÄÆ¼Å¬Áß Duration°ú StartLifeTimeÀ» ¸ÂÃß±â À§ÇÑ Å¬·¡½º
+    //ì´ í´ë˜ìŠ¤ëŠ” íŒŒí‹°í´ì¤‘ Durationê³¼ StartLifeTimeì„ ë§ì¶”ê¸° ìœ„í•œ í´ë˜ìŠ¤
 }

@@ -52,7 +52,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
 
     private void OnDestroy()
     {
-        //TODO: ¿Ö µğ½ºÆ®·ÎÀÌ¿¡ Çß³Ä, OnDisable·Î ÇÏ¸é È­¸éÀÌ ´İÈú¶§ È£ÃâÀÌ ¾ÈµÇ¹Ç·Î µğ½ºÆ®·ÎÀÌ¿¡ ÀúÀå ·ÎÁ÷ ¸¸µë
+        //TODO: ì™œ ë””ìŠ¤íŠ¸ë¡œì´ì— í–ˆëƒ, OnDisableë¡œ í•˜ë©´ í™”ë©´ì´ ë‹«íë•Œ í˜¸ì¶œì´ ì•ˆë˜ë¯€ë¡œ ë””ìŠ¤íŠ¸ë¡œì´ì— ì €ì¥ ë¡œì§ ë§Œë“¬
 
         SaveDataFromEquipment();
     }
@@ -61,11 +61,11 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
         if (IsEquipped == true)
         {
             Managers.SceneDataSaveAndLoader.SaveEquipMentData(new KeyValuePair<Equipment_Slot_Type, UI_ItemComponent_Inventory>(slotType, _equipedItem));
-            IsEquipped = false;//ÀÌÀü ¾ÆÀÌÅÛÀ¸·Î ´É·ÂÄ¡ »©±â
+            IsEquipped = false;//ì´ì „ ì•„ì´í…œìœ¼ë¡œ ëŠ¥ë ¥ì¹˜ ë¹¼ê¸°
 
             UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
             currentEquipItem.transform.SetParent(null);
-            currentEquipItem.SetItemEquipedState(false);//´É·ÂÄ¡ Á¦°Å
+            currentEquipItem.SetItemEquipedState(false);//ëŠ¥ë ¥ì¹˜ ì œê±°
         } 
     }
 
@@ -83,7 +83,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
 
     private void UpdateStatsFromEquippedItem(StatType statType, float statValue, BaseStats stats, bool isEquipped)
     {
-        int coefficient = isEquipped ? 1 : -1; //Àåºñ¸¦ ÀåÂøÇßÀ¸¸é true, »©¸é false
+        int coefficient = isEquipped ? 1 : -1; //ì¥ë¹„ë¥¼ ì¥ì°©í–ˆìœ¼ë©´ true, ë¹¼ë©´ false
 
         switch (statType)
         {
@@ -126,9 +126,9 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
 
     public void ItemEquip(UI_ItemComponent_Inventory itemComponent)
     {
-        if (IsEquipped)//ÀÌ¹Ì ½½·Ô¿¡ ¾ÆÀÌÅÛÀÌ ÀÖ´Ù¸é
+        if (IsEquipped)//ì´ë¯¸ ìŠ¬ë¡¯ì— ì•„ì´í…œì´ ìˆë‹¤ë©´
         {
-            IsEquipped = false;//ÀÌÀü ¾ÆÀÌÅÛÀ¸·Î ´É·ÂÄ¡ »©±â
+            IsEquipped = false;//ì´ì „ ì•„ì´í…œìœ¼ë¡œ ëŠ¥ë ¥ì¹˜ ë¹¼ê¸°
 
             UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
             currentEquipItem.transform.SetParent(contentofInventoryTr);

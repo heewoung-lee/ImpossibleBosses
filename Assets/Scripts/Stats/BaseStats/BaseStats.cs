@@ -45,7 +45,7 @@ public struct CharacterBaseStat : INetworkSerializable
 [DisallowMultipleComponent]
 public abstract class BaseStats : NetworkBehaviour, IDamageable
 {
-    private Action<int, int> _event_Attacked; //ÇöÀç HP°¡ ¹Ù·Î ¾È³Ñ¾î¿Í¼­ µÎ¹ø¤Š ¸Å°³º¯¼ö¿¡ ÇöÀç HP°ª Àü´Ş
+    private Action<int, int> _event_Attacked; //í˜„ì¬ HPê°€ ë°”ë¡œ ì•ˆë„˜ì–´ì™€ì„œ ë‘ë²ˆ ë§¤ê°œë³€ìˆ˜ì— í˜„ì¬ HPê°’ ì „ë‹¬
     private Action<CharacterBaseStat> _done_Base_Stats_Loading;
 
     private Action<int, int> _currentHPValueChangedEvent;
@@ -412,7 +412,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
             OnDeadRpc(attackerRef,RpcTarget.Single(ownetClientId, RpcTargetUse.Temp));
             _isDeadValue.Value = true;
         }
-    }//¼­¹ö´Ï±ñ ¼­¹ö¿¡¼­ ³»°¡ Á×À¸¸é ´©±¸ÇÑÅ× Á×¾ú´ÂÁö Á×¾ú´Ù°í È£ÃâÇÏ±â 
+    }//ì„œë²„ë‹ˆê¹ ì„œë²„ì—ì„œ ë‚´ê°€ ì£½ìœ¼ë©´ ëˆ„êµ¬í•œí…Œ ì£½ì—ˆëŠ”ì§€ ì£½ì—ˆë‹¤ê³  í˜¸ì¶œí•˜ê¸° 
 
 
     [Rpc(SendTo.SpecifiedInParams)]
@@ -431,7 +431,7 @@ public abstract class BaseStats : NetworkBehaviour, IDamageable
 
 
     [Rpc(SendTo.Owner)]
-    public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat) //UI°¡ ÀÌº¥Æ®¸¦ °É±âµµ Àü¿¡ ½ÇÇàÀÌ µÇ¾î¹ö¸°´Ù.
+    public void DoneInitalizeCharacterBaseStatRpc(CharacterBaseStat stat) //UIê°€ ì´ë²¤íŠ¸ë¥¼ ê±¸ê¸°ë„ ì „ì— ì‹¤í–‰ì´ ë˜ì–´ë²„ë¦°ë‹¤.
     {
         _done_Base_Stats_Loading?.Invoke(stat);
     }

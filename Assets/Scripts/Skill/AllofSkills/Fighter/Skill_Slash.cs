@@ -43,10 +43,10 @@ public class Skill_Slash : Skill_Immedialty
         }
     }
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
-    public override string SkillName => "°­º£±â";
+    public override string SkillName => "ê°•ë² ê¸°";
     public override float CoolTime => 2f;
-    public override string EffectDescriptionText => $"Àû¿¡°Ô{AttackDamage}¸¸Å­ X3ÀÇ ÇÇÇØ¸¦ ÁÝ´Ï´Ù.";
-    public override string ETCDescriptionText => "°­ÇÏ°Ô º¥´Ù";
+    public override string EffectDescriptionText => $"ì ì—ê²Œ{AttackDamage}ë§Œí¼ X3ì˜ í”¼í•´ë¥¼ ì¤ë‹ˆë‹¤.";
+    public override string ETCDescriptionText => "ê°•í•˜ê²Œ ë²¤ë‹¤";
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Slash");
     public override float Value => 1.5f;
     public override BaseController PlayerController { 

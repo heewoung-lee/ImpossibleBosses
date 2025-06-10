@@ -94,7 +94,7 @@ public class UI_Manager : IManagerIResettable
         ui_scene = null;
         return false;
     }
-    public void SetCanvas(Canvas canvas, bool sorting = false)//¾À ³Ñ¾î°¥¶§ ´ÙÃÊ±âÈ­ ÇÒ°Í
+    public void SetCanvas(Canvas canvas, bool sorting = false)//ì”¬ ë„˜ì–´ê°ˆë•Œ ë‹¤ì´ˆê¸°í™” í• ê²ƒ
     {
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
@@ -294,7 +294,7 @@ public class UI_Manager : IManagerIResettable
         while (_ui_Popups.Count > 0)
         {
             UI_Popup popup_ui = _ui_Popups.Pop();
-            if (popup_ui == popup)//³ª¿Í _ui_Popups¿¡¼­ ²¨³½ popupÀÌ °°´Ù¸é Á¾·á
+            if (popup_ui == popup)//ë‚˜ì™€ _ui_Popupsì—ì„œ êº¼ë‚¸ popupì´ ê°™ë‹¤ë©´ ì¢…ë£Œ
             {
                 if (handler != null)
                 {
@@ -309,11 +309,11 @@ public class UI_Manager : IManagerIResettable
             }
             else
             {
-                tempUIPopupStack.Push(popup_ui); //¾Æ´Ï¶ó¸é ½ºÅÃÀÓ½Ãº¸°ü¼Ò¿¡ ÀúÀå
+                tempUIPopupStack.Push(popup_ui); //ì•„ë‹ˆë¼ë©´ ìŠ¤íƒìž„ì‹œë³´ê´€ì†Œì— ì €ìž¥
             }
         }
 
-        while (tempUIPopupStack.Count > 0)//ÀÓ½Ã·Î º¸°üµÈ ÆË¾÷Ã¢µéÀ» ´Ù½Ã _ui_Popups¿¡ º×´Â´Ù.
+        while (tempUIPopupStack.Count > 0)//ìž„ì‹œë¡œ ë³´ê´€ëœ íŒì—…ì°½ë“¤ì„ ë‹¤ì‹œ _ui_Popupsì— ë¶“ëŠ”ë‹¤.
         {
             _ui_Popups.Push(tempUIPopupStack.Pop());
         }
@@ -325,11 +325,11 @@ public class UI_Manager : IManagerIResettable
             ClosePopupUI();
     }
     /// <summary>
-    /// ÆË¾÷À» ÄÑ°í ²ø ¼ö ÀÖ´Â ¸Þ¼­µå ÇÚµé·¯·Î ±¸Çö ÇÏ¸é ÄÑ°í ²ô´Â ±¸ÇöºÎ¸¦ Á÷Á¢¼öÁ¤ÇÒ ¼ö ÀÖ´Ù.  
+    /// íŒì—…ì„ ì¼œê³  ëŒ ìˆ˜ ìžˆëŠ” ë©”ì„œë“œ í•¸ë“¤ëŸ¬ë¡œ êµ¬í˜„ í•˜ë©´ ì¼œê³  ë„ëŠ” êµ¬í˜„ë¶€ë¥¼ ì§ì ‘ìˆ˜ì •í•  ìˆ˜ ìžˆë‹¤.  
     /// </summary>
-    /// <param name="popup">6.9ÀÏ IPopupHandler ÀÎÅÍÆäÀÌ½º Ãß°¡ ÇØ´ç ÀÎÅÍÆäÀÌ½º´Â ¿ÀºêÁ§Æ®¸¦ ÄÑ°í ²ô´Â ¹æ½ÄÀÇ ÇÚµé¸µÀ»
-    /// ¼öµ¿À¸·Î ¹Ù²Ù´Â ÀÎÅÍÆäÀÌ½ºÀÌ°í Ãß°¡ÇÑ ÀÌÀ¯´Â °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ºñÈ°¼ºÈ­ÇÏ°Ô µÇ¸é ¹é´Ü¿¡¼­ µµ´Â ÇÁ·Î¼¼½º°¡ ¸ØÃß¹Ç·Î
-    /// ¹é´Ü¿¡¼­ µµ´Â ÇÁ·Î¼¼½º°¡ ÀÖ´Ù¸é ÇØ´ç ÀÎÅÍÆäÀÌ½º¸¦ »ó¼Ó¹Þ°í ±¸ÇöÇÏ´Â°É·Î ´ëÃ¼ÇØ¾ßÇÔ</param>
+    /// <param name="popup">6.9ì¼ IPopupHandler ì¸í„°íŽ˜ì´ìŠ¤ ì¶”ê°€ í•´ë‹¹ ì¸í„°íŽ˜ì´ìŠ¤ëŠ” ì˜¤ë¸Œì íŠ¸ë¥¼ ì¼œê³  ë„ëŠ” ë°©ì‹ì˜ í•¸ë“¤ë§ì„
+    /// ìˆ˜ë™ìœ¼ë¡œ ë°”ê¾¸ëŠ” ì¸í„°íŽ˜ì´ìŠ¤ì´ê³  ì¶”ê°€í•œ ì´ìœ ëŠ” ê²Œìž„ì˜¤ë¸Œì íŠ¸ë¥¼ ë¹„í™œì„±í™”í•˜ê²Œ ë˜ë©´ ë°±ë‹¨ì—ì„œ ë„ëŠ” í”„ë¡œì„¸ìŠ¤ê°€ ë©ˆì¶”ë¯€ë¡œ
+    /// ë°±ë‹¨ì—ì„œ ë„ëŠ” í”„ë¡œì„¸ìŠ¤ê°€ ìžˆë‹¤ë©´ í•´ë‹¹ ì¸í„°íŽ˜ì´ìŠ¤ë¥¼ ìƒì†ë°›ê³  êµ¬í˜„í•˜ëŠ”ê±¸ë¡œ ëŒ€ì²´í•´ì•¼í•¨</param>
     public void SwitchPopUpUI(UI_Popup popup)
     {
 

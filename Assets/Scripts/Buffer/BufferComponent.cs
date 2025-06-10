@@ -79,10 +79,10 @@ public class BufferComponent : MonoBehaviour
         foreach (BufferComponent buffer in transform.parent.GetComponentsInChildren<BufferComponent>())
         {
 
-            if (_modifier != buffer.Modifier)//°°Àº ¹öÇÁ°¡ ¾Æ´Ï¶ó¸é ³Ñ±ä´Ù.
+            if (_modifier != buffer.Modifier)//ê°™ì€ ë²„í”„ê°€ ì•„ë‹ˆë¼ë©´ ë„˜ê¸´ë‹¤.
                 continue;
 
-            if (buffer == this)//³» ¹öÇÁ¶ó¸é ³Ñ±ä´Ù.
+            if (buffer == this)//ë‚´ ë²„í”„ë¼ë©´ ë„˜ê¸´ë‹¤.
                 continue;
 
             else
@@ -100,11 +100,11 @@ public class BufferComponent : MonoBehaviour
         if (_image != null)
         {
             float elapsedTime = _duration;
-            float minAlpha = 0.3f; // ÃÖ¼Ò ¾ËÆÄ°ª (Á¶Àı °¡´É)
-            float maxAlpha = 1f;   // ÃÖ´ë ¾ËÆÄ°ª (Á¶Àı °¡´É)
+            float minAlpha = 0.3f; // ìµœì†Œ ì•ŒíŒŒê°’ (ì¡°ì ˆ ê°€ëŠ¥)
+            float maxAlpha = 1f;   // ìµœëŒ€ ì•ŒíŒŒê°’ (ì¡°ì ˆ ê°€ëŠ¥)
             float remainingTime = 5f;
             float TimeDeal = 0f;
-            // Ã³À½¿¡´Â ÀÌ¹ÌÁö¸¦ ¿ÏÀüÇÑ ¾ËÆÄ°ªÀ¸·Î ¼¼ÆÃ
+            // ì²˜ìŒì—ëŠ” ì´ë¯¸ì§€ë¥¼ ì™„ì „í•œ ì•ŒíŒŒê°’ìœ¼ë¡œ ì„¸íŒ…
             Color color = _image.color;
             color.a = maxAlpha;
             _image.color = color;
@@ -117,14 +117,14 @@ public class BufferComponent : MonoBehaviour
                 {
                     float timeRatio = 1f - (elapsedTime / remainingTime);
                     float flickerSpeed = Mathf.Lerp(3f, 10f, timeRatio);
-                    TimeDeal += Time.deltaTime * flickerSpeed;//°ªÀÇ Áõ°¡·®À» ÀÏÁ¤ÇÏ°Ô ³ô¿©¾ßÇÏ¹Ç·Î TimeÀ» ´õÇÔ
+                    TimeDeal += Time.deltaTime * flickerSpeed;//ê°’ì˜ ì¦ê°€ëŸ‰ì„ ì¼ì •í•˜ê²Œ ë†’ì—¬ì•¼í•˜ë¯€ë¡œ Timeì„ ë”í•¨
                     float t = Mathf.PingPong(TimeDeal, 1f);
                     color.a = Mathf.Lerp(minAlpha, maxAlpha, t);
                     _image.color = color;
                 }
                 else
                 {
-                    // 5ÃÊ ÀÌ»ó ³²¾ÒÀ» ¶© ±ôºıÀÌÁö ¾Ê°í ¾ËÆÄ°ªÀ» °íÁ¤
+                    // 5ì´ˆ ì´ìƒ ë‚¨ì•˜ì„ ë• ê¹œë¹¡ì´ì§€ ì•Šê³  ì•ŒíŒŒê°’ì„ ê³ ì •
                     color = _image.color;
                     color.a = maxAlpha;
                     _image.color = color;

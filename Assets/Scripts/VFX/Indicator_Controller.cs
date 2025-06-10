@@ -37,7 +37,7 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         {
             _radius = Mathf.Max(value, 0f);
             Vector3 currentSize;
-            currentSize.x = _radius * 2; //_radius´Â ¹İÁö¸§ÀÇ ±æÀÌ ÀÌ¹Ç·Î ProjectÀÇ Å©±â´Â 2¹è·Î Å°¿ö¾ßÇÔ
+            currentSize.x = _radius * 2; //_radiusëŠ” ë°˜ì§€ë¦„ì˜ ê¸¸ì´ ì´ë¯€ë¡œ Projectì˜ í¬ê¸°ëŠ” 2ë°°ë¡œ í‚¤ì›Œì•¼í•¨
             currentSize.y = _radius * 2;
             currentSize.z = DEPTH;
 
@@ -131,14 +131,14 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            // 0~1 ·Î Á¤±ÔÈ­µÈ ÁøÇà ºñÀ²
+            // 0~1 ë¡œ ì •ê·œí™”ëœ ì§„í–‰ ë¹„ìœ¨
             float fillAmount = Mathf.Clamp01(elapsed / duration);
             UpdateDecalFillProgressProjector(fillAmount);
             yield return null;
         }
         _doneIndicatorEvent?.Invoke();
         _doneIndicatorEvent = null;
-        UpdateDecalFillProgressProjector(0f);       // ´ÙÀ½ Àç»ç¿ë ´ëºñ
+        UpdateDecalFillProgressProjector(0f);       // ë‹¤ìŒ ì¬ì‚¬ìš© ëŒ€ë¹„
         Managers.ResourceManager.DestroyObject(gameObject);
     }
 }

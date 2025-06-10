@@ -68,12 +68,12 @@ public class PlayerStats : BaseStats, IAttackRange
         set
         {
             _currentexp = value;
-            //·¹º§¾÷ Ã¼Å©
+            //ë ˆë²¨ì—… ì²´í¬
             while (true)
             {
                 PlayerStat stat;
                 if (_statDict.TryGetValue(_level + 1, out stat) == false)
-                    break;//¸¸·¾ÀÌ¸é ¸ØÃß±â
+                    break;//ë§Œë ™ì´ë©´ ë©ˆì¶”ê¸°
 
                 if (_currentexp < stat.xpRequired)
                     break;

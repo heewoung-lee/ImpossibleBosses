@@ -22,7 +22,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     
     private Vector3 _initialEquipPosition;
     private Vector2 _initialMousePosition;
-    private Vector3 _initialWindowPosition;//ÀÎº¥Åä¸®ÀÇ ÃÊ±âÀ§Ä¡¸¦ ´ã´Â°÷
+    private Vector3 _initialWindowPosition;//ì¸ë²¤í† ë¦¬ì˜ ì´ˆê¸°ìœ„ì¹˜ë¥¼ ë‹´ëŠ”ê³³
     private Transform _itemInventoryTr;
 
     private GraphicRaycaster _ui_inventory_Raycaster;
@@ -74,17 +74,17 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
         GameObject playerInfoTr = Utill.FindChild(playerTr.gameObject, "Player_Info_Panel");
 
         _playerName = Utill.FindChild(playerInfoTr, "PlayerName").GetComponent<TMP_Text>();
-        //ÀÌ¸§ ÃÊ±âÈ­
+        //ì´ë¦„ ì´ˆê¸°í™”
         _playerLevel = Utill.FindChild(playerInfoTr, "PlayerLevelText").GetComponent<TMP_Text>();
-        //·¹º§ ÃÊ±âÈ­
+        //ë ˆë²¨ ì´ˆê¸°í™”
         Transform left_Panel_Bottom = Get<Transform>((int)Panel_Tr.Left_Panel_Bottom);
         _currentGold = Utill.FindChild(left_Panel_Bottom.gameObject, "Coin_Text", true).GetComponent<TMP_Text>();
-        //°ñµå ÃÊ±âÈ­
+        //ê³¨ë“œ ì´ˆê¸°í™”
         Transform right_Panel_Bottom = Get<Transform>((int)Panel_Tr.Right_Panel_Bottom);
         _hp_Stat_Text = Utill.FindChild(right_Panel_Bottom.gameObject, "HP_Stat_Text", true).GetComponent<TMP_Text>();
         _attack_Stat_Text = Utill.FindChild(right_Panel_Bottom.gameObject, "Attack_Stat_Text", true).GetComponent<TMP_Text>();
         _defense_Stat_Text = Utill.FindChild(right_Panel_Bottom.gameObject, "Defense_Stat_Text", true).GetComponent<TMP_Text>();
-        //½ºÅÈ ÃÊ±âÈ­
+        //ìŠ¤íƒ¯ ì´ˆê¸°í™”
 
         _windowPanel = Get<Transform>((int)Panel_Tr.Window_Panel);
         _equipMent = Get<GameObject>((int)Equipment_Go.Equipment);
@@ -102,7 +102,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     {
         RectTransform parentRectTransform = transform as RectTransform;
 
-        // µå·¡±× ½ÃÀÛ ½Ã ÃÊ±â À§Ä¡ ÀúÀå
+        // ë“œë˜ê·¸ ì‹œì‘ ì‹œ ì´ˆê¸° ìœ„ì¹˜ ì €ì¥
         _windowPanel.gameObject.AddUIEvent((PointerEventData eventData) =>
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -114,7 +114,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
             _initialEquipPosition = _equipMent.transform.localPosition;
         }, Define.UI_Event.DragBegin);
 
-        // µå·¡±× Áß Ã¢ À§Ä¡ ¾÷µ¥ÀÌÆ®
+        // ë“œë˜ê·¸ ì¤‘ ì°½ ìœ„ì¹˜ ì—…ë°ì´íŠ¸
         _windowPanel.gameObject.AddUIEvent((PointerEventData eventData) =>
         {
             Vector2 currentMousePosition;
@@ -132,7 +132,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
         UpdateGoldUI(OwnerPlayerStats.Gold);
 
         ClosePopup();
-        //¾ÆÀÌÅÛÀ» ·ÎµåÇÏ±â À§ÇØ °ÔÀÓ¿ÀºêÁ§Æ®´Â ÄÑµÎ´Âµ¥ Äµ¹ö½º¸¸ ²¨µÒ.
+        //ì•„ì´í…œì„ ë¡œë“œí•˜ê¸° ìœ„í•´ ê²Œì„ì˜¤ë¸Œì íŠ¸ëŠ” ì¼œë‘ëŠ”ë° ìº”ë²„ìŠ¤ë§Œ êº¼ë‘ .
 
     }
 

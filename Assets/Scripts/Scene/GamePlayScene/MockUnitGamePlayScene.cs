@@ -43,7 +43,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
             await SetAuthenticationService();
             if (_playerType == "Player1")
             {
-                if (_isSoloTest == true)//³ªÈ¥ÀÚ Å×½ºÆ® ÇÒ¶§
+                if (_isSoloTest == true)//ë‚˜í˜¼ì í…ŒìŠ¤íŠ¸ í• ë•Œ
                 {
                     await Managers.RelayManager.StartHostWithRelay(8);
                 }
@@ -120,7 +120,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
 
     public async void Init()
     {
-        await JoinChannel(); // ¸ŞÀÎ ½º·¹µå¿¡¼­ ¾ÈÀüÇÏ°Ô ½ÇÇàµÊ
+        await JoinChannel(); // ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ ì•ˆì „í•˜ê²Œ ì‹¤í–‰ë¨
         _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }

@@ -100,7 +100,7 @@ public class Managers : MonoBehaviour
     {
         if (_instance == null)
         {
-            if (_isQuitting == true)//¿¡µğÅÍ°¡ Á¾·áµÉ¶§ ´Ù¸¥ Å¬·¡½ºµéÀÌ Instance¸¦ ÂüÁ¶ÇÏ·ÁÇØ¼­ ¿À·ù°¡ ³² Á¾·áÁßÀÏ¶© ÂüÁ¶¸¦ ¸øÇÏ°Ô ¸·´Â ¹æÁöÄÚµå
+            if (_isQuitting == true)//ì—ë””í„°ê°€ ì¢…ë£Œë ë•Œ ë‹¤ë¥¸ í´ë˜ìŠ¤ë“¤ì´ Instanceë¥¼ ì°¸ì¡°í•˜ë ¤í•´ì„œ ì˜¤ë¥˜ê°€ ë‚¨ ì¢…ë£Œì¤‘ì¼ë• ì°¸ì¡°ë¥¼ ëª»í•˜ê²Œ ë§‰ëŠ” ë°©ì§€ì½”ë“œ
                 return;
 
             GameObject go = GameObject.Find("@Managers");
@@ -144,7 +144,7 @@ public class Managers : MonoBehaviour
         {
             Debug.LogException(e);
         }
-        //¼ø¼­´ë·Î ²÷¾î¾ß ÇÔ
+        //ìˆœì„œëŒ€ë¡œ ëŠì–´ì•¼ í•¨
     }
 
     public static void Clear()

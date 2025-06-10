@@ -12,8 +12,8 @@ public struct StatEffect : INetworkSerializable
         this.buffname = buffname;
     }
 
-    public StatType statType;  // º¯È­ ½ºÅÈ
-    public float value;        // º¯È­ °ª
+    public StatType statType;  // ë³€í™” ìŠ¤íƒ¯
+    public float value;        // ë³€í™” ê°’
     public string buffname;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter

@@ -73,11 +73,11 @@ public class VFXManager
         return particleObject;
     }
 
-    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//¦i¾Æ°¡´Â ÆÄÆ¼Å¬À» À§ÇØ ³ª´²³õÀ½
+    public void GenerateParticle(string path, Transform spawnTr, float settingDuration = -1f, Action<GameObject> addParticleActionEvent = null)//ì«’ì•„ê°€ëŠ” íŒŒí‹°í´ì„ ìœ„í•´ ë‚˜ëˆ ë†“ìŒ
     {
         GameObject particleObject = SpawnVFXLocalOrNetwork(path, settingDuration, FindTargetNGO_Spawn);
 
-        if (particleObject == null)// NULL ÀÌ¸é ³×Æ®¿öÅ©°¡ Ã³¸®
+        if (particleObject == null)// NULL ì´ë©´ ë„¤íŠ¸ì›Œí¬ê°€ ì²˜ë¦¬
             return;
 
         particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionAndChasetoTagetParticle);
@@ -108,7 +108,7 @@ public class VFXManager
     {
         GameObject particleObject = SpawnVFXLocalOrNetwork(path, settingDuration, FindNgo_Spawn);
 
-        if (particleObject == null)// NULL ÀÌ¸é ³×Æ®¿öÅ©°¡ Ã³¸®
+        if (particleObject == null)// NULL ì´ë©´ ë„¤íŠ¸ì›Œí¬ê°€ ì²˜ë¦¬
             return;
 
         particleObject = SetPariclePosAndLifeCycle(particleObject, path, settingDuration, SetPositionParticle);
@@ -151,11 +151,11 @@ public class VFXManager
 
             duration = settingDuration <= 0 ? main.duration : settingDuration;
             main.duration = duration;
-            if (particle.GetComponent<ParticleLifetimeSync>())//ÆÄÆ¼Å¬ ½Ã½ºÅÛÁß Duration°ú ½Ã°£À» ¸ÂÃç¾ß ÇÏ´Â ÆÄÆ¼Å¬ÀÌ ÀÖ´Ù¸é Àû¿ë
+            if (particle.GetComponent<ParticleLifetimeSync>())//íŒŒí‹°í´ ì‹œìŠ¤í…œì¤‘ Durationê³¼ ì‹œê°„ì„ ë§ì¶°ì•¼ í•˜ëŠ” íŒŒí‹°í´ì´ ìˆë‹¤ë©´ ì ìš©
             {
                 main.startLifetime = duration;
             }
-            else if (duration < particle.main.startLifetime.constantMax)//Durationº¸´Ù ÆÄÆ¼Å¬ »ıÁ¸½Ã°£ÀÌ Å« °æ¿ì ÆÄÆ¼Å¬ »ıÁ¸½Ã°£À» ³Ö´Â´Ù.
+            else if (duration < particle.main.startLifetime.constantMax)//Durationë³´ë‹¤ íŒŒí‹°í´ ìƒì¡´ì‹œê°„ì´ í° ê²½ìš° íŒŒí‹°í´ ìƒì¡´ì‹œê°„ì„ ë„£ëŠ”ë‹¤.
             {
                 maxDurationTime = particle.main.startLifetime.constantMax;
             }

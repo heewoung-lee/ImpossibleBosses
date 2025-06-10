@@ -49,9 +49,9 @@ public class LogInManager
     public PlayerLoginInfo CurrentPlayerInfo { get { return currentPlayerInfo; } }
     public PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
     {
-        //±¸±Û ½ºÇÁ·¹µå ½ÃÆ®¿¡ Á¢±ÙÇØ¼­ ¸Â´Â ¾ÆÀÌµğ¿Í ÆĞ½º¿öµå¸¦ È®ÀÎÇÑÈÄ
-        //ÀÖÀ¸¸é ·ÎºñÃ¢À¸·Î ¾ÀÀüÈ¯
-        //¾øÀ¸¸é ¿À·ù¸Ş¼¼Áö Ãâ·Â
+        //êµ¬ê¸€ ìŠ¤í”„ë ˆë“œ ì‹œíŠ¸ì— ì ‘ê·¼í•´ì„œ ë§ëŠ” ì•„ì´ë””ì™€ íŒ¨ìŠ¤ì›Œë“œë¥¼ í™•ì¸í•œí›„
+        //ìˆìœ¼ë©´ ë¡œë¹„ì°½ìœ¼ë¡œ ì”¬ì „í™˜
+        //ì—†ìœ¼ë©´ ì˜¤ë¥˜ë©”ì„¸ì§€ ì¶œë ¥
         Spreadsheet spreadsheet = Managers.DataManager.GetGoogleSheetData(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId);
         Sheet UserAthenticateData = null;
         bool ischeckSamePlayerLoginfo = false;
@@ -70,7 +70,7 @@ public class LogInManager
             return default;
         }
 
-        string range = $"{UserAthenticateData.Properties.Title}!A1:Z"; // ÇÊ¿äÇÑ ¹üÀ§ ÁöÁ¤ ÀüºÎ ´Ù ÀĞ°Ú´Ù.
+        string range = $"{UserAthenticateData.Properties.Title}!A1:Z"; // í•„ìš”í•œ ë²”ìœ„ ì§€ì • ì „ë¶€ ë‹¤ ì½ê² ë‹¤.
         SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
         ValueRange response = request.Execute();
 
@@ -84,7 +84,7 @@ public class LogInManager
         for (int rowIndex = 1; rowIndex < response.Values.Count; rowIndex++)
         {
             IList<object> row = response.Values[rowIndex];
-            // ÀÌ row¿¡ ½ÇÁ¦ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö È®ÀÎ
+            // ì´ rowì— ì‹¤ì œ ë°ì´í„°ê°€ ìˆëŠ”ì§€ í™•ì¸
             if (row.Count > 1)
             {
                 string idData = row[(int)SheetIndex.ID].ToString();
@@ -159,10 +159,10 @@ public class LogInManager
 
         if(isIDInDatabase.Equals(default(PlayerLoginInfo)) == false)
         {
-            return (false, "ÀÌ¹Ì ÀÖ´Â ID ÀÔ´Ï´Ù");
+            return (false, "ì´ë¯¸ ìˆëŠ” ID ì…ë‹ˆë‹¤");
         }
 
-        // ÀÛ¼ºÇÒ µ¥ÀÌÅÍ ÁØºñ
+        // ì‘ì„±í•  ë°ì´í„° ì¤€ë¹„
         List<IList<object>> values = new List<IList<object>>()
         {
             new List<object> { id, password} 
@@ -173,24 +173,24 @@ public class LogInManager
             Values = values
         };
 
-        // ¹üÀ§ ¼³Á¤: ½ÃÆ® ÀÌ¸§°ú ¹üÀ§¸¦ ÁöÁ¤
-        string range = $"{USER_AUTHENTICATE_DATASHEET_NAME}!A1:Z"; // ½ÃÆ® ÀÌ¸§°ú ¹üÀ§ (A¿­~C¿­)
+        // ë²”ìœ„ ì„¤ì •: ì‹œíŠ¸ ì´ë¦„ê³¼ ë²”ìœ„ë¥¼ ì§€ì •
+        string range = $"{USER_AUTHENTICATE_DATASHEET_NAME}!A1:Z"; // ì‹œíŠ¸ ì´ë¦„ê³¼ ë²”ìœ„ (Aì—´~Cì—´)
 
-        // ¾÷µ¥ÀÌÆ® ¿äÃ» »ı¼º
+        // ì—…ë°ì´íŠ¸ ìš”ì²­ ìƒì„±
         SpreadsheetsResource.ValuesResource.AppendRequest appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadsheetId, range);
         appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
 
-        // ¿äÃ» ½ÇÇà
+        // ìš”ì²­ ì‹¤í–‰
         try
         {
             AppendValuesResponse response = await appendRequest.ExecuteAsync();
         }
         catch(Exception ex)
         {
-            Debug.Log($"{ex}¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù");
-            return (false, "DB¸¦ ¾²´ÂÁß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+            Debug.Log($"{ex}ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤");
+            return (false, "DBë¥¼ ì“°ëŠ”ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
         }
-        return (true, "È¸¿ø°¡ÀÔÀ» ÃàÇÏµå¸³´Ï´Ù.");
+        return (true, "íšŒì›ê°€ì…ì„ ì¶•í•˜ë“œë¦½ë‹ˆë‹¤.");
     }
 
 
@@ -202,7 +202,7 @@ public class LogInManager
 
         if (isNickNameDatabase.Equals(default(PlayerLoginInfo)) == false)
         {
-            return (false, "ÀÌ¹Ì ÀÖ´Â ´Ğ³×ÀÓ ÀÔ´Ï´Ù");
+            return (false, "ì´ë¯¸ ìˆëŠ” ë‹‰ë„¤ì„ ì…ë‹ˆë‹¤");
         }
         List<IList<object>> values = new List<IList<object>>()
         {
@@ -213,21 +213,21 @@ public class LogInManager
         {
             Values = values
         };
-        // ¹üÀ§ ¼³Á¤: ½ÃÆ® ÀÌ¸§°ú ¹üÀ§¸¦ ÁöÁ¤
-        string writeRange = $"{USER_AUTHENTICATE_DATASHEET_NAME}!C{playerInfo.RowNumber+1}"; // ¿¹: "A2:B2" Æ¯Á¤ À§Ä¡
+        // ë²”ìœ„ ì„¤ì •: ì‹œíŠ¸ ì´ë¦„ê³¼ ë²”ìœ„ë¥¼ ì§€ì •
+        string writeRange = $"{USER_AUTHENTICATE_DATASHEET_NAME}!C{playerInfo.RowNumber+1}"; // ì˜ˆ: "A2:B2" íŠ¹ì • ìœ„ì¹˜
         SpreadsheetsResource.ValuesResource.UpdateRequest updateRequest = service.Spreadsheets.Values.Update(valueRange, spreadsheetId, writeRange);
         updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
         try
         {
-            // ¿äÃ» ½ÇÇà
+            // ìš”ì²­ ì‹¤í–‰
             UpdateValuesResponse response = await updateRequest.ExecuteAsync();
         }
         catch (Exception ex)
         {
-            return (false, $"DB¸¦ ¾²´Â Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.¿¡·¯ÄÚµå: {ex}");
+            return (false, $"DBë¥¼ ì“°ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.ì—ëŸ¬ì½”ë“œ: {ex}");
         }
 
-        return (true, "´Ğ³×ÀÓÀ» Áş±â¼º°ø.");
+        return (true, "ë‹‰ë„¤ì„ì„ ì§“ê¸°ì„±ê³µ.");
     }
 
 }

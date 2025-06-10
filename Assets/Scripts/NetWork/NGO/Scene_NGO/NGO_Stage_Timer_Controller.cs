@@ -46,7 +46,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         SetHostTimer();
-        if (IsHost == false) //Å¬¶óÀÌ¾ğÆ®°¡ ¼­¹ö¿¡ µµ´Â ½Ã°£À» °¡Á®¿Í¾ß ÇÑ´Ù.
+        if (IsHost == false) //í´ë¼ì´ì–¸íŠ¸ê°€ ì„œë²„ì— ë„ëŠ” ì‹œê°„ì„ ê°€ì ¸ì™€ì•¼ í•œë‹¤.
         {
             RequestTimeFromServerRpc();
         }

@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class LoopingParticle : MonoBehaviour
 {
-    //·çÇÎ ÆÄÆ¼Å¬À» ÁöÁ¤
+    //ë£¨í•‘ íŒŒí‹°í´ì„ ì§€ì •
 }

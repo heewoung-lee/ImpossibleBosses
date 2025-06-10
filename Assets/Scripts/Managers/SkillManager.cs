@@ -44,7 +44,7 @@ public class SkillManager : IManagerInitializable,IManagerIResettable
     }
     public void Init()
     {
-        //Skill/AllofSkill¿¡ ÀÖ´Â Å¸ÀÔµéÀ» °¡Á®¿Â´Ù.
+        //Skill/AllofSkillì— ìˆëŠ” íƒ€ì…ë“¤ì„ ê°€ì ¸ì˜¨ë‹¤.
         _skillType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
         foreach (Type type in _skillType)
         {

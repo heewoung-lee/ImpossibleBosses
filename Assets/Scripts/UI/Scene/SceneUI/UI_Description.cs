@@ -110,9 +110,9 @@ public class UI_Description : UI_Scene
         _itemNameText.text = iteminfo.ItemName;
         _itemNameText.color = _itemNameText.SetGradeColor(_item_GradeColor);
         _itemType.text = GetItemType(iteminfo);
-        //¾ÆÀÌÅÛ Å¸ÀÔÀ¸·Î ½ºÀ§Ä¡¸¦ ³ª´²¼­
-        //Àåºñ ¾ÆÀÌÅÛÀÌ¸é Àåºñ¾ÆÀÌÅÛ Å¸ÀÔÀ¸·Î ³ª´®
-        //¼Òºñ ¾ÆÀÌÅÛÀÌ¸é Å¸ÀÔ¿¡ ¼Òºñ¾ÆÀÌÅÛÀ¸·Î ³ª´®
+        //ì•„ì´í…œ íƒ€ì…ìœ¼ë¡œ ìŠ¤ìœ„ì¹˜ë¥¼ ë‚˜ëˆ ì„œ
+        //ì¥ë¹„ ì•„ì´í…œì´ë©´ ì¥ë¹„ì•„ì´í…œ íƒ€ì…ìœ¼ë¡œ ë‚˜ëˆ”
+        //ì†Œë¹„ ì•„ì´í…œì´ë©´ íƒ€ì…ì— ì†Œë¹„ì•„ì´í…œìœ¼ë¡œ ë‚˜ëˆ”
     }
 
     public void SetValue(Sprite iconSprite,string name,string typeText = null)
@@ -139,31 +139,31 @@ public class UI_Description : UI_Scene
                 ItemEquipment equip = iteminfo as ItemEquipment;
                 return ConvertEquipItemTypeToKorean(equip.Equipment_Slot);
             case ItemType.Consumable:
-                return "¼Òºñ¾ÆÀÌÅÛ";
+                return "ì†Œë¹„ì•„ì´í…œ";
             case ItemType.ETC:
-                return "±âÅ¸¾ÆÀÌÅÛ";
+                return "ê¸°íƒ€ì•„ì´í…œ";
         }
-        return "±âÅ¸¾ÆÀÌÅÛ";
+        return "ê¸°íƒ€ì•„ì´í…œ";
     }
     public string ConvertEquipItemTypeToKorean(Equipment_Slot_Type EquipType)
     {
         switch (EquipType)
         {
             case Equipment_Slot_Type.Helmet:
-                return "¸Ó¸®";
+                return "ë¨¸ë¦¬";
             case Equipment_Slot_Type.Gauntlet:
-                return "Àå°©";
+                return "ì¥ê°‘";
             case Equipment_Slot_Type.Shoes:
-                return "½Å¹ß";
+                return "ì‹ ë°œ";
             case Equipment_Slot_Type.Weapon:
-                return "¹«±â";
+                return "ë¬´ê¸°";
             case Equipment_Slot_Type.Ring:
-                return "¹İÁö";
+                return "ë°˜ì§€";
             case Equipment_Slot_Type.Armor:
-                return "°©¿Ê";
+                return "ê°‘ì˜·";
         }
 
-        return "¾Ë¼ö¾ø´ÂÀåºñ";
+        return "ì•Œìˆ˜ì—†ëŠ”ì¥ë¹„";
     }
 
     protected override void StartInit()
@@ -180,20 +180,20 @@ public class UI_Description : UI_Scene
     {
         _currnt_Dir = Direction.Right;
         Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, componentTr.position);
-        //´Ù¸¥ Äµ¹ö½ºÀÇ UIÀ§Ä¡¸¦ ´Ù¸¥Äµ¹ö½º·Î ¿Å°Ü¾ß ÇÏ±â ¶§¹®¿¡ ¸ÕÀú ÇØ´ç ·ÎÄÃÁÂÇ¥¸¦ È­¸éÁÂÇ¥·Î º¯È¯ÇÑ´Ù.
+        //ë‹¤ë¥¸ ìº”ë²„ìŠ¤ì˜ UIìœ„ì¹˜ë¥¼ ë‹¤ë¥¸ìº”ë²„ìŠ¤ë¡œ ì˜®ê²¨ì•¼ í•˜ê¸° ë•Œë¬¸ì— ë¨¼ì € í•´ë‹¹ ë¡œì»¬ì¢Œí‘œë¥¼ í™”ë©´ì¢Œí‘œë¡œ ë³€í™˜í•œë‹¤.
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _description_RectTr,
             screenPoint,
             null,
             out localPoint
-        );//º¯È¯ÇÑ È­¸éÁÂÇ¥¸¦ UI_DescriptionÀÇ ·ÎÄÃÆ÷Áö¼ÇÀ¸·Î º¯°æÇÑ´Ù.
+        );//ë³€í™˜í•œ í™”ë©´ì¢Œí‘œë¥¼ UI_Descriptionì˜ ë¡œì»¬í¬ì§€ì…˜ìœ¼ë¡œ ë³€ê²½í•œë‹¤.
 
         Vector3 setPos = localPoint;
         int direction_settingCount = 0;
 
-        float screenWidth = Screen.width; // È­¸éÀÇ ³Êºñ
-        float screenHeight = Screen.height; // È­¸éÀÇ ³ôÀÌ
+        float screenWidth = Screen.width; // í™”ë©´ì˜ ë„ˆë¹„
+        float screenHeight = Screen.height; // í™”ë©´ì˜ ë†’ì´
         while (true)
         {
             direction_settingCount++;
@@ -206,27 +206,27 @@ public class UI_Description : UI_Scene
             switch (_currnt_Dir)
             {
                 case Direction.Right:
-                    _description_RectTr.pivot = new Vector2(0, 1);//¿ŞÂÊ »ó´Ü
+                    _description_RectTr.pivot = new Vector2(0, 1);//ì™¼ìª½ ìƒë‹¨
                     setPos = new Vector2(localPoint.x + width / 2, localPoint.y + height / 2);
                     break;
                 case Direction.Down:
-                    _description_RectTr.pivot = new Vector2(0.5f, 1);//Áß¾Ó »ó´Ü
+                    _description_RectTr.pivot = new Vector2(0.5f, 1);//ì¤‘ì•™ ìƒë‹¨
                     setPos = new Vector2(localPoint.x + width / 2, localPoint.y - height / 2);
                     break;
                 case Direction.Left:
-                    _description_RectTr.pivot = new Vector2(1, 1);//¿À¸¥ÂÊ »ó´Ü
+                    _description_RectTr.pivot = new Vector2(1, 1);//ì˜¤ë¥¸ìª½ ìƒë‹¨
                     setPos = new Vector2(localPoint.x - width / 2, localPoint.y + height / 2);
                     break;
                 case Direction.Up:
-                    _description_RectTr.pivot = new Vector2(0.5f, 0);//Áß¾Ó ÇÏ´Ü
+                    _description_RectTr.pivot = new Vector2(0.5f, 0);//ì¤‘ì•™ í•˜ë‹¨
                     setPos = new Vector2(localPoint.x + width / 2, localPoint.y + height / 2);
                     break;
             }
 
             Vector3 worldPos = _description_RectTr.TransformPoint(setPos);
-            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldPos);//´Ù½Ã ½ºÅ©¸°ÁÂÇ¥·Î º¯È¯ÇØ¼­ ¾ÆÀÌÅÛ¼³¸íÃ¢ÀÌ È­¸é¹ÛÀ¸·Î ³ª°¡´ÂÁö È®ÀÎ
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldPos);//ë‹¤ì‹œ ìŠ¤í¬ë¦°ì¢Œí‘œë¡œ ë³€í™˜í•´ì„œ ì•„ì´í…œì„¤ëª…ì°½ì´ í™”ë©´ë°–ìœ¼ë¡œ ë‚˜ê°€ëŠ”ì§€ í™•ì¸
 
-            float minPositionX = screenPos.x + (_description_RectTr.pivot.x * -1 * _description_RectTr.rect.width);// setPos.x; ±×´ë·Î
+            float minPositionX = screenPos.x + (_description_RectTr.pivot.x * -1 * _description_RectTr.rect.width);// setPos.x; ê·¸ëŒ€ë¡œ
             float maxPositionX = screenPos.x + (_description_RectTr.pivot.x * -1 + 1) * _description_RectTr.rect.width;// setPos.x+ width
             float minPositionY = screenPos.y + (_description_RectTr.pivot.y * -1 * _description_RectTr.rect.height);
             float maxPositionY = screenPos.y + (_description_RectTr.pivot.y * -1 + 1) * _description_RectTr.rect.height;

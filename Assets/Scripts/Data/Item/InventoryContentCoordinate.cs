@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class InventoryContentCoordinate : MonoBehaviour
 {
-    //ÀÌ ½ºÅ©¸³Æ®´Â ItemInventoryÀÇ ContentÀ§Ä¡¸¦ ¾Ë±âÀ§ÇÑ Å¬·¡½º
+    //ì´ ìŠ¤í¬ë¦½íŠ¸ëŠ” ItemInventoryì˜ Contentìœ„ì¹˜ë¥¼ ì•Œê¸°ìœ„í•œ í´ë˜ìŠ¤
 }

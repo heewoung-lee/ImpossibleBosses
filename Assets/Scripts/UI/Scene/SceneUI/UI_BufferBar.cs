@@ -13,7 +13,7 @@ public class UI_BufferBar : UI_Scene,ISceneChangeBehaviour
 
     private Transform _bufferContext;
 
-    public Transform BufferContext { get => _bufferContext; }//¿©±â¿¡ ´Ù¸¥¾ÖµéÀÌ Ãß°¡¸¦ ÇÑ´Ù¸é, 
+    public Transform BufferContext { get => _bufferContext; }//ì—¬ê¸°ì— ë‹¤ë¥¸ì• ë“¤ì´ ì¶”ê°€ë¥¼ í•œë‹¤ë©´, 
 
 
     protected override void AwakeInit()

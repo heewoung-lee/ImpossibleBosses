@@ -63,8 +63,8 @@ public class BufferManager:IManagerInitializable
         _requestType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
         foreach(Type type in _requestType)
         {
-            // Activator.CreateInstance·Î ÀÎ½ºÅÏ½º »ı¼º _requestTypeÀº ¸ŞÅ¸µ¥ÀÌÅÍ ÀÌ¹Ç·Î ÀÎ½ºÅÏ½º°¡ ¾Æ´Ô
-            //µû¶ó¼­ Type ¸ŞÅ¸Á¤º¸¸¦ ¹ÙÅÁÀ¸·Î ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇØÁà¾ßÇÔ
+            // Activator.CreateInstanceë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„± _requestTypeì€ ë©”íƒ€ë°ì´í„° ì´ë¯€ë¡œ ì¸ìŠ¤í„´ìŠ¤ê°€ ì•„ë‹˜
+            //ë”°ë¼ì„œ Type ë©”íƒ€ì •ë³´ë¥¼ ë°”íƒ•ìœ¼ë¡œ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•´ì¤˜ì•¼í•¨
 
             Buff_Modifier modifierInstance = Activator.CreateInstance(type) as Buff_Modifier;
             _allBuffModifierDict.Add(modifierInstance.Buffname, modifierInstance);

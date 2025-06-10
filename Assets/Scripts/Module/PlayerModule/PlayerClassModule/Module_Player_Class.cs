@@ -42,7 +42,7 @@ public abstract class Module_Player_Class : MonoBehaviour
         if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)
             return;
 
-        Debug.Log("ÀÌ°Ç ¾Àº¯°æ½Ã È£Ãâ");
+        Debug.Log("ì´ê±´ ì”¬ë³€ê²½ì‹œ í˜¸ì¶œ");
         InitializeSkillsFromManager();
     }
 
@@ -53,7 +53,7 @@ public abstract class Module_Player_Class : MonoBehaviour
 
         _playerSkill = Managers.SkillManager.AllSKillDict
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
-            .ToDictionary(skill => skill.Key, skill => skill.Value);//°¢ Å¬·¡½º¿¡ ¸Â´Â ½ºÅ³µéÀ» Ãß¸°´Ù
+            .ToDictionary(skill => skill.Key, skill => skill.Value);//ê° í´ë˜ìŠ¤ì— ë§ëŠ” ìŠ¤í‚¬ë“¤ì„ ì¶”ë¦°ë‹¤
 
         if (Managers.SkillManager.UI_SkillBar == null)
         {

@@ -21,8 +21,8 @@ public static class Extension
 
         if (setIteminfo.ItemEffects != null)
         {
-            setIteminfo.ItemEffects.Clear(); // ±âÁ¸ µ¥ÀÌÅÍ ÃÊ±âÈ­
-            setIteminfo.ItemEffects.AddRange(iteminfostruct.ItemEffects); // »õ·Î¿î µ¥ÀÌÅÍ Ãß°¡
+            setIteminfo.ItemEffects.Clear(); // ê¸°ì¡´ ë°ì´í„° ì´ˆê¸°í™”
+            setIteminfo.ItemEffects.AddRange(iteminfostruct.ItemEffects); // ìƒˆë¡œìš´ ë°ì´í„° ì¶”ê°€
         }
         return iteminfo;
     }
@@ -68,7 +68,7 @@ public static class Extension
         }
         catch (Exception e)
         {
-            Debug.LogException(e);   // ¿¹¿Ü Áï½Ã ±â·Ï
+            Debug.LogException(e);   // ì˜ˆì™¸ ì¦‰ì‹œ ê¸°ë¡
         }
     }
 }

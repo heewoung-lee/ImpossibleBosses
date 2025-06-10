@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IBossAnimationChanged //TODO: Action Task¸¸ ¸ğ¾Æ¼­ ÀÎÅÍÆäÀÌ½º°¡ ¾Æ´Ñ »ó¼Ó±¸Á¶·Î ¸¸µé°Í
+public interface IBossAnimationChanged //TODO: Action Taskë§Œ ëª¨ì•„ì„œ ì¸í„°í˜ì´ìŠ¤ê°€ ì•„ë‹Œ ìƒì†êµ¬ì¡°ë¡œ ë§Œë“¤ê²ƒ
 {
     public BossGolemAnimationNetworkController BossAnimNetworkController { get;}
 

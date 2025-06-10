@@ -89,7 +89,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
     public override void ItemRightClick(PointerEventData eventdata)
     {
         base.ItemRightClick(eventdata);
-        //¾ÆÀÌÅÛÃ¢ÀÌ ´İÈù»óÅÂ¿¡¼­ ¹Ş´Â°Ô ºÒ°¡´ÉÇÏ´Ï, ´İÈù»óÅÂ¿¡¼­´Â ·çÆ®¾ÆÀÌÅÛÀ¸·Î º¸³»¹ö¸®±â
+        //ì•„ì´í…œì°½ì´ ë‹«íŒìƒíƒœì—ì„œ ë°›ëŠ”ê²Œ ë¶ˆê°€ëŠ¥í•˜ë‹ˆ, ë‹«íŒìƒíƒœì—ì„œëŠ” ë£¨íŠ¸ì•„ì´í…œìœ¼ë¡œ ë³´ë‚´ë²„ë¦¬ê¸°
         BuyItem();
     }
 
@@ -98,7 +98,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
         if (_playerStats.Gold < _itemPrice)
             return;
 
-        _playerStats.Gold -= _itemPrice;//ÇÃ·¹ÀÌ¾îÀÇ ÇöÀç µ·À» ±ğ´Â´Ù.
+        _playerStats.Gold -= _itemPrice;//í”Œë ˆì´ì–´ì˜ í˜„ì¬ ëˆì„ ê¹ëŠ”ë‹¤.
         _iteminfo.MakeInventoryItemComponent();
 
         ItemCount--;
@@ -108,7 +108,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
 
     public override void GetDragEnd(PointerEventData eventData)
     {
-        //ÀÎº¥Åä¸®¿¡ ³ÖÀ¸¸é ¾ÆÀÌÅÛ »ç±â
+        //ì¸ë²¤í† ë¦¬ì— ë„£ìœ¼ë©´ ì•„ì´í…œ ì‚¬ê¸°
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
         _isDragging = false;
         List<RaycastResult> uiResults = new List<RaycastResult>();

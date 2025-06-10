@@ -53,11 +53,11 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
 
         if(isCheckResult == false)
         {
-            _alertPopup = ShowAlertDialogUI<UI_AlertDialog>(_alertPopup, "¿À·ù", message);
+            _alertPopup = ShowAlertDialogUI<UI_AlertDialog>(_alertPopup, "ì˜¤ë¥˜", message);
         }
         else
         {
-            _confirmPopup = ShowAlertDialogUI<UI_ConfirmDialog>(_confirmPopup, "¼º°ø", message, ShowLoginAfterSignUp);
+            _confirmPopup = ShowAlertDialogUI<UI_ConfirmDialog>(_confirmPopup, "ì„±ê³µ", message, ShowLoginAfterSignUp);
             ClearIDAndPW();
         }
     }

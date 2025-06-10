@@ -15,7 +15,7 @@ public class ProjectorAttack : MonoBehaviour, IAttackRange
     public float ViewDistance => projector.Arc;
 
     public Transform Owner_Transform => Managers.GameManagerEx.BossMonster.transform;
-    //¿©±â¿¡¼­ Owner_TransformÀ» º¸½º·Î ¹Ù²ã¾ßÇÏ´Âµ¥ ¾î¶»°Ô ¹Ù²ã¾ßÇÏ³ª..
+    //ì—¬ê¸°ì—ì„œ Owner_Transformì„ ë³´ìŠ¤ë¡œ ë°”ê¿”ì•¼í•˜ëŠ”ë° ì–´ë–»ê²Œ ë°”ê¿”ì•¼í•˜ë‚˜..
     public Vector3 AttackPosition => transform.position;
 
     public LayerMask TarGetLayer { get => LayerMask.GetMask(

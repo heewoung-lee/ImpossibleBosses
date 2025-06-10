@@ -8,7 +8,7 @@ public class Skill_Buff_Determination : Skill_Duration
         _buffIconImage = Managers.ResourceManager.Load<Sprite>(Buff_IconImage_Path);
         _determination = new Buffer_Determination(_buffIconImage);
     }
-    //TODO: ¹öÇÁ ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ¹Ù²Ü°Í
+    //TODO: ë²„í”„ ì•„ì´ì½˜ ì´ë¯¸ì§€ ë°”ê¿€ê²ƒ
     private Sprite _buffIconImage;
     private Buffer_Determination _determination;
     private Collider[] _players = null;
@@ -18,10 +18,10 @@ public class Skill_Buff_Determination : Skill_Duration
     public override float SkillDuration => 10f;
     public override Sprite BuffIconImage => _buffIconImage;
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
-    public override string SkillName => "°áÀÇ";
+    public override string SkillName => "ê²°ì˜";
     public override float CoolTime => 5f;
-    public override string EffectDescriptionText => $"ÆÄÆ¼¿øµé¿¡°Ô 10ÀÇ ¹æ¾î·ÂÀ» ºÎ¿©ÇÕ´Ï´Ù";
-    public override string ETCDescriptionText => "¼­·Î°£ÀÇ °áÀÇ";
+    public override string EffectDescriptionText => $"íŒŒí‹°ì›ë“¤ì—ê²Œ 10ì˜ ë°©ì–´ë ¥ì„ ë¶€ì—¬í•©ë‹ˆë‹¤";
+    public override string ETCDescriptionText => "ì„œë¡œê°„ì˜ ê²°ì˜";
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Determination");
     public override float Value => 10f;
     public override Buff_Modifier Buff_Modifier => _determination;
@@ -40,7 +40,7 @@ public class Skill_Buff_Determination : Skill_Duration
     }
     public override void RemoveStats()
     {
-        //ÇØÁ¦µÇ¾úÀ»¶§ Ãß°¡ ·ÎÁ÷
+        //í•´ì œë˜ì—ˆì„ë•Œ ì¶”ê°€ ë¡œì§
     }
 
     public override void SkillAction()

@@ -49,7 +49,7 @@ public class ResourceManager : IManagerIResettable
             }
         }
 
-        GameObject prefab = Load<GameObject>(path); // ¸ÕÀú path¸¦ ½Ãµµ ÇÏ°í ¾øÀ¸¸é prefabºÙ¿©¼­ ½Ãµµ
+        GameObject prefab = Load<GameObject>(path); // ë¨¼ì € pathë¥¼ ì‹œë„ í•˜ê³  ì—†ìœ¼ë©´ prefabë¶™ì—¬ì„œ ì‹œë„
         if(prefab == null)
         {
             string prefabPath = "Prefabs/" + path;
@@ -64,7 +64,7 @@ public class ResourceManager : IManagerIResettable
 
         if (prefab.GetComponent<Poolable>() != null)
         {
-            _cachingPoolableObject[path] = prefab;//ÁÖÀÇÁ¡ ´ë½Å¿¡ °æ·Î¿¡ ´ëÇÑ µñ¼Å³Ê¸® Å°´Â ¿øº»°æ·Î·Î µé¾î°¨
+            _cachingPoolableObject[path] = prefab;//ì£¼ì˜ì  ëŒ€ì‹ ì— ê²½ë¡œì— ëŒ€í•œ ë”•ì…”ë„ˆë¦¬ í‚¤ëŠ” ì›ë³¸ê²½ë¡œë¡œ ë“¤ì–´ê°
             if (isCheckNetworkPrefab(prefab))
             {
                 return Managers.NGO_PoolManager.Pop(path, parent);

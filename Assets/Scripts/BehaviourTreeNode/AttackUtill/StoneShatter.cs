@@ -4,7 +4,7 @@ public class StoneShatter : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        // ¿¹: ÇÃ·¹ÀÌ¾î³ª ¹Ù´Ú°ú Ãæµ¹ ½Ã Ã³¸®
+        // ì˜ˆ: í”Œë ˆì´ì–´ë‚˜ ë°”ë‹¥ê³¼ ì¶©ëŒ ì‹œ ì²˜ë¦¬
         if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Shatter();

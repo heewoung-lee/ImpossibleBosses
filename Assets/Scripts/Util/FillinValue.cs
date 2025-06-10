@@ -5,12 +5,12 @@ using Object = UnityEngine.Object;
 
 public class FillinValue
 {
-    #region ÇÊµåÀÚµ¿À¸·Î Ã¤¿ö ³Ö±â
+    #region í•„ë“œìë™ìœ¼ë¡œ ì±„ì›Œ ë„£ê¸°
 #if UNITY_EDITOR
     /// <summary>
-    /// 1.¿¡¼Â¿¡ ÀÖ´Â ÇÁ¸®ÆéÁß IPopulatingDefaultValueÀÎÅÍÆäÀÌ½º¸¦ ±¸ÇöÇÑ Å¬·¡½º¸¦ Á¶»ç
-    /// 2.ÀÎÅÍÆäÀÌ½º°¡ ÀÖ´Â ¿ÀºêÁ§Æ®°¡ ÀÖ´Ù¸é PopulatingDefaultValue()¸¦ È£ÃâÇÏ°í
-    /// 3.¿¡¼ÂÀ» ÀúÀå
+    /// 1.ì—ì…‹ì— ìˆëŠ” í”„ë¦¬í©ì¤‘ IPopulatingDefaultValueì¸í„°í˜ì´ìŠ¤ë¥¼ êµ¬í˜„í•œ í´ë˜ìŠ¤ë¥¼ ì¡°ì‚¬
+    /// 2.ì¸í„°í˜ì´ìŠ¤ê°€ ìˆëŠ” ì˜¤ë¸Œì íŠ¸ê°€ ìˆë‹¤ë©´ PopulatingDefaultValue()ë¥¼ í˜¸ì¶œí•˜ê³ 
+    /// 3.ì—ì…‹ì„ ì €ì¥
     /// </summary>
     [MenuItem("PopulatingDefaultValue", menuItem = "Utility/PopulatingDefaultValue")]
     public static void PopulatingDefaultValue()
@@ -18,22 +18,22 @@ public class FillinValue
         List<Object> allObjects = SearchAllObjects();
         foreach (Object obj in allObjects)
         {
-            // IPopulatingDefaultValue ÀÎÅÍÆäÀÌ½º¸¦ ±¸ÇöÇß´ÂÁö È®ÀÎ
+            // IPopulatingDefaultValue ì¸í„°í˜ì´ìŠ¤ë¥¼ êµ¬í˜„í–ˆëŠ”ì§€ í™•ì¸
             if (obj is IPopulatingDefaultValue populatingDefaultValue)
             {
-                // PopulatingDefaultValue ¸Ş¼­µå È£Ãâ
+                // PopulatingDefaultValue ë©”ì„œë“œ í˜¸ì¶œ
                 populatingDefaultValue.PopulatingDefaultValue(allObjects);
                 EditorUtility.SetDirty(obj);
             }
         }
-        AssetDatabase.SaveAssets();  // ¸ğµç º¯°æµÈ ¿¡¼ÂÀ» µğ½ºÅ©¿¡ ÀúÀåÇÕ´Ï´Ù.
+        AssetDatabase.SaveAssets();  // ëª¨ë“  ë³€ê²½ëœ ì—ì…‹ì„ ë””ìŠ¤í¬ì— ì €ì¥í•©ë‹ˆë‹¤.
         AssetDatabase.Refresh();
     }
 
     private static List<Object> SearchAllObjects()
     {
         List<Object> searchedObjects = new List<Object>();
-        string[] guids = AssetDatabase.FindAssets("t:Object", new[] { "Assets/FillableObjects" });  // ¸ğµç ÇÁ¸®Æé ¿¡¼ÂÀ» °Ë»ö
+        string[] guids = AssetDatabase.FindAssets("t:Object", new[] { "Assets/FillableObjects" });  // ëª¨ë“  í”„ë¦¬í© ì—ì…‹ì„ ê²€ìƒ‰
         foreach (string guid in guids)
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);

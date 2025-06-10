@@ -4,9 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /// <summary>
-/// ±âÁ¸¿¡´Â µ¥¹ÌÁö¸¦ °è»êÇÏ´Â Äİ¶óÀÌ¾î¿Í °°Àº À§Ä¡¿¡ ¹èÄ¡¸¦ ÇßÁö¸¸,
-/// µ¥¹ÌÁö¸¦ °è»êÇÏ´Â Äİ¶óÀÌ¾î¿Í °ãÃÄ¼­ 2¹è·Î µé¾î°¡´Â ¹®Á¦°¡ ¹ß»ıÇß°í
-/// ¿ÀºêÁ§Æ®¸¦ ³ª´®
+/// ê¸°ì¡´ì—ëŠ” ë°ë¯¸ì§€ë¥¼ ê³„ì‚°í•˜ëŠ” ì½œë¼ì´ì–´ì™€ ê°™ì€ ìœ„ì¹˜ì— ë°°ì¹˜ë¥¼ í–ˆì§€ë§Œ,
+/// ë°ë¯¸ì§€ë¥¼ ê³„ì‚°í•˜ëŠ” ì½œë¼ì´ì–´ì™€ ê²¹ì³ì„œ 2ë°°ë¡œ ë“¤ì–´ê°€ëŠ” ë¬¸ì œê°€ ë°œìƒí–ˆê³ 
+/// ì˜¤ë¸Œì íŠ¸ë¥¼ ë‚˜ëˆ”
 /// </summary>
 public class Module_Player_Interaction : MonoBehaviour 
 {
@@ -54,7 +54,7 @@ public class Module_Player_Interaction : MonoBehaviour
     {
         SphereCollider sphereCollider = gameObject.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 1.2f; // °¨Áö ¹İ°æ
+        sphereCollider.radius = 1.2f; // ê°ì§€ ë°˜ê²½
         IconUI.gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)

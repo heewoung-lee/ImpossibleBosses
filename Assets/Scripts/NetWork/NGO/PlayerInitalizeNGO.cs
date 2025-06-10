@@ -130,11 +130,11 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         if (IsOwner == false)
             return;
 
-        GetComponent<NavMeshAgent>().ResetPath();//ÇÃ·¹ÀÌ¾î°¡ ÀÌµ¿ÁßÀÌ¶ó¸é °æ·Î¸¦ ¾ø¾Ø´Ù
-        PlayerController controller = GetComponent<PlayerController>();// »óÅÂ¸¦ IDLE·Î °­Á¦·Î ¹Ù²Û´Ù
+        GetComponent<NavMeshAgent>().ResetPath();//í”Œë ˆì´ì–´ê°€ ì´ë™ì¤‘ì´ë¼ë©´ ê²½ë¡œë¥¼ ì—†ì•¤ë‹¤
+        PlayerController controller = GetComponent<PlayerController>();// ìƒíƒœë¥¼ IDLEë¡œ ê°•ì œë¡œ ë°”ê¾¼ë‹¤
         controller.CurrentStateType = controller.Base_IDleState;
         GetComponent<NetworkTransform>().Teleport(position,transform.rotation,transform.localScale);
-        //Æ÷Áö¼ÇÀ» È£½ºÆ®°¡ ¹Ù²Ù´Âµ¥ NavMesh¿¡ ´ëÇÑ Æ÷Áö¼Ç¸¸ º¯°æÇÏ¹Ç·Î NEtwork¿¡´Â ¾÷µ¥ÀÌÆ®°¡ ¾ÈµÉ ¼ö µµ ÀÖ±â¿¡
-        //°¢ÀÚ°¡ ³×Æ®¿öÅ©¿¡¼­ Æ÷Áö¼ÇÀ» ¾÷µ¥ÀÌÆ® ÇØÁØ´Ù. Ä³½ÌÀº ÇÊ¿ä¾øÀ½ ¾ÀÀüÈ¯½Ã¿¡¸¸ È£Ãâ ÇØ¼­ ¾µ°Å±â ¶§¹®¿¡ Ä³½ÌÀº ¾ÈÇÔ
+        //í¬ì§€ì…˜ì„ í˜¸ìŠ¤íŠ¸ê°€ ë°”ê¾¸ëŠ”ë° NavMeshì— ëŒ€í•œ í¬ì§€ì…˜ë§Œ ë³€ê²½í•˜ë¯€ë¡œ NEtworkì—ëŠ” ì—…ë°ì´íŠ¸ê°€ ì•ˆë  ìˆ˜ ë„ ìˆê¸°ì—
+        //ê°ìê°€ ë„¤íŠ¸ì›Œí¬ì—ì„œ í¬ì§€ì…˜ì„ ì—…ë°ì´íŠ¸ í•´ì¤€ë‹¤. ìºì‹±ì€ í•„ìš”ì—†ìŒ ì”¬ì „í™˜ì‹œì—ë§Œ í˜¸ì¶œ í•´ì„œ ì“¸ê±°ê¸° ë•Œë¬¸ì— ìºì‹±ì€ ì•ˆí•¨
     }
 }

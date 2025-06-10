@@ -53,7 +53,7 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (Exception ex)
         {
-            Debug.LogError($"InitializeAsync ¿¡·¯ ¹ß»ı{ex}");
+            Debug.LogError($"InitializeAsync ì—ëŸ¬ ë°œìƒ{ex}");
             throw;
         }
     }
@@ -63,7 +63,7 @@ public class VivoxManager : IManagerEventInitailize
     {
         if (VivoxService.Instance.IsLoggedIn)
         {
-            Debug.Log("·Î±×ÀÎÀÌ µÇ¾îÀÖÀ½ ¸®ÅÏÇÏ°ÚÀ½");
+            Debug.Log("ë¡œê·¸ì¸ì´ ë˜ì–´ìˆìŒ ë¦¬í„´í•˜ê² ìŒ");
             return;
 
         }
@@ -76,11 +76,11 @@ public class VivoxManager : IManagerEventInitailize
             await VivoxService.Instance.LoginAsync(_loginOptions);
             _checkDoneLoginProcess = true;
             _vivoxDoneLoginEvent?.Invoke();
-            Debug.Log("ViVox ·Î±×ÀÎ¿Ï·á");
+            Debug.Log("ViVox ë¡œê·¸ì¸ì™„ë£Œ");
         }
         catch (Exception ex)
         {
-            Debug.LogError($"LoginToVivoxAsync ¿¡·¯ ¹ß»ı{ex}");
+            Debug.LogError($"LoginToVivoxAsync ì—ëŸ¬ ë°œìƒ{ex}");
             throw;
         }
     }
@@ -94,7 +94,7 @@ public class VivoxManager : IManagerEventInitailize
             }
             if (_currentChanel != null)
             {
-                Debug.Log($"Vivox Ã¤³Î{_currentChanel}Áö¿öÁü");
+                Debug.Log($"Vivox ì±„ë„{_currentChanel}ì§€ì›Œì§");
                 await LeaveEchoChannelAsyncCustom(_currentChanel);
             }
             _currentChanel = chanelID;
@@ -102,16 +102,16 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (RequestFailedException requestFailExceoption)
         {
-            Debug.Log($"¿À·ù¹ß»ı{requestFailExceoption}");
+            Debug.Log($"ì˜¤ë¥˜ë°œìƒ{requestFailExceoption}");
             await Utill.RateLimited(()=>JoinChannel(chanelID));
         }
         catch(ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
         {
-            Debug.Log($"{alreadyAddKey}ÀÌ¹Ì Å°°¡ ÀÖÀ½ ¹«½ÃÇØµµ µÊ");
+            Debug.Log($"{alreadyAddKey}ì´ë¯¸ í‚¤ê°€ ìˆìŒ ë¬´ì‹œí•´ë„ ë¨");
         }
         catch (Exception ex) 
         {
-            Debug.LogError($"JoinChannel ¿¡·¯ ¹ß»ı{ex}");
+            Debug.LogError($"JoinChannel ì—ëŸ¬ ë°œìƒ{ex}");
             throw;
         }
 
@@ -126,7 +126,7 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (MintException e) when (e.Message.Contains("Request timeout"))
         {
-            Debug.LogError($"LeaveEchoChannelAsync ¿¡·¯ ¹ß»ı{e}");
+            Debug.LogError($"LeaveEchoChannelAsync ì—ëŸ¬ ë°œìƒ{e}");
             await Utill.RateLimited(async () => await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty));
             throw;
         }
@@ -136,7 +136,7 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (Exception error)
         {
-            Debug.LogError($"¿¡·¯¹ß»ı{error}");
+            Debug.LogError($"ì—ëŸ¬ë°œìƒ{error}");
             throw;
         }
     }
@@ -153,13 +153,13 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (MintException e) when (e.Message.Contains("Request timeout"))
         {
-            Debug.LogError($"LeaveEchoChannelAsync ¿¡·¯ ¹ß»ı{e}");
+            Debug.LogError($"LeaveEchoChannelAsync ì—ëŸ¬ ë°œìƒ{e}");
             await Utill.RateLimited(async () => await LeaveEchoChannelAsyncCustom(chanelID));
             throw;
         }
         catch(Exception error)
         {
-            Debug.LogError($"¿¡·¯¹ß»ı{error}");
+            Debug.LogError($"ì—ëŸ¬ë°œìƒ{error}");
             throw;
         }
     }
@@ -169,14 +169,14 @@ public class VivoxManager : IManagerEventInitailize
     {
         try
         {
-            Debug.Log("vivox ·Î±×¾Æ¿ô");
+            Debug.Log("vivox ë¡œê·¸ì•„ì›ƒ");
             await VivoxService.Instance.LogoutAsync();
             _checkDoneLoginProcess = false;
             _currentChanel = null;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"LogoutOfVivoxAsync ¿¡·¯ ¹ß»ı{ex}");
+            Debug.LogError($"LogoutOfVivoxAsync ì—ëŸ¬ ë°œìƒ{ex}");
             throw;
         }
     }
@@ -209,7 +209,7 @@ public class VivoxManager : IManagerEventInitailize
         }
         catch (Exception ex)
         {
-            Debug.LogError($"SendMessageAsync ¿¡·¯ ¹ß»ı{ex}");
+            Debug.LogError($"SendMessageAsync ì—ëŸ¬ ë°œìƒ{ex}");
             throw;
         }
     }

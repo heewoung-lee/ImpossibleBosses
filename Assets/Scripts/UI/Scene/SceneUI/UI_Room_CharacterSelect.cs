@@ -134,7 +134,7 @@ public class UI_Room_CharacterSelect : UI_Scene
 
     private void DisConnetedPlayerinLobby(ulong playerIndex)
     {
-        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ ³ª°¬½À´Ï´Ù.");
+        Debug.Log("í”Œë ˆì´ì–´ê°€ ë‚˜ê°”ìŠµë‹ˆë‹¤.");
         isCheckAllReadyToPlayers(playerIndex);
     }
     public void isCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
@@ -157,7 +157,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public void EntetedPlayerinLobby(ulong playerIndex)
     {
-        Debug.Log("EnteredPlayerinLobby ÀÌº¥Æ® ¹ß»ı");
+        Debug.Log("EnteredPlayerinLobby ì´ë²¤íŠ¸ ë°œìƒ");
         SetHostStartButton(false);
         SpawnChractorSeletorAndSetPosition(playerIndex);
     }
@@ -175,7 +175,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
         catch (Exception error)
         {
-            Debug.Log($"¿¡·¯ÄÚµå{error}");
+            Debug.Log($"ì—ëŸ¬ì½”ë“œ{error}");
         }
     }
 
@@ -257,7 +257,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             characterSelector.transform.SetParent(_ngo_UI_Root_Character_Select, worldPositionStays: false);
         }
 
-        //TODO: Å©±â Á¶Àı µÇµµ·Ï ¼öÁ¤
+        //TODO: í¬ê¸° ì¡°ì ˆ ë˜ë„ë¡ ìˆ˜ì •
         return characterSelector;
 
 
@@ -268,7 +268,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         }
 
     }
-    public void LoadScenePlayGames()//È£½ºÆ®°¡ Start¹öÆ°À» Å¬¸¯ÇßÀ»¶§
+    public void LoadScenePlayGames()//í˜¸ìŠ¤íŠ¸ê°€ Startë²„íŠ¼ì„ í´ë¦­í–ˆì„ë•Œ
     {
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
         Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
@@ -279,7 +279,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         void ClientLoadedEvent(ulong clientId)
         {
             Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
-            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene + "¾À³×ÀÓ" + "ÇÃ·¹ÀÌ¾î ID" + clientId);
+            Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene + "ì”¬ë„¤ì„" + "í”Œë ˆì´ì–´ ID" + clientId);
         }
 
         void AllPlayerLoadedEvent()

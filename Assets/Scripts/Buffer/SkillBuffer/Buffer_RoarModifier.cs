@@ -7,7 +7,7 @@ public class Buffer_RoarModifier : Duration_Buff
         _iconImage = iconImage;
     }
     public override Sprite BuffIconImage => _iconImage;
-    public override string Buffname => "°ø°Ý·ÂÁõ°¡";
+    public override string Buffname => "ê³µê²©ë ¥ì¦ê°€";
     public override StatType StatType => StatType.Attack;
     private Sprite _iconImage = null;
 

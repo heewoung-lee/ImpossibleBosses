@@ -65,7 +65,7 @@ public class UI_UserInfo_Panel : UI_Scene
         catch (Exception ex)
         {
             UI_AlertDialog alert_Popup =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
-            alert_Popup.SetText("¿À·ù", $"{ex}");
+            alert_Popup.SetText("ì˜¤ë¥˜", $"{ex}");
             _refreshLobbyButton.interactable = true;
         }
         _refreshLobbyButton.interactable = true;
@@ -79,18 +79,18 @@ public class UI_UserInfo_Panel : UI_Scene
 
         if (activeChannels.Count == 0)
         {
-            Debug.Log("ÇöÀç Á¢¼Ó ÁßÀÎ Ã¤³ÎÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("í˜„ì¬ ì ‘ì† ì¤‘ì¸ ì±„ë„ì´ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        Debug.Log($"ÇöÀç Á¢¼Ó ÁßÀÎ VIVOX Ã¤³Î ¼ö: {activeChannels.Count}");
+        Debug.Log($"í˜„ì¬ ì ‘ì† ì¤‘ì¸ VIVOX ì±„ë„ ìˆ˜: {activeChannels.Count}");
 
         foreach (var channel in activeChannels)
         {
-            string channelName = channel.Key; // Ã¤³Î ID ¶Ç´Â ÀÌ¸§
-            var channelSession = channel.Value; // Ã¤³Î ¼¼¼Ç Á¤º¸
+            string channelName = channel.Key; // ì±„ë„ ID ë˜ëŠ” ì´ë¦„
+            var channelSession = channel.Value; // ì±„ë„ ì„¸ì…˜ ì •ë³´
 
-            Debug.Log($"Ã¤³Î ÀÌ¸§: {channelName}");
+            Debug.Log($"ì±„ë„ ì´ë¦„: {channelName}");
         }
     }
     private void InitButtonInteractable()
@@ -140,7 +140,7 @@ public class UI_UserInfo_Panel : UI_Scene
         }
         catch (Exception e)
         {
-            Debug.Log($"¿¡·¯°¡ ¹ß»ıÇß½À´Ï´Ù.{e}");
+            Debug.Log($"ì—ëŸ¬ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.{e}");
             return;
         }
         Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene);

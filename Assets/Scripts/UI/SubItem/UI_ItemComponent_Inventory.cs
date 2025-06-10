@@ -73,8 +73,8 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     {
         _isEquipped = isEquiped;
     }
-    public sealed override void GetDragEnd(PointerEventData eventData)//´Ù¸¥ ÀÚ½ÄÅ¬·¡½ºµéÀÌ GetDragEnd¸¦ Á÷Á¢ÀûÀ¸·Î »ó¼Ó¹ŞÁö¸øÇÏ°Ô ¸·°í ´ë½Å DropItemOnUI ¸Ş¼­µå¸¦ »ó¼Ó¹Ş¾Æ ±¸ÇöÇÏµµ·Ï
-    {//¾ÆÀÌÅÛ µå¶ø ±¸Çö
+    public sealed override void GetDragEnd(PointerEventData eventData)//ë‹¤ë¥¸ ìì‹í´ë˜ìŠ¤ë“¤ì´ GetDragEndë¥¼ ì§ì ‘ì ìœ¼ë¡œ ìƒì†ë°›ì§€ëª»í•˜ê²Œ ë§‰ê³  ëŒ€ì‹  DropItemOnUI ë©”ì„œë“œë¥¼ ìƒì†ë°›ì•„ êµ¬í˜„í•˜ë„ë¡
+    {//ì•„ì´í…œ ë“œë êµ¬í˜„
         if (_isDragging)
         {
             DropItem(eventData);
@@ -85,9 +85,9 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     private void DropItem(PointerEventData eventData)
     {
-        if (IsPointerOverUI(eventData, out List<RaycastResult> uiraycastResult))//UIÂÊ¿¡ ´êÀ¸¸é ÀÚ½ÄÅ¬·¡½º¿¡¼­ ±¸ÇöÇØ ³õÀº ¸Ş¼­µå¸¦ È£ÃâÇÏ°í Á¾·á.
+        if (IsPointerOverUI(eventData, out List<RaycastResult> uiraycastResult))//UIìª½ì— ë‹¿ìœ¼ë©´ ìì‹í´ë˜ìŠ¤ì—ì„œ êµ¬í˜„í•´ ë†“ì€ ë©”ì„œë“œë¥¼ í˜¸ì¶œí•˜ê³  ì¢…ë£Œ.
         {
-            DropItemOnUI(eventData, uiraycastResult); // ÀÚ½Ä Å¬·¡½ºÀÇ ±¸Çö È£Ãâ
+            DropItemOnUI(eventData, uiraycastResult); // ìì‹ í´ë˜ìŠ¤ì˜ êµ¬í˜„ í˜¸ì¶œ
             return;
         }
         DropItemOnGround();
@@ -116,10 +116,10 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected void AttachItemToSlot(GameObject go, Transform slot)
     {
         go.transform.SetParent(slot);
-        go.GetComponent<RectTransform>().anchorMin = Vector2.zero; // ÁÂÃø ÇÏ´Ü (0, 0)
-        go.GetComponent<RectTransform>().anchorMax = Vector2.one;  // ¿ìÃø »ó´Ü (1, 1)
-        go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // ¿ÀÇÁ¼Â Á¦°Å
-        go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // ¿ÀÇÁ¼Â Á¦°Å
+        go.GetComponent<RectTransform>().anchorMin = Vector2.zero; // ì¢Œì¸¡ í•˜ë‹¨ (0, 0)
+        go.GetComponent<RectTransform>().anchorMax = Vector2.one;  // ìš°ì¸¡ ìƒë‹¨ (1, 1)
+        go.GetComponent<RectTransform>().offsetMin = Vector2.zero; // ì˜¤í”„ì…‹ ì œê±°
+        go.GetComponent<RectTransform>().offsetMax = Vector2.zero; // ì˜¤í”„ì…‹ ì œê±°
 
         if (slot.GetComponent<InventoryContentCoordinate>() != null)
         {

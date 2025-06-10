@@ -26,7 +26,7 @@ public abstract class BaseController : MonoBehaviour
     public GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
 
 
-    private StateAnimationDict _stateAnimDict = new StateAnimationDict();//½ºÅ×ÀÌÅÍ½º°¡ ¹Ù²î¸é ¾Ö´Ï¸ŞÀÌ¼ÇÀ» È£ÃâÇÏ´Â µñ¼Å³Ê¸®
+    private StateAnimationDict _stateAnimDict = new StateAnimationDict();//ìŠ¤í…Œì´í„°ìŠ¤ê°€ ë°”ë€Œë©´ ì• ë‹ˆë©”ì´ì…˜ì„ í˜¸ì¶œí•˜ëŠ” ë”•ì…”ë„ˆë¦¬
     public StateAnimationDict StateAnimDict => _stateAnimDict;
 
     protected abstract int Hash_Idle { get; }
@@ -61,7 +61,7 @@ public abstract class BaseController : MonoBehaviour
             if (_currentStateType.lockAnimationChange == true)
                 return;
             _currentStateType = value;
-            _stateAnimDict.CallState(_currentStateType); // ÇöÀç »óÅÂÀÇ ·çÇÁ¹® ½ÇÇà
+            _stateAnimDict.CallState(_currentStateType); // í˜„ì¬ ìƒíƒœì˜ ë£¨í”„ë¬¸ ì‹¤í–‰
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class BaseController : MonoBehaviour
     public bool IsAnimationDone(int animHash)
     {
         AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(AnimLayer);
-        //  ½ºÅ×ÀÌÆ®°¡ Á¤»ó Àç»ı ÁßÀÌ¸ç, Àç»ıÀÌ ³¡³µ´ÂÁö °Ë»ç
+        //  ìŠ¤í…Œì´íŠ¸ê°€ ì •ìƒ ì¬ìƒ ì¤‘ì´ë©°, ì¬ìƒì´ ëë‚¬ëŠ”ì§€ ê²€ì‚¬
         if (Anim.IsInTransition(AnimLayer) == false && stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= 1.0f)
             return true;
 
@@ -94,8 +94,8 @@ public abstract class BaseController : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
         AwakeInit();
-        InitailizeStateDict(); //±âº» ½ºÅ×ÀÌÅÍ½º ÃÊ±âÈ­
-        _currentStateType = Base_IDleState; //±âº» ½ºÅ×ÀÌÅÍ½º ÁöÁ¤
+        InitailizeStateDict(); //ê¸°ë³¸ ìŠ¤í…Œì´í„°ìŠ¤ ì´ˆê¸°í™”
+        _currentStateType = Base_IDleState; //ê¸°ë³¸ ìŠ¤í…Œì´í„°ìŠ¤ ì§€ì •
     }
     private void Start()
     {

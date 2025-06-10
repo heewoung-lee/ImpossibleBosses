@@ -36,7 +36,7 @@ public class SceneDataSaveAndLoader
 
         IteminfoStruct iteminfo = new IteminfoStruct(equipValue.Value);
         _equipmentSlotData.Add(equipValue.Key,iteminfo);
-        //¿©±â¿¡ ±×³É °ª¸¸ ´ã¾Æ¾ß ÇÏ°í ³ªÁß¿¡ ¿­¾úÀ»¶§ ¾ÆÀÌÅÛÀ¸·Î ´øÀú¾ß ÇÒ°Í °°´Ù
+        //ì—¬ê¸°ì— ê·¸ëƒ¥ ê°’ë§Œ ë‹´ì•„ì•¼ í•˜ê³  ë‚˜ì¤‘ì— ì—´ì—ˆì„ë•Œ ì•„ì´í…œìœ¼ë¡œ ë˜ì €ì•¼ í• ê²ƒ ê°™ë‹¤
     }
 
     public bool TryGetLoadEquipMentData(Equipment_Slot_Type equipMentType,out IteminfoStruct equipItem)

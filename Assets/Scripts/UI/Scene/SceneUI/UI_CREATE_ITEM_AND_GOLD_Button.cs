@@ -81,7 +81,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
             TestGetDamaged();
             //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
             //_ = FindMyJoinCodeAsync();
-            Debug.Log(Managers.GameManagerEx.Player.transform.position+"ÇÃ·¹ÀÌ¾î ÁÂÇ¥");
+            Debug.Log(Managers.GameManagerEx.Player.transform.position+"í”Œë ˆì´ì–´ ì¢Œí‘œ");
             //Managers.GameManagerEx.Player.transform.position = Vector3.zero;
         }
         void MoveScene()
@@ -132,7 +132,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
     private async Task FindMyJoinCodeAsync()
     {
-        Debug.Log($"³» Á¶ÀÎÄÚµå´Â {Managers.RelayManager.JoinCode}");
-        Debug.Log($"·ÎºñÀÇ Á¶ÀÎÄÚµå´Â{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
+        Debug.Log($"ë‚´ ì¡°ì¸ì½”ë“œëŠ” {Managers.RelayManager.JoinCode}");
+        Debug.Log($"ë¡œë¹„ì˜ ì¡°ì¸ì½”ë“œëŠ”{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
     }
 }

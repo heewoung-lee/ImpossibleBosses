@@ -4,14 +4,14 @@ public class DebugLogger : MonoBehaviour
 {
     private void OnEnable()
     {
-        Debug.Log($"{gameObject.name}°¡ È°¼ºÈ­µÇ¾ú½À´Ï´Ù.");
-        Debug.Log($"È°¼ºÈ­ ½ºÅÃ Æ®·¹ÀÌ½º:\n{System.Environment.StackTrace}");
+        Debug.Log($"{gameObject.name}ê°€ í™œì„±í™”ë˜ì—ˆìŠµë‹ˆë‹¤.");
+        Debug.Log($"í™œì„±í™” ìŠ¤íƒ íŠ¸ë ˆì´ìŠ¤:\n{System.Environment.StackTrace}");
 
     }
 
     private void OnDisable()
     {
-        Debug.Log($"{gameObject.name}°¡ ºñÈ°¼ºÈ­µÇ¾ú½À´Ï´Ù.");
-        Debug.Log($"ºñÈ°¼ºÈ­ ½ºÅÃ Æ®·¹ÀÌ½º:\n{System.Environment.StackTrace}");
+        Debug.Log($"{gameObject.name}ê°€ ë¹„í™œì„±í™”ë˜ì—ˆìŠµë‹ˆë‹¤.");
+        Debug.Log($"ë¹„í™œì„±í™” ìŠ¤íƒ íŠ¸ë ˆì´ìŠ¤:\n{System.Environment.StackTrace}");
     }
 }

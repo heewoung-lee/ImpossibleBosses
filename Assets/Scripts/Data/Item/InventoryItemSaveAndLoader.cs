@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InventoryItemSaveAndLoader : MonoBehaviour
 {
-    //¾ÆÀÌÅÛ Á¤º¸ °¡Á®¿À±â
+    //ì•„ì´í…œ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
     List<IteminfoStruct> _inventoryItemList = new List<IteminfoStruct>();
 
     private void OnDestroy()
@@ -21,7 +21,7 @@ public class InventoryItemSaveAndLoader : MonoBehaviour
     {
         if(Managers.SceneDataSaveAndLoader.TryGetLoadInventoryItem(out List<UI_ItemComponent_Inventory> loaditemList))
         {
-            //¾À ÀüÈ¯ÈÄ °¡Á®¿Â ¾ÆÀÌÅÛµé¿¡ ´ëÇÑ ÈÄÃ³¸®´Â ¿©±â¿¡ ÇÒ°Í 
+            //ì”¬ ì „í™˜í›„ ê°€ì ¸ì˜¨ ì•„ì´í…œë“¤ì— ëŒ€í•œ í›„ì²˜ë¦¬ëŠ” ì—¬ê¸°ì— í• ê²ƒ 
         }
     }
 

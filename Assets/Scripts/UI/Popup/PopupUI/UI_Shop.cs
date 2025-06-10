@@ -71,8 +71,8 @@ public class UI_Shop : UI_Popup
         _tabFocusLine = GetImage((int)(IconImages.TabFocusLine));
 
         Managers.UI_Manager.AddImportant_Popup_UI(this);
-        //Å¬¸¯ÇÑ ¾ÆÀÌÅÛ ÅÇ ¿ÀºêÁ§Æ®¾È¿¡ ÀÖ´Â ÅØ½ºÆ®¸¦ ºÒ·¯¿À±â À§ÇÑ µñ¼Å³Ê¸®,
-        //Å¬¸¯ÇÒ¶§¸¶´Ù GetComponentinChildren¸¦ È£ÃâÇÏ±â ½È¾î¼­ ¸¸µê
+        //í´ë¦­í•œ ì•„ì´í…œ íƒ­ ì˜¤ë¸Œì íŠ¸ì•ˆì— ìˆëŠ” í…ìŠ¤íŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¤ê¸° ìœ„í•œ ë”•ì…”ë„ˆë¦¬,
+        //í´ë¦­í• ë•Œë§ˆë‹¤ GetComponentinChildrenë¥¼ í˜¸ì¶œí•˜ê¸° ì‹«ì–´ì„œ ë§Œë“¦
         _findGameObjectToTMP_TextDict = new Dictionary<GameObject, (TMP_Text, ItemType)>()
         {
             {_equipItem_TapText.transform.parent.gameObject,(_equipItem_TapText,ItemType.Equipment)},
@@ -182,7 +182,7 @@ public class UI_Shop : UI_Popup
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float ratio = Mathf.Clamp01(elapsedTime / duration); // 0 ~ 1 ºñÀ² °è»ê
+            float ratio = Mathf.Clamp01(elapsedTime / duration); // 0 ~ 1 ë¹„ìœ¨ ê³„ì‚°
             _tabFocusLine.transform.position = Vector3.Lerp(originTr.position, tarGetTr.position, ratio);
             yield return null;
         }

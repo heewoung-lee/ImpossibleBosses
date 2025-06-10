@@ -90,10 +90,10 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 
         _confirm_Button.interactable = false;
 
-        if (Utill.IsAlphanumeric(userID) == false) //¿µ¹®+¼ıÀÚ¿Ü ´Ù¸¥ ¹®ÀÚ°¡ ¼¯ÀÎ°æ¿ì.
+        if (Utill.IsAlphanumeric(userID) == false) //ì˜ë¬¸+ìˆ«ìì™¸ ë‹¤ë¥¸ ë¬¸ìê°€ ì„ì¸ê²½ìš°.
         {
             Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                .AlertSetText("³­ ÇÑ±ÛÀ» »ç¶ûÇÏÁö¸¸..", "¾ÆÀÌµğ´Â ¿µ¹®+¼ıÀÚ Á¶ÇÕÀ¸·Î¸¸ ¾µ ¼ö ÀÖ½À´Ï´Ù.")
+                .AlertSetText("ë‚œ í•œê¸€ì„ ì‚¬ë‘í•˜ì§€ë§Œ..", "ì•„ì´ë””ëŠ” ì˜ë¬¸+ìˆ«ì ì¡°í•©ìœ¼ë¡œë§Œ ì“¸ ìˆ˜ ìˆìŠµë‹ˆë‹¤.")
                 .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
             return;
         }
@@ -105,7 +105,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             if (playerinfo.Equals(default(PlayerLoginInfo)))
             {
                 Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                    .AlertSetText("¿À·ù", "¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£°¡ Æ²¸³´Ï´Ù")
+                    .AlertSetText("ì˜¤ë¥˜", "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ê°€ í‹€ë¦½ë‹ˆë‹¤")
                     .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
                 return;
             }
@@ -121,29 +121,29 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         {
             Debug.Log($"Error: {ex}\nNot Connetced Internet");
             UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
-                .AlertSetText("¿À·ù", "ÀÎÅÍ³İ ¿¬°áÀÌ ¾ÈµÆ½À´Ï´Ù.")
+                .AlertSetText("ì˜¤ë¥˜", "ì¸í„°ë„· ì—°ê²°ì´ ì•ˆëìŠµë‹ˆë‹¤.")
                 .AfterAlertEvent(()=> { _confirm_Button.interactable = true; });
             return;
         }
         Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
         try
         {
-            bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//·Î±×ÀÎÀ» ½Ãµµ;
+            bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//ë¡œê·¸ì¸ì„ ì‹œë„;
             if (checkPlayerNickNameAlreadyConnected is true)
             {
                 Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                   .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
-                  .AlertSetText("¿À·ù", "¾ÆÀÌµğ°¡ ÀÌ¹Ì Á¢¼ÓµÇ¾î ÀÖ½À´Ï´Ù.")
+                  .AlertSetText("ì˜¤ë¥˜", "ì•„ì´ë””ê°€ ì´ë¯¸ ì ‘ì†ë˜ì–´ ìˆìŠµë‹ˆë‹¤.")
                  .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
                 return;
             }
         }
         catch(Exception ex)
         {
-            Debug.Log($"¿À·ù{ex}");
+            Debug.Log($"ì˜¤ë¥˜{ex}");
             Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                  .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
-                 .AlertSetText("¿À·ù", "·Î±×ÀÎÁß ¹®Á¦°¡ »ı°å½À´Ï´Ù.")
+                 .AlertSetText("ì˜¤ë¥˜", "ë¡œê·¸ì¸ì¤‘ ë¬¸ì œê°€ ìƒê²¼ìŠµë‹ˆë‹¤.")
                 .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
             return;
         }

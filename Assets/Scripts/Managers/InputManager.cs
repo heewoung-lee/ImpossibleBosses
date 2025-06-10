@@ -50,7 +50,7 @@ public class InputManager : IManagerInitializable
 
     public InputAction GetInputAction(Define.ControllerType controllerType,string actionName)
     {
-        //Å¸ÀÔÀ¸·Î Á¦ÀÏ Ã³À½ µñ¼Å³Ê¸® Ã£±â
+        //íƒ€ì…ìœ¼ë¡œ ì œì¼ ì²˜ìŒ ë”•ì…”ë„ˆë¦¬ ì°¾ê¸°
         string controllerTypeString = controllerType.ToString();
 
         if (_inputActionMapDict[controllerTypeString] == null)

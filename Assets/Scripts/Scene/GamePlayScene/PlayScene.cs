@@ -38,7 +38,7 @@ public class PlayScene : BaseScene,ISkillInit, ISceneController
         {
             _sceneController = new MoveSceneController(new UnitGamePlayScene());
             gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
-            // gameObject.AddComponent<UI_GamePlaySceneModule>(); TODO: ºôµå½Ã Å×½ºÆ® ¸ðµâ Á¦°ÅÇÒ°Í
+            // gameObject.AddComponent<UI_GamePlaySceneModule>(); TODO: ë¹Œë“œì‹œ í…ŒìŠ¤íŠ¸ ëª¨ë“ˆ ì œê±°í• ê²ƒ
         }
         _sceneController.InitGamePlayScene();
         _sceneController.SpawnOBJ();
