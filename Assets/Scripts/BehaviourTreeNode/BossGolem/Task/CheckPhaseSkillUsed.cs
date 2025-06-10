@@ -1,29 +1,25 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using BehaviorDesigner.Runtime.Tasks.Unity.SharedVariables;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class CheckPhaseSkillUsed : Conditional
+namespace BehaviourTreeNode.BossGolem.Task
 {
+    public class CheckPhaseSkillUsed : Conditional
+    {
 
-    public SharedBool _isPhaseSkillUsed;
-    public override void OnStart()
-    {
-        base.OnStart();
-    }
-    public override TaskStatus OnUpdate()
-    {
-        if(_isPhaseSkillUsed.Value == false)
+        public readonly SharedBool IsPhaseSkillUsed;
+
+        public override TaskStatus OnUpdate()
         {
-            _isPhaseSkillUsed.Value = true;
-            return TaskStatus.Success;
+            if(IsPhaseSkillUsed.Value == false)
+            {
+                IsPhaseSkillUsed.Value = true;
+                return TaskStatus.Success;
+            }
+            return TaskStatus.Failure;
         }
-        return TaskStatus.Failure;
-    }
-    public override void OnEnd()
-    {
-        base.OnEnd();
+        public override void OnEnd()
+        {
+            base.OnEnd();
+        }
     }
 }

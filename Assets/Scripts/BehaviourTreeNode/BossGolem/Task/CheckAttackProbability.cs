@@ -1,29 +1,30 @@
 using BehaviorDesigner.Runtime.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckAttackProbability : Conditional
+namespace BehaviourTreeNode.BossGolem.Task
 {
-    public int successRate = 0;
-
-    public override void OnStart()
+    public class CheckAttackProbability : Conditional
     {
-        base.OnStart();
-    }
+        [SerializeField] private int _successRate = 0;
 
-    public override TaskStatus OnUpdate()
-    {
-        if (Random.Range(0, 100) < successRate)
+        public override void OnStart()
         {
-            return TaskStatus.Success;
+            base.OnStart();
         }
-        return TaskStatus.Failure;
-    }
 
-    public override void OnEnd()
-    {
-        base.OnEnd();
-    }
+        public override TaskStatus OnUpdate()
+        {
+            if (Random.Range(0, 100) < _successRate)
+            {
+                return TaskStatus.Success;
+            }
+            return TaskStatus.Failure;
+        }
 
+        public override void OnEnd()
+        {
+            base.OnEnd();
+        }
+
+    }
 }

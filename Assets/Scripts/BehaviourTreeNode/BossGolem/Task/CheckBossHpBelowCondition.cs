@@ -1,30 +1,28 @@
-using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using BehaviorDesigner.Runtime.Tasks.Unity.SharedVariables;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckBossHpBelowCondition : Conditional
+namespace BehaviourTreeNode.BossGolem.Task
 {
-    public int HP_Percent;
-
-    BaseStats stat;
-    public override void OnStart()
+    public class CheckBossHpBelowCondition : Conditional
     {
-        base.OnStart();
-        stat = Owner.GetComponent<BaseStats>();
-    }
-    public override TaskStatus OnUpdate()
-    {
-        if(stat.Hp <= stat.MaxHp/100*HP_Percent)
+        [SerializeField]private int _hpPercent;
+        private BaseStats _stat;
+        public override void OnStart()
         {
-            return TaskStatus.Success;
+            base.OnStart();
+            _stat = Owner.GetComponent<BaseStats>();
         }
-        return TaskStatus.Failure;
-    }
-    public override void OnEnd()
-    {
-        base.OnEnd();
+        public override TaskStatus OnUpdate()
+        {
+            if(_stat.Hp <= _stat.MaxHp/100*_hpPercent)
+            {
+                return TaskStatus.Success;
+            }
+            return TaskStatus.Failure;
+        }
+        public override void OnEnd()
+        {
+            base.OnEnd();
+        }
     }
 }

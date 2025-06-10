@@ -2,43 +2,46 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
-public class WaitTimeTarget : Conditional
+namespace BehaviourTreeNode.BossGolem.Task
 {
-    private float _duration;
-    private float _currentTime;
-    public SharedBool _hasArrived;
-    public SharedFloat _minSecond;
-    public SharedFloat _maxSecond;
-
-
-    public override void OnStart()
+    public class WaitTimeTarget : Conditional
     {
-        base.OnStart();
-        _duration = Random.Range(_minSecond.Value, _maxSecond.Value);
-    }
+        private float _duration;
+        private float _currentTime;
+        [SerializeField]private SharedBool _hasArrived;
+        [SerializeField]private SharedFloat _minSecond;
+        [SerializeField]private SharedFloat _maxSecond;
 
-    public override TaskStatus OnUpdate()
-    {
-        _currentTime += Time.deltaTime;
-        if (_currentTime >= _duration)
+
+        public override void OnStart()
         {
-            return TaskStatus.Failure;
+            base.OnStart();
+            _duration = Random.Range(_minSecond.Value, _maxSecond.Value);
         }
-        else
+
+        public override TaskStatus OnUpdate()
         {
-            if (_hasArrived.Value)
+            _currentTime += Time.deltaTime;
+            if (_currentTime >= _duration)
             {
-                return TaskStatus.Success;
+                return TaskStatus.Failure;
             }
+            else
+            {
+                if (_hasArrived.Value)
+                {
+                    return TaskStatus.Success;
+                }
+            }
+            return TaskStatus.Running;
         }
-        return TaskStatus.Running;
-    }
 
 
-    public override void OnEnd()
-    {
-        base.OnEnd();
-        _currentTime = 0;
-        _duration = 0;
+        public override void OnEnd()
+        {
+            base.OnEnd();
+            _currentTime = 0;
+            _duration = 0;
+        }
     }
 }

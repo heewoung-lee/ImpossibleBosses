@@ -6,6 +6,7 @@ public class Define
 {
     public static readonly Vector3 DEFAULT_QUARTERVIEW_POSITION = new Vector3(0, 7, -6);
     public static readonly Quaternion DEFAULT_QUARTERVIEW_ROTATION = Quaternion.Euler(new Vector3(45, 0, 0));
+    public static readonly int MaxPlayer = 8;
     public const string APPLICATIONNAME = "ItemDataSheet";
 
 

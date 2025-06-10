@@ -19,7 +19,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         private NGO_Indicator_Controller _indicatorController;
         private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
 
-        [SerializeField] private SharedProjector AttackIndicator;
+        [SerializeField] private SharedProjector _attackIndicator;
         [SerializeField] private int _radiusStep = 0;
         [SerializeField] private int _angleStep = 0;
 
@@ -55,7 +55,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                 _indicatorController = Managers.ResourceManager
                     .Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
                     .GetComponent<NGO_Indicator_Controller>();
-                AttackIndicator.Value = _indicatorController;
+                _attackIndicator.Value = _indicatorController;
                 _indicatorController = Managers.RelayManager.SpawnNetworkOBJ(_indicatorController.gameObject)
                     .GetComponent<NGO_Indicator_Controller>();
                 float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
