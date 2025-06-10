@@ -5,15 +5,21 @@ using UnityEngine;
 public class Module_UI_Description : MonoBehaviour
 {
     UI_Description _description;
-    void Awake()
+
+    public UI_Description Description
     {
-        _description = Managers.UI_Manager.GetSceneUIFromResource<UI_Description>();
-        
+        get
+        {
+            if(_description == null)
+            {
+                _description = Managers.UI_Manager.GetSceneUIFromResource<UI_Description>();
+            }
+
+            return _description;
+        }
     }
     private void Start()
     {
-        _description.GetComponent<Canvas>().sortingOrder =
-            Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>().GetComponent<Canvas>().sortingOrder + 1;
+        Description.GetComponent<Canvas>().sortingOrder = (int)Define.SpecialSortingOrder.Description;
     }
-
 }

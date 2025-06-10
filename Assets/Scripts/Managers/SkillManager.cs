@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillManager : IManagerInitializable
+public class SkillManager : IManagerInitializable,IManagerIResettable
 {
     Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
     public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
@@ -68,5 +68,10 @@ public class SkillManager : IManagerInitializable
     public void Invoke_Done_UI_SKilBar_Init_Event()
     {
         _done_UI_SkillBar_Init_Event?.Invoke();
+    }
+
+    public void Clear()
+    {
+        _done_UI_SkillBar_Init_Event = null;
     }
 }

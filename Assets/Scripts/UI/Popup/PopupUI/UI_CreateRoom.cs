@@ -39,6 +39,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
 
     public Button CloseButton => _button_close;
 
+
     protected override void AwakeInit()
     {
         base.AwakeInit();

@@ -4,11 +4,12 @@ using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
+public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action, IBossAnimationChanged
 {
-    private readonly float _IndicatorAddDurationTime = 0f;
+    private readonly float _addIndicatorAddDurationTime = 0f;
     private readonly float _attackAnimStopThreshold = 0.06f;
 
     private BossGolemController _controller;
@@ -19,35 +20,44 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
     private bool _hasSpawnedParticles;
 
     private NGO_Indicator_Controller _indicator_controller;
-    
+    private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
+
     public SharedProjector _attackIndicator;
     public int Radius_Step = 0;
     public int Angle_Step = 0;
 
+    public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
+
+    public override void OnAwake()
+    {
+        base.OnAwake();
+        ChechedBossAttackField();
+        void ChechedBossAttackField()
+        {
+            _controller = Owner.GetComponent<BossGolemController>();
+            _stats = _controller.GetComponent<BossStats>();
+            _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
+            _networkController = Owner.GetComponent<BossGolemNetworkController>();
+            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
+        }
+    }
+
+
     public override void OnStart()
     {
         base.OnStart();
-        ChechedBossAttackField();
         SpawnAttackIndicator();
         CalculateBossAttackRange();
         StartAnimationSpeedChanged();
 
-
-        void ChechedBossAttackField()
-        {
-            _controller = Owner.GetComponent<BossGolemController>();
-            _controller.UpdateAttack();
-            _stats = _controller.GetComponent<BossStats>();
-            _animLength = Utill.GetAnimationLength("Anim_Attack1", _controller.Anim);
-            _networkController = Owner.GetComponent<BossGolemNetworkController>();
-            _hasSpawnedParticles = false;
-        }
         void SpawnAttackIndicator()
         {
+            OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_Attackstate);
+            _hasSpawnedParticles = false;
             _indicator_controller = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
             _attackIndicator.Value = _indicator_controller;
             _indicator_controller = Managers.RelayManager.SpawnNetworkOBJ(_indicator_controller.gameObject).GetComponent<NGO_Indicator_Controller>();
-            float totalIndicatorDurationTime = _IndicatorAddDurationTime + _animLength;
+            float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
             _indicator_controller.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
             void IndicatorDoneEvent()
             {
@@ -80,8 +90,9 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
             if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float decelerationRatio) is false)
                 return;
 
-            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _IndicatorAddDurationTime);
-            _networkController.StartAnimChagnedRpc(animinfo);
+
+            CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addIndicatorAddDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+            _networkController.StartAnimChagnedRpc(animinfo,Managers.RelayManager.GetNetworkObject(_indicator_controller.gameObject));
             //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
         }
     }
@@ -98,5 +109,10 @@ public class BossAttack : BehaviorDesigner.Runtime.Tasks.Action
         base.OnEnd();
         _attackRangeParticlePos = null;
         _hasSpawnedParticles = false;
+    }
+
+    public void OnBossGolemAnimationChanged(BossGolemAnimationNetworkController bossAnimController, IState state)
+    {
+        bossAnimController.SyncBossStateToClients(state);
     }
 }

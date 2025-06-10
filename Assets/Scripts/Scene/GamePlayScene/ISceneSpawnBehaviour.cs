@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public interface IGamePlaySceneSpawnBehaviour
+public interface ISceneSpawnBehaviour
 {
+    ISceneMover nextscene { get; }
+
     public void SpawnOBJ();
 
     public void Init();

@@ -23,7 +23,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
 {
     public const ulong INVALIDOBJECTID = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
-    [SerializeField]
     private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
         (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -96,8 +95,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
     private void LoadedPlayerCountValueChanged(int previousValue, int newValue)
     {
-        Debug.Log($"이전값{previousValue} 이후값{newValue}");
-
+        //Debug.Log($"이전값{previousValue} 이후값{newValue}");
         LoadedPlayerCountRpc();
     }
 
@@ -275,13 +273,6 @@ public class NGO_RPC_Caller : NetworkBehaviour
             Managers.BufferManager.InitBuff(playerstats, duration, effect);
         }
     }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    public void AllClientDisconnetedVivoxAndLobbyRpc()
-    {
-        _ = DisconnectFromVivoxAndLobby();
-        //씬 전환을 위해 로비와 비복스만 연결을 끊는 로직이 필요
-    }
     private async Task DisconnectFromVivoxAndLobby()
     {
         try
@@ -438,8 +429,28 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void ResetManagersRpc()
     {
-        Debug.Log("클리어 호출됨");
         Managers.Clear();
     }
 
+    [Rpc(SendTo.Server)]
+    public void OnBeforeSceneUnloadRpc()
+    {
+        foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+        {
+            if(ngo.TryGetComponent(out ISceneChangeBehaviour behaviour))
+            {
+                Debug.Log((behaviour as Component).name + "초기화 처리 됨");
+                behaviour.OnBeforeSceneUnload();
+            }
+        }
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void OnBeforeSceneUnloadLocalRpc()
+    {
+        Managers.SceneManagerEx.InvokeOnBeforeSceneUnloadLocalEvent();
+
+        _ = DisconnectFromVivoxAndLobby();//비복스 및 로비 연결해제
+    }
 }

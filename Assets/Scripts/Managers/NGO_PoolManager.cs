@@ -52,6 +52,9 @@ public class NGO_PoolManager : IManagerIResettable
     }
     public void Push(NetworkObject ngo)
     {
+        if (ngo == null)
+            return;
+
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
             ngo.Despawn();

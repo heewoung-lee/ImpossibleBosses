@@ -92,7 +92,7 @@ public class UI_Shop : UI_Popup
         BindEvent(_consumableItem_icon.gameObject, ClickToTab);
         BindEvent(_etcItem_icon.gameObject, ClickToTab);
 
-        if(_playerStats == null)
+        if (_playerStats == null)
         {
             Managers.SocketEventManager.DonePlayerSpawnEvent += InitializePlayerStatEvent;
         }
@@ -139,7 +139,7 @@ public class UI_Shop : UI_Popup
     {
         if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
         {
-            description.gameObject.SetActive(false);
+            description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();
         }
     }
@@ -191,8 +191,19 @@ public class UI_Shop : UI_Popup
 
     protected override void StartInit()
     {
-        _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        UpdateHasGoldChanged(_playerStats.Gold);
+        if (Managers.GameManagerEx.Player == null)
+        {
+            Managers.GameManagerEx.OnPlayerSpawnEvent += (playerStats) =>
+            {
+                Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+                UpdateHasGoldChanged(_playerStats.Gold);
+            };
+        }
+        else
+        {
+            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+            UpdateHasGoldChanged(_playerStats.Gold);
+        }
         RandomItemRespawn();
         ShowItemTypeForSelectedTab(ItemType.Equipment);
     }

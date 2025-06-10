@@ -39,16 +39,20 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [UnityEngine.Serialization.FormerlySerializedAs("targetPosition")]
         public SharedBool _hasArrived;
         private BossGolemController _controller;
-
+        private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
 
         public override void OnAwake()
         {
             base.OnAwake();
             _controller = Owner.GetComponent<BossGolemController>();
+            _bossGolemAnimationNetworkController = Owner.GetComponent<BossGolemAnimationNetworkController>();
         }
         public override void OnStart()
         {
             base.OnStart();
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.Base_MoveState);
+
+
             _hasArrived.Value = false;
 
             if (targetOBject == null)

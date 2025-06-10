@@ -78,7 +78,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         base.ItemRightClick(eventdata);
         //장착중이 아니라면 슬롯에 넣고
         //장착중이라면 아이템창에 돌려놓고
-        if (_isEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행
+        if (IsEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행
         {
             ItemConsumable consumable = _iteminfo as ItemConsumable;
             ConsumableItemEquip(this);
@@ -87,7 +87,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
         else// 장착중이라면 장착해제
         {
             gameObject.transform.SetParent(_contentofInventoryTr);
-            _isEquipped = false;
+            SetItemEquipedState(false);
             CombineConsumableItems();
         }
 

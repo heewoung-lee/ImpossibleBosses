@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class UI_Description : UI_Scene
 {
-    private const int UI_DESCRIPTION_SORTING_ORDER = 50;
-    
     enum ImageType
     {
         ItemImage
@@ -42,13 +40,36 @@ public class UI_Description : UI_Scene
     private float _descriptionWidth;
     private float _descriptionHeight;
     private Canvas _descriptionCanvas;
-    public DescriptionWindow DescriptionWindow => _descriptionWindow;
-
+    private Direction _currnt_Dir = Direction.Right;
     private Color _item_GradeColor;
     private Vector3 _originPos;
-    public Vector3 OriginPos { get => _originPos; }
+    private UI_Player_Inventory _uI_Player_Inventory;
 
-    private Direction _currnt_Dir = Direction.Right;
+
+    public DescriptionWindow DescriptionWindow => _descriptionWindow;
+
+
+    public UI_Player_Inventory UI_Player_Inventory
+    {
+        get
+        {
+            if(_uI_Player_Inventory == null)
+            {
+                _uI_Player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+            }
+            return _uI_Player_Inventory;
+        }
+    }
+
+    public Vector3 OriginPos { get => _originPos; }
+    public bool isDescriptionActive
+    {
+        get
+        {
+            return gameObject.activeSelf;
+        }
+    }
+
 
     protected override void AwakeInit()
     {
@@ -71,7 +92,16 @@ public class UI_Description : UI_Scene
         gameObject.SetActive(false);
     }
 
+    public void UI_DescriptionEnable()
+    {
+        gameObject.SetActive(true);
+    }
 
+
+    public void UI_DescriptionDisable()
+    {
+        gameObject.SetActive(false);
+    }
 
     public void SetValue(IItem iteminfo)
     {
@@ -138,9 +168,14 @@ public class UI_Description : UI_Scene
 
     protected override void StartInit()
     {
-        _descriptionCanvas.sortingOrder = UI_DESCRIPTION_SORTING_ORDER;
+        _descriptionCanvas.sortingOrder = (int)Define.SpecialSortingOrder.Description;
         
     }
+    private void OnEnable()
+    {
+        _descriptionCanvas.sortingOrder = UI_Player_Inventory.GetComponent<Canvas>().sortingOrder + 1;
+    }
+
     public Vector3 SetDecriptionPos(Transform componentTr, float width, float height)
     {
         _currnt_Dir = Direction.Right;

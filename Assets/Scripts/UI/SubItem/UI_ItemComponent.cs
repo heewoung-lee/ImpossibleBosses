@@ -117,6 +117,8 @@ public struct IteminfoStruct : INetworkSerializable//TODO: 나중에 아이템 강화등 
 
 public abstract class UI_ItemComponent : UI_Base, IItem
 {
+    private readonly float ItemVisibleValue = 0.5f;
+
     protected IItem _iteminfo;
     protected int _itemNumber;
     protected ItemType _itemType;
@@ -127,7 +129,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected string _itemIconSourceImageText;
     protected Image _itemIconSourceImage;
     protected Dictionary<string, Sprite> _imageSource;
-    protected Image _dragImageIcon;
+    protected UI_ItemDragImage _UI_dragImageIcon;
     protected UI_Description _decriptionObject;
     protected bool _isDragging = false;
 
@@ -141,15 +143,18 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     public Dictionary<string, Sprite> ImageSource => _imageSource;
 
     public abstract RectTransform ItemRectTr { get; }
-    public Image DragImageIcon
+    public UI_ItemDragImage UI_DragImageIcon
     {
         get
         {
-            if (_dragImageIcon == null)
+            if (_UI_dragImageIcon == null)
             {
-                _dragImageIcon = (Managers.UI_Manager.UI_sceneDict[typeof(UI_ItemDragImage)] as UI_ItemDragImage).ItemDragImage;
+                if (Managers.UI_Manager.UI_sceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
+                {
+                    _UI_dragImageIcon = itemDragIamge as UI_ItemDragImage;
+                }   
             }
-            return _dragImageIcon;
+            return _UI_dragImageIcon;
         }
 
     }
@@ -172,7 +177,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         if (_isDragging)
             return;
-        _decriptionObject.gameObject.SetActive(true);
+        _decriptionObject.UI_DescriptionEnable();
 
         _decriptionObject.DescriptionWindow.transform.position
             = _decriptionObject.SetDecriptionPos(transform, ItemRectTr.rect.width, ItemRectTr.rect.height);
@@ -184,9 +189,13 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected override void OnDisableInit()
     {
         base.OnDisableInit();
-        if (DragImageIcon.gameObject.activeSelf)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
+
+        if (UI_DragImageIcon == null)
+            return;
+
+        if (UI_DragImageIcon.IsDragImageActive == true)//드래그 이미지가 살아있을떄 상점이나, 인벤토리가 닫힐때
         {
-            DragImageIcon.gameObject.SetActive(false);
+            UI_DragImageIcon.SetItemImageDisable();
         }
         RevertImage();
     }
@@ -195,7 +204,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 1f);
         _isDragging = false;
-        DragImageIcon.gameObject.SetActive(false);
+        UI_DragImageIcon.SetItemImageDisable();
     }
 
 
@@ -206,7 +215,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
 
     protected void CloseDescription()
     {
-        _decriptionObject.gameObject.SetActive(false);
+        _decriptionObject.UI_DescriptionDisable();
         _decriptionObject.SetdecriptionOriginPos();
     }
 
@@ -214,26 +223,26 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     {
         if (_decriptionObject.gameObject.activeSelf)
         {
-            _decriptionObject.gameObject.SetActive(false);
+            _decriptionObject.UI_DescriptionDisable();  
         }
     }
 
     public void GetDragBegin(PointerEventData eventData)
     {
 
-        DragImageIcon.sprite = _itemIconSourceImage.sprite;
-        DragImageIcon.gameObject.SetActive(true);//드래그 될 이미지
-
+        UI_DragImageIcon.SetImageSprite(_itemIconSourceImage.sprite);
+        UI_DragImageIcon.SetItemImageEnable();
         _itemIconSourceImage.color = new Color(_itemIconSourceImage.color.r, _itemIconSourceImage.color.g, _itemIconSourceImage.color.b, 0f);
-        DragImageIcon.color = new Color(DragImageIcon.color.r, DragImageIcon.color.g, DragImageIcon.color.b, 0.5f);
-
+        UI_DragImageIcon.SetImageSpriteColorAlpah(ItemVisibleValue);
         _isDragging = true;
     }
 
     public void DraggingItem(PointerEventData eventData)
     {
-        DragImageIcon.transform.position = eventData.position;
+        UI_DragImageIcon.SetDragImagePosition(eventData.position);
     }
+
+
     public abstract void GetDragEnd(PointerEventData eventData);
 
 
@@ -249,5 +258,16 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         _itemIconSourceImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
         _imageSource = iteminfo.ImageSource;
         _iteminfo = iteminfo;//다른 클래스들이 형변환을 쉽게 하기 위해 인터페이스를 저장
+    }
+
+
+    public virtual void SetINewteminfo(IteminfoStruct iteminfo)
+    {
+        _itemNumber = iteminfo.ItemNumber;
+        _itemType = iteminfo.Item_Type;
+        _item_Grade = iteminfo.Item_Grade_Type;
+        _Itemeffects = iteminfo.ItemEffects;
+        _itemName = iteminfo.ItemName;
+        _descriptionText = iteminfo.DescriptionText;
     }
 }

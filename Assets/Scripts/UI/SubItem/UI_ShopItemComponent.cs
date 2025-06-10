@@ -120,7 +120,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
                 BuyItem();
             }
         }
-        DragImageIcon.gameObject.SetActive(false);
+        UI_DragImageIcon.SetItemImageDisable();
     }
 
     public void IntializeItem(IItem iteminfo, int count, int price)

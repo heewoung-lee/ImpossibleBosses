@@ -54,7 +54,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
         LoadDataFromGoogleSheets(_requestDataTypes);
     }
 
-    public List<Type> LoadSerializableTypesFromFolder(string folderPath,Action<Type,List<Type>> wantTypeFilter)//클래스중 folderPath경로의 파일중 Serialze어트리뷰트가 붙은 타입들 가져오기
+    public List<Type> LoadSerializableTypesFromFolder(string folderPath,Action<Type,List<Type>> wantTypeFilter)
     {
         List<Type> pathClasses = new List<Type>();
 
@@ -72,7 +72,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
                 Type type = monoScript.GetClass();
                 if (type != null)
                 {
-                    wantTypeFilter.Invoke(type, pathClasses);//원하는 애들을 필터해서 가져오기
+                    wantTypeFilter.Invoke(type, pathClasses);//원하는 객체를 필터해서 가져오기
                 }
             }
         }

@@ -28,7 +28,9 @@ public class UI_InputRoomPassWord : UI_Popup
     private GameObject _messageError;
     private TMP_Text _errorMessageText;
     private Module_UI_FadeOut _errorMessageTextFadeOutMoudule;
+
     public PlayerLoginInfo PlayerLoginInfo { get; set; }
+
 
     protected override void OnDisableInit()
     {

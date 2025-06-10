@@ -8,6 +8,7 @@ using UnityEngine;
 public class Managers : MonoBehaviour
 {
     private static Managers _instance;
+    private static bool _isQuitting;
     private static Managers Instance
     {
         get
@@ -51,7 +52,10 @@ public class Managers : MonoBehaviour
 
     private ResourceManager _resourceManager = new ResourceManager();
     public static ResourceManager ResourceManager { get => Instance._resourceManager; }
-    
+
+    private SceneDataSaveAndLoader _sceneDataSaveAndLoader = new SceneDataSaveAndLoader();
+    public static SceneDataSaveAndLoader SceneDataSaveAndLoader { get => Instance._sceneDataSaveAndLoader; }
+
     private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
     public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
 
@@ -96,6 +100,9 @@ public class Managers : MonoBehaviour
     {
         if (_instance == null)
         {
+            if (_isQuitting == true)//에디터가 종료될때 다른 클래스들이 Instance를 참조하려해서 오류가 남 종료중일땐 참조를 못하게 막는 방지코드
+                return;
+
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
@@ -117,6 +124,11 @@ public class Managers : MonoBehaviour
             _instance._skillManager.Init();
         }
 
+    }
+
+    private void OnDestroy()
+    {
+        _isQuitting = true;
     }
 
     public async void OnApplicationQuit()
@@ -143,5 +155,6 @@ public class Managers : MonoBehaviour
         _instance._poolManager.Clear();
         _instance._resourceManager.Clear();
         _instance._ngo_PoolManager.Clear();
+        _instance._skillManager.Clear();
     }
 }

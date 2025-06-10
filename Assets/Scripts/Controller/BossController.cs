@@ -16,17 +16,17 @@ public abstract class BossController : BaseController
     {
     }
 
-    public bool TryGetAnimationSpeed(float elapsedTime, out float animSpeed, CurrentAnimInfo animinfo,bool isCheckattackIndicatorFinish)
+    public bool TryGetAnimationSpeed(double elapsedTime, out float animSpeed, CurrentAnimInfo animinfo,bool isCheckattackIndicatorFinish)
     {
         animSpeed = 0f;
         float startAnimSpeed =animinfo.StartAnimationSpeed;
-        animSpeed = Mathf.Lerp(startAnimSpeed, 0f, elapsedTime / (animinfo.AnimLength * animinfo.DecelerationRatio));
-        Anim.speed = animSpeed;
+        animSpeed = Mathf.Lerp(startAnimSpeed, 0f, (float)(elapsedTime / (animinfo.AnimLength * animinfo.DecelerationRatio)));
+        Anim.speed = (float)animSpeed;
         bool finished = animSpeed <= animinfo.AnimStopThreshold&& isCheckattackIndicatorFinish == true;
         if (finished)
         {
             animSpeed = startAnimSpeed;
-            Anim.speed = animSpeed;
+            Anim.speed = (float)animSpeed;
         }
         return finished;
     }

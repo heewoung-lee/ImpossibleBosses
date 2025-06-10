@@ -7,9 +7,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Player_Inventory : UI_Popup
+public class UI_Player_Inventory : UI_Popup, IPopupHandler
 {
-    private PlayerStats _stat;
+    private PlayerStats _ownerPlayerStats;
     private TMP_Text _playerName;
     private TMP_Text _playerLevel;
     private TMP_Text _currentGold;
@@ -19,22 +19,34 @@ public class UI_Player_Inventory : UI_Popup
     private GameObject _equipMent;
     private Transform _windowPanel;
     private Canvas _inventoryCanvas;
-
+    
     private Vector3 _initialEquipPosition;
     private Vector2 _initialMousePosition;
     private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
     private Transform _itemInventoryTr;
-    private Transform _lootitemStorage;
 
     private GraphicRaycaster _ui_inventory_Raycaster;
     private EventSystem _eventSystem;
-
     public Transform ItemInventoryTr => _itemInventoryTr;
     public GraphicRaycaster UI_Inventory_RayCaster=> _ui_inventory_Raycaster;
     public EventSystem EventSystem => _eventSystem;
-    public Transform InventoryOnwer => _stat.transform;
+    public PlayerStats OwnerPlayerStats
+    {
+        get
+        {
+            if(_ownerPlayerStats == null )
+            {
+                if (Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out PlayerStats stats) == true)
+                {
+                    _ownerPlayerStats = stats;
+                }
+            }
+            return _ownerPlayerStats;
+        }
+    }
 
-    
+    public bool IsVisible => _inventoryCanvas.enabled;
+
     enum Equipment_Go
     {
         Equipment
@@ -79,13 +91,12 @@ public class UI_Player_Inventory : UI_Popup
 
         _initialWindowPosition = (_equipMent.transform as RectTransform).localPosition;
 
-        _itemInventoryTr = Utill.FindChild<InventoryContentCoordinate>(gameObject,null,true).transform;
+        _itemInventoryTr = Utill.FindChild<InventoryContentCoordinate>(gameObject, null, true).transform;
         _inventoryCanvas = GetComponent<Canvas>();
 
         _ui_inventory_Raycaster = GetComponent<GraphicRaycaster>();
         _eventSystem = FindAnyObjectByType<EventSystem>();
 
-        _lootitemStorage = Managers.LootItemManager.TemporaryInventory;
     }
     protected override void StartInit()
     {
@@ -117,36 +128,29 @@ public class UI_Player_Inventory : UI_Popup
             Vector2 offset = currentMousePosition - _initialMousePosition;
             _equipMent.transform.localPosition = _initialEquipPosition + (Vector3)offset;
         }, Define.UI_Event.Drag);
-        _stat = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         UpdateStats();
-        UpdateGoldUI(_stat.Gold);
-        UpdatePlayerLevelAndNickName(_stat.CharacterBaseStats);
-        InitalizeEvent();
-    }
+        UpdateGoldUI(OwnerPlayerStats.Gold);
 
-    private void InitalizeEvent()
-    {
-        SubscribePlayerEvent();
-        _stat.Done_Base_Stats_Loading += UpdatePlayerLevelAndNickName;
+        ClosePopup();
+        //아이템을 로드하기 위해 게임오브젝트는 켜두는데 캔버스만 꺼둠.
+
     }
 
     private void UpdatePlayerLevelAndNickName(CharacterBaseStat stat)
     {
-        _playerName.text = _stat.Name;
-        _playerLevel.text = $"LV : {_stat.Level}";
+        _playerName.text = OwnerPlayerStats.Name;
+        _playerLevel.text = $"LV : {OwnerPlayerStats.Level}";
     }
 
     public void CloseDecriptionWindow(InputAction.CallbackContext context)
     {
         CloseDecriptionWindow();
     }
-
     public void CloseDecriptionWindow()
     {
-        UI_Description description = null;
-        if (description = Managers.UI_Manager.Get_Scene_UI<UI_Description>())
+        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
         {
-            description.gameObject.SetActive(false);
+            description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();
         }
     }
@@ -155,48 +159,55 @@ public class UI_Player_Inventory : UI_Popup
     {
         base.OnEnableInit();
         _close_Popup_UI.performed += CloseDecriptionWindow;
-        if(_stat != null)
+        if(OwnerPlayerStats != null)
         {
             SubscribePlayerEvent();
-            UpdateGoldUI(_stat.Gold);
+            UpdateGoldUI(OwnerPlayerStats.Gold);
             UpdateStats();
+            UpdatePlayerLevelAndNickName(OwnerPlayerStats.CharacterBaseStats);
         }
-        Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
+        //Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;
+
     }
     protected override void OnDisableInit()
     {
         base.OnDisableInit();
         _close_Popup_UI.performed -= CloseDecriptionWindow;
-        if (_stat != null)
+        if (OwnerPlayerStats != null)
         {
             DeSubscribePlayerEvent();
         }
         CloseDecriptionWindow();
     }
 
-  
+
     private void SubscribePlayerEvent()
     {
-        _stat.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
-        _stat.MaxHPValueChangedEvent += UpdateMaxHpValue;
-        _stat.AttackValueChangedEvent += UpdateAttackValue;
-        _stat.DefenceValueChangedEvent += UpdatedefenceValue;
-        _stat.PlayerHasGoldChangeEvent += UpdateGoldUI;
+
+        OwnerPlayerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
+        OwnerPlayerStats.MaxHPValueChangedEvent += UpdateMaxHpValue;
+        OwnerPlayerStats.AttackValueChangedEvent += UpdateAttackValue;
+        OwnerPlayerStats.DefenceValueChangedEvent += UpdatedefenceValue;
+        OwnerPlayerStats.PlayerHasGoldChangeEvent += UpdateGoldUI;
+        OwnerPlayerStats.Done_Base_Stats_Loading += UpdatePlayerLevelAndNickName;
+
     }
     private void DeSubscribePlayerEvent()
     {
-        _stat.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
-        _stat.MaxHPValueChangedEvent -= UpdateMaxHpValue;
-        _stat.AttackValueChangedEvent -= UpdateAttackValue;
-        _stat.DefenceValueChangedEvent -= UpdatedefenceValue;
-        _stat.PlayerHasGoldChangeEvent -= UpdateGoldUI;
+        OwnerPlayerStats.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
+        OwnerPlayerStats.MaxHPValueChangedEvent -= UpdateMaxHpValue;
+        OwnerPlayerStats.AttackValueChangedEvent -= UpdateAttackValue;
+        OwnerPlayerStats.DefenceValueChangedEvent -= UpdatedefenceValue;
+        OwnerPlayerStats.PlayerHasGoldChangeEvent -= UpdateGoldUI;
+        OwnerPlayerStats.Done_Base_Stats_Loading -= UpdatePlayerLevelAndNickName;
+
     }
     public void UpdateStats()
     {
-        _hp_Stat_Text.text = $"{_stat.Hp} / {_stat.MaxHp}";
-        _attack_Stat_Text.text = _stat.Attack.ToString();
-        _defense_Stat_Text.text = _stat.Defence.ToString();
+        _hp_Stat_Text.text = $"{OwnerPlayerStats.Hp} / {OwnerPlayerStats.MaxHp}";
+        _attack_Stat_Text.text = OwnerPlayerStats.Attack.ToString();
+        _defense_Stat_Text.text = OwnerPlayerStats.Defence.ToString();
     }
 
     private void UpdateGoldUI(int hasgold)
@@ -206,11 +217,11 @@ public class UI_Player_Inventory : UI_Popup
 
     private void UpdateCurrentHPValue(int preCurrentHpValue,int currentHP)
     {
-        _hp_Stat_Text.text = $"{currentHP} / {_stat.MaxHp}";
+        _hp_Stat_Text.text = $"{currentHP} / {OwnerPlayerStats.MaxHp}";
     }
     private void UpdateMaxHpValue(int preMaxHpValue ,int maxHP)
     {
-        _hp_Stat_Text.text = $"{_stat.Hp} / {maxHP}";
+        _hp_Stat_Text.text = $"{OwnerPlayerStats.Hp} / {maxHP}";
     }
     private void UpdateAttackValue(int preAttackValue, int attack)
     {
@@ -221,4 +232,13 @@ public class UI_Player_Inventory : UI_Popup
         _defense_Stat_Text.text = defence.ToString();
     }
 
+    public void ShowPopup()
+    {
+      _inventoryCanvas.enabled = true;
+    }
+
+    public void ClosePopup()
+    {
+        _inventoryCanvas.enabled = false;
+    }
 }

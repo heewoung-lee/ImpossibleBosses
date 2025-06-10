@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class BaseScene : MonoBehaviour,ISkillInit
+public abstract class BaseScene : MonoBehaviour
 {
     public abstract Define.Scene CurrentScene { get; }
     MoveMarkerController _moveMarker;
@@ -30,6 +30,6 @@ public abstract class BaseScene : MonoBehaviour,ISkillInit
     }
 
     protected abstract void AwakeInit();
-
+     
     public abstract void Clear();
 }

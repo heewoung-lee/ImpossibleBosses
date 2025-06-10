@@ -2,6 +2,7 @@ using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,30 +15,42 @@ public abstract class Module_Player_Class : MonoBehaviour
 
     public virtual void InitializeOnAwake()
     {
+        
     }
-
-    public virtual void InitializeOnStart()//TODO: 씬전환될때 호출할것
+    public void OnEnable()
     {
-        if (Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
-        {
-            InitializeSkillsFromManager();
-        }
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
     }
-
+    public void OnDisable()
+    {
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
+    }
+    public virtual void InitializeOnStart()
+    {
+        //    if(Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
+        //    {
+        //        InitializeSkillsFromManager();
+        //    }
+    }
+  
     private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
+
+        if (Managers.SceneManagerEx.GetCurrentScene is not ISkillInit)
             return;
 
-        if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
+        if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)
             return;
 
+        Debug.Log("이건 씬변경시 호출");
         InitializeSkillsFromManager();
     }
 
     private void InitializeSkillsFromManager()
     {
+        if (GetComponent<NetworkObject>().IsOwner == false)
+            return;
+
         _playerSkill = Managers.SkillManager.AllSKillDict
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
             .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다

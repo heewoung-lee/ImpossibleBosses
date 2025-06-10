@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,7 +13,8 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         ItemIconSourceImage,
         ItemGradeBorder
     }
-
+    private bool _isEquipped = false;
+    private Action _onAfterStart;
 
     protected RectTransform _itemRectTr;
     protected Transform _contentofInventoryTr;
@@ -20,13 +22,24 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected EquipSlotTrInfo _equipSlot;
     protected Image _backGroundImage;
     protected Image _itemGradeBorder;
-    protected bool _isEquipped = false;
-
-
     protected GraphicRaycaster _uiRaycaster;
     protected EventSystem _eventSystem;
+
+    public event Action OnAfterStart
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onAfterStart, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onAfterStart, value);
+        }
+    }
+    public bool IsEquipped => _isEquipped;
     public override RectTransform ItemRectTr => _itemRectTr;
     public abstract GameObject GetLootingItemObejct(IItem iteminfo);
+
     protected override void AwakeInit()
     {
         Bind<Image>(typeof(Images));
@@ -39,6 +52,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     protected override void StartInit()
     {
         base.StartInit();
+
         _inventory_UI = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
 
         _equipSlot = _inventory_UI.gameObject.FindChild<EquipSlotTrInfo>("Left_Panel", true);
@@ -48,6 +62,11 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         _eventSystem = _inventory_UI.EventSystem;
 
         _itemGradeBorder.sprite = Managers.ItemDataManager.ItemGradeBorder[_item_Grade];
+
+
+        _onAfterStart?.Invoke();
+        _onAfterStart = null;
+
     }
 
     public void SetItemEquipedState(bool isEquiped)
@@ -76,6 +95,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
 
     protected abstract void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult);
 
+
     protected abstract void RemoveItemFromInventory();
 
     private bool IsPointerOverUI(PointerEventData eventData, out List<RaycastResult> uiraycastResult)
@@ -86,20 +106,11 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
         return results.Count > 0;
     }
 
-    private void DropItemOnGround()
+    protected virtual void DropItemOnGround()
     {
         RemoveItemFromInventory();
         IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
         Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct,Managers.GameManagerEx.Player.transform.position);
-
-        //RemoveItemFromInventory();
-        //GameObject lootObject = GetLootingItemObejct(_iteminfo);
-        //lootObject.gameObject.GetComponent<LootItem>().SetDropperAndItem(_inventory_UI.InventoryOnwer, _iteminfo);
-        //if(lootObject.TryGetComponent(out NetworkObject networkOBJ))
-        //{
-        //    networkOBJ.enabled = false;
-        //}
-        //return;
     }
 
     protected void AttachItemToSlot(GameObject go, Transform slot)

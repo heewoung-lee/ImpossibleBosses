@@ -344,7 +344,7 @@ MonoBehaviour:
   UseHalfFloatPrecision: 0
   InLocalSpace: 0
   SwitchTransformSpaceWhenParented: 0
-  Interpolate: 0
+  Interpolate: 1
   SlerpPosition: 1
 --- !u!114 &-4800638692832331848
 MonoBehaviour:
@@ -387,6 +387,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _characterHpValue:
+    m_InternalValue: 0
+  _characterMaxHpValue:
+    m_InternalValue: 0
+  _characterAttackValue:
+    m_InternalValue: 0
+  _characterDefenceValue:
+    m_InternalValue: 0
+  _characterMoveSpeedValue:
+    m_InternalValue: 0
+  _isDeadValue:
+    m_InternalValue: 0
 --- !u!114 &6318345427645833407
 MonoBehaviour:
   m_ObjectHideFlags: 0

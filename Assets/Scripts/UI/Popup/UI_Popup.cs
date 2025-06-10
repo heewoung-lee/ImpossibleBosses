@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public abstract class UI_Popup : UI_Base
 {
     protected InputAction _close_Popup_UI;
-
     protected override void AwakeInit()
     {
         _close_Popup_UI = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "Close_Popup_UI");

@@ -7,7 +7,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class MockUnitBattleScene : IBattleSceneSpawnBehaviour
+public class MockUnitBattleScene : ISceneSpawnBehaviour
 {
     public MockUnitBattleScene(Define.PlayerClass playerClass, UI_Loading ui_Loading, bool isSoloTest)
     {
@@ -30,15 +30,20 @@ public class MockUnitBattleScene : IBattleSceneSpawnBehaviour
     private Define.PlayerClass _playerClass;
     private bool _isSoloTest;
 
+    public ISceneMover nextscene => new GamePlaySceneMover();
+
     public async void Init()
     {
-        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
         await JoinChannel();
     }
     public void SpawnOBJ()
     {
-        Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_PlayScene_OnHost;
-        void Init_NGO_PlayScene_OnHost()
+        if (Managers.RelayManager.NetworkManagerEx.IsListening)
+        {
+            Init_NGO_BattleScene_OnHost();
+        }
+        Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_BattleScene_OnHost;
+        void Init_NGO_BattleScene_OnHost()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost)
             {
@@ -70,7 +75,7 @@ public class MockUnitBattleScene : IBattleSceneSpawnBehaviour
 
                 await Task.Delay(1000);
                 Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
-                if (lobby.Data == null)
+                if (lobby == null || lobby.Data == null)
                 {
                     await Utill.RateLimited(async () => await JoinChannel(), 1000);
                     return;

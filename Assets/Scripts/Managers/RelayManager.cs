@@ -47,10 +47,12 @@ public class RelayManager
         }
     }
 
+
     public void Invoke_Spawn_RPCCaller_Event()
     {
         _spawn_RpcCaller_Event?.Invoke();
     }
+
 
     public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
     public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
@@ -100,7 +102,6 @@ public class RelayManager
             return _nGO_ROOT;
         }
     }
-
     public NGO_RPC_Caller NGO_RPC_Caller
     {
         get
@@ -197,7 +198,6 @@ public class RelayManager
         }
     }
 
-
     public NetworkObjectReference GetNetworkObject(GameObject gameobject)
     {
         if (gameobject.TryGetComponent(out NetworkObject ngo))
@@ -239,7 +239,6 @@ public class RelayManager
             NetworkObject networkObj = instanceObj.GetOrAddComponent<NetworkObject>();
             if (networkObj.IsSpawned == false)
             {
-                //이쪽에서 풀 객체면 스폰이 아닌 문제는 여기구역은 
                 networkObj.SpawnWithOwnership(clientId, destroyOption);
             }
             if (parent != null)

@@ -1,6 +1,7 @@
 using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class UI_PortalIndicator : UI_Base
     }
 
 
-    private Image _indicatorIMG; 
+    private Image _indicatorIMG;
 
 
     public void SetIndicatorOff()
@@ -42,7 +43,12 @@ public class UI_PortalIndicator : UI_Base
         if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
             return;
 
-        Managers.ResourceManager.DestroyObject(this.gameObject);
+        SetIndicatorOff();
+    }
+
+    public void OnDisable()
+    {
+        Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= OnChangeSceneEvent;
     }
     private Vector3 SetPosition()
     {

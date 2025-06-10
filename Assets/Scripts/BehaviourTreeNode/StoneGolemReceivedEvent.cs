@@ -11,9 +11,6 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         private bool eventReceived = false;
         private bool registered = false;
-        private BaseController owner_Controller;
-
-
 
         public override void OnStart()
         {
@@ -22,8 +19,6 @@ namespace BehaviorDesigner.Runtime.Tasks
                 Owner.RegisterEvent(eventName.Value, ReceivedEvent);
                 registered = true;
             }
-
-            owner_Controller = Owner.GetComponent<BaseController>();
         }
 
         public override TaskStatus OnUpdate()
@@ -31,7 +26,6 @@ namespace BehaviorDesigner.Runtime.Tasks
             if (eventReceived)
             {
                 Owner.EnableBehavior();
-                owner_Controller.CurrentStateType = owner_Controller.Base_DieState;
                 return TaskStatus.Success;
             }
             return TaskStatus.Failure;

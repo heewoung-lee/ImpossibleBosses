@@ -21,12 +21,19 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
         base.StartInit();
     }
 
+
     public override void ItemRightClick(PointerEventData eventdata)
     {
         base.ItemRightClick(eventdata);
         //장착중이 아니라면 슬롯에 넣고, 능력치 적용
         //장착중이라면 아이템창에 돌려놓고, 능력치 감소
-        if (_isEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행
+        EquipItem();
+    }
+
+
+    public void EquipItem()
+    {
+        if (IsEquipped == false) // 아이템이 장착중이 아니라면 장착하는 로직 수행
         {
             ItemEquipment equip = _iteminfo as ItemEquipment;
             Equipment_Slot_Type eqiupSlot = equip.Equipment_Slot;
@@ -70,6 +77,7 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
 
     protected override void DropItemOnUI(PointerEventData eventData, List<RaycastResult> uiraycastResult)
     {
+
         foreach (RaycastResult uiResult in uiraycastResult)
         {
             if (uiResult.gameObject.tag == "EquipSlot" && _iteminfo is ItemEquipment)
@@ -82,13 +90,19 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
                     EquipItemToSlot(equipment.Equipment_Slot);
                 }
             }
-            else if(uiResult.gameObject.TryGetComponentInChildren(out InventoryContentCoordinate contentTr) && _isEquipped == true)
+            else if (uiResult.gameObject.TryGetComponentInChildren(out InventoryContentCoordinate contentTr) && IsEquipped == true)
             {
                 GetComponentInParent<EquipMentSlot>().ItemUnEquip();
                 AttachItemToSlot(gameObject, contentTr.transform);
-
             }
         }
+    }
+
+
+    protected override void DropItemOnGround()
+    {
+        base.DropItemOnGround();
+        UnEquipItem();//장비한 아이템을 땅에 떨굴때 장비 벗음 효과 나오도록 수정
     }
 
     public override GameObject GetLootingItemObejct(IItem iteminfo)
@@ -114,5 +128,14 @@ public class UI_ItemComponent_Equipment : UI_ItemComponent_Inventory
     protected override void RemoveItemFromInventory()
     {
         Managers.ResourceManager.DestroyObject(gameObject);
+    }
+
+    private void UnEquipItem()
+    {
+        if (IsEquipped == true)
+        {
+            GetComponentInParent<EquipMentSlot>().ItemUnEquip();
+            SetItemEquipedState(false);
+        }
     }
 }

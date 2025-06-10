@@ -115,7 +115,7 @@ public static class UIExtension
 
         if (parentTr == null)
         {
-            parentTr = Managers.LootItemManager.GetItemComponentPosition(inventory);
+            parentTr = inventory.ItemInventoryTr;
         }
 
         IInventoryItemMaker itemUIType = iteminfo as IInventoryItemMaker;

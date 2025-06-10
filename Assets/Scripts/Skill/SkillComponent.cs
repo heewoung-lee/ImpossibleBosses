@@ -42,7 +42,7 @@ public class SkillComponent : UI_Base
     }
     private void ShowDescription(PointerEventData data)
     {
-        _decriptionObject.gameObject.SetActive(true);
+        _decriptionObject.UI_DescriptionEnable();
 
         _decriptionObject.DescriptionWindow.transform.position
            = _decriptionObject.SetDecriptionPos(transform, _skillComponentRectTr.rect.width, _skillComponentRectTr.rect.height);
@@ -53,7 +53,7 @@ public class SkillComponent : UI_Base
     }
     private void CloseDescription(PointerEventData data)
     {
-        _decriptionObject.gameObject.SetActive(false);
+        _decriptionObject.UI_DescriptionDisable();
         _decriptionObject.SetdecriptionOriginPos();
     }
 

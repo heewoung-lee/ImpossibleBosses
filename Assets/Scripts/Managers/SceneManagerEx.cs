@@ -12,6 +12,46 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
     private Define.Scene _nextScene;
     private bool[] _loadingSceneTaskChecker;
 
+    private Action _onBeforeSceneUnloadLocalEvent;
+    private Action<ulong> _onClientLoadedEvent;
+    private Action _onAllPlayerLoadedEvent;
+
+    public event Action OnBeforeSceneUnloadLocalEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onBeforeSceneUnloadLocalEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onBeforeSceneUnloadLocalEvent, value);
+        }
+    }
+    public event Action<ulong> OnClientLoadedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onClientLoadedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onClientLoadedEvent, value);
+        }
+    }
+    public event Action OnAllPlayerLoadedEvent
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onAllPlayerLoadedEvent, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onAllPlayerLoadedEvent, value);   
+        }
+    }
+
+
+
     public BaseScene GetCurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
 
     public BaseScene[] GetCurrentScenes { get => GameObject.FindObjectsByType<BaseScene>(FindObjectsSortMode.None); }
@@ -33,10 +73,16 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         _nextScene = nextscene;
         LoadScene(Define.Scene.LoadingScene);
     }
-
-    public void NetworkLoadScene(Define.Scene nextscene,Action<ulong> clientLoadedEvent,Action allPlayerLoadedEvent)
+    public void InvokeOnBeforeSceneUnloadLocalEvent()
     {
-        Managers.RelayManager.NGO_RPC_Caller.AllClientDisconnetedVivoxAndLobbyRpc();
+        _onBeforeSceneUnloadLocalEvent?.Invoke();
+        Debug.Log("씬 로드 되기전 호출");
+    }
+
+    public void NetworkLoadScene(Define.Scene nextscene)
+    {
+        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadLocalRpc();//모든 플레이어가 씬 호출전 실행해야할 이벤트(로컬 각자가 맡음)
+        Managers.RelayManager.NGO_RPC_Caller.OnBeforeSceneUnloadRpc();//모든 플레이어가 씬 호출전 실행해야할 넷워크 오브젝트 초기화(호스트가 맡음)
         Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManager_OnLoadCompleteAsync;
         Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
 
@@ -44,14 +90,17 @@ public class SceneManagerEx:IManagerIResettable,IManagerInitializable
         {
             if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
             {
-                clientLoadedEvent.Invoke(clientId);
+                _onClientLoadedEvent?.Invoke(clientId);
                 Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount++;
             }
 
             if (Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
             {
                 Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded = true;//로딩창 90% 이후로 넘어가게끔
-                allPlayerLoadedEvent?.Invoke();
+                _onAllPlayerLoadedEvent?.Invoke();
+                
+                _onClientLoadedEvent = null; // 호출이 끝난뒤 모든 이벤트 구독 전부 삭제
+                _onAllPlayerLoadedEvent = null;
             }
         }
     } 
