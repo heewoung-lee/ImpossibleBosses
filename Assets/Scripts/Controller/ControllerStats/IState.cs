@@ -1,10 +1,13 @@
 using System;
 
-public interface IState
+namespace Controller.ControllerStats
 {
+    public interface IState
+    {
 
-    public event Action UpdateStateEvent;
-    public void UpdateState();
+        public event Action UpdateStateEvent;
+        public void UpdateState();
 
-    public bool lockAnimationChange { get; }
+        public bool LockAnimationChange { get; }
+    }
 }

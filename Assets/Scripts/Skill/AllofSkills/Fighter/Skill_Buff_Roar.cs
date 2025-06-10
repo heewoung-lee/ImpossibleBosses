@@ -1,3 +1,6 @@
+using Buffer;
+using Controller;
+using Controller.ControllerStats;
 using UnityEngine;
 
 public class Skill_Buff_Roar : Skill_Duration
@@ -5,10 +8,10 @@ public class Skill_Buff_Roar : Skill_Duration
     public Skill_Buff_Roar()
     {
         _buffIconImage = Managers.ResourceManager.Load<Sprite>(Buff_IconImage_Path);
-        _roarModifier = new Buffer_RoarModifier(_buffIconImage);
+        _roarModifier = new BufferRoarModifier(_buffIconImage);
     }
 
-    private Buffer_RoarModifier _roarModifier;
+    private BufferRoarModifier _roarModifier;
     private Collider[] _players = null;
     private BaseController _playerController;
     private Module_Fighter_Class _fighter_Class;
@@ -24,7 +27,7 @@ public class Skill_Buff_Roar : Skill_Duration
     public override string SkillName => "분노";
     public override string ETCDescriptionText => "화가난다!";
     public override float Value => 10f;
-    public override Buff_Modifier Buff_Modifier => _roarModifier;
+    public override BuffModifier Buff_Modifier => _roarModifier;
     public override IState state => _fighter_Class.RoarState;
     public override BaseController PlayerController
     {

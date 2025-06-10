@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
+using Controller.BossState;
+using Controller.ControllerStats;
 using UnityEngine;
 
 namespace BehaviourTreeNode.BossGolem.Task
@@ -50,7 +52,7 @@ namespace BehaviourTreeNode.BossGolem.Task
 
             void SpawnAttackIndicator()
             {
-                OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_Attackstate);
+                OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BaseAttackState);
                 _hasSpawnedParticles = false;
                 _indicatorController = Managers.ResourceManager
                     .Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
@@ -97,7 +99,7 @@ namespace BehaviourTreeNode.BossGolem.Task
 
             void StartAnimationSpeedChanged()
             {
-                if (_controller.TryGetAttackTypePreTime(_controller.Base_Attackstate, out float decelerationRatio) is
+                if (_controller.TryGetAttackTypePreTime(_controller.BaseAttackState, out float decelerationRatio) is
                     false)
                     return;
 

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Controller.BossState;
+using Controller.ControllerStats;
 using UnityEngine;
 
 namespace BehaviourTreeNode.BossGolem.Task

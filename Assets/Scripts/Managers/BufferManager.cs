@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Buffer;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
@@ -13,7 +14,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class BufferManager:IManagerInitializable
 {
 
-    Dictionary<string, Buff_Modifier> _allBuffModifierDict = new Dictionary<string, Buff_Modifier>();
+    Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
     List<Type> _requestType = new List<Type>();
 
     UI_BufferBar _ui_BufferBar;
@@ -28,7 +29,7 @@ public class BufferManager:IManagerInitializable
             return _ui_BufferBar;
         }
     }
-    public Buff_Modifier GetModifier(StatEffect efftect)
+    public BuffModifier GetModifier(StatEffect efftect)
     {
         return _allBuffModifierDict[efftect.buffname];
     }
@@ -39,7 +40,7 @@ public class BufferManager:IManagerInitializable
         return buffer;
     }
 
-    public BufferComponent InitBuff(BaseStats targetStat, float duration, Buff_Modifier buffer_modifier,float value)
+    public BufferComponent InitBuff(BaseStats targetStat, float duration, BuffModifier buffer_modifier,float value)
     {
         BufferComponent buffer = Managers.ResourceManager.Instantiate("Prefabs/Buffer/Buffer", UI_BufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
         buffer.InitAndStartBuff(targetStat, duration, buffer_modifier, value);
@@ -47,7 +48,7 @@ public class BufferManager:IManagerInitializable
     }
     public void RemoveBuffer(BufferComponent buffer)
     {
-      Duration_Buff durationbuff = buffer.Modifier as Duration_Buff;
+      DurationBuff durationbuff = buffer.Modifier as DurationBuff;
       durationbuff.RemoveStats(buffer.TarGetStat, buffer.Value);
       Managers.ResourceManager.DestroyObject(buffer.gameObject);
     }
@@ -66,13 +67,13 @@ public class BufferManager:IManagerInitializable
             // Activator.CreateInstance로 인스턴스 생성 _requestType은 메타데이터 이므로 인스턴스가 아님
             //따라서 Type 메타정보를 바탕으로 인스턴스를 생성해줘야함
 
-            Buff_Modifier modifierInstance = Activator.CreateInstance(type) as Buff_Modifier;
+            BuffModifier modifierInstance = Activator.CreateInstance(type) as BuffModifier;
             _allBuffModifierDict.Add(modifierInstance.Buffname, modifierInstance);
         }
     }
     private void GetBuffModifierType(Type type, List<Type> typeList)
     {
-        if (typeof(Buff_Modifier).IsAssignableFrom(type))
+        if (typeof(BuffModifier).IsAssignableFrom(type))
         {
             typeList.Add(type);
         }

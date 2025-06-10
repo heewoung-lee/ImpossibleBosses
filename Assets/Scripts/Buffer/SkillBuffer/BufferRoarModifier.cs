@@ -1,8 +1,9 @@
+using Buffer;
 using UnityEngine;
 
-public class Buffer_RoarModifier : Duration_Buff
+public class BufferRoarModifier : DurationBuff
 {
-    public Buffer_RoarModifier(Sprite iconImage)
+    public BufferRoarModifier(Sprite iconImage)
     {
         _iconImage = iconImage;
     }

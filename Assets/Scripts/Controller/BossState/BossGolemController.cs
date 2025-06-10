@@ -1,111 +1,115 @@
-using BaseStates;
 using System.Collections.Generic;
+using Controller.ControllerStats;
+using Controller.ControllerStats.BaseStates;
 using UnityEngine;
 
-public enum GolemAttackType
+namespace Controller.BossState
 {
-    NormalAttack,
-    Skill1,
-    Skill2,
-}
-public class BossGolemController : BossController
-{
-
-    private const float ATTACK_PRE_FRAME = 0.35f;
-    private const float SKILL1_PRE_FRAME = 0.6f;
-    private const float SKILL2_PRE_FRAME = 0.3f;
-    private const float SKILL1_Transition = 0.1f;
-
-
-    private Dictionary<IState, float> _attackStopTimingRatioDict = new Dictionary<IState, float>();
-    public override Dictionary<IState, float> AttackStopTimingRatioDict => _attackStopTimingRatioDict;
-
-
-    private int[] _golem_Attacks = new int[2]
+    public enum GolemAttackType
     {
-        Animator.StringToHash("Golem_Attack1"),
-        Animator.StringToHash("Golem_Attack2")
-    };
-
-    protected override int Hash_Idle => Enemy_Anim_Hash.Golem_Idle;
-    protected override int Hash_Move => Enemy_Anim_Hash.Golem_Walk;
-    protected override int Hash_Attack => _golem_Attacks[UnityEngine.Random.Range(0, 2)];
-    protected override int Hash_Die => Enemy_Anim_Hash.Golem_Dead;
-
-    private int hash_golem_Skill1 = Enemy_Anim_Hash.Golem_Attacked;
-    private int hash_golem_Skill2 = Enemy_Anim_Hash.Golem_Skill;
-
-    public override AttackState Base_Attackstate => _base_Attackstate;
-    public override IDleState Base_IDleState => _base_IDleState;
-    public override DieState Base_DieState => _base_DieState;
-    public override MoveState Base_MoveState => _base_MoveState;
-    public BossSkill1State BossSkill1State => _bossSkill1State;
-    public BossSkill2State BossSkill2State => _bossSkill2State;
-
-
-    private AttackState _base_Attackstate;
-    private IDleState _base_IDleState;
-    private DieState _base_DieState;
-    private MoveState _base_MoveState;
-    private BossSkill1State _bossSkill1State;
-    private BossSkill2State _bossSkill2State;
-
-    protected override void AwakeInit()
-    {
-        _base_Attackstate = new AttackState(UpdateAttack);
-        _base_MoveState = new MoveState(UpdateMove);
-        _base_DieState = new DieState(UpdateDie);
-        _base_IDleState = new IDleState(UpdateIdle);
-
-        _bossSkill1State = new BossSkill1State(UpdateAttack);
-        _bossSkill2State = new BossSkill2State(UpdateAttack);
-
-        _attackStopTimingRatioDict.Add(_base_Attackstate, ATTACK_PRE_FRAME);
-        _attackStopTimingRatioDict.Add(_bossSkill1State, SKILL1_PRE_FRAME);
-        _attackStopTimingRatioDict.Add(_bossSkill2State, SKILL2_PRE_FRAME);
+        NormalAttack,
+        Skill1,
+        Skill2,
     }
-    public override void UpdateAttack()
+    public class BossGolemController : BossController
     {
-        if (CurrentStateType == Base_DieState)
-            return;
 
-        CurrentStateType = Base_Attackstate;
-    }
+        private const float AttackPreFrame = 0.35f;
+        private const float Skill1PreFrame = 0.6f;
+        private const float Skill2PreFrame = 0.3f;
+        private const float Skill1Transition = 0.1f;
 
-    public override void UpdateIdle()
-    {
-        if (CurrentStateType != Base_IDleState)
+
+        private Dictionary<IState, float> _attackStopTimingRatioDict = new Dictionary<IState, float>();
+        public override Dictionary<IState, float> AttackStopTimingRatioDict => _attackStopTimingRatioDict;
+
+
+        private int[] _golemAttacks = new int[2]
         {
-            CurrentStateType = Base_IDleState;
+            Animator.StringToHash("Golem_Attack1"),
+            Animator.StringToHash("Golem_Attack2")
+        };
+
+        protected override int HashIdle => Enemy_Anim_Hash.Golem_Idle;
+        protected override int HashMove => Enemy_Anim_Hash.Golem_Walk;
+        protected override int HashAttack => _golemAttacks[UnityEngine.Random.Range(0, 2)];
+        protected override int HashDie => Enemy_Anim_Hash.Golem_Dead;
+
+        private int _hashGolemSkill1 = Enemy_Anim_Hash.Golem_Attacked;
+        private int _hashGolemSkill2 = Enemy_Anim_Hash.Golem_Skill;
+
+        public override AttackState BaseAttackState => _baseAttackState;
+        public override IDleState BaseIDleState => _baseIDleState;
+        public override DieState BaseDieState => _baseDieState;
+        public override MoveState BaseMoveState => _baseMoveState;
+        public BossSkill1State BossSkill1State => _bossSkill1State;
+        public BossSkill2State BossSkill2State => _bossSkill2State;
+
+
+        private AttackState _baseAttackState;
+        private IDleState _baseIDleState;
+        private DieState _baseDieState;
+        private MoveState _baseMoveState;
+        private BossSkill1State _bossSkill1State;
+        private BossSkill2State _bossSkill2State;
+
+        protected override void AwakeInit()
+        {
+            _baseAttackState = new AttackState(UpdateAttack);
+            _baseMoveState = new MoveState(UpdateMove);
+            _baseDieState = new DieState(UpdateDie);
+            _baseIDleState = new IDleState(UpdateIdle);
+
+            _bossSkill1State = new BossSkill1State(UpdateAttack);
+            _bossSkill2State = new BossSkill2State(UpdateAttack);
+
+            _attackStopTimingRatioDict.Add(_baseAttackState, AttackPreFrame);
+            _attackStopTimingRatioDict.Add(_bossSkill1State, Skill1PreFrame);
+            _attackStopTimingRatioDict.Add(_bossSkill2State, Skill2PreFrame);
         }
-    }
-
-    public override void UpdateMove()
-    {
-        if(CurrentStateType != Base_MoveState)
+        public override void UpdateAttack()
         {
-            CurrentStateType = Base_MoveState;
+            if (CurrentStateType == BaseDieState)
+                return;
+
+            CurrentStateType = BaseAttackState;
         }
 
-    }
-    private void Update()
-    {
-    }
-    public override void UpdateDie()
-    {
-        if (CurrentStateType == Base_DieState)
+        public override void UpdateIdle()
         {
-            CurrentStateType = Base_DieState;
+            if (CurrentStateType != BaseIDleState)
+            {
+                CurrentStateType = BaseIDleState;
+            }
         }
-    }
 
-    protected override void AddInitalizeStateDict()
-    {
-        StateAnimDict.RegisterState(_bossSkill1State, () => RunAnimation(hash_golem_Skill1, SKILL1_Transition));
-        StateAnimDict.RegisterState(_bossSkill2State, () => RunAnimation(hash_golem_Skill2, Transition_Attack));
-    }
+        public override void UpdateMove()
+        {
+            if(CurrentStateType != BaseMoveState)
+            {
+                CurrentStateType = BaseMoveState;
+            }
 
-    protected override void StartInit()
-    {
+        }
+        private void Update()
+        {
+        }
+        public override void UpdateDie()
+        {
+            if (CurrentStateType == BaseDieState)
+            {
+                CurrentStateType = BaseDieState;
+            }
+        }
+
+        protected override void AddInitalizeStateDict()
+        {
+            StateAnimDict.RegisterState(_bossSkill1State, () => RunAnimation(_hashGolemSkill1, Skill1Transition));
+            StateAnimDict.RegisterState(_bossSkill2State, () => RunAnimation(_hashGolemSkill2, TransitionAttack));
+        }
+
+        protected override void StartInit()
+        {
+        }
     }
 }

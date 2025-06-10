@@ -1,4 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks;
+using Controller.BossState;
+using Controller.ControllerStats;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -30,7 +32,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         public override void OnStart()
         {
             base.OnStart();
-            OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_DieState);
+            OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BaseDieState);
             CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, 0f, 0f, 0f, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animInfo);
         }
@@ -38,7 +40,7 @@ namespace BehaviourTreeNode.BossGolem.Task
 
         public override TaskStatus OnUpdate()
         {
-            if (_controller.CurrentStateType == _controller.Base_DieState)
+            if (_controller.CurrentStateType == _controller.BaseDieState)
             {
                 if (_projector.Value != null && _projector.Value.GetComponent<NetworkObject>().IsSpawned)
                 {

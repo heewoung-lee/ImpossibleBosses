@@ -1,8 +1,9 @@
+using Buffer;
 using UnityEngine;
 
-public class Buffer_Determination : Duration_Buff
+public class BufferDetermination : DurationBuff
 {
-    public Buffer_Determination(Sprite iconImage)
+    public BufferDetermination(Sprite iconImage)
     {
         _iconImage = iconImage;
     }

@@ -1,16 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[DisallowMultipleComponent]
-[RequireComponent(typeof(BaseStats))]
-public abstract class MoveableController : BaseController
+namespace Controller
 {
-    protected Vector3 _destPos;
-    PlayerController _player;
-    private void Update()
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(BaseStats))]
+    public abstract class MoveableController : BaseController
     {
-      CurrentStateType.UpdateState();
+        protected Vector3 _destPos;
+        PlayerController _player;
+        private void Update()
+        {
+            CurrentStateType.UpdateState();
+        }
     }
 }

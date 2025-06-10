@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +9,6 @@ public abstract class BaseScene : MonoBehaviour
 {
     public abstract Define.Scene CurrentScene { get; }
     MoveMarkerController _moveMarker;
-
     void Start()
     {
         StartInit();    

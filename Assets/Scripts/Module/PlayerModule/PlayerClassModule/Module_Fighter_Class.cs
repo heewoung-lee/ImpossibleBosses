@@ -70,21 +70,21 @@ public class Module_Fighter_Class : Module_Player_Class
 
     public void UpdateRoar()
     {
-        _controller.ChangeAnimIfCurrentIsDone(_hash_Roar, _controller.Base_IDleState);
+        _controller.ChangeAnimIfCurrentIsDone(_hash_Roar, _controller.BaseIDleState);
     }
 
     public void UpdateSlash()
     {
-        _controller.ChangeAnimIfCurrentIsDone(_hash_Slash, _controller.Base_IDleState);
+        _controller.ChangeAnimIfCurrentIsDone(_hash_Slash, _controller.BaseIDleState);
     }
 
     private void UpdateTaunt()
     {
-        _controller.ChangeAnimIfCurrentIsDone(_hash_Taunt, _controller.Base_IDleState);
+        _controller.ChangeAnimIfCurrentIsDone(_hash_Taunt, _controller.BaseIDleState);
     }
 
     private void UpdateDetermination()
     {
-        _controller.ChangeAnimIfCurrentIsDone(_hash_Roar, _controller.Base_IDleState);
+        _controller.ChangeAnimIfCurrentIsDone(_hash_Roar, _controller.BaseIDleState);
     }
 }

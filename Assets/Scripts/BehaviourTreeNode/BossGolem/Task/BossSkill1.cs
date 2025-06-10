@@ -1,5 +1,7 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Controller.BossState;
+using Controller.ControllerStats;
 using UnityEngine;
 
 namespace BehaviourTreeNode.BossGolem.Task
@@ -91,7 +93,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         public override void OnEnd()
         {
             base.OnEnd();
-            _controller.CurrentStateType = _controller.Base_IDleState;
+            _controller.CurrentStateType = _controller.BaseIDleState;
         }
         public void OnBossGolemAnimationChanged(BossGolemAnimationNetworkController bossAnimController, IState state)
         {

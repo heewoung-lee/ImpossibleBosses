@@ -2,6 +2,8 @@ using BehaviorDesigner.Runtime;
 using JetBrains.Annotations;
 using System;
 using System.Collections;
+using Controller;
+using Controller.BossState;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;

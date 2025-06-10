@@ -1,5 +1,8 @@
-public interface IAttackInfo
+namespace Controller
 {
-    public float AttackPreTime { get; }
-    public string AttackName { get; }
+    public interface IAttackInfo
+    {
+        public float AttackPreTime { get; }
+        public string AttackName { get; }
+    }
 }

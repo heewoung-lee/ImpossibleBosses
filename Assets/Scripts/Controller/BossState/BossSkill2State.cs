@@ -1,17 +1,20 @@
-using BaseStates;
 using System;
+using Controller.ControllerStats;
 
-public class BossSkill2State : IState
+namespace Controller.BossState
 {
-    public bool lockAnimationChange => false;
+    public class BossSkill2State : IState
+    {
+        public bool LockAnimationChange => false;
 
-    public event Action UpdateStateEvent;
-    public BossSkill2State(Action bossSkill2State)
-    {
-        UpdateStateEvent += bossSkill2State;
-    }
-    public void UpdateState()
-    {
-        UpdateStateEvent?.Invoke();
+        public event Action UpdateStateEvent;
+        public BossSkill2State(Action bossSkill2State)
+        {
+            UpdateStateEvent += bossSkill2State;
+        }
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
+        }
     }
 }

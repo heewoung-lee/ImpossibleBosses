@@ -1,8 +1,9 @@
 using System;
+using Controller.ControllerStats;
 
 public class TauntState : IState
 {
-    public bool lockAnimationChange => true;
+    public bool LockAnimationChange => true;
 
     public event Action UpdateStateEvent;
 

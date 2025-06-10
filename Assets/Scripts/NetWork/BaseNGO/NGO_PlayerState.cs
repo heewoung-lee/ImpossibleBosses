@@ -1,3 +1,5 @@
+using Controller;
+using Controller.ControllerStats;
 using UnityEngine;
 
 public class NGO_PlayerState : NetworkBehaviourBase

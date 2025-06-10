@@ -1,10 +1,10 @@
 using System;
 
-namespace BaseStates
+namespace Controller.ControllerStats.BaseStates
 {
     public class AttackState : IState
     {
-        public bool lockAnimationChange => false;
+        public bool LockAnimationChange => false;
 
         public event Action UpdateStateEvent;
         public AttackState(Action attackMethod) 
@@ -18,7 +18,7 @@ namespace BaseStates
     }
     public class DieState : IState
     {
-        public bool lockAnimationChange => true;
+        public bool LockAnimationChange => true;
 
         public DieState(Action dieMethod)
         {
@@ -33,7 +33,7 @@ namespace BaseStates
     }
     public class IDleState : IState
     {
-        public bool lockAnimationChange => false;
+        public bool LockAnimationChange => false;
 
         public IDleState(Action iDleMethod)
         {
@@ -48,7 +48,7 @@ namespace BaseStates
     }
     public class MoveState : IState
     {
-        public bool lockAnimationChange => false;
+        public bool LockAnimationChange => false;
 
         public MoveState(Action moveMethod)
         {

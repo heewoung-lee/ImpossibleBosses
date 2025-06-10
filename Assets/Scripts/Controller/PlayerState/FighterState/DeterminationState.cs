@@ -1,8 +1,9 @@
 using System;
+using Controller.ControllerStats;
 
 public class DeterminationState : IState
 {
-    public bool lockAnimationChange => true;
+    public bool LockAnimationChange => true;
 
     public event Action UpdateStateEvent;
     public DeterminationState(Action determinationState)

@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime.Tasks.Movement;
+using Controller.BossState;
 using UnityEngine;
 
 
@@ -31,7 +32,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         public override void OnStart()
         {
             base.OnStart();
-            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.Base_MoveState);
+            _bossGolemAnimationNetworkController.SyncBossStateToClients(_controller.BaseMoveState);
             _hasArrived.Value = false;
 
             if (_targetObject == null)

@@ -3,66 +3,69 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerFollowingCamera : MonoBehaviour
+namespace Controller
 {
-    private Transform _playerTr;
-    [SerializeField]private CinemachineCamera _camera;
-    private CinemachineOrbitalFollow _cinemachineOrbitalFollow;
-    private InputAction _mouseMiddleButton;
-    private InputAction _mouseDelta;
-    private InputAction _mouseScroll;
-
-    private bool _mouseMiddleButtonPressed = false;
-    private void Awake()
+    public class PlayerFollowingCamera : MonoBehaviour
     {
-        _camera = GetComponent<CinemachineCamera>();
-        _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
+        private Transform _playerTr;
+        private CinemachineCamera _camera;
+        private CinemachineOrbitalFollow _cinemachineOrbitalFollow;
+        private InputAction _mouseMiddleButton;
+        private InputAction _mouseDelta;
+        private InputAction _mouseScroll;
 
-        if(Managers.GameManagerEx.Player == null)
+        private bool _mouseMiddleButtonPressed = false;
+        private void Awake()
         {
-            Managers.SocketEventManager.DonePlayerSpawnEvent += InitalizeFollowingCamera;
+            _camera = GetComponent<CinemachineCamera>();
+            _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
+
+            if(Managers.GameManagerEx.Player == null)
+            {
+                Managers.SocketEventManager.DonePlayerSpawnEvent += InitalizeFollowingCamera;
+            }
+            else
+            {
+                InitalizeFollowingCamera(Managers.GameManagerEx.Player);
+            }
         }
-        else
+
+        public void InitalizeFollowingCamera(GameObject player)
         {
-            InitalizeFollowingCamera(Managers.GameManagerEx.Player);
+            _playerTr = player.transform;
+            _camera.Target.TrackingTarget = _playerTr;
+
+            _mouseMiddleButton = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");
+            _mouseMiddleButton.Enable();
+            _mouseMiddleButton.started += context => _mouseMiddleButtonPressed = true;
+            _mouseMiddleButton.canceled += context => _mouseMiddleButtonPressed = false;
+
+
+            _mouseDelta = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Look");
+            _mouseDelta.Enable();
+            _mouseDelta.performed += PressedMiddleMouseButton;
+
+
+            _mouseScroll = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Scroll");
+            _mouseScroll.Enable();
+            _mouseScroll.performed += SetCameraHeight;
         }
-    }
 
-    public void InitalizeFollowingCamera(GameObject player)
-    {
-        _playerTr = player.transform;
-        _camera.Target.TrackingTarget = _playerTr;
-
-        _mouseMiddleButton = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");
-        _mouseMiddleButton.Enable();
-        _mouseMiddleButton.started += context => _mouseMiddleButtonPressed = true;
-        _mouseMiddleButton.canceled += context => _mouseMiddleButtonPressed = false;
-
-
-        _mouseDelta = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Look");
-        _mouseDelta.Enable();
-        _mouseDelta.performed += PressedMiddleMouseButton;
-
-
-        _mouseScroll = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Scroll");
-        _mouseScroll.Enable();
-        _mouseScroll.performed += SetCameraHeight;
-    }
-
-    public void PressedMiddleMouseButton(InputAction.CallbackContext context)
-    {
-        if (_mouseMiddleButtonPressed)
+        public void PressedMiddleMouseButton(InputAction.CallbackContext context)
         {
-            _cinemachineOrbitalFollow.HorizontalAxis.Value += context.ReadValue<Vector2>().x *0.1f;
+            if (_mouseMiddleButtonPressed)
+            {
+                _cinemachineOrbitalFollow.HorizontalAxis.Value += context.ReadValue<Vector2>().x *0.1f;
+            }
         }
-    }
 
-    public void SetCameraHeight(InputAction.CallbackContext context)
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-        _cinemachineOrbitalFollow.VerticalAxis.Value += context.ReadValue<Vector2>().y;
-        _cinemachineOrbitalFollow.VerticalAxis.Value = Mathf.Clamp(_cinemachineOrbitalFollow.VerticalAxis.Value, _cinemachineOrbitalFollow.VerticalAxis.Range.x, _cinemachineOrbitalFollow.VerticalAxis.Range.y);
-    }
+        public void SetCameraHeight(InputAction.CallbackContext context)
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+            _cinemachineOrbitalFollow.VerticalAxis.Value += context.ReadValue<Vector2>().y;
+            _cinemachineOrbitalFollow.VerticalAxis.Value = Mathf.Clamp(_cinemachineOrbitalFollow.VerticalAxis.Value, _cinemachineOrbitalFollow.VerticalAxis.Range.x, _cinemachineOrbitalFollow.VerticalAxis.Range.y);
+        }
 
+    }
 }

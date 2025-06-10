@@ -1,63 +1,63 @@
-using BaseStates;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Controller.ControllerStats.BaseStates;
 using UnityEngine.AI;
 
-public class MonsterController : MoveableController
+namespace Controller
 {
-    public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Monster;
+    public class MonsterController : MoveableController
+    {
+        public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Monster;
 
-    protected override int Hash_Idle => 0;
+        protected override int HashIdle => 0;
 
-    protected override int Hash_Move => 0;
+        protected override int HashMove => 0;
 
-    protected override int Hash_Attack => 0;
+        protected override int HashAttack => 0;
 
-    protected override int Hash_Die => 0;
+        protected override int HashDie => 0;
 
-    public override AttackState Base_Attackstate => _base_Attackstate;
-    public override IDleState Base_IDleState => _base_IDleState;
-    public override DieState Base_DieState => _base_DieState;
-    public override MoveState Base_MoveState => _base_MoveState;
+        public override AttackState BaseAttackState => _baseAttackState;
+        public override IDleState BaseIDleState => _baseIDleState;
+        public override DieState BaseDieState => _baseDieState;
+        public override MoveState BaseMoveState => _baseMoveState;
 
-    private AttackState _base_Attackstate;
-    private IDleState _base_IDleState;
-    private DieState _base_DieState;
-    private MoveState _base_MoveState;
-    NavMeshAgent _agent;
+        private AttackState _baseAttackState;
+        private IDleState _baseIDleState;
+        private DieState _baseDieState;
+        private MoveState _baseMoveState;
+        NavMeshAgent _agent;
     
-    public override void UpdateAttack()
-    {
-    }
+        public override void UpdateAttack()
+        {
+        }
 
-    public override void UpdateDie()
-    {
-    }
+        public override void UpdateDie()
+        {
+        }
 
-    public override void UpdateIdle()
-    {
-    }
+        public override void UpdateIdle()
+        {
+        }
 
-    public override void UpdateMove()
-    {
-    }
+        public override void UpdateMove()
+        {
+        }
     
 
-    protected override void AwakeInit()
-    {
-        _base_Attackstate = new AttackState(UpdateAttack);
-        _base_MoveState = new MoveState(UpdateMove);
-        _base_DieState = new DieState(UpdateDie);
-        _base_IDleState = new IDleState(UpdateIdle);
-    }
-    protected override void StartInit()
-    {
+        protected override void AwakeInit()
+        {
+            _baseAttackState = new AttackState(UpdateAttack);
+            _baseMoveState = new MoveState(UpdateMove);
+            _baseDieState = new DieState(UpdateDie);
+            _baseIDleState = new IDleState(UpdateIdle);
+        }
+        protected override void StartInit()
+        {
 
 
-    }
+        }
 
-    protected override void AddInitalizeStateDict()
-    {
+        protected override void AddInitalizeStateDict()
+        {
+        }
     }
 }

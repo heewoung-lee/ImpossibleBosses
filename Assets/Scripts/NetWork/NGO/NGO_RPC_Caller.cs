@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Buffer;
 using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
@@ -262,7 +263,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         PlayerStats playerstats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
 
-        if (Managers.BufferManager.GetModifier(effect) is Duration_Buff durationbuff)
+        if (Managers.BufferManager.GetModifier(effect) is DurationBuff durationbuff)
         {
             Sprite buffImageIcon = Managers.ResourceManager.Load<Sprite>(buffIconImagePath);
             durationbuff.SetBuffIconImage(buffImageIcon);

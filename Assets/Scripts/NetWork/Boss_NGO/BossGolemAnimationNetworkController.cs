@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Controller.BossState;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using IState = Controller.ControllerStats.IState;
 
 public class BossGolemAnimationNetworkController : NetworkBehaviour
 {

@@ -1,3 +1,6 @@
+using Buffer;
+using Controller;
+using Controller.ControllerStats;
 using UnityEngine;
 using static PlaySceneMockUnitTest;
 
@@ -6,11 +9,11 @@ public class Skill_Buff_Determination : Skill_Duration
     public Skill_Buff_Determination()
     {
         _buffIconImage = Managers.ResourceManager.Load<Sprite>(Buff_IconImage_Path);
-        _determination = new Buffer_Determination(_buffIconImage);
+        _determination = new BufferDetermination(_buffIconImage);
     }
     //TODO: 버프 아이콘 이미지 바꿀것
     private Sprite _buffIconImage;
-    private Buffer_Determination _determination;
+    private BufferDetermination _determination;
     private Collider[] _players = null;
     private BaseController _playerController;
     private Module_Fighter_Class _fighter_Class;
@@ -24,7 +27,7 @@ public class Skill_Buff_Determination : Skill_Duration
     public override string ETCDescriptionText => "서로간의 결의";
     public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Determination");
     public override float Value => 10f;
-    public override Buff_Modifier Buff_Modifier => _determination;
+    public override BuffModifier Buff_Modifier => _determination;
     public override BaseController PlayerController { 
         get => _playerController;
         protected set => _playerController = value; }

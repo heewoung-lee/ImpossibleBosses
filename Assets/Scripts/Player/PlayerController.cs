@@ -1,6 +1,7 @@
-using BaseStates;
 using System;
 using System.Collections.Generic;
+using Controller;
+using Controller.ControllerStats.BaseStates;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -23,20 +24,20 @@ public class PlayerController : MoveableController
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
-    protected override int Hash_Idle => Player_Anim_Hash.Idle;
-    protected override int Hash_Move => Player_Anim_Hash.Run;
-    protected override int Hash_Attack => Player_Anim_Hash.Attack;
-    protected override int Hash_Die => Player_Anim_Hash.Die;
+    protected override int HashIdle => Player_Anim_Hash.Idle;
+    protected override int HashMove => Player_Anim_Hash.Run;
+    protected override int HashAttack => Player_Anim_Hash.Attack;
+    protected override int HashDie => Player_Anim_Hash.Die;
     private int _hash_PickUp => Animator.StringToHash("Pickup");
 
-    public override AttackState Base_Attackstate => _base_Attackstate;
-    public override IDleState Base_IDleState => _base_IDleState;
-    public override DieState Base_DieState => _base_DieState;
-    public override MoveState Base_MoveState => _base_MoveState;
+    public override AttackState BaseAttackState => _baseAttackState;
+    public override IDleState BaseIDleState => _base_IDleState;
+    public override DieState BaseDieState => _base_DieState;
+    public override MoveState BaseMoveState => _base_MoveState;
 
     public PickUpState PickupState => _pickup_State;
 
-    private AttackState _base_Attackstate;
+    private AttackState _baseAttackState;
     private IDleState _base_IDleState;
     private DieState _base_DieState;
     private MoveState _base_MoveState;
@@ -60,7 +61,7 @@ public class PlayerController : MoveableController
         _attackAction.Enable();
         _stopAction.Enable();
 
-        _base_Attackstate = new AttackState(UpdateAttack);
+        _baseAttackState = new AttackState(UpdateAttack);
         _base_MoveState = new MoveState(UpdateMove);
         _base_DieState = new DieState(UpdateDie);
         _base_IDleState = new IDleState(UpdateIdle);
@@ -117,15 +118,15 @@ public class PlayerController : MoveableController
 
     public void PlayerDead()
     {
-        CurrentStateType = Base_DieState;
+        CurrentStateType = BaseDieState;
     }
 
     private void Attack(InputAction.CallbackContext context)
     {
-        if (CurrentStateType == Base_Attackstate)
+        if (CurrentStateType == BaseAttackState)
             return;
 
-        CurrentStateType = Base_Attackstate;
+        CurrentStateType = BaseAttackState;
     }
     private void StopCommand(InputAction.CallbackContext context)
     {
@@ -166,7 +167,7 @@ public class PlayerController : MoveableController
     }
     public override void UpdateAttack()
     {
-        ChangeAnimIfCurrentIsDone(Hash_Attack, _base_IDleState);
+        ChangeAnimIfCurrentIsDone(HashAttack, _base_IDleState);
     }
     protected override void AddInitalizeStateDict()
     {
