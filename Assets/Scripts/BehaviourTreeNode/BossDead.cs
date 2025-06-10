@@ -9,6 +9,9 @@ public class BossDead : Action, IBossAnimationChanged
     private BossGolemNetworkController _networkController;
     private Animator _anim;
     private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
+    private float _animLength = 0f;
+
+
 
     public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
 
@@ -19,12 +22,15 @@ public class BossDead : Action, IBossAnimationChanged
         _networkController = Owner.GetComponent<BossGolemNetworkController>();
         _anim = Owner.GetComponent<Animator>();
         _bossGolemAnimationNetworkController = Owner.GetComponent <BossGolemAnimationNetworkController>();
+        _animLength = Utill.GetAnimationLength("Anim_Dead", _controller.Anim);
     }
 
     public override void OnStart()
     {
         base.OnStart();
         OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.Base_DieState);
+        CurrentAnimInfo animinfo = new CurrentAnimInfo(_animLength, 0f, 0f, 0f, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+        _networkController.StartAnimChagnedRpc(animinfo);
     }
 
 

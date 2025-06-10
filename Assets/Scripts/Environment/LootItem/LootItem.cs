@@ -141,7 +141,7 @@ private void ItemGradeEffect(IItem itemInfo)
             return;
 
         UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
-        inventory_item.transform.SetParent(Managers.LootItemManager.GetItemComponentPosition(_ui_player_Inventory));
+        inventory_item.transform.SetParent(_ui_player_Inventory.ItemInventoryTr);
         player.DisEnable_Icon_UI();//상호작용 아이콘 제거
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {

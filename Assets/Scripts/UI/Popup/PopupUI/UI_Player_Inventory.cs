@@ -24,7 +24,6 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     private Vector2 _initialMousePosition;
     private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
     private Transform _itemInventoryTr;
-    private Transform _lootitemStorage;
 
     private GraphicRaycaster _ui_inventory_Raycaster;
     private EventSystem _eventSystem;
@@ -98,8 +97,6 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
         _ui_inventory_Raycaster = GetComponent<GraphicRaycaster>();
         _eventSystem = FindAnyObjectByType<EventSystem>();
 
-        _lootitemStorage = Managers.LootItemManager.TemporaryInventory;
-
     }
     protected override void StartInit()
     {
@@ -169,7 +166,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
             UpdateStats();
             UpdatePlayerLevelAndNickName(OwnerPlayerStats.CharacterBaseStats);
         }
-        Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
+        //Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
         _equipMent.transform.localPosition = _initialWindowPosition;
 
     }
