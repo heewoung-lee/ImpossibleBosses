@@ -1,28 +1,31 @@
-using Buffer;
+using Data.DataType.ItemType.Interface;
 using UnityEngine;
 
-public class BufferRoarModifier : DurationBuff
+namespace Buffer.SkillBuffer
 {
-    public BufferRoarModifier(Sprite iconImage)
+    public class BufferRoarModifier : DurationBuff
     {
-        _iconImage = iconImage;
-    }
-    public override Sprite BuffIconImage => _iconImage;
-    public override string Buffname => "공격력증가";
-    public override StatType StatType => StatType.Attack;
-    private Sprite _iconImage = null;
+        public BufferRoarModifier(Sprite iconImage)
+        {
+            _iconImage = iconImage;
+        }
+        public override Sprite BuffIconImage => _iconImage;
+        public override string Buffname => "공격력증가";
+        public override StatType StatType => StatType.Attack;
+        private Sprite _iconImage = null;
 
-    public override void ApplyStats(BaseStats stats, float value)
-    {
-        stats.Plus_Attack_Ability((int)value);
-    }
-    public override void RemoveStats(BaseStats stats, float value)
-    {
-        stats.Plus_Attack_Ability(-(int)value);
-    }
+        public override void ApplyStats(BaseStats stats, float value)
+        {
+            stats.Plus_Attack_Ability((int)value);
+        }
+        public override void RemoveStats(BaseStats stats, float value)
+        {
+            stats.Plus_Attack_Ability(-(int)value);
+        }
 
-    public override void SetBuffIconImage(Sprite buffImageIcon)
-    {
-        _iconImage = buffImageIcon;
+        public override void SetBuffIconImage(Sprite buffImageIcon)
+        {
+            _iconImage = buffImageIcon;
+        }
     }
 }

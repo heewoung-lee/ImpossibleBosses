@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Controller.ControllerStats;
 using Controller.ControllerStats.BaseStates;
+using Data;
 using UnityEngine;
 
 namespace Controller.BossState
@@ -30,13 +31,13 @@ namespace Controller.BossState
             Animator.StringToHash("Golem_Attack2")
         };
 
-        protected override int HashIdle => Enemy_Anim_Hash.Golem_Idle;
-        protected override int HashMove => Enemy_Anim_Hash.Golem_Walk;
+        protected override int HashIdle => EnemyAnimHash.GolemIdle;
+        protected override int HashMove => EnemyAnimHash.GolemWalk;
         protected override int HashAttack => _golemAttacks[UnityEngine.Random.Range(0, 2)];
-        protected override int HashDie => Enemy_Anim_Hash.Golem_Dead;
+        protected override int HashDie => EnemyAnimHash.GolemDead;
 
-        private int _hashGolemSkill1 = Enemy_Anim_Hash.Golem_Attacked;
-        private int _hashGolemSkill2 = Enemy_Anim_Hash.Golem_Skill;
+        private int _hashGolemSkill1 = EnemyAnimHash.GolemAttacked;
+        private int _hashGolemSkill2 = EnemyAnimHash.GolemSkill;
 
         public override AttackState BaseAttackState => _baseAttackState;
         public override IDleState BaseIDleState => _baseIDleState;

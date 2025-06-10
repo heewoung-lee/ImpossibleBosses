@@ -18,12 +18,12 @@ namespace Controller
             animSpeed = 0f;
             float startAnimSpeed =animinfo.StartAnimationSpeed;
             animSpeed = Mathf.Lerp(startAnimSpeed, 0f, (float)(elapsedTime / (animinfo.AnimLength * animinfo.DecelerationRatio)));
-            Anim.speed = (float)animSpeed;
+            Anim.speed = animSpeed;
             bool finished = animSpeed <= animinfo.AnimStopThreshold&& isCheckattackIndicatorFinish == true;
             if (finished)
             {
                 animSpeed = startAnimSpeed;
-                Anim.speed = (float)animSpeed;
+                Anim.speed = animSpeed;
             }
             return finished;
         }

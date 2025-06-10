@@ -1,5 +1,7 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using System.Threading.Tasks;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;

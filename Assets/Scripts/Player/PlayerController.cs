@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Controller;
 using Controller.ControllerStats.BaseStates;
+using Controller.PlayerState;
+using Data;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,10 +26,10 @@ public class PlayerController : MoveableController
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
-    protected override int HashIdle => Player_Anim_Hash.Idle;
-    protected override int HashMove => Player_Anim_Hash.Run;
-    protected override int HashAttack => Player_Anim_Hash.Attack;
-    protected override int HashDie => Player_Anim_Hash.Die;
+    protected override int HashIdle => PlayerAnimHash.Idle;
+    protected override int HashMove => PlayerAnimHash.Run;
+    protected override int HashAttack => PlayerAnimHash.Attack;
+    protected override int HashDie => PlayerAnimHash.Die;
     private int _hash_PickUp => Animator.StringToHash("Pickup");
 
     public override AttackState BaseAttackState => _baseAttackState;

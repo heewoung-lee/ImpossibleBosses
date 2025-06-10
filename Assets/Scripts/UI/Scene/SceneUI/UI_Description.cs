@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -105,7 +107,7 @@ public class UI_Description : UI_Scene
 
     public void SetValue(IItem iteminfo)
     {
-        _item_GradeColor = Utill.GetItemGradeColor(iteminfo.Item_Grade);
+        _item_GradeColor = Utill.GetItemGradeColor(iteminfo.ItemGradeType);
         _itemImage.sprite = iteminfo.ImageSource[iteminfo.ItemIconSourceText];
         _itemNameText.text = iteminfo.ItemName;
         _itemNameText.color = _itemNameText.SetGradeColor(_item_GradeColor);
@@ -133,11 +135,11 @@ public class UI_Description : UI_Scene
 
     public string GetItemType(IItem iteminfo)
     {
-        switch (iteminfo.Item_Type)
+        switch (iteminfo.ItemType)
         {
             case ItemType.Equipment:
                 ItemEquipment equip = iteminfo as ItemEquipment;
-                return ConvertEquipItemTypeToKorean(equip.Equipment_Slot);
+                return ConvertEquipItemTypeToKorean(equip.EquipmentSlotType);
             case ItemType.Consumable:
                 return "소비아이템";
             case ItemType.ETC:
@@ -145,21 +147,21 @@ public class UI_Description : UI_Scene
         }
         return "기타아이템";
     }
-    public string ConvertEquipItemTypeToKorean(Equipment_Slot_Type EquipType)
+    public string ConvertEquipItemTypeToKorean(EquipmentSlotType EquipType)
     {
         switch (EquipType)
         {
-            case Equipment_Slot_Type.Helmet:
+            case EquipmentSlotType.Helmet:
                 return "머리";
-            case Equipment_Slot_Type.Gauntlet:
+            case EquipmentSlotType.Gauntlet:
                 return "장갑";
-            case Equipment_Slot_Type.Shoes:
+            case EquipmentSlotType.Shoes:
                 return "신발";
-            case Equipment_Slot_Type.Weapon:
+            case EquipmentSlotType.Weapon:
                 return "무기";
-            case Equipment_Slot_Type.Ring:
+            case EquipmentSlotType.Ring:
                 return "반지";
-            case Equipment_Slot_Type.Armor:
+            case EquipmentSlotType.Armor:
                 return "갑옷";
         }
 

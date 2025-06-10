@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Buffer;
+using Data.DataType.ItemType.Interface;
 using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
@@ -158,7 +159,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         {
             if (addLootItemBehaviour.TryGet(out NetworkObject ngo))
             {
-                LootItemBehaviour lootItemBehaviour = ngo.GetComponent<LootItemBehaviour>();
+                ILootItemBehaviour lootItemBehaviour = ngo.GetComponent<ILootItemBehaviour>();
                 if (lootItemBehaviour is MonoBehaviour monoBehaviour)
                 {
                     Type monoBehaviourType = monoBehaviour.GetType();

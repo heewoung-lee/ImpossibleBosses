@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Data;
+using Data.DataType.ItemType.Interface;
 using UnityEngine;
 
-public enum Equipment_Slot_Type
+public enum EquipmentSlotType
 {
     Helmet,
     Gauntlet,
@@ -11,74 +13,92 @@ public enum Equipment_Slot_Type
     Ring,
     Armor
 }
+
 [Serializable]
-public class ItemEquipment : Ikey<int>,IItem,IInventoryItemMaker,IItemDescriptionForm, IShopItemMaker
+public class ItemEquipment : IKey<int>, IItem, IInventoryItemMaker, IItemDescriptionForm, IShopItemMaker
 {
     public int itemNumber;
     public ItemType itemType = ItemType.Equipment;
     public string itemGradeText;
-    public string equipment_SlotText;
+    public string equipmentSlotText;
     public List<StatEffect> itemEffects = new List<StatEffect>();
     public string itemName;
     public string descriptionText;
     public string itemIconSourceText;
-    public ItemEquipment() { }
+
+    public ItemEquipment()
+    {
+    }
+
     public ItemEquipment(IItem iteminfo)
     {
         itemNumber = iteminfo.ItemNumber;
         itemType = ItemType.Consumable;
-        itemGradeText = iteminfo.Item_Grade.ToString();
+        itemGradeText = iteminfo.ItemGradeType.ToString();
         itemEffects = iteminfo.ItemEffects;
         itemName = iteminfo.ItemName;
         descriptionText = iteminfo.DescriptionText;
         itemIconSourceText = iteminfo.ItemIconSourceText;
-        equipment_SlotText = (iteminfo as ItemEquipment).equipment_SlotText.ToString();
+        equipmentSlotText = ((ItemEquipment)iteminfo).equipmentSlotText;
     }
 
     private Dictionary<string, Sprite> _imageSource = new Dictionary<string, Sprite>();
     public int ItemNumber => itemNumber;
-    public ItemType Item_Type => itemType;
-    public Item_Grade_Type Item_Grade => (Item_Grade_Type)System.Enum.Parse(typeof(Item_Grade_Type), itemGradeText);
-    public Equipment_Slot_Type Equipment_Slot => (Equipment_Slot_Type) System.Enum.Parse(typeof(Equipment_Slot_Type),equipment_SlotText);
+    public ItemType ItemType => itemType;
+    public ItemGradeType ItemGradeType => (ItemGradeType)Enum.Parse(typeof(ItemGradeType), itemGradeText);
+    public EquipmentSlotType EquipmentSlotType =>(EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), equipmentSlotText);
+
     public int Key => itemNumber;
     public List<StatEffect> ItemEffects => itemEffects;
     public string ItemName => itemName;
     public string DescriptionText => descriptionText;
     public string ItemIconSourceText => itemIconSourceText;
-    public Dictionary<string, Sprite> ImageSource { get => _imageSource; set => _imageSource = value; }
+
+    public Dictionary<string, Sprite> ImageSource
+    {
+        get => _imageSource;
+        set => _imageSource = value;
+    }
 
     public string GetItemEffectText()
     {
-        string descriptionText = "";
-        descriptionText = Utill.ItemGradeConvertToKorean(Item_Grade) + "등급\n";
+        string itemEffectText = "";
+        itemEffectText = Utill.ItemGradeConvertToKorean(ItemGradeType) + "등급\n";
         foreach (StatEffect effect in ItemEffects)
         {
-            descriptionText += $"{Utill.StatTypeConvertToKorean(effect.statType)} : {effect.value} \n";
+            itemEffectText += $"{Utill.StatTypeConvertToKorean(effect.statType)} : {effect.value} \n";
         }
 
-        return descriptionText;
+        return itemEffectText;
     }
 
-    public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1, string name = null, string path = null)
+    public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
+        string name = null, string path = null)
     {
-        UI_ItemComponent_Equipment ui_Equipment_Component 
-            = Managers.UI_Manager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name, $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
+        UI_ItemComponent_Equipment uiEquipmentComponent
+            = Managers.UI_Manager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name,
+                $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
         if (itemCount != 1)
         {
             Debug.LogWarning("Equipment items are uncountable.");
         }
-        ui_Equipment_Component.IntializeItem(this);
-        return ui_Equipment_Component;
+
+        uiEquipmentComponent.IntializeItem(this);
+        return uiEquipmentComponent;
     }
-    public UI_ShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1, string name = null, string path = null)
+
+    public UI_ShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
+        string name = null, string path = null)
     {
-        UI_ShopItemComponent ui_shopItemComponent = Managers.UI_Manager.MakeSubItem<UI_ShopItemComponent>(parent, name, $"Prefabs/UI/Item/UI_ShopItemComponent");
+        UI_ShopItemComponent uiShopItemComponent =
+            Managers.UI_Manager.MakeSubItem<UI_ShopItemComponent>(parent, name,
+                $"Prefabs/UI/Item/UI_ShopItemComponent");
         if (itemCount != 1)
         {
             Debug.LogWarning("Equipment items are uncountable.");
         }
-        ui_shopItemComponent.IntializeItem(this, itemCount, itemPrice);
-        return ui_shopItemComponent;
+
+        uiShopItemComponent.IntializeItem(this, itemCount, itemPrice);
+        return uiShopItemComponent;
     }
 }
-

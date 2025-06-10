@@ -1,3 +1,5 @@
+using Data.DataType.ItemType.Interface;
+
 namespace Buffer.Buffer_Type.ImmediatelyBuffer
 {
     public class HpPosition : ImmediatelyBuff

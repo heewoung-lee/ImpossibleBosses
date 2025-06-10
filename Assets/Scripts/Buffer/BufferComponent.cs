@@ -51,9 +51,9 @@ namespace Buffer
             _value = effect.value;
             InitAndStartBuffInternal(targetStat, duration);
         }
-        public void InitAndStartBuff(BaseStats targetStat, float duration, BuffModifier buff_Modifier,float value)
+        public void InitAndStartBuff(BaseStats targetStat, float duration, BuffModifier buffModifier,float value)
         {
-            _modifier = buff_Modifier;
+            _modifier = buffModifier;
             _value = value;
             InitAndStartBuffInternal(targetStat, duration);
         }

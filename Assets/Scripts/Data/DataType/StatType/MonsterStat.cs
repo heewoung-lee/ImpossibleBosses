@@ -1,14 +1,15 @@
 using System;
+using Data;
 
 [Serializable]
-public struct MonsterStat : Ikey<int>
-{
-    public int monsterID;
-    public int hp;
-    public int attack;
-    public int exp;
-    public int defence;
-    public float speed;
+    public struct MonsterStat : IKey<int>
+    {
+        public int monsterID;
+        public int hp;
+        public int attack;
+        public int exp;
+        public int defence;
+        public float speed;
 
-    public int Key => monsterID;
-}
+        public int Key => monsterID;
+    }

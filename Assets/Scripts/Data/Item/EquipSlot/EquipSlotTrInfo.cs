@@ -1,71 +1,72 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipSlotTrInfo : MonoBehaviour
+namespace Data.Item.EquipSlot
 {
-    Transform _equipSlotR;
-    Transform _equipSlotL;
-
-    Transform _equipSlot_Helmet;
-    EquipMentSlot _helmetEquipMent;
-
-    Transform _equipSlot_Gauntlet;
-    EquipMentSlot _gauntletEquipMent;
-
-    Transform _equipSlot_Shoes;
-    EquipMentSlot _shoesEquipMent;
-
-    Transform _equipSlot_Weapon;
-    EquipMentSlot _weaponEquipMent;
-
-    Transform _equipSlot_Ring;
-    EquipMentSlot _ringEquipMent;
-
-    Transform _equipSlot_Armor;
-    EquipMentSlot _armorEquipMent;
-
-
-    public Transform EquipSlot_Helmet { get => _equipSlot_Helmet;}
-    public EquipMentSlot HelmetEquipMent { get => _helmetEquipMent; }
-
-    public Transform EquipSlot_Gauntlet { get => _equipSlot_Gauntlet;}
-    public EquipMentSlot GauntletEquipMent{ get => _gauntletEquipMent; }
-
-    public Transform EquipSlot_Shoes { get => _equipSlot_Shoes;}
-    public EquipMentSlot ShoesEquipMent { get => _shoesEquipMent; }
-
-    public Transform EquipSlot_Weapon { get => _equipSlot_Weapon;}
-    public EquipMentSlot WeaponEquipMent { get => _weaponEquipMent; }
-
-    public Transform EquipSlot_Ring { get => _equipSlot_Ring;}
-    public EquipMentSlot RingEquipMent {get=>_ringEquipMent; }
-
-    public Transform EquipSlot_Armor { get => _equipSlot_Armor;}
-    public EquipMentSlot ArmorEquipMent { get => _armorEquipMent; }
-
-    void Awake()
+    public class EquipSlotTrInfo : MonoBehaviour
     {
-        _equipSlotR = gameObject.FindChild<Transform>("EquipSlot_R");
-        _equipSlotL = gameObject.FindChild<Transform>("EquipSlot_L");
+        private Transform _equipSlotR;
+        private Transform _equipSlotL;
+        
+        private Transform _equipSlotHelmet;
+        private EquipMentSlot _helmetEquipMent;
+        
+        private Transform _equipSlotGauntlet;
+        private EquipMentSlot _gauntletEquipMent;
+        
+        private Transform _equipSlotShoes;
+        private EquipMentSlot _shoesEquipMent;
+        
+        private Transform _equipSlotWeapon;
+        private EquipMentSlot _weaponEquipMent;
+        
+        private Transform _equipSlotRing;
+        private EquipMentSlot _ringEquipMent;
+        
+        private Transform _equipSlotArmor;
+        private EquipMentSlot _armorEquipMent;
 
 
-        _equipSlot_Helmet = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Helmet");
-        _helmetEquipMent = _equipSlot_Helmet.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotHelmet { get => _equipSlotHelmet;}
+        public EquipMentSlot HelmetEquipMent { get => _helmetEquipMent; }
 
-        _equipSlot_Gauntlet = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Gauntlet");
-        _gauntletEquipMent = _equipSlot_Gauntlet.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotGauntlet { get => _equipSlotGauntlet;}
+        public EquipMentSlot GauntletEquipMent{ get => _gauntletEquipMent; }
 
-        _equipSlot_Shoes = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Shoes");
-        _shoesEquipMent = _equipSlot_Shoes.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotShoes { get => _equipSlotShoes;}
+        public EquipMentSlot ShoesEquipMent { get => _shoesEquipMent; }
 
-        _equipSlot_Weapon = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Weapon");
-        _weaponEquipMent = _equipSlot_Weapon.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotWeapon { get => _equipSlotWeapon;}
+        public EquipMentSlot WeaponEquipMent { get => _weaponEquipMent; }
 
-        _equipSlot_Ring = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Ring");
-        _ringEquipMent = _equipSlot_Ring.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotRing { get => _equipSlotRing;}
+        public EquipMentSlot RingEquipMent {get=>_ringEquipMent; }
 
-        _equipSlot_Armor = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Armor");
-        _armorEquipMent = _equipSlot_Armor.GetComponentInChildren<EquipMentSlot>();
+        public Transform EquipSlotArmor { get => _equipSlotArmor;}
+        public EquipMentSlot ArmorEquipMent { get => _armorEquipMent; }
+
+        void Awake()
+        {
+            _equipSlotR = gameObject.FindChild<Transform>("EquipSlot_R");
+            _equipSlotL = gameObject.FindChild<Transform>("EquipSlot_L");
+
+
+            _equipSlotHelmet = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Helmet");
+            _helmetEquipMent = _equipSlotHelmet.GetComponentInChildren<EquipMentSlot>();
+
+            _equipSlotGauntlet = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Gauntlet");
+            _gauntletEquipMent = _equipSlotGauntlet.GetComponentInChildren<EquipMentSlot>();
+
+            _equipSlotShoes = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Shoes");
+            _shoesEquipMent = _equipSlotShoes.GetComponentInChildren<EquipMentSlot>();
+
+            _equipSlotWeapon = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Weapon");
+            _weaponEquipMent = _equipSlotWeapon.GetComponentInChildren<EquipMentSlot>();
+
+            _equipSlotRing = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Ring");
+            _ringEquipMent = _equipSlotRing.GetComponentInChildren<EquipMentSlot>();
+
+            _equipSlotArmor = _equipSlotL.gameObject.FindChild<Transform>("EquipSlot_Armor");
+            _armorEquipMent = _equipSlotArmor.GetComponentInChildren<EquipMentSlot>();
+        }
     }
 }

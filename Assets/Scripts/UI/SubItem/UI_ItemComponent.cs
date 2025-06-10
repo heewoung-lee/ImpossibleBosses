@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data.DataType.ItemType.Interface;
 using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -15,7 +16,7 @@ public struct IteminfoStruct : INetworkSerializable//TODO: 나중에 아이템 �
 {
     public int ItemNumber;
     public ItemType Item_Type;
-    public Item_Grade_Type Item_Grade_Type;
+    public ItemGradeType Item_Grade_Type;
     public List<StatEffect> ItemEffects;
     public string ItemName;
     public string DescriptionText;
@@ -26,8 +27,8 @@ public struct IteminfoStruct : INetworkSerializable//TODO: 나중에 아이템 �
     public IteminfoStruct(IItem iitem)
     {
         ItemNumber = iitem.ItemNumber;
-        Item_Type = iitem.Item_Type;
-        Item_Grade_Type = iitem.Item_Grade;
+        Item_Type = iitem.ItemType;
+        Item_Grade_Type = iitem.ItemGradeType;
         ItemEffects = iitem.ItemEffects;
         ItemName = iitem.ItemName;
         DescriptionText = iitem.DescriptionText;
@@ -122,7 +123,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected IItem _iteminfo;
     protected int _itemNumber;
     protected ItemType _itemType;
-    protected Item_Grade_Type _item_Grade;
+    protected ItemGradeType _item_Grade;
     protected List<StatEffect> _Itemeffects;
     protected string _itemName;
     protected string _descriptionText;
@@ -134,8 +135,8 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     protected bool _isDragging = false;
 
     public int ItemNumber => _itemNumber;
-    public ItemType Item_Type => _itemType;
-    public Item_Grade_Type Item_Grade => _item_Grade;
+    public ItemType ItemType => _itemType;
+    public ItemGradeType ItemGradeType => _item_Grade;
     public List<StatEffect> ItemEffects => _Itemeffects;
     public string ItemName => _itemName;
     public string DescriptionText => _descriptionText;
@@ -249,8 +250,8 @@ public abstract class UI_ItemComponent : UI_Base, IItem
     public virtual void IntializeItem(IItem iteminfo)
     {
         _itemNumber = iteminfo.ItemNumber;
-        _itemType = iteminfo.Item_Type;
-        _item_Grade = iteminfo.Item_Grade;
+        _itemType = iteminfo.ItemType;
+        _item_Grade = iteminfo.ItemGradeType;
         _Itemeffects = iteminfo.ItemEffects;
         _itemName = iteminfo.ItemName;
         _descriptionText = iteminfo.DescriptionText;

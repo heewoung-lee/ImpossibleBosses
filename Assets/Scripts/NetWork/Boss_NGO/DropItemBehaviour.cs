@@ -1,8 +1,9 @@
 using System.Collections;
+using Data.DataType.ItemType.Interface;
 using Unity.Netcode;
 using UnityEngine;
 
-public class DropItemBehaviour : NetworkBehaviour,LootItemBehaviour
+public class DropItemBehaviour : NetworkBehaviour,ILootItemBehaviour
 {
     private readonly float MAX_HEIGHT = 3f;
     private readonly float CircleRange = 30f;

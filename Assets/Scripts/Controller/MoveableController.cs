@@ -7,7 +7,7 @@ namespace Controller
     public abstract class MoveableController : BaseController
     {
         protected Vector3 _destPos;
-        PlayerController _player;
+        private PlayerController _player;
         private void Update()
         {
             CurrentStateType.UpdateState();

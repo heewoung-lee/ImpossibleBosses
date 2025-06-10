@@ -1,35 +1,38 @@
 using UnityEngine;
 
-[System.Serializable]
-public struct InstalledData
+namespace Data
 {
-    public string client_id;
-    public string client_secret;
-}
-[System.Serializable]
-public struct GoogleLoginWrapper
-{
-    public InstalledData installed;
-}
-public class GoogleAuthLogin
-{
-
-    public TextAsset[] LoadJson()
+    [System.Serializable]
+    public struct InstalledData
     {
-        TextAsset[] jsonFiles = Managers.ResourceManager.LoadAll<TextAsset>("GoogleLoginData");
-        return jsonFiles;
+        public string client_id;
+        public string client_secret;
     }
-
-    public GoogleLoginWrapper ParseJsontoGoogleAuth(TextAsset[] jsonFile)
+    [System.Serializable]
+    public struct GoogleLoginWrapper
     {
-        foreach (TextAsset file in jsonFile)
-        {
-            if (file.text.Contains("\"installed\"") == false)
-                continue;
+        public InstalledData installed;
+    }
+    public class GoogleAuthLogin
+    {
 
-            return JsonUtility.FromJson<GoogleLoginWrapper>(file.text);
+        public TextAsset[] LoadJson()
+        {
+            TextAsset[] jsonFiles = Managers.ResourceManager.LoadAll<TextAsset>("GoogleLoginData");
+            return jsonFiles;
         }
 
-        return default(GoogleLoginWrapper);
+        public GoogleLoginWrapper ParseJsontoGoogleAuth(TextAsset[] jsonFile)
+        {
+            foreach (TextAsset file in jsonFile)
+            {
+                if (file.text.Contains("\"installed\"") == false)
+                    continue;
+
+                return JsonUtility.FromJson<GoogleLoginWrapper>(file.text);
+            }
+
+            return default(GoogleLoginWrapper);
+        }
     }
 }

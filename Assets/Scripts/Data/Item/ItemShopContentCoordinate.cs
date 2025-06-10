@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemShopContentCoordinate : MonoBehaviour
+namespace Data.Item
 {
+    public class ItemShopContentCoordinate : MonoBehaviour
+    {
 
+    }
 }

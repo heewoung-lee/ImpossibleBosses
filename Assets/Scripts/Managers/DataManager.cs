@@ -15,6 +15,7 @@ using System.Linq;
 using UnityEditor;
 using Unity.VisualScripting;
 using System.Net;
+using Data;
 using UnityEditor.PackageManager;
 using UnityEngine.UIElements;
 
@@ -299,7 +300,7 @@ public class DataManager : IManagerInitializable,IManagerIResettable
 
         foreach (Type TypeInterface in TypeInterfaces)
         {
-            if (TypeInterface.IsGenericType && TypeInterface.GetGenericTypeDefinition() == typeof(Ikey<>))
+            if (TypeInterface.IsGenericType && TypeInterface.GetGenericTypeDefinition() == typeof(IKey<>))
             {
                 //제네릭타입의 첫번째 매개변수를 던진다. = 키가 되는 매개변수 
                 return TypeInterface.GetGenericArguments()[0];

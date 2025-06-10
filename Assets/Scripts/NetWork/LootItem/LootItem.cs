@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data.DataType.ItemType.Interface;
 using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -23,7 +24,7 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     public bool CanInteraction => _canInteraction;
     public string InteractionName => _iteminfo.ItemName;
-    public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.Item_Grade);
+    public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.ItemGradeType);
 
     private bool _canInteraction = false;
 
@@ -40,7 +41,7 @@ public class LootItem : NetworkBehaviour,IInteraction
         _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
 
-        if (TryGetComponent(out LootItemBehaviour behaviour) == true)
+        if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
         {
             behaviour.SpawnBahaviour(_rigidBody);
             return;
@@ -107,13 +108,13 @@ public class LootItem : NetworkBehaviour,IInteraction
 
 private void ItemGradeEffect(IItem itemInfo)
 {
-    string path = itemInfo.Item_Grade switch
+    string path = itemInfo.ItemGradeType switch
     {
-        Item_Grade_Type.Normal  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Common",
-        Item_Grade_Type.Magic   => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
-        Item_Grade_Type.Rare    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
-        Item_Grade_Type.Unique  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
-        Item_Grade_Type.Epic    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
+        ItemGradeType.Normal  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Common",
+        ItemGradeType.Magic   => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
+        ItemGradeType.Rare    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
+        ItemGradeType.Unique  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
+        ItemGradeType.Epic    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
         _ => null
     };
 

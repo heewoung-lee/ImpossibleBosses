@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
 using UnityEngine;
 
 public class SceneDataSaveAndLoader 
 {
-    private Dictionary<Equipment_Slot_Type, IteminfoStruct> _equipmentSlotData = new Dictionary<Equipment_Slot_Type, IteminfoStruct>();
+    private Dictionary<EquipmentSlotType, IteminfoStruct> _equipmentSlotData = new Dictionary<EquipmentSlotType, IteminfoStruct>();
     private List<IteminfoStruct> _inventoryItemList = new List<IteminfoStruct>();
 
 
@@ -31,7 +33,7 @@ public class SceneDataSaveAndLoader
 
 
 
-    public void SaveEquipMentData(KeyValuePair<Equipment_Slot_Type, UI_ItemComponent_Inventory> equipValue)
+    public void SaveEquipMentData(KeyValuePair<EquipmentSlotType, UI_ItemComponent_Inventory> equipValue)
     {
 
         IteminfoStruct iteminfo = new IteminfoStruct(equipValue.Value);
@@ -39,7 +41,7 @@ public class SceneDataSaveAndLoader
         //여기에 그냥 값만 담아야 하고 나중에 열었을때 아이템으로 던저야 할것 같다
     }
 
-    public bool TryGetLoadEquipMentData(Equipment_Slot_Type equipMentType,out IteminfoStruct equipItem)
+    public bool TryGetLoadEquipMentData(EquipmentSlotType equipMentType,out IteminfoStruct equipItem)
     {
         equipItem = default;
         if (_equipmentSlotData.TryGetValue(equipMentType,out IteminfoStruct iteminfo))

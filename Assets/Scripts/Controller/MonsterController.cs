@@ -24,7 +24,7 @@ namespace Controller
         private IDleState _baseIDleState;
         private DieState _baseDieState;
         private MoveState _baseMoveState;
-        NavMeshAgent _agent;
+        private NavMeshAgent _agent;
     
         public override void UpdateAttack()
         {

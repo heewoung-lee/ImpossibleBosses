@@ -18,7 +18,7 @@ namespace Controller
         private float _transitionMove = DefalutTransitionMove;
         private float _transitionAttack = DefalutTransitionAttack;
         private float _transitionDie = DefalutTransitionDie;
-        private int _animLayer = 0;
+        private int _animLayer;
 
         private GameObject _targetObject;
         public GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
@@ -129,8 +129,6 @@ namespace Controller
                 return;
 
             _anim.CrossFade(hashCode, transitionState, AnimLayer, 0f);
-            var info = Anim.GetCurrentAnimatorStateInfo(0);
-            float normalized = info.normalizedTime;
         }
     }
 }

@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
+using Data.Item;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -168,7 +171,7 @@ public class UI_Shop : UI_Popup
     {
         foreach (Transform childTr in _itemCoordinate)
         {
-            if (childTr.gameObject.GetComponent<UI_ShopItemComponent>().Item_Type == type)
+            if (childTr.gameObject.GetComponent<UI_ShopItemComponent>().ItemType == type)
                 childTr.gameObject.SetActive(true);
             else
                 childTr.gameObject.SetActive(false);

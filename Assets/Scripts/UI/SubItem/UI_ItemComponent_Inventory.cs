@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Data.DataType.ItemType.Interface;
+using Data.Item;
+using Data.Item.EquipSlot;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
+using Data.Item;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -78,7 +81,7 @@ public class UI_ShopItemComponent : UI_ItemComponent
         _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
         _ui_Player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _ui_Shop = Managers.UI_Manager.GetImportant_Popup_UI<UI_Shop>();
-        _itemGradeBorder_Image.sprite = Managers.ItemDataManager.ItemGradeBorder[Item_Grade];
+        _itemGradeBorder_Image.sprite = Managers.ItemDataManager.ItemGradeBorder[ItemGradeType];
 
 
         _uiRaycaster = _ui_Shop.UI_Shop_RayCaster;

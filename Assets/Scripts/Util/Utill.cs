@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Data.DataType.ItemType.Interface;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEditor.Timeline.Actions;
@@ -21,19 +22,19 @@ public class Utill
         return component;
     }
 
-    public static Color GetItemGradeColor(Item_Grade_Type grade)
+    public static Color GetItemGradeColor(ItemGradeType grade)
     {
         switch (grade)
         {
-            case Item_Grade_Type.Normal:
+            case ItemGradeType.Normal:
                 return Color.white;
-            case Item_Grade_Type.Magic:
+            case ItemGradeType.Magic:
                 return Color.green;
-            case Item_Grade_Type.Rare:
+            case ItemGradeType.Rare:
                 return new Color(150 / 255f, 200 / 255f, 255 / 255f);//파란색;
-            case Item_Grade_Type.Unique:
+            case ItemGradeType.Unique:
                 return Color.red;
-            case Item_Grade_Type.Epic:
+            case ItemGradeType.Epic:
                 return Color.yellow;
         }
         return Color.white;
@@ -128,19 +129,19 @@ public class Utill
         return time;
     }
 
-    public static string ItemGradeConvertToKorean(Item_Grade_Type itemGrade)
+    public static string ItemGradeConvertToKorean(ItemGradeType itemGrade)
     {
         switch (itemGrade)
         {
-            case Item_Grade_Type.Normal:
+            case ItemGradeType.Normal:
                 return "노멀";
-            case Item_Grade_Type.Magic:
+            case ItemGradeType.Magic:
                 return "매직";
-            case Item_Grade_Type.Rare:
+            case ItemGradeType.Rare:
                 return "레어";
-            case Item_Grade_Type.Unique:
+            case ItemGradeType.Unique:
                 return "유니크";
-            case Item_Grade_Type.Epic:
+            case ItemGradeType.Epic:
                 return "에픽";
         }
 

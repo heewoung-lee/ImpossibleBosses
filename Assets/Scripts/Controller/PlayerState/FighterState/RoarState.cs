@@ -1,17 +1,20 @@
 using System;
 using Controller.ControllerStats;
 
-public class RoarState : IState
+namespace Controller.PlayerState.FighterState
 {
-    public bool LockAnimationChange => true;
+    public class RoarState : IState
+    {
+        public bool LockAnimationChange => true;
 
-    public event Action UpdateStateEvent;
-    public RoarState(Action roarState)
-    {
-        UpdateStateEvent += roarState;
-    }
-    public void UpdateState()
-    {
-        UpdateStateEvent?.Invoke();
+        public event Action UpdateStateEvent;
+        public RoarState(Action roarState)
+        {
+            UpdateStateEvent += roarState;
+        }
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
+        }
     }
 }

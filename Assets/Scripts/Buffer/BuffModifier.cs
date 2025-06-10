@@ -1,3 +1,5 @@
+using Data.DataType.ItemType.Interface;
+
 namespace Buffer
 {
     public abstract class BuffModifier

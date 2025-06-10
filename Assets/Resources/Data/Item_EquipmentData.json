@@ -3,7 +3,7 @@
 {
 "itemNumber":"100",
 "itemGradeText":"Normal",
-"Equipment_SlotText":"Weapon",
+"equipmentSlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":5}],
 "itemName":"손도끼",
 "descriptionText":"",
@@ -12,7 +12,7 @@
 {
 "itemNumber":"101",
 "itemGradeText":"Magic",
-"Equipment_SlotText":"Weapon",
+"equipmentSlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":8}],
 "itemName":"벼려진 손도끼",
 "descriptionText":"",
@@ -21,7 +21,7 @@
 {
 "itemNumber":"102",
 "itemGradeText":"Rare",
-"Equipment_SlotText":"Weapon",
+"equipmentSlotText":"Weapon",
 "itemEffects":[{"statType":"Attack","value":10},{"statType":"Defence","value":1}],
 "itemName":"날카로운 손도끼",
 "descriptionText":"대장장이가 날카롭게 갈았습니다.",

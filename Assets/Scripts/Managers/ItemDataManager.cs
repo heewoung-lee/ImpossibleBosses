@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Data.DataType.ItemType;
+using Data.DataType.ItemType.Interface;
 using UnityEngine;
 using Random = UnityEngine.Random;
 public class ItemDataManager : IManagerInitializable
 {
     private const string ITEM_FRAME_BORDER_PATH = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
-    private Dictionary<Item_Grade_Type, Sprite> _itemGradeBorder;
-    public Dictionary<Item_Grade_Type, Sprite> ItemGradeBorder => _itemGradeBorder;
+    private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
+    public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
 
     private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
     private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
@@ -47,13 +49,13 @@ public class ItemDataManager : IManagerInitializable
             _allItemDataDict[itemtype] = BindImageSources(_allItemDataDict[itemtype]) as Dictionary<int, IItem>;
         }
 
-        _itemGradeBorder = new Dictionary<Item_Grade_Type, Sprite>//아이템 등급 프레임 초기화
+        _itemGradeBorder = new Dictionary<ItemGradeType, Sprite>//아이템 등급 프레임 초기화
         {
-            { Item_Grade_Type.Normal, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_White") },
-            { Item_Grade_Type.Magic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Green") },
-            { Item_Grade_Type.Rare, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Blue") },
-            { Item_Grade_Type.Unique, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Red") },
-            { Item_Grade_Type.Epic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Yellow") }
+            { ItemGradeType.Normal, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_White") },
+            { ItemGradeType.Magic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Green") },
+            { ItemGradeType.Rare, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Blue") },
+            { ItemGradeType.Unique, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Red") },
+            { ItemGradeType.Epic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Yellow") }
         };
     }
 
@@ -109,13 +111,13 @@ public class ItemDataManager : IManagerInitializable
     public GameObject GetEquipLootItem(IItem iteminfo)
     {
         GameObject lootItem;
-        switch ((iteminfo as ItemEquipment).Equipment_Slot)
+        switch ((iteminfo as ItemEquipment).EquipmentSlotType)
         {
-            case Equipment_Slot_Type.Helmet:
-            case Equipment_Slot_Type.Armor:
+            case EquipmentSlotType.Helmet:
+            case EquipmentSlotType.Armor:
                 lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Shield");
                 break;
-            case Equipment_Slot_Type.Weapon:
+            case EquipmentSlotType.Weapon:
                 lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Sword");
                 break;
             default:

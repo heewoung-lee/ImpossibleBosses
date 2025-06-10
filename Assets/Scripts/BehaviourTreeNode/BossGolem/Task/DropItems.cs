@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Data.DataType.ItemType.Interface;
 using Unity.Netcode;
 using UnityEngine;
 

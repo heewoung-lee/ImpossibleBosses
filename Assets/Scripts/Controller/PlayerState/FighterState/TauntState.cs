@@ -1,19 +1,22 @@
 using System;
 using Controller.ControllerStats;
 
-public class TauntState : IState
+namespace Controller.PlayerState.FighterState
 {
-    public bool LockAnimationChange => true;
-
-    public event Action UpdateStateEvent;
-
-    public TauntState(Action tauntState)
+    public class TauntState : IState
     {
-        UpdateStateEvent += tauntState;
-    }
+        public bool LockAnimationChange => true;
 
-    public void UpdateState()
-    {
-        UpdateStateEvent?.Invoke();
+        public event Action UpdateStateEvent;
+
+        public TauntState(Action tauntState)
+        {
+            UpdateStateEvent += tauntState;
+        }
+
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
+        }
     }
 }

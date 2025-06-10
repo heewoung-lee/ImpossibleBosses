@@ -1,4 +1,5 @@
 using System;
+using Controller.PlayerState.FighterState;
 using UnityEngine;
 
 public class Module_Fighter_Class : Module_Player_Class

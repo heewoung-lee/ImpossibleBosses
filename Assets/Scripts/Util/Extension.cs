@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using UnityEngine.Events;
 using Unity.Netcode;
 using System.Threading.Tasks;
+using Data.DataType.ItemType.Interface;
 
 public static class Extension
 {

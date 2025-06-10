@@ -1,19 +1,22 @@
 using System;
 using Controller.ControllerStats;
 
-public class SlashState : IState
+namespace Controller.PlayerState.FighterState
 {
-    public bool LockAnimationChange => true;
-
-    public event Action UpdateStateEvent;
-
-    public SlashState(Action slashState)
+    public class SlashState : IState
     {
-        UpdateStateEvent += slashState;
-    }
+        public bool LockAnimationChange => true;
 
-    public void UpdateState()
-    {
-        UpdateStateEvent?.Invoke();
+        public event Action UpdateStateEvent;
+
+        public SlashState(Action slashState)
+        {
+            UpdateStateEvent += slashState;
+        }
+
+        public void UpdateState()
+        {
+            UpdateStateEvent?.Invoke();
+        }
     }
 }

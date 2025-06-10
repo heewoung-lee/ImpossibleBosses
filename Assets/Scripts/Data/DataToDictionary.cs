@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 
-public class DataToDictionary<TKey, TStat> : ILoader<TKey, TStat> where TStat : Ikey<TKey>
+namespace Data
+{
+    public class DataToDictionary<TKey, TStat> : ILoader<TKey, TStat> where TStat : IKey<TKey>
     {
         public List<TStat> stats = new List<TStat>();
 
@@ -9,8 +11,9 @@ public class DataToDictionary<TKey, TStat> : ILoader<TKey, TStat> where TStat : 
             Dictionary<TKey, TStat> dict = new Dictionary<TKey, TStat>();
             foreach (TStat stat in stats)
             {
-            dict[stat.Key] = stat;
+                dict[stat.Key] = stat;
             }
             return dict;
         }
     }
+}
