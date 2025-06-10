@@ -71,14 +71,14 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         _interactionTr.AddComponent<Module_Player_Interaction>();
         SetPlayerLayerMask();
       
-        RuntimeAnimatorController OwnerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
-        gameObject.GetComponent<Animator>().runtimeAnimatorController = OwnerPlayerAnimController; 
+        RuntimeAnimatorController ownerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController; 
     }
 
 
-    private Type GetPlayerModuleClass(Define.PlayerClass playerclass)
+    private Type GetPlayerModuleClass(Define.PlayerClass playerClass)
     {
-        switch (playerclass)
+        switch (playerClass)
         {
             case Define.PlayerClass.Archer:
                 return typeof(Module_Acher_Class); 
