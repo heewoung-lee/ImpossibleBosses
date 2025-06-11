@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
+using GameManagers;
 using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;

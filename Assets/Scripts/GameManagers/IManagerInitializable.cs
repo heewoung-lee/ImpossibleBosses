@@ -1,4 +1,7 @@
-public interface IManagerInitializable
+namespace GameManagers
 {
-    public void Init();
+    public interface IManagerInitializable
+    {
+        public void Init();
+    }
 }

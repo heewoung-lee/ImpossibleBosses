@@ -1,65 +1,67 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using System.Linq;
 
-public class SocketEventManager
+namespace GameManagers
 {
-    private Func<Task> _disconnectRelayEvent;
-    private Func<Task> _logoutVivoxEvent;
-    private Func<Task> _logoutAllLeaveLobbyEvent;
-    private Action<GameObject> _donePlayerSpawnEvent;
-
-    public event Func<Task> DisconnectRelayEvent
+    public class SocketEventManager
     {
-        add
-        {
-          UniqueEventRegister.AddSingleEvent(ref _disconnectRelayEvent, value);
-        }
-        remove
-        {
-            UniqueEventRegister.RemovedEvent(ref _disconnectRelayEvent, value);
-        }
-    }
+        private Func<Task> _disconnectRelayEvent;
+        private Func<Task> _logoutVivoxEvent;
+        private Func<Task> _logoutAllLeaveLobbyEvent;
+        private Action<GameObject> _donePlayerSpawnEvent;
 
-    public event Func<Task> LogoutVivoxEvent
-    {
-        add
+        public event Func<Task> DisconnectRelayEvent
         {
-            UniqueEventRegister.AddSingleEvent(ref _logoutVivoxEvent, value);
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _disconnectRelayEvent, value);
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _disconnectRelayEvent, value);
+            }
         }
-        remove
-        {
-            UniqueEventRegister.RemovedEvent(ref _logoutVivoxEvent, value);
-        }
-    }
 
-    public event Func<Task> LogoutAllLeaveLobbyEvent
-    {
-        add
+        public event Func<Task> LogoutVivoxEvent
         {
-            UniqueEventRegister.AddSingleEvent(ref _logoutAllLeaveLobbyEvent, value);
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _logoutVivoxEvent, value);
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _logoutVivoxEvent, value);
+            }
         }
-        remove
-        {
-            UniqueEventRegister.RemovedEvent(ref _logoutAllLeaveLobbyEvent, value);
-        }
-    }
 
-    public event Action<GameObject> DonePlayerSpawnEvent
-    {
-        add
+        public event Func<Task> LogoutAllLeaveLobbyEvent
         {
-            UniqueEventRegister.AddSingleEvent(ref _donePlayerSpawnEvent, value);
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _logoutAllLeaveLobbyEvent, value);
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _logoutAllLeaveLobbyEvent, value);
+            }
         }
-        remove
-        {
-            UniqueEventRegister.RemovedEvent(ref _donePlayerSpawnEvent, value);
-        }
-    }
 
-    public Task InvokeDisconnectRelayEvent() => _disconnectRelayEvent?.Invoke() ?? Task.CompletedTask;
-    public Task InvokeLogoutVivoxEvent() => _logoutVivoxEvent?.Invoke() ?? Task.CompletedTask;
-    public Task InvokeLogoutAllLeaveLobbyEvent() => _logoutAllLeaveLobbyEvent?.Invoke() ?? Task.CompletedTask;
-    public void InvokeDonePlayerSpawnEvent(GameObject go) => _donePlayerSpawnEvent?.Invoke(go);
+        public event Action<GameObject> DonePlayerSpawnEvent
+        {
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _donePlayerSpawnEvent, value);
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _donePlayerSpawnEvent, value);
+            }
+        }
+
+        public Task InvokeDisconnectRelayEvent() => _disconnectRelayEvent?.Invoke() ?? Task.CompletedTask;
+        public Task InvokeLogoutVivoxEvent() => _logoutVivoxEvent?.Invoke() ?? Task.CompletedTask;
+        public Task InvokeLogoutAllLeaveLobbyEvent() => _logoutAllLeaveLobbyEvent?.Invoke() ?? Task.CompletedTask;
+        public void InvokeDonePlayerSpawnEvent(GameObject go) => _donePlayerSpawnEvent?.Invoke(go);
+    }
 }

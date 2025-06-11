@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Controller.BossState;
+using GameManagers;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;

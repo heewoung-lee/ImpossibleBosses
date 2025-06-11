@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
+using GameManagers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

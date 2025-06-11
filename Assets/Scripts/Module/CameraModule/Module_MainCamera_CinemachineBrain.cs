@@ -1,3 +1,4 @@
+using GameManagers;
 using UnityEngine;
 
 public class Module_MainCamera_CinemachineBrain : MonoBehaviour

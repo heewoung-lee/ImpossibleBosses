@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
+using GameManagers;
 using UnityEngine;
 
 namespace Data.DataType.ItemType

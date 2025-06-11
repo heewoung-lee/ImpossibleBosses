@@ -1,20 +1,21 @@
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class LootItemManager
+namespace GameManagers
 {
-    private GameObject _itemRoot;
-
-    public Transform ItemRoot
+    public class LootItemManager
     {
-        get
+        private GameObject _itemRoot;
+
+        public Transform ItemRoot
         {
-            if(_itemRoot == null)
+            get
             {
-                _itemRoot = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/ItemRootNetwork");
+                if(_itemRoot == null)
+                {
+                    _itemRoot = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/ItemRootNetwork");
+                }
+                return _itemRoot.transform;
             }
-            return _itemRoot.transform;
         }
     }
 }

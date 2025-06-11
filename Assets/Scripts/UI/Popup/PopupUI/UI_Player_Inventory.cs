@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Data.Item;
+using GameManagers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

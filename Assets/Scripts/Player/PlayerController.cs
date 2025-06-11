@@ -4,6 +4,7 @@ using Controller;
 using Controller.ControllerStats.BaseStates;
 using Controller.PlayerState;
 using Data;
+using GameManagers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -23,6 +24,20 @@ public class PlayerController : MoveableController
     private InputAction _attackAction;
     private InputAction _stopAction;
     private NetworkObject _playerNGO;
+
+    private Action<Vector3> _onPlayerMouseClickPosition;
+    
+    public event Action<Vector3> OnPlayerMouseClickPosition
+    {
+        add
+        {
+            UniqueEventRegister.AddSingleEvent(ref _onPlayerMouseClickPosition, value);
+        }
+        remove
+        {
+            UniqueEventRegister.RemovedEvent(ref _onPlayerMouseClickPosition, value);
+        }
+    }
 
     public Func<InputAction.CallbackContext, Vector3> ClickPositionEvent;
     public override Define.WorldObject WorldobjectType { get; protected set; } = Define.WorldObject.Player;
@@ -115,7 +130,7 @@ public class PlayerController : MoveableController
             return;
 
         Vector3 clickPos = MouseRightClickPosEvent(context);
-        _inputmanager.playerMouseClickPositionEvent?.Invoke(clickPos);
+        _onPlayerMouseClickPosition?.Invoke(clickPos);
     }
 
     public void PlayerDead()

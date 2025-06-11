@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameManagers;
 using UI.Scene.Interface;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -64,7 +65,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         gameObject.name = "OnwerPlayer";
         gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
-        gameObject.AddComponent<PlayerController>();
+        PlayerController controller = gameObject.AddComponent<PlayerController>();
         gameObject.AddComponent<Module_MainCamera_CinemachineBrain>();
         gameObject.AddComponent<Module_Player_AnimInfo>();
         gameObject.AddComponent<Module_Player_TextureCamera>();
@@ -73,7 +74,8 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         SetPlayerLayerMask();
       
         RuntimeAnimatorController ownerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
-        gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController; 
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
+        Managers.GameManagerEx.OnPlayerSpawnWithControllerModule(controller);
     }
 
 

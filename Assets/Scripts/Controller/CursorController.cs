@@ -1,3 +1,4 @@
+using GameManagers;
 using UnityEngine;
 
 namespace Controller

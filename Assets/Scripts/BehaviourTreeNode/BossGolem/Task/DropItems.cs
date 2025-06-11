@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Data.DataType.ItemType.Interface;
+using GameManagers;
 using Unity.Netcode;
 using UnityEngine;
 

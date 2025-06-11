@@ -1,4 +1,5 @@
 using Controller;
+using GameManagers;
 using UnityEngine;
 
 public class Module_Call_ToFollwingCamera : MonoBehaviour

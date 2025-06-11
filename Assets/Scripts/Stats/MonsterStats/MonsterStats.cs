@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.DataType.StatType;
+using GameManagers;
 
 public abstract class MonsterStats : BaseStats
 {

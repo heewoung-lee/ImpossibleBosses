@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Controller.BossState;
 using Controller.ControllerStats;
+using GameManagers;
 using UnityEngine;
 
 namespace BehaviourTreeNode.BossGolem.Task

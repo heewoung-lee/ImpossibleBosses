@@ -1,6 +1,7 @@
 using System.Collections;
 using Controller;
 using Controller.ControllerStats;
+using GameManagers;
 using UnityEngine;
 
 public class Skill_Slash : Skill_Immedialty

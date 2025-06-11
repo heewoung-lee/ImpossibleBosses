@@ -1,4 +1,7 @@
-public interface IManagerIResettable
+namespace GameManagers
 {
-    public void Clear();
+    public interface IManagerIResettable
+    {
+        public void Clear();
+    }
 }

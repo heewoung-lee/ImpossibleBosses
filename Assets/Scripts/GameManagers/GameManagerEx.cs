@@ -51,6 +51,22 @@ namespace GameManagers
             }
         }
 
+        private Action<PlayerController> _onPlayerSpawnwithController;
+        public event Action<PlayerController> OnPlayerSpawnwithController
+        {
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnwithController, value);                
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnwithController, value);
+            }
+        }
+        public void OnPlayerSpawnWithControllerModule(PlayerController playerController)
+        {
+            _onPlayerSpawnwithController?.Invoke(playerController);
+        }
 
         public GameObject Player { get => _player; }
         public GameObject BossMonster { get => _bossMonster; }

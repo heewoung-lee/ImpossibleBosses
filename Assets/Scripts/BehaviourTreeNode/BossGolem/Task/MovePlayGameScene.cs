@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using GameManagers;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {

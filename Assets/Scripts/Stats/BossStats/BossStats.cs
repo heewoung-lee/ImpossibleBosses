@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLayerMask;
 using System.Collections.Generic;
 using Data.DataType.StatType;
+using GameManagers;
 using UnityEngine;
 
 public abstract class BossStats : BaseStats, IAttackRange

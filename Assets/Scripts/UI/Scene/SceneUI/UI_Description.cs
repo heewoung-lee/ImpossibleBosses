@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using GameManagers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

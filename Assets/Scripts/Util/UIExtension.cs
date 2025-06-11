@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
+using GameManagers;
 using JetBrains.Annotations;
 using UnityEngine.Events;
 
