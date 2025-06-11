@@ -17,7 +17,7 @@ namespace GameManagers
 
     public class LogInManager
     {
-        private const string SPREEDSHEETID = "1SKhi41z1KRfHI6KwhQ2iM3mSjgLZKXw7_VopoIEZYNQ";
+        private const string Spreedsheetid = "1SKhi41z1KRfHI6KwhQ2iM3mSjgLZKXw7_VopoIEZYNQ";
 
         private static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         enum SheetIndex
@@ -27,10 +27,10 @@ namespace GameManagers
             NickName,
             RowNumber
         }
-        private const string USER_AUTHENTICATE_DATASHEET_NAME = "UserAuthenticateData";
+        private const string UserAuthenticateDatasheetName = "UserAuthenticateData";
 
         private GoogleDataBaseStruct _googleDataBaseStruct;
-        private PlayerLoginInfo currentPlayerInfo;
+        private PlayerLoginInfo _currentPlayerInfo;
 
 
         GoogleDataBaseStruct GoogleUserDataSheet
@@ -40,36 +40,36 @@ namespace GameManagers
                 if(_googleDataBaseStruct.Equals(default(GoogleDataBaseStruct)))
                 {
                     _googleDataBaseStruct = Managers.DataManager.DatabaseStruct;
-                    _googleDataBaseStruct.SpreedSheetID = SPREEDSHEETID;
+                    _googleDataBaseStruct.SpreedSheetID = Spreedsheetid;
                 }
                 return _googleDataBaseStruct;
             }
         }
-        public PlayerLoginInfo CurrentPlayerInfo { get { return currentPlayerInfo; } }
+        public PlayerLoginInfo CurrentPlayerInfo { get { return _currentPlayerInfo; } }
         public PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
         {
             //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
             //있으면 로비창으로 씬전환
             //없으면 오류메세지 출력
             Spreadsheet spreadsheet = Managers.DataManager.GetGoogleSheetData(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId);
-            Sheet UserAthenticateData = null;
+            Sheet userAthenticateData = null;
             bool ischeckSamePlayerLoginfo = false;
             foreach (Sheet sheet in spreadsheet.Sheets)
             {
-                if (sheet.Properties.Title == USER_AUTHENTICATE_DATASHEET_NAME)
+                if (sheet.Properties.Title == UserAuthenticateDatasheetName)
                 {
-                    UserAthenticateData = sheet;
+                    userAthenticateData = sheet;
                     break;
                 }
             }
 
-            if (UserAthenticateData == null)
+            if (userAthenticateData == null)
             {
-                Debug.LogError($"Not Found {USER_AUTHENTICATE_DATASHEET_NAME} Sheet");
+                Debug.LogError($"Not Found {UserAuthenticateDatasheetName} Sheet");
                 return default;
             }
 
-            string range = $"{UserAthenticateData.Properties.Title}!A1:Z"; // 필요한 범위 지정 전부 다 읽겠다.
+            string range = $"{userAthenticateData.Properties.Title}!A1:Z"; // 필요한 범위 지정 전부 다 읽겠다.
             SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
             ValueRange response = request.Execute();
 
@@ -91,7 +91,7 @@ namespace GameManagers
                     string nickNameData = idData != null && pwData != null && row.Count > 2
                         ? row[(int)SheetIndex.NickName].ToString() : "";
 
-                    currentPlayerInfo = new PlayerLoginInfo()
+                    _currentPlayerInfo = new PlayerLoginInfo()
                     {
                         ID = idData,
                         Password = pwData,
@@ -99,12 +99,12 @@ namespace GameManagers
                         RowNumber = rowIndex,
                     };
                 }
-                ischeckSamePlayerLoginfo = action.Invoke(currentPlayerInfo);
+                ischeckSamePlayerLoginfo = action.Invoke(_currentPlayerInfo);
 
                 if (ischeckSamePlayerLoginfo == false)
                     continue;
                 else
-                    return currentPlayerInfo;
+                    return _currentPlayerInfo;
             }
             return default;
         }
@@ -173,7 +173,7 @@ namespace GameManagers
             };
 
             // 범위 설정: 시트 이름과 범위를 지정
-            string range = $"{USER_AUTHENTICATE_DATASHEET_NAME}!A1:Z"; // 시트 이름과 범위 (A열~C열)
+            string range = $"{UserAuthenticateDatasheetName}!A1:Z"; // 시트 이름과 범위 (A열~C열)
 
             // 업데이트 요청 생성
             SpreadsheetsResource.ValuesResource.AppendRequest appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadsheetId, range);
@@ -213,7 +213,7 @@ namespace GameManagers
                 Values = values
             };
             // 범위 설정: 시트 이름과 범위를 지정
-            string writeRange = $"{USER_AUTHENTICATE_DATASHEET_NAME}!C{playerInfo.RowNumber+1}"; // 예: "A2:B2" 특정 위치
+            string writeRange = $"{UserAuthenticateDatasheetName}!C{playerInfo.RowNumber+1}"; // 예: "A2:B2" 특정 위치
             SpreadsheetsResource.ValuesResource.UpdateRequest updateRequest = service.Spreadsheets.Values.Update(valueRange, spreadsheetId, writeRange);
             updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
             try

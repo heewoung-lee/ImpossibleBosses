@@ -13,7 +13,7 @@ public class Module_UI_Description : MonoBehaviour
         {
             if(_description == null)
             {
-                _description = Managers.UI_Manager.GetSceneUIFromResource<UI_Description>();
+                _description = Managers.UIManager.GetSceneUIFromResource<UI_Description>();
             }
 
             return _description;

@@ -67,7 +67,7 @@ public class UI_CreateNickName : UI_Popup
         }
         else
         {
-            Managers.UI_Manager.ClosePopupUI(this);
+            Managers.UIManager.ClosePopupUI(this);
         }
     }
 }

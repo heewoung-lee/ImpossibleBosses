@@ -23,7 +23,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
         {
             if (_ui_Stage_Timer == null)
             {
-                _ui_Stage_Timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
+                _ui_Stage_Timer = Managers.UIManager.GetOrCreateSceneUI<UI_Stage_Timer>();
             }
             return _ui_Stage_Timer;
         }
@@ -65,7 +65,7 @@ public class NGO_Stage_Timer_Controller : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void RequestTimeFromServerRpc(RpcParams rpcParams = default)
     {
-        float currentCount = Managers.UI_Manager.Get_Scene_UI<UI_Stage_Timer>().CurrentTime;
+        float currentCount = Managers.UIManager.Get_Scene_UI<UI_Stage_Timer>().CurrentTime;
         ulong clientId = rpcParams.Receive.SenderClientId;
 
         SendTimeRpcToSpecificClientRpc(currentCount, RpcTarget.Single(clientId, RpcTargetUse.Temp));

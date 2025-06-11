@@ -56,9 +56,9 @@ public abstract class Module_Player_Class : MonoBehaviour
             .Where(skill => skill.Value.PlayerClass == PlayerClass)
             .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다
 
-        if (Managers.SkillManager.UI_SkillBar == null)
+        if (Managers.SkillManager.UISkillBar == null)
         {
-            Managers.SkillManager.Done_UI_SKilBar_Init_Event += AssignSkillsToUISlots;
+            Managers.SkillManager.DoneUISkilBarInitEvent += AssignSkillsToUISlots;
         }
         else
         {
@@ -74,7 +74,7 @@ public abstract class Module_Player_Class : MonoBehaviour
             GameObject skillPrefab = Managers.ResourceManager.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
             SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
             skillcomponent.SetSkillComponent(skill);
-            Transform skillLocation = Managers.SkillManager.UI_SkillBar.SetLocationSkillSlot(skillcomponent);
+            Transform skillLocation = Managers.SkillManager.UISkillBar.SetLocationSkillSlot(skillcomponent);
             skillcomponent.AttachItemToSlot(skillcomponent.gameObject, skillLocation);
         }
     }

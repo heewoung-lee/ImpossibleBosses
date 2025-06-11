@@ -25,19 +25,19 @@ public class NetworkObjectPool : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        Managers.NGO_PoolManager.Set_NGO_Pool(this);
+        Managers.NgoPoolManager.Set_NGO_Pool(this);
 
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
 
 
-        foreach ((string, int) poolingPrefabInfo in Managers.NGO_PoolManager.AutoRegisterFromFolder())
+        foreach ((string, int) poolingPrefabInfo in Managers.NgoPoolManager.AutoRegisterFromFolder())
         {
             //경로에 맞게 Root가져올 것
             GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
             if (pollingNgo_Root != null)
             {
-               Managers.RelayManager.SpawnNetworkOBJ(pollingNgo_Root);
+               Managers.RelayManager.SpawnNetworkObj(pollingNgo_Root);
             }
 
             if (pollingNgo_Root.TryGetComponent(out NGO_Pool_RootInitailize initalilze))
@@ -111,7 +111,7 @@ public class NetworkObjectPool : NetworkBehaviour
 
         NetworkObject CreateFunc()
         {
-            NetworkObject ngo = Instantiate(prefab, Managers.NGO_PoolManager.Pool_NGO_Root_Dict[prefabPath]).RemoveCloneText().GetComponent<NetworkObject>();
+            NetworkObject ngo = Instantiate(prefab, Managers.NgoPoolManager.PoolNgoRootDict[prefabPath]).RemoveCloneText().GetComponent<NetworkObject>();
             return ngo;
         }
 

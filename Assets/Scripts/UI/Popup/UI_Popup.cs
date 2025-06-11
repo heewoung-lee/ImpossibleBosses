@@ -28,9 +28,9 @@ public abstract class UI_Popup : UI_Base
 
     public void ClosePopupUI(InputAction.CallbackContext context)
     {
-        if (Managers.UI_Manager.GetTopPopUpUI(this))
+        if (Managers.UIManager.GetTopPopUpUI(this))
         {
-            Managers.UI_Manager.ClosePopupUI();
+            Managers.UIManager.ClosePopupUI();
         }
     }
 }

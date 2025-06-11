@@ -27,7 +27,7 @@ public class NGO_BattleSceneSpawn : NetworkBehaviourBase
         if (IsHost == false)
             return;
         Managers.RelayManager.SpawnToRPC_Caller();
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
+        Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
         RequestSpawnToNPC(new List<(string, Vector3)>
         {
            ("Prefabs/Enemy/Boss/Character/StoneGolem",new Vector3(10f,0f,10f))
@@ -38,7 +38,7 @@ public class NGO_BattleSceneSpawn : NetworkBehaviourBase
     {
         foreach ((string, Vector3) npcdata in npcPathAndTr)
         {
-            Managers.RelayManager.SpawnNetworkOBJ($"{npcdata.Item1}", Managers.RelayManager.NGO_ROOT.transform, position: npcdata.Item2);
+            Managers.RelayManager.SpawnNetworkObj($"{npcdata.Item1}", Managers.RelayManager.NgoRoot.transform, position: npcdata.Item2);
         }
     }
     protected override void StartInit()

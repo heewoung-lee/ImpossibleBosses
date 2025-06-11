@@ -10,7 +10,7 @@ public class UnitBattleScene : ISceneSpawnBehaviour
 
     public void Init()
     {
-        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        _ui_Loading_Scene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
     }
 
     public void SpawnOBJ()

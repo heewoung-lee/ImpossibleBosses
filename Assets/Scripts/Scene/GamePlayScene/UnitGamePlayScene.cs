@@ -13,8 +13,8 @@ public class UnitGamePlayScene : ISceneSpawnBehaviour
 
     public void Init()
     {
-        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
-        _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
+        _ui_Loading_Scene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
+        _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UI_Stage_Timer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
     public void SpawnOBJ()

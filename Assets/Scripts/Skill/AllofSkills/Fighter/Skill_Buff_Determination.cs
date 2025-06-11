@@ -55,13 +55,13 @@ public class Skill_Buff_Determination : Skill_Duration
         Managers.BufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
         (playerNgo) =>
         {
-                Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDuration);
+                Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDuration);
             }
             ,
             () =>
             {
                 StatEffect effect = new StatEffect(_determination.StatType, Value, _determination.Buffname);
-                Managers.RelayManager.NGO_RPC_Caller.Call_InitBuffer_ServerRpc(effect, Buff_IconImage_Path, SkillDuration);
+                Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, Buff_IconImage_Path, SkillDuration);
             });
     }
 }

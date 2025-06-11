@@ -4,27 +4,25 @@ using UnityEngine;
 
 namespace GameManagers
 {
-    public class UI_Manager : IManagerIResettable
+    public class UIManager : IManagerIResettable
     {
 
-        private const int SCENE_UI_SORTING_DEFAULT_VALUE = 0;
-        private const int POPUP_UI_SORTING_DEFAULT_VALUE = 30;
-        private const int DESCRIPTION_UI_SORTING_DEFAULT_VALUE = 50;
+        private const int SceneUISortingDefaultValue = 0;
+        private const int PopupUISortingDefaultValue = 30;
 
 
-        int _sorting = SCENE_UI_SORTING_DEFAULT_VALUE;
-        int _popupSorting = POPUP_UI_SORTING_DEFAULT_VALUE;
-        int _descriptionUI_Sorting = DESCRIPTION_UI_SORTING_DEFAULT_VALUE;
+        int _sorting = SceneUISortingDefaultValue;
+        int _popupSorting = PopupUISortingDefaultValue;
 
-        public int DescriptionUI_Sorting => _descriptionUI_Sorting;
 
-        private Stack<UI_Popup> _ui_Popups = new Stack<UI_Popup>();
+        private Stack<UI_Popup> _uiPopups = new Stack<UI_Popup>();
 
-        private Dictionary<Type, UI_Scene> _ui_sceneDict = new Dictionary<Type, UI_Scene>();
-        public Dictionary<Type, UI_Scene> UI_sceneDict => _ui_sceneDict;
+        private Dictionary<Type, UI_Scene> _uiSceneDict = new Dictionary<Type, UI_Scene>();
 
-        private Dictionary<Type, UI_Base> _importantPopup_UI = new Dictionary<Type, UI_Base>();
+        private Dictionary<Type, UI_Base> _importantPopupUI = new Dictionary<Type, UI_Base>();
 
+        
+        public Dictionary<Type, UI_Scene> UISceneDict => _uiSceneDict;
         public GameObject Root
         {
             get
@@ -37,30 +35,16 @@ namespace GameManagers
                 return go;
             }
         }
-
-        public GameObject UI_DamageText_Root
+        public void AddImportant_Popup_UI(UI_Base importantUI)
         {
-            get
-            {
-                GameObject go = GameObject.Find("@UI_DamageText");
-                if (go == null)
-                {
-                    go = new GameObject() { name = "@UI_DamageText" };
-                }
-                return go;
-            }
-        }
-
-        public void AddImportant_Popup_UI(UI_Base important_UI)
-        {
-            Type type = important_UI.GetType();
-            _importantPopup_UI[type] = important_UI;
+            Type type = importantUI.GetType();
+            _importantPopupUI[type] = importantUI;
         }
 
         public T GetImportant_Popup_UI<T>() where T : UI_Base
         {
 
-            if (_importantPopup_UI.TryGetValue(typeof(T), out UI_Base value))
+            if (_importantPopupUI.TryGetValue(typeof(T), out UI_Base value))
             {
                 return value as T;
             }
@@ -72,7 +56,7 @@ namespace GameManagers
         public T Get_Scene_UI<T>() where T : UI_Scene
         {
 
-            if (_ui_sceneDict.TryGetValue(typeof(T), out UI_Scene value))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene value))
             {
                 return value as T;
             }
@@ -83,7 +67,7 @@ namespace GameManagers
 
         public bool Try_Get_Scene_UI<T>(out T ui_scene) where T : UI_Scene
         {
-            if (_ui_sceneDict.TryGetValue(typeof(T), out UI_Scene scene))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene scene))
             {
                 ui_scene = scene as T;
                 return ui_scene is not null;
@@ -129,7 +113,7 @@ namespace GameManagers
         public T TryGetPopupDictAndShowPopup<T>() where T : UI_Popup
         {
             T ui_popup = TryGetPopupInDict<T>();
-            Managers.UI_Manager.ShowPopupUI(ui_popup);
+            Managers.UIManager.ShowPopupUI(ui_popup);
             return ui_popup;
         }
 
@@ -171,14 +155,14 @@ namespace GameManagers
                 go = Managers.ResourceManager.Instantiate($"{path}");
             }
             T scene = Utill.GetOrAddComponent<T>(go);
-            _ui_sceneDict.Add(typeof(T), scene);
+            _uiSceneDict.Add(typeof(T), scene);
             go.transform.SetParent(Root.transform);
 
             return scene;
         }
         public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UI_Scene
         {
-            if (_ui_sceneDict.TryGetValue(typeof(T), out UI_Scene value))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene value))
             {
                 return value as T;
             }
@@ -243,7 +227,7 @@ namespace GameManagers
 
             Canvas canvas = Utill.GetOrAddComponent<Canvas>(popup.gameObject);
             SetCanvas(canvas, true);
-            _ui_Popups.Push(popup);
+            _uiPopups.Push(popup);
 
             if (handler != null)
             {
@@ -259,10 +243,10 @@ namespace GameManagers
         public void ClosePopupUI()
         {
 
-            if (_ui_Popups.Count <= 0)
+            if (_uiPopups.Count <= 0)
                 return;
 
-            UI_Popup popup = _ui_Popups.Pop();
+            UI_Popup popup = _uiPopups.Pop();
 
             IPopupHandler handler = popup as IPopupHandler;
             if (handler != null)
@@ -288,10 +272,10 @@ namespace GameManagers
 
             Stack<UI_Popup> tempUIPopupStack = new Stack<UI_Popup>();
 
-            while (_ui_Popups.Count > 0)
+            while (_uiPopups.Count > 0)
             {
-                UI_Popup popup_ui = _ui_Popups.Pop();
-                if (popup_ui == popup)//나와 _ui_Popups에서 꺼낸 popup이 같다면 종료
+                UI_Popup popupUI = _uiPopups.Pop();
+                if (popupUI == popup)//나와 _ui_Popups에서 꺼낸 popup이 같다면 종료
                 {
                     if (handler != null)
                     {
@@ -306,19 +290,19 @@ namespace GameManagers
                 }
                 else
                 {
-                    tempUIPopupStack.Push(popup_ui); //아니라면 스택임시보관소에 저장
+                    tempUIPopupStack.Push(popupUI); //아니라면 스택임시보관소에 저장
                 }
             }
 
             while (tempUIPopupStack.Count > 0)//임시로 보관된 팝업창들을 다시 _ui_Popups에 붓는다.
             {
-                _ui_Popups.Push(tempUIPopupStack.Pop());
+                _uiPopups.Push(tempUIPopupStack.Pop());
             }
         }
 
         public void CloseAllPopupUI()
         {
-            while (_ui_Popups.Count > 0)
+            while (_uiPopups.Count > 0)
                 ClosePopupUI();
         }
         /// <summary>
@@ -356,10 +340,10 @@ namespace GameManagers
 
         public bool GetTopPopUpUI(UI_Popup popup)
         {
-            if (_ui_Popups.Count <= 0)
+            if (_uiPopups.Count <= 0)
                 return false;
 
-            if (_ui_Popups.Peek() == popup)
+            if (_uiPopups.Peek() == popup)
             {
                 return true;
             }
@@ -370,12 +354,11 @@ namespace GameManagers
         public void Clear()
         {
             CloseAllPopupUI();
-            _ui_sceneDict.Clear();
-            _importantPopup_UI.Clear();
-            _ui_Popups.Clear();
-            _sorting = SCENE_UI_SORTING_DEFAULT_VALUE;
-            _popupSorting = POPUP_UI_SORTING_DEFAULT_VALUE;
-            _descriptionUI_Sorting = DESCRIPTION_UI_SORTING_DEFAULT_VALUE;
+            _uiSceneDict.Clear();
+            _importantPopupUI.Clear();
+            _uiPopups.Clear();
+            _sorting = SceneUISortingDefaultValue;
+            _popupSorting = PopupUISortingDefaultValue;
         }
     }
 }

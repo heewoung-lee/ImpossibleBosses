@@ -116,7 +116,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
         _readyPanel.gameObject.SetActive(false);
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
-        _ui_Room_CharacterSelect = Managers.UI_Manager.Get_Scene_UI<UI_Room_CharacterSelect>();
+        _ui_Room_CharacterSelect = Managers.UIManager.Get_Scene_UI<UI_Room_CharacterSelect>();
     }
     public override void OnNetworkSpawn()
     {

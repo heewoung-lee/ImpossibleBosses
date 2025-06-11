@@ -22,7 +22,7 @@ public class Module_Player_Interaction : MonoBehaviour
         {
             if (_iconUI == null)
             {
-                _iconUI = Managers.UI_Manager.MakeUIWorldSpaceUI<UI_ShowInteraction_ICON>();
+                _iconUI = Managers.UIManager.MakeUIWorldSpaceUI<UI_ShowInteraction_ICON>();
             }
             return _iconUI;
         }
@@ -63,7 +63,7 @@ public class Module_Player_Interaction : MonoBehaviour
         if (other.TryGetComponent(out IInteraction interaction) && interaction.CanInteraction == true)
         {
             _interactionTarget = interaction;
-            IconUI.transform.SetParent(Managers.UI_Manager.Root.transform);
+            IconUI.transform.SetParent(Managers.UIManager.Root.transform);
             IconUI.gameObject.SetActive(true);
             IconUI.SetInteractionText(interaction.InteractionName, interaction.InteractionNameColor);
             IconUI.transform.position = new Vector3(other.transform.position.x, other.GetComponent<Collider>().bounds.max.y + Y_POSITION_OFFSET, other.transform.position.z);

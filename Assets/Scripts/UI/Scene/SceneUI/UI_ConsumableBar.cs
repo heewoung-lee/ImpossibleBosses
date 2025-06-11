@@ -29,7 +29,7 @@ public class UI_ConsumableBar : UI_Scene
         {
             if(_itemDragImage == null)
             {
-                _itemDragImage = Managers.UI_Manager.Get_Scene_UI<UI_ItemDragImage>();
+                _itemDragImage = Managers.UIManager.Get_Scene_UI<UI_ItemDragImage>();
             }
             return _itemDragImage;
         }
@@ -43,7 +43,7 @@ public class UI_ConsumableBar : UI_Scene
         {
             if(_ui_Description == null)
             {
-                _ui_Description = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+                _ui_Description = Managers.UIManager.Get_Scene_UI<UI_Description>();
             }
             return _ui_Description;
         }

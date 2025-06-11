@@ -10,6 +10,6 @@ public class DustParticleInitalize : Poolable,ISpawnBehavior
 {
     public void SpawnObjectToLocal(in SpawnParamBase param,string path = null)
     {
-        Managers.VFX_Manager.GenerateParticle(path, param.argPosVector3, param.argFloat);
+        Managers.VFXManager.GenerateParticle(path, param.argPosVector3, param.argFloat);
     }
 }

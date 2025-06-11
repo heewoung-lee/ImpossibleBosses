@@ -64,13 +64,13 @@ public class Skill_Buff_Roar : Skill_Duration
 
             (playerNgo) =>
             {
-                Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
+                Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
             }
             ,
             () =>
             {
                 StatEffect effect = new StatEffect(_roarModifier.StatType, Value, _roarModifier.Buffname);
-                Managers.RelayManager.NGO_RPC_Caller.Call_InitBuffer_ServerRpc(effect, Buff_IconImage_Path, SkillDuration);
+                Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, Buff_IconImage_Path, SkillDuration);
             });
     }
 }

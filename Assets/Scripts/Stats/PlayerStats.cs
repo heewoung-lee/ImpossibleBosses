@@ -85,7 +85,7 @@ public class PlayerStats : BaseStats, IAttackRange
                     _currentexp -= stat.xpRequired;
                     _level++;
                     UpdateStat();
-                    Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Level_up", gameObject.transform);
+                    Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Level_up", gameObject.transform);
                 }
             }
         }

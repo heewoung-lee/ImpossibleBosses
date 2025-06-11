@@ -39,7 +39,7 @@ public class LootItem : NetworkBehaviour,IInteraction
 
     public void SpawnBahaviour()
     {
-        _ui_player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+        _ui_player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
         _canInteraction = false;
 
         if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
@@ -122,7 +122,7 @@ private void ItemGradeEffect(IItem itemInfo)
     if (string.IsNullOrEmpty(path))
         return;
 
-    Managers.VFX_Manager.GenerateParticle(path, addParticleActionEvent: (itemEffectParticle) =>
+    Managers.VFXManager.GenerateParticle(path, addParticleActionEvent: (itemEffectParticle) =>
     {
         itemEffectParticle.transform.position = transform.position;
         itemEffectParticle.transform.SetParent(transform);

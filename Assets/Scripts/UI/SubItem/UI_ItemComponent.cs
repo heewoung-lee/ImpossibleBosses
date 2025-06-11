@@ -151,7 +151,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         {
             if (_UI_dragImageIcon == null)
             {
-                if (Managers.UI_Manager.UI_sceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
+                if (Managers.UIManager.UISceneDict.TryGetValue(typeof(UI_ItemDragImage), out UI_Scene itemDragIamge) == true)
                 {
                     _UI_dragImageIcon = itemDragIamge as UI_ItemDragImage;
                 }   
@@ -172,7 +172,7 @@ public abstract class UI_ItemComponent : UI_Base, IItem
         BindEvent(gameObject, DraggingItem, Define.UI_Event.Drag);
         BindEvent(gameObject, GetDragEnd, Define.UI_Event.DragEnd);
 
-        _decriptionObject = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+        _decriptionObject = Managers.UIManager.Get_Scene_UI<UI_Description>();
     }
 
     public void ShowDescription(PointerEventData eventdata)

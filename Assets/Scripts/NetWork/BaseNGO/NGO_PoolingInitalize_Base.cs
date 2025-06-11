@@ -63,7 +63,7 @@ public abstract class NGO_PoolingInitalize_Base : NGO_Particle_Initailize_Base
     }
     private void PoolObjectSetParent()
     {
-        if(Managers.NGO_PoolManager.Pool_NGO_Root_Dict.TryGetValue(PoolingNGO_PATH,out Transform parentTr))
+        if(Managers.NgoPoolManager.PoolNgoRootDict.TryGetValue(PoolingNGO_PATH,out Transform parentTr))
         {
             transform.SetParent(parentTr,false);
         }

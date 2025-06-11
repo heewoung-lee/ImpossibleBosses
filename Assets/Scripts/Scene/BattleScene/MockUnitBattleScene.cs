@@ -49,7 +49,7 @@ public class MockUnitBattleScene : ISceneSpawnBehaviour
             if (Managers.RelayManager.NetworkManagerEx.IsHost)
             {
                 Managers.RelayManager.Load_NGO_Prefab<NGO_BattleSceneSpawn>();
-                Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+                Managers.NgoPoolManager.Create_NGO_Pooling_Object();
             }
         }
     }
@@ -88,9 +88,9 @@ public class MockUnitBattleScene : ISceneSpawnBehaviour
     }
     private void ConnectClicent(ulong clientID)
     {
-        if (Managers.RelayManager.NGO_RPC_Caller == null)
+        if (Managers.RelayManager.NgoRPCCaller == null)
         {
-            Managers.RelayManager.Spawn_RpcCaller_Event += SpawnPlayer;
+            Managers.RelayManager.SpawnRpcCallerEvent += SpawnPlayer;
         }
         else
         {
@@ -104,7 +104,7 @@ public class MockUnitBattleScene : ISceneSpawnBehaviour
                 (int)_playerClass + (int)clientID < Enum.GetValues(typeof(Define.PlayerClass)).Length
                 ? (Define.PlayerClass)((int)_playerClass + (int)clientID) : Define.PlayerClass.Archer;
             Managers.RelayManager.RegisterSelectedCharacter(clientID, playerClass);
-            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientID);
+            Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
             LoadBattleScene();
         }
     }

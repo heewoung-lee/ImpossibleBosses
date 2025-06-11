@@ -18,7 +18,7 @@ namespace GameManagers
             get
             {
                 if (_uiBufferBar == null)
-                    _uiBufferBar = Managers.UI_Manager.Get_Scene_UI<UI_BufferBar>();
+                    _uiBufferBar = Managers.UIManager.Get_Scene_UI<UI_BufferBar>();
 
                 return _uiBufferBar;
             }

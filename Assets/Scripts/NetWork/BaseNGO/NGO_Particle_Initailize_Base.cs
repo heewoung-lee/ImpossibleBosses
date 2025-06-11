@@ -10,6 +10,6 @@ public abstract class NGO_Particle_Initailize_Base : NGO_InitailizeBase
 
     public virtual void StartParticle(string path,float duration, Action<GameObject> positionAndBehaviorSetterEvent)
     {
-        Managers.VFX_Manager.SetPariclePosAndLifeCycle(ParticleNGO.gameObject, path, duration, positionAndBehaviorSetterEvent);
+        Managers.VFXManager.SetPariclePosAndLifeCycle(ParticleNGO.gameObject, path, duration, positionAndBehaviorSetterEvent);
     }
 }

@@ -69,7 +69,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     protected override void AwakeInit()
     {
         base.AwakeInit();
-        Managers.UI_Manager.AddImportant_Popup_UI(this);
+        Managers.UIManager.AddImportant_Popup_UI(this);
         Bind<Transform>(typeof(Panel_Tr));
         Bind<GameObject>(typeof(Equipment_Go));
         Transform playerTr = Get<Transform>((int)Panel_Tr.Player);
@@ -150,7 +150,7 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     }
     public void CloseDecriptionWindow()
     {
-        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
+        if (Managers.UIManager.Try_Get_Scene_UI(out UI_Description description))
         {
             description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();

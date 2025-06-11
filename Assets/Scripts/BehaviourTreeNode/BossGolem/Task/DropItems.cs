@@ -27,7 +27,7 @@ namespace BehaviourTreeNode.BossGolem.Task
             base.OnStart();
             _tree = Owner.GetComponent<BehaviorTree>();
             _ngoDropItemBehaviour = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_BossDropItemBehaviour");
-            Managers.RelayManager.SpawnNetworkOBJ(_ngoDropItemBehaviour,Managers.RelayManager.NGO_ROOT.transform);
+            Managers.RelayManager.SpawnNetworkObj(_ngoDropItemBehaviour,Managers.RelayManager.NgoRoot.transform);
             _index = 0;
             _isCallIndex = false;
 
@@ -63,7 +63,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     IItem spawnItem = Managers.ItemDataManager.GetRandomItemFromAll();
                     IteminfoStruct itemStruct = new IteminfoStruct(spawnItem);
                     NetworkObjectReference dropItemBahaviour = Managers.RelayManager.GetNetworkObject(_ngoDropItemBehaviour);
-                    Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);
+                    Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);
                 }
             }
             _isCallIndex = false;

@@ -37,7 +37,7 @@ namespace GameManagers
             TryJoinLobby,
             VivoxLogin
         }
-        private const string WAIT_LOBBY_NAME = "WaitLobby";
+        private const string WaitLobbyName = "WaitLobby";
         private PlayerIngameLoginInfo _currentPlayerInfo;
         private bool _isDoneInitEvent = false;
         private Lobby _currentLobby;
@@ -257,27 +257,27 @@ namespace GameManagers
         }
 
 
-        private async Task JoinRelayServer(Lobby lobby, Func<Lobby, Task> CheckHostAndGuestEvent)
+        private async Task JoinRelayServer(Lobby lobby, Func<Lobby, Task> checkHostAndGuestEvent)
         {
-            await CheckHostAndGuestEvent?.Invoke(lobby);
+            await checkHostAndGuestEvent?.Invoke(lobby);
         }
         private async Task RegisteLobbyCallBack(Lobby lobby,
-            Func<ILobbyChanges,Task> OnLobbyChangeEvent,
-            Func<List<LobbyPlayerJoined>,Task> OnPlayerJoinedEvent = null,
-            Func<List<int>,Task> OnPlayerLeftEvent = null)
+            Func<ILobbyChanges,Task> onLobbyChangeEvent,
+            Func<List<LobbyPlayerJoined>,Task> onPlayerJoinedEvent = null,
+            Func<List<int>,Task> onPlayerLeftEvent = null)
         {
             LobbyEventCallbacks lobbycallbacks = new LobbyEventCallbacks();
             lobbycallbacks.LobbyChanged += (ilobbyChagnges) =>
             {
-                _ = OnLobbyChangeEvent.SafeFireAndForgetInvoke(ilobbyChagnges);
+                _ = onLobbyChangeEvent.SafeFireAndForgetInvoke(ilobbyChagnges);
             };
             lobbycallbacks.PlayerJoined += (lobbyPlayerJoined) =>
             {
-                _ = OnPlayerJoinedEvent.SafeFireAndForgetInvoke(lobbyPlayerJoined);
+                _ = onPlayerJoinedEvent.SafeFireAndForgetInvoke(lobbyPlayerJoined);
             };
             lobbycallbacks.PlayerLeft += (playerLeftList) =>
             {
-                _ = OnPlayerLeftEvent.SafeFireAndForgetInvoke(playerLeftList);
+                _ = onPlayerLeftEvent.SafeFireAndForgetInvoke(playerLeftList);
             };
             try
             {
@@ -306,7 +306,7 @@ namespace GameManagers
                 Debug.Log(lobby.Name + "로비의 이름");
                 await InjectionRelayJoinCodeintoLobby(lobby, joincode);
             }
-            catch (LobbyServiceException TimeLimmitException) when (TimeLimmitException.Message.Contains("Rate limit has been exceeded"))
+            catch (LobbyServiceException timeLimmitException) when (timeLimmitException.Message.Contains("Rate limit has been exceeded"))
             {
                 await Utill.RateLimited(async () => await CheckHostRelay(lobby));
                 return;
@@ -355,10 +355,10 @@ namespace GameManagers
                     IsPrivate = false,
                     Data = new Dictionary<string, DataObject>
                     {
-                        {WAIT_LOBBY_NAME,new DataObject(DataObject.VisibilityOptions.Public,"PlayerWaitLobbyRoom") }
+                        {WaitLobbyName,new DataObject(DataObject.VisibilityOptions.Public,"PlayerWaitLobbyRoom") }
                     }
                 };
-                await TryJoinLobbyByNameOrCreateLobby(WAIT_LOBBY_NAME, 100, waitLobbyoption);
+                await TryJoinLobbyByNameOrCreateLobby(WaitLobbyName, 100, waitLobbyoption);
             }
             catch (LobbyServiceException playerNotFound) when (playerNotFound.Message.Contains("player not found"))
             {
@@ -864,7 +864,7 @@ namespace GameManagers
                 return;
 
 
-            if (_isRefreshing || Managers.UI_Manager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
+            if (_isRefreshing || Managers.UIManager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
             {
                 return;
             }
@@ -907,10 +907,10 @@ namespace GameManagers
         private void CreateRoomInitalize(Lobby lobby)
         {
 
-            if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
+            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
                 return;
 
-            UI_Room_Info_Panel infoPanel = Managers.UI_Manager.MakeSubItem<UI_Room_Info_Panel>(room_inventory_ui.Room_Content);
+            UI_Room_Info_Panel infoPanel = Managers.UIManager.MakeSubItem<UI_Room_Info_Panel>(room_inventory_ui.Room_Content);
             infoPanel.SetRoomInfo(lobby);
         }
 

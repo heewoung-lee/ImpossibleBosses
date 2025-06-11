@@ -55,7 +55,7 @@ public class UI_UserInfo_Panel : UI_Scene
     public async void RefreshButton()
     {
         _refreshLobbyButton.interactable = false;
-        UI_Room_Inventory inventory = Managers.UI_Manager.Get_Scene_UI<UI_Room_Inventory>();
+        UI_Room_Inventory inventory = Managers.UIManager.Get_Scene_UI<UI_Room_Inventory>();
         try
         {
             await Managers.LobbyManager.ReFreshRoomList();
@@ -65,7 +65,7 @@ public class UI_UserInfo_Panel : UI_Scene
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert_Popup =  Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            UI_AlertDialog alert_Popup =  Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
             alert_Popup.SetText("오류", $"{ex}");
             _refreshLobbyButton.interactable = true;
         }
@@ -109,9 +109,9 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         if (_createRoomUI == null)
         {
-            _createRoomUI = Managers.UI_Manager.GetPopupUIFromResource<UI_CreateRoom>();
+            _createRoomUI = Managers.UIManager.GetPopupUIFromResource<UI_CreateRoom>();
         }
-        Managers.UI_Manager.ShowPopupUI(_createRoomUI);
+        Managers.UIManager.ShowPopupUI(_createRoomUI);
     }
 
     private void ShowUserNickName()

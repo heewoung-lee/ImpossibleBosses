@@ -14,41 +14,41 @@ namespace GameManagers
     public class RelayManager
     {
 
-        private Action _spawn_RpcCaller_Event;
+        private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
         private string _joinCode;
         private Allocation _allocation;
-        private GameObject _nGO_ROOT_UI;
-        private GameObject _nGO_ROOT;
-        private NGO_RPC_Caller _nGO_RPC_Caller;
+        private GameObject _nGoRootUI;
+        private GameObject _nGoRoot;
+        private NGO_RPC_Caller _ngoRPCCaller;
         private Define.PlayerClass _choicePlayerCharacter;
         private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
-        public event Action Spawn_RpcCaller_Event
+        public event Action SpawnRpcCallerEvent
         {
             add
             {
-                if (_spawn_RpcCaller_Event != null && _spawn_RpcCaller_Event.GetInvocationList().Contains(value) == false)
+                if (_spawnRpcCallerEvent != null && _spawnRpcCallerEvent.GetInvocationList().Contains(value) == false)
                     return;
 
-                _spawn_RpcCaller_Event += value;
+                _spawnRpcCallerEvent += value;
             }
             remove
             {
-                if(_spawn_RpcCaller_Event == null || _spawn_RpcCaller_Event.GetInvocationList().Contains(value) == false)
+                if(_spawnRpcCallerEvent == null || _spawnRpcCallerEvent.GetInvocationList().Contains(value) == false)
                 {
                     Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
                     return;
                 }
 
-                _spawn_RpcCaller_Event -= value;
+                _spawnRpcCallerEvent -= value;
             }
         }
 
 
         public void Invoke_Spawn_RPCCaller_Event()
         {
-            _spawn_RpcCaller_Event?.Invoke();
+            _spawnRpcCallerEvent?.Invoke();
         }
 
 
@@ -77,45 +77,45 @@ namespace GameManagers
             }
         }
 
-        public GameObject NGO_ROOT_UI
+        public GameObject NgoRootUI
         {
             get
             {
-                if (_nGO_ROOT_UI == null && _netWorkManager.IsHost)
+                if (_nGoRootUI == null && _netWorkManager.IsHost)
                 {
-                    _nGO_ROOT_UI = SpawnNetworkOBJ("Prefabs/NGO/NGO_ROOT_UI");
+                    _nGoRootUI = SpawnNetworkObj("Prefabs/NGO/NGO_ROOT_UI");
                 }
-                return _nGO_ROOT_UI;
+                return _nGoRootUI;
             }
         }
 
-        public GameObject NGO_ROOT
+        public GameObject NgoRoot
         {
             get
             {
-                if (_nGO_ROOT == null && _netWorkManager.IsHost)
+                if (_nGoRoot == null && _netWorkManager.IsHost)
                 {
-                    _nGO_ROOT = SpawnNetworkOBJ("Prefabs/NGO/NGO_ROOT");
+                    _nGoRoot = SpawnNetworkObj("Prefabs/NGO/NGO_ROOT");
                 }
-                return _nGO_ROOT;
+                return _nGoRoot;
             }
         }
-        public NGO_RPC_Caller NGO_RPC_Caller
+        public NGO_RPC_Caller NgoRPCCaller
         {
             get
             {
-                if (_nGO_RPC_Caller == null && NetworkManagerEx.SpawnManager != null)
+                if (_ngoRPCCaller == null && NetworkManagerEx.SpawnManager != null)
                 {
-                    foreach (NetworkObject netWorkOBJ in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
+                    foreach (NetworkObject netWorkObj in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
                     {
-                        if (netWorkOBJ.TryGetComponent(out NGO_RPC_Caller rpccaller))
+                        if (netWorkObj.TryGetComponent(out NGO_RPC_Caller rpccaller))
                         {
-                            _nGO_RPC_Caller = rpccaller;
+                            _ngoRPCCaller = rpccaller;
                             break;
                         }
                     }
                 }
-                return _nGO_RPC_Caller;
+                return _ngoRPCCaller;
             }
         }
 
@@ -123,7 +123,7 @@ namespace GameManagers
 
         public void RegisterSelectedCharacter(ulong clientId, Define.PlayerClass playerClass)
         {
-            Managers.RelayManager.NGO_RPC_Caller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
+            Managers.RelayManager.NgoRPCCaller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
             _choicePlayerCharacter = playerClass;
         }
 
@@ -145,19 +145,19 @@ namespace GameManagers
             {
                 go = Managers.ResourceManager.Instantiate($"{path}");
             }
-            go = SpawnNetworkOBJ(go, NGO_ROOT.transform);
+            go = SpawnNetworkObj(go, NgoRoot.transform);
             return go;
         }
         public GameObject Load_NGO_Prefab(string path)
         {
-            GameObject networkOBJ = SpawnNetworkOBJ(path, NGO_ROOT.transform);
-            return networkOBJ;
+            GameObject networkObj = SpawnNetworkObj(path, NgoRoot.transform);
+            return networkObj;
         }
 
 
         public void SetRPCCaller(GameObject ngo)
         {
-            _nGO_RPC_Caller = ngo.GetComponent<NGO_RPC_Caller>();
+            _ngoRPCCaller = ngo.GetComponent<NGO_RPC_Caller>();
         }
 
         public void SpawnToRPC_Caller()
@@ -165,10 +165,10 @@ namespace GameManagers
             if (_netWorkManager.IsHost == false)
                 return;
 
-            if (NGO_RPC_Caller != null)
+            if (NgoRPCCaller != null)
                 return;
 
-            Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_RPC_Caller", destroyOption: false);
+            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_RPC_Caller", destroyOption: false);
         }
         public async Task<string> StartHostWithRelay(int maxConnections)
         {
@@ -206,13 +206,13 @@ namespace GameManagers
             return default;
         }
 
-        public GameObject SpawnNetworkOBJ(string ngoPath, Transform parent = null, Vector3 position = default, bool destroyOption = true)
+        public GameObject SpawnNetworkObj(string ngoPath, Transform parent = null, Vector3 position = default, bool destroyOption = true)
         {
             return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, ngoPath, position, parent, destroyOption);
         }
-        public GameObject SpawnNetworkOBJ(GameObject ngo, Transform parent = null, Vector3 position = default, bool destroyOption = true)
+        public GameObject SpawnNetworkObj(GameObject ngo, Transform parent = null, Vector3 position = default, bool destroyOption = true)
         {
-            return SpawnAndInjectionNGO(ngo, NetworkManagerEx.LocalClientId, position, parent, destroyOption);
+            return SpawnAndInjectionNgo(ngo, NetworkManagerEx.LocalClientId, position, parent, destroyOption);
         }
 
 
@@ -221,15 +221,15 @@ namespace GameManagers
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
             GameObject instanceObj = Managers.ResourceManager.Instantiate(ngoPath, parent);
-            return SpawnAndInjectionNGO(instanceObj, clientId, position, parent, destroyOption);
+            return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
         }
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
-            return SpawnAndInjectionNGO(ngo, clientId, position, parent, destroyOption);
+            return SpawnAndInjectionNgo(ngo, clientId, position, parent, destroyOption);
         }
 
 
-        private GameObject SpawnAndInjectionNGO(GameObject instanceObj, ulong clientId, Vector3 position, Transform parent = null, bool destroyOption = true)
+        private GameObject SpawnAndInjectionNgo(GameObject instanceObj, ulong clientId, Vector3 position, Transform parent = null, bool destroyOption = true)
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
             {
@@ -249,13 +249,13 @@ namespace GameManagers
 
         public void DeSpawn_NetWorkOBJ(ulong networkObjectID)
         {
-            NGO_RPC_Caller.DeSpawnByIDServerRpc(networkObjectID);
+            NgoRPCCaller.DeSpawnByIDServerRpc(networkObjectID);
         }
 
         public void DeSpawn_NetWorkOBJ(GameObject ngoGameobject)
         {
             NetworkObjectReference despawnNgo = GetNetworkObject(ngoGameobject);
-            NGO_RPC_Caller.DeSpawnByReferenceServerRpc(despawnNgo);
+            NgoRPCCaller.DeSpawnByReferenceServerRpc(despawnNgo);
         }
 
         public async Task<bool> IsValidRelayJoinCode(string joinCode)

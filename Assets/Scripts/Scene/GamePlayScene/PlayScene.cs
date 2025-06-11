@@ -28,7 +28,7 @@ public class PlayScene : BaseScene,ISkillInit, ISceneController
     protected override void StartInit()
     {
         base.StartInit();
-        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        _ui_Loading_Scene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
        _gamePlaySceneLoadingProgress = _ui_Loading_Scene.AddComponent<GamePlaySceneLoadingProgress>();
         if (isTest == true)
         {

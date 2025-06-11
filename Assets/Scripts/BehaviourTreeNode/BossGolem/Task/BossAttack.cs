@@ -59,7 +59,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     .Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
                     .GetComponent<NGO_Indicator_Controller>();
                 _attackIndicator.Value = _indicatorController;
-                _indicatorController = Managers.RelayManager.SpawnNetworkOBJ(_indicatorController.gameObject)
+                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject)
                     .GetComponent<NGO_Indicator_Controller>();
                 float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
                 _indicatorController.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform,
@@ -70,7 +70,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (_hasSpawnedParticles) return;
                     string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
                     SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
-                    Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath,
+                    Managers.RelayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath,
                         param);
 
                     #region 5.6일 파티클 스폰방식 수정

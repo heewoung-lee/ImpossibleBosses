@@ -45,7 +45,7 @@ public class LogInTestToggle : UI_Scene
 
     private void ClickLogin()
     {
-        UI_LoginPopup loginPopup = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_LoginPopup>();
+        UI_LoginPopup loginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_LoginPopup>();
 
 
         Players currentPlayer = Players.Player1;

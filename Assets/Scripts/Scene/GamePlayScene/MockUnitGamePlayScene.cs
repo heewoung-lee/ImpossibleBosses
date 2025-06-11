@@ -71,9 +71,9 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
 
     private void ConnectClicent(ulong clientID)
     {
-        if (Managers.RelayManager.NGO_RPC_Caller == null)
+        if (Managers.RelayManager.NgoRPCCaller == null)
         {
-            Managers.RelayManager.Spawn_RpcCaller_Event += SpawnPlayer;
+            Managers.RelayManager.SpawnRpcCallerEvent += SpawnPlayer;
         }
         else
         {
@@ -85,7 +85,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
                 return;
 
             Managers.RelayManager.RegisterSelectedCharacter(clientID, _playerClass);
-            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientID);
+            Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
             LoadGamePlayScene();
         }
     }
@@ -122,7 +122,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     public async void Init()
     {
         await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
-        _ui_stage_timer = Managers.UI_Manager.GetOrCreateSceneUI<UI_Stage_Timer>();
+        _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UI_Stage_Timer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
 

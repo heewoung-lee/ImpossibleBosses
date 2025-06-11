@@ -47,7 +47,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         if (loadSceneMode != LoadSceneMode.Single)
             return;
 
-        transform.SetParent(Managers.RelayManager.NGO_ROOT.transform);
+        transform.SetParent(Managers.RelayManager.NgoRoot.transform);
     }
 
     public override void OnNetworkDespawn()

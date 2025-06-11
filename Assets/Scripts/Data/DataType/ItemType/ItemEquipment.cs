@@ -78,7 +78,7 @@ namespace Data.DataType.ItemType
             string name = null, string path = null)
         {
             UI_ItemComponent_Equipment uiEquipmentComponent
-                = Managers.UI_Manager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name,
+                = Managers.UIManager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
             if (itemCount != 1)
             {
@@ -93,7 +93,7 @@ namespace Data.DataType.ItemType
             string name = null, string path = null)
         {
             UI_ShopItemComponent uiShopItemComponent =
-                Managers.UI_Manager.MakeSubItem<UI_ShopItemComponent>(parent, name,
+                Managers.UIManager.MakeSubItem<UI_ShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UI_ShopItemComponent");
             if (itemCount != 1)
             {

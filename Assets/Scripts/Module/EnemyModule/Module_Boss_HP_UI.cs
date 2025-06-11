@@ -9,7 +9,7 @@ public class Module_Boss_HP_UI : MonoBehaviour
 {
     private void Start()
     {
-        UI_Boss_HP boss_HP_UI = Managers.UI_Manager.GetSceneUIFromResource<UI_Boss_HP>();
+        UI_Boss_HP boss_HP_UI = Managers.UIManager.GetSceneUIFromResource<UI_Boss_HP>();
     }
 
 }

@@ -22,7 +22,7 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
 
         if (IsHost)
         {
-            transform.SetParent(Managers.NGO_PoolManager.NGOPool.transform);
+            transform.SetParent(Managers.NgoPoolManager.NgoPool.transform);
         }
 
         _rootName.OnValueChanged -= OnChangedRootname;
@@ -62,8 +62,8 @@ public class NGO_Pool_RootInitailize : NetworkBehaviour
         //_poolingNgoPath가 안뜸
         if (ngo.TryGetComponent(out NGO_PoolingInitalize_Base poolingOBJ))
         {
-            Managers.NGO_PoolManager.SetPool_NGO_ROOT_Dict(poolingOBJ.PoolingNGO_PATH, transform);
-            Managers.NGO_PoolManager.NGO_Pool_RegisterPrefab(poolingOBJ.PoolingNGO_PATH, poolingOBJ.PoolingCapacity);
+            Managers.NgoPoolManager.SetPool_NGO_ROOT_Dict(poolingOBJ.PoolingNGO_PATH, transform);
+            Managers.NgoPoolManager.NGO_Pool_RegisterPrefab(poolingOBJ.PoolingNGO_PATH, poolingOBJ.PoolingCapacity);
             //딕셔너리에 각 풀마다 반납장소 등록
         }
     }

@@ -87,10 +87,10 @@ public class UI_InputRoomPassWord : UI_Popup
         catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
         {
             Debug.Log("로비를 찾을 수 없습니다");
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>().AlertSetText("오류", "로비를 찾을 수 없습니다")
+            Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>().AlertSetText("오류", "로비를 찾을 수 없습니다")
                 .AfterAlertEvent(async () =>
                 {
-                    Managers.UI_Manager.ClosePopupUI(this);
+                    Managers.UIManager.ClosePopupUI(this);
                     _confirm_Button.interactable = true;
                     await Managers.LobbyManager.ReFreshRoomList();
                 });

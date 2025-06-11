@@ -87,7 +87,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         _ui_RoomPlayerFrames = new UI_RoomPlayerFrame[MAX_PLAYER_COUNT];
         for (int index = 0; index < _ui_RoomPlayerFrames.Length; index++)
         {
-            _ui_RoomPlayerFrames[index] = Managers.UI_Manager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelect);
+            _ui_RoomPlayerFrames[index] = Managers.UIManager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelect);
         }
         _netWorkManager = Managers.RelayManager.NetworkManagerEx;
         _button_Ready = Get<Button>((int)Buttons.Button_Ready);
@@ -140,7 +140,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public void isCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
     {
-        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NGO_ROOT_UI.GetComponentsInChildren<CharacterSelectorNGO>())
+        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NgoRootUI.GetComponentsInChildren<CharacterSelectorNGO>())
         {
             if (playerNGO.GetComponent<NetworkObject>().OwnerClientId == playerIndex)
                 continue;
@@ -193,7 +193,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     protected override void StartInit()
     {
         base.StartInit();
-        _ui_LoadingPanel = Managers.UI_Manager.GetSceneUIFromResource<UI_LoadingPanel>();
+        _ui_LoadingPanel = Managers.UIManager.GetSceneUIFromResource<UI_LoadingPanel>();
         InitializeCharacterSelectionAsHost();
         Managers.LobbyManager.HostChageEvent += OnHostMigrationEvent;
     }
@@ -208,7 +208,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
             return;
         Managers.RelayManager.SpawnToRPC_Caller();
-        Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: Managers.RelayManager.NGO_ROOT_UI.transform);
+        Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: Managers.RelayManager.NgoRootUI.transform);
         SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
         SubScribeRelayCallback();
     }
@@ -279,7 +279,7 @@ public class UI_Room_CharacterSelect : UI_Scene
 
         void ClientLoadedEvent(ulong clientId)
         {
-            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientId);
+            Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientId);
             Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene + "씬네임" + "플레이어 ID" + clientId);
         }
 

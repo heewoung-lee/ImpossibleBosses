@@ -64,7 +64,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                 _indicatorController = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
                 _attackIndicator.Value = _indicatorController;
                 _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
-                _indicatorController = Managers.RelayManager.SpawnNetworkOBJ(_indicatorController.gameObject).GetComponent<NGO_Indicator_Controller>();
+                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NGO_Indicator_Controller>();
                 float totalIndicatorDurationTime = _addAttackDurationTime + _animLength;
                 _indicatorController.SetValue(_attackRange, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
                 OnBossGolemAnimationChanged(_bossGolemAnimationNetworkController, _controller.BossSkill2State);
@@ -73,7 +73,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (_hasSpawnedParticles == true) return;
                     string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle_Big";
                     SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
-                    Managers.RelayManager.NGO_RPC_Caller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
+                    Managers.RelayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
                     TargetInSight.AttackTargetInCircle(_stats, _attackRange, _damage.Value);
                     _hasSpawnedParticles = true;
                 }

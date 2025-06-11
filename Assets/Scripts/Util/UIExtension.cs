@@ -113,7 +113,7 @@ public static class UIExtension
         //ItemCOnsumable을 찾으면 UI_ItemComponent_Consumable로 연결해주고
         //ItemEquipment을 찾으면 UI_ItemComponent_Equipment로 연결해야한다.
 
-        UI_Player_Inventory inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+        UI_Player_Inventory inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
 
         if (parentTr == null)
         {
@@ -126,7 +126,7 @@ public static class UIExtension
 
     public static UI_ShopItemComponent MakeShopItemComponent(this IItem iteminfo,int price,Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
     {
-        UI_Shop shop = Managers.UI_Manager.GetImportant_Popup_UI<UI_Shop>();
+        UI_Shop shop = Managers.UIManager.GetImportant_Popup_UI<UI_Shop>();
         if (parentTr == null)
             parentTr = shop.ItemCoordinate;
 

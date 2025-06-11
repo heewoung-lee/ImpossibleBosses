@@ -81,10 +81,10 @@ namespace BehaviourTreeNode.BossGolem.Task
                         Vector3 targetPos = targetPlayer.transform.position;
 
                         SpawnParamBase skill1IndicatorParam = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: _damage.Value, argFloat: _skill1DurationTime);
-                        Managers.RelayManager.NGO_RPC_Caller.SpawnLocalObject(targetPos, _skill1IndicatorPath, skill1IndicatorParam);
+                        Managers.RelayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1IndicatorPath, skill1IndicatorParam);
 
                         SpawnParamBase skill1StoneParam = SpawnParamBase.Create(argFloat: _skill1DurationTime);
-                        Managers.RelayManager.NGO_RPC_Caller.SpawnLocalObject(targetPos, _skill1StonePath, skill1StoneParam);
+                        Managers.RelayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1StonePath, skill1StoneParam);
                         //5.6 수정 SpawnProjector(targetPlayer);
                     }
                 }

@@ -114,7 +114,7 @@ public class EquipMentSlot : MonoBehaviour, IItemUnEquip
     {
         string slotTypeName = transform.gameObject.name.Replace("_Item_Slot", "");
         slotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), slotTypeName);
-        _player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+        _player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
         contentofInventoryTr = _player_Inventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
 
         if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)

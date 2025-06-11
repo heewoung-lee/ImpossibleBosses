@@ -7,7 +7,7 @@ public class Module_PortalIndicator : MonoBehaviour
 {
     void Start()
     {
-        UI_PortalIndicator ui_ProtalIndicator = Managers.UI_Manager.MakeUIWorldSpaceUI<UI_PortalIndicator>();
+        UI_PortalIndicator ui_ProtalIndicator = Managers.UIManager.MakeUIWorldSpaceUI<UI_PortalIndicator>();
         ui_ProtalIndicator.transform.SetParent(transform);
     }
 }

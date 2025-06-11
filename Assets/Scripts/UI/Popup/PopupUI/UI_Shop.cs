@@ -74,7 +74,7 @@ public class UI_Shop : UI_Popup
         _etcItem_icon = GetImage((int)(IconImages.ETCItem_Tap));
         _tabFocusLine = GetImage((int)(IconImages.TabFocusLine));
 
-        Managers.UI_Manager.AddImportant_Popup_UI(this);
+        Managers.UIManager.AddImportant_Popup_UI(this);
         //클릭한 아이템 탭 오브젝트안에 있는 텍스트를 불러오기 위한 딕셔너리,
         //클릭할때마다 GetComponentinChildren를 호출하기 싫어서 만듦
         _findGameObjectToTMP_TextDict = new Dictionary<GameObject, (TMP_Text, ItemType)>()
@@ -141,7 +141,7 @@ public class UI_Shop : UI_Popup
     }
     public void CloseDecriptionWindow()
     {
-        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Description description))
+        if (Managers.UIManager.Try_Get_Scene_UI(out UI_Description description))
         {
             description.UI_DescriptionDisable();
             description.SetdecriptionOriginPos();

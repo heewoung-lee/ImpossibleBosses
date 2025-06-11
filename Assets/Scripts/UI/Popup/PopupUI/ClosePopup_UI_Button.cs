@@ -17,7 +17,7 @@ public class ClosePopup_UI_Button : MonoBehaviour
         _windowClose_Button = _windowClose_Button = Utill.FindChild(gameObject, "Button_Close", true).GetComponent<Button>();
         _windowClose_Button.onClick.AddListener(() =>
         {
-            Managers.UI_Manager.ClosePopupUI(parentPopup);
+            Managers.UIManager.ClosePopupUI(parentPopup);
         });
     }
 

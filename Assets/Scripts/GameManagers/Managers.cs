@@ -40,8 +40,8 @@ namespace GameManagers
         private LootItemManager _lootItemManaer = new LootItemManager();
         public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }
    
-        private NGO_PoolManager _ngo_PoolManager = new NGO_PoolManager();
-        public static NGO_PoolManager NGO_PoolManager { get => Instance._ngo_PoolManager; }
+        private NgoPoolManager _ngoPoolManager = new NgoPoolManager();
+        public static NgoPoolManager NgoPoolManager { get => Instance._ngoPoolManager; }
 
         private RelayManager _relayManager = new RelayManager();
         public static RelayManager RelayManager { get => Instance._relayManager; }
@@ -67,11 +67,11 @@ namespace GameManagers
         private SoundManager _soundManager = new SoundManager();
         public static SoundManager SoundManager { get => Instance._soundManager; }
 
-        private UI_Manager _ui_manager = new UI_Manager();
-        public static UI_Manager UI_Manager { get => Instance._ui_manager; }
+        private UIManager _uiManager = new UIManager();
+        public static UIManager UIManager { get => Instance._uiManager; }
 
-        private VFXManager _vFX_Manager = new VFXManager();
-        public static VFXManager VFX_Manager { get => Instance._vFX_Manager; }
+        private VFXManager _vfxManager = new VFXManager();
+        public static VFXManager VFXManager { get => Instance._vfxManager; }
 
         private VivoxManager _vivoxManager = new VivoxManager();
         public static VivoxManager VivoxManager { get => Instance._vivoxManager; }
@@ -149,11 +149,11 @@ namespace GameManagers
         public static void Clear()
         {
             _instance._soundManager.Clear();
-            _instance._ui_manager.Clear();
+            _instance._uiManager.Clear();
             _instance._sceneManagerEx.Clear();
             _instance._poolManager.Clear();
             _instance._resourceManager.Clear();
-            _instance._ngo_PoolManager.Clear();
+            _instance._ngoPoolManager.Clear();
             _instance._skillManager.Clear();
         }
     }

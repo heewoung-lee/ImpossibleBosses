@@ -8,56 +8,56 @@ namespace GameManagers
 {
     public struct ParticleInfo
     {
-        public bool isNetworkObject;
-        public bool isLooping;
+        public bool IsNetworkObject;
+        public bool IsLooping;
     }
 
     public class VFXManager
     {
 
-        Dictionary<string, ParticleInfo> _isCheckNGODict = new Dictionary<string, ParticleInfo>();
+        Dictionary<string, ParticleInfo> _isCheckNgoDict = new Dictionary<string, ParticleInfo>();
 
-        GameObject _vfx_Root;
+        GameObject _vfxRoot;
 
-        public Transform VFX_Root
+        public Transform VFXRoot
         {
             get
             {
-                if (_vfx_Root == null)
+                if (_vfxRoot == null)
                 {
                     GameObject root = new GameObject(name: "VFX_ROOT");
-                    _vfx_Root = root;
+                    _vfxRoot = root;
                 }
-                return _vfx_Root.transform;
+                return _vfxRoot.transform;
             }
         }
 
-        GameObject _vfx_Root_NGO;
+        GameObject _vfxRootNgo;
 
-        public Transform VFX_Root_NGO
+        public Transform VFXRootNgo
         {
             get
             {
-                if(_vfx_Root_NGO == null)
+                if(_vfxRootNgo == null)
                 {
-                    _vfx_Root_NGO = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/VFX_Root_NGO");
+                    _vfxRootNgo = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
                 }
-                return _vfx_Root_NGO.transform;
+                return _vfxRootNgo.transform;
             }
         }
 
 
         public void Set_VFX_Root_NGO(NetworkObject ngo)
         {
-            _vfx_Root_NGO = ngo.gameObject;
+            _vfxRootNgo = ngo.gameObject;
         }
         public GameObject SpawnVFXLocalOrNetwork(string path, float duration, Action rpcCallSpawnParticleEvent)
         {
-            if (_isCheckNGODict.ContainsKey(path) == false)
+            if (_isCheckNgoDict.ContainsKey(path) == false)
             {
-                CashingisCheckNGODict(path);
+                CashingisCheckNgoDict(path);
             }
-            if (_isCheckNGODict[path].isNetworkObject)
+            if (_isCheckNgoDict[path].IsNetworkObject)
             {
                 rpcCallSpawnParticleEvent.Invoke();
                 Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
@@ -90,12 +90,12 @@ namespace GameManagers
                     Debug.Log("targetNGOID isn't Found NGO");
                     return;
                 }
-                Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
+                Managers.RelayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
             }
-            void SetPositionAndChasetoTagetParticle(GameObject particleOBJ)
+            void SetPositionAndChasetoTagetParticle(GameObject particleObj)
             {
-                ParticleObjectSetPosition(particleOBJ, spawnTr.position, VFX_Root);
-                Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleOBJ));
+                ParticleObjectSetPosition(particleObj, spawnTr.position, VFXRoot);
+                Managers.ManagersStartCoroutine(FollowingGenerator(spawnTr, particleObj));
             }
         }
 
@@ -112,20 +112,20 @@ namespace GameManagers
 
             void FindNgo_Spawn()
             {
-                Managers.RelayManager.NGO_RPC_Caller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
+                Managers.RelayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
             }
             void SetPositionParticle(GameObject particleOBJ)
             {
-                ParticleObjectSetPosition(particleOBJ, spawnPos, VFX_Root);
+                ParticleObjectSetPosition(particleOBJ, spawnPos, VFXRoot);
             }
         }
 
         public GameObject SetPariclePosAndLifeCycle(GameObject particleObject, string path, float settingDuration, Action<GameObject> positionAndBehaviorSetterEvent)
         {
             positionAndBehaviorSetterEvent?.Invoke(particleObject);
-            if (_isCheckNGODict.TryGetValue(path, out ParticleInfo info))
+            if (_isCheckNgoDict.TryGetValue(path, out ParticleInfo info))
             {
-                if (info.isLooping == true)
+                if (info.IsLooping == true)
                     return particleObject;
             }
             SettingAndRuntoParticle(particleObject, settingDuration, out float maxDurationTime);
@@ -180,33 +180,33 @@ namespace GameManagers
         }
 
 
-        private void CashingisCheckNGODict(string path)
+        private void CashingisCheckNgoDict(string path)
         {
-            GameObject particleOBJ = Managers.ResourceManager.Load<GameObject>(path);
-            if (particleOBJ.TryGetComponent(out NetworkObject ngo))
+            GameObject particleObj = Managers.ResourceManager.Load<GameObject>(path);
+            if (particleObj.TryGetComponent(out NetworkObject ngo))
             {
-                _isCheckNGODict.Add(path, new ParticleInfo()
+                _isCheckNgoDict.Add(path, new ParticleInfo()
                 {
-                    isNetworkObject = true
+                    IsNetworkObject = true
                 });
             }
             else
             {
-                _isCheckNGODict.Add(path, new ParticleInfo()
+                _isCheckNgoDict.Add(path, new ParticleInfo()
                 {
-                    isNetworkObject = false
+                    IsNetworkObject = false
                 });
             }
-            ParticleInfo particleinfo = _isCheckNGODict[path];
-            if (particleOBJ.TryGetComponent(out LoopingParticle loopingParticle))
+            ParticleInfo particleinfo = _isCheckNgoDict[path];
+            if (particleObj.TryGetComponent(out LoopingParticle loopingParticle))
             {
-                particleinfo.isLooping = true;
-                _isCheckNGODict[path] = particleinfo;
+                particleinfo.IsLooping = true;
+                _isCheckNgoDict[path] = particleinfo;
             }
             else
             {
-                particleinfo.isLooping = false;
-                _isCheckNGODict[path] = particleinfo;
+                particleinfo.IsLooping = false;
+                _isCheckNgoDict[path] = particleinfo;
             }
         }
 

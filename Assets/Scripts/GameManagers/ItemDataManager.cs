@@ -10,7 +10,7 @@ namespace GameManagers
 {
     public class ItemDataManager : IManagerInitializable
     {
-        private const string ITEM_FRAME_BORDER_PATH = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
+        private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
         private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
         public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
 
@@ -52,11 +52,11 @@ namespace GameManagers
 
             _itemGradeBorder = new Dictionary<ItemGradeType, Sprite>//아이템 등급 프레임 초기화
             {
-                { ItemGradeType.Normal, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_White") },
-                { ItemGradeType.Magic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Green") },
-                { ItemGradeType.Rare, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Blue") },
-                { ItemGradeType.Unique, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Red") },
-                { ItemGradeType.Epic, Managers.ResourceManager.Load<Sprite>(ITEM_FRAME_BORDER_PATH + "/ItemFrame_01_Border_Yellow") }
+                { ItemGradeType.Normal, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_White") },
+                { ItemGradeType.Magic, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Green") },
+                { ItemGradeType.Rare, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Blue") },
+                { ItemGradeType.Unique, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Red") },
+                { ItemGradeType.Epic, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Yellow") }
             };
         }
 

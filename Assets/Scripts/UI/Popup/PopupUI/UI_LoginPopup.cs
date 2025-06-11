@@ -42,7 +42,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         {
             if (_ui_CreateNickName == null)
             {
-                _ui_CreateNickName = Managers.UI_Manager.TryGetPopupInDict<UI_CreateNickName>();
+                _ui_CreateNickName = Managers.UIManager.TryGetPopupInDict<UI_CreateNickName>();
             }
             return _ui_CreateNickName;
         }
@@ -67,14 +67,14 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         _close_Button.onClick.AddListener(OnClickCloseButton);
         _signup_Button.onClick.AddListener(ShowSignUpUI);
         _confirm_Button.onClick.AddListener(()=>AuthenticateUser(_idInputField.text, _pwInputField.text));
-        Managers.UI_Manager.AddImportant_Popup_UI(this);
+        Managers.UIManager.AddImportant_Popup_UI(this);
     }
     protected override void StartInit()
     {
     }
     public void ShowSignUpUI()
     {
-        Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_SignUpPopup>();
+        Managers.UIManager.TryGetPopupDictAndShowPopup<UI_SignUpPopup>();
     }
 
     private void OnDisable()
@@ -93,7 +93,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 
         if (Utill.IsAlphanumeric(userID) == false) //영문+숫자외 다른 문자가 섞인경우.
         {
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+            Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                 .AlertSetText("난 한글을 사랑하지만..", "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.")
                 .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
             return;
@@ -105,14 +105,14 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 
             if (playerinfo.Equals(default(PlayerLoginInfo)))
             {
-                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                     .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
                     .AfterAlertEvent(() => { _confirm_Button.interactable = true; });
                 return;
             }
             if (string.IsNullOrEmpty(playerinfo.NickName))
             {
-                Managers.UI_Manager.ShowPopupUI(UI_CreateNickName);
+                Managers.UIManager.ShowPopupUI(UI_CreateNickName);
                 UI_CreateNickName.PlayerLoginInfo = playerinfo;
                 _confirm_Button.interactable = true;
                 return;
@@ -121,7 +121,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         catch (Exception ex)
         {
             Debug.Log($"Error: {ex}\nNot Connetced Internet");
-            UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+            UI_AlertPopupBase alertDialog = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                 .AlertSetText("오류", "인터넷 연결이 안됐습니다.")
                 .AfterAlertEvent(()=> { _confirm_Button.interactable = true; });
             return;
@@ -132,7 +132,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
             bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
             if (checkPlayerNickNameAlreadyConnected is true)
             {
-                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                   .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
                   .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
                  .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
@@ -142,7 +142,7 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         catch(Exception ex)
         {
             Debug.Log($"오류{ex}");
-            Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+            Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                  .AfterAlertEvent(() => { _confirm_Button.interactable = true; })
                  .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
                 .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
@@ -152,6 +152,6 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
 
     public void OnClickCloseButton()
     {
-        Managers.UI_Manager.ClosePopupUI(this);
+        Managers.UIManager.ClosePopupUI(this);
     }
 }

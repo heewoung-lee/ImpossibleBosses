@@ -12,7 +12,7 @@ namespace GameManagers
             {
                 if(_itemRoot == null)
                 {
-                    _itemRoot = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/ItemRootNetwork");
+                    _itemRoot = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/ItemRootNetwork");
                 }
                 return _itemRoot.transform;
             }

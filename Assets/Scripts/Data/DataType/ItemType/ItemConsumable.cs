@@ -81,7 +81,7 @@ namespace Data.DataType.ItemType
             string name = null, string path = null)
         {
             UI_ItemComponent_Consumable uiConsumableComponent =
-                Managers.UI_Manager.MakeSubItem<UI_ItemComponent_Consumable>(parent, name,
+                Managers.UIManager.MakeSubItem<UI_ItemComponent_Consumable>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Consumable");
             uiConsumableComponent.IntializeItem(this, itemCount);
             return uiConsumableComponent;
@@ -91,7 +91,7 @@ namespace Data.DataType.ItemType
             string name = null, string path = null)
         {
             UI_ShopItemComponent uiShopItemComponent =
-                Managers.UI_Manager.MakeSubItem<UI_ShopItemComponent>(parent, name,
+                Managers.UIManager.MakeSubItem<UI_ShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UI_ShopItemComponent");
             uiShopItemComponent.IntializeItem(this, itemCount, itemPrice);
             return uiShopItemComponent;

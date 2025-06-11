@@ -10,7 +10,7 @@ public class LoginScene : BaseScene
     protected override void StartInit()
     {
         base.StartInit();
-        ui_login = Managers.UI_Manager.GetSceneUIFromResource<UI_LoginTitle>();
+        ui_login = Managers.UIManager.GetSceneUIFromResource<UI_LoginTitle>();
         
     }
 

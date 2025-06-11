@@ -21,7 +21,7 @@ public class Module_UI_Player_Inventory : MonoBehaviour
         }
         void InitalizeInventoryKey()
         {
-            _inventory_UI = Managers.UI_Manager.GetPopupUIFromResource<UI_Player_Inventory>();
+            _inventory_UI = Managers.UIManager.GetPopupUIFromResource<UI_Player_Inventory>();
         }
     }
 
@@ -37,7 +37,7 @@ public class Module_UI_Player_Inventory : MonoBehaviour
 
     public void Switch_Inventoy(InputAction.CallbackContext context)
     {
-        Managers.UI_Manager.SwitchPopUpUI(_inventory_UI);
+        Managers.UIManager.SwitchPopUpUI(_inventory_UI);
         
     }
 }

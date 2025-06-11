@@ -57,7 +57,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     {
         base.StartInit();
 
-        _inventory_UI = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+        _inventory_UI = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
 
         _equipSlot = _inventory_UI.gameObject.FindChild<EquipSlotTrInfo>("Left_Panel", true);
         _contentofInventoryTr = _inventory_UI.GetComponentInChildren<InventoryContentCoordinate>().transform;
@@ -114,7 +114,7 @@ public abstract class UI_ItemComponent_Inventory : UI_ItemComponent
     {
         RemoveItemFromInventory();
         IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
-        Managers.RelayManager.NGO_RPC_Caller.Spawn_Loot_ItemRpc(itemStruct,Managers.GameManagerEx.Player.transform.position);
+        Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,Managers.GameManagerEx.Player.transform.position);
     }
 
     protected void AttachItemToSlot(GameObject go, Transform slot)

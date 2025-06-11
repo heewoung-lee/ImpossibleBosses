@@ -5,15 +5,15 @@ using UnityEngine.Pool;
 
 namespace GameManagers
 {
-    public class NGO_PoolManager : IManagerIResettable
+    public class NgoPoolManager : IManagerIResettable
     {
         private NetworkObjectPool _ngoPool;
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
-        public NetworkObjectPool NGOPool => _ngoPool;
+        public NetworkObjectPool NgoPool => _ngoPool;
 
-        private Dictionary<string, Transform> _pool_NGO_Root_Dict = new Dictionary<string, Transform>();
-        public Dictionary<string, Transform> Pool_NGO_Root_Dict => _pool_NGO_Root_Dict;
+        private Dictionary<string, Transform> _poolNgoRootDict = new Dictionary<string, Transform>();
+        public Dictionary<string, Transform> PoolNgoRootDict => _poolNgoRootDict;
 
         public void Set_NGO_Pool(NetworkObjectPool ngo)
         {
@@ -24,23 +24,23 @@ namespace GameManagers
             if (Managers.RelayManager.NetworkManagerEx.IsHost == false || _ngoPool != null)
                 return;
 
-            if (Managers.RelayManager.NGO_RPC_Caller == null)
+            if (Managers.RelayManager.NgoRPCCaller == null)
             {
-                Managers.RelayManager.Spawn_RpcCaller_Event += Spawn_Ngo_Polling;
+                Managers.RelayManager.SpawnRpcCallerEvent += SpawnNgoPolling;
             }
             else
             {
-                Spawn_Ngo_Polling();
+                SpawnNgoPolling();
             }
 
-            void Spawn_Ngo_Polling()
+            void SpawnNgoPolling()
             {
-                Managers.RelayManager.NGO_RPC_Caller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
+                Managers.RelayManager.NgoRPCCaller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
             }
         }
-        public void SetPool_NGO_ROOT_Dict(string poolNgoPath,Transform RootTr)
+        public void SetPool_NGO_ROOT_Dict(string poolNgoPath,Transform rootTr)
         {
-            _pool_NGO_Root_Dict.Add(poolNgoPath, RootTr);
+            _poolNgoRootDict.Add(poolNgoPath, rootTr);
         }
         public GameObject Pop(string prefabPath,Transform parantTr = null)
         {
@@ -59,16 +59,16 @@ namespace GameManagers
 
         public List<(string, int)> AutoRegisterFromFolder()
         {
-            GameObject[] poolableNGOList = Managers.ResourceManager.LoadAll<GameObject>("Prefabs");
-            List<(string, int)> poolingOBJ_Path = new List<(string, int)>();
-            foreach (GameObject go in poolableNGOList)
+            GameObject[] poolableNgoList = Managers.ResourceManager.LoadAll<GameObject>("Prefabs");
+            List<(string, int)> poolingObjPath = new List<(string, int)>();
+            foreach (GameObject go in poolableNgoList)
             {
-                if (go.TryGetComponent(out Poolable poolable) && go.TryGetComponent(out NGO_PoolingInitalize_Base poolingOBJ))
+                if (go.TryGetComponent(out Poolable poolable) && go.TryGetComponent(out NGO_PoolingInitalize_Base poolingObj))
                 {
-                    poolingOBJ_Path.Add((poolingOBJ.PoolingNGO_PATH, poolingOBJ.PoolingCapacity));
+                    poolingObjPath.Add((poolingObj.PoolingNGO_PATH, poolingObj.PoolingCapacity));
                 }
             }
-            return poolingOBJ_Path;
+            return poolingObjPath;
         }
 
         public void NGO_Pool_RegisterPrefab(string path,int capacity = 5)
@@ -78,7 +78,7 @@ namespace GameManagers
 
         public void Clear()
         {
-            _pool_NGO_Root_Dict.Clear();
+            _poolNgoRootDict.Clear();
         }
 
     }

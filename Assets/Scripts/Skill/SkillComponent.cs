@@ -94,7 +94,7 @@ public class SkillComponent : UI_Base
     }
     protected override void StartInit()
     {
-        _decriptionObject = Managers.UI_Manager.Get_Scene_UI<UI_Description>();
+        _decriptionObject = Managers.UIManager.Get_Scene_UI<UI_Description>();
         
     }
 

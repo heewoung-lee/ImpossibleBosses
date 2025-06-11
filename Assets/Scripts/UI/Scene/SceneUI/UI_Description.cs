@@ -58,7 +58,7 @@ public class UI_Description : UI_Scene
         {
             if(_uI_Player_Inventory == null)
             {
-                _uI_Player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
+                _uI_Player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
             }
             return _uI_Player_Inventory;
         }

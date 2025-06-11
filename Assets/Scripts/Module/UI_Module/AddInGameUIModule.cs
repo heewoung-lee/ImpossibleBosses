@@ -22,7 +22,7 @@ public class AddInGameUIModule : MonoBehaviour
         gameObject.AddComponent<Module_UI_SkillBar>();
         gameObject.AddComponent<Module_UI_Description>();
 
-        Managers.NGO_PoolManager.Create_NGO_Pooling_Object();
+        Managers.NgoPoolManager.Create_NGO_Pooling_Object();
 
     }
 }

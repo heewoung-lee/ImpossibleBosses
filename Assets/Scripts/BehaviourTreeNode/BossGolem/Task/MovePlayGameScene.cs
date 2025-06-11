@@ -13,8 +13,8 @@ namespace BehaviourTreeNode.BossGolem.Task
         private ISceneMover _sceneMover;
         public override void OnStart()
         {
-            _ngoMoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NGO_MoveDownTownBehaviour>();
-            _ngoStageTimerController = Managers.RelayManager.SpawnNetworkOBJ("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NGO_Stage_Timer_Controller>();
+            _ngoMoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NGO_MoveDownTownBehaviour>();
+            _ngoStageTimerController = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NGO_Stage_Timer_Controller>();
             _sceneMoverController = ((ISceneController)Managers.SceneManagerEx.GetCurrentScene).SceneMoverController;//씬 무버가 없다면 오류뜨도록 설계
             _ngoStageTimerController.UI_Stage_Timer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.nextscene.MoveScene;
             _tree = Owner.GetComponent<BehaviorTree>();

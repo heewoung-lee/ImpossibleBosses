@@ -47,7 +47,7 @@ public class UI_ItemComponent_Consumable : UI_ItemComponent_Inventory
     protected override void StartInit()
     {
         base.StartInit();
-        _consumableBar = Managers.UI_Manager.Get_Scene_UI<UI_ConsumableBar>();
+        _consumableBar = Managers.UIManager.Get_Scene_UI<UI_ConsumableBar>();
         _itemCount_Text.text = $"{_itemCount}";
         CombineConsumableItems();
     }

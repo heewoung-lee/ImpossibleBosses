@@ -32,7 +32,7 @@ public class PlaySceneMockUnitTest : BaseScene
     protected override async void StartInit()
     {
         base.StartInit();
-        _ui_Loading_Scene = Managers.UI_Manager.GetOrCreateSceneUI<UI_Loading>();
+        _ui_Loading_Scene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
         await JoinChannel();
     }
     private async Task JoinChannel()
@@ -71,9 +71,9 @@ public class PlaySceneMockUnitTest : BaseScene
 
     private void ConnectClicent(ulong clientID)
     {
-        if (Managers.RelayManager.NGO_RPC_Caller == null)
+        if (Managers.RelayManager.NgoRPCCaller == null)
         {
-            Managers.RelayManager.Spawn_RpcCaller_Event += SpawnPlayer;
+            Managers.RelayManager.SpawnRpcCallerEvent += SpawnPlayer;
         }
         else
         {
@@ -85,7 +85,7 @@ public class PlaySceneMockUnitTest : BaseScene
                 return;
 
             Managers.RelayManager.RegisterSelectedCharacter(clientID, PlayerClass);
-            Managers.RelayManager.NGO_RPC_Caller.GetPlayerChoiceCharacterRpc(clientID);
+            Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
             LoadGamePlayScene();
         }
     }

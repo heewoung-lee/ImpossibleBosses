@@ -6,12 +6,12 @@ namespace GameManagers
 {
     public class SpawningPool : MonoBehaviour
     {
-        [SerializeField] private int _monsterCount = 0;
-        [SerializeField] private int _reserveMonsterCount = 0;
-        [SerializeField] private int _keepMonsterCount = 0;
-        [SerializeField] private Vector3 _spawnPosition = Vector3.zero;
-        [SerializeField] private float _spawnRange = 15f;
-        [SerializeField] private float _spawnTime = 5f;
+        private int _monsterCount = 0;
+        private int _reserveMonsterCount = 0;
+        private int _keepMonsterCount = 0;
+        private Vector3 _spawnPosition = Vector3.zero;
+        private float _spawnRange = 15f;
+        private float _spawnTime = 5f;
 
         public void AddCount(int value)
         {

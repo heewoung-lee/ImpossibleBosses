@@ -51,14 +51,14 @@ public class Skill_Taunt : Skill_Immedialty
 
     public override void SkillAction()
     {
-        Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Taunt_Player", _playerController.transform, DURATION_PARTICLE);
+        Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Taunt_Player", _playerController.transform, DURATION_PARTICLE);
         _monsters = Managers.BufferManager.DetectedOther("Monster");
         foreach (Collider monster in _monsters)
         {
             HeadTr headTr = monster.GetComponentInChildren<HeadTr>();
             if (headTr != null)
             {
-                Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
+                Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Taunt_Enemy", headTr.transform, DURATION_PARTICLE);
             }
         }
     }

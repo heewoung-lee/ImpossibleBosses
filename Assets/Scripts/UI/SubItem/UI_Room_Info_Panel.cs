@@ -56,7 +56,7 @@ public class UI_Room_Info_Panel : UI_Base
     {
         if (_lobbyRegisteredPanel.HasPassword)
         {
-            UI_InputRoomPassWord ui_inputPassword = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
+            UI_InputRoomPassWord ui_inputPassword = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_InputRoomPassWord>();
             ui_inputPassword.SetRoomInfoPanel(this);
         }
         else
@@ -74,7 +74,7 @@ public class UI_Room_Info_Panel : UI_Base
             {
                 string errorMsg = "방이 없습니다.";
                 Debug.Log($"{errorMsg}");
-                Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                     .AlertSetText("오류",$"{errorMsg}")
                     .AfterAlertEvent(async() =>
                     {

@@ -12,7 +12,7 @@ public class Module_Damage_Text : MonoBehaviour
     }
     public void ShowDamageText_UI(int damage, int currentHp)
     {
-        UI_DamageText uI_DamageText = Managers.UI_Manager.MakeUIWorldSpaceUI<UI_DamageText>();
+        UI_DamageText uI_DamageText = Managers.UIManager.MakeUIWorldSpaceUI<UI_DamageText>();
         uI_DamageText.SetTextAndPosition(transform, damage);
         uI_DamageText.transform.SetParent(transform);
     }

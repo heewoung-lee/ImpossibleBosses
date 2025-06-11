@@ -19,16 +19,16 @@ public class Module_NPC_SHOP_Interaction : MonoBehaviour, IInteraction
     }
     private void Start()
     {
-        _ui_shop = Managers.UI_Manager.GetPopupUIFromResource<UI_Shop>();
-        Managers.UI_Manager.ClosePopupUI(_ui_shop);
+        _ui_shop = Managers.UIManager.GetPopupUIFromResource<UI_Shop>();
+        Managers.UIManager.ClosePopupUI(_ui_shop);
     }
     public void Interaction(Module_Player_Interaction caller)
     {
-        Managers.UI_Manager.SwitchPopUpUI(_ui_shop);
+        Managers.UIManager.SwitchPopUpUI(_ui_shop);
     }
     public void OutInteraction()
     {
-        Managers.UI_Manager.ClosePopupUI(_ui_shop);
+        Managers.UIManager.ClosePopupUI(_ui_shop);
     }
 
 }

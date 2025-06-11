@@ -5,7 +5,7 @@ namespace GameManagers
 {
     public class PoolManager : IManagerInitializable,IManagerIResettable
     {
-        public Dictionary<string, Pool> _pools = new Dictionary<string, Pool>();
+        private Dictionary<string, Pool> _pools = new Dictionary<string, Pool>();
         private Transform _rootTransform;
         #region Pool
         public class Pool

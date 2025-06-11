@@ -34,8 +34,8 @@ public class RoomSceneMockUnitTest : BaseScene
         base.StartInit();
         await JoinChannel();
         Managers.RelayManager.SpawnToRPC_Caller();
-        UI_Room_CharacterSelect uI_CharacterSelect = Managers.UI_Manager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
-        UI_RoomChat ui_Chatting = Managers.UI_Manager.GetSceneUIFromResource<UI_RoomChat>();
+        UI_Room_CharacterSelect uI_CharacterSelect = Managers.UIManager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
+        UI_RoomChat ui_Chatting = Managers.UIManager.GetSceneUIFromResource<UI_RoomChat>();
     }
 
     private async Task JoinChannel()

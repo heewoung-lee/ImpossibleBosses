@@ -39,9 +39,9 @@ namespace GameManagers
 
             if (_cachingPoolableObject.TryGetValue(path, out GameObject cachedPrefab))
             {
-                if (isCheckNetworkPrefab(cachedPrefab))
+                if (IsCheckNetworkPrefab(cachedPrefab))
                 {
-                    return Managers.NGO_PoolManager.Pop(path);
+                    return Managers.NgoPoolManager.Pop(path);
                 }
                 else
                 {
@@ -65,9 +65,9 @@ namespace GameManagers
             if (prefab.GetComponent<Poolable>() != null)
             {
                 _cachingPoolableObject[path] = prefab;//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
-                if (isCheckNetworkPrefab(prefab))
+                if (IsCheckNetworkPrefab(prefab))
                 {
-                    return Managers.NGO_PoolManager.Pop(path, parent);
+                    return Managers.NgoPoolManager.Pop(path, parent);
                 }
                 else
                 {
@@ -94,7 +94,7 @@ namespace GameManagers
             return parentTr;
         }
 
-        private bool isCheckNetworkPrefab(GameObject prefab)
+        private bool IsCheckNetworkPrefab(GameObject prefab)
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
             {
@@ -115,7 +115,7 @@ namespace GameManagers
                 {
                     Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
                     {
-                        Managers.NGO_PoolManager.Push(ngo);
+                        Managers.NgoPoolManager.Push(ngo);
                     }, duration));
                 }
                 else

@@ -110,13 +110,13 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
     public void TestGenerateBossSkill1()
     {
         GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
-        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root_NGO, false);
+        stone.transform.SetParent(Managers.VFXManager.VFXRootNgo, false);
         stone.transform.position = Managers.GameManagerEx.Player.transform.position + Vector3.up * 5f;
     }
 
     public void TestIteminInventort()
     {
-        if (Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>().gameObject.activeSelf == false)
+        if (Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>().gameObject.activeSelf == false)
             return;
 
         switch (itemGeneratingType)

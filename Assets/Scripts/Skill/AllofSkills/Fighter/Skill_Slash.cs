@@ -69,7 +69,7 @@ public class Skill_Slash : Skill_Immedialty
     }
     public override void SkillAction()
     {
-        Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Fighter_Slash", 
+        Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Fighter_Slash", 
             _playerController.transform, 
             addParticleActionEvent: (slashParicle) =>
         {

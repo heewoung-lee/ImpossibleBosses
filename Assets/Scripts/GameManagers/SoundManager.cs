@@ -6,7 +6,7 @@ namespace GameManagers
 {
     public class SoundManager : IManagerInitializable,IManagerIResettable
     {
-        AudioSource[] audioSources = new AudioSource[System.Enum.GetValues(typeof(Define.Sound)).Length];
+        AudioSource[] _audioSources = new AudioSource[System.Enum.GetValues(typeof(Define.Sound)).Length];
 
         Dictionary<string,AudioClip> _sfxDictionnary = new Dictionary<string,AudioClip>();
 
@@ -38,11 +38,11 @@ namespace GameManagers
             for (int i = 0; i< _soundsType.Length; i++)
             {
                 GameObject sound = new GameObject() { name = _soundsType[i]};
-                audioSources[i] = Utill.GetOrAddComponent<AudioSource>(sound);
+                _audioSources[i] = Utill.GetOrAddComponent<AudioSource>(sound);
                 sound.transform.parent = go.transform;
             }
 
-            audioSources[(int)Define.Sound.BGM].loop = true;
+            _audioSources[(int)Define.Sound.BGM].loop = true;
         }
 
 
@@ -58,7 +58,7 @@ namespace GameManagers
             if (clip == null)
                 return;
 
-            AudioSource source = audioSources[(int)type];
+            AudioSource source = _audioSources[(int)type];
 
             if (type == Define.Sound.BGM)
             {
@@ -81,7 +81,7 @@ namespace GameManagers
 
         public void Clear()
         {
-            foreach(AudioSource audiosource in audioSources)
+            foreach(AudioSource audiosource in _audioSources)
             {
                 audiosource.Stop();
                 audiosource.clip = null;

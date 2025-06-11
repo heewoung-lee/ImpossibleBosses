@@ -69,9 +69,9 @@ public class GamePlaySceneLoadingProgress : UI_Base
         _totalPlayerCount = Managers.RelayManager.CurrentUserCount;
 
 
-        if(Managers.RelayManager.NGO_RPC_Caller == null)
+        if(Managers.RelayManager.NgoRPCCaller == null)
         {
-            Managers.RelayManager.Spawn_RpcCaller_Event += LoadPlayerInit;
+            Managers.RelayManager.SpawnRpcCallerEvent += LoadPlayerInit;
         }
         else
         {
@@ -79,8 +79,8 @@ public class GamePlaySceneLoadingProgress : UI_Base
         }
         void LoadPlayerInit()
         {
-            LoadedPlayerCount = Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount;
-            SetisAllPlayerLoaded(Managers.RelayManager.NGO_RPC_Caller.IsAllPlayerLoaded);
+            LoadedPlayerCount = Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount;
+            SetisAllPlayerLoaded(Managers.RelayManager.NgoRPCCaller.IsAllPlayerLoaded);
         }
 
     }
@@ -140,7 +140,7 @@ public class GamePlaySceneLoadingProgress : UI_Base
             loadsceneImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
         }
 
-        Managers.RelayManager.NGO_RPC_Caller.LoadedPlayerCount = 0;
+        Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount = 0;
         _loadedPlayerCount = 0;
     }
 }

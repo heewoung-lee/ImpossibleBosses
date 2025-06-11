@@ -90,7 +90,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
                 value = int.Parse(passWord);
                 if ((float)value / 10000000 < 1)
                 {
-                    UI_AlertPopupBase alertDialog = Managers.UI_Manager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
+                    UI_AlertPopupBase alertDialog = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>()
                    .AlertSetText("오류", "비밀번호는 8자리 이상");
                     _button_connect.interactable = true;
                     return;
@@ -133,7 +133,7 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
     }
     public void OnClickCloseButton()
     {
-        Managers.UI_Manager.ClosePopupUI(this);
+        Managers.UIManager.ClosePopupUI(this);
     }
     protected override void StartInit()
     {

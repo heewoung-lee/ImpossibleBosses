@@ -74,7 +74,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         string choiceCharacterName = Managers.RelayManager.ChoicePlayerCharactersDict[clientId].ToString();
         Vector3 targetPosition = new Vector3(1 * clientId, 0, 1);
-        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NGO_ROOT.transform,false);
+        Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NgoRoot.transform,false);
     }
 
     public override void OnNetworkSpawn()
@@ -139,7 +139,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
         //여기에서는 어떤 아이템을 스폰할껀지 아이템의 형상만 가져올 것.
         networkLootItem.GetComponent<LootItem>().SetPosition(dropPosition);
-        GameObject rootItem = Managers.RelayManager.SpawnNetworkOBJ(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
+        GameObject rootItem = Managers.RelayManager.SpawnNetworkObj(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
         NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
         SetDropItemInfoRpc(itemStruct, rootItemRef, addLootItemBehaviour);
     }
@@ -195,13 +195,13 @@ public class NGO_RPC_Caller : NetworkBehaviour
     private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default)
     {
 
-        if (Managers.NGO_PoolManager.PooledObjects.ContainsKey(path))
+        if (Managers.NgoPoolManager.PooledObjects.ContainsKey(path))
         {
             //return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
             return SpawnObjectToResources(path, position);
         }
         //4.28일 NGO_CALLER가 부모까지 지정하는건 책임소재에서 문제가 될 수 있어서 이부분은 각자 풀 오브젝트 초기화 부분에서 부모를 지정하도록 함
-        return SpawnObjectToResources(path, position, Managers.VFX_Manager.VFX_Root_NGO);
+        return SpawnObjectToResources(path, position, Managers.VFXManager.VFXRootNgo);
     }
 
 
@@ -210,7 +210,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         GameObject obj = Managers.ResourceManager.Instantiate(path);
         obj.transform.position = position;
         NetworkObject networkObj;
-        networkObj = Managers.RelayManager.SpawnNetworkOBJ(obj, parentTr, position).GetComponent<NetworkObject>();
+        networkObj = Managers.RelayManager.SpawnNetworkObj(obj, parentTr, position).GetComponent<NetworkObject>();
         return networkObj;
     }
 
@@ -247,7 +247,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
                 {
                     skillInitailze.SetTargetInitalze(targetNgo);
-                    positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFX_Manager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
+                    positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFXManager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
                 }
                 skillInitailze.StartParticle(path, duration, positionAndBehaviorSetterEvent);
             }
@@ -304,7 +304,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void LoadedPlayerCountRpc()
     {
-        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Loading loading))
+        if (Managers.UIManager.Try_Get_Scene_UI(out UI_Loading loading))
         {
             if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
             {
@@ -316,7 +316,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void SetisAllPlayerLoadedRpc(bool isAllplayerLoaded)
     {
-        if (Managers.UI_Manager.Try_Get_Scene_UI(out UI_Loading loading))
+        if (Managers.UIManager.Try_Get_Scene_UI(out UI_Loading loading))
         {
             if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
             {

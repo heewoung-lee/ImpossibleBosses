@@ -42,7 +42,7 @@ namespace Controller
 
         private void InstantiateMoveMarker(Vector3 markerPosition)
         {
-            Managers.VFX_Manager.GenerateParticle("Prefabs/Paticle/WayPointEffect/Move", markerPosition);
+            Managers.VFXManager.GenerateParticle("Prefabs/Paticle/WayPointEffect/Move", markerPosition);
         }
     }
 }

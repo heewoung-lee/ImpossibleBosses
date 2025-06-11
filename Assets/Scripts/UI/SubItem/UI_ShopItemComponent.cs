@@ -80,8 +80,8 @@ public class UI_ShopItemComponent : UI_ItemComponent
         base.StartInit();
         _itemName_Text.text = _itemName;
         _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-        _ui_Player_Inventory = Managers.UI_Manager.GetImportant_Popup_UI<UI_Player_Inventory>();
-        _ui_Shop = Managers.UI_Manager.GetImportant_Popup_UI<UI_Shop>();
+        _ui_Player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
+        _ui_Shop = Managers.UIManager.GetImportant_Popup_UI<UI_Shop>();
         _itemGradeBorder_Image.sprite = Managers.ItemDataManager.ItemGradeBorder[ItemGradeType];
 
 

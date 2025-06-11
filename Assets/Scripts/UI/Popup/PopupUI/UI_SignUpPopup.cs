@@ -71,23 +71,23 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
 
     public void ShowLoginAfterSignUp()
     {
-        Managers.UI_Manager.CloseAllPopupUI();
-        UI_LoginPopup loginPopup = Managers.UI_Manager.GetImportant_Popup_UI<UI_LoginPopup>();
-        Managers.UI_Manager.ShowPopupUI(loginPopup);
+        Managers.UIManager.CloseAllPopupUI();
+        UI_LoginPopup loginPopup = Managers.UIManager.GetImportant_Popup_UI<UI_LoginPopup>();
+        Managers.UIManager.ShowPopupUI(loginPopup);
     }
 
     private UI_AlertPopupBase ShowAlertDialogUI<T>(UI_AlertPopupBase alertBasePopup,string titleMessage,string bodyText,UnityAction closeButtonAction = null) where T: UI_AlertPopupBase
     {
         if(alertBasePopup == null)
         {
-            alertBasePopup = Managers.UI_Manager.TryGetPopupInDict<T>();
+            alertBasePopup = Managers.UIManager.TryGetPopupInDict<T>();
         }
         alertBasePopup.SetText(titleMessage, bodyText);
         if (closeButtonAction != null)
         {
             alertBasePopup.SetCloseButtonOverride(closeButtonAction);
         }
-        Managers.UI_Manager.ShowPopupUI(alertBasePopup);
+        Managers.UIManager.ShowPopupUI(alertBasePopup);
 
         return alertBasePopup;
     }
@@ -98,6 +98,6 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
 
     public void OnClickCloseButton()
     {
-        Managers.UI_Manager.ClosePopupUI(this);
+        Managers.UIManager.ClosePopupUI(this);
     }
 }

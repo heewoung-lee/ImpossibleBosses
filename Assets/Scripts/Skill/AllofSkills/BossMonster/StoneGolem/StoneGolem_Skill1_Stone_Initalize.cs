@@ -13,7 +13,7 @@ public class StoneGolem_Skill1_Stone_Initalize : Poolable, ISpawnBehavior
     {
         Collider _bossTr = Managers.GameManagerEx.BossMonster.transform.GetComponent<Collider>();
         StoneGolem_Skill1_Stone_Initalize stone = Managers.ResourceManager.Instantiate(runtimePath).GetComponent<StoneGolem_Skill1_Stone_Initalize>();
-        stone.transform.SetParent(Managers.VFX_Manager.VFX_Root, false);
+        stone.transform.SetParent(Managers.VFXManager.VFXRoot, false);
         stone.transform.position = _bossTr.transform.position + Vector3.up * _bossTr.GetComponent<Collider>().bounds.max.y;
         stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
         Vector3 targetPos = stoneParams.argPosVector3;

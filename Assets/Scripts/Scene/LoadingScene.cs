@@ -32,7 +32,7 @@ public class LoadingScene : BaseScene
 
     protected override void AwakeInit()
     {
-        _ui_loding = Managers.UI_Manager.GetSceneUIFromResource<UI_Loading>();
+        _ui_loding = Managers.UIManager.GetSceneUIFromResource<UI_Loading>();
     }
 
     private IEnumerator LoadingSceneProcess()
