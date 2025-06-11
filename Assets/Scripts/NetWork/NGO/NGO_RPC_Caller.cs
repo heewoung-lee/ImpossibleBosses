@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Buffer;
 using Data.DataType.ItemType.Interface;
+using UI.Scene.Interface;
 using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
@@ -338,6 +339,9 @@ public class NGO_RPC_Caller : NetworkBehaviour
     }
     public void SpawnNonNetworkObject(List<Vector3> pos, string objectPath, SpawnParamBase spawnParamBase)
     {
+        if (pos == null)
+            return;
+        
         int posCount = pos.Count;
         switch (posCount)
         {

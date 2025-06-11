@@ -1,3 +1,4 @@
+using Data.DataType.StatType;
 using Unity.Netcode;
 
 public class SlimeStats : MonsterStats

@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using Controller.BossState;
+using Data.DataType.StatType;
 
 public class BossGolemStats : BossStats
 {

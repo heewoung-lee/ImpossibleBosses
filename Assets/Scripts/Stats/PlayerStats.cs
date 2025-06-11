@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Data.DataType.StatType;
 using UnityEngine;
 public class PlayerStats : BaseStats, IAttackRange
 {

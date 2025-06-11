@@ -1,7 +1,8 @@
 using System;
-using Data;
 
-[Serializable]
+namespace Data.DataType.StatType
+{
+    [Serializable]
     public struct MonsterStat : IKey<int>
     {
         public int monsterID;
@@ -13,3 +14,4 @@ using Data;
 
         public int Key => monsterID;
     }
+}

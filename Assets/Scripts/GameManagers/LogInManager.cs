@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using Unity.Android.Gradle.Manifest;
 using System.Threading.Tasks;
+using GameManagers;
 using static UnityEngine.Rendering.DebugUI;
 using Google.Apis.Auth.OAuth2;
 
@@ -41,7 +42,7 @@ public class LogInManager
             if(_googleDataBaseStruct.Equals(default(GoogleDataBaseStruct)))
             {
                 _googleDataBaseStruct = Managers.DataManager.DatabaseStruct;
-                _googleDataBaseStruct._spreedSheetID = SPREEDSHEETID;
+                _googleDataBaseStruct.SpreedSheetID = SPREEDSHEETID;
             }
             return _googleDataBaseStruct;
         }

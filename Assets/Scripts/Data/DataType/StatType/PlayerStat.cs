@@ -1,7 +1,8 @@
 using System;
-using Data;
 
-[Serializable]
+namespace Data.DataType.StatType
+{
+    [Serializable]
     public struct PlayerStat : IKey<int>
     {
         public int level;
@@ -15,3 +16,4 @@ using Data;
 
         public int Key => level;
     }
+}

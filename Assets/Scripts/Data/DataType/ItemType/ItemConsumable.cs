@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Data;
 using Data.DataType.ItemType.Interface;
 using UnityEngine;
 
+namespace Data.DataType.ItemType
+{
     [Serializable]
     public class ItemConsumable : IKey<int>, IItem, IInventoryItemMaker, IItemDescriptionForm, IShopItemMaker
     {
         public int itemNumber;
-        public ItemType itemType = ItemType.Consumable;
+        public Interface.ItemType itemType = Interface.ItemType.Consumable;
         public string itemGradeText = "Normal";
         public List<StatEffect> itemEffects = new List<StatEffect>();
         public string itemName;
@@ -21,7 +22,7 @@ using UnityEngine;
 
         public int ItemNumber => itemNumber;
         public int Key => itemNumber;
-        public ItemType ItemType => itemType;
+        public Interface.ItemType ItemType => itemType;
         public ItemGradeType ItemGradeType => (ItemGradeType)System.Enum.Parse(typeof(ItemGradeType), itemGradeText);
         public List<StatEffect> ItemEffects => itemEffects;
         public string ItemName => itemName;
@@ -42,7 +43,7 @@ using UnityEngine;
         public ItemConsumable(IItem iteminfo)
         {
             itemNumber = iteminfo.ItemNumber;
-            itemType = ItemType.Consumable;
+            itemType = Interface.ItemType.Consumable;
             itemGradeText = iteminfo.ItemGradeType.ToString();
             itemEffects = iteminfo.ItemEffects;
             itemName = iteminfo.ItemName;
@@ -95,3 +96,4 @@ using UnityEngine;
             return uiShopItemComponent;
         }
     }
+}
