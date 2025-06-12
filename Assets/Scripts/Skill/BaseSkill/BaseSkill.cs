@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 using static UnityEngine.CullingGroup;
 
@@ -17,7 +18,7 @@ public abstract class BaseSkill
 
     public virtual void AddInitailzeState() { }
     public abstract BaseController PlayerController { get; protected set; }
-    public abstract Module_Player_Class Module_Player_Class { get; protected set; }
+    public abstract ModulePlayerClass Module_Player_Class { get; protected set; }
 
     public abstract void SkillAction();
 
@@ -29,7 +30,7 @@ public abstract class BaseSkill
         if (PlayerController == null || Module_Player_Class == null)
         {
             PlayerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
-            Module_Player_Class = PlayerController.GetComponent<Module_Player_Class>();
+            Module_Player_Class = PlayerController.GetComponent<ModulePlayerClass>();
             PlayerController.StateAnimDict.RegisterState(state, SkillAction);
             AddInitailzeState();
         }

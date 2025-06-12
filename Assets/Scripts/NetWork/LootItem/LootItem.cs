@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using Module.CommonModule;
+using Module.PlayerModule;
 using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -130,11 +132,11 @@ private void ItemGradeEffect(IItem itemInfo)
 }
 
 
-    public void Interaction(Module_Player_Interaction caller)
+    public void Interaction(ModulePlayerInteraction caller)
     {
         PlayerPickup(caller);
     }
-    public void PlayerPickup(Module_Player_Interaction player)
+    public void PlayerPickup(ModulePlayerInteraction player)
     {
         PlayerController base_controller = player.PlayerController;
         base_controller.CurrentStateType = base_controller.PickupState;//픽업 애니메이션 실행
@@ -159,7 +161,7 @@ private void ItemGradeEffect(IItem itemInfo)
     [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]
     public void DisEnble_Icon_UI_Rpc()
     {
-        Module_Player_Interaction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<Module_Player_Interaction>();
+        ModulePlayerInteraction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<ModulePlayerInteraction>();
         if (interaction.enabled == false)
             return;
 

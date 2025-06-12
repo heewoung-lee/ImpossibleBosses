@@ -3,6 +3,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using GameManagers;
+using Module.UI_Module;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
@@ -68,7 +69,7 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
     private bool isRunnningCoroutine = false;
     private Coroutine _cameraMoveCoroutine;
     private bool _isInitCameraPosition = false;
-    private Module_ChooseCharacter_Move _module_chooseCharacter_Move;
+    private ModuleChooseCharacterMove _module_chooseCharacter_Move;
 
     public Button PreViousButton { get => _previousButton; }
     public Button NextButton { get => _nextButton; }
@@ -84,13 +85,13 @@ public class CharacterSelectorNGO : NetworkBehaviourBase
             return _selectPlayerRawImage;
         }
     }
-    public Module_ChooseCharacter_Move Module_ChooseCharacter_Move
+    public ModuleChooseCharacterMove Module_ChooseCharacter_Move
     {
         get
         {
             if (_module_chooseCharacter_Move == null)
             {
-                _module_chooseCharacter_Move = GetComponent<Module_ChooseCharacter_Move>();
+                _module_chooseCharacter_Move = GetComponent<ModuleChooseCharacterMove>();
             }
             return _module_chooseCharacter_Move;
         }

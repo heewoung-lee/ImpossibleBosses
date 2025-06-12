@@ -3,6 +3,7 @@ using Buffer.SkillBuffer;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 
 public class Skill_Buff_Roar : Skill_Duration
@@ -16,7 +17,7 @@ public class Skill_Buff_Roar : Skill_Duration
     private BufferRoarModifier _roarModifier;
     private Collider[] _players = null;
     private BaseController _playerController;
-    private Module_Fighter_Class _fighter_Class;
+    private ModuleFighterClass _fighter_Class;
     private Sprite _buffIconImage;
 
     public override string Buff_IconImage_Path => "Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/Icon_Booster_Power";
@@ -36,10 +37,10 @@ public class Skill_Buff_Roar : Skill_Duration
         get => _playerController;
         protected set => _playerController = value;
     }
-    public override Module_Player_Class Module_Player_Class
+    public override ModulePlayerClass Module_Player_Class
     {
         get => _fighter_Class;
-        protected set => _fighter_Class = value as Module_Fighter_Class;
+        protected set => _fighter_Class = value as ModuleFighterClass;
     }
 
 

@@ -1,4 +1,5 @@
 using GameManagers;
+using Module.UI_Module;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class UI_CreateNickName : UI_Popup
     private Button _confirm_Button;
     private GameObject _messageError;
     private TMP_Text _errorMessageText;
-    private Module_UI_FadeOut _errorMessageTextFadeOutMoudule;
+    private ModuleUIFadeOut _errorMessageTextFadeOutMoudule;
     public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
     protected override void OnDisableInit()
@@ -44,7 +45,7 @@ public class UI_CreateNickName : UI_Popup
         _confirm_Button = Get<Button>((int)Buttons.Confirm_Button);
         _messageError = Get<GameObject>((int)GameObjects.MessageError);
         _errorMessageText = _messageError.GetComponentInChildren<TMP_Text>();
-        _errorMessageTextFadeOutMoudule = _messageError.GetComponent<Module_UI_FadeOut>();
+        _errorMessageTextFadeOutMoudule = _messageError.GetComponent<ModuleUIFadeOut>();
         _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () => _confirm_Button.interactable = true;
         _messageError.SetActive(false);
         _confirm_Button.onClick.AddListener(CreateNickname);

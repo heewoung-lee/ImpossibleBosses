@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameManagers;
 using UnityEngine;
 
-public class Module_PortalIndicator : MonoBehaviour
+namespace Module.CommonModule
 {
-    void Start()
+    public class ModulePortalIndicator : MonoBehaviour
     {
-        UI_PortalIndicator ui_ProtalIndicator = Managers.UIManager.MakeUIWorldSpaceUI<UI_PortalIndicator>();
-        ui_ProtalIndicator.transform.SetParent(transform);
+        void Start()
+        {
+            UI_PortalIndicator uiPortalIndicator = Managers.UIManager.MakeUIWorldSpaceUI<UI_PortalIndicator>();
+            uiPortalIndicator.transform.SetParent(transform);
+        }
     }
 }

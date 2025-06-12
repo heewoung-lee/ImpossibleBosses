@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using Module.UI_Module;
 using TMPro;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
@@ -28,7 +29,7 @@ public class UI_InputRoomPassWord : UI_Popup
     private Button _confirm_Button;
     private GameObject _messageError;
     private TMP_Text _errorMessageText;
-    private Module_UI_FadeOut _errorMessageTextFadeOutMoudule;
+    private ModuleUIFadeOut _errorMessageTextFadeOutMoudule;
 
     public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
@@ -54,7 +55,7 @@ public class UI_InputRoomPassWord : UI_Popup
         _confirm_Button = Get<Button>((int)Buttons.Confirm_Button);
         _messageError = Get<GameObject>((int)GameObjects.MessageError);
         _errorMessageText = _messageError.GetComponentInChildren<TMP_Text>();
-        _errorMessageTextFadeOutMoudule = _messageError.GetComponent<Module_UI_FadeOut>();
+        _errorMessageTextFadeOutMoudule = _messageError.GetComponent<ModuleUIFadeOut>();
         _errorMessageTextFadeOutMoudule.DoneFadeoutEvent += () => _confirm_Button.interactable = true;
         _confirm_Button.onClick.AddListener(async () => await CheckJoinRoom());
         _messageError.SetActive(false);

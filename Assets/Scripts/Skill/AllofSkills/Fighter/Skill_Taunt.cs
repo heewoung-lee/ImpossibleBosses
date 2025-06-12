@@ -2,6 +2,7 @@ using System.Collections;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 
 public class Skill_Taunt : Skill_Immedialty
@@ -9,7 +10,7 @@ public class Skill_Taunt : Skill_Immedialty
 
     private const float DURATION_PARTICLE = 5f;
     private BaseController _playerController;
-    private Module_Fighter_Class _fighter_Class;
+    private ModuleFighterClass _fighter_Class;
     private Collider[] _monsters;
 
     public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
@@ -23,9 +24,9 @@ public class Skill_Taunt : Skill_Immedialty
         get => _playerController;
         protected set => _playerController = value;
     }
-    public override Module_Player_Class Module_Player_Class {
+    public override ModulePlayerClass Module_Player_Class {
         get => _fighter_Class;
-        protected set => _fighter_Class = value as Module_Fighter_Class;
+        protected set => _fighter_Class = value as ModuleFighterClass;
     }
     public override IState state => _fighter_Class.TauntState;
     public override void InvokeSkill()

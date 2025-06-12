@@ -2,6 +2,8 @@ using System.Collections;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using Module.PlayerModule;
+using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 
 public class Skill_Slash : Skill_Immedialty
@@ -9,7 +11,7 @@ public class Skill_Slash : Skill_Immedialty
 
     private BaseController _playerController;
     private PlayerStats _playerStat;
-    private Module_Fighter_Class _fighter_Class;
+    private ModuleFighterClass _fighter_Class;
     private AnimationClip _slashAnimClip;
     public AnimationClip SlashAnimClip
     {
@@ -17,7 +19,7 @@ public class Skill_Slash : Skill_Immedialty
         {
             if (_slashAnimClip == null)
             {
-                _slashAnimClip = _playerController.GetComponent<Module_Player_AnimInfo>().GetAnimationClip(_fighter_Class.Hash_Slash);
+                _slashAnimClip = _playerController.GetComponent<ModulePlayerAnimInfo>().GetAnimationClip(_fighter_Class.HashSlash);
             }
             return _slashAnimClip;
         }
@@ -56,9 +58,9 @@ public class Skill_Slash : Skill_Immedialty
         get => _playerController; 
         protected set => _playerController = value;
     }
-    public override Module_Player_Class Module_Player_Class {
+    public override ModulePlayerClass Module_Player_Class {
         get => _fighter_Class;
-        protected set => _fighter_Class = value as Module_Fighter_Class;
+        protected set => _fighter_Class = value as ModuleFighterClass;
     }
 
     public override IState state => _fighter_Class.SlashState;

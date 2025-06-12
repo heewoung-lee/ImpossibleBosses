@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using Module.CameraModule;
+using Module.PlayerModule;
+using Module.PlayerModule.PlayerClassModule;
 using UI.Scene.Interface;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -66,11 +69,11 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         gameObject.GetComponent<PlayerStats>().enabled = true;
         gameObject.AddComponent<PlayerInput>();
         PlayerController controller = gameObject.AddComponent<PlayerController>();
-        gameObject.AddComponent<Module_MainCamera_CinemachineBrain>();
-        gameObject.AddComponent<Module_Player_AnimInfo>();
-        gameObject.AddComponent<Module_Player_TextureCamera>();
+        gameObject.AddComponent<ModuleMainCameraCinemachineBrain>();
+        gameObject.AddComponent<ModulePlayerAnimInfo>();
+        gameObject.AddComponent<ModulePlayerTextureCamera>();
         gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
-        _interactionTr.AddComponent<Module_Player_Interaction>();
+        _interactionTr.AddComponent<ModulePlayerInteraction>();
         SetPlayerLayerMask();
       
         RuntimeAnimatorController ownerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
@@ -84,15 +87,15 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         switch (playerClass)
         {
             case Define.PlayerClass.Archer:
-                return typeof(Module_Acher_Class); 
+                return typeof(ModuleAcherClass); 
             case Define.PlayerClass.Fighter:
-                return typeof(Module_Fighter_Class);
+                return typeof(ModuleFighterClass);
             case Define.PlayerClass.Mage:
-                return typeof(Module_Mage_Class);
+                return typeof(ModuleMageClass);
             case Define.PlayerClass.Monk:
-                return typeof(Module_Monk_Class);
+                return typeof(ModuleMonkClass);
             case Define.PlayerClass.Necromancer:
-                return typeof(Module_Necromancer_Class);
+                return typeof(ModuleNecromancerClass);
 
             default: return null;
         }
@@ -103,7 +106,7 @@ public class PlayerInitalizeNGO : NetworkBehaviourBase, ISceneChangeBehaviour
         gameObject.layer = playerMask;
         foreach (Transform childtr in gameObject.transform)
         {
-            if (childtr.TryGetComponent(out Module_Player_LayerField module_Field))
+            if (childtr.TryGetComponent(out ModulePlayerLayerField module_Field))
             {
                 module_Field.gameObject.layer = playerMask;
                 SetPlayerLayerMask(module_Field.transform, playerMask);

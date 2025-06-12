@@ -3,6 +3,7 @@ using Buffer.SkillBuffer;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 using static PlaySceneMockUnitTest;
 
@@ -18,7 +19,7 @@ public class Skill_Buff_Determination : Skill_Duration
     private BufferDetermination _determination;
     private Collider[] _players = null;
     private BaseController _playerController;
-    private Module_Fighter_Class _fighter_Class;
+    private ModuleFighterClass _fighter_Class;
     public override string Buff_IconImage_Path => "Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/IconSet_Equip_Helmet";
     public override float SkillDuration => 10f;
     public override Sprite BuffIconImage => _buffIconImage;
@@ -33,9 +34,9 @@ public class Skill_Buff_Determination : Skill_Duration
     public override BaseController PlayerController { 
         get => _playerController;
         protected set => _playerController = value; }
-    public override Module_Player_Class Module_Player_Class { 
+    public override ModulePlayerClass Module_Player_Class { 
         get => _fighter_Class;
-        protected set => _fighter_Class = value as Module_Fighter_Class;  }
+        protected set => _fighter_Class = value as ModuleFighterClass;  }
     public override IState state => _fighter_Class.DeterminationState;
 
 
