@@ -1,4 +1,5 @@
 using Controller.ControllerStats;
+using NetWork.Boss_NGO;
 
 namespace Controller.BossState
 {

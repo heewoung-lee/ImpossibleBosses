@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using Controller.BossState;
 using Controller.ControllerStats;
 using GameManagers;
+using NetWork.Boss_NGO;
 using Unity.Netcode;
 using UnityEngine;
 

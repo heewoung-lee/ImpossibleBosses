@@ -1,5 +1,7 @@
 using System.Collections;
 using GameManagers;
+using NetWork;
+using NetWork.NGO.Interface;
 using UnityEngine;
 using static Define;
 using static UnityEngine.UI.GridLayoutGroup;
@@ -16,7 +18,7 @@ public class StoneGolem_Skill1_Stone_Initalize : Poolable, ISpawnBehavior
         stone.transform.SetParent(Managers.VFXManager.VFXRoot, false);
         stone.transform.position = _bossTr.transform.position + Vector3.up * _bossTr.GetComponent<Collider>().bounds.max.y;
         stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
-        Vector3 targetPos = stoneParams.argPosVector3;
+        Vector3 targetPos = stoneParams.ArgPosVector3;
         stone.StartCoroutine(stone.ThrowStoneParabola(stone.transform,targetPos,FLIGHTDURATION_TIME));
     }
     public IEnumerator ThrowStoneParabola(Transform projectile, Vector3 targetPlayer, float duration)

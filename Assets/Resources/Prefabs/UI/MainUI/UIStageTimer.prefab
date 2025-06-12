@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 6138633079964889658}
   - component: {fileID: 4668556135894790818}
   m_Layer: 5
-  m_Name: UI_Stage_Timer
+  m_Name: UIStageTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

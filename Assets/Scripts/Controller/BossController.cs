@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Controller.ControllerStats;
+using NetWork.Boss_NGO;
 using UnityEngine;
 
 namespace Controller

@@ -1,3 +1,4 @@
+using NetWork.NGO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +11,9 @@ public class UI_RoomPlayerFrame : UI_Base
         Bg
     }
     private readonly Color EMPTY_PLAYER_FRAME_COLOR = "#988B8B50".HexCodetoConvertColor();
-    public CharacterSelectorNGO _characterNgo;
+    public CharacterSelectorNgo _characterNgo;
     private Image _bg;
-    public CharacterSelectorNGO ChracterSelectorNGO { get => _characterNgo; }
+    public CharacterSelectorNgo ChracterSelectorNGO { get => _characterNgo; }
 
     protected override void AwakeInit()
     {
@@ -27,7 +28,7 @@ public class UI_RoomPlayerFrame : UI_Base
 
     public void SetCharacterSelector(GameObject chracterSelecter)
     {
-        _characterNgo = chracterSelecter.GetComponent<CharacterSelectorNGO>();
+        _characterNgo = chracterSelecter.GetComponent<CharacterSelectorNgo>();
     }
 
 

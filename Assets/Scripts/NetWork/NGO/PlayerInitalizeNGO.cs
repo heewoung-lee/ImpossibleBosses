@@ -4,6 +4,7 @@ using GameManagers;
 using Module.CameraModule;
 using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
+using NetWork.BaseNGO;
 using UI.Scene.Interface;
 using Unity.Netcode;
 using Unity.Netcode.Components;

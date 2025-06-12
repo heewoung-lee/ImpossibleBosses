@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using NetWork.LootItem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 namespace GameManagers

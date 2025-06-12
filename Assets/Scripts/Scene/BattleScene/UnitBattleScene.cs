@@ -1,4 +1,5 @@
 using GameManagers;
+using NetWork.NGO.UI;
 using UnityEngine;
 
 public class UnitBattleScene : ISceneSpawnBehaviour
@@ -17,7 +18,7 @@ public class UnitBattleScene : ISceneSpawnBehaviour
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_BattleSceneSpawn>();
+            Managers.RelayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
         }
     }
 }

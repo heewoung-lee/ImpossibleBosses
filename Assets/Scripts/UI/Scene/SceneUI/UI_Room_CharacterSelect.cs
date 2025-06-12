@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameManagers;
 using Module.UI_Module;
+using NetWork.NGO;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
@@ -55,7 +56,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     private Button _button_Ready;
     private Button _button_Start;
     private TMP_Text _button_Text;
-    private CharacterSelectorNGO _chracterSelectorNGO;
+    private CharacterSelectorNgo _chracterSelectorNGO;
     private bool _readyButtonState;
     private Transform _ngo_UI_Root_Character_Select;
     private string _joincodeCache;
@@ -141,7 +142,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     public void isCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
     {
-        foreach (CharacterSelectorNGO playerNGO in Managers.RelayManager.NgoRootUI.GetComponentsInChildren<CharacterSelectorNGO>())
+        foreach (CharacterSelectorNgo playerNGO in Managers.RelayManager.NgoRootUI.GetComponentsInChildren<CharacterSelectorNgo>())
         {
             if (playerNGO.GetComponent<NetworkObject>().OwnerClientId == playerIndex)
                 continue;
@@ -149,7 +150,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             if (playerNGO.IsOwnedByServer)
                 continue;
 
-            if (playerNGO.ISReady == false)
+            if (playerNGO.IsReady == false)
             {
                 SetHostStartButton(false);
                 return;
@@ -221,7 +222,7 @@ public class UI_Room_CharacterSelect : UI_Scene
             characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
             if (characterSelector.GetComponent<NetworkObject>().IsOwner)
             {
-                _chracterSelectorNGO = characterSelector.GetComponent<CharacterSelectorNGO>();
+                _chracterSelectorNGO = characterSelector.GetComponent<CharacterSelectorNgo>();
             }
         }
     }
@@ -273,7 +274,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     public void LoadScenePlayGames()//호스트가 Start버튼을 클릭했을때
     {
         _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-        Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.Module_ChooseCharacter_Move.PlayerChooseIndex);
+        Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_chracterSelectorNGO.ModuleChooseCharacterMove.PlayerChooseIndex);
         Managers.SceneManagerEx.OnClientLoadedEvent += ClientLoadedEvent;
         Managers.SceneManagerEx.OnAllPlayerLoadedEvent += AllPlayerLoadedEvent;
         Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);

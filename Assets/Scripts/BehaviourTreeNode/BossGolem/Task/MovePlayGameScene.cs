@@ -1,22 +1,23 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using GameManagers;
+using NetWork.NGO.Scene_NGO;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
     public class MovePlayGameScene : Action
     {
-        private NGO_MoveDownTownBehaviour _ngoMoveDownTownBehaviour;
-        private NGO_Stage_Timer_Controller _ngoStageTimerController;
+        private NgoMoveDownTownBehaviour _ngoMoveDownTownBehaviour;
+        private NgoStageTimerController _ngoStageTimerController;
         private BehaviorTree _tree;
         private MoveSceneController _sceneMoverController;
         private ISceneMover _sceneMover;
         public override void OnStart()
         {
-            _ngoMoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NGO_MoveDownTownBehaviour>();
-            _ngoStageTimerController = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NGO_Stage_Timer_Controller>();
+            _ngoMoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NgoMoveDownTownBehaviour>();
+            _ngoStageTimerController = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NgoStageTimerController>();
             _sceneMoverController = ((ISceneController)Managers.SceneManagerEx.GetCurrentScene).SceneMoverController;//씬 무버가 없다면 오류뜨도록 설계
-            _ngoStageTimerController.UI_Stage_Timer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.nextscene.MoveScene;
+            _ngoStageTimerController.UIStageTimer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.nextscene.MoveScene;
             _tree = Owner.GetComponent<BehaviorTree>();
             base.OnStart();
         }

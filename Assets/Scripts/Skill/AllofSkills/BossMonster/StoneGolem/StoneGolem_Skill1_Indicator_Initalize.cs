@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using GameManagers;
+using NetWork;
+using NetWork.NGO.Interface;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,9 +15,9 @@ public class StoneGolem_Skill1_Indicator_Initalize : Poolable, ISpawnBehavior
     {
         IIndicatorBahaviour projector = Managers.ResourceManager.Instantiate(runtimePath,Managers.VFXManager.VFXRoot).GetComponent<IIndicatorBahaviour>();
         IAttackRange attacker = (projector as Component).GetComponent<IAttackRange>();
-        int attackDamage = spawnparam.argInteger;
-        float durationTime = spawnparam.argFloat;
-        projector.SetValue(SKILL1_RADIUS, SKILL1_ARC, spawnparam.argPosVector3, durationTime, Attack);
+        int attackDamage = spawnparam.ArgInteger;
+        float durationTime = spawnparam.ArgFloat;
+        projector.SetValue(SKILL1_RADIUS, SKILL1_ARC, spawnparam.ArgPosVector3, durationTime, Attack);
         void Attack()
         {
             TargetInSight.AttackTargetInCircle(attacker, projector.Radius, attackDamage);

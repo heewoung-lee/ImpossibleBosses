@@ -1,10 +1,11 @@
 using System;
+using NetWork.BaseNGO;
 using Unity.Netcode;
 using UnityEngine;
 
-public class StoneGolem_Attack_Indicator_Pooling_Initalize : NGO_PoolingInitalize_Base
+public class StoneGolem_Attack_Indicator_Pooling_Initalize : NgoPoolingInitalizeBase
 {
-    public override string PoolingNGO_PATH => "Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator";
+    public override string PoolingNgoPath => "Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator";
     public override int PoolingCapacity => 5;
 
 }

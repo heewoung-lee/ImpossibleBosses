@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Buffer;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using NetWork;
+using NetWork.BaseNGO;
+using NetWork.LootItem;
+using NetWork.NGO.Interface;
 using UI.Scene.Interface;
 using Unity.Collections;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
@@ -171,7 +175,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         }
         IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
         rootItemngo.GetComponent<LootItem>().SetIteminfo(iteminfo);
-        rootItemngo.GetComponent<LootItem>().SpawnBahaviour();
+        rootItemngo.GetComponent<LootItem>().SpawnBehaviour();
     }
 
     [Rpc(SendTo.Server)]
@@ -186,7 +190,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
     {
         if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject obj))
         {
-            if (obj.TryGetComponent(out NGO_InitailizeBase ngoInitalize))
+            if (obj.TryGetComponent(out NgoInitailizeBase ngoInitalize))
             {
                 ngoInitalize.SetInitalze(obj);
             }
@@ -241,7 +245,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
         Action<GameObject> positionAndBehaviorSetterEvent = null;
         if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNGOID, out NetworkObject paricleNgo))
         {
-            if (paricleNgo.TryGetComponent(out NGO_Particle_Initailize_Base skillInitailze))
+            if (paricleNgo.TryGetComponent(out NgoParticleInitailizeBase skillInitailze))
             {
                 skillInitailze.SetInitalze(paricleNgo);
                 if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
@@ -423,7 +427,7 @@ public class NGO_RPC_Caller : NetworkBehaviour
             for (int i = 0; i < fixedList.Length; i++)
             {
                 SpawnParamBase spawnParams = spawnParamBase;
-                spawnParams.argPosVector3 = fixedList[i];
+                spawnParams.ArgPosVector3 = fixedList[i];
                 spawnBehaviour.SpawnObjectToLocal(spawnParams, objectPath);
             }
         }

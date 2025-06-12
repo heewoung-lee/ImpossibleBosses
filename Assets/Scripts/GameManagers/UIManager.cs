@@ -8,7 +8,7 @@ namespace GameManagers
     {
 
         private const int SceneUISortingDefaultValue = 0;
-        private const int PopupUISortingDefaultValue = 30;
+        private const int PopupUISortingDefaultValue = 20;
 
 
         int _sorting = SceneUISortingDefaultValue;

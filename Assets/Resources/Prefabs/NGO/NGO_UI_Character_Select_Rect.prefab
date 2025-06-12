@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8131264845966953290}
   - component: {fileID: 7613754464630600725}
-  - component: {fileID: 3405596405991351386}
   - component: {fileID: 5958979602131744907}
+  - component: {fileID: 8405412631952006682}
   m_Layer: 0
   m_Name: NGO_UI_Character_Select_Rect
   m_TagString: Untagged
@@ -71,19 +71,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &3405596405991351386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 641167045363581546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4cd9463a99e04444ab656b6101083c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &5958979602131744907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,6 +83,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062a91a1286b77f49974fce957605c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8405412631952006682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641167045363581546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76f7649ae274ead8d41b54fcdcfa4c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1844186465525722026
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +628,7 @@ GameObject:
   - component: {fileID: 2219473926444027143}
   - component: {fileID: 6404981650063155275}
   m_Layer: 5
-  m_Name: PreviousPlayerBTN
+  m_Name: PreviousPlayerBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -748,7 +748,7 @@ GameObject:
   - component: {fileID: 8481687406976317530}
   - component: {fileID: 3814324432350550267}
   m_Layer: 5
-  m_Name: NextPlayerBTN
+  m_Name: NextPlayerBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

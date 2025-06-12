@@ -1,3 +1,4 @@
+using NetWork.NGO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +17,7 @@ namespace Module.UI_Module
         private const int Movevalue = 4;
         private int _currentSelectCharactorIndex = 0;
         private Transform _chooseCameraTr;
-        private CharacterSelectorNGO _characterSelectorNgo;
+        private CharacterSelectorNgo _characterSelectorNgo;
 
         private Button _previousButton;
         private Button _nextButton;
@@ -25,13 +26,13 @@ namespace Module.UI_Module
 
         public int PlayerChooseIndex => _playerChooseIndex;
 
-        public CharacterSelectorNGO CharacterSelectorNgo
+        public CharacterSelectorNgo CharacterSelectorNgo
         {
             get
             {
                 if(_characterSelectorNgo == null)
                 {
-                    _characterSelectorNgo = GetComponent<CharacterSelectorNGO>();
+                    _characterSelectorNgo = GetComponent<CharacterSelectorNgo>();
                 }
 
                 return _characterSelectorNgo;
@@ -83,7 +84,7 @@ namespace Module.UI_Module
             }
             if(index != _currentSelectCharactorIndex)
             {
-                CharacterSelectorNgo.SetCameraPositionServerRpc((int)direction * Vector3.right * Movevalue,CharacterSelectorNGO.CameraOperation.Add);
+                CharacterSelectorNgo.SetCameraPositionServerRpc((int)direction * Vector3.right * Movevalue,CharacterSelectorNgo.CameraOperation.Add);
                 _playerChooseIndex = _currentSelectCharactorIndex;
             }
         }

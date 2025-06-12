@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using NetWork.NGO.UI;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -118,7 +119,7 @@ public class BattleSceneMockUnitTest : BaseScene
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)
         {
-            Managers.RelayManager.Load_NGO_Prefab<NGO_BattleSceneSpawn>();
+            Managers.RelayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
             Managers.NgoPoolManager.Create_NGO_Pooling_Object();
         }
     }

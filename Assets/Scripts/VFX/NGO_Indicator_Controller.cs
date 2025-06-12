@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameManagers;
+using NetWork.BaseNGO;
 using Unity.Burst.Intrinsics;
 using Unity.Netcode;
 using UnityEngine;
@@ -168,7 +169,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         _decal_Circle_projector = Get<DecalProjector>((int)DecalProjectors.Circle);
         _decal_CircleBorder_projector = Get<DecalProjector>((int)DecalProjectors.CircleBorder);
         GetComponent<Poolable>().WorldPositionStays = false;
-        if (TryGetComponent(out NGO_PoolingInitalize_Base initbase))
+        if (TryGetComponent(out NgoPoolingInitalizeBase initbase))
         {
             initbase.PoolObjectReleaseEvent += ReleseProjector;
         }

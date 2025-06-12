@@ -1,3 +1,4 @@
+using NetWork.NGO;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
@@ -48,7 +49,7 @@ namespace Module.CameraModule
         }
         private void Start()
         {
-            GetComponentInParent<CharacterSelectorNGO>().SetSelectPlayerRawImage(_renderTexture);
+            GetComponentInParent<CharacterSelectorNgo>().SetSelectPlayerRawImage(_renderTexture);
         }
 
     }

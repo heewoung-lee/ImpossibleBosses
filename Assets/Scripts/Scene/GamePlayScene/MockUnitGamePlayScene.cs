@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using NetWork.NGO.UI;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -31,7 +32,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     private UI_Loading _ui_Loading_Scene;
     private Define.PlayerClass _playerClass;
     private bool _isSoloTest;
-    private UI_Stage_Timer _ui_stage_timer;
+    private UIStageTimer _ui_stage_timer;
 
     public ISceneMover nextscene => new BattleSceneMover();
 
@@ -122,7 +123,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     public async void Init()
     {
         await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
-        _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UI_Stage_Timer>();
+        _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
 
@@ -137,7 +138,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost)
             {
-                Managers.RelayManager.Load_NGO_Prefab<NGO_GamePlaySceneSpawn>();
+                Managers.RelayManager.Load_NGO_Prefab<NgoGamePlaySceneSpawn>();
             }
         }
     }

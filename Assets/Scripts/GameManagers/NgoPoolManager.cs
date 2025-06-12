@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using NetWork.BaseNGO;
+using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -63,9 +65,9 @@ namespace GameManagers
             List<(string, int)> poolingObjPath = new List<(string, int)>();
             foreach (GameObject go in poolableNgoList)
             {
-                if (go.TryGetComponent(out Poolable poolable) && go.TryGetComponent(out NGO_PoolingInitalize_Base poolingObj))
+                if (go.TryGetComponent(out Poolable poolable) && go.TryGetComponent(out NgoPoolingInitalizeBase poolingObj))
                 {
-                    poolingObjPath.Add((poolingObj.PoolingNGO_PATH, poolingObj.PoolingCapacity));
+                    poolingObjPath.Add((poolingObj.PoolingNgoPath, poolingObj.PoolingCapacity));
                 }
             }
             return poolingObjPath;

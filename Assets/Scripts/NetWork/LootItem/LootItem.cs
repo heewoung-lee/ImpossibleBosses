@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using Module.CommonModule;
@@ -9,175 +7,175 @@ using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LootItem : NetworkBehaviour,IInteraction
+namespace NetWork.LootItem
 {
-    private const float ADDFORCE_OFFSET = 5f;
-    private const float TORQUE_FORCE_OFFSET = 30f;
-    private const float DROPITEM_VERTICAL_OFFSET = 0.2f;
-    private const float DROPITEM_ROTATION_OFFSET = 40f;
-    private UI_Player_Inventory _ui_player_Inventory;
-    private NetworkObject _networkObject;
-
-    [SerializeField] private Vector3 _dropPosition;
-    [SerializeField] private Rigidbody _rigidBody;
-    [SerializeField] private GameObject _itemEffect;
-    [SerializeField] private CapsuleCollider _collider;
-    [SerializeField] private IItem _iteminfo;
-
-
-    public bool CanInteraction => _canInteraction;
-    public string InteractionName => _iteminfo.ItemName;
-    public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.ItemGradeType);
-
-    private bool _canInteraction = false;
-
-
-    private void Awake()
+    public class LootItem : NetworkBehaviour,IInteraction
     {
-        _rigidBody = GetComponent<Rigidbody>();
-        _collider = GetComponent<CapsuleCollider>();
-        _networkObject = GetComponent<NetworkObject>();
-    }
+        private const float AddforceOffset = 5f;
+        private const float TorqueForceOffset = 30f;
+        private const float DropitemVerticalOffset = 0.2f;
+        private const float DropitemRotationOffset = 40f;
+        private UI_Player_Inventory _uiPlayerInventory;
+        private NetworkObject _networkObject;
 
-    public void SpawnBahaviour()
-    {
-        _ui_player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
-        _canInteraction = false;
+        private Vector3 _dropPosition;
+        private Rigidbody _rigidBody;
+        private IItem _iteminfo;
 
-        if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
+
+        public bool CanInteraction => _canInteraction;
+        public string InteractionName => _iteminfo.ItemName;
+        public Color InteractionNameColor => Utill.GetItemGradeColor(_iteminfo.ItemGradeType);
+
+        private bool _canInteraction = false;
+
+
+        private void Awake()
         {
-            behaviour.SpawnBahaviour(_rigidBody);
-            return;
+            _rigidBody = GetComponent<Rigidbody>();
+            _networkObject = GetComponent<NetworkObject>();
         }
-        //튀어오르면서 로테이션을 돌린다.
-        //바닥에 닿으면 VFX효과를 킨다.
-        //아이템을 회전시킨다.
-        //상호작용을 하면
-        transform.position = _dropPosition + Vector3.up * 1.2f;
-        _rigidBody.AddForce(Vector3.up * ADDFORCE_OFFSET, ForceMode.Impulse);
-        // 임의의 회전을 위한 랜덤 값 생성
-        Vector3 randomTorque = new Vector3(
-            Random.Range(-1f, 1f),  // X축 회전
-            Random.Range(-1f, 1f),  // Y축 회전
-            Random.Range(-1f, 1f)   // Z축 회전
-        );
-        // 회전 힘 추가 (랜덤 값에 강도를 조절)
-        _rigidBody.AddTorque(randomTorque * TORQUE_FORCE_OFFSET, ForceMode.Impulse);
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!IsServer) return;                         // 충돌 판정은 서버만
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") == false || _rigidBody.isKinematic) return;
-        LandedLogicRpc();                                 // 서버 로컬 처리
-    }
+        public void SpawnBehaviour()
+        {
+            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
+            _canInteraction = false;
 
-    [Rpc(SendTo.ClientsAndHost)]
-    private void LandedLogicRpc()
-    {
-        _rigidBody.isKinematic = true;
-        transform.position += Vector3.up * DROPITEM_VERTICAL_OFFSET;
-        transform.rotation = Quaternion.identity;
-        StartCoroutine(RotationDropItem());
-        CreateLootingItemEffect();
-        _canInteraction = true;
-    }
+            if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
+            {
+                behaviour.SpawnBahaviour(_rigidBody);
+                return;
+            }
+            //튀어오르면서 로테이션을 돌린다.
+            //바닥에 닿으면 VFX효과를 킨다.
+            //아이템을 회전시킨다.
+            //상호작용을 하면
+            transform.position = _dropPosition + Vector3.up * 1.2f;
+            _rigidBody.AddForce(Vector3.up * AddforceOffset, ForceMode.Impulse);
+            // 임의의 회전을 위한 랜덤 값 생성
+            Vector3 randomTorque = new Vector3(
+                Random.Range(-1f, 1f),  // X축 회전
+                Random.Range(-1f, 1f),  // Y축 회전
+                Random.Range(-1f, 1f)   // Z축 회전
+            );
+            // 회전 힘 추가 (랜덤 값에 강도를 조절)
+            _rigidBody.AddTorque(randomTorque * TorqueForceOffset, ForceMode.Impulse);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!IsServer) return;                         // 충돌 판정은 서버만
+            if (other.gameObject.layer == LayerMask.NameToLayer("Ground") == false || _rigidBody.isKinematic) return;
+            LandedLogicRpc();                                 // 서버 로컬 처리
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void LandedLogicRpc()
+        {
+            _rigidBody.isKinematic = true;
+            transform.position += Vector3.up * DropitemVerticalOffset;
+            transform.rotation = Quaternion.identity;
+            StartCoroutine(RotationDropItem());
+            CreateLootingItemEffect();
+            _canInteraction = true;
+        }
 
 
-    public void CreateLootingItemEffect()
-    {
-        ItemGradeEffect(_iteminfo);
-    }
+        public void CreateLootingItemEffect()
+        {
+            ItemGradeEffect(_iteminfo);
+        }
 
-    public void SetPosition(Vector3 dropPosition)
-    {
-        _dropPosition = dropPosition;
-    }
+        public void SetPosition(Vector3 dropPosition)
+        {
+            _dropPosition = dropPosition;
+        }
 
-    public void SetIteminfo(IItem iteminfo)
-    {
-        _iteminfo = iteminfo;
-    }
+        public void SetIteminfo(IItem iteminfo)
+        {
+            _iteminfo = iteminfo;
+        }
     
 
-    IEnumerator RotationDropItem()
-    {
-        while (true)
+        IEnumerator RotationDropItem()
         {
-            transform.Rotate(new Vector3(0, Time.deltaTime * DROPITEM_ROTATION_OFFSET, 0));
-            yield return null;
+            while (true)
+            {
+                transform.Rotate(new Vector3(0, Time.deltaTime * DropitemRotationOffset, 0));
+                yield return null;
+            }
         }
-    }
 
-private void ItemGradeEffect(IItem itemInfo)
-{
-    string path = itemInfo.ItemGradeType switch
-    {
-        ItemGradeType.Normal  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Common",
-        ItemGradeType.Magic   => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
-        ItemGradeType.Rare    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
-        ItemGradeType.Unique  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
-        ItemGradeType.Epic    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
-        _ => null
-    };
+        private void ItemGradeEffect(IItem itemInfo)
+        {
+            string path = itemInfo.ItemGradeType switch
+            {
+                ItemGradeType.Normal  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Common",
+                ItemGradeType.Magic   => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Uncommon",
+                ItemGradeType.Rare    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Rare",
+                ItemGradeType.Unique  => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Epic",
+                ItemGradeType.Epic    => "Prefabs/Paticle/LootingItemEffect/Lootbeams_Runic_Legendary",
+                _ => null
+            };
 
-    if (string.IsNullOrEmpty(path))
-        return;
+            if (string.IsNullOrEmpty(path))
+                return;
 
-    Managers.VFXManager.GenerateParticle(path, addParticleActionEvent: (itemEffectParticle) =>
-    {
-        itemEffectParticle.transform.position = transform.position;
-        itemEffectParticle.transform.SetParent(transform);
-    });
-}
+            Managers.VFXManager.GenerateParticle(path, addParticleActionEvent: (itemEffectParticle) =>
+            {
+                itemEffectParticle.transform.position = transform.position;
+                itemEffectParticle.transform.SetParent(transform);
+            });
+        }
 
 
-    public void Interaction(ModulePlayerInteraction caller)
-    {
-        PlayerPickup(caller);
-    }
-    public void PlayerPickup(ModulePlayerInteraction player)
-    {
-        PlayerController base_controller = player.PlayerController;
-        base_controller.CurrentStateType = base_controller.PickupState;//픽업 애니메이션 실행
+        public void Interaction(ModulePlayerInteraction caller)
+        {
+            PlayerPickup(caller);
+        }
+        public void PlayerPickup(ModulePlayerInteraction player)
+        {
+            PlayerController baseController = player.PlayerController;
+            baseController.CurrentStateType = baseController.PickupState;//픽업 애니메이션 실행
 
-        if (base_controller.CurrentStateType != base_controller.PickupState)
-            return;
+            if (baseController.CurrentStateType != baseController.PickupState)
+                return;
 
-        UI_ItemComponent_Inventory inventory_item = (_iteminfo as IInventoryItemMaker).MakeItemComponentInventory();
-        inventory_item.transform.SetParent(_ui_player_Inventory.ItemInventoryTr);
-        player.DisEnable_Icon_UI();//상호작용 아이콘 제거
-        if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            UI_ItemComponent_Inventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory();
+            inventoryItem.transform.SetParent(_uiPlayerInventory.ItemInventoryTr);
+            player.DisEnable_Icon_UI();//상호작용 아이콘 제거
+            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            {
+                DisEnble_Icon_UI_Rpc();
+            }
+            else
+            {
+                Call_DisEnable_Icon_UI_Rpc();
+            }
+            Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
+        }
+
+        [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]
+        public void DisEnble_Icon_UI_Rpc()
+        {
+            ModulePlayerInteraction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<ModulePlayerInteraction>();
+            if (interaction.enabled == false)
+                return;
+
+            if (ReferenceEquals(interaction.InteractionTarget, this))
+            {
+                interaction.DisEnable_Icon_UI();
+            }
+        }
+
+        [Rpc(SendTo.Server)]
+        public void Call_DisEnable_Icon_UI_Rpc()
         {
             DisEnble_Icon_UI_Rpc();
         }
-        else
+        public void OutInteraction()
         {
-            Call_DisEnable_Icon_UI_Rpc();
+
         }
-        Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
-    }
-
-    [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]
-    public void DisEnble_Icon_UI_Rpc()
-    {
-        ModulePlayerInteraction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<ModulePlayerInteraction>();
-        if (interaction.enabled == false)
-            return;
-
-        if (ReferenceEquals(interaction.InteractionTarget, this))
-        {
-            interaction.DisEnable_Icon_UI();
-        }
-    }
-
-    [Rpc(SendTo.Server)]
-    public void Call_DisEnable_Icon_UI_Rpc()
-    {
-        DisEnble_Icon_UI_Rpc();
-    }
-    public void OutInteraction()
-    {
-
     }
 }

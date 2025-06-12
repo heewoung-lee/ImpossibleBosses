@@ -74,9 +74,7 @@ namespace GameManagers
                     return Managers.PoolManager.Pop(prefab, parent).gameObject;
                 }
             }
-
             GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
-
             return go;
         }
 

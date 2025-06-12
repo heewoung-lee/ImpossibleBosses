@@ -4,6 +4,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using NetWork.LootItem;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
