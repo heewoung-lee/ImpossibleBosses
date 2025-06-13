@@ -3,6 +3,7 @@ using System.Linq;
 using GameManagers;
 using Scene;
 using Skill;
+using Skill.BaseSkill;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;

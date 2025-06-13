@@ -4,6 +4,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using Scene;
+using Stats;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;

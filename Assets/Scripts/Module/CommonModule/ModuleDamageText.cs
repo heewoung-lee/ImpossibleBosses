@@ -1,4 +1,5 @@
 using GameManagers;
+using Stats.BaseStats;
 using UnityEngine;
 
 namespace Module.CommonModule
@@ -8,7 +9,7 @@ namespace Module.CommonModule
         private void Start()
         {
             BaseStats stat = GetComponent<BaseStats>();
-            stat.Event_Attacked += ShowDamageText_UI;
+            stat.EventAttacked += ShowDamageText_UI;
         }
         public void ShowDamageText_UI(int damage, int currentHp)
         {

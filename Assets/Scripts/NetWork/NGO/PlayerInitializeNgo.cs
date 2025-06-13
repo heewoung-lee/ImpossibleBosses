@@ -6,6 +6,7 @@ using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
 using NetWork.BaseNGO;
 using Player;
+using Stats;
 using UI.Scene.Interface;
 using Unity.Netcode;
 using Unity.Netcode.Components;

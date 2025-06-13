@@ -9,13 +9,13 @@ namespace Skill
     public class SkillComponent : UI_Base
     {
     
-        enum SkillIamge
+        enum SkillImage
         {
             SkillIconImage,
             CoolTimeImg
         }
-        private BaseSkill _skill;
-        public BaseSkill Skill { get => _skill; }
+        private BaseSkill.BaseSkill _skill;
+        public BaseSkill.BaseSkill Skill { get => _skill; }
 
 
         private Image _iconimage;
@@ -24,7 +24,7 @@ namespace Skill
         private bool _isSkillReady;
         private UI_Description _decriptionObject;
         private RectTransform _skillComponentRectTr;
-        public void SetSkillComponent(BaseSkill skill)
+        public void SetSkillComponent(BaseSkill.BaseSkill skill)
         {
             _skill = skill;
             _iconimage.sprite = _skill.SkillconImage;
@@ -33,9 +33,9 @@ namespace Skill
 
         protected override void AwakeInit()
         {
-            Bind<Image>(typeof(SkillIamge));
-            _iconimage = Get<Image>((int)SkillIamge.SkillIconImage);
-            _coolTimeImg = Get<Image>((int)SkillIamge.CoolTimeImg);
+            Bind<Image>(typeof(SkillImage));
+            _iconimage = Get<Image>((int)SkillImage.SkillIconImage);
+            _coolTimeImg = Get<Image>((int)SkillImage.CoolTimeImg);
             _isSkillReady = true;
             _skillComponentRectTr = transform as RectTransform;
             BindEvent(_iconimage.gameObject, ClicktoSkill);

@@ -4,6 +4,7 @@ using Controller.ControllerStats.BaseStates;
 using Controller.PlayerState;
 using Data;
 using GameManagers;
+using Stats;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;

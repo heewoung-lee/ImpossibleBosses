@@ -4,11 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using GameManagers;
+using Stats;
+using Stats.BaseStats;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static PlaySceneMockUnitTest;
+using static Test.TestScripts.UnitTest.PlaySceneMockUnitTest;
 public class UI_Player_Info : UI_Scene
 {
     private Slider _hpSlider;
@@ -68,9 +70,9 @@ public class UI_Player_Info : UI_Scene
     private void InitalizePlayerInfo(PlayerStats stats)
     {
         _playerStats = stats;
-        stats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
-        stats.MaxHPValueChangedEvent += UpdateCurrentMaxHpValue;
-        stats.Done_Base_Stats_Loading += UpdateUIInfo;
+        stats.CurrentHpValueChangedEvent += UpdateCurrentHPValue;
+        stats.MaxHpValueChangedEvent += UpdateCurrentMaxHpValue;
+        stats.DoneBaseStatsLoading += UpdateUIInfo;
     }
 
     private void UpdateCurrentMaxHpValue(int preCurrentMaxHp, int currentMaxHP)
@@ -92,8 +94,8 @@ public class UI_Player_Info : UI_Scene
 
     public void UpdateUIInfo(CharacterBaseStat stat)
     {
-        _hpText.text = $"{stat.hp}/{stat.maxHp}";
-        _hpSlider.value = (float)stat.hp / (float)stat.maxHp;
+        _hpText.text = $"{stat.Hp}/{stat.MaxHp}";
+        _hpSlider.value = (float)stat.Hp / (float)stat.MaxHp;
         _levelText.text = _playerStats.Level.ToString();
         _playerName_Text.text = _playerStats.Name.ToString();
     }

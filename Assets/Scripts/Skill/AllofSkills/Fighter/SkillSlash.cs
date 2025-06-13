@@ -4,11 +4,13 @@ using Controller.ControllerStats;
 using GameManagers;
 using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
+using Skill.BaseSkill;
+using Stats;
 using UnityEngine;
 
 namespace Skill.AllofSkills.Fighter
 {
-    public class SkillSlash : Skill_Immedialty
+    public class SkillSlash : SkillImmedialty
     {
 
         private BaseController _playerController;
@@ -60,12 +62,12 @@ namespace Skill.AllofSkills.Fighter
             get => _playerController; 
             protected set => _playerController = value;
         }
-        public override ModulePlayerClass Module_Player_Class {
+        public override ModulePlayerClass ModulePlayerClass {
             get => _fighterClass;
             protected set => _fighterClass = value as ModuleFighterClass;
         }
 
-        public override IState state => _fighterClass.SlashState;
+        public override IState State => _fighterClass.SlashState;
 
         public override void InvokeSkill()
         {

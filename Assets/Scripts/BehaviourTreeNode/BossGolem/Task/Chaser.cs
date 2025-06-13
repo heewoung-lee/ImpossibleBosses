@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using Controller.BossState;
 using NetWork.Boss_NGO;
+using Stats.BaseStats;
 using UnityEngine;
 
 

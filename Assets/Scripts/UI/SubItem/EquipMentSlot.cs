@@ -6,6 +6,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using Stats.BaseStats;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

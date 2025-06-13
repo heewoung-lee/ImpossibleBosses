@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameManagers;
+using Stats.BaseStats;
 using UnityEngine;
 
 public class ProjectorAttack : MonoBehaviour, IAttackRange
@@ -15,7 +16,7 @@ public class ProjectorAttack : MonoBehaviour, IAttackRange
 
     public float ViewDistance => projector.Arc;
 
-    public Transform Owner_Transform => Managers.GameManagerEx.BossMonster.transform;
+    public Transform OwnerTransform => Managers.GameManagerEx.BossMonster.transform;
     //여기에서 Owner_Transform을 보스로 바꿔야하는데 어떻게 바꿔야하나..
     public Vector3 AttackPosition => transform.position;
 

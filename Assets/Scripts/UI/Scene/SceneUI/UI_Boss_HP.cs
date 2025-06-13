@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using GameManagers;
+using Stats.BossStats;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,8 +46,8 @@ public class UI_Boss_HP : UI_Scene
         void SetBossStatUI()
         {
             _stats = Managers.GameManagerEx.BossMonster.GetComponent<BossStats>();
-            _stats.CurrentHPValueChangedEvent += Stats_CurrentHPValueChangedEvent;
-            _stats.MaxHPValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
+            _stats.CurrentHpValueChangedEvent += Stats_CurrentHPValueChangedEvent;
+            _stats.MaxHpValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
 
             if (_stats.MaxHp <= 0)
                 return;

@@ -2,11 +2,12 @@ using Controller;
 using Controller.ControllerStats;
 using GameManagers;
 using Module.PlayerModule.PlayerClassModule;
+using Skill.BaseSkill;
 using UnityEngine;
 
 namespace Skill.AllofSkills.Fighter
 {
-    public class SkillTaunt : Skill_Immedialty
+    public class SkillTaunt : SkillImmedialty
     {
 
         private const float DurationParticle = 5f;
@@ -25,11 +26,11 @@ namespace Skill.AllofSkills.Fighter
             get => _playerController;
             protected set => _playerController = value;
         }
-        public override ModulePlayerClass Module_Player_Class {
+        public override ModulePlayerClass ModulePlayerClass {
             get => _fighterClass;
             protected set => _fighterClass = value as ModuleFighterClass;
         }
-        public override IState state => _fighterClass.TauntState;
+        public override IState State => _fighterClass.TauntState;
         public override void InvokeSkill()
         {
             base.InvokeSkill();

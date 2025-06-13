@@ -1,43 +1,47 @@
 using Data.DataType.StatType;
 using GameManagers;
+using Stats.BaseStats;
 using Unity.Netcode;
 
-public class SlimeStats : MonsterStats
+namespace Stats.MonsterStats.SlimeStats
 {
-    Define.MonsterID SlimeID;
-    int _exp;
+    public class SlimeStats : global::Stats.MonsterStats.MonsterStats
+    {
+        private Define.MonsterID _slimeID;
+        private int _exp;
 
 
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-        SlimeID = Define.MonsterID.Slime;
-    }
-    protected override void SetStats()
-    {
-        MonsterStat stat = _statDict[(int)SlimeID];
-        CharacterBaseStat basestat = new CharacterBaseStat(stat.hp, stat.hp, stat.attack, stat.defence,stat.speed);
-        SetPlayerBaseStatRpc(basestat);
-        _exp = stat.exp;
-    }
-
-    protected override void OnDead(BaseStats attacker)
-    {
-        if (attacker.TryGetComponent(out PlayerStats playerStat))
+        protected override void AwakeInit()
         {
-            playerStat.Exp += _exp;
+            base.AwakeInit();
+            _slimeID = Define.MonsterID.Slime;
+        }
+        protected override void SetStats()
+        {
+            MonsterStat stat = _statDict[(int)_slimeID];
+            CharacterBaseStat basestat = new CharacterBaseStat(stat.hp, stat.hp, stat.attack, stat.defence,stat.speed);
+            SetPlayerBaseStatRpc(basestat);
+            _exp = stat.exp;
         }
 
-        if (gameObject.TryGetComponent(out NetworkObject ngo))
+        protected override void OnDead(BaseStats.BaseStats attacker)
         {
-            ulong networkObjectID = ngo.NetworkObjectId;
-            Managers.RelayManager.DeSpawn_NetWorkOBJ(networkObjectID);
-        }
-    }
+            if (attacker.TryGetComponent(out PlayerStats playerStat))
+            {
+                playerStat.Exp += _exp;
+            }
 
-    protected override void StartInit()
-    {
-        base.StartInit();
-        UpdateStat();
+            if (gameObject.TryGetComponent(out NetworkObject ngo))
+            {
+                ulong networkObjectID = ngo.NetworkObjectId;
+                Managers.RelayManager.DeSpawn_NetWorkOBJ(networkObjectID);
+            }
+        }
+
+        protected override void StartInit()
+        {
+            base.StartInit();
+            UpdateStat();
+        }
     }
 }

@@ -4,53 +4,55 @@ using Unity.Multiplayer.Playmode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LogInTestToggle : UI_Scene
+namespace Test.TestUI
 {
-
-    enum Buttons
+    public class LogInTestToggle : UI_Scene
     {
-        Test_Button
-    }
-    enum Toggles 
-    {
-        LogInTestToggle
-    }
 
-    enum Players
-    {
-        Player1,
-        Player2,
-        Player3,
-        Player4,
-        None
-    }
-
-
-    Button _testButton;
-    Toggle _testToggle;
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-        Bind<Button>(typeof(Buttons));
-        Bind<Toggle>(typeof(Toggles));
-        _testButton = Get<Button>((int)Buttons.Test_Button);
-        _testToggle = Get<Toggle>((int)Toggles.LogInTestToggle);
-        _testButton.interactable = _testToggle.interactable;
-        _testToggle.onValueChanged.AddListener((ison) =>
+        enum Buttons
         {
-            _testButton.gameObject.SetActive(ison);
-        });
-        _testButton.onClick.AddListener(ClickLogin);
-    }
+            TestButton
+        }
+        enum Toggles 
+        {
+            LogInTestToggle
+        }
 
-    private void ClickLogin()
-    {
-        UI_LoginPopup loginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_LoginPopup>();
+        enum Players
+        {
+            Player1,
+            Player2,
+            Player3,
+            Player4,
+            None
+        }
 
 
-        Players currentPlayer = Players.Player1;
+        Button _testButton;
+        Toggle _testToggle;
+        protected override void AwakeInit()
+        {
+            base.AwakeInit();
+            Bind<Button>(typeof(Buttons));
+            Bind<Toggle>(typeof(Toggles));
+            _testButton = Get<Button>((int)Buttons.TestButton);
+            _testToggle = Get<Toggle>((int)Toggles.LogInTestToggle);
+            _testButton.interactable = _testToggle.interactable;
+            _testToggle.onValueChanged.AddListener((ison) =>
+            {
+                _testButton.gameObject.SetActive(ison);
+            });
+            _testButton.onClick.AddListener(ClickLogin);
+        }
 
-        string[] tagValue = CurrentPlayer.ReadOnlyTags();
+        private void ClickLogin()
+        {
+            UI_LoginPopup loginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_LoginPopup>();
+
+
+            Players currentPlayer = Players.Player1;
+
+            string[] tagValue = CurrentPlayer.ReadOnlyTags();
             if (tagValue.Length > 0 && Enum.TryParse(typeof(Players), tagValue[0], out var parsedEnum))
             {
                 currentPlayer = (Players)parsedEnum;
@@ -72,12 +74,13 @@ public class LogInTestToggle : UI_Scene
                     break;
                 case Players.None:
                     break;
+            }
         }
-    }
 
-    protected override void StartInit()
-    {
-        base.AwakeInit();
-    }
+        protected override void StartInit()
+        {
+            base.AwakeInit();
+        }
 
+    }
 }

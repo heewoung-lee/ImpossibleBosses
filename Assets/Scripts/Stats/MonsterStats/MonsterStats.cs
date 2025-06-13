@@ -2,17 +2,20 @@ using System.Collections.Generic;
 using Data.DataType.StatType;
 using GameManagers;
 
-public abstract class MonsterStats : BaseStats
+namespace Stats.MonsterStats
 {
-    protected Dictionary<int, MonsterStat> _statDict;
-    protected override void AwakeInit()
+    public abstract class MonsterStats : BaseStats.BaseStats
     {
-        base.AwakeInit();
-    }
-    protected override void StartInit()
-    {
-        _statDict = Managers.DataManager.AllDataDict[typeof(MonsterStat)] as Dictionary<int, MonsterStat>;
-    }
+        protected Dictionary<int, MonsterStat> _statDict;
+        protected override void AwakeInit()
+        {
+            base.AwakeInit();
+        }
+        protected override void StartInit()
+        {
+            _statDict = Managers.DataManager.AllDataDict[typeof(MonsterStat)] as Dictionary<int, MonsterStat>;
+        }
 
     
+    }
 }

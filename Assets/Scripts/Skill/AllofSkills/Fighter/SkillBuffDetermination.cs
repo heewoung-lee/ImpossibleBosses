@@ -4,11 +4,12 @@ using Controller;
 using Controller.ControllerStats;
 using GameManagers;
 using Module.PlayerModule.PlayerClassModule;
+using Skill.BaseSkill;
 using UnityEngine;
 
 namespace Skill.AllofSkills.Fighter
 {
-    public class SkillBuffDetermination : Skill_Duration
+    public class SkillBuffDetermination : SkillDuration
     {
         public SkillBuffDetermination()
         {
@@ -22,7 +23,7 @@ namespace Skill.AllofSkills.Fighter
         private BaseController _playerController;
         private ModuleFighterClass _fighterClass;
         public sealed override string BuffIconImagePath => "Art/Player/SkillICon/WarriorSkill/BuffSkillIcon/IconSet_Equip_Helmet";
-        public override float SkillDuration => 10f;
+        public override float SkillDurationTime => 10f;
         public override Sprite BuffIconImage => _buffIconImage;
         public override Define.PlayerClass PlayerClass => Define.PlayerClass.Fighter;
         public override string SkillName => "결의";
@@ -31,14 +32,14 @@ namespace Skill.AllofSkills.Fighter
         public override string ETCDescriptionText => "서로간의 결의";
         public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Determination");
         public override float Value => 10f;
-        public override BuffModifier Buff_Modifier => _determination;
+        public override BuffModifier BuffModifier => _determination;
         public override BaseController PlayerController { 
             get => _playerController;
             protected set => _playerController = value; }
-        public override ModulePlayerClass Module_Player_Class { 
+        public override ModulePlayerClass ModulePlayerClass { 
             get => _fighterClass;
             protected set => _fighterClass = value as ModuleFighterClass;  }
-        public override IState state => _fighterClass.DeterminationState;
+        public override IState State => _fighterClass.DeterminationState;
 
 
         public override void InvokeSkill()
@@ -57,13 +58,13 @@ namespace Skill.AllofSkills.Fighter
             Managers.BufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
                 (playerNgo) =>
                 {
-                    Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDuration);
+                    Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Shield_Determination", playerNgo.transform, SkillDurationTime);
                 }
                 ,
                 () =>
                 {
                     StatEffect effect = new StatEffect(_determination.StatType, Value, _determination.Buffname);
-                    Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath, SkillDuration);
+                    Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath, SkillDurationTime);
                 });
         }
     }

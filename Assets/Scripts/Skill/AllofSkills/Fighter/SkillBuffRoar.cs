@@ -4,11 +4,12 @@ using Controller;
 using Controller.ControllerStats;
 using GameManagers;
 using Module.PlayerModule.PlayerClassModule;
+using Skill.BaseSkill;
 using UnityEngine;
 
 namespace Skill.AllofSkills.Fighter
 {
-    public class SkillBuffRoar : Skill_Duration
+    public class SkillBuffRoar : SkillDuration
     {
         public SkillBuffRoar()
         {
@@ -28,18 +29,18 @@ namespace Skill.AllofSkills.Fighter
         public override float CoolTime => 5f;
         public override string EffectDescriptionText => $"파티원들에게 10의 공격력을 부여합니다";
         public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
-        public override float SkillDuration => 10f;//지속시간
+        public override float SkillDurationTime => 10f;//지속시간
         public override string SkillName => "분노";
         public override string ETCDescriptionText => "화가난다!";
         public override float Value => 10f;
-        public override BuffModifier Buff_Modifier => _roarModifier;
-        public override IState state => _fighterClass.RoarState;
+        public override BuffModifier BuffModifier => _roarModifier;
+        public override IState State => _fighterClass.RoarState;
         public override BaseController PlayerController
         {
             get => _playerController;
             protected set => _playerController = value;
         }
-        public override ModulePlayerClass Module_Player_Class
+        public override ModulePlayerClass ModulePlayerClass
         {
             get => _fighterClass;
             protected set => _fighterClass = value as ModuleFighterClass;
@@ -67,13 +68,13 @@ namespace Skill.AllofSkills.Fighter
 
                 (playerNgo) =>
                 {
-                    Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDuration);
+                    Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Aura_Roar", playerNgo.transform, SkillDurationTime);
                 }
                 ,
                 () =>
                 {
                     StatEffect effect = new StatEffect(_roarModifier.StatType, Value, _roarModifier.Buffname);
-                    Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath, SkillDuration);
+                    Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath, SkillDurationTime);
                 });
         }
     }

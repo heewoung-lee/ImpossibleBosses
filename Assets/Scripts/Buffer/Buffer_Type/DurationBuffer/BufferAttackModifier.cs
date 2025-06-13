@@ -1,5 +1,6 @@
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using Stats.BaseStats;
 using UnityEngine;
 
 namespace Buffer.Buffer_Type.DurationBuffer

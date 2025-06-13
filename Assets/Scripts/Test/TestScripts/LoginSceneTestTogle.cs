@@ -1,11 +1,14 @@
 using GameManagers;
+using Test.TestUI;
 using UnityEngine;
 
-public class LoginSceneTestTogle : MonoBehaviour
+namespace Test.TestScripts
 {
-    void Start()
+    public class LoginSceneTestTogle : MonoBehaviour
     {
-        //ев╫╨ф╝©К UI
-        LogInTestToggle testTogle = Managers.UIManager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
+        void Start()
+        {
+            LogInTestToggle testTogle = Managers.UIManager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
+        }
     }
 }

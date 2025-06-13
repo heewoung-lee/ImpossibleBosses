@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Data.Item;
 using GameManagers;
+using Stats;
+using Stats.BaseStats;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -187,22 +189,22 @@ public class UI_Player_Inventory : UI_Popup, IPopupHandler
     private void SubscribePlayerEvent()
     {
 
-        OwnerPlayerStats.CurrentHPValueChangedEvent += UpdateCurrentHPValue;
-        OwnerPlayerStats.MaxHPValueChangedEvent += UpdateMaxHpValue;
+        OwnerPlayerStats.CurrentHpValueChangedEvent += UpdateCurrentHPValue;
+        OwnerPlayerStats.MaxHpValueChangedEvent += UpdateMaxHpValue;
         OwnerPlayerStats.AttackValueChangedEvent += UpdateAttackValue;
         OwnerPlayerStats.DefenceValueChangedEvent += UpdatedefenceValue;
         OwnerPlayerStats.PlayerHasGoldChangeEvent += UpdateGoldUI;
-        OwnerPlayerStats.Done_Base_Stats_Loading += UpdatePlayerLevelAndNickName;
+        OwnerPlayerStats.DoneBaseStatsLoading += UpdatePlayerLevelAndNickName;
 
     }
     private void DeSubscribePlayerEvent()
     {
-        OwnerPlayerStats.CurrentHPValueChangedEvent -= UpdateCurrentHPValue;
-        OwnerPlayerStats.MaxHPValueChangedEvent -= UpdateMaxHpValue;
+        OwnerPlayerStats.CurrentHpValueChangedEvent -= UpdateCurrentHPValue;
+        OwnerPlayerStats.MaxHpValueChangedEvent -= UpdateMaxHpValue;
         OwnerPlayerStats.AttackValueChangedEvent -= UpdateAttackValue;
         OwnerPlayerStats.DefenceValueChangedEvent -= UpdatedefenceValue;
         OwnerPlayerStats.PlayerHasGoldChangeEvent -= UpdateGoldUI;
-        OwnerPlayerStats.Done_Base_Stats_Loading -= UpdatePlayerLevelAndNickName;
+        OwnerPlayerStats.DoneBaseStatsLoading -= UpdatePlayerLevelAndNickName;
 
     }
     public void UpdateStats()

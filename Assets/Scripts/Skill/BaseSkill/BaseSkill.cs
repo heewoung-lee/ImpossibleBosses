@@ -1,54 +1,55 @@
-using System.Collections.Generic;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
 using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
-using static UnityEngine.CullingGroup;
 
-public abstract class BaseSkill
+namespace Skill.BaseSkill
 {
-    public abstract Define.PlayerClass PlayerClass { get; }
-    public abstract string SkillName { get; }
-    public abstract float CoolTime {  get; }
-    public abstract string EffectDescriptionText { get; }
-    public abstract string ETCDescriptionText { get; }
-    public abstract Sprite SkillconImage { get; }
-    public abstract float Value { get; }
-
-    public virtual void AddInitailzeState() { }
-    public abstract BaseController PlayerController { get; protected set; }
-    public abstract ModulePlayerClass Module_Player_Class { get; protected set; }
-
-    public abstract void SkillAction();
-
-    public abstract IState state { get; }
-
-
-    public virtual void InvokeSkill()
+    public abstract class BaseSkill
     {
-        if (PlayerController == null || Module_Player_Class == null)
+        public abstract Define.PlayerClass PlayerClass { get; }
+        public abstract string SkillName { get; }
+        public abstract float CoolTime {  get; }
+        public abstract string EffectDescriptionText { get; }
+        public abstract string ETCDescriptionText { get; }
+        public abstract Sprite SkillconImage { get; }
+        public abstract float Value { get; }
+
+        public virtual void AddInitailzeState() { }
+        public abstract BaseController PlayerController { get; protected set; }
+        public abstract ModulePlayerClass ModulePlayerClass { get; protected set; }
+
+        public abstract void SkillAction();
+
+        public abstract IState State { get; }
+
+
+        public virtual void InvokeSkill()
         {
-            PlayerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
-            Module_Player_Class = PlayerController.GetComponent<ModulePlayerClass>();
-            PlayerController.StateAnimDict.RegisterState(state, SkillAction);
-            AddInitailzeState();
+            if (PlayerController == null || ModulePlayerClass == null)
+            {
+                PlayerController = Managers.GameManagerEx.Player.GetComponent<BaseController>();
+                ModulePlayerClass = PlayerController.GetComponent<ModulePlayerClass>();
+                PlayerController.StateAnimDict.RegisterState(State, SkillAction);
+                AddInitailzeState();
+            }
+            PlayerController.CurrentStateType = State;
         }
-        PlayerController.CurrentStateType = state;
-    }
 
-    private BaseController baseController;
+        private BaseController _baseController;
 
-    public bool IsStateUpdatedAfterSkill()
-    {
-        if(baseController == null)
+        public bool IsStateUpdatedAfterSkill()
         {
-            baseController =  Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            if(_baseController == null)
+            {
+                _baseController =  Managers.GameManagerEx.Player.GetComponent<BaseController>();
+            }
+            IState currentIState = _baseController.CurrentStateType;
+            InvokeSkill();
+
+            return currentIState != _baseController.CurrentStateType ? true : false;
         }
-        IState currentIState = baseController.CurrentStateType;
-        InvokeSkill();
 
-        return currentIState != baseController.CurrentStateType ? true : false;
     }
-
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using Stats;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;

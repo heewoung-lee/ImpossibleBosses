@@ -6,6 +6,8 @@ using GameManagers;
 using NetWork;
 using NetWork.Boss_NGO;
 using NetWork.NGO.Interface;
+using Stats.BaseStats;
+using Stats.BossStats;
 using UnityEngine;
 
 namespace BehaviourTreeNode.BossGolem.Task

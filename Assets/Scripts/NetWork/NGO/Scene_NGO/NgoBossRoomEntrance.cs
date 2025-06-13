@@ -1,5 +1,6 @@
 using GameManagers;
 using NetWork.BaseNGO;
+using Stats;
 using Unity.Netcode;
 using UnityEngine;
 

@@ -1,6 +1,7 @@
-using UnityEngine;
-
-public interface IDamageable
+namespace Stats.BaseStats
 {
-    public void OnAttacked(IAttackRange attacker,int damage = -1);
+    public interface IDamageable
+    {
+        public void OnAttacked(IAttackRange attacker,int damage = -1);
+    }
 }

@@ -1,3 +1,4 @@
+using Stats.BaseStats;
 using UnityEngine;
 
 namespace Buffer

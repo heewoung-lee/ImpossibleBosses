@@ -7,6 +7,7 @@ using GameManagers;
 using NetWork.BaseNGO;
 using NetWork.NGO.Interface;
 using Scene.GamePlayScene;
+using Stats;
 using UI.Scene.Interface;
 using Unity.Collections;
 using Unity.Netcode;

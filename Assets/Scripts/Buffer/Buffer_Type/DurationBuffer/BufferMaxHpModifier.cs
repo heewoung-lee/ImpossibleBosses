@@ -1,4 +1,5 @@
 using Data.DataType.ItemType.Interface;
+using Stats.BaseStats;
 using UnityEngine;
 
 namespace Buffer.Buffer_Type.DurationBuffer

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Stats.BaseStats;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ public class UI_HPBar : UI_Base
     {
         _stats = GetComponentInParent<BaseStats>();
         transform.position = _stats.transform.position+ OFFSET_HPBAR * (_stats.GetComponent<Collider>().bounds.size.y);
-        _stats.Event_Attacked += SetHpUI;
+        _stats.EventAttacked += SetHpUI;
     }
 
     void LateUpdate()

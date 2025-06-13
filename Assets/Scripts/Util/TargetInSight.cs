@@ -4,6 +4,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.InputSystem.XR;
 using System;
+using Stats.BaseStats;
 using Unity.Netcode;
 using static Unity.Cinemachine.CinemachineTargetGroup;
 
@@ -18,24 +19,24 @@ public class TargetInSight
 
     public static void AttackTargetInSector(IAttackRange _stats, int damage = -1)
     {
-        Vector3 _leftBoundary = BoundaryAngle(_stats.ViewAngle * -0.5f, _stats.Owner_Transform);
-        Vector3 _rightBoundary = BoundaryAngle(_stats.ViewAngle * 0.5f, _stats.Owner_Transform);
+        Vector3 _leftBoundary = BoundaryAngle(_stats.ViewAngle * -0.5f, _stats.OwnerTransform);
+        Vector3 _rightBoundary = BoundaryAngle(_stats.ViewAngle * 0.5f, _stats.OwnerTransform);
 
-        Debug.DrawRay(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _leftBoundary * _stats.ViewDistance, Color.red, 1f);
-        Debug.DrawRay(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _rightBoundary * _stats.ViewDistance, Color.red, 1f);
+        Debug.DrawRay(_stats.OwnerTransform.position + _stats.OwnerTransform.up * 0.4f, _leftBoundary * _stats.ViewDistance, Color.red, 1f);
+        Debug.DrawRay(_stats.OwnerTransform.position + _stats.OwnerTransform.up * 0.4f, _rightBoundary * _stats.ViewDistance, Color.red, 1f);
 
-        Collider[] _targets = Physics.OverlapSphere(_stats.Owner_Transform.position, _stats.ViewDistance, _stats.TarGetLayer);
+        Collider[] _targets = Physics.OverlapSphere(_stats.OwnerTransform.position, _stats.ViewDistance, _stats.TarGetLayer);
         foreach (Collider _target in _targets)
         {
             Transform _targetTr = _target.transform;
             if (_target.TryGetComponent(out IDamageable idamaged))
             {
-                Vector3 _direction = (_targetTr.position - _stats.Owner_Transform.position).normalized;
-                float _angle = Vector3.Angle(_direction, _stats.Owner_Transform.forward);
+                Vector3 _direction = (_targetTr.position - _stats.OwnerTransform.position).normalized;
+                float _angle = Vector3.Angle(_direction, _stats.OwnerTransform.forward);
                 if (_angle < _stats.ViewAngle * 0.5f)
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(_stats.Owner_Transform.position + _stats.Owner_Transform.up * 0.4f, _direction, out hit, _stats.ViewDistance))
+                    if (Physics.Raycast(_stats.OwnerTransform.position + _stats.OwnerTransform.up * 0.4f, _direction, out hit, _stats.ViewDistance))
                     {
                         if (damage > 0)
                             idamaged.OnAttacked(_stats, damage);
@@ -66,8 +67,8 @@ public class TargetInSight
     }
     public static bool IsTargetInSight(IAttackRange _stats, Transform targetTr, float sightRange = 0.5f)
     {
-        Vector3 direction = (targetTr.position - _stats.Owner_Transform.position).normalized;
-        float angle = Vector3.Angle(direction, _stats.Owner_Transform.forward);
+        Vector3 direction = (targetTr.position - _stats.OwnerTransform.position).normalized;
+        float angle = Vector3.Angle(direction, _stats.OwnerTransform.forward);
         sightRange = Mathf.Clamp(sightRange, 0f, 0.5f);
 
 

@@ -1,4 +1,5 @@
 using Data.DataType.ItemType.Interface;
+using Stats.BaseStats;
 
 namespace Buffer
 {

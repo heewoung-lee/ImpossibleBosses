@@ -1,6 +1,7 @@
 using GameManagers;
 using NetWork;
 using NetWork.NGO.Interface;
+using Stats.BaseStats;
 using UnityEngine;
 
 namespace Skill.AllofSkills.BossMonster.StoneGolem

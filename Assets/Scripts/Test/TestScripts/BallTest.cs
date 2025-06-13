@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class BallTest : MonoBehaviour
+namespace Test.TestScripts
 {
-    private void OnCollisionEnter(Collision collision)
+    public class BallTest : MonoBehaviour
     {
-        Debug.Log(collision.gameObject.layer);
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log(collision.gameObject.layer);
+        }
     }
 }
