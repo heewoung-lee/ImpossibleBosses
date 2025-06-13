@@ -1,3 +1,4 @@
+using Scene.GamePlayScene;
 using UnityEngine;
 
 namespace Module.NGO_Module
@@ -6,7 +7,7 @@ namespace Module.NGO_Module
     {
         void Start()
         {
-            GetComponent<ISceneSpawnBehaviour>().SpawnOBJ();
+            GetComponent<ISceneSpawnBehaviour>().SpawnObj();
         }
     }
 }

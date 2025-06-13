@@ -2,6 +2,8 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using GameManagers;
 using NetWork.NGO.Scene_NGO;
+using Scene;
+using Scene.GamePlayScene;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
@@ -17,7 +19,7 @@ namespace BehaviourTreeNode.BossGolem.Task
             _ngoMoveDownTownBehaviour = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NgoMoveDownTownBehaviour>();
             _ngoStageTimerController = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NgoStageTimerController>();
             _sceneMoverController = ((ISceneController)Managers.SceneManagerEx.GetCurrentScene).SceneMoverController;//씬 무버가 없다면 오류뜨도록 설계
-            _ngoStageTimerController.UIStageTimer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.nextscene.MoveScene;
+            _ngoStageTimerController.UIStageTimer.OnTimerCompleted += _sceneMoverController.ISceneBehaviour.Nextscene.MoveScene;
             _tree = Owner.GetComponent<BehaviorTree>();
             base.OnStart();
         }

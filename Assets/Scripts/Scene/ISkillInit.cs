@@ -1,6 +1,7 @@
-using UnityEngine;
-
-public interface ISkillInit
+namespace Scene
 {
+    public interface ISkillInit
+    {
    
+    }
 }

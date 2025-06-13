@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using NetWork.NGO.UI;
+using Scene.GamePlayScene;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -33,13 +34,13 @@ namespace Scene.BattleScene
         private Define.PlayerClass _playerClass;
         private bool _isSoloTest;
 
-        public ISceneMover nextscene => new GamePlaySceneMover();
+        public ISceneMover Nextscene => new GamePlaySceneMover();
 
         public void Init()
         {
            JoinChannel().FireAndForgetSafeAsync();
         }
-        public void SpawnOBJ()
+        public void SpawnObj()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening)
             {

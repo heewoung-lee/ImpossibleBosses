@@ -1,6 +1,7 @@
-using UnityEngine;
-
-public interface ISceneMover
+namespace Scene
 {
-    public void MoveScene();
+    public interface ISceneMover
+    {
+        public void MoveScene();
+    }
 }

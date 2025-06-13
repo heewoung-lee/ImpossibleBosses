@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameManagers;
+using Scene;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,7 +40,6 @@ namespace Module.PlayerModule.PlayerClassModule
             if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)
                 return;
 
-            Debug.Log("이건 씬변경시 호출");
             InitializeSkillsFromManager();
         }
 

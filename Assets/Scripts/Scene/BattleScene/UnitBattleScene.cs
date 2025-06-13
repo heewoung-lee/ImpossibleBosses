@@ -1,5 +1,6 @@
 using GameManagers;
 using NetWork.NGO.UI;
+using Scene.GamePlayScene;
 
 namespace Scene.BattleScene
 {
@@ -8,14 +9,14 @@ namespace Scene.BattleScene
         private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
 
-        public ISceneMover nextscene => new GamePlaySceneMover();
+        public ISceneMover Nextscene => new GamePlaySceneMover();
 
         public void Init()
         {
             _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
         }
 
-        public void SpawnOBJ()
+        public void SpawnObj()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost)
             {

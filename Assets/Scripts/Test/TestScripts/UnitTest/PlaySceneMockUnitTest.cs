@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers;
+using Scene;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Authentication;

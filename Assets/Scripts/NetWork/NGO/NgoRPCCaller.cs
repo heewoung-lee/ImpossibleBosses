@@ -6,6 +6,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using NetWork.BaseNGO;
 using NetWork.NGO.Interface;
+using Scene.GamePlayScene;
 using UI.Scene.Interface;
 using Unity.Collections;
 using Unity.Netcode;

@@ -1,28 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameManagers;
-using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class TestScene : BaseScene
+namespace Scene
 {
-    private GameObject _player;
-
-    public override Define.Scene CurrentScene => Define.Scene.Unknown;
-
-    protected override void StartInit()
+    public class TestScene : BaseScene
     {
-        base.StartInit();
-    }
+        private GameObject _player;
 
-    public override void Clear()
-    {
+        public override Define.Scene CurrentScene => Define.Scene.Unknown;
 
-    }
+        protected override void StartInit()
+        {
+            base.StartInit();
+        }
 
-    protected override void AwakeInit()
-    {
-        _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Fighter");
+        public override void Clear()
+        {
+
+        }
+
+        protected override void AwakeInit()
+        {
+            _player = Managers.GameManagerEx.Spawn("Prefabs/Player/Fighter");
+        }
     }
 }

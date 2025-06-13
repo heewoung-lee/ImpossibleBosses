@@ -1,5 +1,10 @@
 
-public interface ISceneController
+using Scene.GamePlayScene;
+
+namespace Scene
 {
-    public MoveSceneController SceneMoverController { get; }
+    public interface ISceneController
+    {
+        public MoveSceneController SceneMoverController { get; }
+    }
 }

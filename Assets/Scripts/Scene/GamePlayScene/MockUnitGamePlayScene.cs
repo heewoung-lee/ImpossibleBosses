@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers;
 using NetWork.NGO.UI;
+using Scene;
 using Scene.BattleScene;
+using Scene.GamePlayScene;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -37,7 +39,7 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     private bool _isSoloTest;
     private UIStageTimer _ui_stage_timer;
 
-    public ISceneMover nextscene => new BattleSceneMover();
+    public ISceneMover Nextscene => new BattleSceneMover();
 
     private async Task JoinChannel()
     {
@@ -127,9 +129,9 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     {
         await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
         _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
-        _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
+        _ui_stage_timer.OnTimerCompleted += Nextscene.MoveScene;
     }
-    public void SpawnOBJ()
+    public void SpawnObj()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsListening)
         {

@@ -1,39 +1,36 @@
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using GameManagers;
 using NetWork.NGO;
 using Unity.Netcode;
-using Unity.Netcode.Components;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GamePlaySceneMover : ISceneMover
+namespace Scene.GamePlayScene
 {
-    public void MoveScene()
+    public class GamePlaySceneMover : ISceneMover
     {
-        if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
-            return;
-
-        Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-        Managers.SceneManagerEx.OnAllPlayerLoadedEvent += SetPlayerPostion;
-        Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
-        Managers.RelayManager.NgoRPCCaller.ResetManagersRpc();
-
-        void SetPlayerPostion()
+        public void MoveScene()
         {
-            foreach (NetworkObject player in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+                return;
+
+            Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
+            Managers.SceneManagerEx.OnAllPlayerLoadedEvent += SetPlayerPostion;
+            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
+            Managers.RelayManager.NgoRPCCaller.ResetManagersRpc();
+
+            void SetPlayerPostion()
             {
-                Vector3 pos = new Vector3(player.OwnerClientId, 0, 0);
-
-                if (player.TryGetComponent(out NavMeshAgent agent))
+                foreach (NetworkObject player in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
                 {
-                    agent.Warp(pos);
-                    player.GetComponent<PlayerInitializeNgo>().SetForcePositionFromNetworkRpc(pos);
-                }
+                    Vector3 pos = new Vector3(player.OwnerClientId, 0, 0);
 
+                    if (player.TryGetComponent(out NavMeshAgent agent))
+                    {
+                        agent.Warp(pos);
+                        player.GetComponent<PlayerInitializeNgo>().SetForcePositionFromNetworkRpc(pos);
+                    }
+
+                }
             }
         }
     }

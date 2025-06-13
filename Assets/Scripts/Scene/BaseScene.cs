@@ -1,36 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using Controller;
 using GameManagers;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class BaseScene : MonoBehaviour
+namespace Scene
 {
-    public abstract Define.Scene CurrentScene { get; }
-    MoveMarkerController _moveMarker;
-    void Start()
+    public abstract class BaseScene : MonoBehaviour
     {
-        StartInit();    
-    }
-
-    private void Awake()
-    {
-        AwakeInit();
-    }
-
-    protected virtual void StartInit()
-    {
-        Object go = GameObject.FindAnyObjectByType<EventSystem>();
-        if (go == null)
+        public abstract Define.Scene CurrentScene { get; }
+        MoveMarkerController _moveMarker;
+        void Start()
         {
-           Managers.ResourceManager.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
+            StartInit();    
         }
-        _moveMarker = gameObject.GetOrAddComponent<MoveMarkerController>();
-    }
 
-    protected abstract void AwakeInit();
+        private void Awake()
+        {
+            AwakeInit();
+        }
+
+        protected virtual void StartInit()
+        {
+            Object go = GameObject.FindAnyObjectByType<EventSystem>();
+            if (go == null)
+            {
+                Managers.ResourceManager.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
+            }
+            _moveMarker = gameObject.GetOrAddComponent<MoveMarkerController>();
+        }
+
+        protected abstract void AwakeInit();
      
-    public abstract void Clear();
+        public abstract void Clear();
+    }
 }

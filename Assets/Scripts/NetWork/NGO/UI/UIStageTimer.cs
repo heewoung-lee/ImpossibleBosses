@@ -122,17 +122,5 @@ namespace NetWork.NGO.UI
             _onTimerCompleted?.Invoke();
         }
 
-
-        protected override void OnEnableInit()
-        {
-            base.OnEnableInit();
-            Debug.Log($"OnEnableInit{typeof(UIStageTimer)}");
-        }
-
-        protected override void OnDisableInit()
-        {
-            base.OnDisableInit();
-            Debug.Log($"OnDisableInit{typeof(UIStageTimer)}");
-        }
     }
 }

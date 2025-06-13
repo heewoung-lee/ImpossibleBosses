@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using Scene;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -89,7 +90,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
         }
         void MoveScene()
         {
-            (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController.ISceneBehaviour.nextscene.MoveScene();
+            (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController.ISceneBehaviour.Nextscene.MoveScene();
         }
 
         //void AllLevelup()

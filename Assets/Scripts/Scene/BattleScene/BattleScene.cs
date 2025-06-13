@@ -1,4 +1,5 @@
 using GameManagers;
+using Scene.GamePlayScene;
 using Unity.VisualScripting;
 
 namespace Scene.BattleScene
@@ -22,16 +23,16 @@ namespace Scene.BattleScene
             if (isTest == true)
             {
                 _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _uiLoadingScene, isSoloTest));
-                gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
+                gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
                 _battleSceneController.InitGamePlayScene();
-                _battleSceneController.SpawnOBJ();
+                _battleSceneController.SpawnObj();
             }
             else
             {
                 _battleSceneController = new MoveSceneController(new UnitBattleScene());
-                gameObject.AddComponent<MockUnit_UI_GamePlaySceneModule>();
+                gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
                 _battleSceneController.InitGamePlayScene();
-                _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnOBJ;
+                _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnObj;
             }
         }
         public override void Clear()

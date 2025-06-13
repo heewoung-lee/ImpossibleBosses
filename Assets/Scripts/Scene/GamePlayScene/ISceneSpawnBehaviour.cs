@@ -1,11 +1,12 @@
-using UnityEngine;
-
-public interface ISceneSpawnBehaviour
+namespace Scene.GamePlayScene
 {
-    ISceneMover nextscene { get; }
+    public interface ISceneSpawnBehaviour
+    {
+        ISceneMover Nextscene { get; }
 
-    public void SpawnOBJ();
+        public void SpawnObj();
 
-    public void Init();
+        public void Init();
 
- }
+    }
+}

@@ -1,27 +1,24 @@
 using GameManagers;
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
-using Unity.Services.Lobbies.Models;
-using Unity.Services.Vivox;
-using Unity.VisualScripting;
-using UnityEngine;
 
-public class LobbyScene : BaseScene
+namespace Scene
 {
-    public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
-    UI_LobbyScene _uI_LobbyScene;
-    public override void Clear()
+    public class LobbyScene : BaseScene
     {
-    }
+        public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
+        UI_LobbyScene _uiLobbyScene;
+        public override void Clear()
+        {
+        }
 
-    protected override void AwakeInit()
-    {
-    }
+        protected override void AwakeInit()
+        {
+        }
 
-    protected override void StartInit()
-    {
-        base.StartInit();
-        _uI_LobbyScene = Managers.UIManager.GetSceneUIFromResource<UI_LobbyScene>();
+        protected override void StartInit()
+        {
+            base.StartInit();
+            _uiLobbyScene = Managers.UIManager.GetSceneUIFromResource<UI_LobbyScene>();
 
+        }
     }
 }

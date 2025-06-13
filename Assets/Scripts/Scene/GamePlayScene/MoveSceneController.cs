@@ -1,23 +1,24 @@
-using UnityEngine;
-
-public class MoveSceneController
+namespace Scene.GamePlayScene
 {
-    private ISceneSpawnBehaviour _iSceneBehaviour;
-    public ISceneSpawnBehaviour ISceneBehaviour => _iSceneBehaviour;
-    public MoveSceneController(ISceneSpawnBehaviour iSceneBehaviour)
+    public class MoveSceneController
     {
-        this._iSceneBehaviour = iSceneBehaviour;
-    }
+        private ISceneSpawnBehaviour _iSceneBehaviour;
+        public ISceneSpawnBehaviour ISceneBehaviour => _iSceneBehaviour;
+        public MoveSceneController(ISceneSpawnBehaviour iSceneBehaviour)
+        {
+            this._iSceneBehaviour = iSceneBehaviour;
+        }
 
 
-    public void InitGamePlayScene()
-    {
-        _iSceneBehaviour.Init();
-    }
+        public void InitGamePlayScene()
+        {
+            _iSceneBehaviour.Init();
+        }
 
 
-    public void SpawnOBJ()
-    {
-        _iSceneBehaviour.SpawnOBJ();
+        public void SpawnObj()
+        {
+            _iSceneBehaviour.SpawnObj();
+        }
     }
 }

@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.AI;
-
-public interface IPlayerPositionController
+namespace Scene
 {
-    public void SetPlayerPosition();
+    public interface IPlayerPositionController
+    {
+        public void SetPlayerPosition();
+    }
 }

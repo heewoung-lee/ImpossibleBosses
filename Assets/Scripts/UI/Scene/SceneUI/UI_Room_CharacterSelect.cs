@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using GameManagers;
 using Module.UI_Module;
 using NetWork.NGO;
+using Scene;
+using Scene.GamePlayScene;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies;

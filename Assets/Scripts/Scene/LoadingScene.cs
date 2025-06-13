@@ -1,81 +1,75 @@
-using NUnit.Framework;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using GameManagers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadingScene : BaseScene
+namespace Scene
 {
-    UI_Loading _ui_loding;
-
-    public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
-    public bool IsErrorOccurred { get; set; } = false;
-
-    private bool[] _isCheckTaskChecker;
-
-
-    public bool[] LobbyTask;
-
-    protected override void StartInit()
+    public class LoadingScene : BaseScene
     {
-        base.StartInit();
-        _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
-        LobbyTask = Managers.LobbyManager.TaskChecker;
-        StartCoroutine(LoadingSceneProcess());
-    }
+        UI_Loading _uiLoading;
 
-    public override void Clear()
-    {
-    }
-
-    protected override void AwakeInit()
-    {
-        _ui_loding = Managers.UIManager.GetSceneUIFromResource<UI_Loading>();
-    }
-
-    private IEnumerator LoadingSceneProcess()
-    {
-         AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());
-        operation.allowSceneActivation = false;
-        while(_isCheckTaskChecker == null)
+        public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
+        public bool IsErrorOccurred { get; set; } = false;
+        private bool[] _isCheckTaskChecker;
+        protected override void StartInit()
         {
-            yield return null;
+            base.StartInit();
+            _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
+            StartCoroutine(LoadingSceneProcess());
         }
-        float pretimer = 0f;
-        float aftertimer = 0f;
-        float processLength = 0.9f / _isCheckTaskChecker.Length;
-        
-        while (operation.isDone == false)
+
+        public override void Clear()
         {
-            yield return null;
+        }
 
-            if (IsErrorOccurred == true)
-                yield break;
+        protected override void AwakeInit()
+        {
+            _uiLoading = Managers.UIManager.GetSceneUIFromResource<UI_Loading>();
+        }
 
-            if (_ui_loding.LoaingSliderValue < 0.9f)
+        private IEnumerator LoadingSceneProcess()
+        {
+            AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());
+            operation.allowSceneActivation = false;
+            while(_isCheckTaskChecker == null)
             {
-                int sucessCount = 0;
-                foreach (bool OperationSucess in _isCheckTaskChecker)
-                {
-                    if (OperationSucess is true)
-                    {
-                        sucessCount++;
-                    }
-                }
-                _ui_loding.LoaingSliderValue = sucessCount * processLength;
-                pretimer += Time.deltaTime / 5f;
-                _ui_loding.LoaingSliderValue = Mathf.Lerp(_ui_loding.LoaingSliderValue - processLength, _ui_loding.LoaingSliderValue + processLength, pretimer);
+                yield return null;
             }
-            else
+            float pretimer = 0f;
+            float aftertimer = 0f;
+            float processLength = 0.9f / _isCheckTaskChecker.Length;
+        
+            while (operation.isDone == false)
             {
-                aftertimer += Time.deltaTime/5f;
-                _ui_loding.LoaingSliderValue = Mathf.Lerp(0.9f,1, aftertimer);
-                if (_ui_loding.LoaingSliderValue>=1.0f)
-                {
-                    operation.allowSceneActivation = true;
+                yield return null;
+
+                if (IsErrorOccurred == true)
                     yield break;
+
+                if (_uiLoading.LoaingSliderValue < 0.9f)
+                {
+                    int sucessCount = 0;
+                    foreach (bool operationSucess in _isCheckTaskChecker)
+                    {
+                        if (operationSucess is true)
+                        {
+                            sucessCount++;
+                        }
+                    }
+                    _uiLoading.LoaingSliderValue = sucessCount * processLength;
+                    pretimer += Time.deltaTime / 5f;
+                    _uiLoading.LoaingSliderValue = Mathf.Lerp(_uiLoading.LoaingSliderValue - processLength, _uiLoading.LoaingSliderValue + processLength, pretimer);
+                }
+                else
+                {
+                    aftertimer += Time.deltaTime/5f;
+                    _uiLoading.LoaingSliderValue = Mathf.Lerp(0.9f,1, aftertimer);
+                    if (_uiLoading.LoaingSliderValue>=1.0f)
+                    {
+                        operation.allowSceneActivation = true;
+                        yield break;
+                    }
                 }
             }
         }

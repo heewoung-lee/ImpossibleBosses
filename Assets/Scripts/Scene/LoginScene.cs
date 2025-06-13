@@ -1,24 +1,25 @@
 using GameManagers;
-using UnityEngine;
 
-public class LoginScene : BaseScene
+namespace Scene
 {
-    UI_LoginTitle ui_login;
-
-    public override Define.Scene CurrentScene => Define.Scene.LoginScene;
-
-    protected override void StartInit()
+    public class LoginScene : BaseScene
     {
-        base.StartInit();
-        ui_login = Managers.UIManager.GetSceneUIFromResource<UI_LoginTitle>();
-        
-    }
+        UI_LoginTitle _uiLoginTitle;
 
-    protected override void AwakeInit()
-    {
-    }
-    public override void Clear()
-    {
+        public override Define.Scene CurrentScene => Define.Scene.LoginScene;
 
+        protected override void StartInit()
+        {
+            base.StartInit();
+            _uiLoginTitle = Managers.UIManager.GetSceneUIFromResource<UI_LoginTitle>();
+        }
+
+        protected override void AwakeInit()
+        {
+        }
+        public override void Clear()
+        {
+
+        }
     }
 }
