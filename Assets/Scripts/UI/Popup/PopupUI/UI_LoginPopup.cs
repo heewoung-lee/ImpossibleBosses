@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using GameManagers;
 using TMPro;
+using UI.Popup.PopupUI;
 using Unity.Multiplayer.Playmode;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
@@ -12,7 +13,7 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
 
-public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
+public class UI_LoginPopup : IDPwPopup, IUI_HasCloseButton
 {
 
     enum Buttons
@@ -48,9 +49,9 @@ public class UI_LoginPopup : ID_PW_Popup, IUI_HasCloseButton
         }
     }
 
-    public override TMP_InputField ID_Input_Field => _idInputField;
+    public override TMP_InputField IdInputField => _idInputField;
 
-    public override TMP_InputField PW_Input_Field => _pwInputField;
+    public override TMP_InputField PwInputField => _pwInputField;
 
     public Button CloseButton => _close_Button;
 

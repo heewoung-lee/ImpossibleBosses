@@ -1,13 +1,14 @@
 using System;
 using GameManagers;
 using TMPro;
+using UI.Popup.PopupUI;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using Input = UnityEngine.Input;
 
-public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
+public class UI_CreateRoom : IDPwPopup, IUI_HasCloseButton
 {
 
     enum InputFields
@@ -35,8 +36,8 @@ public class UI_CreateRoom : ID_PW_Popup, IUI_HasCloseButton
     private Slider _userCount_slider;
     private TMP_Text _currentCount;
 
-    public override TMP_InputField ID_Input_Field => _roomNameInputField;
-    public override TMP_InputField PW_Input_Field => _roomPWInputField;
+    public override TMP_InputField IdInputField => _roomNameInputField;
+    public override TMP_InputField PwInputField => _roomPWInputField;
 
     public Button CloseButton => _button_close;
 

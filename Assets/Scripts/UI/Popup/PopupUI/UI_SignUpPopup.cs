@@ -1,12 +1,13 @@
 using System;
 using GameManagers;
 using TMPro;
+using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using WebSocketSharp;
 
-public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
+public class UI_SignUpPopup : IDPwPopup, IUI_HasCloseButton
 {
     Button _buttonClose;
     Button _buttonSignup;
@@ -15,9 +16,9 @@ public class UI_SignUpPopup : ID_PW_Popup, IUI_HasCloseButton
     private UI_AlertPopupBase _alertPopup;
     private UI_AlertPopupBase _confirmPopup;
 
-    public override TMP_InputField ID_Input_Field => _idInputField;
+    public override TMP_InputField IdInputField => _idInputField;
 
-    public override TMP_InputField PW_Input_Field => _pwInputField;
+    public override TMP_InputField PwInputField => _pwInputField;
 
     public Button CloseButton => _buttonClose;
 

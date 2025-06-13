@@ -1,0 +1,35 @@
+using GameManagers;
+using TMPro;
+using UnityEngine.InputSystem;
+
+namespace UI.Popup.PopupUI
+{
+    public abstract class IDPwPopup : UI_Popup
+    {
+        private InputAction _inputTabKey;
+
+        public abstract TMP_InputField IdInputField { get; }
+        public abstract TMP_InputField PwInputField { get; }
+
+        protected override void AwakeInit()
+        {
+            base.AwakeInit();
+            _inputTabKey = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "ID_PW_Popup_TabKey");
+            _inputTabKey.Enable();
+
+            _inputTabKey.started += SwitchingField;
+        }
+
+        protected void SwitchingField(InputAction.CallbackContext context)
+        {
+            if (IdInputField.isFocused)
+            {
+                PwInputField.ActivateInputField();
+            }
+            else
+            {
+                IdInputField.ActivateInputField();
+            }
+        }
+    }
+}
