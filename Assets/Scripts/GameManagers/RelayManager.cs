@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NetWork.NGO;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
@@ -20,7 +21,7 @@ namespace GameManagers
         private Allocation _allocation;
         private GameObject _nGoRootUI;
         private GameObject _nGoRoot;
-        private NGO_RPC_Caller _ngoRPCCaller;
+        private NgoRPCCaller _ngoRPCCaller;
         private Define.PlayerClass _choicePlayerCharacter;
         private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
@@ -59,20 +60,19 @@ namespace GameManagers
         {
             get
             {
-                if (_netWorkManager != null)
-                    return _netWorkManager;
-
-                if (NetworkManager.Singleton != null)
+                if (_netWorkManager == null)
                 {
-                    _netWorkManager = NetworkManager.Singleton;
-                }
-                else
-                {
-                    Managers.ResourceManager.Instantiate("Prefabs/NGO/NetworkManager");
-                    //자꾸 어디서 네트워크종료될때 간헐적으로 하이어라키에 이인스턴스 생기는데 이거 의심 해볼것 
-                    NetworkManager.Singleton.SetSingleton();
-                    return NetworkManager.Singleton;
-                }
+                    if (NetworkManager.Singleton != null)
+                    {
+                        _netWorkManager = NetworkManager.Singleton;
+                    }
+                    else
+                    {
+                        _netWorkManager = Managers.ResourceManager.Instantiate("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
+                        Managers.DontDestroyOnLoad(_netWorkManager.gameObject);
+                        _netWorkManager = NetworkManager.Singleton;
+                    }
+                }  
                 return _netWorkManager;
             }
         }
@@ -100,7 +100,7 @@ namespace GameManagers
                 return _nGoRoot;
             }
         }
-        public NGO_RPC_Caller NgoRPCCaller
+        public NgoRPCCaller NgoRPCCaller
         {
             get
             {
@@ -108,7 +108,7 @@ namespace GameManagers
                 {
                     foreach (NetworkObject netWorkObj in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
                     {
-                        if (netWorkObj.TryGetComponent(out NGO_RPC_Caller rpccaller))
+                        if (netWorkObj.TryGetComponent(out NgoRPCCaller rpccaller))
                         {
                             _ngoRPCCaller = rpccaller;
                             break;
@@ -157,7 +157,7 @@ namespace GameManagers
 
         public void SetRPCCaller(GameObject ngo)
         {
-            _ngoRPCCaller = ngo.GetComponent<NGO_RPC_Caller>();
+            _ngoRPCCaller = ngo.GetComponent<NgoRPCCaller>();
         }
 
         public void SpawnToRPC_Caller()
@@ -168,7 +168,7 @@ namespace GameManagers
             if (NgoRPCCaller != null)
                 return;
 
-            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_RPC_Caller", destroyOption: false);
+            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NgoRPCCaller", destroyOption: false);
         }
         public async Task<string> StartHostWithRelay(int maxConnections)
         {

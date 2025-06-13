@@ -3,6 +3,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using Module.CommonModule;
 using Module.PlayerModule;
+using Player;
 using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;

@@ -3,21 +3,24 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MockUnitBattleScenePlayerPosition : IPlayerPositionController
+namespace Scene.BattleScene
 {
-    public void SetPlayerPosition()
+    public class MockUnitBattleScenePlayerPosition : IPlayerPositionController
     {
-        if (Managers.GameManagerEx.Player == null)
+        public void SetPlayerPosition()
         {
-            Managers.GameManagerEx.OnPlayerSpawnEvent += (PlayerStats) => { PlayerSpawnPosition(PlayerStats.GetComponent<NavMeshAgent>()); };
+            if (Managers.GameManagerEx.Player == null)
+            {
+                Managers.GameManagerEx.OnPlayerSpawnEvent += (playerStats) => { PlayerSpawnPosition(playerStats.GetComponent<NavMeshAgent>()); };
+            }
+            else
+            {
+                PlayerSpawnPosition(Managers.GameManagerEx.Player.GetComponent<NavMeshAgent>());
+            }
         }
-        else
+        void PlayerSpawnPosition(NavMeshAgent navMesh)
         {
-            PlayerSpawnPosition(Managers.GameManagerEx.Player.GetComponent<NavMeshAgent>());
+            navMesh.Warp(new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0));
         }
-    }
-    void PlayerSpawnPosition(NavMeshAgent navMesh)
-    {
-        navMesh.Warp(new Vector3(Managers.GameManagerEx.Player.GetComponent<NetworkObject>().OwnerClientId, 0, 0));
     }
 }

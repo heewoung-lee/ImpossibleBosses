@@ -1,13 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers;
 using NetWork.NGO.UI;
+using Scene.BattleScene;
 using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MockUnitGamePlayScene : ISceneSpawnBehaviour
 {
@@ -126,7 +129,6 @@ public class MockUnitGamePlayScene : ISceneSpawnBehaviour
         _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
-
     public void SpawnOBJ()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsListening)

@@ -1,15 +1,18 @@
 using Unity.Netcode.Components;
 using UnityEngine;
 
-[DisallowMultipleComponent]
-public class ClientNetworkAnimator : NetworkAnimator
+namespace NetWork
 {
-    /// <summary>
-    /// Used to determine who can write to this animator. Owner client only.
-    /// This imposes state to the server. This is putting trust on your clients. Make sure no security-sensitive features use this animator.
-    /// </summary>
-    protected override bool OnIsServerAuthoritative()
+    [DisallowMultipleComponent]
+    public class ClientNetworkAnimator : NetworkAnimator
     {
-        return false;
+        /// <summary>
+        /// Used to determine who can write to this animator. Owner client only.
+        /// This imposes state to the server. This is putting trust on your clients. Make sure no security-sensitive features use this animator.
+        /// </summary>
+        protected override bool OnIsServerAuthoritative()
+        {
+            return false;
+        }
     }
 }

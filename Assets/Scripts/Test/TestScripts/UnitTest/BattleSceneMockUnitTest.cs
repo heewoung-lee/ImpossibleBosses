@@ -54,7 +54,7 @@ public class BattleSceneMockUnitTest : BaseScene
                 {
                     await Managers.LobbyManager.CreateLobby("TestLobby", 8, null);
                 }
-                if (NetworkManager.Singleton.IsListening == true)
+                if (Managers.RelayManager.NetworkManagerEx == true)
                 {
                     Init_NGO_PlayScene_OnHost();
                 }

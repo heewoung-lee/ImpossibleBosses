@@ -28,10 +28,6 @@ namespace Module.PlayerModule.PlayerClassModule
         }
         public virtual void InitializeOnStart()
         {
-            //    if(Managers.SceneManagerEx.GetCurrentScene is ISkillInit)
-            //    {
-            //        InitializeSkillsFromManager();
-            //    }
         }
   
         private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)

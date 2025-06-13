@@ -72,4 +72,34 @@ public static class Extension
             Debug.LogException(e);   // 예외 즉시 기록
         }
     }
+
+
+    public static async void FireAndForgetSafeAsync<TException>(this Task task, Action<Exception> onException = null) where TException : System.Exception
+    {
+        try
+        {
+            await task;
+        }
+        catch (TException catchException)
+        {
+            onException?.Invoke(catchException);
+            Debug.LogError($"Exception in FireAndForgetSafeAsync: {catchException}");
+        }
+        catch (Exception exception)
+        {
+            Debug.Log($"Exception in FireAndForgetSafeAsync:{exception}");
+        }
+    }
+    
+    public static async void FireAndForgetSafeAsync(this Task task)
+    {
+        try
+        {
+            await task;
+        }
+        catch (Exception exception)
+        {
+            Debug.Log($"Exception in FireAndForgetSafeAsync:{exception}");
+        }
+    }
 }

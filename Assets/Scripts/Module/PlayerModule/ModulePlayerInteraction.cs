@@ -1,5 +1,6 @@
 using GameManagers;
 using Module.CommonModule;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

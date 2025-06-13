@@ -1,5 +1,6 @@
 using Controller.PlayerState.FighterState;
 using GameManagers;
+using Player;
 using UnityEngine;
 
 namespace Module.PlayerModule.PlayerClassModule

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,8 +19,6 @@ namespace NetWork.NGO.UI
         private float _timerFillAmount;
 
         private Action _onTimerCompleted;
-
-
         public event Action OnTimerCompleted
         {
             add
@@ -124,5 +123,16 @@ namespace NetWork.NGO.UI
         }
 
 
+        protected override void OnEnableInit()
+        {
+            base.OnEnableInit();
+            Debug.Log($"OnEnableInit{typeof(UIStageTimer)}");
+        }
+
+        protected override void OnDisableInit()
+        {
+            base.OnDisableInit();
+            Debug.Log($"OnDisableInit{typeof(UIStageTimer)}");
+        }
     }
 }

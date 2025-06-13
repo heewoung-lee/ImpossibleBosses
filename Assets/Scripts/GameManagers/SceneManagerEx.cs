@@ -13,7 +13,7 @@ namespace GameManagers
         private Action _onBeforeSceneUnloadLocalEvent;
         private Action<ulong> _onClientLoadedEvent;
         private Action _onAllPlayerLoadedEvent;
-
+        private Action _onAfterSceneLoadedEvent;
         public event Action OnBeforeSceneUnloadLocalEvent
         {
             add
@@ -45,6 +45,17 @@ namespace GameManagers
             remove
             {
                 UniqueEventRegister.RemovedEvent(ref _onAllPlayerLoadedEvent, value);   
+            }
+        }
+        public event Action OnAfterSceneLoadedEvent
+        {
+            add
+            {
+                UniqueEventRegister.AddSingleEvent(ref _onAfterSceneLoadedEvent,value);
+            }
+            remove
+            {
+                UniqueEventRegister.RemovedEvent(ref _onAfterSceneLoadedEvent, value);
             }
         }
 
@@ -83,7 +94,7 @@ namespace GameManagers
             Managers.RelayManager.NgoRPCCaller.OnBeforeSceneUnloadRpc();//모든 플레이어가 씬 호출전 실행해야할 넷워크 오브젝트 초기화(호스트가 맡음)
             Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManagerOnLoadCompleteAsync;
             Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
-
+            
             void SceneManagerOnLoadCompleteAsync(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
             {
                 if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)

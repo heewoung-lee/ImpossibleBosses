@@ -270,7 +270,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     [Rpc(SendTo.NotMe)]
     private void NotifyButtonStateClientRpc(bool state, ulong targetClientId)
     {
-        if (NetworkManager.Singleton.LocalClientId == targetClientId)
+        if (Managers.RelayManager.NetworkManagerEx.LocalClientId == targetClientId)
         {
             _uiRoomCharacterSelect.ButtonState(state); // 본인의 클라이언트에서만 실행
         }

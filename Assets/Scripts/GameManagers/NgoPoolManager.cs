@@ -37,7 +37,7 @@ namespace GameManagers
 
             void SpawnNgoPolling()
             {
-                Managers.RelayManager.NgoRPCCaller.SpawnPrefabNeedToInitalizeRpc("Prefabs/NGO/NGO_Polling");
+                Managers.RelayManager.NgoRPCCaller.SpawnPrefabNeedToInitializeRpc("Prefabs/NGO/NGO_Polling");
             }
         }
         public void SetPool_NGO_ROOT_Dict(string poolNgoPath,Transform rootTr)

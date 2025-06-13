@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using GameManagers;
 using NetWork.NGO.UI;
+using Scene.BattleScene;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +20,10 @@ public class UnitGamePlayScene : ISceneSpawnBehaviour
         _ui_stage_timer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
         _ui_stage_timer.OnTimerCompleted += nextscene.MoveScene;
     }
+    
+    
+    
+    
     public void SpawnOBJ()
     {
         if (Managers.RelayManager.NetworkManagerEx.IsHost)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2008588023665778795}
   - component: {fileID: 4418273896801461844}
   m_Layer: 0
-  m_Name: NGO_BattleSceneSpawn
+  m_Name: NgoBattleSceneSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

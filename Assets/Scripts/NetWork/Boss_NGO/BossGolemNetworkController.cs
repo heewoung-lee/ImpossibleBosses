@@ -140,7 +140,7 @@ namespace NetWork.Boss_NGO
             }
             while (elaspedTime <=animinfo.AnimLength)
             {
-                double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+                double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
                 double deltaTime = (currentNetTime - nowTime);
                 nowTime = currentNetTime;
 
@@ -166,7 +166,7 @@ namespace NetWork.Boss_NGO
             float elapsedTime = 0f;
             while (elapsedTime <= indicatorAddduration + animLength)
             {
-                double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+                double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
                 float deltaTime = (float)(currentNetTime - prevNetTime);
                 elapsedTime += deltaTime;
                 yield return null;

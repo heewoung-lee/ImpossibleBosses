@@ -223,7 +223,7 @@ public class NGO_Indicator_Controller : NetworkBehaviourBase, IIndicatorBahaviou
         double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
         while (elapsed < duration)
         {
-            double currentNetTime = NetworkManager.Singleton.ServerTime.Time;
+            double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
             double deltaTime = currentNetTime - nowTime;
             nowTime = currentNetTime;
 

@@ -1,4 +1,5 @@
 using GameManagers;
+using Player;
 using UnityEngine;
 
 namespace Controller

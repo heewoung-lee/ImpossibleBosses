@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -80,7 +81,7 @@ namespace GameManagers
 
             void FindTargetNGO_Spawn()
             {
-                ulong targetNGOID = NGO_RPC_Caller.INVALIDOBJECTID;
+                ulong targetNGOID = NgoRPCCaller.Invalidobjectid;
                 if (spawnTr.TryGetComponentInParents(out NetworkObject networkObj))
                 {
                     targetNGOID = networkObj.NetworkObjectId;

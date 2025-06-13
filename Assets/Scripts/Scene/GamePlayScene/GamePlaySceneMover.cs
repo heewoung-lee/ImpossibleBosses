@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameManagers;
+using NetWork.NGO;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEditor;
@@ -30,7 +31,7 @@ public class GamePlaySceneMover : ISceneMover
                 if (player.TryGetComponent(out NavMeshAgent agent))
                 {
                     agent.Warp(pos);
-                    player.GetComponent<PlayerInitalizeNGO>().SetForcePositionFromNetworkRpc(pos);
+                    player.GetComponent<PlayerInitializeNgo>().SetForcePositionFromNetworkRpc(pos);
                 }
 
             }

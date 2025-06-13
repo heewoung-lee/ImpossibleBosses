@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5789822676079542233}
   - component: {fileID: 7801371336485906067}
   m_Layer: 0
-  m_Name: NGO_RPC_Caller
+  m_Name: NgoRPCCaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
