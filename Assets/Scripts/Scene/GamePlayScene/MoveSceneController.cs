@@ -9,6 +9,7 @@ namespace Scene.GamePlayScene
             this._iSceneBehaviour = iSceneBehaviour;
         }
 
+//컨트롤러가 어떤 걸 주입받냐에 따라 어떻게 행동할껀지 분기해줘야함.
 
         public void InitGamePlayScene()
         {

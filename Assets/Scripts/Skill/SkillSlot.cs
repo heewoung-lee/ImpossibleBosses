@@ -1,3 +1,4 @@
+using Skill;
 using UnityEngine;
 
 public class SkillSlot : MonoBehaviour

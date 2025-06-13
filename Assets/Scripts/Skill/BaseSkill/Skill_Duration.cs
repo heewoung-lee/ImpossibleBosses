@@ -9,5 +9,5 @@ public abstract class Skill_Duration : BaseSkill
     public abstract Sprite BuffIconImage { get; }
     public abstract BuffModifier Buff_Modifier { get; }
 
-    public abstract string Buff_IconImage_Path { get; }
+    public abstract string BuffIconImagePath { get; }
 }

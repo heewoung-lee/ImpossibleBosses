@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6279427201469973434}
   - component: {fileID: 8575423652317584147}
   m_Layer: 0
-  m_Name: CoolTimeIMG
+  m_Name: CoolTimeImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
