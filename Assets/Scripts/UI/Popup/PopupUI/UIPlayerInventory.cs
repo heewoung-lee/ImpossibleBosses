@@ -28,6 +28,7 @@ namespace UI.Popup.PopupUI
         private Vector2 _initialMousePosition;
         private Vector3 _initialWindowPosition;//인벤토리의 초기위치를 담는곳
         private Transform _itemInventoryTr;
+        private RectTransform _parentRectTransform;
 
         private GraphicRaycaster _uiInventoryRaycaster;
         private EventSystem _eventSystem;
@@ -91,45 +92,18 @@ namespace UI.Popup.PopupUI
             _windowPanel = Get<Transform>((int)PanelTr.WindowPanel);
             _equipMent = Get<GameObject>((int)EquipmentGo.Equipment);
 
-            _initialWindowPosition = (_equipMent.transform as RectTransform).localPosition;
+            _initialWindowPosition = ((RectTransform)_equipMent.transform).localPosition;
 
             _itemInventoryTr = Utill.FindChild<InventoryContentCoordinate>(gameObject, null, true).transform;
             _inventoryCanvas = GetComponent<Canvas>();
 
             _uiInventoryRaycaster = GetComponent<GraphicRaycaster>();
             _eventSystem = FindAnyObjectByType<EventSystem>();
+            _parentRectTransform = transform as RectTransform;
 
         }
         protected override void StartInit()
         {
-            RectTransform parentRectTransform = transform as RectTransform;
-
-            // 드래그 시작 시 초기 위치 저장
-            _windowPanel.gameObject.AddUIEvent((PointerEventData eventData) =>
-            {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    parentRectTransform,
-                    eventData.position,
-                    null,
-                    out _initialMousePosition
-                );
-                _initialEquipPosition = _equipMent.transform.localPosition;
-            }, Define.UIEvent.DragBegin);
-
-            // 드래그 중 창 위치 업데이트
-            _windowPanel.gameObject.AddUIEvent((PointerEventData eventData) =>
-            {
-                Vector2 currentMousePosition;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    parentRectTransform,
-                    eventData.position,
-                    null,
-                    out currentMousePosition
-                );
-
-                Vector2 offset = currentMousePosition - _initialMousePosition;
-                _equipMent.transform.localPosition = _initialEquipPosition + (Vector3)offset;
-            }, Define.UIEvent.Drag);
             UpdateStats();
             UpdateGoldUI(OwnerPlayerStats.Gold);
 
@@ -157,6 +131,30 @@ namespace UI.Popup.PopupUI
             }
         }
 
+        private void DragBeginInitialize(PointerEventData eventData)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                _parentRectTransform,
+                eventData.position,
+                null,
+                out _initialMousePosition
+            );
+            _initialEquipPosition = _equipMent.transform.localPosition;
+        }
+        private void DragingPositionUpdate(PointerEventData eventData)
+        {
+            Vector2 currentMousePosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                _parentRectTransform,
+                eventData.position,
+                null,
+                out currentMousePosition
+            );
+
+            Vector2 offset = currentMousePosition - _initialMousePosition;
+            _equipMent.transform.localPosition = _initialEquipPosition + (Vector3)offset;
+        }
+        
         protected override void OnEnableInit()
         {
             base.OnEnableInit();
@@ -168,9 +166,12 @@ namespace UI.Popup.PopupUI
                 UpdateStats();
                 UpdatePlayerLevelAndNickName(OwnerPlayerStats.CharacterBaseStats);
             }
+            // 드래그 시작 시 초기 위치 저장
+            _windowPanel.gameObject.AddUIEvent(DragBeginInitialize, Define.UIEvent.DragBegin);
+            // 드래그 중 창 위치 업데이트
+            _windowPanel.gameObject.AddUIEvent(DragingPositionUpdate, Define.UIEvent.Drag);
             //Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
             _equipMent.transform.localPosition = _initialWindowPosition;
-
         }
         protected override void OnDisableInit()
         {
@@ -180,6 +181,10 @@ namespace UI.Popup.PopupUI
             {
                 DeSubscribePlayerEvent();
             }
+            _windowPanel.gameObject.UnUIEvent(DragBeginInitialize, Define.UIEvent.DragBegin);
+            // 드래그 중 창 위치 업데이트
+            _windowPanel.gameObject.UnUIEvent(DragingPositionUpdate, Define.UIEvent.Drag);
+            
             CloseDecriptionWindow();
         }
 

@@ -163,15 +163,11 @@ namespace UI.SubItem
         protected override void StartInit()
         {
 
-            BindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
-            BindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
-            BindEvent(gameObject, ItemRightClick, Define.UIEvent.RightClick);
-            BindEvent(gameObject, GetDragBegin, Define.UIEvent.DragBegin);
-            BindEvent(gameObject, DraggingItem, Define.UIEvent.Drag);
-            BindEvent(gameObject, GetDragEnd, Define.UIEvent.DragEnd);
+           
 
             _decriptionObject = Managers.UIManager.Get_Scene_UI<UI_Description>();
         }
+
 
         public void ShowDescription(PointerEventData eventdata)
         {
@@ -186,6 +182,16 @@ namespace UI.SubItem
             _decriptionObject.SetValue(_iteminfo);//여기에 부모클래스인 IITem이 나와야함
             _decriptionObject.SetDescription(_descriptionText);
         }
+        protected override void OnEnableInit()
+        {
+            base.OnEnableInit();
+            BindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
+            BindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
+            BindEvent(gameObject, ItemRightClick, Define.UIEvent.RightClick);
+            BindEvent(gameObject, GetDragBegin, Define.UIEvent.DragBegin);
+            BindEvent(gameObject, DraggingItem, Define.UIEvent.Drag);
+            BindEvent(gameObject, GetDragEnd, Define.UIEvent.DragEnd);
+        }
         protected override void OnDisableInit()
         {
             base.OnDisableInit();
@@ -197,6 +203,12 @@ namespace UI.SubItem
             {
                 UIDragImageIcon.SetItemImageDisable();
             }
+            UnBindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
+            UnBindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
+            UnBindEvent(gameObject, ItemRightClick, Define.UIEvent.RightClick);
+            UnBindEvent(gameObject, GetDragBegin, Define.UIEvent.DragBegin);
+            UnBindEvent(gameObject, DraggingItem, Define.UIEvent.Drag);
+            UnBindEvent(gameObject, GetDragEnd, Define.UIEvent.DragEnd);
             RevertImage();
         }
 

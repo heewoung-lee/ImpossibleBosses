@@ -138,41 +138,59 @@ namespace UI
         public static void BindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
         {
             UIEventHandler evt = go.GetOrAddComponent<UIEventHandler>();
-
+            switch (mouseEvent)
+            {
+                case Define.UIEvent.LeftClick:
+                    evt.OnLeftClickEvent += action;
+                    break;
+                case Define.UIEvent.RightClick:
+                    evt.OnRightClickEvent += action;
+                    break;
+                case Define.UIEvent.Drag:
+                    evt.OnDragEvent += action;
+                    break;
+                case Define.UIEvent.DragBegin:
+                    evt.OnBeginDragEvent += action;
+                    break;
+                case Define.UIEvent.DragEnd:
+                    evt.OnEndDragEvent += action;
+                    break;
+                case Define.UIEvent.PointerEnter:
+                    evt.OnPointerEnterEvent += action;
+                    break;
+                case Define.UIEvent.PointerExit:
+                    evt.OnPointerExitEvent += action;
+                    break;
+            }
+        }
+        public static void UnBindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        {
+            UIEventHandler evt = go.GetOrAddComponent<UIEventHandler>();
             switch (mouseEvent)
             {
                 case Define.UIEvent.LeftClick:
                     evt.OnLeftClickEvent -= action;
-                    evt.OnLeftClickEvent += action;
                     break;
                 case Define.UIEvent.RightClick:
                     evt.OnRightClickEvent -= action;
-                    evt.OnRightClickEvent += action;
                     break;
                 case Define.UIEvent.Drag:
                     evt.OnDragEvent -= action;
-                    evt.OnDragEvent += action;
                     break;
                 case Define.UIEvent.DragBegin:
                     evt.OnBeginDragEvent -= action;
-                    evt.OnBeginDragEvent += action;
                     break;
                 case Define.UIEvent.DragEnd:
                     evt.OnEndDragEvent -= action;
-                    evt.OnEndDragEvent += action;
                     break;
                 case Define.UIEvent.PointerEnter:
                     evt.OnPointerEnterEvent -= action;
-                    evt.OnPointerEnterEvent += action;
                     break;
                 case Define.UIEvent.PointerExit:
                     evt.OnPointerExitEvent -= action;
-                    evt.OnPointerExitEvent += action;
                     break;
             }
-
         }
-
         protected Vector2 GetUISize(GameObject uiObject)
         {
             RectTransform rectTransform = uiObject.GetComponent<RectTransform>();

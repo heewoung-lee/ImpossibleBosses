@@ -1,6 +1,7 @@
 using Controller.PlayerState.FighterState;
 using GameManagers;
 using Player;
+using Stats;
 using UnityEngine;
 using Util;
 
@@ -49,21 +50,21 @@ namespace Module.PlayerModule.PlayerClassModule
             if(TryGetComponent(out PlayerController controller))
             {
                 _controller = controller;
-                InitailizeState();
+                InitializeState();
             }
             else
             {
-                Managers.SocketEventManager.DonePlayerSpawnEvent += Initailize_Player_DoneEvent;
+                Managers.GameManagerEx.OnPlayerSpawnEvent += Initialize_Player_DoneEvent;
             }
 
         }
-        private void Initailize_Player_DoneEvent(GameObject player)
+        private void Initialize_Player_DoneEvent(PlayerStats playerStats)
         {
-            _controller = player.GetComponent<PlayerController>();
-            InitailizeState();
+            _controller = playerStats.GetComponent<PlayerController>();
+            InitializeState();
         }
 
-        private void InitailizeState()
+        private void InitializeState()
         {
             _controller.StateAnimDict.RegisterState(_roarState, () => _controller.RunAnimation(_hashRoar, DefalutTransitionRoar));
             _controller.StateAnimDict.RegisterState(_determinationState, () => _controller.RunAnimation(_hashRoar, DefalutTransitionRoar));

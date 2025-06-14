@@ -41,7 +41,6 @@ namespace NetWork.NGO
                 _interactionTr = Get<Transform>((int)Transforms.Interaction);
                 Managers.GameManagerEx.SetPlayer(gameObject);
                 SetOwnerPlayerADD_Module();
-                Managers.SocketEventManager.InvokeDonePlayerSpawnEvent(gameObject);
             }
             Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
         }

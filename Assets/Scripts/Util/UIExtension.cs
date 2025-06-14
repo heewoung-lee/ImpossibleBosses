@@ -22,7 +22,10 @@ namespace Util
         {
             UIBase.BindEvent(go, action, mouseEvent);
         }
-
+        public static void UnUIEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        {
+            UIBase.UnBindEvent(go, action, mouseEvent);
+        }
         public static bool TryGetTask<T>(this BehaviorTree tree, out T task) where T : BehaviorDesigner.Runtime.Tasks.Task
         {
             task = tree.FindTask<T>();

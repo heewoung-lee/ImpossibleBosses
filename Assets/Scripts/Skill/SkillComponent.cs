@@ -40,10 +40,25 @@ namespace Skill
             _coolTimeImg = Get<Image>((int)SkillImage.CoolTimeImg);
             _isSkillReady = true;
             _skillComponentRectTr = transform as RectTransform;
+           
+        }
+
+        protected override void OnEnableInit()
+        {
+            base.OnEnableInit();
             BindEvent(_iconimage.gameObject, ClicktoSkill);
             BindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
             BindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
         }
+
+        protected override void OnDisableInit()
+        {
+            base.OnDisableInit();
+            UnBindEvent(_iconimage.gameObject, ClicktoSkill);
+            UnBindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
+            UnBindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
+        }
+
         private void ShowDescription(PointerEventData data)
         {
             _decriptionObject.UI_DescriptionEnable();

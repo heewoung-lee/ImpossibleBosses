@@ -1,4 +1,5 @@
 using GameManagers;
+using Stats;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,17 +25,17 @@ namespace Controller
 
             if(Managers.GameManagerEx.Player == null)
             {
-                Managers.SocketEventManager.DonePlayerSpawnEvent += InitalizeFollowingCamera;
+                Managers.GameManagerEx.OnPlayerSpawnEvent += InitializeFollowingCamera;
             }
             else
             {
-                InitalizeFollowingCamera(Managers.GameManagerEx.Player);
+                InitializeFollowingCamera(Managers.GameManagerEx.Player.GetComponent<PlayerStats>());
             }
         }
 
-        public void InitalizeFollowingCamera(GameObject player)
+        public void InitializeFollowingCamera(PlayerStats playerstats)
         {
-            _playerTr = player.transform;
+            _playerTr = playerstats.transform;
             _camera.Target.TrackingTarget = _playerTr;
 
             _mouseMiddleButton = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");

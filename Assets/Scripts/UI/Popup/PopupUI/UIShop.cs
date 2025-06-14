@@ -96,23 +96,20 @@ namespace UI.Popup.PopupUI
             _uiShopRaycaster = GetComponent<GraphicRaycaster>();
             _eventSystem = FindAnyObjectByType<EventSystem>();
 
-            BindEvent(_equipItemIcon.gameObject, ClickToTab);
-            BindEvent(_consumableItemIcon.gameObject, ClickToTab);
-            BindEvent(_etcItemIcon.gameObject, ClickToTab);
 
-            if (_playerStats == null)
+            if (Managers.GameManagerEx.Player == null || Managers.GameManagerEx.Player.GetComponent<PlayerStats>() == null)
             {
-                Managers.SocketEventManager.DonePlayerSpawnEvent += InitializePlayerStatEvent;
+                Managers.GameManagerEx.OnPlayerSpawnEvent += InitializePlayerStatEvent;
             }
             else
             {
-                _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+              _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
             }
         }
 
-        public void InitializePlayerStatEvent(GameObject player)
+        public void InitializePlayerStatEvent(PlayerStats playerstats)
         {
-            _playerStats = player.GetComponent<PlayerStats>();
+            _playerStats = playerstats;
             OnEnableInit();
         }
 
@@ -123,6 +120,9 @@ namespace UI.Popup.PopupUI
                 return;
             _closePopupUI.performed += CloseDecriptionWindow;
             _playerStats.PlayerHasGoldChangeEvent += UpdateHasGoldChanged;
+            BindEvent(_equipItemIcon.gameObject, ClickToTab);
+            BindEvent(_consumableItemIcon.gameObject, ClickToTab);
+            BindEvent(_etcItemIcon.gameObject, ClickToTab);
             UpdateHasGoldChanged(_playerStats.Gold);
         }
 
@@ -133,6 +133,9 @@ namespace UI.Popup.PopupUI
             base.OnDisableInit();
             _closePopupUI.performed -= CloseDecriptionWindow;
             _playerStats.PlayerHasGoldChangeEvent -= UpdateHasGoldChanged;
+            UnBindEvent(_equipItemIcon.gameObject, ClickToTab);
+            UnBindEvent(_consumableItemIcon.gameObject, ClickToTab);
+            UnBindEvent(_etcItemIcon.gameObject, ClickToTab);
             CloseDecriptionWindow();
         }
         public void UpdateHasGoldChanged(int gold)
