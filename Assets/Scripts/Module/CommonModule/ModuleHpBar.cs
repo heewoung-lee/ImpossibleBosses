@@ -1,4 +1,5 @@
 using GameManagers;
+using UI.WorldSpace;
 using UnityEngine;
 
 namespace Module.CommonModule
@@ -7,7 +8,7 @@ namespace Module.CommonModule
     {
         void Start()
         {
-            UI_HPBar playerInfoUI = Managers.UIManager.MakeUIWorldSpaceUI<UI_HPBar>();
+            UIHpBar playerInfoUI = Managers.UIManager.MakeUIWorldSpaceUI<UIHpBar>();
             playerInfoUI.transform.SetParent(transform);
         }
     }

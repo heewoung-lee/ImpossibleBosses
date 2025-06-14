@@ -1,6 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Environment : MonoBehaviour
+namespace Util
 {
+    public class Environment : MonoBehaviour
+    {
+    }
 }

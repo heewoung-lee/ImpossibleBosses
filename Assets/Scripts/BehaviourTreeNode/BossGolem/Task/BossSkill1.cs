@@ -9,6 +9,7 @@ using NetWork.NGO.Interface;
 using Stats.BaseStats;
 using Stats.BossStats;
 using UnityEngine;
+using Util;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {

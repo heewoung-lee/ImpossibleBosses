@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Buffer;
 using GameManagers;
+using UI.Scene;
 using UI.Scene.Interface;
 using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
-public class UI_BufferBar : UI_Scene,ISceneChangeBehaviour
+public class UI_BufferBar : UIScene,ISceneChangeBehaviour
 {
     enum BufferContextTr
     {

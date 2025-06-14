@@ -1,12 +1,14 @@
 using System.Collections;
 using GameManagers;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Util;
 
 namespace Skill
 {
-    public class SkillComponent : UI_Base
+    public class SkillComponent : UIBase
     {
     
         enum SkillImage
@@ -39,8 +41,8 @@ namespace Skill
             _isSkillReady = true;
             _skillComponentRectTr = transform as RectTransform;
             BindEvent(_iconimage.gameObject, ClicktoSkill);
-            BindEvent(gameObject, ShowDescription, Define.UI_Event.PointerEnter);
-            BindEvent(gameObject, CloseDescription, Define.UI_Event.PointerExit);
+            BindEvent(gameObject, ShowDescription, Define.UIEvent.PointerEnter);
+            BindEvent(gameObject, CloseDescription, Define.UIEvent.PointerExit);
         }
         private void ShowDescription(PointerEventData data)
         {

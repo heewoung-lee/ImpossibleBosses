@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class UnexpectedComponent : MonoBehaviour
+namespace Util
 {
-    private void OnEnable()
+    public class UnexpectedComponent : MonoBehaviour
     {
-        Debug.Log($"[DEBUG] {this.GetType().Name} added to {gameObject.name}\n{StackTraceUtility.ExtractStackTrace()}");
+        private void OnEnable()
+        {
+            Debug.Log($"[DEBUG] {this.GetType().Name} added to {gameObject.name}\n{StackTraceUtility.ExtractStackTrace()}");
+        }
     }
 }

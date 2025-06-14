@@ -1,5 +1,6 @@
 using GameManagers;
 using Stats.BaseStats;
+using UI.WorldSpace;
 using UnityEngine;
 
 namespace Module.CommonModule
@@ -13,7 +14,7 @@ namespace Module.CommonModule
         }
         public void ShowDamageText_UI(int damage, int currentHp)
         {
-            UI_DamageText uIDamageText = Managers.UIManager.MakeUIWorldSpaceUI<UI_DamageText>();
+            UIDamageText uIDamageText = Managers.UIManager.MakeUIWorldSpaceUI<UIDamageText>();
             uIDamageText.SetTextAndPosition(transform, damage);
             uIDamageText.transform.SetParent(transform);
         }

@@ -1,8 +1,10 @@
 using GameManagers;
 using Module.CommonModule;
 using Player;
+using UI.WorldSpace;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Util;
 
 namespace Module.PlayerModule
 {
@@ -15,16 +17,16 @@ namespace Module.PlayerModule
     {
         private const float YPositionOffset = 0.2f;
         private InputAction _interactionInput;
-        private UI_ShowInteraction_ICON _iconUI;
+        private UIShowInteractionIcon _iconUI;
 
 
-        public UI_ShowInteraction_ICON IconUI
+        public UIShowInteractionIcon IconUI
         {
             get
             {
                 if (_iconUI == null)
                 {
-                    _iconUI = Managers.UIManager.MakeUIWorldSpaceUI<UI_ShowInteraction_ICON>();
+                    _iconUI = Managers.UIManager.MakeUIWorldSpaceUI<UIShowInteractionIcon>();
                 }
                 return _iconUI;
             }

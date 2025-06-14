@@ -3,10 +3,11 @@ using System.Collections;
 using GameManagers;
 using Stats.BossStats;
 using TMPro;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Boss_HP : UI_Scene
+public class UI_Boss_HP : UIScene
 {
     enum HP_Slider
     {

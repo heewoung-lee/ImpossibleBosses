@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers;
 using TMPro;
+using UI.Popup.PopupUI;
+using UI.Scene;
 using Unity.Services.Authentication;
 using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
-public class UI_UserInfo_Panel : UI_Scene
+public class UI_UserInfo_Panel : UIScene
 {
 
     enum Buttons
@@ -27,7 +30,7 @@ public class UI_UserInfo_Panel : UI_Scene
     Button _createRoomButton;
     Button _refreshLobbyButton;
     Button _loginSceneBackButton;
-    UI_CreateRoom _createRoomUI;
+    UICreateRoom _createRoomUI;
 
     TMP_Text _userNickNamaText;
     protected override void AwakeInit()
@@ -65,7 +68,7 @@ public class UI_UserInfo_Panel : UI_Scene
         }
         catch (Exception ex)
         {
-            UI_AlertDialog alert_Popup =  Managers.UIManager.TryGetPopupDictAndShowPopup<UI_AlertDialog>();
+            UIAlertDialog alert_Popup =  Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>();
             alert_Popup.SetText("오류", $"{ex}");
             _refreshLobbyButton.interactable = true;
         }
@@ -109,7 +112,7 @@ public class UI_UserInfo_Panel : UI_Scene
     {
         if (_createRoomUI == null)
         {
-            _createRoomUI = Managers.UIManager.GetPopupUIFromResource<UI_CreateRoom>();
+            _createRoomUI = Managers.UIManager.GetPopupUIFromResource<UICreateRoom>();
         }
         Managers.UIManager.ShowPopupUI(_createRoomUI);
     }

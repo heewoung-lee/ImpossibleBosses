@@ -3,8 +3,9 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using UnityEngine;
 using System.Threading.Tasks;
+using UI.Scene;
 
-public class UI_Room_Inventory : UI_Scene
+public class UI_Room_Inventory : UIScene
 {    enum Transforms
     {
         Room_Content

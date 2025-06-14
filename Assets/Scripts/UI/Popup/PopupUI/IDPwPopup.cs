@@ -1,10 +1,11 @@
 using GameManagers;
 using TMPro;
 using UnityEngine.InputSystem;
+using Util;
 
 namespace UI.Popup.PopupUI
 {
-    public abstract class IDPwPopup : UI_Popup
+    public abstract class IDPwPopup : UIPopup
     {
         private InputAction _inputTabKey;
 

@@ -2,6 +2,7 @@ using Controller.PlayerState.FighterState;
 using GameManagers;
 using Player;
 using UnityEngine;
+using Util;
 
 namespace Module.PlayerModule.PlayerClassModule
 {

@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class HeadTr : MonoBehaviour
+namespace Util
 {
+    public class HeadTr : MonoBehaviour
+    {
     
+    }
 }

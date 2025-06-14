@@ -3,6 +3,7 @@ using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using Util;
 
 namespace Scene.GamePlayScene
 {

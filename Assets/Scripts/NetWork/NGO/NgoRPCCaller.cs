@@ -9,10 +9,12 @@ using NetWork.NGO.Interface;
 using Scene.GamePlayScene;
 using Stats;
 using UI.Scene.Interface;
+using UI.SubItem;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using Util;
 
 namespace NetWork.NGO
 {
@@ -119,7 +121,7 @@ namespace NetWork.NGO
             //여기에서 itemStruct를 IItem으로 변환
             GameObject networkLootItem = null;
             IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
-            switch (itemStruct.Item_Type)
+            switch (itemStruct.ItemType)
             {
                 case ItemType.Equipment:
                     networkLootItem = Managers.ItemDataManager.GetEquipLootItem(iteminfo);

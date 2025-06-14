@@ -6,6 +6,7 @@ using GameManagers;
 using Module.PlayerModule.PlayerClassModule;
 using Skill.BaseSkill;
 using UnityEngine;
+using Util;
 
 namespace Skill.AllofSkills.Fighter
 {

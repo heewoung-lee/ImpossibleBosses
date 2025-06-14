@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using UI.SubItem;
 using UnityEngine;
+using Util;
 
 namespace Data.DataType.ItemType
 {
@@ -74,11 +76,11 @@ namespace Data.DataType.ItemType
             return itemEffectText;
         }
 
-        public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
-            UI_ItemComponent_Equipment uiEquipmentComponent
-                = Managers.UIManager.MakeSubItem<UI_ItemComponent_Equipment>(parent, name,
+            UIItemComponentEquipment uiEquipmentComponent
+                = Managers.UIManager.MakeSubItem<UIItemComponentEquipment>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
             if (itemCount != 1)
             {
@@ -89,18 +91,18 @@ namespace Data.DataType.ItemType
             return uiEquipmentComponent;
         }
 
-        public UI_ShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
-            UI_ShopItemComponent uiShopItemComponent =
-                Managers.UIManager.MakeSubItem<UI_ShopItemComponent>(parent, name,
-                    $"Prefabs/UI/Item/UI_ShopItemComponent");
+            UIShopItemComponent uiShopItemComponent =
+                Managers.UIManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                    $"Prefabs/UI/Item/UIShopItemComponent");
             if (itemCount != 1)
             {
                 Debug.LogWarning("Equipment items are uncountable.");
             }
 
-            uiShopItemComponent.IntializeItem(this, itemCount, itemPrice);
+            uiShopItemComponent.InitializeItem(this, itemCount, itemPrice);
             return uiShopItemComponent;
         }
     }

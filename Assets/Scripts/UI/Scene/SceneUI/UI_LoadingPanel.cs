@@ -1,8 +1,10 @@
 using GameManagers;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
-public class UI_LoadingPanel : UI_Scene
+public class UI_LoadingPanel : UIScene
 {
     enum LoadingPanel
     {

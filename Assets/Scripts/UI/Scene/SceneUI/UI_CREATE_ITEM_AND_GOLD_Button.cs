@@ -6,12 +6,15 @@ using GameManagers;
 using Scene;
 using Stats;
 using TMPro;
+using UI.Popup.PopupUI;
+using UI.Scene;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Util;
 
-public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
+public class UI_CREATE_ITEM_AND_GOLD_Button : UIScene
 {
     private Button _scoreButton;
     private Button _moveSceneButton;
@@ -118,7 +121,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UI_Scene
 
     public void TestIteminInventort()
     {
-        if (Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>().gameObject.activeSelf == false)
+        if (Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>().gameObject.activeSelf == false)
             return;
 
         switch (itemGeneratingType)

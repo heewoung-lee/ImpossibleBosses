@@ -4,8 +4,11 @@ using GameManagers;
 using Module.CommonModule;
 using Module.PlayerModule;
 using Player;
+using UI.Popup.PopupUI;
+using UI.SubItem;
 using Unity.Netcode;
 using UnityEngine;
+using Util;
 using Random = UnityEngine.Random;
 
 namespace NetWork.LootItem
@@ -16,7 +19,7 @@ namespace NetWork.LootItem
         private const float TorqueForceOffset = 30f;
         private const float DropitemVerticalOffset = 0.2f;
         private const float DropitemRotationOffset = 40f;
-        private UI_Player_Inventory _uiPlayerInventory;
+        private UIPlayerInventory _uiPlayerInventory;
         private NetworkObject _networkObject;
 
         private Vector3 _dropPosition;
@@ -39,7 +42,7 @@ namespace NetWork.LootItem
 
         public void SpawnBehaviour()
         {
-            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
+            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _canInteraction = false;
 
             if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
@@ -142,7 +145,7 @@ namespace NetWork.LootItem
             if (baseController.CurrentStateType != baseController.PickupState)
                 return;
 
-            UI_ItemComponent_Inventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory();
+            UIItemComponentInventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory();
             inventoryItem.transform.SetParent(_uiPlayerInventory.ItemInventoryTr);
             player.DisEnable_Icon_UI();//상호작용 아이콘 제거
             if (Managers.RelayManager.NetworkManagerEx.IsHost)

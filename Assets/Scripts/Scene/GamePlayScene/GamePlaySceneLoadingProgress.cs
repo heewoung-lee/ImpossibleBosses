@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using GameManagers;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace Scene.GamePlayScene
 {
-    public class GamePlaySceneLoadingProgress : UI_Base
+    public class GamePlaySceneLoadingProgress : UIBase
     {
         private UI_Loading _uiLoading;
         private int _loadedPlayerCount = 0;

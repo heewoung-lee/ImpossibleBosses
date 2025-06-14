@@ -2,6 +2,7 @@ using Data.DataType.StatType;
 using GameManagers;
 using Stats.BaseStats;
 using Unity.Netcode;
+using Util;
 
 namespace Stats.MonsterStats.SlimeStats
 {

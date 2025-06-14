@@ -14,6 +14,7 @@ using Google.Apis.Sheets.v4.Data;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
+using Util;
 
 namespace GameManagers
 {
@@ -40,7 +41,7 @@ namespace GameManagers
                     GoogleAuthLogin authlogin = new GoogleAuthLogin();
                     TextAsset[] jsonTexts = authlogin.LoadJson();
                     GoogleLoginWrapper googleLoginData = authlogin.ParseJsontoGoogleAuth(jsonTexts);
-                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.APPLICATIONNAME, Spreedsheetid);
+                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, Spreedsheetid);
                 }
                 return _databaseStruct;
             }

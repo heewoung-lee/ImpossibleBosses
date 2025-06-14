@@ -1,8 +1,10 @@
 using GameManagers;
 using NetWork.BaseNGO;
 using Stats;
+using UI.WorldSpace;
 using Unity.Netcode;
 using UnityEngine;
+using Util;
 
 namespace NetWork.NGO.Scene_NGO
 {
@@ -117,7 +119,7 @@ namespace NetWork.NGO.Scene_NGO
         {
             if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex,out NetworkObject player))
             {
-                player.gameObject.TryGetComponentInChildren(out UI_PortalIndicator indicator);
+                player.gameObject.TryGetComponentInChildren(out UIPortalIndicator indicator);
                 indicator.SetIndicatorOn();
             }
         }
@@ -128,7 +130,7 @@ namespace NetWork.NGO.Scene_NGO
         {
             if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex, out NetworkObject player))
             {
-                player.gameObject.TryGetComponentInChildren(out UI_PortalIndicator indicator);
+                player.gameObject.TryGetComponentInChildren(out UIPortalIndicator indicator);
                 indicator.SetIndicatorOff();
             }
         }

@@ -1,6 +1,9 @@
-public interface IPopupHandler
+namespace UI.Popup.PopupUI
 {
-    public bool IsVisible { get; }
-    public void ShowPopup();
-    public void ClosePopup();
+    public interface IPopupHandler
+    {
+        public bool IsVisible { get; }
+        public void ShowPopup();
+        public void ClosePopup();
+    }
 }

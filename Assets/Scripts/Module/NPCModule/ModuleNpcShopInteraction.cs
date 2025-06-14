@@ -1,13 +1,14 @@
 using GameManagers;
 using Module.CommonModule;
 using Module.PlayerModule;
+using UI.Popup.PopupUI;
 using UnityEngine;
 
 namespace Module.NPCModule
 {
     public class ModuleNpcShopInteraction : MonoBehaviour, IInteraction
     {
-        UI_Shop _uiShop;
+        UIShop _uiShop;
         CapsuleCollider _collider;
 
         public bool CanInteraction => true;
@@ -22,7 +23,7 @@ namespace Module.NPCModule
         }
         private void Start()
         {
-            _uiShop = Managers.UIManager.GetPopupUIFromResource<UI_Shop>();
+            _uiShop = Managers.UIManager.GetPopupUIFromResource<UIShop>();
             Managers.UIManager.ClosePopupUI(_uiShop);
         }
         public void Interaction(ModulePlayerInteraction caller)

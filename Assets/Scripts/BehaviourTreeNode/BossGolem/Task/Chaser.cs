@@ -5,6 +5,7 @@ using Controller.BossState;
 using NetWork.Boss_NGO;
 using Stats.BaseStats;
 using UnityEngine;
+using Util;
 
 
 namespace BehaviourTreeNode.BossGolem.Task

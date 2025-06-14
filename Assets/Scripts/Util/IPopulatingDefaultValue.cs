@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPopulatingDefaultValue
+namespace Util
 {
-    public void PopulatingDefaultValue(List<Object> searchedObject);
+    public interface IPopulatingDefaultValue
+    {
+        public void PopulatingDefaultValue(List<Object> searchedObject);
+    }
 }

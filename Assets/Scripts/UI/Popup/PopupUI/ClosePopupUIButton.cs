@@ -1,6 +1,7 @@
 using GameManagers;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace UI.Popup.PopupUI
 {
@@ -8,10 +9,10 @@ namespace UI.Popup.PopupUI
     {
         private Button _windowCloseButton;
     
-        private UI_Popup _parentPopup;
+        private UIPopup _parentPopup;
         void Start()
         {
-            _parentPopup = transform.FindParantComponent<UI_Popup>();
+            _parentPopup = transform.FindParantComponent<UIPopup>();
 
             _windowCloseButton = _windowCloseButton = Utill.FindChild(gameObject, "Button_Close", true).GetComponent<Button>();
             _windowCloseButton.onClick.AddListener(() =>

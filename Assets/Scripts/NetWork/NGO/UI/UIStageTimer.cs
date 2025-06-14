@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using TMPro;
+using UI.Scene;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace NetWork.NGO.UI
 {
-    public class UIStageTimer : UI_Scene
+    public class UIStageTimer : UIScene
     {
 
         private Image _timerDial;

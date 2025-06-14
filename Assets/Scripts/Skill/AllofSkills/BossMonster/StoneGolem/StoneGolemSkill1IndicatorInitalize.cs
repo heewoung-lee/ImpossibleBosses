@@ -3,6 +3,7 @@ using NetWork;
 using NetWork.NGO.Interface;
 using Stats.BaseStats;
 using UnityEngine;
+using Util;
 
 namespace Skill.AllofSkills.BossMonster.StoneGolem
 {

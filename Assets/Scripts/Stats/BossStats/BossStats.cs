@@ -3,6 +3,7 @@ using Data.DataType.StatType;
 using GameManagers;
 using Stats.BaseStats;
 using UnityEngine;
+using Util;
 
 namespace Stats.BossStats
 {

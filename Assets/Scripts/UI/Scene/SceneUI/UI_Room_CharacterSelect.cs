@@ -8,6 +8,8 @@ using NetWork.NGO;
 using Scene;
 using Scene.GamePlayScene;
 using TMPro;
+using UI.Scene;
+using UI.SubItem;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
@@ -16,6 +18,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Util;
 
 struct ReadyButtonImages
 {
@@ -24,7 +27,7 @@ struct ReadyButtonImages
     public Color readyButtonTextColor;
 }
 
-public class UI_Room_CharacterSelect : UI_Scene
+public class UI_Room_CharacterSelect : UIScene
 {
     private const int MAX_PLAYER_COUNT = 8;
 
@@ -49,7 +52,7 @@ public class UI_Room_CharacterSelect : UI_Scene
     }
     private Transform _chooseCameraTr;
     private Transform _charactorSelect;
-    private UI_RoomPlayerFrame[] _ui_RoomPlayerFrames;
+    private UIRoomPlayerFrame[] _ui_RoomPlayerFrames;
     private Button _backToLobbyButton;
     private GameObject _loadingPanel;
     private UI_LoadingPanel _ui_LoadingPanel;
@@ -88,10 +91,10 @@ public class UI_Room_CharacterSelect : UI_Scene
         });
         _loadingPanel = Get<GameObject>((int)GameObjects.LoadingPanel);
 
-        _ui_RoomPlayerFrames = new UI_RoomPlayerFrame[MAX_PLAYER_COUNT];
+        _ui_RoomPlayerFrames = new UIRoomPlayerFrame[MAX_PLAYER_COUNT];
         for (int index = 0; index < _ui_RoomPlayerFrames.Length; index++)
         {
-            _ui_RoomPlayerFrames[index] = Managers.UIManager.MakeSubItem<UI_RoomPlayerFrame>(_charactorSelect);
+            _ui_RoomPlayerFrames[index] = Managers.UIManager.MakeSubItem<UIRoomPlayerFrame>(_charactorSelect);
         }
         _netWorkManager = Managers.RelayManager.NetworkManagerEx;
         _button_Ready = Get<Button>((int)Buttons.Button_Ready);
@@ -236,7 +239,7 @@ public class UI_Room_CharacterSelect : UI_Scene
         int playerframeindex = 0;
         for (int i = 0; i < _ui_RoomPlayerFrames.Length; i++)
         {
-            if (_ui_RoomPlayerFrames[i].ChracterSelectorNGO == null)
+            if (_ui_RoomPlayerFrames[i].CharacterSelectorNgo == null)
             {
                 _ui_RoomPlayerFrames[i].SetCharacterSelector(characterSelector);
                 playerframeindex = i;

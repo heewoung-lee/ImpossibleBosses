@@ -1,13 +1,15 @@
 using GameManagers;
+using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Util;
 
 namespace Module.UI_Module
 {
     public class ModuleUIPlayerInventory : MonoBehaviour
     {
 
-        private UI_Player_Inventory _inventoryUI;
+        private UIPlayerInventory _inventoryUI;
         private InputAction _switchInventoryUI;
         private void Awake()
         {
@@ -23,7 +25,7 @@ namespace Module.UI_Module
             }
             void InitalizeInventoryKey()
             {
-                _inventoryUI = Managers.UIManager.GetPopupUIFromResource<UI_Player_Inventory>();
+                _inventoryUI = Managers.UIManager.GetPopupUIFromResource<UIPlayerInventory>();
             }
         }
 

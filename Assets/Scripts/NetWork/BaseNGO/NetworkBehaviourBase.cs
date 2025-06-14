@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Util;
 using Object = UnityEngine.Object;
 
 namespace NetWork.BaseNGO

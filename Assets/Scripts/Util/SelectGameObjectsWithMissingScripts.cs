@@ -1,33 +1,36 @@
 using UnityEditor;
 using UnityEngine;
 
-public class SelectGameObjectsWithMissingScripts : Editor
+namespace Util
 {
-    [MenuItem("Utility/Remove Missing Script")]
-    private static void RemoveAllMissingScriptComponents()
+    public class SelectGameObjectsWithMissingScripts : Editor
     {
-        GameObject selectedGameObjects = Selection.activeGameObject;
-        int totalComponentCount = 0;
-        int totalGameObjectCount = 0;
-
-
-
-
-        foreach (Transform transform in selectedGameObjects.GetComponentsInChildren<Transform>(true))
+        [MenuItem("Utility/Remove Missing Script")]
+        private static void RemoveAllMissingScriptComponents()
         {
-            int missingScriptCount = GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(transform.gameObject);
+            GameObject selectedGameObjects = Selection.activeGameObject;
+            int totalComponentCount = 0;
+            int totalGameObjectCount = 0;
 
-            if (missingScriptCount > 0)
+
+
+
+            foreach (Transform transform in selectedGameObjects.GetComponentsInChildren<Transform>(true))
             {
-                Undo.RegisterCompleteObjectUndo(transform.gameObject, "Remove Missing Scripts");
-                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(transform.gameObject);
+                int missingScriptCount = GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(transform.gameObject);
 
-                totalComponentCount += missingScriptCount;
-                totalGameObjectCount++;
+                if (missingScriptCount > 0)
+                {
+                    Undo.RegisterCompleteObjectUndo(transform.gameObject, "Remove Missing Scripts");
+                    GameObjectUtility.RemoveMonoBehavioursWithMissingScript(transform.gameObject);
+
+                    totalComponentCount += missingScriptCount;
+                    totalGameObjectCount++;
+                }
+
             }
-
-        }
         
-        Debug.Log($"Removed {totalComponentCount} missing script component(s) from {totalGameObjectCount} game object(s).");
+            Debug.Log($"Removed {totalComponentCount} missing script component(s) from {totalGameObjectCount} game object(s).");
+        }
     }
 }

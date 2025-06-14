@@ -1,12 +1,14 @@
 using System;
 using GameManagers;
+using UI.Popup.PopupUI;
+using UI.Scene;
 using Unity.Multiplayer.Playmode;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Test.TestUI
 {
-    public class LogInTestToggle : UI_Scene
+    public class LogInTestToggle : UIScene
     {
 
         enum Buttons
@@ -47,7 +49,7 @@ namespace Test.TestUI
 
         private void ClickLogin()
         {
-            UI_LoginPopup loginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UI_LoginPopup>();
+            UILoginPopup uiLoginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UILoginPopup>();
 
 
             Players currentPlayer = Players.Player1;
@@ -61,16 +63,16 @@ namespace Test.TestUI
             switch (currentPlayer)
             {
                 case Players.Player1:
-                    loginPopup.AuthenticateUser("hiwoong123", "123123");
+                    uiLoginPopup.AuthenticateUser("hiwoong123", "123123");
                     break;
                 case Players.Player2:
-                    loginPopup.AuthenticateUser("hiwoong12", "123123");
+                    uiLoginPopup.AuthenticateUser("hiwoong12", "123123");
                     break;
                 case Players.Player3:
-                    loginPopup.AuthenticateUser("hiwoo12", "123123");
+                    uiLoginPopup.AuthenticateUser("hiwoo12", "123123");
                     break;
                 case Players.Player4:
-                    loginPopup.AuthenticateUser("hiwoong1234", "123123");
+                    uiLoginPopup.AuthenticateUser("hiwoong1234", "123123");
                     break;
                 case Players.None:
                     break;

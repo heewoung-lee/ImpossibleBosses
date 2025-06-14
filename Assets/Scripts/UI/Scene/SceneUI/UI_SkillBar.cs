@@ -2,11 +2,13 @@ using BehaviorDesigner.Runtime.Tasks.Unity.UnityInput;
 using System;
 using GameManagers;
 using Skill;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Util;
 
-public class UI_SkillBar : UI_Scene
+public class UI_SkillBar : UIScene
 {
     private Transform[] _skillContextFrames;
     private SkillSlot[] _skillSlot;

@@ -1,151 +1,150 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityPlayerPrefs;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
 using Stats.BaseStats;
+using UI.Popup.PopupUI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Util;
 
-public class EquipMentSlot : MonoBehaviour, IItemUnEquip
+namespace UI.SubItem
 {
-    public EquipmentSlotType slotType;
-
-    private UI_Player_Inventory _player_Inventory;
-    private Transform contentofInventoryTr;
-    private BaseStats _playerStats;
-    private UI_ItemComponent_Inventory _equipedItem;
-
-    public Action slotEvent;
-
-
-    public BaseStats PlayerStats
+    public class EquipMentSlot : MonoBehaviour, IItemUnEquip
     {
-        get
+        public EquipmentSlotType slotType;
+
+        private UIPlayerInventory _uiPlayerInventory;
+        private Transform _contentofInventoryTr;
+        private BaseStats _playerStats;
+        private UIItemComponentInventory _equipedItem;
+
+        public BaseStats PlayerStats
         {
-            if(_playerStats == null)
+            get
             {
-                if(Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
+                if(_playerStats == null)
                 {
-                    _playerStats = stats;
+                    if(Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
+                    {
+                        _playerStats = stats;
+                    }
                 }
+                return _playerStats;
             }
-            return _playerStats;
         }
-    }
 
 
-    private bool _isEquipped = false;
-    public bool IsEquipped
-    {
-        get => _isEquipped;
-        private set
+        private bool _isEquipped = false;
+        public bool IsEquipped
         {
-            _isEquipped = value;
+            get => _isEquipped;
+            private set
+            {
+                _isEquipped = value;
 
-            if (_equipedItem == null)
-                return;
+                if (_equipedItem == null)
+                    return;
 
-            ApplyItemEffects();
+                ApplyItemEffects();
+            }
         }
-    }
 
 
 
-    private void OnDestroy()
-    {
-        //TODO: 왜 디스트로이에 했냐, OnDisable로 하면 화면이 닫힐때 호출이 안되므로 디스트로이에 저장 로직 만듬
-
-        SaveDataFromEquipment();
-    }
-    private void SaveDataFromEquipment()
-    {
-        if (IsEquipped == true)
+        private void OnDestroy()
         {
-            Managers.SceneDataSaveAndLoader.SaveEquipMentData(new KeyValuePair<EquipmentSlotType, UI_ItemComponent_Inventory>(slotType, _equipedItem));
-            IsEquipped = false;//이전 아이템으로 능력치 빼기
+            //TODO: 왜 디스트로이에 했냐, OnDisable로 하면 화면이 닫힐때 호출이 안되므로 디스트로이에 저장 로직 만듬
 
-            UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
-            currentEquipItem.transform.SetParent(null);
-            currentEquipItem.SetItemEquipedState(false);//능력치 제거
-        } 
-    }
-
-    private void ApplyItemEffects()
-    {
-        List<StatEffect> Itemeffects = _equipedItem.ItemEffects;
-
-        foreach (StatEffect effect in Itemeffects)
-        {
-            StatType statType = effect.statType;
-            float statValue = effect.value;
-            UpdateStatsFromEquippedItem(statType, statValue, PlayerStats, IsEquipped);
+            SaveDataFromEquipment();
         }
-    }
-
-    private void UpdateStatsFromEquippedItem(StatType statType, float statValue, BaseStats stats, bool isEquipped)
-    {
-        int coefficient = isEquipped ? 1 : -1; //장비를 장착했으면 true, 빼면 false
-
-        switch (statType)
+        private void SaveDataFromEquipment()
         {
-            case StatType.MaxHP:
-                stats.Plus_MaxHp_Abillity((int)statValue * coefficient);
-                break;
-            case StatType.CurrentHp:
-                stats.Plus_Current_Hp_Abillity((int)statValue * coefficient);
-                break;
-            case StatType.Attack:
-                stats.Plus_Attack_Ability((int)statValue * coefficient);
-                break;
-            case StatType.Defence:
-                stats.Plus_Defence_Abillity((int)statValue * coefficient);
-                break;
-            case StatType.MoveSpeed:
-                stats.Plus_MoveSpeed_Abillity(statValue * coefficient);
-                break;
+            if (IsEquipped == true)
+            {
+                Managers.SceneDataSaveAndLoader.SaveEquipMentData(new KeyValuePair<EquipmentSlotType, UIItemComponentInventory>(slotType, _equipedItem));
+                IsEquipped = false;//이전 아이템으로 능력치 빼기
+
+                UIItemComponentInventory currentEquipItem = _equipedItem;
+                currentEquipItem.transform.SetParent(null);
+                currentEquipItem.SetItemEquipedState(false);//능력치 제거
+            } 
         }
-    }
 
-
-    void Start()
-    {
-        string slotTypeName = transform.gameObject.name.Replace("_Item_Slot", "");
-        slotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), slotTypeName);
-        _player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
-        contentofInventoryTr = _player_Inventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
-
-        if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
+        private void ApplyItemEffects()
         {
-            IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
-            UI_ItemComponent_Equipment equipItem = item.MakeInventoryItemComponent() as UI_ItemComponent_Equipment;
-            equipItem.SetINewteminfo(iteminfo);
-            equipItem.OnAfterStart += () => { equipItem.EquipItem(); };
+            List<StatEffect> itemEffects = _equipedItem.ItemEffects;
+
+            foreach (StatEffect effect in itemEffects)
+            {
+                StatType statType = effect.statType;
+                float statValue = effect.value;
+                UpdateStatsFromEquippedItem(statType, statValue, PlayerStats, IsEquipped);
+            }
+        }
+
+        private void UpdateStatsFromEquippedItem(StatType statType, float statValue, BaseStats stats, bool isEquipped)
+        {
+            int coefficient = isEquipped ? 1 : -1; //장비를 장착했으면 true, 빼면 false
+
+            switch (statType)
+            {
+                case StatType.MaxHP:
+                    stats.Plus_MaxHp_Abillity((int)statValue * coefficient);
+                    break;
+                case StatType.CurrentHp:
+                    stats.Plus_Current_Hp_Abillity((int)statValue * coefficient);
+                    break;
+                case StatType.Attack:
+                    stats.Plus_Attack_Ability((int)statValue * coefficient);
+                    break;
+                case StatType.Defence:
+                    stats.Plus_Defence_Abillity((int)statValue * coefficient);
+                    break;
+                case StatType.MoveSpeed:
+                    stats.Plus_MoveSpeed_Abillity(statValue * coefficient);
+                    break;
+            }
+        }
+
+
+        void Start()
+        {
+            string slotTypeName = transform.gameObject.name.Replace("_Item_Slot", "");
+            slotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), slotTypeName);
+            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _contentofInventoryTr = _uiPlayerInventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
+
+            if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
+            {
+                IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
+                UIItemComponentEquipment equipItem = item.MakeInventoryItemComponent() as UIItemComponentEquipment;
+                equipItem.SetINewteminfo(iteminfo);
+                equipItem.OnAfterStart += () => { equipItem.EquipItem(); };
             
+            }
         }
-    }
 
 
-    public void ItemEquip(UI_ItemComponent_Inventory itemComponent)
-    {
-        if (IsEquipped)//이미 슬롯에 아이템이 있다면
+        public void ItemEquip(UIItemComponentInventory itemComponent)
         {
-            IsEquipped = false;//이전 아이템으로 능력치 빼기
+            if (IsEquipped)//이미 슬롯에 아이템이 있다면
+            {
+                IsEquipped = false;//이전 아이템으로 능력치 빼기
 
-            UI_ItemComponent_Inventory currentEquipItem = _equipedItem;
-            currentEquipItem.transform.SetParent(contentofInventoryTr);
-            currentEquipItem.SetItemEquipedState(false);
+                UIItemComponentInventory currentEquipItem = _equipedItem;
+                currentEquipItem.transform.SetParent(_contentofInventoryTr);
+                currentEquipItem.SetItemEquipedState(false);
+            }
+            _equipedItem = itemComponent;
+            IsEquipped = true;
         }
-        _equipedItem = itemComponent;
-        IsEquipped = true;
-    }
 
-    public void ItemUnEquip()
-    {
-        IsEquipped = false;
-    }
+        public void ItemUnEquip()
+        {
+            IsEquipped = false;
+        }
 
+    }
 }

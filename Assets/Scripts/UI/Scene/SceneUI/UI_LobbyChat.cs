@@ -2,10 +2,11 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using TMPro;
+using UI.Scene;
 using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
-public class UI_LobbyChat : UI_Scene
+public class UI_LobbyChat : UIScene
 {
     enum Buttons
     {

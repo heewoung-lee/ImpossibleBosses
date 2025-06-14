@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using UI.SubItem;
+using Util;
 
 namespace GameManagers
 {
@@ -15,16 +17,16 @@ namespace GameManagers
             _inventoryItemList.AddRange(saveItemlist);
         }
 
-        public bool TryGetLoadInventoryItem(out List<UI_ItemComponent_Inventory> loadInventory)
+        public bool TryGetLoadInventoryItem(out List<UIItemComponentInventory> loadInventory)
         {
-            loadInventory = new List<UI_ItemComponent_Inventory>();
+            loadInventory = new List<UIItemComponentInventory>();
             if (_inventoryItemList == null || _inventoryItemList.Count <= 0)
                 return false;
 
             foreach (IteminfoStruct iteminfo in _inventoryItemList)
             {
                 IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
-                UI_ItemComponent_Inventory inventoryitem = item.MakeInventoryItemComponent();
+                UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent();
                 inventoryitem.SetINewteminfo(iteminfo);
                 loadInventory.Add(inventoryitem);
             }
@@ -34,7 +36,7 @@ namespace GameManagers
 
 
 
-        public void SaveEquipMentData(KeyValuePair<EquipmentSlotType, UI_ItemComponent_Inventory> equipValue)
+        public void SaveEquipMentData(KeyValuePair<EquipmentSlotType, UIItemComponentInventory> equipValue)
         {
 
             IteminfoStruct iteminfo = new IteminfoStruct(equipValue.Value);

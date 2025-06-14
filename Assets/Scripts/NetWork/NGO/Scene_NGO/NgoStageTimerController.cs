@@ -2,6 +2,7 @@ using GameManagers;
 using NetWork.NGO.UI;
 using Unity.Netcode;
 using UnityEngine;
+using Util;
 
 namespace NetWork.NGO.Scene_NGO
 {

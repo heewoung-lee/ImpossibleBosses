@@ -2,6 +2,7 @@ using System.Collections;
 using GameManagers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Util;
 
 namespace Scene
 {

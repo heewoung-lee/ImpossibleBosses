@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using GameManagers;
 using Stats;
+using UI.Scene;
+using UI.SubItem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Util;
 
-public class UI_ConsumableBar : UI_Scene
+public class UI_ConsumableBar : UIScene
 {
 
     private Image[] _consumableIcons;
@@ -102,7 +105,7 @@ public class UI_ConsumableBar : UI_Scene
     {
         int inputKey = int.Parse(context.control.path.Replace("/Keyboard/",""))-1;
 
-        if (_frameTrs[inputKey].gameObject.TryGetComponentInChildren(out UI_ItemComponent_Consumable consumable))
+        if (_frameTrs[inputKey].gameObject.TryGetComponentInChildren(out UIItemComponentConsumable consumable))
         {
             if (consumable.ItemCount > 1)
             {

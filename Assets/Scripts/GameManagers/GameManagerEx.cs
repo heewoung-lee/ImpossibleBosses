@@ -5,6 +5,8 @@ using Controller;
 using Player;
 using Stats;
 using UnityEngine;
+using Util;
+using Environment = Util.Environment;
 
 namespace GameManagers
 {

@@ -1,8 +1,10 @@
 using TMPro;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
-public class UI_Loading : UI_Scene
+public class UI_Loading : UIScene
 {
     enum Texts
     {

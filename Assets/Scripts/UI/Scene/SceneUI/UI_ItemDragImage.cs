@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
-public class UI_ItemDragImage : UI_Scene
+public class UI_ItemDragImage : UIScene
 {
     private Image _itemDragImage;
 

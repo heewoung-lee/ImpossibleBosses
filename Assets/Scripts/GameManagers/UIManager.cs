@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UI;
+using UI.Popup;
+using UI.Popup.PopupUI;
+using UI.Scene;
 using UnityEngine;
+using Util;
 
 namespace GameManagers
 {
@@ -15,14 +20,14 @@ namespace GameManagers
         int _popupSorting = PopupUISortingDefaultValue;
 
 
-        private Stack<UI_Popup> _uiPopups = new Stack<UI_Popup>();
+        private Stack<UIPopup> _uiPopups = new Stack<UIPopup>();
 
-        private Dictionary<Type, UI_Scene> _uiSceneDict = new Dictionary<Type, UI_Scene>();
+        private Dictionary<Type, UIScene> _uiSceneDict = new Dictionary<Type, UIScene>();
 
-        private Dictionary<Type, UI_Base> _importantPopupUI = new Dictionary<Type, UI_Base>();
+        private Dictionary<Type, UIBase> _importantPopupUI = new Dictionary<Type, UIBase>();
 
         
-        public Dictionary<Type, UI_Scene> UISceneDict => _uiSceneDict;
+        public Dictionary<Type, UIScene> UISceneDict => _uiSceneDict;
         public GameObject Root
         {
             get
@@ -35,16 +40,16 @@ namespace GameManagers
                 return go;
             }
         }
-        public void AddImportant_Popup_UI(UI_Base importantUI)
+        public void AddImportant_Popup_UI(UIBase importantUI)
         {
             Type type = importantUI.GetType();
             _importantPopupUI[type] = importantUI;
         }
 
-        public T GetImportant_Popup_UI<T>() where T : UI_Base
+        public T GetImportant_Popup_UI<T>() where T : UIBase
         {
 
-            if (_importantPopupUI.TryGetValue(typeof(T), out UI_Base value))
+            if (_importantPopupUI.TryGetValue(typeof(T), out UIBase value))
             {
                 return value as T;
             }
@@ -53,10 +58,10 @@ namespace GameManagers
             return null;
         }
 
-        public T Get_Scene_UI<T>() where T : UI_Scene
+        public T Get_Scene_UI<T>() where T : UIScene
         {
 
-            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene value))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UIScene value))
             {
                 return value as T;
             }
@@ -65,9 +70,9 @@ namespace GameManagers
             return null;
         }
 
-        public bool Try_Get_Scene_UI<T>(out T ui_scene) where T : UI_Scene
+        public bool Try_Get_Scene_UI<T>(out T ui_scene) where T : UIScene
         {
-            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene scene))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UIScene scene))
             {
                 ui_scene = scene as T;
                 return ui_scene is not null;
@@ -81,7 +86,7 @@ namespace GameManagers
             canvas.overrideSorting = true;
             if (sorting)
             {
-                if (canvas.GetComponent<UI_Popup>() != null)
+                if (canvas.GetComponent<UIPopup>() != null)
                 {
                     _popupSorting++;
                     canvas.sortingOrder = _popupSorting;
@@ -98,7 +103,7 @@ namespace GameManagers
             }
         }
 
-        public T TryGetPopupInDict<T>() where T : UI_Popup
+        public T TryGetPopupInDict<T>() where T : UIPopup
         {
             T popup = GetImportant_Popup_UI<T>();
             if (popup == null)
@@ -110,14 +115,14 @@ namespace GameManagers
             return popup;
         }
 
-        public T TryGetPopupDictAndShowPopup<T>() where T : UI_Popup
+        public T TryGetPopupDictAndShowPopup<T>() where T : UIPopup
         {
             T ui_popup = TryGetPopupInDict<T>();
             Managers.UIManager.ShowPopupUI(ui_popup);
             return ui_popup;
         }
 
-        public T GetPopupUIFromResource<T>(string name = null) where T : UI_Popup
+        public T GetPopupUIFromResource<T>(string name = null) where T : UIPopup
         {
             if (name == null)
                 name = typeof(T).Name;
@@ -140,7 +145,7 @@ namespace GameManagers
             }
             return popup;
         }
-        public T GetSceneUIFromResource<T>(string name = null, string path = null) where T : UI_Scene
+        public T GetSceneUIFromResource<T>(string name = null, string path = null) where T : UIScene
         {
             if (name == null)
                 name = typeof(T).Name;
@@ -160,9 +165,9 @@ namespace GameManagers
 
             return scene;
         }
-        public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UI_Scene
+        public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UIScene
         {
-            if (_uiSceneDict.TryGetValue(typeof(T), out UI_Scene value))
+            if (_uiSceneDict.TryGetValue(typeof(T), out UIScene value))
             {
                 return value as T;
             }
@@ -171,7 +176,7 @@ namespace GameManagers
 
 
 
-        public T MakeUIWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
+        public T MakeUIWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UIBase
         {
             if (name == null)
                 name = typeof(T).Name;
@@ -194,7 +199,7 @@ namespace GameManagers
             return go.GetComponent<T>();
         }
 
-        public T MakeSubItem<T>(Transform parent = null, string name = null, string path = null) where T : UI_Base
+        public T MakeSubItem<T>(Transform parent = null, string name = null, string path = null) where T : UIBase
         {
             if (name == null)
                 name = typeof(T).Name;
@@ -216,7 +221,7 @@ namespace GameManagers
             return Utill.GetOrAddComponent<T>(go);
         }
 
-        public void ShowPopupUI(UI_Popup popup)
+        public void ShowPopupUI(UIPopup popup)
         {
             IPopupHandler handler = popup as IPopupHandler;
 
@@ -246,7 +251,7 @@ namespace GameManagers
             if (_uiPopups.Count <= 0)
                 return;
 
-            UI_Popup popup = _uiPopups.Pop();
+            UIPopup popup = _uiPopups.Pop();
 
             IPopupHandler handler = popup as IPopupHandler;
             if (handler != null)
@@ -260,7 +265,7 @@ namespace GameManagers
             _popupSorting--;
         }
 
-        public void ClosePopupUI(UI_Popup popup)
+        public void ClosePopupUI(UIPopup popup)
         {
             IPopupHandler handler = popup as IPopupHandler;
 
@@ -270,11 +275,11 @@ namespace GameManagers
                 return;
 
 
-            Stack<UI_Popup> tempUIPopupStack = new Stack<UI_Popup>();
+            Stack<UIPopup> tempUIPopupStack = new Stack<UIPopup>();
 
             while (_uiPopups.Count > 0)
             {
-                UI_Popup popupUI = _uiPopups.Pop();
+                UIPopup popupUI = _uiPopups.Pop();
                 if (popupUI == popup)//나와 _ui_Popups에서 꺼낸 popup이 같다면 종료
                 {
                     if (handler != null)
@@ -311,7 +316,7 @@ namespace GameManagers
         /// <param name="popup">6.9일 IPopupHandler 인터페이스 추가 해당 인터페이스는 오브젝트를 켜고 끄는 방식의 핸들링을
         /// 수동으로 바꾸는 인터페이스이고 추가한 이유는 게임오브젝트를 비활성화하게 되면 백단에서 도는 프로세스가 멈추므로
         /// 백단에서 도는 프로세스가 있다면 해당 인터페이스를 상속받고 구현하는걸로 대체해야함</param>
-        public void SwitchPopUpUI(UI_Popup popup)
+        public void SwitchPopUpUI(UIPopup popup)
         {
 
             if (popup is IPopupHandler handler)
@@ -338,7 +343,7 @@ namespace GameManagers
             }
         }
 
-        public bool GetTopPopUpUI(UI_Popup popup)
+        public bool GetTopPopUpUI(UIPopup popup)
         {
             if (_uiPopups.Count <= 0)
                 return false;

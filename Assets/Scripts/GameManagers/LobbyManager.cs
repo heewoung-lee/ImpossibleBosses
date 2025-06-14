@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Scene;
+using UI.SubItem;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using Util;
 
 namespace GameManagers
 {
@@ -653,7 +655,7 @@ namespace GameManagers
             catch (Exception error)
             {
                 Debug.Log($"An Error Occured ErrorCode:{error}");
-                return null;
+                throw;
             }
 
             if (preLobby != null)
@@ -911,7 +913,7 @@ namespace GameManagers
             if (Managers.UIManager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
                 return;
 
-            UI_Room_Info_Panel infoPanel = Managers.UIManager.MakeSubItem<UI_Room_Info_Panel>(room_inventory_ui.Room_Content);
+            UIRoomInfoPanel infoPanel = Managers.UIManager.MakeSubItem<UIRoomInfoPanel>(room_inventory_ui.Room_Content);
             infoPanel.SetRoomInfo(lobby);
         }
 

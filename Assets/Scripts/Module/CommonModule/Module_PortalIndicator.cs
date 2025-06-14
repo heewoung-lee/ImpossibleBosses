@@ -1,4 +1,5 @@
 using GameManagers;
+using UI.WorldSpace;
 using UnityEngine;
 
 namespace Module.CommonModule
@@ -7,7 +8,7 @@ namespace Module.CommonModule
     {
         void Start()
         {
-            UI_PortalIndicator uiPortalIndicator = Managers.UIManager.MakeUIWorldSpaceUI<UI_PortalIndicator>();
+            UIPortalIndicator uiPortalIndicator = Managers.UIManager.MakeUIWorldSpaceUI<UIPortalIndicator>();
             uiPortalIndicator.transform.SetParent(transform);
         }
     }

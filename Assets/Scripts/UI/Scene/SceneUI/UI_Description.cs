@@ -5,10 +5,13 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using TMPro;
+using UI.Popup.PopupUI;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
-public class UI_Description : UI_Scene
+public class UI_Description : UIScene
 {
     enum ImageType
     {
@@ -46,19 +49,19 @@ public class UI_Description : UI_Scene
     private Direction _currnt_Dir = Direction.Right;
     private Color _item_GradeColor;
     private Vector3 _originPos;
-    private UI_Player_Inventory _uI_Player_Inventory;
+    private UIPlayerInventory _uI_Player_Inventory;
 
 
     public DescriptionWindow DescriptionWindow => _descriptionWindow;
 
 
-    public UI_Player_Inventory UI_Player_Inventory
+    public UIPlayerInventory UI_Player_Inventory
     {
         get
         {
             if(_uI_Player_Inventory == null)
             {
-                _uI_Player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UI_Player_Inventory>();
+                _uI_Player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
             }
             return _uI_Player_Inventory;
         }

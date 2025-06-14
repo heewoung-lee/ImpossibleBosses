@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GameManagers;
+using UI.SubItem;
 using UnityEngine;
 
 namespace Data.Item
@@ -11,7 +12,7 @@ namespace Data.Item
 
         private void OnDestroy()
         {
-            foreach (UI_ItemComponent_Inventory item in GetComponentsInChildren<UI_ItemComponent_Inventory>())
+            foreach (UIItemComponentInventory item in GetComponentsInChildren<UIItemComponentInventory>())
             {
                 _inventoryItemList.Add(new IteminfoStruct(item));
             }
@@ -20,7 +21,7 @@ namespace Data.Item
 
         private void Start()
         {
-            if(Managers.SceneDataSaveAndLoader.TryGetLoadInventoryItem(out List<UI_ItemComponent_Inventory> loaditemList))
+            if(Managers.SceneDataSaveAndLoader.TryGetLoadInventoryItem(out List<UIItemComponentInventory> loaditemList))
             {
                 //씬 전환후 가져온 아이템들에 대한 후처리는 여기에 할것 
             }

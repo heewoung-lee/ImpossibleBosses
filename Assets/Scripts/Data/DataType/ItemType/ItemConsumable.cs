@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using UI.SubItem;
 using UnityEngine;
+using Util;
 
 namespace Data.DataType.ItemType
 {
@@ -77,23 +79,23 @@ namespace Data.DataType.ItemType
             return descriptionBuilder.ToString();
         }
 
-        public UI_ItemComponent_Inventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
-            UI_ItemComponent_Consumable uiConsumableComponent =
-                Managers.UIManager.MakeSubItem<UI_ItemComponent_Consumable>(parent, name,
+            UIItemComponentConsumable uiConsumableComponent =
+                Managers.UIManager.MakeSubItem<UIItemComponentConsumable>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Consumable");
-            uiConsumableComponent.IntializeItem(this, itemCount);
+            uiConsumableComponent.InitializeItem(this, itemCount);
             return uiConsumableComponent;
         }
 
-        public UI_ShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
-            UI_ShopItemComponent uiShopItemComponent =
-                Managers.UIManager.MakeSubItem<UI_ShopItemComponent>(parent, name,
-                    $"Prefabs/UI/Item/UI_ShopItemComponent");
-            uiShopItemComponent.IntializeItem(this, itemCount, itemPrice);
+            UIShopItemComponent uiShopItemComponent =
+                Managers.UIManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                    $"Prefabs/UI/Item/UIShopItemComponent");
+            uiShopItemComponent.InitializeItem(this, itemCount, itemPrice);
             return uiShopItemComponent;
         }
     }

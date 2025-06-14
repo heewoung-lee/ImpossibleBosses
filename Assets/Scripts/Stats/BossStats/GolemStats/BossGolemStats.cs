@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using Controller.BossState;
 using Data.DataType.StatType;
+using Util;
 
 namespace Stats.BossStats.GolemStats
 {

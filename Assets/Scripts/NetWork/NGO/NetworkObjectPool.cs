@@ -5,6 +5,7 @@ using NetWork.NGO.InitializeNGO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
+using Util;
 
 namespace NetWork.NGO
 {

@@ -1,40 +1,42 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityInput;
 using GameManagers;
-using UnityEngine;
+using UI.Popup.PopupUI;
 using UnityEngine.UI;
 
-public class UI_LoginTitle : UI_Scene
+namespace UI.Scene.SceneUI
 {
-    enum ButtonEvent
+    public class UI_LoginTitle : UIScene
     {
-        Button_Start,
-    }
+        enum ButtonEvent
+        {
+            Button_Start,
+        }
 
 
-    Button _openLoginButton;
-    UI_LoginPopup _loginPopup;
-    protected override void AwakeInit()
-    {
-        base.AwakeInit();
-        Bind<Button>(typeof(ButtonEvent));
-        _openLoginButton = Get<Button>((int)ButtonEvent.Button_Start);
-    }
+        Button _openLoginButton;
+        UILoginPopup _uiLoginPopup;
+        protected override void AwakeInit()
+        {
+            base.AwakeInit();
+            Bind<Button>(typeof(ButtonEvent));
+            _openLoginButton = Get<Button>((int)ButtonEvent.Button_Start);
+        }
 
-    protected override void StartInit()
-    {
-        base.StartInit();
-        _openLoginButton.onClick.AddListener(ClickLoginButton);
-    }
+        protected override void StartInit()
+        {
+            base.StartInit();
+            _openLoginButton.onClick.AddListener(ClickLoginButton);
+        }
     
 
-    public void ClickLoginButton()
-    {
-        if(_loginPopup == null)
+        public void ClickLoginButton()
         {
-            _loginPopup = Managers.UIManager.GetPopupUIFromResource<UI_LoginPopup>();
+            if(_uiLoginPopup == null)
+            {
+                _uiLoginPopup = Managers.UIManager.GetPopupUIFromResource<UILoginPopup>();
+            }
+            Managers.UIManager.ShowPopupUI(_uiLoginPopup);
         }
-        Managers.UIManager.ShowPopupUI(_loginPopup);
+
+
     }
-
-
 }

@@ -7,11 +7,12 @@ using GameManagers;
 using Stats;
 using Stats.BaseStats;
 using TMPro;
+using UI.Scene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Test.TestScripts.UnitTest.PlaySceneMockUnitTest;
-public class UI_Player_Info : UI_Scene
+public class UI_Player_Info : UIScene
 {
     private Slider _hpSlider;
     private TMP_Text _hpText;

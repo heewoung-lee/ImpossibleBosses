@@ -1,4 +1,6 @@
+using UI.SubItem;
 using UnityEngine;
+using Util;
 
 namespace Data.Item.EquipSlot
 {
@@ -46,8 +48,8 @@ namespace Data.Item.EquipSlot
 
         void Awake()
         {
-            _equipSlotR = gameObject.FindChild<Transform>("EquipSlot_R");
-            _equipSlotL = gameObject.FindChild<Transform>("EquipSlot_L");
+            _equipSlotR = gameObject.FindChild<Transform>("EquipSlotR");
+            _equipSlotL = gameObject.FindChild<Transform>("EquipSlotL");
 
 
             _equipSlotHelmet = _equipSlotR.gameObject.FindChild<Transform>("EquipSlot_Helmet");
