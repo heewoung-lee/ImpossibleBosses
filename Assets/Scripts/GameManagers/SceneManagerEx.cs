@@ -15,7 +15,12 @@ namespace GameManagers
         private Action _onBeforeSceneUnloadLocalEvent;
         private Action<ulong> _onClientLoadedEvent;
         private Action _onAllPlayerLoadedEvent;
-        private Action _onAfterSceneLoadedEvent;
+
+        private bool _isNormalBoot = false;
+        
+        public bool IsNormalBoot => _isNormalBoot;
+        
+        
         public event Action OnBeforeSceneUnloadLocalEvent
         {
             add
@@ -49,19 +54,8 @@ namespace GameManagers
                 UniqueEventRegister.RemovedEvent(ref _onAllPlayerLoadedEvent, value);   
             }
         }
-        public event Action OnAfterSceneLoadedEvent
-        {
-            add
-            {
-                UniqueEventRegister.AddSingleEvent(ref _onAfterSceneLoadedEvent,value);
-            }
-            remove
-            {
-                UniqueEventRegister.RemovedEvent(ref _onAfterSceneLoadedEvent, value);
-            }
-        }
 
-
+    
 
         public BaseScene GetCurrentScene { get => GameObject.FindAnyObjectByType<BaseScene>(); }
 
@@ -70,6 +64,12 @@ namespace GameManagers
         public Define.Scene NextScene => _nextScene;
 
         public bool[] LoadingSceneTaskChecker => _loadingSceneTaskChecker;
+
+        public void SetBootMode(bool bootMode)
+        {
+            _isNormalBoot = bootMode;
+        }
+        
         public void LoadScene(Define.Scene nextscene)
         {
             Managers.Clear();

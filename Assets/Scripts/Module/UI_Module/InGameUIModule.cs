@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Module.UI_Module
 {
-    public class AddInGameUIModule : MonoBehaviour
+    public class InGameUIModule : MonoBehaviour
     {
 
         private void Start()

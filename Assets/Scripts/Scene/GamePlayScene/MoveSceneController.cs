@@ -1,10 +1,18 @@
+using Module.UI_Module;
+
 namespace Scene.GamePlayScene
 {
     public class MoveSceneController
     {
         private ISceneSpawnBehaviour _iSceneBehaviour;
         public ISceneSpawnBehaviour ISceneBehaviour => _iSceneBehaviour;
+        
         public MoveSceneController(ISceneSpawnBehaviour iSceneBehaviour)
+        {
+            this._iSceneBehaviour = iSceneBehaviour;
+        }
+        
+        public MoveSceneController(ISceneSpawnBehaviour iSceneBehaviour,InGameUIModule uiMoudle) 
         {
             this._iSceneBehaviour = iSceneBehaviour;
         }
@@ -14,12 +22,13 @@ namespace Scene.GamePlayScene
         public void InitGamePlayScene()
         {
             _iSceneBehaviour.Init();
+            _iSceneBehaviour.SpawnObj();
         }
-
 
         public void SpawnObj()
         {
             _iSceneBehaviour.SpawnObj();
         }
+
     }
 }

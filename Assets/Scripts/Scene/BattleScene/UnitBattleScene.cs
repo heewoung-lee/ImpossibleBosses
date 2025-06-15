@@ -1,15 +1,20 @@
 using GameManagers;
+using Module.UI_Module;
 using NetWork.NGO.UI;
 using Scene.GamePlayScene;
+using UnityEditor.SceneManagement;
 
 namespace Scene.BattleScene
 {
     public class UnitBattleScene : ISceneSpawnBehaviour
     {
-        private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
+        private UI_Loading _uiLoadingScene;
+        private InGameUIModule _inGameUIModule;
+        
 
         public ISceneMover Nextscene => new GamePlaySceneMover();
+
 
         public void Init()
         {

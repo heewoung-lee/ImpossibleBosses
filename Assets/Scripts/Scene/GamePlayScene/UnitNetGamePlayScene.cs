@@ -4,7 +4,7 @@ using Scene.BattleScene;
 
 namespace Scene.GamePlayScene
 {
-    public class UnitGamePlayScene : ISceneSpawnBehaviour
+    public class UnitNetGamePlayScene : ISceneSpawnBehaviour
     {
         private UIStageTimer _uiStageTimer;
         private UI_Loading _uiLoadingScene;

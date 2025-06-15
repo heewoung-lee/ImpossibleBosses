@@ -26,7 +26,6 @@ namespace Scene.BattleScene
                 _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _uiLoadingScene, isSoloTest));
                 gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
                 _battleSceneController.InitGamePlayScene();
-                _battleSceneController.SpawnObj();
             }
             else
             {

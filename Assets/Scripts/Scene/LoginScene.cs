@@ -14,6 +14,8 @@ namespace Scene
         {
             base.StartInit();
             _uiLoginTitle = Managers.UIManager.GetSceneUIFromResource<UI_LoginTitle>();
+            Managers.SceneManagerEx.SetBootMode(true);
+            //로그인 상태부터 돌리는 씬은 노멀 루트이므로 테스트모드가 아니다.
         }
 
         protected override void AwakeInit()
