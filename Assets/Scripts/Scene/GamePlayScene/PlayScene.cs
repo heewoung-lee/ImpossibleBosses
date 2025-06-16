@@ -83,6 +83,7 @@ namespace Scene.GamePlayScene
                 _sceneController = new MoveSceneController(new UnitNetGamePlayScene());
                 gameObject.AddComponent<InGameUIModule>();
                 //노멀 모드를 주입해야함.
+                //이부분에 UI 모듈 심는것도 다시 생각해볼것
             }
             else
             {
