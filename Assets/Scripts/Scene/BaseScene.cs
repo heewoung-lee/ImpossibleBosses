@@ -1,5 +1,6 @@
 using Controller;
 using GameManagers;
+using Scene.GamePlayScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Util;
@@ -9,6 +10,7 @@ namespace Scene
     public abstract class BaseScene : MonoBehaviour
     {
         public abstract Define.Scene CurrentScene { get; }
+        public abstract ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         MoveMarkerController _moveMarker;
         void Start()
         {

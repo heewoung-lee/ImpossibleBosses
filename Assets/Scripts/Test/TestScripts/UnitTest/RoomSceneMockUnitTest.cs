@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using Scene;
+using Scene.GamePlayScene;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -29,7 +30,7 @@ namespace Test.TestScripts.UnitTest
         public bool isSoloTest;
 
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
-
+        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
 
         protected override async void StartInit()

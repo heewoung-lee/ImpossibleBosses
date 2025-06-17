@@ -1,4 +1,5 @@
 using GameManagers;
+using Scene.GamePlayScene;
 using UI.Scene.SceneUI;
 using Util;
 
@@ -9,6 +10,7 @@ namespace Scene
         UI_LoginTitle _uiLoginTitle;
 
         public override Define.Scene CurrentScene => Define.Scene.LoginScene;
+        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
         protected override void StartInit()
         {

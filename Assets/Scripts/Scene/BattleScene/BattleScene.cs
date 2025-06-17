@@ -5,35 +5,41 @@ using Util;
 
 namespace Scene.BattleScene
 {
-    public class BattleScene : BaseScene, ISkillInit, ISceneController
+    public class BattleScene : BaseScene, ISkillInit
     {
         private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-        private MoveSceneController _battleSceneController;
+        private ISceneSpawnBehaviour _sceneSpawnBehaviour;
 
         public bool isTest = false;
         public bool isSoloTest = false;
         public override Define.Scene CurrentScene => Define.Scene.BattleScene;
-        public MoveSceneController SceneMoverController => _battleSceneController;
+        public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
+
 
         protected override void StartInit()
         {
             base.StartInit();
             _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
             _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
-            if (isTest == true)
-            {
-                _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _uiLoadingScene, isSoloTest));
-                gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
-                _battleSceneController.InitGamePlayScene();
-            }
-            else
-            {
-                _battleSceneController = new MoveSceneController(new UnitBattleScene());
-                gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
-                _battleSceneController.InitGamePlayScene();
-                _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnObj;
-            }
+            // if (isTest == true)
+            // {
+            //     _battleSceneController = new MoveSceneController(new MockUnitBattleScene(Define.PlayerClass.Fighter, _uiLoadingScene, isSoloTest));
+            //     gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
+            //     _battleSceneController.InitGamePlayScene();
+            // }
+            // else
+            // {
+            //     _battleSceneController = new MoveSceneController(new UnitBattleScene());
+            //     gameObject.AddComponent<MockUnitUIGamePlaySceneModule>();
+            //     _battleSceneController.InitGamePlayScene();
+            //     _gamePlaySceneLoadingProgress.OnLoadingComplete += _battleSceneController.SpawnObj;
+            // }
+            //
+            
+            _sceneSpawnBehaviour.Init();
+            _sceneSpawnBehaviour.SpawnObj();
+            //TODO: 0617 인르톨러가 없으니깐 반드시 인스톨러 넣을 것
         }
         public override void Clear()
         {

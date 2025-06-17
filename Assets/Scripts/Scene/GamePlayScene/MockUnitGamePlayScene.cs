@@ -14,10 +14,9 @@ namespace Scene.GamePlayScene
 {
     public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     {
-        public MockUnitGamePlayScene(Define.PlayerClass playerClass,UI_Loading uiLoading,bool isSoloTest)
+        public MockUnitGamePlayScene(Define.PlayerClass playerClass,bool isSoloTest)
         {
             _playerClass = playerClass;
-            _uiLoadingScene = uiLoading;
             _isSoloTest = isSoloTest;
         }
      
@@ -32,7 +31,6 @@ namespace Scene.GamePlayScene
         string _playerType = null;
         GameObject _ngoRoot;
         private const string LobbyName = "TestLobby";
-        private UI_Loading _uiLoadingScene;
         private Define.PlayerClass _playerClass;
         private bool _isSoloTest;
         private UIStageTimer _uiStageTimer;
@@ -96,7 +94,7 @@ namespace Scene.GamePlayScene
 
         private void LoadGamePlayScene()
         {
-            _uiLoadingScene.gameObject.SetActive(false);
+           Managers.UIManager.GetOrCreateSceneUI<UI_Loading>().gameObject.SetActive(false);
         }
         private async Task SetAuthenticationService()
         {

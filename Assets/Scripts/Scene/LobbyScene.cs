@@ -1,4 +1,5 @@
 using GameManagers;
+using Scene.GamePlayScene;
 using Util;
 
 namespace Scene
@@ -6,6 +7,7 @@ namespace Scene
     public class LobbyScene : BaseScene
     {
         public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
+        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         UI_LobbyScene _uiLobbyScene;
         public override void Clear()
         {

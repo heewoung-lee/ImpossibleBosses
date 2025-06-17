@@ -1,4 +1,5 @@
 using GameManagers;
+using Scene.GamePlayScene;
 using UnityEngine;
 using Util;
 
@@ -9,6 +10,7 @@ namespace Scene
         private GameObject _player;
 
         public override Define.Scene CurrentScene => Define.Scene.Unknown;
+        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
         protected override void StartInit()
         {

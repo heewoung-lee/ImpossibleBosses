@@ -94,7 +94,7 @@ public class UI_CREATE_ITEM_AND_GOLD_Button : UIScene
         }
         void MoveScene()
         {
-            (Managers.SceneManagerEx.GetCurrentScene as ISceneController).SceneMoverController.ISceneBehaviour.Nextscene.MoveScene();
+            Managers.SceneManagerEx.GetCurrentScene.SceneSpawnBehaviour.Nextscene.MoveScene();
         }
 
         //void AllLevelup()
