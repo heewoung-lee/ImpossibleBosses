@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameManagers;
 using Stats;
 using UI.Scene;
+using UI.Scene.SceneUI;
 using UI.SubItem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,13 +11,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 public class UI_ConsumableBar : UIScene
 {
 
     private Image[] _consumableIcons;
     [SerializeField]private Transform[] _frameTrs;
-
+    [Inject]private UIManager _uiManager; 
     public Transform[] FrameTrs => _frameTrs;
 
     private InputAction[] _comsumableGetKey;
@@ -33,21 +35,21 @@ public class UI_ConsumableBar : UIScene
         {
             if(_itemDragImage == null)
             {
-                _itemDragImage = Managers.UIManager.Get_Scene_UI<UI_ItemDragImage>();
+                _itemDragImage = _uiManager.Get_Scene_UI<UI_ItemDragImage>();
             }
             return _itemDragImage;
         }
     }
 
-    private UI_Description _ui_Description;
+    private UIDescription _ui_Description;
 
-    public UI_Description UI_Description
+    public UIDescription UI_Description
     {
         get
         {
             if(_ui_Description == null)
             {
-                _ui_Description = Managers.UIManager.Get_Scene_UI<UI_Description>();
+                _ui_Description = _uiManager.Get_Scene_UI<UIDescription>();
             }
             return _ui_Description;
         }
@@ -125,7 +127,7 @@ public class UI_ConsumableBar : UIScene
         {
             ItemDragImage.SetItemImageDisable();
         }
-        if(UI_Description.isDescriptionActive == true)
+        if(UI_Description.IsDescriptionActive == true)
         {
             UI_Description.UI_DescriptionDisable();
         }

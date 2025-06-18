@@ -3,6 +3,7 @@ using Module.UI_Module;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -25,6 +26,8 @@ namespace UI.Popup.PopupUI
         private GameObject _messageError;
         private TMP_Text _errorMessageText;
         private ModuleUIFadeOut _errorMessageTextFadeOutMoudule;
+        [Inject] private UIManager _uiManager;
+
         public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
         protected override void OnDisableInit()
@@ -70,7 +73,7 @@ namespace UI.Popup.PopupUI
             }
             else
             {
-                Managers.UIManager.ClosePopupUI(this);
+                _uiManager.ClosePopupUI(this);
             }
         }
     }

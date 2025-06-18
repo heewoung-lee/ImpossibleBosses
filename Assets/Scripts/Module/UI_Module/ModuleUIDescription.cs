@@ -1,20 +1,22 @@
 using GameManagers;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Module.UI_Module
 {
     public class ModuleUIDescription : MonoBehaviour
     {
-        UI_Description _description;
-
-        public UI_Description Description
+        UIDescription _description;
+        [Inject]private UIManager _uiManager; 
+        public UIDescription Description
         {
             get
             {
                 if(_description == null)
                 {
-                    _description = Managers.UIManager.GetSceneUIFromResource<UI_Description>();
+                    _description = _uiManager.GetSceneUIFromResource<UIDescription>();
                 }
 
                 return _description;

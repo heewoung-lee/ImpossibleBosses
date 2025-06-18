@@ -992,7 +992,7 @@ GameObject:
   - component: {fileID: 6199023878737334385}
   - component: {fileID: 6199023878737334384}
   m_Layer: 5
-  m_Name: UI_LobbyChat
+  m_Name: UILobbyChat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

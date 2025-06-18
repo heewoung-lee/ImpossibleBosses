@@ -3,6 +3,7 @@ using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Util;
+using Zenject;
 
 namespace Module.UI_Module
 {
@@ -11,6 +12,7 @@ namespace Module.UI_Module
 
         private UIPlayerInventory _inventoryUI;
         private InputAction _switchInventoryUI;
+        [Inject] private UIManager _uiManager;
         private void Awake()
         {
             _switchInventoryUI = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
@@ -25,7 +27,7 @@ namespace Module.UI_Module
             }
             void InitalizeInventoryKey()
             {
-                _inventoryUI = Managers.UIManager.GetPopupUIFromResource<UIPlayerInventory>();
+                _inventoryUI = _uiManager.GetPopupUIFromResource<UIPlayerInventory>();
             }
         }
 
@@ -41,8 +43,7 @@ namespace Module.UI_Module
 
         public void Switch_Inventoy(InputAction.CallbackContext context)
         {
-            Managers.UIManager.SwitchPopUpUI(_inventoryUI);
-        
+            _uiManager.SwitchPopUpUI(_inventoryUI);
         }
     }
 }

@@ -5,12 +5,13 @@ using UI.Scene;
 using Unity.Multiplayer.Playmode;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Test.TestUI
 {
     public class LogInTestToggle : UIScene
     {
-
+        [Inject]private UIManager _uiManager; 
         enum Buttons
         {
             TestButton
@@ -50,7 +51,7 @@ namespace Test.TestUI
         private void ClickLogin()
         {
 
-            if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UILoginPopup loginPopup) == true)
+            if (_uiManager.TryGetPopupDictAndShowPopup(out UILoginPopup loginPopup) == true)
             {
                 Players currentPlayer = Players.Player1;
 

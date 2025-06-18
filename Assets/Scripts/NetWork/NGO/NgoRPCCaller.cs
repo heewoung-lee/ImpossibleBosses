@@ -15,11 +15,14 @@ using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace NetWork.NGO
 {
     public class NgoRPCCaller : NetworkBehaviour
     {
+        [Inject] private UIManager _uiManager;
+
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
         private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
@@ -295,7 +298,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void LoadedPlayerCountRpc()
         {
-            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiManager.Try_Get_Scene_UI(out UI_Loading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {
@@ -307,7 +310,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void SetisAllPlayerLoadedRpc(bool isAllplayerLoaded)
         {
-            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiManager.Try_Get_Scene_UI(out UI_Loading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {

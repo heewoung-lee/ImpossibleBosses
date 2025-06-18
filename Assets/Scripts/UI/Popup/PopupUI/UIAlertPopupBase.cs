@@ -2,6 +2,7 @@ using GameManagers;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -21,6 +22,7 @@ namespace UI.Popup.PopupUI
         protected TMP_Text _titleText;
         protected TMP_Text _bodyText;
         protected Button _confirm_Button;
+        [Inject] private UIManager _uiManager;
 
         public void SetText(string titleText,string bodyText)
         {
@@ -37,14 +39,14 @@ namespace UI.Popup.PopupUI
             _titleText = Get<TMP_Text>((int)Texts.TitleText);
             _bodyText = Get<TMP_Text>((int)(Texts.BodyText));
             _confirm_Button = Get<Button>((int)Buttons.ConfirmButton);
-            Managers.UIManager.AddImportant_Popup_UI(this);
+            _uiManager.AddImportant_Popup_UI(this);
         }
 
 
         protected override void OnEnableInit()
         {
             base.OnEnableInit();
-            _confirm_Button.onClick.AddListener(() => { Managers.UIManager.ClosePopupUI(this); });
+            _confirm_Button.onClick.AddListener(() => { _uiManager.ClosePopupUI(this); });
         }
 
         protected override void OnDisableInit()

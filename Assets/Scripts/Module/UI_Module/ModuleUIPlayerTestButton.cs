@@ -1,14 +1,16 @@
 using GameManagers;
+using UI.Scene.SceneUI;
 using UnityEngine;
+using Zenject;
 
 namespace Module.UI_Module
 {
     public class ModuleUIPlayerTestButton : MonoBehaviour
     {
-
+        [Inject] private UIManager _uiManager;
         void Start()
         {
-            UI_CREATE_ITEM_AND_GOLD_Button buttonUI = Managers.UIManager.GetSceneUIFromResource<UI_CREATE_ITEM_AND_GOLD_Button>();
+            UICreateItemAndGoldButton buttonUI = _uiManager.GetSceneUIFromResource<UICreateItemAndGoldButton>();
         }
 
     }

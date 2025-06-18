@@ -2,6 +2,7 @@ using GameManagers;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -13,7 +14,10 @@ namespace UI.Popup.PopupUI
         TMP_InputField _pwInputField;
         private UIAlertPopupBase _alertPopup;
         private UIAlertPopupBase _confirmPopup;
+        [Inject] private UIManager _uiManager;
 
+        
+        
         public override TMP_InputField IdInputField => _idInputField;
 
         public override TMP_InputField PwInputField => _pwInputField;
@@ -70,23 +74,23 @@ namespace UI.Popup.PopupUI
 
         public void ShowLoginAfterSignUp()
         {
-            Managers.UIManager.CloseAllPopupUI();
-            UILoginPopup uiLoginPopup = Managers.UIManager.GetImportant_Popup_UI<UILoginPopup>();
-            Managers.UIManager.ShowPopupUI(uiLoginPopup);
+            _uiManager.CloseAllPopupUI();
+            UILoginPopup uiLoginPopup = _uiManager.GetImportant_Popup_UI<UILoginPopup>();
+            _uiManager.ShowPopupUI(uiLoginPopup);
         }
 
         private UIAlertPopupBase ShowAlertDialogUI<T>(UIAlertPopupBase alertBasePopup,string titleMessage,string bodyText,UnityAction closeButtonAction = null) where T: UIAlertPopupBase
         {
             if(alertBasePopup == null)
             {
-                alertBasePopup = Managers.UIManager.GetPopupInDict<T>();
+                alertBasePopup = _uiManager.GetPopupInDict<T>();
             }
             alertBasePopup.SetText(titleMessage, bodyText);
             if (closeButtonAction != null)
             {
                 alertBasePopup.SetCloseButtonOverride(closeButtonAction);
             }
-            Managers.UIManager.ShowPopupUI(alertBasePopup);
+            _uiManager.ShowPopupUI(alertBasePopup);
 
             return alertBasePopup;
         }
@@ -97,7 +101,7 @@ namespace UI.Popup.PopupUI
 
         public void OnClickCloseButton()
         {
-            Managers.UIManager.ClosePopupUI(this);
+            _uiManager.ClosePopupUI(this);
         }
     }
 }

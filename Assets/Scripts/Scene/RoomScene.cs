@@ -1,11 +1,14 @@
 using GameManagers;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Util;
+using Zenject;
 
 namespace Scene
 {
     public class RoomScene : BaseScene
     {
+        [Inject]private UIManager _uiManager;
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
@@ -21,8 +24,8 @@ namespace Scene
         {
             base.StartInit();
       
-            UI_Room_CharacterSelect uICharacterSelect = Managers.UIManager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
-            UI_RoomChat uiChatting = Managers.UIManager.GetSceneUIFromResource<UI_RoomChat>();
+            UIRoomCharacterSelect uICharacterSelect = _uiManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
+            UI_RoomChat uiChatting = _uiManager.GetSceneUIFromResource<UI_RoomChat>();
         }
     }
 }

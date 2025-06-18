@@ -4,6 +4,7 @@ using Scene.GamePlayScene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
+using Zenject;
 
 namespace Scene
 {
@@ -15,6 +16,7 @@ namespace Scene
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
         private bool[] _isCheckTaskChecker;
+        [Inject]private UIManager _uiManager; 
         protected override void StartInit()
         {
             base.StartInit();
@@ -28,7 +30,7 @@ namespace Scene
 
         protected override void AwakeInit()
         {
-            _uiLoading = Managers.UIManager.GetSceneUIFromResource<UI_Loading>();
+            _uiLoading = _uiManager.GetSceneUIFromResource<UI_Loading>();
         }
 
         private IEnumerator LoadingSceneProcess()

@@ -8,6 +8,7 @@ using Stats.BaseStats;
 using UI.Popup.PopupUI;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
@@ -19,6 +20,7 @@ namespace UI.SubItem
         private Transform _contentofInventoryTr;
         private BaseStats _playerStats;
         private UIItemComponentInventory _equipedItem;
+        [Inject] private UIManager _uiManager;
 
         public BaseStats PlayerStats
         {
@@ -113,13 +115,13 @@ namespace UI.SubItem
         {
             string slotTypeName = transform.gameObject.name.Replace("_Item_Slot", "");
             slotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), slotTypeName);
-            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _contentofInventoryTr = _uiPlayerInventory.GetComponentInChildren<InventoryContentCoordinate>().transform;
 
             if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
             {
                 IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
-                UIItemComponentEquipment equipItem = item.MakeInventoryItemComponent() as UIItemComponentEquipment;
+                UIItemComponentEquipment equipItem = item.MakeInventoryItemComponent(_uiManager) as UIItemComponentEquipment;
                 equipItem.SetINewteminfo(iteminfo);
                 equipItem.OnAfterStart += () => { equipItem.EquipItem(); };
             

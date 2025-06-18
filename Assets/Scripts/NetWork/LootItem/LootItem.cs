@@ -9,6 +9,7 @@ using UI.SubItem;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace NetWork.LootItem
@@ -21,7 +22,9 @@ namespace NetWork.LootItem
         private const float DropitemRotationOffset = 40f;
         private UIPlayerInventory _uiPlayerInventory;
         private NetworkObject _networkObject;
-
+        [Inject] private UIManager _uiManager;
+        
+        
         private Vector3 _dropPosition;
         private Rigidbody _rigidBody;
         private IItem _iteminfo;
@@ -42,7 +45,7 @@ namespace NetWork.LootItem
 
         public void SpawnBehaviour()
         {
-            _uiPlayerInventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _canInteraction = false;
 
             if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
@@ -145,7 +148,7 @@ namespace NetWork.LootItem
             if (baseController.CurrentStateType != baseController.PickupState)
                 return;
 
-            UIItemComponentInventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory();
+            UIItemComponentInventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory(_uiManager);
             inventoryItem.transform.SetParent(_uiPlayerInventory.ItemInventoryTr);
             player.DisEnable_Icon_UI();//상호작용 아이콘 제거
             if (Managers.RelayManager.NetworkManagerEx.IsHost)

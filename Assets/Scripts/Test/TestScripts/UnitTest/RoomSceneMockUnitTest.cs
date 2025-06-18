@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using GameManagers;
 using Scene;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Test.TestScripts.UnitTest
 {
@@ -31,6 +33,7 @@ namespace Test.TestScripts.UnitTest
 
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
+        [Inject] private UIManager _uiManager;
 
 
         protected override async void StartInit()
@@ -38,8 +41,8 @@ namespace Test.TestScripts.UnitTest
             base.StartInit();
             await JoinChannel();
             Managers.RelayManager.SpawnToRPC_Caller();
-            UI_Room_CharacterSelect uICharacterSelect = Managers.UIManager.GetSceneUIFromResource<UI_Room_CharacterSelect>();
-            UI_RoomChat uiChatting = Managers.UIManager.GetSceneUIFromResource<UI_RoomChat>();
+            UIRoomCharacterSelect uICharacterSelect = _uiManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
+            UI_RoomChat uiChatting = _uiManager.GetSceneUIFromResource<UI_RoomChat>();
         }
 
         private async Task JoinChannel()

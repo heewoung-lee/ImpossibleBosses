@@ -7,6 +7,7 @@ namespace GameManagers
 {
     public class SkillManager : IManagerInitializable,IManagerIResettable
     {
+        
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
         public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
 

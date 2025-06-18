@@ -3,11 +3,13 @@ using System.Linq;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using UI.Scene;
+using UI.Scene.SceneUI;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
@@ -118,6 +120,7 @@ namespace UI.SubItem
     public abstract class UIItemComponent : UIBase, IItem
     {
         private readonly float _itemVisibleValue = 0.5f;
+        [Inject] private UIManager _uiManager;
 
         protected IItem _iteminfo;
         protected int _itemNumber;
@@ -130,7 +133,7 @@ namespace UI.SubItem
         protected Image _itemIconSourceImage;
         protected Dictionary<string, Sprite> _imageSource;
         protected UI_ItemDragImage _UI_dragImageIcon;
-        protected UI_Description _decriptionObject;
+        protected UIDescription _decriptionObject;
         protected bool _isDragging = false;
 
         public int ItemNumber => _itemNumber;
@@ -149,7 +152,7 @@ namespace UI.SubItem
             {
                 if (_UI_dragImageIcon == null)
                 {
-                    if (Managers.UIManager.UISceneDict.TryGetValue(typeof(UI_ItemDragImage), out UIScene itemDragIamge) == true)
+                    if (_uiManager.UISceneDict.TryGetValue(typeof(UI_ItemDragImage), out UIScene itemDragIamge) == true)
                     {
                         _UI_dragImageIcon = itemDragIamge as UI_ItemDragImage;
                     }   
@@ -165,7 +168,7 @@ namespace UI.SubItem
 
            
 
-            _decriptionObject = Managers.UIManager.Get_Scene_UI<UI_Description>();
+            _decriptionObject = _uiManager.Get_Scene_UI<UIDescription>();
         }
 
 

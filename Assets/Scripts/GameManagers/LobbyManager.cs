@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Scene;
+using UI.Scene.SceneUI;
 using UI.SubItem;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -11,6 +12,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -31,6 +33,12 @@ namespace GameManagers
 
     public class LobbyManager : IManagerEventInitialize
     {
+        [Inject]
+        public LobbyManager(UIManager uiManager)
+        {
+            _uiManager = uiManager;
+        }
+        
         enum LoadingProcess
         {
             VivoxInitalize,
@@ -50,6 +58,7 @@ namespace GameManagers
         private Action<bool> _lobbyLoading;
         private Action _initDoneEvent;
         private Action _hostChangeEvent;
+        private UIManager _uiManager;
 
         public bool[] TaskChecker => _taskChecker;
         public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
@@ -867,7 +876,7 @@ namespace GameManagers
                 return;
 
 
-            if (_isRefreshing || Managers.UIManager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
+            if (_isRefreshing || Managers.UIManager.Try_Get_Scene_UI(out UIRoomInventory room_inventory_ui) == false)
             {
                 return;
             }
@@ -889,7 +898,7 @@ namespace GameManagers
                         value: "0"),
                 };
                 QueryResponse lobbies = await GetQueryLobbiesAsyncCustom(options);
-                foreach (Transform child in room_inventory_ui.Room_Content)
+                foreach (Transform child in room_inventory_ui.RoomContent)
                 {
                     Managers.ResourceManager.DestroyObject(child.gameObject);
                 }
@@ -910,10 +919,10 @@ namespace GameManagers
         private void CreateRoomInitalize(Lobby lobby)
         {
 
-            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Room_Inventory room_inventory_ui) == false)
+            if (Managers.UIManager.Try_Get_Scene_UI(out UIRoomInventory room_inventory_ui) == false)
                 return;
 
-            UIRoomInfoPanel infoPanel = Managers.UIManager.MakeSubItem<UIRoomInfoPanel>(room_inventory_ui.Room_Content);
+            UIRoomInfoPanel infoPanel = Managers.UIManager.MakeSubItem<UIRoomInfoPanel>(room_inventory_ui.RoomContent);
             infoPanel.SetRoomInfo(lobby);
         }
 

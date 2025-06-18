@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
@@ -23,6 +24,7 @@ namespace UI.SubItem
         private UI_ConsumableBar _consumableBar;
         private int _itemCount;
         private float _duringbuff;
+        [Inject] private UIManager _uiManager;
 
         public float DuringBuffTime => _duringbuff;
         public string ItemGuid => _itemGuid;
@@ -48,7 +50,7 @@ namespace UI.SubItem
         protected override void StartInit()
         {
             base.StartInit();
-            _consumableBar = Managers.UIManager.Get_Scene_UI<UI_ConsumableBar>();
+            _consumableBar = _uiManager.Get_Scene_UI<UI_ConsumableBar>();
             _itemCountText.text = $"{_itemCount}";
             CombineConsumableItems();
         }

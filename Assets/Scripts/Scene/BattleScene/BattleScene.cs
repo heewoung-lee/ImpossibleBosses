@@ -2,6 +2,7 @@ using GameManagers;
 using Scene.GamePlayScene;
 using Unity.VisualScripting;
 using Util;
+using Zenject;
 
 namespace Scene.BattleScene
 {
@@ -10,7 +11,11 @@ namespace Scene.BattleScene
         private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
         private ISceneSpawnBehaviour _sceneSpawnBehaviour;
+        [Inject] private UIManager _uiManager;
 
+        
+        
+        
         public bool isTest = false;
         public bool isSoloTest = false;
         public override Define.Scene CurrentScene => Define.Scene.BattleScene;
@@ -20,7 +25,7 @@ namespace Scene.BattleScene
         protected override void StartInit()
         {
             base.StartInit();
-            _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
             _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
             // if (isTest == true)
             // {

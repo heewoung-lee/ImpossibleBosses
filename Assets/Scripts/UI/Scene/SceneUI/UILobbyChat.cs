@@ -6,7 +6,7 @@ using UI.Scene;
 using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
-public class UI_LobbyChat : UIScene
+public class UILobbyChat : UIScene
 {
     enum Buttons
     {

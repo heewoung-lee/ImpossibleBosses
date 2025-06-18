@@ -9,6 +9,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Test.TestScripts.UnitTest
 {
@@ -26,6 +27,9 @@ namespace Test.TestScripts.UnitTest
         GameObject _ngoRoot;
         private const string LobbyName = "TestLobby";
         private UI_Loading _uiLoadingScene;
+        [Inject] private UIManager _uiManager;
+
+        
         public Define.PlayerClass PlayerClass;
         public bool isSoloTest;
 
@@ -35,7 +39,7 @@ namespace Test.TestScripts.UnitTest
         protected override async void StartInit()
         {
             base.StartInit();
-            _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
             await JoinChannel();
         }
         private async Task JoinChannel()

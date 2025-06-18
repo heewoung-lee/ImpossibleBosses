@@ -3,6 +3,7 @@ using NetWork.NGO.UI;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace NetWork.NGO.Scene_NGO
 {
@@ -18,6 +19,7 @@ namespace NetWork.NGO.Scene_NGO
         private const float AllPlayerinPortalCount = 7f;
         private float _totalTime = 0;
         private float _currentTime = 0;
+        [Inject] private UIManager _uiManager;
 
         private UIStageTimer _uiStageTimer;
 
@@ -27,7 +29,7 @@ namespace NetWork.NGO.Scene_NGO
             {
                 if (_uiStageTimer == null)
                 {
-                    _uiStageTimer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
+                    _uiStageTimer = _uiManager.GetOrCreateSceneUI<UIStageTimer>();
                 }
                 return _uiStageTimer;
             }
@@ -69,7 +71,7 @@ namespace NetWork.NGO.Scene_NGO
         [Rpc(SendTo.Server)]
         private void RequestTimeFromServerRpc(RpcParams rpcParams = default)
         {
-            float currentCount = Managers.UIManager.Get_Scene_UI<UIStageTimer>().CurrentTime;
+            float currentCount = _uiManager.Get_Scene_UI<UIStageTimer>().CurrentTime;
             ulong clientId = rpcParams.Receive.SenderClientId;
 
             SendTimeRpcToSpecificClientRpc(currentCount, RpcTarget.Single(clientId, RpcTargetUse.Temp));

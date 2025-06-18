@@ -32,7 +32,8 @@ namespace Scene.GamePlayScene
         [SerializeField] public MultiMode multiMode = MultiMode.Solo;
         [SerializeField] public Define.PlayerClass playerableCharacter = Define.PlayerClass.Archer;
         [Inject] private ISceneSpawnBehaviour _sceneSpawnBehaviour;
-        
+        [Inject] private UIManager _uiManager;
+
         
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
@@ -56,7 +57,7 @@ namespace Scene.GamePlayScene
             _sceneSpawnBehaviour.SpawnObj();
             
             
-            _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
             _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
         }
 

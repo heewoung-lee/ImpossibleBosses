@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
@@ -36,8 +37,11 @@ namespace UI.SubItem
         private TMP_Text _itemCountText;
         private int _itemPrice;
         private int _itemCount;
-        private UIPlayerInventory _ui_Player_Inventory;
+        private UIPlayerInventory _uiPlayerInventory;
+        [Inject] private UIManager _uiManager;
 
+        
+        
         private RectTransform _itemRectTr;
         private PlayerStats _playerStats;
         private Image _itemGradeBorderImage;
@@ -84,8 +88,8 @@ namespace UI.SubItem
             base.StartInit();
             _itemNameText.text = _itemName;
             _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
-            _ui_Player_Inventory = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
-            _uiShop = Managers.UIManager.GetImportant_Popup_UI<UIShop>();
+            _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _uiShop = _uiManager.GetImportant_Popup_UI<UIShop>();
             _itemGradeBorderImage.sprite = Managers.ItemDataManager.ItemGradeBorder[ItemGradeType];
 
 
@@ -107,7 +111,7 @@ namespace UI.SubItem
                 return;
 
             _playerStats.Gold -= _itemPrice;//플레이어의 현재 돈을 깎는다.
-            _iteminfo.MakeInventoryItemComponent();
+            _iteminfo.MakeInventoryItemComponent(_uiManager);
 
             ItemCount--;
             if (_itemCount <= 0)

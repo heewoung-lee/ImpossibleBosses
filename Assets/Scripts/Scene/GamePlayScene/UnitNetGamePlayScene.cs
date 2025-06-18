@@ -1,11 +1,13 @@
 using GameManagers;
 using NetWork.NGO.UI;
 using Scene.BattleScene;
+using Zenject;
 
 namespace Scene.GamePlayScene
 {
     public class UnitNetGamePlayScene : ISceneSpawnBehaviour
     {
+        [Inject] private UIManager _uiManager;
         private UIStageTimer _uiStageTimer;
         private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
@@ -14,8 +16,8 @@ namespace Scene.GamePlayScene
 
         public void Init()
         {
-            _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
-            _uiStageTimer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiStageTimer = _uiManager.GetOrCreateSceneUI<UIStageTimer>();
             _uiStageTimer.OnTimerCompleted += Nextscene.MoveScene;
         }
     

@@ -31,8 +31,8 @@ namespace GameManagers
         private ItemDataManager _itemDataManaer = new ItemDataManager();
         public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
-        private LobbyManager _lobbyManager = new LobbyManager();
-        public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
+        // private LobbyManager _lobbyManager = new LobbyManager();
+        // public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
 
         private LogInManager _logInManager = new LogInManager();
         public static LogInManager LogInManager { get => Instance._logInManager; }
@@ -67,8 +67,8 @@ namespace GameManagers
         private SoundManager _soundManager = new SoundManager();
         public static SoundManager SoundManager { get => Instance._soundManager; }
 
-        private UIManager _uiManager = new UIManager();
-        public static UIManager UIManager { get => Instance._uiManager; }
+        // private UIManager _uiManager = new UIManager();
+        // public static UIManager UIManager { get => Instance._uiManager; }
 
         private VFXManager _vfxManager = new VFXManager();
         public static VFXManager VFXManager { get => Instance._vfxManager; }
@@ -149,7 +149,7 @@ namespace GameManagers
         public static void Clear()
         {
             _instance._soundManager.Clear();
-            _instance._uiManager.Clear();
+            //_instance._uiManager.Clear();
             _instance._sceneManagerEx.Clear();
             _instance._poolManager.Clear();
             _instance._resourceManager.Clear();

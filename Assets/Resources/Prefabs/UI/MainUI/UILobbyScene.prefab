@@ -14627,7 +14627,7 @@ GameObject:
   - component: {fileID: 5046118298481992738}
   - component: {fileID: 4696530469397506729}
   m_Layer: 5
-  m_Name: UI_LobbyScene
+  m_Name: UILobbyScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

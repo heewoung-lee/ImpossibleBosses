@@ -79,21 +79,21 @@ namespace Data.DataType.ItemType
             return descriptionBuilder.ToString();
         }
 
-        public UIItemComponentInventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(UIManager uiManager,Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIItemComponentConsumable uiConsumableComponent =
-                Managers.UIManager.MakeSubItem<UIItemComponentConsumable>(parent, name,
+                uiManager.MakeSubItem<UIItemComponentConsumable>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Consumable");
             uiConsumableComponent.InitializeItem(this, itemCount);
             return uiConsumableComponent;
         }
 
-        public UIShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(UIManager uiManager,int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIShopItemComponent uiShopItemComponent =
-                Managers.UIManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                uiManager.MakeSubItem<UIShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UIShopItemComponent");
             uiShopItemComponent.InitializeItem(this, itemCount, itemPrice);
             return uiShopItemComponent;

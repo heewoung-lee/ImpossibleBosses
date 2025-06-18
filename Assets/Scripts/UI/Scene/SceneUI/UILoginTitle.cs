@@ -1,24 +1,26 @@
 using GameManagers;
 using UI.Popup.PopupUI;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Scene.SceneUI
 {
-    public class UI_LoginTitle : UIScene
+    public class UILoginTitle : UIScene
     {
         enum ButtonEvent
         {
-            Button_Start,
+            ButtonStart,
         }
 
+        private Button _openLoginButton;
+        private UILoginPopup _uiLoginPopup;
+        [Inject] private UIManager _uiManager;
 
-        Button _openLoginButton;
-        UILoginPopup _uiLoginPopup;
         protected override void AwakeInit()
         {
             base.AwakeInit();
             Bind<Button>(typeof(ButtonEvent));
-            _openLoginButton = Get<Button>((int)ButtonEvent.Button_Start);
+            _openLoginButton = Get<Button>((int)ButtonEvent.ButtonStart);
         }
 
         protected override void StartInit()
@@ -32,9 +34,9 @@ namespace UI.Scene.SceneUI
         {
             if(_uiLoginPopup == null)
             {
-                _uiLoginPopup = Managers.UIManager.GetPopupUIFromResource<UILoginPopup>();
+                _uiLoginPopup = _uiManager.GetPopupUIFromResource<UILoginPopup>();
             }
-            Managers.UIManager.ShowPopupUI(_uiLoginPopup);
+            _uiManager.ShowPopupUI(_uiLoginPopup);
         }
 
 

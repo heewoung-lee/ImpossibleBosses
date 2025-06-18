@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameManagers.Interface;
 using UI;
 using UI.Popup;
 using UI.Popup.PopupUI;
@@ -9,7 +10,7 @@ using Util;
 
 namespace GameManagers
 {
-    public class UIManager : IManagerIResettable
+    public class UIManager : IManagerIResettable,IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
     {
 
         private const int SceneUISortingDefaultValue = 0;
@@ -21,13 +22,13 @@ namespace GameManagers
 
 
         private Stack<UIPopup> _uiPopups = new Stack<UIPopup>();
-
         private Dictionary<Type, UIScene> _uiSceneDict = new Dictionary<Type, UIScene>();
-
-        private Dictionary<Type, UIBase> _importantPopupUI = new Dictionary<Type, UIBase>();
-
-        
+        private Dictionary<Type, UIPopup> _importantPopupUI = new Dictionary<Type, UIPopup>();
+        public Dictionary<Type, UIPopup> ImportantPopupUI => _importantPopupUI;
+        public Stack<UIPopup> UIPopupStack => _uiPopups;
         public Dictionary<Type, UIScene> UISceneDict => _uiSceneDict;
+        
+        
         public GameObject Root
         {
             get
@@ -40,16 +41,16 @@ namespace GameManagers
                 return go;
             }
         }
-        public void AddImportant_Popup_UI(UIBase importantUI)
+        public void AddImportant_Popup_UI(UIPopup importantUI)
         {
             Type type = importantUI.GetType();
             _importantPopupUI[type] = importantUI;
         }
 
-        public T GetImportant_Popup_UI<T>() where T : UIBase
+        public T GetImportant_Popup_UI<T>() where T : UIPopup
         {
 
-            if (_importantPopupUI.TryGetValue(typeof(T), out UIBase value))
+            if (_importantPopupUI.TryGetValue(typeof(T), out UIPopup value))
             {
                 return value as T;
             }
@@ -70,14 +71,14 @@ namespace GameManagers
             return null;
         }
 
-        public bool Try_Get_Scene_UI<T>(out T ui_scene) where T : UIScene
+        public bool Try_Get_Scene_UI<T>(out T uiScene) where T : UIScene
         {
             if (_uiSceneDict.TryGetValue(typeof(T), out UIScene scene))
             {
-                ui_scene = scene as T;
-                return ui_scene is not null;
+                uiScene = scene as T;
+                return uiScene is not null;
             }
-            ui_scene = null;
+            uiScene = null;
             return false;
         }
         public void SetCanvas(Canvas canvas, bool sorting = false)//씬 넘어갈때 다초기화 할것
@@ -103,6 +104,7 @@ namespace GameManagers
             }
         }
 
+
         public T GetPopupInDict<T>() where T : UIPopup
         {
             T popup = GetImportant_Popup_UI<T>();
@@ -119,7 +121,7 @@ namespace GameManagers
             uiPopup = GetPopupInDict<T>();
             if (uiPopup != null)
             {
-                Managers.UIManager.ShowPopupUI(uiPopup);
+                ShowPopupUI(uiPopup);
                 return true;
             }
             return false;

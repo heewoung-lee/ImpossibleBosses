@@ -76,11 +76,11 @@ namespace Data.DataType.ItemType
             return itemEffectText;
         }
 
-        public UIItemComponentInventory MakeItemComponentInventory(Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(UIManager uiManager,Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIItemComponentEquipment uiEquipmentComponent
-                = Managers.UIManager.MakeSubItem<UIItemComponentEquipment>(parent, name,
+                = uiManager.MakeSubItem<UIItemComponentEquipment>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
             if (itemCount != 1)
             {
@@ -91,11 +91,11 @@ namespace Data.DataType.ItemType
             return uiEquipmentComponent;
         }
 
-        public UIShopItemComponent MakeShopItemComponent(int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(UIManager uiManager,int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIShopItemComponent uiShopItemComponent =
-                Managers.UIManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                uiManager.MakeSubItem<UIShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UIShopItemComponent");
             if (itemCount != 1)
             {

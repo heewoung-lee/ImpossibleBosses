@@ -1,6 +1,8 @@
 using GameManagers;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Util;
+using Zenject;
 
 namespace Scene
 {
@@ -8,7 +10,9 @@ namespace Scene
     {
         public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
-        UI_LobbyScene _uiLobbyScene;
+        
+        [Inject]private UIManager _uiManager; 
+        UILobbyScene _uiLobbyScene;
         public override void Clear()
         {
         }
@@ -20,7 +24,7 @@ namespace Scene
         protected override void StartInit()
         {
             base.StartInit();
-            _uiLobbyScene = Managers.UIManager.GetSceneUIFromResource<UI_LobbyScene>();
+            _uiLobbyScene = _uiManager.GetSceneUIFromResource<UILobbyScene>();
 
         }
     }

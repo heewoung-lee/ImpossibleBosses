@@ -6,11 +6,13 @@ using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.Scene.SceneUI
 {
     public class UIUserInfoPanel : UIScene
     {
+        [Inject] private UIManager _uiManager;
 
         enum Buttons
         {
@@ -56,17 +58,17 @@ namespace UI.Scene.SceneUI
         public async void RefreshButton()
         {
             _refreshLobbyButton.interactable = false;
-            UI_Room_Inventory inventory = Managers.UIManager.Get_Scene_UI<UI_Room_Inventory>();
+            UIRoomInventory inventory = _uiManager.Get_Scene_UI<UIRoomInventory>();
             try
             {
-                await Managers.LobbyManager.ReFreshRoomList();
+                await Managers.LobbyManager.ReFreshRoomList(_uiManager);
                 await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
                 Managers.LobbyManager.ShowLobbyData();
                 //Managers.RelayManager.ShowRelayPlayer();
             }
             catch (Exception ex)
             {
-                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog alertPopup) == true)
+                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog alertPopup) == true)
                 {
                     alertPopup.SetText("오류", $"{ex}");
                     _refreshLobbyButton.interactable = true;
@@ -113,9 +115,9 @@ namespace UI.Scene.SceneUI
         {
             if (_createRoomUI == null)
             {
-                _createRoomUI = Managers.UIManager.GetPopupUIFromResource<UICreateRoom>();
+                _createRoomUI = _uiManager.GetPopupUIFromResource<UICreateRoom>();
             }
-            Managers.UIManager.ShowPopupUI(_createRoomUI);
+            _uiManager.ShowPopupUI(_createRoomUI);
         }
 
         private void ShowUserNickName()

@@ -6,6 +6,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 using Input = UnityEngine.Input;
 
 namespace UI.Popup.PopupUI
@@ -37,7 +38,9 @@ namespace UI.Popup.PopupUI
 
         private Slider _userCountSlider;
         private TMP_Text _currentCount;
+        [Inject] private UIManager _uiManager;
 
+        
         public override TMP_InputField IdInputField => _roomNameInputField;
         public override TMP_InputField PwInputField => _roomPwInputField;
 
@@ -93,7 +96,7 @@ namespace UI.Popup.PopupUI
                     value = int.Parse(passWord);
                     if ((float)value / 10000000 < 1)
                     {
-                        if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                        if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                         {
                             dialog .AlertSetText("오류", "비밀번호는 8자리 이상");
                             _buttonConnect.interactable = true;
@@ -138,7 +141,7 @@ namespace UI.Popup.PopupUI
         }
         public void OnClickCloseButton()
         {
-            Managers.UIManager.ClosePopupUI(this);
+            _uiManager.ClosePopupUI(this);
         }
         protected override void StartInit()
         {

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_RoomChat : UI_LobbyChat
+public class UI_RoomChat : UILobbyChat
 {
     private const int EXTENSION_SIZE = 400;
     enum AddButtons

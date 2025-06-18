@@ -9,6 +9,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Scene.GamePlayScene
 {
@@ -34,7 +35,9 @@ namespace Scene.GamePlayScene
         private Define.PlayerClass _playerClass;
         private bool _isSoloTest;
         private UIStageTimer _uiStageTimer;
+        [Inject] private UIManager _uiManager;
 
+        
         public ISceneMover Nextscene => new BattleSceneMover();
 
         private async Task JoinChannel()
@@ -94,7 +97,7 @@ namespace Scene.GamePlayScene
 
         private void LoadGamePlayScene()
         {
-           Managers.UIManager.GetOrCreateSceneUI<UI_Loading>().gameObject.SetActive(false);
+            _uiManager.GetOrCreateSceneUI<UI_Loading>().gameObject.SetActive(false);
         }
         private async Task SetAuthenticationService()
         {
@@ -124,17 +127,17 @@ namespace Scene.GamePlayScene
         public async void Init()
         {
             await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
-            _uiStageTimer = Managers.UIManager.GetOrCreateSceneUI<UIStageTimer>();
+            _uiStageTimer = _uiManager.GetOrCreateSceneUI<UIStageTimer>();
             _uiStageTimer.OnTimerCompleted += Nextscene.MoveScene;
         }
         public void SpawnObj()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsListening)
             {
-                Init_NGO_PlayScene_OnHost();
+                InitNgoPlaySceneOnHost();
             }
-            Managers.RelayManager.NetworkManagerEx.OnServerStarted += Init_NGO_PlayScene_OnHost;
-            void Init_NGO_PlayScene_OnHost()
+            Managers.RelayManager.NetworkManagerEx.OnServerStarted += InitNgoPlaySceneOnHost;
+            void InitNgoPlaySceneOnHost()
             {
                 if (Managers.RelayManager.NetworkManagerEx.IsHost)
                 {

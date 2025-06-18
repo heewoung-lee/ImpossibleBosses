@@ -10,6 +10,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Test.TestScripts.UnitTest
 {
@@ -33,11 +34,12 @@ namespace Test.TestScripts.UnitTest
         public override Define.Scene CurrentScene => Define.Scene.BattleScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
+        [Inject] private UIManager _uiManager;
 
         protected override async void StartInit()
         {
             base.StartInit();
-            _uiLoadingScene = Managers.UIManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
             await JoinChannel();
             //Managers.GameManagerEx.Player.GetComponent<Module_Player_Class>().InitializeSkillsFromManager();
         }

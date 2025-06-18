@@ -3,13 +3,16 @@ using Module.CommonModule;
 using Module.PlayerModule;
 using UI.Popup.PopupUI;
 using UnityEngine;
+using Zenject;
 
 namespace Module.NPCModule
 {
     public class ModuleNpcShopInteraction : MonoBehaviour, IInteraction
     {
-        UIShop _uiShop;
-        CapsuleCollider _collider;
+        private UIShop _uiShop;
+        private CapsuleCollider _collider;
+        [Inject] private UIManager _uiManager;
+
 
         public bool CanInteraction => true;
 
@@ -23,16 +26,16 @@ namespace Module.NPCModule
         }
         private void Start()
         {
-            _uiShop = Managers.UIManager.GetPopupUIFromResource<UIShop>();
-            Managers.UIManager.ClosePopupUI(_uiShop);
+            _uiShop = _uiManager.GetPopupUIFromResource<UIShop>();
+            _uiManager.ClosePopupUI(_uiShop);
         }
         public void Interaction(ModulePlayerInteraction caller)
         {
-            Managers.UIManager.SwitchPopUpUI(_uiShop);
+            _uiManager.SwitchPopUpUI(_uiShop);
         }
         public void OutInteraction()
         {
-            Managers.UIManager.ClosePopupUI(_uiShop);
+            _uiManager.ClosePopupUI(_uiShop);
         }
 
     }

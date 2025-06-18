@@ -3,7 +3,6 @@ using BehaviorDesigner.Runtime.Tasks;
 using GameManagers;
 using NetWork.NGO.Scene_NGO;
 using Scene;
-using Scene.GamePlayScene;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {

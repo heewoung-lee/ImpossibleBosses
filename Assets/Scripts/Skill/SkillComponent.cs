@@ -1,10 +1,12 @@
 using System.Collections;
 using GameManagers;
 using UI;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace Skill
 {
@@ -24,8 +26,9 @@ namespace Skill
         private Image _coolTimeImg;
         private float _coolTime;
         private bool _isSkillReady;
-        private UI_Description _decriptionObject;
+        private UIDescription _decriptionObject;
         private RectTransform _skillComponentRectTr;
+        [Inject] private UIManager _uiManager;
         public void SetSkillComponent(BaseSkill.BaseSkill skill)
         {
             _skill = skill;
@@ -112,7 +115,7 @@ namespace Skill
         }
         protected override void StartInit()
         {
-            _decriptionObject = Managers.UIManager.Get_Scene_UI<UI_Description>();
+            _decriptionObject = _uiManager.Get_Scene_UI<UIDescription>();
         
         }
 

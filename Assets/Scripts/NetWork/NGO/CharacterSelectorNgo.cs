@@ -3,11 +3,13 @@ using GameManagers;
 using Module.UI_Module;
 using NetWork.BaseNGO;
 using TMPro;
+using UI.Scene.SceneUI;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 
 namespace NetWork.NGO
@@ -15,6 +17,7 @@ namespace NetWork.NGO
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
     private readonly Color _playerFrameColor = "#143658".HexCodetoConvertColor();
+    [Inject] private UIManager _uiManager;
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
         new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone,
@@ -68,7 +71,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     private GameObject _playerNickNameObject;
     private GameObject _readyPanel;
     private TMP_Text _playerNickNameText;
-    private UI_Room_CharacterSelect _uiRoomCharacterSelect;
+    private UIRoomCharacterSelect _uiRoomCharacterSelect;
     private Camera _playerChooseCamera;
     private RawImage _selectPlayerRawImage;
     private bool _isRunnningCoroutine = false;
@@ -138,7 +141,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
         _readyPanel.gameObject.SetActive(false);
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
-        _uiRoomCharacterSelect = Managers.UIManager.Get_Scene_UI<UI_Room_CharacterSelect>();
+        _uiRoomCharacterSelect = _uiManager.Get_Scene_UI<UIRoomCharacterSelect>();
     }
 
     public override void OnNetworkSpawn()
@@ -264,7 +267,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     {
         _isReady.Value = !_isReady.Value;
         _readyPanel.SetActive(_isReady.Value);
-        _uiRoomCharacterSelect.isCheckAllReadyToPlayers();
+        _uiRoomCharacterSelect.IsCheckAllReadyToPlayers();
         NotifyButtonStateClientRpc(_isReady.Value, rpcParams.Receive.SenderClientId);
     }
 

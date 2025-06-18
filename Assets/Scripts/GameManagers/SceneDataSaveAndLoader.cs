@@ -17,7 +17,7 @@ namespace GameManagers
             _inventoryItemList.AddRange(saveItemlist);
         }
 
-        public bool TryGetLoadInventoryItem(out List<UIItemComponentInventory> loadInventory)
+        public bool TryGetLoadInventoryItem(UIManager uiManager,out List<UIItemComponentInventory> loadInventory)
         {
             loadInventory = new List<UIItemComponentInventory>();
             if (_inventoryItemList == null || _inventoryItemList.Count <= 0)
@@ -26,7 +26,7 @@ namespace GameManagers
             foreach (IteminfoStruct iteminfo in _inventoryItemList)
             {
                 IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
-                UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent();
+                UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent(uiManager);
                 inventoryitem.SetINewteminfo(iteminfo);
                 loadInventory.Add(inventoryitem);
             }

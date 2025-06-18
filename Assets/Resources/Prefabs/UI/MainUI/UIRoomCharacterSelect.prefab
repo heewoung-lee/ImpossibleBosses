@@ -670,7 +670,7 @@ GameObject:
   - component: {fileID: 1409618760759360269}
   - component: {fileID: 3696118962142453391}
   m_Layer: 5
-  m_Name: Button_Ready
+  m_Name: ButtonReady
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,7 +1139,7 @@ GameObject:
   - component: {fileID: 8795446310428385060}
   - component: {fileID: 4780563337131546814}
   m_Layer: 5
-  m_Name: Button_Start
+  m_Name: ButtonStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1312,7 +1312,7 @@ GameObject:
   - component: {fileID: 6993086307384350607}
   - component: {fileID: 1178753092858447673}
   m_Layer: 5
-  m_Name: UI_Room_CharacterSelect
+  m_Name: UIRoomCharacterSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

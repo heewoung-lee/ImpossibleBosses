@@ -5,6 +5,7 @@ using Stats.BaseStats;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -14,13 +15,15 @@ namespace GameManagers
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
         private List<Type> _requestType = new List<Type>();
         private UI_BufferBar _uiBufferBar;
+        [Inject] private UIManager _uiManager;
+
 
         public UI_BufferBar UIBufferBar
         {
             get
             {
                 if (_uiBufferBar == null)
-                    _uiBufferBar = Managers.UIManager.Get_Scene_UI<UI_BufferBar>();
+                    _uiBufferBar = _uiManager.Get_Scene_UI<UI_BufferBar>();
 
                 return _uiBufferBar;
             }

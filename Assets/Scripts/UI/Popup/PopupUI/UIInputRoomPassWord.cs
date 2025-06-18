@@ -9,6 +9,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -35,6 +36,7 @@ namespace UI.Popup.PopupUI
         private GameObject _messageError;
         private TMP_Text _errorMessageText;
         private ModuleUIFadeOut _errorMessageTextFadeOutMoudule;
+        [Inject] private UIManager _uiManager;
 
         public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
@@ -99,12 +101,12 @@ namespace UI.Popup.PopupUI
             {
                 Debug.Log("로비를 찾을 수 없습니다");
 
-                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog loginPopup) == true)
+                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog loginPopup) == true)
                 {
                     loginPopup.AlertSetText("오류", "로비를 찾을 수 없습니다")
                         .AfterAlertEvent(async () =>
                         {
-                            Managers.UIManager.ClosePopupUI(this);
+                            _uiManager.ClosePopupUI(this);
                             _confirmButton.interactable = true;
                             await Managers.LobbyManager.ReFreshRoomList();
                         });

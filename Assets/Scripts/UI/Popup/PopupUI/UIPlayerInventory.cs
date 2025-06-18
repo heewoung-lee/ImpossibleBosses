@@ -3,11 +3,13 @@ using GameManagers;
 using Stats;
 using Stats.BaseStats;
 using TMPro;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -32,6 +34,8 @@ namespace UI.Popup.PopupUI
 
         private GraphicRaycaster _uiInventoryRaycaster;
         private EventSystem _eventSystem;
+        [Inject] private UIManager _uiManager;
+
         public Transform ItemInventoryTr => _itemInventoryTr;
         public GraphicRaycaster UIInventoryRayCaster=> _uiInventoryRaycaster;
         public EventSystem EventSystem => _eventSystem;
@@ -70,7 +74,7 @@ namespace UI.Popup.PopupUI
         protected override void AwakeInit()
         {
             base.AwakeInit();
-            Managers.UIManager.AddImportant_Popup_UI(this);
+            _uiManager.AddImportant_Popup_UI(this);
             Bind<Transform>(typeof(PanelTr));
             Bind<GameObject>(typeof(EquipmentGo));
             Transform playerTr = Get<Transform>((int)PanelTr.Player);
@@ -124,7 +128,7 @@ namespace UI.Popup.PopupUI
         }
         public void CloseDecriptionWindow()
         {
-            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Description description))
+            if (_uiManager.Try_Get_Scene_UI(out UIDescription description))
             {
                 description.UI_DescriptionDisable();
                 description.SetdecriptionOriginPos();

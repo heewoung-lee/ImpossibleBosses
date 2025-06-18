@@ -6,12 +6,14 @@ using Data.Item;
 using GameManagers;
 using Stats;
 using TMPro;
+using UI.Scene.SceneUI;
 using UI.SubItem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.Popup.PopupUI
 {
@@ -59,6 +61,8 @@ namespace UI.Popup.PopupUI
         private GraphicRaycaster _uiShopRaycaster;
         private EventSystem _eventSystem;
 
+        [Inject] private UIManager _uiManager;
+
         public GraphicRaycaster UIShopRayCaster => _uiShopRaycaster;
         public EventSystem EventSystem => _eventSystem;
 
@@ -78,7 +82,7 @@ namespace UI.Popup.PopupUI
             _etcItemIcon = GetImage((int)(IconImages.ETCItemTap));
             _tabFocusLine = GetImage((int)(IconImages.TabFocusLine));
 
-            Managers.UIManager.AddImportant_Popup_UI(this);
+            _uiManager.AddImportant_Popup_UI(this);
             //클릭한 아이템 탭 오브젝트안에 있는 텍스트를 불러오기 위한 딕셔너리,
             //클릭할때마다 GetComponentinChildren를 호출하기 싫어서 만듦
             _findGameObjectToTMPTextDict = new Dictionary<GameObject, (TMP_Text, ItemType)>()
@@ -148,7 +152,7 @@ namespace UI.Popup.PopupUI
         }
         public void CloseDecriptionWindow()
         {
-            if (Managers.UIManager.Try_Get_Scene_UI(out UI_Description description))
+            if (_uiManager.Try_Get_Scene_UI(out UIDescription description))
             {
                 description.UI_DescriptionDisable();
                 description.SetdecriptionOriginPos();
@@ -224,8 +228,8 @@ namespace UI.Popup.PopupUI
         {
             for (int i = 0; i < 10; i++)
             {
-                Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeShopItemComponent(Random.Range(10, 20), null, Random.Range(1, 5));
-                Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeShopItemComponent(Random.Range(10, 20));
+                Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeShopItemComponent(_uiManager,Random.Range(10, 20), null, Random.Range(1, 5));
+                Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeShopItemComponent(_uiManager,Random.Range(10, 20));
             }
         }
     }

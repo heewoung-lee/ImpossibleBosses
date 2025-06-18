@@ -124,7 +124,6 @@ namespace GameManagers
         public void Clear()
         {
             GetCurrentScene.Clear();
-            Managers.UIManager.Clear();
         }
 
         public void Init()

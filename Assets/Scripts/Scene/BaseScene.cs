@@ -1,9 +1,12 @@
+using System;
 using Controller;
 using GameManagers;
 using Scene.GamePlayScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Util;
+using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Scene
 {
@@ -12,13 +15,20 @@ namespace Scene
         public abstract Define.Scene CurrentScene { get; }
         public abstract ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         MoveMarkerController _moveMarker;
+
         void Start()
         {
-            StartInit();    
+            StartInit();
         }
 
         private void Awake()
         {
+#if UNITY_EDITOR
+            if (FindAnyObjectByType<SceneContext>() == null)
+            { 
+                Debug.LogWarning("There is no Scene Context");
+            }
+#endif
             AwakeInit();
         }
 
@@ -29,11 +39,13 @@ namespace Scene
             {
                 Managers.ResourceManager.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
             }
+
             _moveMarker = gameObject.GetOrAddComponent<MoveMarkerController>();
         }
 
         protected abstract void AwakeInit();
-     
+
         public abstract void Clear();
+
     }
 }

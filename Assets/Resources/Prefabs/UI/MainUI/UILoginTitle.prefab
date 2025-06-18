@@ -9852,7 +9852,7 @@ GameObject:
   - component: {fileID: 1591723605335551695}
   - component: {fileID: 7861599864859206600}
   m_Layer: 5
-  m_Name: Button_Start
+  m_Name: ButtonStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10145,7 +10145,7 @@ GameObject:
   - component: {fileID: 4774975351089625063}
   - component: {fileID: 3854063442202944870}
   m_Layer: 5
-  m_Name: UI_LoginTitle
+  m_Name: UILoginTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

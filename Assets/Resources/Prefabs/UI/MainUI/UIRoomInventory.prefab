@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 6639308715519680268}
   - component: {fileID: 7318311548150993057}
   m_Layer: 5
-  m_Name: Room_Content
+  m_Name: RoomContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 7556397622553559771}
   - component: {fileID: 2343684021302580082}
   m_Layer: 5
-  m_Name: UI_Room_Inventory
+  m_Name: UIRoomInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

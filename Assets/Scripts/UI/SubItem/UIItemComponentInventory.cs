@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
@@ -31,6 +32,7 @@ namespace UI.SubItem
         protected Image _itemGradeBorder;
         protected GraphicRaycaster _uiRaycaster;
         protected EventSystem _eventSystem;
+        [Inject] private UIManager _uiManager;
 
         public event Action OnAfterStart
         {
@@ -60,7 +62,7 @@ namespace UI.SubItem
         {
             base.StartInit();
 
-            _inventoryUI = Managers.UIManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _inventoryUI = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
 
             _equipSlot = _inventoryUI.gameObject.FindChild<EquipSlotTrInfo>("Left_Panel", true);
             _contentofInventoryTr = _inventoryUI.GetComponentInChildren<InventoryContentCoordinate>().transform;

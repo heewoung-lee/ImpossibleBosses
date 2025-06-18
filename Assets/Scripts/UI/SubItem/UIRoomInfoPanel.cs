@@ -7,11 +7,13 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
     public class UIRoomInfoPanel : UIBase
     {
+        [Inject] private UIManager _uiManager;
 
         enum Texts
         {
@@ -62,7 +64,7 @@ namespace UI.SubItem
         {
             if (_lobbyRegisteredPanel.HasPassword)
             {
-                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIInputRoomPassWord inputroomPassWord) == true)
+                if (_uiManager.TryGetPopupDictAndShowPopup(out UIInputRoomPassWord inputroomPassWord) == true)
                 {
                     inputroomPassWord.SetRoomInfoPanel(this);
                 }
@@ -83,12 +85,12 @@ namespace UI.SubItem
                     string errorMsg = "방이 없습니다.";
                     Debug.Log($"{errorMsg}");
 
-                    if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                    if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                     {
                         dialog.AlertSetText("오류",$"{errorMsg}")
                             .AfterAlertEvent(async() =>
                             {
-                                await Managers.LobbyManager.ReFreshRoomList();
+                                await Managers.LobbyManager.ReFreshRoomList(_uiManager);
                             });
                     }
                     _joinButton.interactable = true;
