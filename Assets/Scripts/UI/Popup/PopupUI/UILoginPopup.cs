@@ -37,7 +37,7 @@ namespace UI.Popup.PopupUI
             {
                 if (_uiCreateNickName == null)
                 {
-                    _uiCreateNickName = Managers.UIManager.TryGetPopupInDict<UICreateNickName>();
+                    _uiCreateNickName = Managers.UIManager.GetPopupInDict<UICreateNickName>();
                 }
                 return _uiCreateNickName;
             }
@@ -69,7 +69,10 @@ namespace UI.Popup.PopupUI
         }
         public void ShowSignUpUI()
         {
-            Managers.UIManager.TryGetPopupDictAndShowPopup<UISignUpPopup>();
+            if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UISignUpPopup popup) == true)
+            {
+                
+            }
         }
 
         private void OnDisable()
@@ -88,9 +91,11 @@ namespace UI.Popup.PopupUI
 
             if (Utill.IsAlphanumeric(userID) == false) //영문+숫자외 다른 문자가 섞인경우.
             {
-                Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                    .AlertSetText("난 한글을 사랑하지만..", "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.")
-                    .AfterAlertEvent(() => { _confirmButton.interactable = true; });
+                if(Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
+                {
+                    uiAlertDialog.AlertSetText("난 한글을 사랑하지만..", "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.")
+                        .AfterAlertEvent(() => { _confirmButton.interactable = true; });
+                }
                 return;
             }
 
@@ -98,11 +103,13 @@ namespace UI.Popup.PopupUI
             {
                 PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPw);
 
-                if (playerinfo.Equals(default(PlayerLoginInfo)))
+                if (playerinfo.Equals(default))
                 {
-                    Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                        .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
-                        .AfterAlertEvent(() => { _confirmButton.interactable = true; });
+                    if(Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
+                    {
+                        uiAlertDialog .AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
+                            .AfterAlertEvent(() => { _confirmButton.interactable = true; });
+                    }
                     return;
                 }
                 if (string.IsNullOrEmpty(playerinfo.NickName))
@@ -116,9 +123,11 @@ namespace UI.Popup.PopupUI
             catch (Exception ex)
             {
                 Debug.Log($"Error: {ex}\nNot Connetced Internet");
-                UIAlertPopupBase alertDialog = Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                    .AlertSetText("오류", "인터넷 연결이 안됐습니다.")
-                    .AfterAlertEvent(()=> { _confirmButton.interactable = true; });
+                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                {
+                    dialog.AlertSetText("오류", "인터넷 연결이 안됐습니다.")
+                        .AfterAlertEvent(()=> { _confirmButton.interactable = true; });
+                }
                 return;
             }
             Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
@@ -127,20 +136,24 @@ namespace UI.Popup.PopupUI
                 bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene();//로그인을 시도;
                 if (checkPlayerNickNameAlreadyConnected is true)
                 {
-                    Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                        .AfterAlertEvent(() => { _confirmButton.interactable = true; })
-                        .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
-                        .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                    if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                    {
+                        dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
+                            .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
+                            .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                    }
                     return;
                 }
             }
             catch(Exception ex)
             {
                 Debug.Log($"오류{ex}");
-                Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                    .AfterAlertEvent(() => { _confirmButton.interactable = true; })
-                    .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
-                    .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                {
+                    dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
+                        .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
+                        .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                }
                 return;
             }
         }

@@ -31,6 +31,7 @@ namespace Scene.GamePlayScene
         [SerializeField] public TestMode testMode = TestMode.Local;
         [SerializeField] public MultiMode multiMode = MultiMode.Solo;
         [SerializeField] public Define.PlayerClass playerableCharacter = Define.PlayerClass.Archer;
+        [Inject] private ISceneSpawnBehaviour _sceneSpawnBehaviour;
         
         
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
@@ -41,7 +42,6 @@ namespace Scene.GamePlayScene
         
         
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-        [Inject] private ISceneSpawnBehaviour _sceneSpawnBehaviour;
 
 
         protected override void AwakeInit()

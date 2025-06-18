@@ -79,7 +79,7 @@ namespace UI.Popup.PopupUI
         {
             if(alertBasePopup == null)
             {
-                alertBasePopup = Managers.UIManager.TryGetPopupInDict<T>();
+                alertBasePopup = Managers.UIManager.GetPopupInDict<T>();
             }
             alertBasePopup.SetText(titleMessage, bodyText);
             if (closeButtonAction != null)

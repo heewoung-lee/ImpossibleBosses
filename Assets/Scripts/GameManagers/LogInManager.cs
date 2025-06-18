@@ -7,12 +7,27 @@ using UnityEngine;
 
 namespace GameManagers
 {
-    public struct PlayerLoginInfo
+    public struct PlayerLoginInfo : IEquatable<PlayerLoginInfo>
     {
         public string ID;
         public string Password;
         public string NickName;
         public int RowNumber;
+
+        public bool Equals(PlayerLoginInfo other)
+        {
+            return ID == other.ID && Password == other.Password;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PlayerLoginInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Password);
+        }
     }
 
     public class LogInManager

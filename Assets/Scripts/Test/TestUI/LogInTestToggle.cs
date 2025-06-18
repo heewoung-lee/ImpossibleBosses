@@ -49,33 +49,34 @@ namespace Test.TestUI
 
         private void ClickLogin()
         {
-            UILoginPopup uiLoginPopup = Managers.UIManager.TryGetPopupDictAndShowPopup<UILoginPopup>();
 
-
-            Players currentPlayer = Players.Player1;
-
-            string[] tagValue = CurrentPlayer.ReadOnlyTags();
-            if (tagValue.Length > 0 && Enum.TryParse(typeof(Players), tagValue[0], out var parsedEnum))
+            if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UILoginPopup loginPopup) == true)
             {
-                currentPlayer = (Players)parsedEnum;
-                Debug.Log($"Current player: {currentPlayer}");
-            }
-            switch (currentPlayer)
-            {
-                case Players.Player1:
-                    uiLoginPopup.AuthenticateUser("hiwoong123", "123123");
-                    break;
-                case Players.Player2:
-                    uiLoginPopup.AuthenticateUser("hiwoong12", "123123");
-                    break;
-                case Players.Player3:
-                    uiLoginPopup.AuthenticateUser("hiwoo12", "123123");
-                    break;
-                case Players.Player4:
-                    uiLoginPopup.AuthenticateUser("hiwoong1234", "123123");
-                    break;
-                case Players.None:
-                    break;
+                Players currentPlayer = Players.Player1;
+
+                string[] tagValue = CurrentPlayer.ReadOnlyTags();
+                if (tagValue.Length > 0 && Enum.TryParse(typeof(Players), tagValue[0], out var parsedEnum))
+                {
+                    currentPlayer = (Players)parsedEnum;
+                    Debug.Log($"Current player: {currentPlayer}");
+                }
+                switch (currentPlayer)
+                {
+                    case Players.Player1:
+                        loginPopup.AuthenticateUser("hiwoong123", "123123");
+                        break;
+                    case Players.Player2:
+                        loginPopup.AuthenticateUser("hiwoong12", "123123");
+                        break;
+                    case Players.Player3:
+                        loginPopup.AuthenticateUser("hiwoo12", "123123");
+                        break;
+                    case Players.Player4:
+                        loginPopup.AuthenticateUser("hiwoong1234", "123123");
+                        break;
+                    case Players.None:
+                        break;
+                }
             }
         }
 

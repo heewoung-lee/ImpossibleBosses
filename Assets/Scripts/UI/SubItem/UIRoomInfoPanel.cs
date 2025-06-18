@@ -62,8 +62,10 @@ namespace UI.SubItem
         {
             if (_lobbyRegisteredPanel.HasPassword)
             {
-                UIInputRoomPassWord uiInputPassword = Managers.UIManager.TryGetPopupDictAndShowPopup<UIInputRoomPassWord>();
-                uiInputPassword.SetRoomInfoPanel(this);
+                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIInputRoomPassWord inputroomPassWord) == true)
+                {
+                    inputroomPassWord.SetRoomInfoPanel(this);
+                }
             }
             else
             {
@@ -80,12 +82,15 @@ namespace UI.SubItem
                 {
                     string errorMsg = "방이 없습니다.";
                     Debug.Log($"{errorMsg}");
-                    Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                        .AlertSetText("오류",$"{errorMsg}")
-                        .AfterAlertEvent(async() =>
-                        {
-                            await Managers.LobbyManager.ReFreshRoomList();
-                        });
+
+                    if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                    {
+                        dialog.AlertSetText("오류",$"{errorMsg}")
+                            .AfterAlertEvent(async() =>
+                            {
+                                await Managers.LobbyManager.ReFreshRoomList();
+                            });
+                    }
                     _joinButton.interactable = true;
                     Managers.LobbyManager.TriggerLobbyLoadingEvent(false);
                     return;

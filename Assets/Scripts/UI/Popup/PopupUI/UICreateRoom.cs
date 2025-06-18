@@ -93,9 +93,11 @@ namespace UI.Popup.PopupUI
                     value = int.Parse(passWord);
                     if ((float)value / 10000000 < 1)
                     {
-                        UIAlertPopupBase alertDialog = Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>()
-                            .AlertSetText("오류", "비밀번호는 8자리 이상");
-                        _buttonConnect.interactable = true;
+                        if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                        {
+                            dialog .AlertSetText("오류", "비밀번호는 8자리 이상");
+                            _buttonConnect.interactable = true;
+                        }
                         return;
                     }
 

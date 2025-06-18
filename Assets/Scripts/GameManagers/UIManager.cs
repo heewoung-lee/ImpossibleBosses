@@ -103,23 +103,26 @@ namespace GameManagers
             }
         }
 
-        public T TryGetPopupInDict<T>() where T : UIPopup
+        public T GetPopupInDict<T>() where T : UIPopup
         {
             T popup = GetImportant_Popup_UI<T>();
             if (popup == null)
             {
                 popup = GetPopupUIFromResource<T>();
                 AddImportant_Popup_UI(popup);
-                return popup;
             }
             return popup;
         }
 
-        public T TryGetPopupDictAndShowPopup<T>() where T : UIPopup
+        public bool TryGetPopupDictAndShowPopup<T>(out T uiPopup) where T : UIPopup
         {
-            T ui_popup = TryGetPopupInDict<T>();
-            Managers.UIManager.ShowPopupUI(ui_popup);
-            return ui_popup;
+            uiPopup = GetPopupInDict<T>();
+            if (uiPopup != null)
+            {
+                Managers.UIManager.ShowPopupUI(uiPopup);
+                return true;
+            }
+            return false;
         }
 
         public T GetPopupUIFromResource<T>(string name = null) where T : UIPopup

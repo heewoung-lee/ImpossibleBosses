@@ -98,13 +98,17 @@ namespace UI.Popup.PopupUI
             catch (LobbyServiceException notfound) when (notfound.Reason == LobbyExceptionReason.LobbyNotFound)
             {
                 Debug.Log("로비를 찾을 수 없습니다");
-                Managers.UIManager.TryGetPopupDictAndShowPopup<UIAlertDialog>().AlertSetText("오류", "로비를 찾을 수 없습니다")
-                    .AfterAlertEvent(async () =>
-                    {
-                        Managers.UIManager.ClosePopupUI(this);
-                        _confirmButton.interactable = true;
-                        await Managers.LobbyManager.ReFreshRoomList();
-                    });
+
+                if (Managers.UIManager.TryGetPopupDictAndShowPopup(out UIAlertDialog loginPopup) == true)
+                {
+                    loginPopup.AlertSetText("오류", "로비를 찾을 수 없습니다")
+                        .AfterAlertEvent(async () =>
+                        {
+                            Managers.UIManager.ClosePopupUI(this);
+                            _confirmButton.interactable = true;
+                            await Managers.LobbyManager.ReFreshRoomList();
+                        });
+                }
                 return;
             }
             catch (Exception error)
