@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using GameManagers.Interface;
 using Skill.BaseSkill;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -10,7 +12,7 @@ namespace GameManagers
         
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
         public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
-
+        [Inject] public IUISceneManager SceneManager { get; }
 
         private Action _doneUISkillBarInitEvent;
 
@@ -28,7 +30,6 @@ namespace GameManagers
 
 
 
-
         List<Type> _skillType = new List<Type>();
 
         private UI_SkillBar _uiSkillBar;
@@ -38,7 +39,7 @@ namespace GameManagers
             {
                 if (_uiSkillBar == null)
                 {
-                    if(Managers.UIManager.Try_Get_Scene_UI(out UI_SkillBar skillbar))
+                    if(SceneManager.Try_Get_Scene_UI(out UI_SkillBar skillbar))
                     {
                         _uiSkillBar = skillbar;
                     }

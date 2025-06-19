@@ -7,11 +7,14 @@ using UI.Popup.PopupUI;
 using UI.Scene;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
-    public class UIManager : IManagerIResettable,IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
+    internal class UIManager : IManagerIResettable,IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
     {
+        
+        [Inject] private DiContainer _container; 
 
         private const int SceneUISortingDefaultValue = 0;
         private const int PopupUISortingDefaultValue = 20;
@@ -165,9 +168,10 @@ namespace GameManagers
                 go = Managers.ResourceManager.Instantiate($"{path}");
             }
             T scene = Utill.GetOrAddComponent<T>(go);
+            _container.Inject(go);
             _uiSceneDict.Add(typeof(T), scene);
             go.transform.SetParent(Root.transform);
-
+            
             return scene;
         }
         public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UIScene
@@ -218,8 +222,6 @@ namespace GameManagers
             {
                 go = Managers.ResourceManager.Instantiate($"{path}");
             }
-
-
             if (parent != null)
                 go.transform.SetParent(parent);
 

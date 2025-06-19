@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -10,7 +11,7 @@ namespace GameManagers
     {
         Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
         public Dictionary<string, GameObject> CachingPoolableObjectDict => _cachingPoolableObject;
-
+        [Inject] private DiContainer _container;
         public T Load<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -75,7 +76,8 @@ namespace GameManagers
                     return Managers.PoolManager.Pop(prefab, parent).gameObject;
                 }
             }
-            GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
+            //GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
+            GameObject go = _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
             return go;
         }
 

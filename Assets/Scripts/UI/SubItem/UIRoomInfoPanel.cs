@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface;
 using TMPro;
 using UI.Popup.PopupUI;
 using Unity.Services.Lobbies;
@@ -13,7 +14,7 @@ namespace UI.SubItem
 {
     public class UIRoomInfoPanel : UIBase
     {
-        [Inject] private UIManager _uiManager;
+        [Inject]public IUIPopupManager PopupManager { get; }
 
         enum Texts
         {
@@ -64,7 +65,7 @@ namespace UI.SubItem
         {
             if (_lobbyRegisteredPanel.HasPassword)
             {
-                if (_uiManager.TryGetPopupDictAndShowPopup(out UIInputRoomPassWord inputroomPassWord) == true)
+                if (PopupManager.TryGetPopupDictAndShowPopup(out UIInputRoomPassWord inputroomPassWord) == true)
                 {
                     inputroomPassWord.SetRoomInfoPanel(this);
                 }
@@ -85,12 +86,12 @@ namespace UI.SubItem
                     string errorMsg = "방이 없습니다.";
                     Debug.Log($"{errorMsg}");
 
-                    if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                    if (PopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                     {
                         dialog.AlertSetText("오류",$"{errorMsg}")
                             .AfterAlertEvent(async() =>
                             {
-                                await Managers.LobbyManager.ReFreshRoomList(_uiManager);
+                                await Managers.LobbyManager.ReFreshRoomList();
                             });
                     }
                     _joinButton.interactable = true;

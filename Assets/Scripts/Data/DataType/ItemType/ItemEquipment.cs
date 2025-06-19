@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
 using UI.SubItem;
 using UnityEngine;
 using Util;
@@ -76,11 +77,11 @@ namespace Data.DataType.ItemType
             return itemEffectText;
         }
 
-        public UIItemComponentInventory MakeItemComponentInventory(UIManager uiManager,Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(IUISubItem subItemManager,Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIItemComponentEquipment uiEquipmentComponent
-                = uiManager.MakeSubItem<UIItemComponentEquipment>(parent, name,
+                = subItemManager.MakeSubItem<UIItemComponentEquipment>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Equipment");
             if (itemCount != 1)
             {
@@ -91,11 +92,11 @@ namespace Data.DataType.ItemType
             return uiEquipmentComponent;
         }
 
-        public UIShopItemComponent MakeShopItemComponent(UIManager uiManager,int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(IUISubItem subItemManager,int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIShopItemComponent uiShopItemComponent =
-                uiManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                subItemManager.MakeSubItem<UIShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UIShopItemComponent");
             if (itemCount != 1)
             {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameManagers.Interface;
 using Scene;
 using UI.Scene.SceneUI;
 using UI.SubItem;
@@ -19,25 +20,20 @@ namespace GameManagers
     public struct PlayerIngameLoginInfo
     {
         private readonly string _nickname;
-        private readonly string _Id;
+        private readonly string _id;
 
         public string PlayerNickName => _nickname;
-        public string Id => _Id;
+        public string Id => _id;
 
         public PlayerIngameLoginInfo(string playerNickname, string playerId)
         {
             _nickname = playerNickname; // 모든 필드를 초기화
-            _Id = playerId;
+            _id = playerId;
         }
     }
 
     public class LobbyManager : IManagerEventInitialize
     {
-        [Inject]
-        public LobbyManager(UIManager uiManager)
-        {
-            _uiManager = uiManager;
-        }
         
         enum LoadingProcess
         {
@@ -58,8 +54,10 @@ namespace GameManagers
         private Action<bool> _lobbyLoading;
         private Action _initDoneEvent;
         private Action _hostChangeEvent;
-        private UIManager _uiManager;
-
+        
+        [Inject]private IUISceneManager _sceneUIManager;
+        [Inject]private IUISubItem _subItemManager;
+            
         public bool[] TaskChecker => _taskChecker;
         public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
         public event Action<bool> LobbyLoadingEvent
@@ -876,7 +874,7 @@ namespace GameManagers
                 return;
 
 
-            if (_isRefreshing || Managers.UIManager.Try_Get_Scene_UI(out UIRoomInventory room_inventory_ui) == false)
+            if (_isRefreshing || _sceneUIManager.Try_Get_Scene_UI(out UIRoomInventory room_inventory_ui) == false)
             {
                 return;
             }
@@ -919,10 +917,10 @@ namespace GameManagers
         private void CreateRoomInitalize(Lobby lobby)
         {
 
-            if (Managers.UIManager.Try_Get_Scene_UI(out UIRoomInventory room_inventory_ui) == false)
+            if (_sceneUIManager.Try_Get_Scene_UI(out UIRoomInventory roomInventoryUI) == false)
                 return;
 
-            UIRoomInfoPanel infoPanel = Managers.UIManager.MakeSubItem<UIRoomInfoPanel>(room_inventory_ui.RoomContent);
+            UIRoomInfoPanel infoPanel = _subItemManager.MakeSubItem<UIRoomInfoPanel>(roomInventoryUI.RoomContent);
             infoPanel.SetRoomInfo(lobby);
         }
 

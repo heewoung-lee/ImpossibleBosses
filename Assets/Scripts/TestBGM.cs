@@ -9,7 +9,7 @@ public class TestBGM : MonoBehaviour
 
     void Start()
     {
-        Managers.SoundManager.Play("Sounds/001.BGM", Define.Sound.BGM);
+        //Managers.SoundManager.Play("Sounds/001.BGM", Define.Sound.BGM);
     }
 
 

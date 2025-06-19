@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface;
 using UnityEngine;
 using Zenject;
 
@@ -6,7 +7,7 @@ namespace UI.Scene
 {
     public class UIScene : UIBase
     {
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIManager _uiManager;
         protected override void AwakeInit()
         {
             _uiManager.SetCanvas(gameObject.GetComponent<Canvas>(), true);

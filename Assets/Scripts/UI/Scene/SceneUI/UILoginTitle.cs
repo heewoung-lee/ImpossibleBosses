@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface;
 using UI.Popup.PopupUI;
 using UnityEngine.UI;
 using Zenject;
@@ -14,7 +15,7 @@ namespace UI.Scene.SceneUI
 
         private Button _openLoginButton;
         private UILoginPopup _uiLoginPopup;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _popUpManager;
 
         protected override void AwakeInit()
         {
@@ -34,9 +35,9 @@ namespace UI.Scene.SceneUI
         {
             if(_uiLoginPopup == null)
             {
-                _uiLoginPopup = _uiManager.GetPopupUIFromResource<UILoginPopup>();
+                _uiLoginPopup = _popUpManager.GetPopupUIFromResource<UILoginPopup>();
             }
-            _uiManager.ShowPopupUI(_uiLoginPopup);
+            _popUpManager.ShowPopupUI(_uiLoginPopup);
         }
 
 

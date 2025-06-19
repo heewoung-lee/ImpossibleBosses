@@ -2,6 +2,7 @@ using System;
 using BehaviorDesigner.Runtime;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
 using UI;
 using UI.Popup.PopupUI;
 using UI.SubItem;
@@ -109,13 +110,13 @@ namespace Util
         }
 
 
-        public static UIItemComponentInventory MakeInventoryItemComponent(this IItem iteminfo,UIManager uiManager, Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
+        public static UIItemComponentInventory MakeInventoryItemComponent(this IItem iteminfo,IUIPopupManager popupUIManager, Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
         {
             //iteminfo의 정보는 ItemConsumable 혹은 ItemEquipment이기에 UI_ItemComponent 형변환이 안된다.
             //ItemCOnsumable을 찾으면 UI_ItemComponent_Consumable로 연결해주고
             //ItemEquipment을 찾으면 UI_ItemComponent_Equipment로 연결해야한다.
 
-            UIPlayerInventory inventory = uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            UIPlayerInventory inventory = popupUIManager.GetImportant_Popup_UI<UIPlayerInventory>();
 
             if (parentTr == null)
             {
@@ -123,17 +124,19 @@ namespace Util
             }
 
             IInventoryItemMaker itemUIType = iteminfo as IInventoryItemMaker;
-            return itemUIType.MakeItemComponentInventory(uiManager,parentTr, itemCount, name, path);
+            IUISubItem subItemManager = popupUIManager as IUISubItem;
+            return itemUIType.MakeItemComponentInventory(subItemManager,parentTr, itemCount, name, path);
         }
 
-        public static UIShopItemComponent MakeShopItemComponent(this IItem iteminfo,UIManager uiManager,int price,Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
+        public static UIShopItemComponent MakeShopItemComponent(this IItem iteminfo,IUIPopupManager popupUIManager,int price,Transform parentTr = null, int itemCount = 1, string name = null, string path = null)
         {
-            UIShop shop = uiManager.GetImportant_Popup_UI<UIShop>();
+            UIShop shop = popupUIManager.GetImportant_Popup_UI<UIShop>();
             if (parentTr == null)
                 parentTr = shop.ItemCoordinate;
 
             IShopItemMaker itemUIType = iteminfo as IShopItemMaker;
-            return itemUIType.MakeShopItemComponent(uiManager,price,parentTr, itemCount, name, path);
+            IUISubItem subItemManager = popupUIManager as IUISubItem;
+            return itemUIType.MakeShopItemComponent(subItemManager,price,parentTr, itemCount, name, path);
         }
 
         public static Color HexCodetoConvertColor(this string hexCode)

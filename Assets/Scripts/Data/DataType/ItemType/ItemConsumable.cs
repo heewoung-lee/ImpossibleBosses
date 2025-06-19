@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
 using UI.SubItem;
 using UnityEngine;
 using Util;
@@ -79,21 +80,21 @@ namespace Data.DataType.ItemType
             return descriptionBuilder.ToString();
         }
 
-        public UIItemComponentInventory MakeItemComponentInventory(UIManager uiManager,Transform parent = null, int itemCount = 1,
+        public UIItemComponentInventory MakeItemComponentInventory(IUISubItem subItemManager,Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIItemComponentConsumable uiConsumableComponent =
-                uiManager.MakeSubItem<UIItemComponentConsumable>(parent, name,
+                subItemManager.MakeSubItem<UIItemComponentConsumable>(parent, name,
                     $"Prefabs/UI/Item/UI_ItemComponent_Consumable");
             uiConsumableComponent.InitializeItem(this, itemCount);
             return uiConsumableComponent;
         }
 
-        public UIShopItemComponent MakeShopItemComponent(UIManager uiManager,int itemPrice, Transform parent = null, int itemCount = 1,
+        public UIShopItemComponent MakeShopItemComponent(IUISubItem subItemManager,int itemPrice, Transform parent = null, int itemCount = 1,
             string name = null, string path = null)
         {
             UIShopItemComponent uiShopItemComponent =
-                uiManager.MakeSubItem<UIShopItemComponent>(parent, name,
+                subItemManager.MakeSubItem<UIShopItemComponent>(parent, name,
                     $"Prefabs/UI/Item/UIShopItemComponent");
             uiShopItemComponent.InitializeItem(this, itemCount, itemPrice);
             return uiShopItemComponent;

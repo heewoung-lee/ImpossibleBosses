@@ -7,17 +7,20 @@ using Data.DataType.ItemType.Interface;
 using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 namespace Util
 {
     public class Utill
     {
-        public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
+        public static T GetOrAddComponent<T>(GameObject go) where T : Component
         {
             T component = go.GetComponent<T>();
             if (component == null)
+            {
                 component = go.AddComponent<T>();
-
+                ProjectContext.Instance.Container.Inject(component);
+            }
             return component;
         }
 
@@ -248,4 +251,5 @@ namespace Util
             return enumvalue.ToString();
         }
     }
+
 }

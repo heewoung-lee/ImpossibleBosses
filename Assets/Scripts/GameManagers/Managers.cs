@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 namespace GameManagers
 {
@@ -31,8 +32,8 @@ namespace GameManagers
         private ItemDataManager _itemDataManaer = new ItemDataManager();
         public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
-        // private LobbyManager _lobbyManager = new LobbyManager();
-        // public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
+        private LobbyManager _lobbyManager = new LobbyManager();
+        public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
 
         private LogInManager _logInManager = new LogInManager();
         public static LogInManager LogInManager { get => Instance._logInManager; }
@@ -49,8 +50,8 @@ namespace GameManagers
         private PoolManager _poolManager = new PoolManager();
         public static PoolManager PoolManager { get => Instance._poolManager; }
 
-        private ResourceManager _resourceManager = new ResourceManager();
-        public static ResourceManager ResourceManager { get => Instance._resourceManager; }
+        private ResourceManager _resourceManager;
+        public static ResourceManager ResourceManager => Instance._resourceManager;
 
         private SceneDataSaveAndLoader _sceneDataSaveAndLoader = new SceneDataSaveAndLoader();
         public static SceneDataSaveAndLoader SceneDataSaveAndLoader { get => Instance._sceneDataSaveAndLoader; }
@@ -113,10 +114,24 @@ namespace GameManagers
                     DontDestroyOnLoad(go);
                 }
                 _instance = go.GetComponent<Managers>();
+                if (_instance._resourceManager == null)
+                {
+                    SceneContext sceneContext = FindObjectOfType<SceneContext>();
+                    if (sceneContext != null)
+                    {
+                        _instance._resourceManager = sceneContext.Container.Resolve<ResourceManager>();
+                    }
+                    else
+                    {
+                        Debug.LogError("SceneContext가 없어 ResourceManager를 주입할 수 없습니다.");
+                    }
+                }
+                
+                
                 _instance._inputManager.Init();
                 _instance._dataManager.Init();
                 _instance._poolManager.Init();
-                _instance._soundManager.Init();
+                // _instance._soundManager.Init();
                 _instance._gameManagerEx.Init();
                 _instance._itemDataManaer.Init();
                 _instance._bufferManager.Init();
@@ -146,9 +161,10 @@ namespace GameManagers
             //순서대로 끊어야 함
         }
 
+
         public static void Clear()
         {
-            _instance._soundManager.Clear();
+            // _instance._soundManager.Clear();
             //_instance._uiManager.Clear();
             _instance._sceneManagerEx.Clear();
             _instance._poolManager.Clear();

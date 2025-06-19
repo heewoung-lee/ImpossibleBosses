@@ -1,13 +1,14 @@
 using GameManagers;
+using GameManagers.Interface;
 using Zenject;
 
 namespace Scene.ZenjectInstaller
 {
-   public class LoginSceneInstaller : MonoInstaller
+   public class UIManagerInstaller : MonoInstaller
    {
       public override void InstallBindings()
       {
-         Container.Bind<UIManager>().FromInstance(new UIManager()).AsSingle();
+         Container.BindInterfacesTo<UIManager>().AsSingle();
       }
    }
 }

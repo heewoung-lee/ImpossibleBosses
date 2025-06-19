@@ -61,7 +61,7 @@ namespace UI.Scene.SceneUI
             UIRoomInventory inventory = _uiManager.Get_Scene_UI<UIRoomInventory>();
             try
             {
-                await Managers.LobbyManager.ReFreshRoomList(_uiManager);
+                await Managers.LobbyManager.ReFreshRoomList();
                 await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
                 Managers.LobbyManager.ShowLobbyData();
                 //Managers.RelayManager.ShowRelayPlayer();

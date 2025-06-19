@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using GameManagers.Interface;
 using UI.SubItem;
 using Util;
 
@@ -17,7 +18,7 @@ namespace GameManagers
             _inventoryItemList.AddRange(saveItemlist);
         }
 
-        public bool TryGetLoadInventoryItem(UIManager uiManager,out List<UIItemComponentInventory> loadInventory)
+        public bool TryGetLoadInventoryItem(IUIPopupManager popupManager,out List<UIItemComponentInventory> loadInventory)
         {
             loadInventory = new List<UIItemComponentInventory>();
             if (_inventoryItemList == null || _inventoryItemList.Count <= 0)
@@ -26,7 +27,7 @@ namespace GameManagers
             foreach (IteminfoStruct iteminfo in _inventoryItemList)
             {
                 IItem item = Managers.ItemDataManager.GetItem(iteminfo.ItemNumber);
-                UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent(uiManager);
+                UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent(popupManager);
                 inventoryitem.SetINewteminfo(iteminfo);
                 loadInventory.Add(inventoryitem);
             }
