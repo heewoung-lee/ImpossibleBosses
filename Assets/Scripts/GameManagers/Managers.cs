@@ -50,8 +50,8 @@ namespace GameManagers
         private PoolManager _poolManager = new PoolManager();
         public static PoolManager PoolManager { get => Instance._poolManager; }
 
-        private ResourceManager _resourceManager;
-        public static ResourceManager ResourceManager => Instance._resourceManager;
+        // private ResourceManager _resourceManager;
+        // public static ResourceManager ResourceManager => Instance._resourceManager;
 
         private SceneDataSaveAndLoader _sceneDataSaveAndLoader = new SceneDataSaveAndLoader();
         public static SceneDataSaveAndLoader SceneDataSaveAndLoader { get => Instance._sceneDataSaveAndLoader; }
@@ -114,20 +114,6 @@ namespace GameManagers
                     DontDestroyOnLoad(go);
                 }
                 _instance = go.GetComponent<Managers>();
-                if (_instance._resourceManager == null)
-                {
-                    SceneContext sceneContext = FindObjectOfType<SceneContext>();
-                    if (sceneContext != null)
-                    {
-                        _instance._resourceManager = sceneContext.Container.Resolve<ResourceManager>();
-                    }
-                    else
-                    {
-                        Debug.LogError("SceneContext가 없어 ResourceManager를 주입할 수 없습니다.");
-                    }
-                }
-                
-                
                 _instance._inputManager.Init();
                 _instance._dataManager.Init();
                 _instance._poolManager.Init();
@@ -168,7 +154,7 @@ namespace GameManagers
             //_instance._uiManager.Clear();
             _instance._sceneManagerEx.Clear();
             _instance._poolManager.Clear();
-            _instance._resourceManager.Clear();
+            //_instance._resourceManager.Clear();
             _instance._ngoPoolManager.Clear();
             _instance._skillManager.Clear();
         }

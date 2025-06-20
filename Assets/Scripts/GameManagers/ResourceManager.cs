@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
@@ -7,11 +8,15 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class ResourceManager : IManagerIResettable
+    public class ResourceManager : IManagerIResettable,IResourcesLoader,IInstantiate,IDestroyObject
     {
+        [Inject] private DiContainer  _container;
+            
         Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
-        public Dictionary<string, GameObject> CachingPoolableObjectDict => _cachingPoolableObject;
-        [Inject] private DiContainer _container;
+        public Dictionary<string, GameObject> CachingPoolableObject => _cachingPoolableObject;
+        
+        
+        
         public T Load<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -25,13 +30,14 @@ namespace GameManagers
 
         public bool TryGetLoad<T>(string path, out T loadItem) where T : UnityEngine.Object
         {
-            loadItem = Managers.ResourceManager.Load<T>(path);
+            loadItem = Load<T>(path);
 
             if (loadItem == null)
                 return false;
             else
                 return true;
         }
+
 
         public GameObject Instantiate(string path, Transform parent = null)
         {
@@ -79,20 +85,6 @@ namespace GameManagers
             //GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
             GameObject go = _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
             return go;
-        }
-
-
-        private Transform GetCashedParentTr(Transform parent,string path)
-        {
-            Transform parentTr = parent;
-            if (parent == null)
-            {
-                if (_cachingPoolableObject.TryGetValue(path, out GameObject cachedTransform))
-                {
-                    parentTr = cachedTransform.transform;
-                }
-            }
-            return parentTr;
         }
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
