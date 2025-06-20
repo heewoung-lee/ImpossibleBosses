@@ -1,7 +1,7 @@
 using GameManagers;
 using Zenject;
 
-namespace Scene.ZenjectInstaller
+namespace Scene.ZenjectInstaller.Managers
 {
    public class ResourcesInstaller : MonoInstaller
    {

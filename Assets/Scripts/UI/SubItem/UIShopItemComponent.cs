@@ -18,6 +18,8 @@ namespace UI.SubItem
     public class UIShopItemComponent : UIItemComponent
     {
         [Inject] IDestroyObject _destroyer;
+        [Inject] private ItemDataManager _itemDataManager;
+        
         enum ItemICons
         {
             ItemIconImage,
@@ -91,7 +93,7 @@ namespace UI.SubItem
             _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
             _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _uiShop = _uiManager.GetImportant_Popup_UI<UIShop>();
-            _itemGradeBorderImage.sprite = Managers.ItemDataManager.ItemGradeBorder[ItemGradeType];
+            _itemGradeBorderImage.sprite = _itemDataManager.ItemGradeBorder[ItemGradeType];
 
 
             _uiRaycaster = _uiShop.UIShopRayCaster;

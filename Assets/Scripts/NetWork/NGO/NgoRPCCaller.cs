@@ -26,6 +26,8 @@ namespace NetWork.NGO
         [Inject] private IUISceneManager _uiSceneManager;
         [Inject] private IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
+        [Inject] private ItemDataManager _itemDataManager; 
+        [Inject]private BufferManager _bufferManager;
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
@@ -127,14 +129,14 @@ namespace NetWork.NGO
         {
             //여기에서 itemStruct를 IItem으로 변환
             GameObject networkLootItem = null;
-            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber);
+            IItem iteminfo = _itemDataManager.GetItem(itemStruct.ItemNumber);
             switch (itemStruct.ItemType)
             {
                 case ItemType.Equipment:
-                    networkLootItem = Managers.ItemDataManager.GetEquipLootItem(iteminfo);
+                    networkLootItem = _itemDataManager.GetEquipLootItem(iteminfo);
                     break;
                 case ItemType.Consumable:
-                    networkLootItem = Managers.ItemDataManager.GetConsumableLootItem(iteminfo);
+                    networkLootItem = _itemDataManager.GetConsumableLootItem(iteminfo);
                     break;
                 case ItemType.ETC:
                     break;
@@ -171,7 +173,7 @@ namespace NetWork.NGO
                     }
                 }
             }
-            IItem iteminfo = Managers.ItemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
+            IItem iteminfo = _itemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
             rootItemngo.GetComponent<LootItem.LootItem>().SetIteminfo(iteminfo);
             rootItemngo.GetComponent<LootItem.LootItem>().SpawnBehaviour();
         }
@@ -268,15 +270,15 @@ namespace NetWork.NGO
         {
             PlayerStats playerstats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
 
-            if (Managers.BufferManager.GetModifier(effect) is DurationBuff durationbuff)
+            if (_bufferManager.GetModifier(effect) is DurationBuff durationbuff)
             {
                 Sprite buffImageIcon = _resourcesLoader.Load<Sprite>(buffIconImagePath);
                 durationbuff.SetBuffIconImage(buffImageIcon);
-                Managers.BufferManager.InitBuff(playerstats, duration, durationbuff, effect.value);
+                _bufferManager.InitBuff(playerstats, duration, durationbuff, effect.value);
             }
             else
             {
-                Managers.BufferManager.InitBuff(playerstats, duration, effect);
+                _bufferManager.InitBuff(playerstats, duration, effect);
             }
         }
         private async Task DisconnectFromVivoxAndLobby()

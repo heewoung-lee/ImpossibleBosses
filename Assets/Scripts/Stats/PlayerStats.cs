@@ -4,6 +4,7 @@ using Data.DataType.StatType;
 using GameManagers;
 using Stats.BaseStats;
 using UnityEngine;
+using Zenject;
 
 namespace Stats
 {
@@ -21,6 +22,8 @@ namespace Stats
         public Action PlayerDeadEvent;
         public Action<int> PlayerHasGoldChangeEvent;
         private LayerMask _targetLayer;
+        
+        [Inject] DataManager _dataManager;
 
 
         public string Name
@@ -60,7 +63,7 @@ namespace Stats
         }
         protected override void StartInit()
         {
-            _statDict = Managers.DataManager.AllDataDict[typeof(PlayerStat)] as Dictionary<int, PlayerStat>;
+            _statDict = _dataManager.AllDataDict[typeof(PlayerStat)] as Dictionary<int, PlayerStat>;
             _targetLayer = LayerMask.GetMask("Monster");
 
             if (IsOwner == false)

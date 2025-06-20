@@ -15,6 +15,7 @@ namespace Skill.AllofSkills.Fighter
     public class SkillBuffRoar : SkillDuration
     {
         [Inject] IResourcesLoader _resourcesLoader;
+    [Inject]private BufferManager _bufferManager;
         
         public SkillBuffRoar()
         {
@@ -67,9 +68,9 @@ namespace Skill.AllofSkills.Fighter
 
         public override void SkillAction()
         {
-            _players = Managers.BufferManager.DetectedPlayers();
+            _players = _bufferManager.DetectedPlayers();
 
-            Managers.BufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
+            _bufferManager.ALL_Character_ApplyBuffAndCreateParticle(_players,
 
                 (playerNgo) =>
                 {

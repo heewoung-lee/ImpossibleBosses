@@ -8,18 +8,31 @@ using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Util
 {
     public class Utill
     {
+        private static DiContainer _cachedContainer;
+
+        public static DiContainer GetSceneContainer()
+        {
+            if (_cachedContainer == null)
+            {
+                var context = Object.FindObjectOfType<SceneContext>();
+                _cachedContainer = context?.Container;
+            }
+            return _cachedContainer;
+        }
+        
+
         public static T GetOrAddComponent<T>(GameObject go) where T : Component
         {
-            T component = go.GetComponent<T>();
+            var component = go.GetComponent<T>();
             if (component == null)
             {
-                component = go.AddComponent<T>();
-                ProjectContext.Instance.Container.Inject(component);
+                component = GetSceneContainer().InstantiateComponent<T>(go);
             }
             return component;
         }
@@ -33,16 +46,18 @@ namespace Util
                 case ItemGradeType.Magic:
                     return Color.green;
                 case ItemGradeType.Rare:
-                    return new Color(150 / 255f, 200 / 255f, 255 / 255f);//파란색;
+                    return new Color(150 / 255f, 200 / 255f, 255 / 255f); //파란색;
                 case ItemGradeType.Unique:
                     return Color.red;
                 case ItemGradeType.Epic:
                     return Color.yellow;
             }
+
             return Color.white;
         }
 
-        public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
+        public static T FindChild<T>(GameObject go, string name = null, bool recursive = false)
+            where T : UnityEngine.Object
         {
             if (go == null)
                 return null;
@@ -68,13 +83,13 @@ namespace Util
                         return component;
                 }
             }
+
             return null;
         }
 
 
-
-
-        public static T[] FindChildAll<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
+        public static T[] FindChildAll<T>(GameObject go, string name = null, bool recursive = false)
+            where T : UnityEngine.Object
         {
             List<T> list = new List<T>();
             if (recursive == false)
@@ -165,6 +180,7 @@ namespace Util
                 case StatType.MoveSpeed:
                     return "이동속도";
             }
+
             return "Unknown";
         }
 
@@ -189,6 +205,7 @@ namespace Util
 
         private static CancellationTokenSource _retryCts;
         private static CancellationTokenSource _retryCtsVoid;
+
         public static async Task<T> RateLimited<T>(Func<Task<T>> action, int delayMs = 1_000)
         {
             // 1) 먼저 새 CTS를 만든다.
@@ -219,8 +236,9 @@ namespace Util
             }
         }
 
-        public static async Task RateLimited(Func<Task> action,int delayMs = 1_000)
-        {  // 1) 먼저 새 CTS를 만든다.
+        public static async Task RateLimited(Func<Task> action, int delayMs = 1_000)
+        {
+            // 1) 먼저 새 CTS를 만든다.
             var newCts = new CancellationTokenSource();
 
             // 2) 이전 CTS를 원자적으로 취소·폐기하고
@@ -251,5 +269,4 @@ namespace Util
             return enumvalue.ToString();
         }
     }
-
 }

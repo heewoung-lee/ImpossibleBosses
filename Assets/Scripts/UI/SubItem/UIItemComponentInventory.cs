@@ -4,6 +4,7 @@ using Data.DataType.ItemType.Interface;
 using Data.Item;
 using Data.Item.EquipSlot;
 using GameManagers;
+using GameManagers.Interface;
 using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -32,7 +33,8 @@ namespace UI.SubItem
         protected Image _itemGradeBorder;
         protected GraphicRaycaster _uiRaycaster;
         protected EventSystem _eventSystem;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _popupUIManager;
+        [Inject] private ItemDataManager _itemDataManager;
 
         public event Action OnAfterStart
         {
@@ -62,7 +64,7 @@ namespace UI.SubItem
         {
             base.StartInit();
 
-            _inventoryUI = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _inventoryUI = _popupUIManager.GetImportant_Popup_UI<UIPlayerInventory>();
 
             _equipSlot = _inventoryUI.gameObject.FindChild<EquipSlotTrInfo>("Left_Panel", true);
             _contentofInventoryTr = _inventoryUI.GetComponentInChildren<InventoryContentCoordinate>().transform;
@@ -70,7 +72,7 @@ namespace UI.SubItem
             _uiRaycaster = _inventoryUI.UIInventoryRayCaster;
             _eventSystem = _inventoryUI.EventSystem;
 
-            _itemGradeBorder.sprite = Managers.ItemDataManager.ItemGradeBorder[_itemGrade];
+            _itemGradeBorder.sprite = _itemDataManager.ItemGradeBorder[_itemGrade];
 
 
             _onAfterStart?.Invoke();

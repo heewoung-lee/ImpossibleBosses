@@ -1,4 +1,6 @@
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.InputManager_Interface;
 using UnityEngine.InputSystem;
 using Util;
 using Zenject;
@@ -8,11 +10,12 @@ namespace UI.Popup
     public abstract class UIPopup : UIBase
     {
         protected InputAction _closePopupUI;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _popupUIManager;
+        [Inject] private IInputAsset _inputManager;
 
         protected override void AwakeInit()
         {
-            _closePopupUI = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "Close_Popup_UI");
+            _closePopupUI = _inputManager.GetInputAction(Define.ControllerType.UI, "Close_Popup_UI");
             _closePopupUI.Enable();
         }
 
@@ -30,9 +33,9 @@ namespace UI.Popup
 
         public void ClosePopupUI(InputAction.CallbackContext context)
         {
-            if (_uiManager.GetTopPopUpUI(this))
+            if (_popupUIManager.GetTopPopUpUI(this))
             {
-                _uiManager.ClosePopupUI();
+                _popupUIManager.ClosePopupUI();
             }
         }
     }

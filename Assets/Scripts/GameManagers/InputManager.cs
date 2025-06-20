@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameManagers.Interface.InputManager_Interface;
 using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,10 +9,15 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class InputManager : IManagerInitializable
+    internal class InputManager : IManagerInitializable,IInputAsset
     {
         [Inject] IResourcesLoader _resourcesLoader;
         private InputActionAsset _inputActionAsset;
+        private Dictionary<string, Dictionary<string, InputAction>> _inputActionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
+
+      
+
+        public Dictionary<string, Dictionary<string, InputAction>> InputActionMapDict => _inputActionMapDict;
         public InputActionAsset InputActionAsset
         {                                   
             get
@@ -24,7 +30,6 @@ namespace GameManagers
             }
         }
 
-        private Dictionary<string, Dictionary<string, InputAction>> _inputActionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
 
         //public Action<Vector3> playerMouseClickPositionEvent;
         //6.11일 플레이어의포지션에 클릭포지션에 따라 수행되는 이벤트 제거, 클래스가 수행하지 않아도될 책임을 지게 되는 터라 삭제함,
@@ -32,24 +37,24 @@ namespace GameManagers
         {
             _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
             _inputActionMapDict = InitActionMapDict(_inputActionAsset);
-        }
-
-        private Dictionary<string, Dictionary<string, InputAction>> InitActionMapDict(InputActionAsset inputAssets)
-        {
-            Dictionary<string, Dictionary<string, InputAction>> actionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
-
-            foreach (InputActionMap actionMap in inputAssets.actionMaps)
+            
+            
+            Dictionary<string, Dictionary<string, InputAction>> InitActionMapDict(InputActionAsset inputAssets)
             {
-                Dictionary<string, InputAction> actionDict = new Dictionary<string, InputAction>();
-                foreach (InputAction action in actionMap)
-                {
-                    actionDict[action.name] = action;
-                }
-                actionMapDict[actionMap.name] = actionDict;
-            }
-            return actionMapDict;
-        }
+                Dictionary<string, Dictionary<string, InputAction>> actionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
 
+                foreach (InputActionMap actionMap in inputAssets.actionMaps)
+                {
+                    Dictionary<string, InputAction> actionDict = new Dictionary<string, InputAction>();
+                    foreach (InputAction action in actionMap)
+                    {
+                        actionDict[action.name] = action;
+                    }
+                    actionMapDict[actionMap.name] = actionDict;
+                }
+                return actionMapDict;
+            }
+        }
 
         public InputAction GetInputAction(Define.ControllerType controllerType,string actionName)
         {

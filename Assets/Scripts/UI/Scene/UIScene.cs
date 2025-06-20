@@ -14,7 +14,6 @@ namespace UI.Scene
         }
         protected override void StartInit()
         {
-
         }
     }
 }

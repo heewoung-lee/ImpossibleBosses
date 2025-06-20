@@ -13,6 +13,7 @@ namespace Buffer
     {
 
         [Inject]private IDestroyObject _destroyer;
+        [Inject]private BufferManager _bufferManager;
             
         private BaseStats _targetStat;
         public BaseStats TarGetStat { get => _targetStat; }
@@ -53,7 +54,7 @@ namespace Buffer
 
         public void InitAndStartBuff(BaseStats targetStat, float duration,StatEffect effect)
         {
-            _modifier = Managers.BufferManager.GetModifier(effect);
+            _modifier = _bufferManager.GetModifier(effect);
             _value = effect.value;
             InitAndStartBuffInternal(targetStat, duration);
         }
@@ -68,7 +69,7 @@ namespace Buffer
         {
             if (_modifier is ImmediatelyBuff)
             {
-                Managers.BufferManager.ImmediatelyBuffStart(this);
+                _bufferManager.ImmediatelyBuffStart(this);
                 return;
             }
             else if(_modifier is DurationBuff)
@@ -138,7 +139,7 @@ namespace Buffer
                     yield return null;
                 }
             }
-            Managers.BufferManager.RemoveBuffer(this);
+            _bufferManager.RemoveBuffer(this);
         }
 
 

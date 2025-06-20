@@ -4,6 +4,7 @@ using Buffer;
 using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
 using Stats.BaseStats;
+using UI.Scene.SceneUI;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
@@ -18,17 +19,17 @@ namespace GameManagers
         
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
         private List<Type> _requestType = new List<Type>();
-        private UI_BufferBar _uiBufferBar;
+        private UIBufferBar _uiBufferBar;
         [Inject] private IUISceneManager _sceneManager;
         [Inject] IDestroyObject _destroyer;
         [Inject] private IInstantiate _instantiate;
-
-        public UI_BufferBar UIBufferBar
+        [Inject] DataManager _dataManager;
+        public UIBufferBar UIBufferBar
         {
             get
             {
                 if (_uiBufferBar == null)
-                    _uiBufferBar = _sceneManager.Get_Scene_UI<UI_BufferBar>();
+                    _uiBufferBar = _sceneManager.Get_Scene_UI<UIBufferBar>();
 
                 return _uiBufferBar;
             }
@@ -65,7 +66,7 @@ namespace GameManagers
 
         public void Init()
         {
-            _requestType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
+            _requestType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
             foreach(Type type in _requestType)
             {
                 // Activator.CreateInstance로 인스턴스 생성 _requestType은 메타데이터 이므로 인스턴스가 아님

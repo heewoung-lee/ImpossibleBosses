@@ -17,20 +17,20 @@ namespace GameManagers
                 return _instance;
             }
         }
-        private BufferManager _bufferManager = new BufferManager();
-        public static BufferManager BufferManager { get => Instance._bufferManager; }
-
-        private DataManager _dataManager = new DataManager();
-        public static DataManager DataManager { get => Instance._dataManager; }
+        // private BufferManager _bufferManager = new BufferManager();
+        // public static BufferManager BufferManager { get => Instance._bufferManager; }
+        //
+        // private DataManager _dataManager = new DataManager();
+        // public static DataManager DataManager { get => Instance._dataManager; }
 
         private GameManagerEx _gameManagerEx = new GameManagerEx();
         public static GameManagerEx GameManagerEx { get => Instance._gameManagerEx; }
 
-        private InputManager _inputManager = new InputManager();
-        public static InputManager InputManager { get => Instance._inputManager; }
+        // private InputManager _inputManager = new InputManager();
+        // public static InputManager InputManager { get => Instance._inputManager; }
 
-        private ItemDataManager _itemDataManaer = new ItemDataManager();
-        public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
+        // private ItemDataManager _itemDataManaer = new ItemDataManager();
+        // public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
         private LobbyManager _lobbyManager = new LobbyManager();
         public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
@@ -59,8 +59,8 @@ namespace GameManagers
         private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
         public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
 
-        private SkillManager _skillManager = new SkillManager();
-        public static SkillManager SkillManager { get => Instance._skillManager; }
+        // private SkillManager _skillManager = new SkillManager();
+        // public static SkillManager SkillManager { get => Instance._skillManager; }
 
         private SocketEventManager _socketEventManager = new SocketEventManager();
         public static SocketEventManager SocketEventManager { get => Instance._socketEventManager; }
@@ -114,14 +114,14 @@ namespace GameManagers
                     DontDestroyOnLoad(go);
                 }
                 _instance = go.GetComponent<Managers>();
-                _instance._inputManager.Init();
-                _instance._dataManager.Init();
+                //_instance._inputManager.Init();
+                //_instance._dataManager.Init();
                 _instance._poolManager.Init();
                 // _instance._soundManager.Init();
                 _instance._gameManagerEx.Init();
-                _instance._itemDataManaer.Init();
-                _instance._bufferManager.Init();
-                _instance._skillManager.Init();
+                //_instance._itemDataManaer.Init();
+                //_instance._bufferManager.Init();
+                //_instance._skillManager.Init();
             }
 
         }
@@ -156,7 +156,7 @@ namespace GameManagers
             _instance._poolManager.Clear();
             //_instance._resourceManager.Clear();
             _instance._ngoPoolManager.Clear();
-            _instance._skillManager.Clear();
+            //_instance._skillManager.Clear();
         }
     }
 }

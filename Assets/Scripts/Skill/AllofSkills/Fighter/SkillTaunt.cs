@@ -13,7 +13,7 @@ namespace Skill.AllofSkills.Fighter
     public class SkillTaunt : SkillImmedialty
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        
+        [Inject]private BufferManager _bufferManager;
         private const float DurationParticle = 5f;
         private BaseController _playerController;
         private ModuleFighterClass _fighterClass;
@@ -59,7 +59,7 @@ namespace Skill.AllofSkills.Fighter
         public override void SkillAction()
         {
             Managers.VFXManager.GenerateParticle("Prefabs/Player/SkillVFX/Taunt_Player", _playerController.transform, DurationParticle);
-            _monsters = Managers.BufferManager.DetectedOther("Monster");
+            _monsters = _bufferManager.DetectedOther("Monster");
             foreach (Collider monster in _monsters)
             {
                 HeadTr headTr = monster.GetComponentInChildren<HeadTr>();

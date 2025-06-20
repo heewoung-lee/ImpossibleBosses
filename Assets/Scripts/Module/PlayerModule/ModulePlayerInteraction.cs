@@ -1,4 +1,6 @@
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.InputManager_Interface;
 using Module.CommonModule;
 using Player;
 using UI.WorldSpace;
@@ -19,8 +21,9 @@ namespace Module.PlayerModule
         private const float YPositionOffset = 0.2f;
         private InputAction _interactionInput;
         private UIShowInteractionIcon _iconUI;
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUIManager _uiManager;
+        [Inject] private IUISubItem _subItemUIManager;
+        [Inject] private IInputAsset _inputManager;
 
         public UIShowInteractionIcon IconUI
         {
@@ -28,7 +31,7 @@ namespace Module.PlayerModule
             {
                 if (_iconUI == null)
                 {
-                    _iconUI = _uiManager.MakeUIWorldSpaceUI<UIShowInteractionIcon>();
+                    _iconUI = _subItemUIManager.MakeUIWorldSpaceUI<UIShowInteractionIcon>();
                 }
                 return _iconUI;
             }
@@ -43,7 +46,7 @@ namespace Module.PlayerModule
         private void Awake()
         {
             _playerController = GetComponentInParent<PlayerController>();
-            _interactionInput = Managers.InputManager.GetInputAction(Define.ControllerType.Player, "Interaction");
+            _interactionInput = _inputManager.GetInputAction(Define.ControllerType.Player, "Interaction");
             _interactionInput.Enable();
         }
 

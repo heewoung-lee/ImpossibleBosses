@@ -1,10 +1,12 @@
 using GameManagers;
+using GameManagers.Interface.InputManager_Interface;
 using Stats;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Util;
+using Zenject;
 
 namespace Controller
 {
@@ -16,6 +18,7 @@ namespace Controller
         private InputAction _mouseMiddleButton;
         private InputAction _mouseDelta;
         private InputAction _mouseScroll;
+        [Inject] private IInputAsset _inputManager;
 
         private bool _mouseMiddleButtonPressed = false;
         private void Awake()
@@ -38,18 +41,18 @@ namespace Controller
             _playerTr = playerstats.transform;
             _camera.Target.TrackingTarget = _playerTr;
 
-            _mouseMiddleButton = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");
+            _mouseMiddleButton = _inputManager.GetInputAction(Define.ControllerType.Camera, "MouseScrollButton");
             _mouseMiddleButton.Enable();
             _mouseMiddleButton.started += context => _mouseMiddleButtonPressed = true;
             _mouseMiddleButton.canceled += context => _mouseMiddleButtonPressed = false;
 
 
-            _mouseDelta = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Look");
+            _mouseDelta = _inputManager.GetInputAction(Define.ControllerType.Camera, "Look");
             _mouseDelta.Enable();
             _mouseDelta.performed += PressedMiddleMouseButton;
 
 
-            _mouseScroll = Managers.InputManager.GetInputAction(Define.ControllerType.Camera, "Scroll");
+            _mouseScroll = _inputManager.GetInputAction(Define.ControllerType.Camera, "Scroll");
             _mouseScroll.Enable();
             _mouseScroll.performed += SetCameraHeight;
         }

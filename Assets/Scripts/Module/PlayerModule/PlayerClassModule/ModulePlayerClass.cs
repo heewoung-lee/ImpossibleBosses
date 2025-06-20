@@ -21,7 +21,7 @@ namespace Module.PlayerModule.PlayerClassModule
         private Dictionary<string, BaseSkill> _playerSkill;
         
         [Inject] IInstantiate _instantiate;
-
+        [Inject]SkillManager _skillManager; 
         public virtual void InitializeOnAwake()
         {
         
@@ -55,13 +55,13 @@ namespace Module.PlayerModule.PlayerClassModule
             if (GetComponent<NetworkObject>().IsOwner == false)
                 return;
 
-            _playerSkill = Managers.SkillManager.AllSKillDict
+            _playerSkill = _skillManager.AllSKillDict
                 .Where(skill => skill.Value.PlayerClass == PlayerClass)
                 .ToDictionary(skill => skill.Key, skill => skill.Value);//각 클래스에 맞는 스킬들을 추린다
 
-            if (Managers.SkillManager.UISkillBar == null)
+            if (_skillManager.UISkillBar == null)
             {
-                Managers.SkillManager.DoneUISkilBarInitEvent += AssignSkillsToUISlots;
+                _skillManager.DoneUISkilBarInitEvent += AssignSkillsToUISlots;
             }
             else
             {
@@ -77,7 +77,7 @@ namespace Module.PlayerModule.PlayerClassModule
                 GameObject skillPrefab = _instantiate.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
                 SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
                 skillcomponent.SetSkillComponent(skill);
-                Transform skillLocation = Managers.SkillManager.UISkillBar.SetLocationSkillSlot(skillcomponent);
+                Transform skillLocation = _skillManager.UISkillBar.SetLocationSkillSlot(skillcomponent);
                 skillcomponent.AttachItemToSlot(skillcomponent.gameObject, skillLocation);
             }
         }

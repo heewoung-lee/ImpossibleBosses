@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GameManagers.Interface;
 using Skill.BaseSkill;
+using UI.Scene.SceneUI;
 using Util;
 using Zenject;
 
@@ -13,7 +14,7 @@ namespace GameManagers
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
         public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
         [Inject] public IUISceneManager SceneManager { get; }
-
+        [Inject] DataManager _dataManager;
         private Action _doneUISkillBarInitEvent;
 
         public event Action DoneUISkilBarInitEvent
@@ -32,14 +33,14 @@ namespace GameManagers
 
         List<Type> _skillType = new List<Type>();
 
-        private UI_SkillBar _uiSkillBar;
-        public UI_SkillBar UISkillBar
+        private UISkillBar _uiSkillBar;
+        public UISkillBar UISkillBar
         {
             get
             {
                 if (_uiSkillBar == null)
                 {
-                    if(SceneManager.Try_Get_Scene_UI(out UI_SkillBar skillbar))
+                    if(SceneManager.Try_Get_Scene_UI(out UISkillBar skillbar))
                     {
                         _uiSkillBar = skillbar;
                     }
@@ -50,7 +51,7 @@ namespace GameManagers
         public void Init()
         {
             //Skill/AllofSkill에 있는 타입들을 가져온다.
-            _skillType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
+            _skillType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
             foreach (Type type in _skillType)
             {
            

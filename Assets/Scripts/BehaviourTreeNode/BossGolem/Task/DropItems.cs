@@ -14,6 +14,7 @@ namespace BehaviourTreeNode.BossGolem.Task
     public class DropItems : Action
     {
         [Inject] private IInstantiate _instantiate;
+        [Inject] private ItemDataManager _itemDataManager;
         
         private readonly int _minimumTimeCount = 1;
         private readonly int _maximumTimeCount = 3;
@@ -65,7 +66,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
                         return;
 
-                    IItem spawnItem = Managers.ItemDataManager.GetRandomItemFromAll();
+                    IItem spawnItem = _itemDataManager.GetRandomItemFromAll();
                     IteminfoStruct itemStruct = new IteminfoStruct(spawnItem);
                     NetworkObjectReference dropItemBahaviour = Managers.RelayManager.GetNetworkObject(_ngoDropItemBehaviour);
                     Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);

@@ -1,4 +1,6 @@
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.InputManager_Interface;
 using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,10 +14,11 @@ namespace Module.UI_Module
 
         private UIPlayerInventory _inventoryUI;
         private InputAction _switchInventoryUI;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiManager;
+        [Inject] private IInputAsset _inputManager;
         private void Awake()
         {
-            _switchInventoryUI = Managers.InputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
+            _switchInventoryUI = _inputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
             _switchInventoryUI.Enable();
             if (Managers.GameManagerEx.Player == null)
             {

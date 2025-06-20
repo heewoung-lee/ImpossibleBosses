@@ -23,7 +23,7 @@ namespace UI.Scene.SceneUI
         private PlayerStats _playerStats;
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IInstantiate _instantiate;
-
+        [Inject] private ItemDataManager _itemDataManager;
         public PlayerStats PlayerStats
         {
             get
@@ -128,13 +128,13 @@ namespace UI.Scene.SceneUI
             switch (itemGeneratingType)
             {
                 case ItemGeneratingType.EquipMent:
-                    IItem equipmentitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiPopupManager);
+                    IItem equipmentitem = _itemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.Consumable:
-                    IItem consumableitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiPopupManager);
+                    IItem consumableitem = _itemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.All:
-                    IItem item = Managers.ItemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent(_uiPopupManager);
+                    IItem item = _itemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent(_uiPopupManager);
                     break;
             }
         }

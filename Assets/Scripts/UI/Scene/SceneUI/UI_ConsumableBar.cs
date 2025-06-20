@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.InputManager_Interface;
 using GameManagers.Interface.Resources_Interface;
 using Stats;
 using UI.Scene;
@@ -17,14 +18,17 @@ using Zenject;
 public class UI_ConsumableBar : UIScene
 {
     [Inject] IDestroyObject _destroyer;
+    [Inject] private IInputAsset _inputManager;
     private Image[] _consumableIcons;
     [SerializeField]private Transform[] _frameTrs;
     [Inject]private UIManager _uiManager; 
+    [Inject]private BufferManager _bufferManager;
+    
     public Transform[] FrameTrs => _frameTrs;
 
     private InputAction[] _comsumableGetKey;
 
-    private UI_BufferBar _ui_BufferBar;
+    private UIBufferBar _ui_BufferBar;
 
     private PlayerStats _playerStats;
 
@@ -98,7 +102,7 @@ public class UI_ConsumableBar : UIScene
         _comsumableGetKey = new InputAction[_frameTrs.Length];
         for (int i = 0; i < _comsumableGetKey.Length; i++)
         {
-            _comsumableGetKey[i] = Managers.InputManager.GetInputAction(Define.ControllerType.UI, $"Consumabar_GetKey{i + 1}");
+            _comsumableGetKey[i] = _inputManager.GetInputAction(Define.ControllerType.UI, $"Consumabar_GetKey{i + 1}");
             _comsumableGetKey[i].Enable();
         }
     }
@@ -120,7 +124,7 @@ public class UI_ConsumableBar : UIScene
             }
             foreach (StatEffect effect in consumable.ItemEffects)
             {
-                Managers.BufferManager.InitBuff(_playerStats,consumable.DuringBuffTime,effect);
+                _bufferManager.InitBuff(_playerStats,consumable.DuringBuffTime,effect);
             }
         }
 

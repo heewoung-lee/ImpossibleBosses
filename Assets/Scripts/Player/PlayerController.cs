@@ -4,6 +4,7 @@ using Controller.ControllerStats.BaseStates;
 using Controller.PlayerState;
 using Data;
 using GameManagers;
+using GameManagers.Interface.InputManager_Interface;
 using Stats;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,6 +12,7 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Util;
+using Zenject;
 
 namespace Player
 {
@@ -56,13 +58,14 @@ namespace Player
         private MoveState _baseMoveState;
         private PickUpState _pickupState;
 
+        [Inject]private IInputAsset _inputManager;
+
         protected override void AwakeInit()
         {
             _stats = gameObject.GetComponent<PlayerStats>();
             _agent = gameObject.GetComponent<NavMeshAgent>();
             _playerInput = gameObject.GetComponent<PlayerInput>();
 
-            _inputmanager = Managers.InputManager;
             _playerInput.actions = _inputmanager.InputActionAsset;
             _moveAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Move");
             _pointerAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Pointer");

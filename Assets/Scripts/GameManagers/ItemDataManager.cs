@@ -15,7 +15,7 @@ namespace GameManagers
     {
         [Inject] private IResourcesLoader _loader;
         [Inject] private IInstantiate _instantiate;
-        
+        [Inject] DataManager _dataManager;
         private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
         private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
         public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
@@ -27,12 +27,12 @@ namespace GameManagers
         {
 
             //폴더내에 있는 타입들을 긁어와서 데이터를 읽는다.
-            _itemDataType = Managers.DataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
-                , Managers.DataManager.AddSerializableAttributeType);
+            _itemDataType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
+                , _dataManager.AddSerializableAttributeType);
 
             foreach (Type itemtype in _itemDataType)
             {
-                IDictionary itemTypeIDict = Managers.DataManager.AllDataDict[itemtype] as IDictionary;
+                IDictionary itemTypeIDict = _dataManager.AllDataDict[itemtype] as IDictionary;
                 //IDictionary 인터페이스로 변환한 후 모든 Dictionary데이터를 받아올 수 있도록한다.
                 if (itemTypeIDict == null)
                 {
