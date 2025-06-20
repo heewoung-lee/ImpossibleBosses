@@ -1,16 +1,19 @@
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.PlayerModule.PlayerClassModule;
 using Skill.BaseSkill;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Skill.AllofSkills.Fighter
 {
     public class SkillTaunt : SkillImmedialty
     {
-
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         private const float DurationParticle = 5f;
         private BaseController _playerController;
         private ModuleFighterClass _fighterClass;
@@ -21,7 +24,7 @@ namespace Skill.AllofSkills.Fighter
         public override float CoolTime => 10f;
         public override string EffectDescriptionText => $"적들에게 도발을해 나를 i아오도록한다";
         public override string ETCDescriptionText => "메롱";
-        public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Taunt");
+        public override Sprite SkillconImage => _resourcesLoader.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Taunt");
         public override float Value => 0f;
         public override BaseController PlayerController { 
             get => _playerController;

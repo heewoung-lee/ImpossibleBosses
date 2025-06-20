@@ -1,14 +1,18 @@
 using System.IO;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.BaseNGO;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 namespace NetWork.NGO.InitializeNGO
 {
     public class NgoPoolRootInitailize : NetworkBehaviour
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+
         NetworkVariable<FixedString64Bytes> _rootName = new NetworkVariable<FixedString64Bytes>
             ("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -56,7 +60,7 @@ namespace NetWork.NGO.InitializeNGO
 
         private void GeneratePoolObj(string path)
         {
-            GameObject ngo = Managers.ResourceManager.Load<GameObject>(path);
+            GameObject ngo = _resourcesLoader.Load<GameObject>(path);
 
             //_poolingNgoPath가 안뜸
             if (ngo.TryGetComponent(out NgoPoolingInitalizeBase poolingObj))

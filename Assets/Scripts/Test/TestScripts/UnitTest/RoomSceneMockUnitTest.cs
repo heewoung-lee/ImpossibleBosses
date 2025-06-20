@@ -42,7 +42,7 @@ namespace Test.TestScripts.UnitTest
             await JoinChannel();
             Managers.RelayManager.SpawnToRPC_Caller();
             UIRoomCharacterSelect uICharacterSelect = _uiManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
-            UI_RoomChat uiChatting = _uiManager.GetSceneUIFromResource<UI_RoomChat>();
+            UIRoomChat uiChatting = _uiManager.GetSceneUIFromResource<UIRoomChat>();
         }
 
         private async Task JoinChannel()

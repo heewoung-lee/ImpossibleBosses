@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.UI_Module;
 using NetWork.NGO;
 using Scene;
@@ -26,6 +27,9 @@ namespace UI.Scene.SceneUI
 
     public class UIRoomCharacterSelect : UIScene
     {
+        [Inject] private IInstantiate _instantiate;
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         private const int MaxPlayerCount = 8;
 
         enum ReadyButtonStateEnum
@@ -90,7 +94,7 @@ namespace UI.Scene.SceneUI
             Bind<Transform>(typeof(Transforms));
             Bind<Button>(typeof(Buttons));
             Bind<GameObject>(typeof(GameObjects));
-            _chooseCameraTr = Managers.ResourceManager.Instantiate("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<ModuleChooseCharactorTr>().ChooseCameraTr;
+            _chooseCameraTr = _instantiate.Instantiate("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<ModuleChooseCharactorTr>().ChooseCameraTr;
             _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
             _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
             _buttonStart = Get<Button>((int)Buttons.ButtonStart);
@@ -125,7 +129,7 @@ namespace UI.Scene.SceneUI
             _readyButtonStateValue[(int)ReadyButtonStateEnum.TrueState].ReadyButtonText = _buttonReady.GetComponentInChildren<TMP_Text>().text;
             _readyButtonStateValue[(int)ReadyButtonStateEnum.TrueState].ReadyButtonTextColor = _buttonReady.GetComponentInChildren<TMP_Text>().color;
 
-            _readyButtonStateValue[(int)ReadyButtonStateEnum.CancelState].ReadyButtonImage = Managers.ResourceManager.Load<Sprite>("Art/UI/ButtonImage/Button_Rectangle_Red");
+            _readyButtonStateValue[(int)ReadyButtonStateEnum.CancelState].ReadyButtonImage = _resourcesLoader.Load<Sprite>("Art/UI/ButtonImage/Button_Rectangle_Red");
             _readyButtonStateValue[(int)ReadyButtonStateEnum.CancelState].ReadyButtonText = "Not Ready";
             _readyButtonStateValue[(int)ReadyButtonStateEnum.CancelState].ReadyButtonTextColor = Color.white;
         }
@@ -234,7 +238,7 @@ namespace UI.Scene.SceneUI
         {
             if (_netWorkManager.IsHost)
             {
-                GameObject characterSelector = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_UI_Character_Select_Rect");
+                GameObject characterSelector = _instantiate.Instantiate("Prefabs/NGO/NGO_UI_Character_Select_Rect");
                 characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
                 if (characterSelector.GetComponent<NetworkObject>().IsOwner)
                 {

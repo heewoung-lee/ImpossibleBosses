@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.NGO;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -10,12 +11,14 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
     public class RelayManager
     {
-
+        
+        [Inject] IInstantiate _instantiate;
         private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
         private string _joinCode;
@@ -69,7 +72,7 @@ namespace GameManagers
                     }
                     else
                     {
-                        _netWorkManager = Managers.ResourceManager.Instantiate("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
+                        _netWorkManager = _instantiate.Instantiate("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
                         Managers.DontDestroyOnLoad(_netWorkManager.gameObject);
                         _netWorkManager = NetworkManager.Singleton;
                     }
@@ -140,11 +143,11 @@ namespace GameManagers
             GameObject go = null;
             if (path == null)
             {
-                go = Managers.ResourceManager.Instantiate($"Prefabs/NGO/{name}");
+                go = _instantiate.Instantiate($"Prefabs/NGO/{name}");
             }
             else
             {
-                go = Managers.ResourceManager.Instantiate($"{path}");
+                go = _instantiate.Instantiate($"{path}");
             }
             go = SpawnNetworkObj(go, NgoRoot.transform);
             return go;
@@ -221,7 +224,7 @@ namespace GameManagers
 
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
-            GameObject instanceObj = Managers.ResourceManager.Instantiate(ngoPath, parent);
+            GameObject instanceObj = _instantiate.Instantiate(ngoPath, parent);
             return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
         }
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)

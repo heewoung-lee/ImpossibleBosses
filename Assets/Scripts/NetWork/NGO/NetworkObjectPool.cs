@@ -1,16 +1,21 @@
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.BaseNGO;
 using NetWork.NGO.InitializeNGO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
 using Util;
+using Zenject;
 
 namespace NetWork.NGO
 {
     public class NetworkObjectPool : NetworkBehaviour
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+        [Inject] private IInstantiate _instantiate;
+        
         Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
         public override void OnNetworkDespawn()
@@ -18,7 +23,7 @@ namespace NetWork.NGO
             foreach (string prefabPath in m_PooledObjects.Keys)
             {
                 m_PooledObjects[prefabPath].Clear();
-                GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
+                GameObject prefab = _resourcesLoader.Load<GameObject>(prefabPath);
                 Managers.RelayManager.NetworkManagerEx.PrefabHandler.RemoveHandler(prefab);
             }
             m_PooledObjects.Clear();
@@ -36,7 +41,7 @@ namespace NetWork.NGO
             foreach ((string, int) poolingPrefabInfo in Managers.NgoPoolManager.AutoRegisterFromFolder())
             {
                 //경로에 맞게 Root가져올 것
-                GameObject pollingNgo_Root = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
+                GameObject pollingNgo_Root = _instantiate.Instantiate("Prefabs/NGO/NGO_Polling_ROOT");
                 if (pollingNgo_Root != null)
                 {
                     Managers.RelayManager.SpawnNetworkObj(pollingNgo_Root);
@@ -86,7 +91,7 @@ namespace NetWork.NGO
 
         public void RegisterPrefabInternal(string prefabPath, int prewarmCount = 5)
         {
-            GameObject prefab = Managers.ResourceManager.Load<GameObject>(prefabPath);
+            GameObject prefab = _resourcesLoader.Load<GameObject>(prefabPath);
 
             if (Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
             {

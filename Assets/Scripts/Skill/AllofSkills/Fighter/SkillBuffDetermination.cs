@@ -3,18 +3,22 @@ using Buffer.SkillBuffer;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.PlayerModule.PlayerClassModule;
 using Skill.BaseSkill;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Skill.AllofSkills.Fighter
 {
     public class SkillBuffDetermination : SkillDuration
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         public SkillBuffDetermination()
         {
-            _buffIconImage = Managers.ResourceManager.Load<Sprite>(BuffIconImagePath);
+            _buffIconImage = _resourcesLoader.Load<Sprite>(BuffIconImagePath);
             _determination = new BufferDetermination(_buffIconImage);
         }
         //TODO: 버프 아이콘 이미지 바꿀것
@@ -31,7 +35,7 @@ namespace Skill.AllofSkills.Fighter
         public override float CoolTime => 5f;
         public override string EffectDescriptionText => $"파티원들에게 10의 방어력을 부여합니다";
         public override string ETCDescriptionText => "서로간의 결의";
-        public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Determination");
+        public override Sprite SkillconImage => _resourcesLoader.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Determination");
         public override float Value => 10f;
         public override BuffModifier BuffModifier => _determination;
         public override BaseController PlayerController { 

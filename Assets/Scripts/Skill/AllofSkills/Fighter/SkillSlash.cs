@@ -2,18 +2,20 @@ using System.Collections;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
 using Skill.BaseSkill;
 using Stats;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Skill.AllofSkills.Fighter
 {
     public class SkillSlash : SkillImmedialty
     {
-
+        [Inject] IResourcesLoader _resourcesLoader;
         private BaseController _playerController;
         private PlayerStats _playerStat;
         private ModuleFighterClass _fighterClass;
@@ -57,7 +59,7 @@ namespace Skill.AllofSkills.Fighter
         public override float CoolTime => 2f;
         public override string EffectDescriptionText => $"적에게{AttackDamage}만큼 X3의 피해를 줍니다.";
         public override string ETCDescriptionText => "강하게 벤다";
-        public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Slash");
+        public override Sprite SkillconImage => _resourcesLoader.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Slash");
         public override float Value => 1.5f;
         public override BaseController PlayerController { 
             get => _playerController; 

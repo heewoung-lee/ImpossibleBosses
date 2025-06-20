@@ -1,9 +1,11 @@
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork;
 using NetWork.NGO.Interface;
 using Stats.BaseStats;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Skill.AllofSkills.BossMonster.StoneGolem
 {
@@ -11,10 +13,10 @@ namespace Skill.AllofSkills.BossMonster.StoneGolem
     {
         private const float Skill1Radius = 2f;
         private const float Skill1Arc = 360f;
-
+        [Inject] private IInstantiate _instantiate;
         public void SpawnObjectToLocal(in SpawnParamBase spawnparam, string runtimePath = null)
         {
-            IIndicatorBahaviour projector = Managers.ResourceManager.Instantiate(runtimePath,Managers.VFXManager.VFXRoot).GetComponent<IIndicatorBahaviour>();
+            IIndicatorBahaviour projector = _instantiate.Instantiate(runtimePath,Managers.VFXManager.VFXRoot).GetComponent<IIndicatorBahaviour>();
             IAttackRange attacker = (projector as Component).GetComponent<IAttackRange>();
             int attackDamage = spawnparam.ArgInteger;
             float durationTime = spawnparam.ArgFloat;

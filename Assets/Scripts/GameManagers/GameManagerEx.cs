@@ -2,22 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using GameManagers.Interface.Resources_Interface;
 using Player;
 using Stats;
 using UnityEngine;
 using Util;
+using Zenject;
 using Environment = Util.Environment;
 
 namespace GameManagers
 {
     public class GameManagerEx : IManagerInitializable
     {
+        
+        [Inject] IDestroyObject _destroyer;
+        [Inject] private IInstantiate _instantiate;
+        
+        
         private GameObject _player;
         private GameObject _bossMonster;
         private Environment _environment;
         private GameObject _spawnPoint;
         private HashSet<GameObject> _enemy = new HashSet<GameObject>();
 
+        
         public Action<int> SpawnEvent;
 
         private Action _onBossSpawnEvent;
@@ -80,7 +88,7 @@ namespace GameManagers
 
         public GameObject Spawn(string path, Transform parent = null)
         {
-            GameObject go = Managers.ResourceManager.Instantiate(path, parent);
+            GameObject go = _instantiate.Instantiate(path, parent);
 
             switch (GetWorldObjectType(go))
             {
@@ -140,7 +148,7 @@ namespace GameManagers
                     }
                     break;
             }
-            Managers.ResourceManager.DestroyObject(go);
+            _destroyer.DestroyObject(go);
         }
 
         public void Init()

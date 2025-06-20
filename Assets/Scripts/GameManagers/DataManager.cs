@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using Data;
+using GameManagers.Interface.Resources_Interface;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -15,6 +16,7 @@ using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -25,6 +27,8 @@ namespace GameManagers
 
     public class DataManager : IManagerInitializable,IManagerIResettable
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         private const string Spreedsheetid = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
 
         private List<Type> _requestDataTypes;
@@ -98,7 +102,7 @@ namespace GameManagers
 
         private bool LoadAllDataFromLocal(string typeName)
         {
-            TextAsset[] jsonFiles = Managers.ResourceManager.LoadAll<TextAsset>("Data");
+            TextAsset[] jsonFiles = _resourcesLoader.LoadAll<TextAsset>("Data");
 
             foreach (TextAsset jsonFile in jsonFiles)
             {
@@ -259,7 +263,7 @@ namespace GameManagers
 
                         string jsonString = ParseSheetData(response.Values);
 
-                        if (Managers.ResourceManager.TryGetLoad($"Data/{sheetName}", out TextAsset originJsonFile))//있다면.
+                        if (_resourcesLoader.TryGetLoad($"Data/{sheetName}", out TextAsset originJsonFile))//있다면.
                         {
                             if (BinaryCheck<string>(jsonString, originJsonFile.ToString()) == false)
                             {

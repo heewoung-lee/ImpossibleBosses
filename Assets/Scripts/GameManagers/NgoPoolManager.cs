@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.BaseNGO;
 using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 
 namespace GameManagers
 {
     public class NgoPoolManager : IManagerIResettable
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         private NetworkObjectPool _ngoPool;
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
@@ -61,7 +65,7 @@ namespace GameManagers
 
         public List<(string, int)> AutoRegisterFromFolder()
         {
-            GameObject[] poolableNgoList = Managers.ResourceManager.LoadAll<GameObject>("Prefabs");
+            GameObject[] poolableNgoList = _resourcesLoader.LoadAll<GameObject>("Prefabs");
             List<(string, int)> poolingObjPath = new List<(string, int)>();
             foreach (GameObject go in poolableNgoList)
             {

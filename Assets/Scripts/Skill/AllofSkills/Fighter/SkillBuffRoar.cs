@@ -3,18 +3,22 @@ using Buffer.SkillBuffer;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.PlayerModule.PlayerClassModule;
 using Skill.BaseSkill;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Skill.AllofSkills.Fighter
 {
     public class SkillBuffRoar : SkillDuration
     {
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         public SkillBuffRoar()
         {
-            _buffIconImage = Managers.ResourceManager.Load<Sprite>(BuffIconImagePath);
+            _buffIconImage = _resourcesLoader.Load<Sprite>(BuffIconImagePath);
             _roarModifier = new BufferRoarModifier(_buffIconImage);
         }
 
@@ -29,7 +33,7 @@ namespace Skill.AllofSkills.Fighter
         public override Sprite BuffIconImage => _buffIconImage;
         public override float CoolTime => 5f;
         public override string EffectDescriptionText => $"파티원들에게 10의 공격력을 부여합니다";
-        public override Sprite SkillconImage => Managers.ResourceManager.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
+        public override Sprite SkillconImage => _resourcesLoader.Load<Sprite>("Art/Player/SkillICon/WarriorSkill/SkillIcon/Roar");
         public override float SkillDurationTime => 10f;//지속시간
         public override string SkillName => "분노";
         public override string ETCDescriptionText => "화가난다!";

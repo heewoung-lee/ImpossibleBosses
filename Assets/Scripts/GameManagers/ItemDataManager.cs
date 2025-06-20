@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.LootItem;
 using UnityEngine;
+using Zenject;
 using Random = UnityEngine.Random;
 namespace GameManagers
 {
     public class ItemDataManager : IManagerInitializable
     {
+        [Inject] private IResourcesLoader _loader;
+        [Inject] private IInstantiate _instantiate;
+        
         private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
         private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
         public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
@@ -53,11 +58,11 @@ namespace GameManagers
 
             _itemGradeBorder = new Dictionary<ItemGradeType, Sprite>//아이템 등급 프레임 초기화
             {
-                { ItemGradeType.Normal, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_White") },
-                { ItemGradeType.Magic, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Green") },
-                { ItemGradeType.Rare, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Blue") },
-                { ItemGradeType.Unique, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Red") },
-                { ItemGradeType.Epic, Managers.ResourceManager.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Yellow") }
+                { ItemGradeType.Normal, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_White") },
+                { ItemGradeType.Magic, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Green") },
+                { ItemGradeType.Rare, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Blue") },
+                { ItemGradeType.Unique, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Red") },
+                { ItemGradeType.Epic, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Yellow") }
             };
         }
 
@@ -104,7 +109,7 @@ namespace GameManagers
 
         public void FindImageByKey(IItem items)
         {
-            items.ImageSource[items.ItemIconSourceText] = Managers.ResourceManager.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
+            items.ImageSource[items.ItemIconSourceText] = _loader.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
             //TODO: 나중에 사용하는 모든 이미지파일을 모아서 경로지정을 다시 해야함.
         }
 
@@ -117,13 +122,13 @@ namespace GameManagers
             {
                 case EquipmentSlotType.Helmet:
                 case EquipmentSlotType.Armor:
-                    lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Shield");
+                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Shield");
                     break;
                 case EquipmentSlotType.Weapon:
-                    lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Sword");
+                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Sword");
                     break;
                 default:
-                    lootItem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Bag");
+                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Bag");
                     break;
             }
             lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -132,7 +137,7 @@ namespace GameManagers
 
         public GameObject GetConsumableLootItem(IItem iteminfo)
         {
-            GameObject lootitem = Managers.ResourceManager.Instantiate("NGO/LootingItem/Potion");
+            GameObject lootitem = _instantiate.Instantiate("NGO/LootingItem/Potion");
             lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
             return lootitem;
         }

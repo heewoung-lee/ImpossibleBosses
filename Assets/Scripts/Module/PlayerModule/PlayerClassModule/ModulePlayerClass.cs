@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Scene;
 using Skill;
 using Skill.BaseSkill;
@@ -8,6 +9,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
+using Zenject;
 
 namespace Module.PlayerModule.PlayerClassModule
 {
@@ -17,6 +19,8 @@ namespace Module.PlayerModule.PlayerClassModule
 
 
         private Dictionary<string, BaseSkill> _playerSkill;
+        
+        [Inject] IInstantiate _instantiate;
 
         public virtual void InitializeOnAwake()
         {
@@ -70,7 +74,7 @@ namespace Module.PlayerModule.PlayerClassModule
         {
             foreach (BaseSkill skill in _playerSkill.Values)
             {
-                GameObject skillPrefab = Managers.ResourceManager.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
+                GameObject skillPrefab = _instantiate.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
                 SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
                 skillcomponent.SetSkillComponent(skill);
                 Transform skillLocation = Managers.SkillManager.UISkillBar.SetLocationSkillSlot(skillcomponent);

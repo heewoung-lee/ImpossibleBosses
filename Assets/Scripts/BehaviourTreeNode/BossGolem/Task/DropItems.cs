@@ -3,17 +3,21 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using UI.SubItem;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
     public class DropItems : Action
     {
+        [Inject] private IInstantiate _instantiate;
+        
         private readonly int _minimumTimeCount = 1;
         private readonly int _maximumTimeCount = 3;
-
+        
 
         [SerializeField] private int _spwanItemCount;
         private List<int> _timeRandom;
@@ -27,7 +31,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         {
             base.OnStart();
             _tree = Owner.GetComponent<BehaviorTree>();
-            _ngoDropItemBehaviour = Managers.ResourceManager.Instantiate("Prefabs/NGO/NGO_BossDropItemBehaviour");
+            _ngoDropItemBehaviour = _instantiate.Instantiate("Prefabs/NGO/NGO_BossDropItemBehaviour");
             Managers.RelayManager.SpawnNetworkObj(_ngoDropItemBehaviour,Managers.RelayManager.NgoRoot.transform);
             _index = 0;
             _isCallIndex = false;

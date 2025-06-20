@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Buffer;
+using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using Stats.BaseStats;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,19 +13,22 @@ namespace GameManagers
 {
     public class BufferManager:IManagerInitializable
     {
-
+        
+        
+        
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
         private List<Type> _requestType = new List<Type>();
         private UI_BufferBar _uiBufferBar;
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUISceneManager _sceneManager;
+        [Inject] IDestroyObject _destroyer;
+        [Inject] private IInstantiate _instantiate;
 
         public UI_BufferBar UIBufferBar
         {
             get
             {
                 if (_uiBufferBar == null)
-                    _uiBufferBar = _uiManager.Get_Scene_UI<UI_BufferBar>();
+                    _uiBufferBar = _sceneManager.Get_Scene_UI<UI_BufferBar>();
 
                 return _uiBufferBar;
             }
@@ -34,14 +39,14 @@ namespace GameManagers
         }
         public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
         {
-            BufferComponent buffer = Managers.ResourceManager.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+            BufferComponent buffer = _instantiate.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
             buffer.InitAndStartBuff(targetStat, duration, effect);
             return buffer;
         }
 
         public BufferComponent InitBuff(BaseStats targetStat, float duration, BuffModifier bufferModifier,float value)
         {
-            BufferComponent buffer = Managers.ResourceManager.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+            BufferComponent buffer = _instantiate.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
             buffer.InitAndStartBuff(targetStat, duration, bufferModifier, value);
             return buffer;
         }
@@ -49,13 +54,13 @@ namespace GameManagers
         {
             DurationBuff durationbuff = buffer.Modifier as DurationBuff;
             durationbuff.RemoveStats(buffer.TarGetStat, buffer.Value);
-            Managers.ResourceManager.DestroyObject(buffer.gameObject);
+            _destroyer.DestroyObject(buffer.gameObject);
         }
 
         public void ImmediatelyBuffStart(BufferComponent buffer)
         {
             buffer.Modifier.ApplyStats(buffer.TarGetStat,buffer.Value);
-            Managers.ResourceManager.DestroyObject(buffer.gameObject);
+            _destroyer.DestroyObject(buffer.gameObject);
         }
 
         public void Init()

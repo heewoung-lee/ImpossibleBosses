@@ -2,15 +2,19 @@ using BehaviorDesigner.Runtime.Tasks;
 using Controller.BossState;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.Boss_NGO;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
     public class BossDead : Action, IBossAnimationChanged
     {
+        
+        [Inject] IDestroyObject _destroyer;
         BossGolemController _controller;
         [SerializeField] private SharedProjector _projector;
         private BossGolemNetworkController _networkController;
@@ -47,7 +51,7 @@ namespace BehaviourTreeNode.BossGolem.Task
             {
                 if (_projector.Value != null && _projector.Value.GetComponent<NetworkObject>().IsSpawned)
                 {
-                    Managers.ResourceManager.DestroyObject(_projector.Value.gameObject);
+                    _destroyer.DestroyObject(_projector.Value.gameObject);
                     _projector.Value = null;
                 }
                 AnimatorStateInfo info = _anim.GetCurrentAnimatorStateInfo(0);

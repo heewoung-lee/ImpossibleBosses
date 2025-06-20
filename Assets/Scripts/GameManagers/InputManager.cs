@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
     public class InputManager : IManagerInitializable
     {
+        [Inject] IResourcesLoader _resourcesLoader;
         private InputActionAsset _inputActionAsset;
         public InputActionAsset InputActionAsset
         {                                   
@@ -15,7 +18,7 @@ namespace GameManagers
             {
                 if(_inputActionAsset == null)
                 {
-                    _inputActionAsset = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
+                    _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
                 }
                 return _inputActionAsset;
             }
@@ -27,7 +30,7 @@ namespace GameManagers
         //6.11일 플레이어의포지션에 클릭포지션에 따라 수행되는 이벤트 제거, 클래스가 수행하지 않아도될 책임을 지게 되는 터라 삭제함,
         public void Init()
         {
-            _inputActionAsset = Managers.ResourceManager.Load<InputActionAsset>("InputData/GameInputActions");
+            _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
             _inputActionMapDict = InitActionMapDict(_inputActionAsset);
         }
 

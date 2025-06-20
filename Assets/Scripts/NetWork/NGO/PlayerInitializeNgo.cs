@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Module.CameraModule;
 using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
@@ -16,11 +17,13 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Util;
+using Zenject;
 
 namespace NetWork.NGO
 {
     public class PlayerInitializeNgo : NetworkBehaviourBase, ISceneChangeBehaviour
     {
+        [Inject] IResourcesLoader _resourcesLoader;
         enum Transforms
         {
             Interaction
@@ -78,7 +81,7 @@ namespace NetWork.NGO
             _interactionTr.AddComponent<ModulePlayerInteraction>();
             SetPlayerLayerMask();
       
-            RuntimeAnimatorController ownerPlayerAnimController = Managers.ResourceManager.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
+            RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
             gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
             Managers.GameManagerEx.OnPlayerSpawnWithControllerModule(controller);
         }

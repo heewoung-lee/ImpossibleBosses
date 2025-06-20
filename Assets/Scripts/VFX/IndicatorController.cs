@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Splines.ExtrusionShapes;
+using Zenject;
 
-public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
+public class IndicatorController : MonoBehaviour, IIndicatorBahaviour
 {
-    private const float DEPTH = 100f;
-
+    private const float Depth = 100f;
+    [Inject] IDestroyObject _destroyer;
     public int ID = 0;
 
     enum DecalProjectors
@@ -20,13 +22,13 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         CircleBorder
     }
 
-    [SerializeField]private float _radius;
-    [SerializeField] private float _angle;
-    [SerializeField] private float _arc;
-    [SerializeField] private Vector3 _callerPosition;
+    private float _radius;
+    private float _angle;
+    private float _arc;
+    private Vector3 _callerPosition;
 
-    private DecalProjector _decal_Circle_projector;
-    private DecalProjector _decal_CircleBorder_projector;
+    private DecalProjector _decalCircleProjector;
+    private DecalProjector _decalCircleBorderProjector;
 
     private Action _doneIndicatorEvent;
 
@@ -40,10 +42,10 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
             Vector3 currentSize;
             currentSize.x = _radius * 2; //_radius는 반지름의 길이 이므로 Project의 크기는 2배로 키워야함
             currentSize.y = _radius * 2;
-            currentSize.z = DEPTH;
+            currentSize.z = Depth;
 
-            _decal_Circle_projector.size = currentSize;
-            _decal_CircleBorder_projector.size = currentSize;
+            _decalCircleProjector.size = currentSize;
+            _decalCircleBorderProjector.size = currentSize;
         }
     }
     public float Angle
@@ -53,8 +55,8 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         {
             _angle = value;
             float normalizedAngle = Mathf.Repeat((_angle - 90) % 360, 360) / 360;
-            _decal_CircleBorder_projector.material.SetFloat(AngleShaderID, normalizedAngle);
-            _decal_Circle_projector.material.SetFloat(AngleShaderID, normalizedAngle);
+            _decalCircleBorderProjector.material.SetFloat(AngleShaderID, normalizedAngle);
+            _decalCircleProjector.material.SetFloat(AngleShaderID, normalizedAngle);
         }
     }
     public float Arc
@@ -64,8 +66,8 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         {
             _arc = Mathf.Clamp(value, 0f, 360f);
             float arcAngleNormalized = 1f - _arc / 360;
-            _decal_Circle_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
-            _decal_CircleBorder_projector.material.SetFloat(ArcShaderID, arcAngleNormalized);
+            _decalCircleProjector.material.SetFloat(ArcShaderID, arcAngleNormalized);
+            _decalCircleBorderProjector.material.SetFloat(ArcShaderID, arcAngleNormalized);
         }
     }
     public Vector3 CallerPosition
@@ -90,23 +92,23 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
 
     protected void Awake()
     {
-        _decal_Circle_projector = transform.Find(DecalProjectors.Circle.ToString()).GetComponent<DecalProjector>();
-        _decal_CircleBorder_projector = transform.Find(DecalProjectors.CircleBorder.ToString()).GetComponent<DecalProjector>();
+        _decalCircleProjector = transform.Find(DecalProjectors.Circle.ToString()).GetComponent<DecalProjector>();
+        _decalCircleBorderProjector = transform.Find(DecalProjectors.CircleBorder.ToString()).GetComponent<DecalProjector>();
         GetComponent<Poolable>().WorldPositionStays = false;
         ReassignMaterials();
     }
     private void ReassignMaterials()
     {
-        if (_decal_Circle_projector != null)
-            _decal_Circle_projector.material = new Material(_decal_Circle_projector.material);
+        if (_decalCircleProjector != null)
+            _decalCircleProjector.material = new Material(_decalCircleProjector.material);
 
-        if (_decal_CircleBorder_projector != null)
-            _decal_CircleBorder_projector.material = new Material(_decal_CircleBorder_projector.material);
+        if (_decalCircleBorderProjector != null)
+            _decalCircleBorderProjector.material = new Material(_decalCircleBorderProjector.material);
     }
     private void UpdateDecalFillProgressProjector(float fillAmount)
     {
-        _decal_Circle_projector.material.SetFloat(FillProgressShaderID, fillAmount);
-        _decal_CircleBorder_projector.material.SetFloat(FillProgressShaderID, fillAmount);
+        _decalCircleProjector.material.SetFloat(FillProgressShaderID, fillAmount);
+        _decalCircleBorderProjector.material.SetFloat(FillProgressShaderID, fillAmount);
     }
     public void SetValue(float radius, float arc, Transform targetTr, float duration, Action indicatorDoneEvent = null)
     {
@@ -140,6 +142,6 @@ public class Indicator_Controller : MonoBehaviour, IIndicatorBahaviour
         _doneIndicatorEvent?.Invoke();
         _doneIndicatorEvent = null;
         UpdateDecalFillProgressProjector(0f);       // 다음 재사용 대비
-        Managers.ResourceManager.DestroyObject(gameObject);
+        _destroyer.DestroyObject(gameObject);
     }
 }

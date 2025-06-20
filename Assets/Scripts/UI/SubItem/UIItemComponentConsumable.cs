@@ -3,6 +3,8 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.LootItem;
 using TMPro;
 using UnityEngine;
@@ -24,7 +26,9 @@ namespace UI.SubItem
         private UI_ConsumableBar _consumableBar;
         private int _itemCount;
         private float _duringbuff;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUISceneManager _uiManager;
+        [Inject] private IInstantiate _instantiate;
+        [Inject] private IDestroyObject _destroyer;
 
         public float DuringBuffTime => _duringbuff;
         public string ItemGuid => _itemGuid;
@@ -73,7 +77,7 @@ namespace UI.SubItem
                     if (item.ItemNumber == ItemNumber)
                     {
                         item.ItemCount += int.Parse(_itemCountText.text);
-                        Managers.ResourceManager.DestroyObject(gameObject);
+                        _destroyer.DestroyObject(gameObject);
                         return true;
                     }
                 }
@@ -171,7 +175,7 @@ namespace UI.SubItem
 
         public override GameObject GetLootingItemObejct(IItem iteminfo)
         {
-            GameObject lootitem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+            GameObject lootitem = _instantiate.Instantiate("Prefabs/LootingItem/Potion", Managers.LootItemManager.ItemRoot);
             lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
             return lootitem;
         }
@@ -181,7 +185,7 @@ namespace UI.SubItem
         {
             ItemCount--;
             if (ItemCount <= 0)
-                Managers.ResourceManager.DestroyObject(gameObject);
+                _destroyer.DestroyObject(gameObject);
         }
     }
 }

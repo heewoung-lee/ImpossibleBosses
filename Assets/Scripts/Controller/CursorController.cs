@@ -1,6 +1,8 @@
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Controller
 {
@@ -16,16 +18,16 @@ namespace Controller
         [SerializeField] Texture2D _TalkCursor;
         Define.CurrentMouseType _currentMouseType = Define.CurrentMouseType.None;
 
-
+        [Inject] private IResourcesLoader _loader;
 
         int _mask = 1 << (int)Define.Layer.Npc | 1 << (int)Define.Layer.Monster | 1 << (int)Define.Layer.Npc;
 
         Camera _camera;
         void Start()
         {
-            _BaseCursor = Managers.ResourceManager.Load<Texture2D>("Prefabs/Textures/Cursors/Base");
-            _AttackCursor = Managers.ResourceManager.Load<Texture2D>("Prefabs/Textures/Cursors/Attack");
-            _TalkCursor = Managers.ResourceManager.Load<Texture2D>("Prefabs/Textures/Cursors/Talk");
+            _BaseCursor = _loader.Load<Texture2D>("Prefabs/Textures/Cursors/Base");
+            _AttackCursor = _loader.Load<Texture2D>("Prefabs/Textures/Cursors/Attack");
+            _TalkCursor = _loader.Load<Texture2D>("Prefabs/Textures/Cursors/Talk");
             _camera = Camera.main;
         }
 

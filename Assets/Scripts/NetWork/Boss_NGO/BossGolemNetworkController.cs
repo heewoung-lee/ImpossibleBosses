@@ -7,6 +7,7 @@ using GameManagers;
 using NetWork.BaseNGO;
 using Unity.Netcode;
 using UnityEngine;
+using VFX;
 
 namespace NetWork.Boss_NGO
 {
@@ -85,12 +86,12 @@ namespace NetWork.Boss_NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void StartAnimChagnedRpc(CurrentAnimInfo animinfo,NetworkObjectReference indicatorRef = default)
         {
-            NGO_Indicator_Controller indicatorController = null;
+            NgoIndicatorController indicatorController = null;
             if (indicatorRef.Equals(default) == false)
             {
                 if (indicatorRef.TryGet(out NetworkObject ngo))
                 {
-                    indicatorController = ngo.GetComponent<NGO_Indicator_Controller>();
+                    indicatorController = ngo.GetComponent<NgoIndicatorController>();
                 }
             }
        
@@ -109,7 +110,7 @@ namespace NetWork.Boss_NGO
         }
 
 
-        IEnumerator UpdateAnimCorutine(CurrentAnimInfo animinfo, NGO_Indicator_Controller indicatorCon = null)
+        IEnumerator UpdateAnimCorutine(CurrentAnimInfo animinfo, NgoIndicatorController indicatorCon = null)
         {
 
             double elaspedTime = 0f;

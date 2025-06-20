@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Stats.BaseStats;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Buffer
 {
     public class BufferComponent : MonoBehaviour
     {
 
+        [Inject]private IDestroyObject _destroyer;
+            
         private BaseStats _targetStat;
         public BaseStats TarGetStat { get => _targetStat; }
 
@@ -90,7 +94,7 @@ namespace Buffer
                 else
                 {
                     buffer.BufferReStart();
-                    Managers.ResourceManager.DestroyObject(gameObject);
+                    _destroyer.DestroyObject(gameObject);
                     return true;
                 }
             }

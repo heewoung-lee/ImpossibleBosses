@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Buffer;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.BaseNGO;
 using NetWork.NGO.Interface;
 using Scene.GamePlayScene;
@@ -21,8 +23,10 @@ namespace NetWork.NGO
 {
     public class NgoRPCCaller : NetworkBehaviour
     {
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private IInstantiate _instantiate;
+        [Inject] IResourcesLoader _resourcesLoader;
+        
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
         private NetworkVariable<int> _loadedPlayerCount = new NetworkVariable<int>
@@ -205,7 +209,7 @@ namespace NetWork.NGO
 
         private NetworkObject SpawnObjectToResources(string path, Vector3 position = default, Transform parentTr = null)
         {
-            GameObject obj = Managers.ResourceManager.Instantiate(path);
+            GameObject obj = _instantiate.Instantiate(path);
             obj.transform.position = position;
             NetworkObject networkObj;
             networkObj = Managers.RelayManager.SpawnNetworkObj(obj, parentTr, position).GetComponent<NetworkObject>();
@@ -266,7 +270,7 @@ namespace NetWork.NGO
 
             if (Managers.BufferManager.GetModifier(effect) is DurationBuff durationbuff)
             {
-                Sprite buffImageIcon = Managers.ResourceManager.Load<Sprite>(buffIconImagePath);
+                Sprite buffImageIcon = _resourcesLoader.Load<Sprite>(buffIconImagePath);
                 durationbuff.SetBuffIconImage(buffImageIcon);
                 Managers.BufferManager.InitBuff(playerstats, duration, durationbuff, effect.value);
             }
@@ -298,7 +302,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void LoadedPlayerCountRpc()
         {
-            if (_uiManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiSceneManager.Try_Get_Scene_UI(out UI_Loading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {
@@ -310,7 +314,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void SetisAllPlayerLoadedRpc(bool isAllplayerLoaded)
         {
-            if (_uiManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiSceneManager.Try_Get_Scene_UI(out UI_Loading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {
@@ -410,7 +414,7 @@ namespace NetWork.NGO
             where TList : struct, INativeList<Vector3>
         {
             string objectPath = path.ConvertToString();
-            GameObject spawnGo = Managers.ResourceManager.Load<GameObject>(objectPath);
+            GameObject spawnGo = _resourcesLoader.Load<GameObject>(objectPath);
             if (spawnGo.TryGetComponent<ISpawnBehavior>(out var spawnBehaviour))
             {
                 TList fixedList = posList;

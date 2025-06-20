@@ -4,17 +4,21 @@ using BehaviorDesigner.Runtime.Tasks;
 using Controller.BossState;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork;
 using NetWork.Boss_NGO;
 using NetWork.NGO.Interface;
 using Stats.BossStats;
 using UnityEngine;
 using Util;
+using VFX;
+using Zenject;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
     public class BossSkill2 : Action, IBossAnimationChanged
     {
+        [Inject] private IInstantiate _instantiate;
         private readonly float _addAttackDurationTime = 0f;
         private readonly float _attackAnimStopThreshold = 0.05f;
 
@@ -33,7 +37,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         [SerializeField] private int _angleStep;
 
         [SerializeField] private SharedProjector _attackIndicator;
-        private NGO_Indicator_Controller _indicatorController;
+        private NgoIndicatorController _indicatorController;
 
         public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
 
@@ -66,10 +70,10 @@ namespace BehaviourTreeNode.BossGolem.Task
             }
             void SpawnAttackIndicator()
             {
-                _indicatorController = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NGO_Indicator_Controller>();
+                _indicatorController = _instantiate.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
                 _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
-                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NGO_Indicator_Controller>();
+                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NgoIndicatorController>();
                 float totalIndicatorDurationTime = _addAttackDurationTime + _animLength;
                 _indicatorController.SetValue(_attackRange, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
                 OnBossGolemAnimationChanged(_bossGolemAnimationNetworkController, _controller.BossSkill2State);

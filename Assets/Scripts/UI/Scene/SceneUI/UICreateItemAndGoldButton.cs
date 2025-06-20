@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using Stats;
 using TMPro;
 using UI.Popup.PopupUI;
@@ -19,8 +21,8 @@ namespace UI.Scene.SceneUI
         private TMP_Text _scoreText;
 
         private PlayerStats _playerStats;
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private IInstantiate _instantiate;
 
         public PlayerStats PlayerStats
         {
@@ -113,26 +115,26 @@ namespace UI.Scene.SceneUI
 
         public void TestGenerateBossSkill1()
         {
-            GameObject stone = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+            GameObject stone = _instantiate.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
             stone.transform.SetParent(Managers.VFXManager.VFXRootNgo, false);
             stone.transform.position = Managers.GameManagerEx.Player.transform.position + Vector3.up * 5f;
         }
 
         public void TestIteminInventort()
         {
-            if (_uiManager.GetImportant_Popup_UI<UIPlayerInventory>().gameObject.activeSelf == false)
+            if (_uiPopupManager.GetImportant_Popup_UI<UIPlayerInventory>().gameObject.activeSelf == false)
                 return;
 
             switch (itemGeneratingType)
             {
                 case ItemGeneratingType.EquipMent:
-                    IItem equipmentitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiManager);
+                    IItem equipmentitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.Consumable:
-                    IItem consumableitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiManager);
+                    IItem consumableitem = Managers.ItemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.All:
-                    IItem item = Managers.ItemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent(_uiManager);
+                    IItem item = Managers.ItemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent(_uiPopupManager);
                     break;
             }
         }

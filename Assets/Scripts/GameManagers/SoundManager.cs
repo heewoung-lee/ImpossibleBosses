@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -10,6 +12,7 @@ namespace GameManagers
         AudioSource[] _audioSources = new AudioSource[System.Enum.GetValues(typeof(Define.Sound)).Length];
 
         Dictionary<string,AudioClip> _sfxDictionnary = new Dictionary<string,AudioClip>();
+        [Inject] IResourcesLoader _resourcesLoader;
 
 
         //Init()으로 현재 씬에서 @Sound 매니저가 있는지 확인.
@@ -99,14 +102,14 @@ namespace GameManagers
             AudioClip clip = null;
             if(type == Define.Sound.BGM)
             {
-                clip = Managers.ResourceManager.Load<AudioClip>(path);
+                clip = _resourcesLoader.Load<AudioClip>(path);
             }
             else
             {
                 clip = null;
                 if(_sfxDictionnary.TryGetValue(path,out clip) == false)
                 {
-                    clip = Managers.ResourceManager.Load<AudioClip>(path);
+                    clip = _resourcesLoader.Load<AudioClip>(path);
                     _sfxDictionnary.Add(path, clip);
                 }
             }

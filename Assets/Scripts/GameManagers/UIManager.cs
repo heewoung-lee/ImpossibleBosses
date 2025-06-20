@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using UI;
 using UI.Popup;
 using UI.Popup.PopupUI;
@@ -14,8 +15,8 @@ namespace GameManagers
     internal class UIManager : IManagerIResettable,IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
     {
         
-        [Inject] private DiContainer _container; 
-
+        [Inject] private IInstantiate _instantiate;
+        
         private const int SceneUISortingDefaultValue = 0;
         private const int PopupUISortingDefaultValue = 20;
 
@@ -135,7 +136,7 @@ namespace GameManagers
             if (name == null)
                 name = typeof(T).Name;
 
-            GameObject go = Managers.ResourceManager.Instantiate($"Prefabs/UI/Popup/{name}");
+            GameObject go = _instantiate.Instantiate($"Prefabs/UI/Popup/{name}");
             T popup = Utill.GetOrAddComponent<T>(go);
 
             //_ui_Popups.Push(popup);
@@ -161,14 +162,13 @@ namespace GameManagers
             GameObject go = null;
             if (path == null)
             {
-                go = Managers.ResourceManager.Instantiate($"Prefabs/UI/MainUI/{name}");
+                go = _instantiate.Instantiate($"Prefabs/UI/MainUI/{name}");
             }
             else
             {
-                go = Managers.ResourceManager.Instantiate($"{path}");
+                go = _instantiate.Instantiate($"{path}");
             }
             T scene = Utill.GetOrAddComponent<T>(go);
-            _container.Inject(go);
             _uiSceneDict.Add(typeof(T), scene);
             go.transform.SetParent(Root.transform);
             
@@ -191,7 +191,7 @@ namespace GameManagers
                 name = typeof(T).Name;
 
 
-            GameObject go = Managers.ResourceManager.Instantiate($"Prefabs/UI/WorldSpace/{name}");
+            GameObject go = _instantiate.Instantiate($"Prefabs/UI/WorldSpace/{name}");
 
             if (parent != null)
                 go.transform.SetParent(parent);
@@ -216,11 +216,11 @@ namespace GameManagers
             GameObject go;
             if (path == null)
             {
-                go = Managers.ResourceManager.Instantiate($"Prefabs/UI/SubItem/{name}");
+                go = _instantiate.Instantiate($"Prefabs/UI/SubItem/{name}");
             }
             else
             {
-                go = Managers.ResourceManager.Instantiate($"{path}");
+                go = _instantiate.Instantiate($"{path}");
             }
             if (parent != null)
                 go.transform.SetParent(parent);

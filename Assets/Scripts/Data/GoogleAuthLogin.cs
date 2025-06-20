@@ -1,5 +1,7 @@
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
+using Zenject;
 
 namespace Data
 {
@@ -16,10 +18,10 @@ namespace Data
     }
     public class GoogleAuthLogin
     {
-
+        [Inject] private IResourcesLoader _loader;
         public TextAsset[] LoadJson()
         {
-            TextAsset[] jsonFiles = Managers.ResourceManager.LoadAll<TextAsset>("GoogleLoginData");
+            TextAsset[] jsonFiles = _loader.LoadAll<TextAsset>("GoogleLoginData");
             return jsonFiles;
         }
 

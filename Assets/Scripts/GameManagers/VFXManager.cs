@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -17,6 +19,10 @@ namespace GameManagers
     public class VFXManager
     {
 
+        [Inject] private IInstantiate _instantiate;
+        [Inject] IResourcesLoader _resourcesLoader;
+        [Inject] IDestroyObject _destroyer;
+        
         Dictionary<string, ParticleInfo> _isCheckNgoDict = new Dictionary<string, ParticleInfo>();
 
         GameObject _vfxRoot;
@@ -65,7 +71,7 @@ namespace GameManagers
                 Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
                 return null;
             }
-            GameObject particleObject = Managers.ResourceManager.Instantiate(path);
+            GameObject particleObject = _instantiate.Instantiate(path);
 
             return particleObject;
         }
@@ -131,7 +137,7 @@ namespace GameManagers
                     return particleObject;
             }
             SettingAndRuntoParticle(particleObject, settingDuration, out float maxDurationTime);
-            Managers.ResourceManager.DestroyObject(particleObject, maxDurationTime);
+            _destroyer.DestroyObject(particleObject, maxDurationTime);
             return particleObject;
         }
 
@@ -184,7 +190,7 @@ namespace GameManagers
 
         private void CashingisCheckNgoDict(string path)
         {
-            GameObject particleObj = Managers.ResourceManager.Load<GameObject>(path);
+            GameObject particleObj = _resourcesLoader.Load<GameObject>(path);
             if (particleObj.TryGetComponent(out NetworkObject ngo))
             {
                 _isCheckNgoDict.Add(path, new ParticleInfo()

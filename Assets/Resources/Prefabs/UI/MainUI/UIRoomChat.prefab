@@ -949,7 +949,7 @@ GameObject:
   - component: {fileID: 1692099873402383143}
   - component: {fileID: 8917122656989021925}
   m_Layer: 5
-  m_Name: UI_RoomChat
+  m_Name: UIRoomChat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

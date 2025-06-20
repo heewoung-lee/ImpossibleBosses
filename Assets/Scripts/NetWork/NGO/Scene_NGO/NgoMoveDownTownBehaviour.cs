@@ -1,4 +1,6 @@
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using Unity.Netcode;
 using Zenject;
 
@@ -6,14 +8,14 @@ namespace NetWork.NGO.Scene_NGO
 {
     public class NgoMoveDownTownBehaviour : NetworkBehaviour
     {
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUISceneManager _uiManager;
+        [Inject] IDestroyObject _destroyer;
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             if(_uiManager.Try_Get_Scene_UI(out UI_Boss_HP bossHp))
             {
-                Managers.ResourceManager.DestroyObject(bossHp.gameObject);
+                _destroyer.DestroyObject(bossHp.gameObject);
             }
         }
     }

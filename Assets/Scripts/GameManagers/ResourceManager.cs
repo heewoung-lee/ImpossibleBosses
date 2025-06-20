@@ -8,7 +8,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class ResourceManager : IManagerIResettable,IResourcesLoader,IInstantiate,IDestroyObject
+    internal class ResourceManager : IManagerIResettable,IResourcesLoader,IInstantiate,IDestroyObject
     {
         [Inject] private DiContainer  _container;
             

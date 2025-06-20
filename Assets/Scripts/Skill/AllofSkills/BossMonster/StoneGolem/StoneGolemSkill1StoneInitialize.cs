@@ -1,20 +1,26 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork;
 using NetWork.NGO.Interface;
 using UnityEngine;
+using Zenject;
 
 namespace Skill.AllofSkills.BossMonster.StoneGolem
 {
     public class StoneGolemSkill1StoneInitialize : Poolable, ISpawnBehavior
     {
+        
+        [Inject] private IInstantiate _instantiate;
+        [Inject] IDestroyObject _destroyer;
+        
         private const float MaxHeight = 3f;
         private const int FlightdurationTime = 1;
     
         public void SpawnObjectToLocal(in SpawnParamBase stoneParams, string runtimePath = null)
         {
             Collider bossTr = Managers.GameManagerEx.BossMonster.transform.GetComponent<Collider>();
-            StoneGolemSkill1StoneInitialize stone = Managers.ResourceManager.Instantiate(runtimePath).GetComponent<StoneGolemSkill1StoneInitialize>();
+            StoneGolemSkill1StoneInitialize stone = _instantiate.Instantiate(runtimePath).GetComponent<StoneGolemSkill1StoneInitialize>();
             stone.transform.SetParent(Managers.VFXManager.VFXRoot, false);
             stone.transform.position = bossTr.transform.position + Vector3.up * bossTr.GetComponent<Collider>().bounds.max.y;
             stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
@@ -45,7 +51,7 @@ namespace Skill.AllofSkills.BossMonster.StoneGolem
                 yield return null;
             }
             // 포물선 이동 완료 후 파괴
-            Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
+            _destroyer.DestroyObject(projectile.gameObject, 2f);
         }
     }
 }

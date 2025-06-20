@@ -1,12 +1,15 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace UI.WorldSpace
 {
     public class UIDamageText : UIBase
     {
+        [Inject] IDestroyObject _destroyer;
         TMP_Text _damageText;
         public TMP_Text DamageText { get => _damageText; set => _damageText = value; }
         Color _originalColor;
@@ -44,7 +47,7 @@ namespace UI.WorldSpace
                 _damageText.color = color;
                 if(color.a <= 0)
                 {
-                    Managers.ResourceManager.DestroyObject(gameObject);
+                    _destroyer.DestroyObject(gameObject);
                     break;
                 }
                 yield return null;

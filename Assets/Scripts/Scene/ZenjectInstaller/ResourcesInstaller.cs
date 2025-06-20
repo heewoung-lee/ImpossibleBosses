@@ -7,7 +7,7 @@ namespace Scene.ZenjectInstaller
    {
       public override void InstallBindings()
       {
-         Container.Bind<ResourceManager>().AsSingle().NonLazy();
+         Container.BindInterfacesTo<ResourceManager>().AsSingle().NonLazy();
       }
    }
 }

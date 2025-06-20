@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameManagers.Interface;
+using GameManagers.Interface.Resources_Interface;
 using Scene;
 using UI.Scene.SceneUI;
 using UI.SubItem;
@@ -34,7 +35,8 @@ namespace GameManagers
 
     public class LobbyManager : IManagerEventInitialize
     {
-        
+        [Inject] IDestroyObject _destroyer;
+
         enum LoadingProcess
         {
             VivoxInitalize,
@@ -898,7 +900,7 @@ namespace GameManagers
                 QueryResponse lobbies = await GetQueryLobbiesAsyncCustom(options);
                 foreach (Transform child in room_inventory_ui.RoomContent)
                 {
-                    Managers.ResourceManager.DestroyObject(child.gameObject);
+                    _destroyer.DestroyObject(child.gameObject);
                 }
                 foreach (Lobby lobby in lobbies.Results)
                 {

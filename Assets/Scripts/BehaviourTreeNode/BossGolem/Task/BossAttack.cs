@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using Controller.BossState;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork;
 using NetWork.Boss_NGO;
 using NetWork.NGO.Interface;
@@ -10,6 +11,8 @@ using Stats.BaseStats;
 using Stats.BossStats;
 using UnityEngine;
 using Util;
+using VFX;
+using Zenject;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
@@ -25,13 +28,14 @@ namespace BehaviourTreeNode.BossGolem.Task
         private BossStats _stats;
         private bool _hasSpawnedParticles;
 
-        private NGO_Indicator_Controller _indicatorController;
+        private NgoIndicatorController _indicatorController;
         private BossGolemAnimationNetworkController _bossGolemAnimationNetworkController;
 
         [SerializeField] private SharedProjector _attackIndicator;
         [SerializeField] private int _radiusStep = 0;
         [SerializeField] private int _angleStep = 0;
-
+        
+        [Inject] private IInstantiate _instantiate;
         public BossGolemAnimationNetworkController BossAnimNetworkController => _bossGolemAnimationNetworkController;
 
         public override void OnAwake()
@@ -61,12 +65,12 @@ namespace BehaviourTreeNode.BossGolem.Task
             {
                 OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BaseAttackState);
                 _hasSpawnedParticles = false;
-                _indicatorController = Managers.ResourceManager
-                    .Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
-                    .GetComponent<NGO_Indicator_Controller>();
+                _indicatorController = _instantiate.
+                    Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
+                    .GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
                 _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject)
-                    .GetComponent<NGO_Indicator_Controller>();
+                    .GetComponent<NgoIndicatorController>();
                 float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
                 _indicatorController.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform,
                     totalIndicatorDurationTime, IndicatorDoneEvent);

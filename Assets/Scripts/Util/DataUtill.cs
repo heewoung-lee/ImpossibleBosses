@@ -2,16 +2,18 @@ using System;
 using System.Data;
 using System.IO;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Newtonsoft.Json;
 using UnityEngine;
+using Zenject;
 
 namespace Util
 {
     public static class DataUtil
     {
-        public static DataTable GetDataTable(string fileName, string tableName)
+        public static DataTable GetDataTable(string fileName, string tableName, IResourcesLoader resourcesLoader)
         {
-            UnityEngine.Object obj = Managers.ResourceManager.Load<UnityEngine.Object>(fileName);
+            UnityEngine.Object obj = resourcesLoader.Load<UnityEngine.Object>(fileName);
             string value = ((TextAsset)obj).ToString();
             DataTable data = JsonConvert.DeserializeObject<DataTable>(value);
             data.TableName = tableName;
@@ -19,14 +21,14 @@ namespace Util
             return data;
         }
 
-        public static DataTable GetDataTable(FileInfo info)
+        public static DataTable GetDataTable(FileInfo info, IResourcesLoader resourcesLoader)
         {
             string fileName = Path.GetFileNameWithoutExtension(info.Name);
             string path = string.Concat("Data/", fileName);
             string value = string.Empty;
             try
             {
-                value = Managers.ResourceManager.Load<TextAsset>(path).ToString();
+                value = resourcesLoader.Load<TextAsset>(path).ToString();
             }
             catch (Exception ex)
             {

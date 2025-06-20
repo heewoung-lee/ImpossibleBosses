@@ -3,6 +3,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Stats;
 using TMPro;
 using UI.Popup.PopupUI;
@@ -16,7 +17,7 @@ namespace UI.SubItem
 {
     public class UIShopItemComponent : UIItemComponent
     {
-
+        [Inject] IDestroyObject _destroyer;
         enum ItemICons
         {
             ItemIconImage,
@@ -115,7 +116,7 @@ namespace UI.SubItem
 
             ItemCount--;
             if (_itemCount <= 0)
-                Managers.ResourceManager.DestroyObject(gameObject);
+                _destroyer.DestroyObject(gameObject);
         }
 
         public override void GetDragEnd(PointerEventData eventData)

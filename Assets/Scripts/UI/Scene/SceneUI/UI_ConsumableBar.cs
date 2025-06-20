@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Stats;
 using UI.Scene;
 using UI.Scene.SceneUI;
@@ -15,7 +16,7 @@ using Zenject;
 
 public class UI_ConsumableBar : UIScene
 {
-
+    [Inject] IDestroyObject _destroyer;
     private Image[] _consumableIcons;
     [SerializeField]private Transform[] _frameTrs;
     [Inject]private UIManager _uiManager; 
@@ -115,7 +116,7 @@ public class UI_ConsumableBar : UIScene
             }
             else
             {
-                Managers.ResourceManager.DestroyObject(consumable.gameObject);
+                _destroyer.DestroyObject(consumable.gameObject);
             }
             foreach (StatEffect effect in consumable.ItemEffects)
             {

@@ -1,11 +1,15 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
+using Zenject;
 
 namespace Test.TestScripts
 {
     public class CanonShooter : MonoBehaviour
     {
+        [Inject] private IInstantiate _instantiate;
+        [Inject] IDestroyObject _destroyer;
         public Transform startTransform;  // 시작 위치
         public Transform targetTransform; // 목표 위치
         public GameObject projectilePrefab; // 발사체 프리팹
@@ -29,7 +33,7 @@ namespace Test.TestScripts
             targetTransform = Managers.GameManagerEx.Player.transform;
 
             // 발사체 생성
-            GameObject projectile = Managers.ResourceManager.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+            GameObject projectile = _instantiate.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
 
             projectile.transform.SetParent(Managers.VFXManager.VFXRootNgo);
             projectile.transform.position += Vector3.up * GetComponent<Collider>().bounds.max.y;
@@ -71,7 +75,7 @@ namespace Test.TestScripts
             }
 
             // 포물선 이동 완료 후 파괴
-            Managers.ResourceManager.DestroyObject(projectile.gameObject, 2f);
+            _destroyer.DestroyObject(projectile.gameObject, 2f);
         }
     }
 }

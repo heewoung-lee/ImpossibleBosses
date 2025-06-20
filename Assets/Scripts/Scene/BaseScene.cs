@@ -1,6 +1,7 @@
 using System;
 using Controller;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Scene.GamePlayScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,7 @@ namespace Scene
 {
     public abstract class BaseScene : MonoBehaviour
     {
+        [Inject] private IInstantiate _instantiate;
         public abstract Define.Scene CurrentScene { get; }
         public abstract ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         MoveMarkerController _moveMarker;
@@ -37,7 +39,7 @@ namespace Scene
             Object go = GameObject.FindAnyObjectByType<EventSystem>();
             if (go == null)
             {
-                Managers.ResourceManager.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
+                _instantiate.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
             }
 
             _moveMarker = gameObject.GetOrAddComponent<MoveMarkerController>();

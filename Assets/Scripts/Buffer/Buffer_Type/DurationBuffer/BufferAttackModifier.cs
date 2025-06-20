@@ -1,17 +1,33 @@
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using Stats.BaseStats;
 using UnityEngine;
+using Zenject;
 
 namespace Buffer.Buffer_Type.DurationBuffer
 {
     public class BufferAttackModifier : DurationBuff
     {
-        public override Sprite BuffIconImage => _iconImage;
+        
+        [Inject]private IResourcesLoader _loader;
+
+        private Sprite _iconImage;
+
+        public override Sprite BuffIconImage
+        {
+            get
+            {
+                if (_iconImage == null)
+                {
+                    _iconImage = _loader.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");
+                }
+                return _iconImage;
+            }
+        }
+        
         public override string Buffname => "공격력증가";
         public override StatType StatType => StatType.Attack;
-
-        private Sprite _iconImage = Managers.ResourceManager.Load<Sprite>("Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/IconMisc/IconSet_Equip_Sword");
 
         public override void ApplyStats(BaseStats stats, float value)
         {

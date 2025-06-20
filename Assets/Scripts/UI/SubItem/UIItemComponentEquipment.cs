@@ -3,15 +3,21 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface.Resources_Interface;
 using NetWork.LootItem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Util;
+using Zenject;
 
 namespace UI.SubItem
 {
     public class UIItemComponentEquipment : UIItemComponentInventory
     {
+        [Inject] IDestroyObject _destroyer;
+        [Inject] private IInstantiate _instantiate;
+        
+        
         public override void ItemRightClick(PointerEventData eventdata)
         {
             base.ItemRightClick(eventdata);
@@ -102,13 +108,13 @@ namespace UI.SubItem
             {
                 case EquipmentSlotType.Helmet:
                 case EquipmentSlotType.Armor:
-                    lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Shield", Managers.LootItemManager.ItemRoot);
                     break;
                 case EquipmentSlotType.Weapon:
-                    lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Sword", Managers.LootItemManager.ItemRoot);
                     break;
                 default:
-                    lootItem = Managers.ResourceManager.Instantiate("Prefabs/LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Bag", Managers.LootItemManager.ItemRoot);
                     break;
             }
             lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -117,7 +123,7 @@ namespace UI.SubItem
 
         protected override void RemoveItemFromInventory()
         {
-            Managers.ResourceManager.DestroyObject(gameObject);
+            _destroyer.DestroyObject(gameObject);
         }
 
         private void UnEquipItem()
