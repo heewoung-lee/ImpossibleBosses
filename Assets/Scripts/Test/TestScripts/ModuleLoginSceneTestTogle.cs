@@ -1,16 +1,17 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UI_Interface;
 using Test.TestUI;
 using UnityEngine;
 using Zenject;
 
 namespace Test.TestScripts
 {
-    public class LoginSceneTestTogle : MonoBehaviour
+    public class ModuleLoginSceneTestTogle : MonoBehaviour
     {
         [Inject] private IUISceneManager _sceneUIManager;
 
-        void Start()
+        void Awake()
         {
             LogInTestToggle testTogle = _sceneUIManager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
         }

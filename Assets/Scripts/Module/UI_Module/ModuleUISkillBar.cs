@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UI_Interface;
 using UI.Scene.SceneUI;
 using UnityEngine;
 using Zenject;

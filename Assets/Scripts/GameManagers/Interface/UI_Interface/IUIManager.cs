@@ -1,9 +1,6 @@
-using UI;
-using UI.Popup;
-using UI.Scene;
 using UnityEngine;
 
-namespace GameManagers.Interface
+namespace GameManagers.Interface.UI_Interface
 {
     public interface IUIManager
     {

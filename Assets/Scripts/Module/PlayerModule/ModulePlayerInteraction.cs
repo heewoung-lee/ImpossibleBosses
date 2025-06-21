@@ -1,6 +1,7 @@
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.UI_Interface;
 using Module.CommonModule;
 using Player;
 using UI.WorldSpace;

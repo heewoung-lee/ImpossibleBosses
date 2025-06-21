@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UI.Scene;
 
-namespace GameManagers.Interface
+namespace GameManagers.Interface.UI_Interface
 {
     public interface IUISceneManager
     {

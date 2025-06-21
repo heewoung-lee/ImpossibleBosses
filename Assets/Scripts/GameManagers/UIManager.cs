@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.UI_Interface;
 using UI;
 using UI.Popup;
 using UI.Popup.PopupUI;
@@ -16,6 +17,8 @@ namespace GameManagers
     {
         
         [Inject] private IInstantiate _instantiate;
+        [Inject] private DiContainer _container;
+        
         
         private const int SceneUISortingDefaultValue = 0;
         private const int PopupUISortingDefaultValue = 20;
@@ -168,12 +171,32 @@ namespace GameManagers
             {
                 go = _instantiate.Instantiate($"{path}");
             }
-            T scene = Utill.GetOrAddComponent<T>(go);
+            go.SetActive(false);
+            T scene = GetOrAddComponent<T>(go);
             _uiSceneDict.Add(typeof(T), scene);
             go.transform.SetParent(Root.transform);
-            
+            go.SetActive(true);
             return scene;
+
+
+
+            T GetOrAddComponent<T>(GameObject go) where T : UIScene
+            {
+                if (go.TryGetComponent(out T component) == true)
+                {
+                    return component;
+                }
+                else
+                {
+                    T requireComponent = _container.InstantiateComponent<T>(go);
+                    return requireComponent;
+                }
+            }
+
         }
+        
+        
+        
         public T GetOrCreateSceneUI<T>(string name = null, string path = null) where T : UIScene
         {
             if (_uiSceneDict.TryGetValue(typeof(T), out UIScene value))
