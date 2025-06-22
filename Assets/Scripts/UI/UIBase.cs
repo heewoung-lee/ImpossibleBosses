@@ -1,17 +1,23 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameManagers.Interface.Resources_Interface;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace UI
 {
     public abstract class UIBase : MonoBehaviour
     {
+        [Inject] private IInstantiate _instantiate; 
         Dictionary<Type, Object[]> _bindDictionary = new Dictionary<Type,Object[]>();
         protected abstract void StartInit();
         protected abstract void AwakeInit();
@@ -135,9 +141,9 @@ namespace UI
         //2) Get을 통해 딕셔너리에 저장된 타입을 Enum의 이름으로 꺼내온다.
         //3) BindEvent를 통해 해당객체에 이벤트 핸들러를 달아준다.
 
-        public static void BindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        public void BindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
         {
-            UIEventHandler evt = go.GetOrAddComponent<UIEventHandler>();
+            UIEventHandler evt = _instantiate.GetOrAddComponent<UIEventHandler>(go);
             switch (mouseEvent)
             {
                 case Define.UIEvent.LeftClick:
@@ -163,9 +169,9 @@ namespace UI
                     break;
             }
         }
-        public static void UnBindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        public void UnBindEvent(GameObject go,Action<PointerEventData> action,Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
         {
-            UIEventHandler evt = go.GetOrAddComponent<UIEventHandler>();
+            UIEventHandler evt = _instantiate.GetOrAddComponent<UIEventHandler>(go);
             switch (mouseEvent)
             {
                 case Define.UIEvent.LeftClick:

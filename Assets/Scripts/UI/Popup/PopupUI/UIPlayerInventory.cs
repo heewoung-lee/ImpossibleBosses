@@ -1,5 +1,7 @@
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface;
+using GameManagers.Interface.UI_Interface;
 using Stats;
 using Stats.BaseStats;
 using TMPro;
@@ -23,7 +25,7 @@ namespace UI.Popup.PopupUI
         private TMP_Text _attackStatText;
         private TMP_Text _defenseStatText;
         private GameObject _equipMent;
-        private Transform _windowPanel;
+        private UIBase _windowPanel;
         private Canvas _inventoryCanvas;
     
         private Vector3 _initialEquipPosition;
@@ -34,7 +36,8 @@ namespace UI.Popup.PopupUI
 
         private GraphicRaycaster _uiInventoryRaycaster;
         private EventSystem _eventSystem;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private IUISceneManager _uiSceneManager;
 
         public Transform ItemInventoryTr => _itemInventoryTr;
         public GraphicRaycaster UIInventoryRayCaster=> _uiInventoryRaycaster;
@@ -68,15 +71,20 @@ namespace UI.Popup.PopupUI
             Player,
             LeftPanelBottom,
             RightPanelBottom,
+        }
+
+        enum UIBases
+        {
             WindowPanel
         }
 
         protected override void AwakeInit()
         {
             base.AwakeInit();
-            _uiManager.AddImportant_Popup_UI(this);
+            _uiPopupManager.AddImportant_Popup_UI(this);
             Bind<Transform>(typeof(PanelTr));
             Bind<GameObject>(typeof(EquipmentGo));
+            Bind<UIBase>(typeof(UIBases));
             Transform playerTr = Get<Transform>((int)PanelTr.Player);
             GameObject playerInfoTr = Utill.FindChild(playerTr.gameObject, "Player_Info_Panel");
 
@@ -93,7 +101,7 @@ namespace UI.Popup.PopupUI
             _defenseStatText = Utill.FindChild(rightPanelBottom.gameObject, "Defense_Stat_Text", true).GetComponent<TMP_Text>();
             //스탯 초기화
 
-            _windowPanel = Get<Transform>((int)PanelTr.WindowPanel);
+            _windowPanel = Get<UIBase>((int)UIBases.WindowPanel);
             _equipMent = Get<GameObject>((int)EquipmentGo.Equipment);
 
             _initialWindowPosition = ((RectTransform)_equipMent.transform).localPosition;
@@ -128,7 +136,7 @@ namespace UI.Popup.PopupUI
         }
         public void CloseDecriptionWindow()
         {
-            if (_uiManager.Try_Get_Scene_UI(out UIDescription description))
+            if (_uiSceneManager.Try_Get_Scene_UI(out UIDescription description))
             {
                 description.UI_DescriptionDisable();
                 description.SetdecriptionOriginPos();
@@ -170,11 +178,8 @@ namespace UI.Popup.PopupUI
                 UpdateStats();
                 UpdatePlayerLevelAndNickName(OwnerPlayerStats.CharacterBaseStats);
             }
-            // 드래그 시작 시 초기 위치 저장
-            _windowPanel.gameObject.AddUIEvent(DragBeginInitialize, Define.UIEvent.DragBegin);
-            // 드래그 중 창 위치 업데이트
-            _windowPanel.gameObject.AddUIEvent(DragingPositionUpdate, Define.UIEvent.Drag);
-            //Managers.LootItemManager.LoadItemsFromLootStorage(_itemInventoryTr);
+            _windowPanel.BindEvent(_windowPanel.gameObject,DragBeginInitialize, Define.UIEvent.DragBegin);
+            _windowPanel.BindEvent(_windowPanel.gameObject,DragingPositionUpdate, Define.UIEvent.Drag);
             _equipMent.transform.localPosition = _initialWindowPosition;
         }
         protected override void OnDisableInit()
@@ -185,9 +190,8 @@ namespace UI.Popup.PopupUI
             {
                 DeSubscribePlayerEvent();
             }
-            _windowPanel.gameObject.UnUIEvent(DragBeginInitialize, Define.UIEvent.DragBegin);
-            // 드래그 중 창 위치 업데이트
-            _windowPanel.gameObject.UnUIEvent(DragingPositionUpdate, Define.UIEvent.Drag);
+            _windowPanel.UnBindEvent(_windowPanel.gameObject,DragBeginInitialize, Define.UIEvent.DragBegin);
+            _windowPanel.UnBindEvent(_windowPanel.gameObject,DragingPositionUpdate, Define.UIEvent.Drag);
             
             CloseDecriptionWindow();
         }

@@ -14,8 +14,8 @@ namespace Module.CameraModule
         void Start()
         {
             _playerFollwingCamera = GameObject.Find("PlayerFollowingCamera") == true ? 
-                GameObject.Find("PlayerFollowingCamera") : _instantiate.Instantiate("Prefabs/Camera/PlayerFollowingCamera");
-            _playerFollwingCamera.GetOrAddComponent<PlayerFollowingCamera>();
+                GameObject.Find("PlayerFollowingCamera") : _instantiate.InstantiateByPath("Prefabs/Camera/PlayerFollowingCamera");
+            _instantiate.GetOrAddComponent<PlayerFollowingCamera>(_playerFollwingCamera);
         }
 
     }

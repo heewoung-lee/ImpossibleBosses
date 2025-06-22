@@ -1,12 +1,16 @@
 using System.Collections;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using UnityEngine.AI;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
     public class SpawningPool : MonoBehaviour
     {
+        [Inject] IInstantiate _instantiate;
+        
         private int _monsterCount = 0;
         private int _reserveMonsterCount = 0;
         private int _keepMonsterCount = 0;
@@ -44,7 +48,7 @@ namespace GameManagers
             _reserveMonsterCount++;
             yield return new WaitForSeconds(Random.Range(0,_spawnTime));
             GameObject enemy = Managers.GameManagerEx.Spawn("Prefabs/Enemy/EnemyCube", transform);
-            NavMeshAgent nma = enemy.GetOrAddComponent<NavMeshAgent>();
+            NavMeshAgent nma = _instantiate.GetOrAddComponent<NavMeshAgent>(enemy);
             Vector3 ranpos = Vector3.zero;
             while (true)
             {

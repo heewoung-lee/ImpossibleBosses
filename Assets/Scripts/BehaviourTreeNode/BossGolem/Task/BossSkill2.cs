@@ -70,7 +70,7 @@ namespace BehaviourTreeNode.BossGolem.Task
             }
             void SpawnAttackIndicator()
             {
-                _indicatorController = _instantiate.Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NgoIndicatorController>();
+                _indicatorController = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
                 _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
                 _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NgoIndicatorController>();

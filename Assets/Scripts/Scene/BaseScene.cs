@@ -39,10 +39,9 @@ namespace Scene
             Object go = GameObject.FindAnyObjectByType<EventSystem>();
             if (go == null)
             {
-                _instantiate.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
+                _instantiate.InstantiateByPath("Prefabs/UI/EventSystem").name = "@EventSystem";
             }
-
-            _moveMarker = gameObject.GetOrAddComponent<MoveMarkerController>();
+            _moveMarker = _instantiate.GetOrAddComponent<MoveMarkerController>(gameObject);
         }
 
         protected abstract void AwakeInit();

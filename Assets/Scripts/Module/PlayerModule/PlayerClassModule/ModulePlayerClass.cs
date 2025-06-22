@@ -74,8 +74,8 @@ namespace Module.PlayerModule.PlayerClassModule
         {
             foreach (BaseSkill skill in _playerSkill.Values)
             {
-                GameObject skillPrefab = _instantiate.Instantiate("Prefabs/UI/Skill/UI_SkillComponent");
-                SkillComponent skillcomponent = skillPrefab.GetOrAddComponent<SkillComponent>();
+                GameObject skillPrefab = _instantiate.InstantiateByPath("Prefabs/UI/Skill/UI_SkillComponent");
+                SkillComponent skillcomponent = _instantiate.GetOrAddComponent<SkillComponent>(skillPrefab);
                 skillcomponent.SetSkillComponent(skill);
                 Transform skillLocation = _skillManager.UISkillBar.SetLocationSkillSlot(skillcomponent);
                 skillcomponent.AttachItemToSlot(skillcomponent.gameObject, skillLocation);

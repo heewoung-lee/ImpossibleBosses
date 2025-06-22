@@ -94,7 +94,7 @@ namespace UI.Scene.SceneUI
             Bind<Transform>(typeof(Transforms));
             Bind<Button>(typeof(Buttons));
             Bind<GameObject>(typeof(GameObjects));
-            _chooseCameraTr = _instantiate.Instantiate("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<ModuleChooseCharactorTr>().ChooseCameraTr;
+            _chooseCameraTr = _instantiate.InstantiateByPath("Prefabs/Map/LobbyScene/ChoosePlayer").GetComponent<ModuleChooseCharactorTr>().ChooseCameraTr;
             _charactorSelect = Get<Transform>((int)Transforms.CharactorSelectTr);
             _backToLobbyButton = Get<Button>((int)Buttons.BackToLobbyButton);
             _buttonStart = Get<Button>((int)Buttons.ButtonStart);
@@ -238,7 +238,7 @@ namespace UI.Scene.SceneUI
         {
             if (_netWorkManager.IsHost)
             {
-                GameObject characterSelector = _instantiate.Instantiate("Prefabs/NGO/NGO_UI_Character_Select_Rect");
+                GameObject characterSelector = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_UI_Character_Select_Rect");
                 characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
                 if (characterSelector.GetComponent<NetworkObject>().IsOwner)
                 {

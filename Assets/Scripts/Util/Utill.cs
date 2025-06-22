@@ -14,28 +14,16 @@ namespace Util
 {
     public class Utill
     {
-        private static DiContainer _cachedContainer;
 
-        public static DiContainer GetSceneContainer()
-        {
-            if (_cachedContainer == null)
-            {
-                var context = Object.FindObjectOfType<SceneContext>();
-                _cachedContainer = context?.Container;
-            }
-            return _cachedContainer;
-        }
-        
-
-        public static T GetOrAddComponent<T>(GameObject go) where T : Component
-        {
-            var component = go.GetComponent<T>();
-            if (component == null)
-            {
-                component = GetSceneContainer().InstantiateComponent<T>(go);
-            }
-            return component;
-        }
+        // public static T GetOrAddComponent<T>(GameObject go) where T : Component
+        // {
+        //     var component = go.GetComponent<T>();
+        //     if (component == null)
+        //     {
+        //         component = GetSceneContainer().InstantiateComponent<T>(go);
+        //     }
+        //     return component;
+        // }
 
         public static Color GetItemGradeColor(ItemGradeType grade)
         {

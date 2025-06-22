@@ -13,9 +13,9 @@ namespace Module.CameraModule
         void Start()
         {
             _mainCamera = GameObject.Find("CinemachineBrainCamera") == true ? GameObject.Find("CinemachineBrainCamera") :
-                _instantiate.Instantiate("Prefabs/Camera/CinemachineBrainCamera");
+                _instantiate.InstantiateByPath("Prefabs/Camera/CinemachineBrainCamera");
 
-            _mainCamera.GetOrAddComponent<ModuleCallToFollwingCamera>();
+            _instantiate.GetOrAddComponent<ModuleCallToFollwingCamera>(_mainCamera);
         }
     }
 }

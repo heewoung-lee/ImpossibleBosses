@@ -11,7 +11,7 @@ namespace Module.PlayerModule
         private GameObject _playerTextureCamara;
         void Start()
         {
-            _playerTextureCamara = _instantiate.Instantiate("Prefabs/Player/PlayerInvenTextureCamera", transform);
+            _playerTextureCamara = _instantiate.InstantiateByPath("Prefabs/Player/PlayerInvenTextureCamera", transform);
         }
     }
 }

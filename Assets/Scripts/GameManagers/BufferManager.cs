@@ -41,14 +41,16 @@ namespace GameManagers
         }
         public BufferComponent InitBuff(BaseStats targetStat, float duration,StatEffect effect)
         {
-            BufferComponent buffer = _instantiate.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+            GameObject bufferGo = _instantiate.InstantiateByPath("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext);
+            BufferComponent buffer = _instantiate.GetOrAddComponent<BufferComponent>(bufferGo);
             buffer.InitAndStartBuff(targetStat, duration, effect);
             return buffer;
         }
 
         public BufferComponent InitBuff(BaseStats targetStat, float duration, BuffModifier bufferModifier,float value)
         {
-            BufferComponent buffer = _instantiate.Instantiate("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext).GetOrAddComponent<BufferComponent>();
+            GameObject bufferGo = _instantiate.InstantiateByPath("Prefabs/Buffer/Buffer", UIBufferBar.BufferContext);
+            BufferComponent buffer = _instantiate.GetOrAddComponent<BufferComponent>(bufferGo);
             buffer.InitAndStartBuff(targetStat, duration, bufferModifier, value);
             return buffer;
         }

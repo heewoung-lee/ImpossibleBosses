@@ -115,7 +115,7 @@ namespace UI.Scene.SceneUI
 
         public void TestGenerateBossSkill1()
         {
-            GameObject stone = _instantiate.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+            GameObject stone = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
             stone.transform.SetParent(Managers.VFXManager.VFXRootNgo, false);
             stone.transform.position = Managers.GameManagerEx.Player.transform.position + Vector3.up * 5f;
         }

@@ -212,7 +212,7 @@ namespace NetWork.NGO
 
         private NetworkObject SpawnObjectToResources(string path, Vector3 position = default, Transform parentTr = null)
         {
-            GameObject obj = _instantiate.Instantiate(path);
+            GameObject obj = _instantiate.InstantiateByPath(path);
             obj.transform.position = position;
             NetworkObject networkObj;
             networkObj = Managers.RelayManager.SpawnNetworkObj(obj, parentTr, position).GetComponent<NetworkObject>();

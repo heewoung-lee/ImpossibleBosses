@@ -32,7 +32,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         {
             base.OnStart();
             _tree = Owner.GetComponent<BehaviorTree>();
-            _ngoDropItemBehaviour = _instantiate.Instantiate("Prefabs/NGO/NGO_BossDropItemBehaviour");
+            _ngoDropItemBehaviour = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_BossDropItemBehaviour");
             Managers.RelayManager.SpawnNetworkObj(_ngoDropItemBehaviour,Managers.RelayManager.NgoRoot.transform);
             _index = 0;
             _isCallIndex = false;

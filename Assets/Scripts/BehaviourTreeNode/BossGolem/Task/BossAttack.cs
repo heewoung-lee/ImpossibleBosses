@@ -66,7 +66,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                 OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BaseAttackState);
                 _hasSpawnedParticles = false;
                 _indicatorController = _instantiate.
-                    Instantiate("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
+                    InstantiateByPath("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
                     .GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
                 _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject)

@@ -20,7 +20,7 @@ namespace Skill.AllofSkills.BossMonster.StoneGolem
         public void SpawnObjectToLocal(in SpawnParamBase stoneParams, string runtimePath = null)
         {
             Collider bossTr = Managers.GameManagerEx.BossMonster.transform.GetComponent<Collider>();
-            StoneGolemSkill1StoneInitialize stone = _instantiate.Instantiate(runtimePath).GetComponent<StoneGolemSkill1StoneInitialize>();
+            StoneGolemSkill1StoneInitialize stone = _instantiate.InstantiateByPath(runtimePath).GetComponent<StoneGolemSkill1StoneInitialize>();
             stone.transform.SetParent(Managers.VFXManager.VFXRoot, false);
             stone.transform.position = bossTr.transform.position + Vector3.up * bossTr.GetComponent<Collider>().bounds.max.y;
             stone.transform.rotation = Quaternion.Euler(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));

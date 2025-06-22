@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
@@ -11,6 +13,7 @@ namespace GameManagers
         #region Pool
         public class Pool
         {
+            [Inject] IInstantiate _instantiate;
             public GameObject Original { get; private set; }
             Stack<Poolable> _poolStack = new Stack<Poolable>();
             public Transform Root { get; private set; }
@@ -31,10 +34,9 @@ namespace GameManagers
 
             public Poolable Create()
             {
-                GameObject go = Object.Instantiate(Original);
+                GameObject go = _instantiate.InstantiateByObject(Original);
                 go.name = Original.name;
-
-                return go.GetOrAddComponent<Poolable>();
+                return _instantiate.GetOrAddComponent<Poolable>(go);
             }
 
             public void Push(Poolable item)

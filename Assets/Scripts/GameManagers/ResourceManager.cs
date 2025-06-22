@@ -39,7 +39,7 @@ namespace GameManagers
         }
 
 
-        public GameObject Instantiate(string path, Transform parent = null)
+        public GameObject InstantiateByPath(string path, Transform parent = null)
         {
 
             if (string.IsNullOrEmpty(path))
@@ -83,8 +83,31 @@ namespace GameManagers
                 }
             }
             //GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
-            GameObject go = _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
+            GameObject go = InstantiatePrefab(prefab, parent);
             return go;
+        }
+
+        public GameObject InstantiateByObject(GameObject gameobject, Transform parent = null)
+        {
+           return _container.InstantiatePrefab(gameobject, parent).RemoveCloneText();;
+        }
+
+        private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
+        {
+            return _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
+        }
+        
+        public T GetOrAddComponent<T>(GameObject go) where T : Component
+        {
+            go.SetActive(false);
+            T component = null;
+            component = go.GetComponent<T>();
+            if (component == null)
+            {
+                component = _container.InstantiateComponent<T>(go);
+            }
+            go.SetActive(true);
+            return component;
         }
 
         private bool IsCheckNetworkPrefab(GameObject prefab)

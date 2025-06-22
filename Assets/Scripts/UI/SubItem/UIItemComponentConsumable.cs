@@ -176,7 +176,7 @@ namespace UI.SubItem
 
         public override GameObject GetLootingItemObejct(IItem iteminfo)
         {
-            GameObject lootitem = _instantiate.Instantiate("Prefabs/LootingItem/Potion", Managers.LootItemManager.ItemRoot);
+            GameObject lootitem = _instantiate.InstantiateByPath("Prefabs/LootingItem/Potion", Managers.LootItemManager.ItemRoot);
             lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
             return lootitem;
         }

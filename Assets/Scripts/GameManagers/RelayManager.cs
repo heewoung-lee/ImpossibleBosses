@@ -72,7 +72,7 @@ namespace GameManagers
                     }
                     else
                     {
-                        _netWorkManager = _instantiate.Instantiate("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
+                        _netWorkManager = _instantiate.InstantiateByPath("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
                         Managers.DontDestroyOnLoad(_netWorkManager.gameObject);
                         _netWorkManager = NetworkManager.Singleton;
                     }
@@ -143,11 +143,11 @@ namespace GameManagers
             GameObject go = null;
             if (path == null)
             {
-                go = _instantiate.Instantiate($"Prefabs/NGO/{name}");
+                go = _instantiate.InstantiateByPath($"Prefabs/NGO/{name}");
             }
             else
             {
-                go = _instantiate.Instantiate($"{path}");
+                go = _instantiate.InstantiateByPath($"{path}");
             }
             go = SpawnNetworkObj(go, NgoRoot.transform);
             return go;
@@ -224,7 +224,7 @@ namespace GameManagers
 
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
-            GameObject instanceObj = _instantiate.Instantiate(ngoPath, parent);
+            GameObject instanceObj = _instantiate.InstantiateByPath(ngoPath, parent);
             return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
         }
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
@@ -238,7 +238,7 @@ namespace GameManagers
             if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
             {
                 instanceObj.transform.position = position;
-                NetworkObject networkObj = instanceObj.GetOrAddComponent<NetworkObject>();
+                NetworkObject networkObj = _instantiate.GetOrAddComponent<NetworkObject>(instanceObj);
                 if (networkObj.IsSpawned == false)
                 {
                     networkObj.SpawnWithOwnership(clientId, destroyOption);

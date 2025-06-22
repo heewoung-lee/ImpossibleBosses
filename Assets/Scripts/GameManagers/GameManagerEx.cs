@@ -88,7 +88,7 @@ namespace GameManagers
 
         public GameObject Spawn(string path, Transform parent = null)
         {
-            GameObject go = _instantiate.Instantiate(path, parent);
+            GameObject go = _instantiate.InstantiateByPath(path, parent);
 
             switch (GetWorldObjectType(go))
             {
@@ -159,7 +159,7 @@ namespace GameManagers
             if (_environment == null)
             {
                 GameObject environmentGo = new GameObject() { name = "@Environment" };
-                _environment = environmentGo.GetOrAddComponent<Environment>();
+                _environment = _instantiate.GetOrAddComponent<Environment>(environmentGo);
             }
             foreach (Transform childTr in _environment.transform)
             {

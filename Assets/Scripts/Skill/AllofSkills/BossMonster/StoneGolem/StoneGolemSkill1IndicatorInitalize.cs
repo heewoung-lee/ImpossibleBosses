@@ -16,7 +16,7 @@ namespace Skill.AllofSkills.BossMonster.StoneGolem
         [Inject] private IInstantiate _instantiate;
         public void SpawnObjectToLocal(in SpawnParamBase spawnparam, string runtimePath = null)
         {
-            IIndicatorBahaviour projector = _instantiate.Instantiate(runtimePath,Managers.VFXManager.VFXRoot).GetComponent<IIndicatorBahaviour>();
+            IIndicatorBahaviour projector = _instantiate.InstantiateByPath(runtimePath,Managers.VFXManager.VFXRoot).GetComponent<IIndicatorBahaviour>();
             IAttackRange attacker = (projector as Component).GetComponent<IAttackRange>();
             int attackDamage = spawnparam.ArgInteger;
             float durationTime = spawnparam.ArgFloat;

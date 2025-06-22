@@ -13,7 +13,7 @@ namespace GameManagers
 
         Dictionary<string,AudioClip> _sfxDictionnary = new Dictionary<string,AudioClip>();
         [Inject] IResourcesLoader _resourcesLoader;
-
+        [Inject] IInstantiate _instantiate;
 
         //Init()으로 현재 씬에서 @Sound 매니저가 있는지 확인.
         //없다면 새로 만들고 다른씬에서도 안 부셔지게끔 설정
@@ -42,7 +42,7 @@ namespace GameManagers
             for (int i = 0; i< _soundsType.Length; i++)
             {
                 GameObject sound = new GameObject() { name = _soundsType[i]};
-                _audioSources[i] = Utill.GetOrAddComponent<AudioSource>(sound);
+                _audioSources[i] = _instantiate.GetOrAddComponent<AudioSource>(sound);
                 sound.transform.parent = go.transform;
             }
 

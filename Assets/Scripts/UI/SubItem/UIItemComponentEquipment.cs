@@ -108,13 +108,13 @@ namespace UI.SubItem
             {
                 case EquipmentSlotType.Helmet:
                 case EquipmentSlotType.Armor:
-                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Shield", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.InstantiateByPath("Prefabs/LootingItem/Shield", Managers.LootItemManager.ItemRoot);
                     break;
                 case EquipmentSlotType.Weapon:
-                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Sword", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.InstantiateByPath("Prefabs/LootingItem/Sword", Managers.LootItemManager.ItemRoot);
                     break;
                 default:
-                    lootItem = _instantiate.Instantiate("Prefabs/LootingItem/Bag", Managers.LootItemManager.ItemRoot);
+                    lootItem = _instantiate.InstantiateByPath("Prefabs/LootingItem/Bag", Managers.LootItemManager.ItemRoot);
                     break;
             }
             lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);

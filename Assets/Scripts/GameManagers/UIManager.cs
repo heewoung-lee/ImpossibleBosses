@@ -139,8 +139,8 @@ namespace GameManagers
             if (name == null)
                 name = typeof(T).Name;
 
-            GameObject go = _instantiate.Instantiate($"Prefabs/UI/Popup/{name}");
-            T popup = Utill.GetOrAddComponent<T>(go);
+            GameObject go = _instantiate.InstantiateByPath($"Prefabs/UI/Popup/{name}");
+            T popup = _instantiate.GetOrAddComponent<T>(go);
 
             //_ui_Popups.Push(popup);
             //ShowPopupUI(popup);
@@ -165,34 +165,16 @@ namespace GameManagers
             GameObject go = null;
             if (path == null)
             {
-                go = _instantiate.Instantiate($"Prefabs/UI/MainUI/{name}");
+                go = _instantiate.InstantiateByPath($"Prefabs/UI/MainUI/{name}");
             }
             else
             {
-                go = _instantiate.Instantiate($"{path}");
+                go = _instantiate.InstantiateByPath($"{path}");
             }
-            go.SetActive(false);
-            T scene = GetOrAddComponent<T>(go);
+            T scene = _instantiate.GetOrAddComponent<T>(go);
             _uiSceneDict.Add(typeof(T), scene);
             go.transform.SetParent(Root.transform);
-            go.SetActive(true);
             return scene;
-
-
-
-            T GetOrAddComponent<T>(GameObject go) where T : UIScene
-            {
-                if (go.TryGetComponent(out T component) == true)
-                {
-                    return component;
-                }
-                else
-                {
-                    T requireComponent = _container.InstantiateComponent<T>(go);
-                    return requireComponent;
-                }
-            }
-
         }
         
         
@@ -214,7 +196,7 @@ namespace GameManagers
                 name = typeof(T).Name;
 
 
-            GameObject go = _instantiate.Instantiate($"Prefabs/UI/WorldSpace/{name}");
+            GameObject go = _instantiate.InstantiateByPath($"Prefabs/UI/WorldSpace/{name}");
 
             if (parent != null)
                 go.transform.SetParent(parent);
@@ -239,16 +221,16 @@ namespace GameManagers
             GameObject go;
             if (path == null)
             {
-                go = _instantiate.Instantiate($"Prefabs/UI/SubItem/{name}");
+                go = _instantiate.InstantiateByPath($"Prefabs/UI/SubItem/{name}");
             }
             else
             {
-                go = _instantiate.Instantiate($"{path}");
+                go = _instantiate.InstantiateByPath($"{path}");
             }
             if (parent != null)
                 go.transform.SetParent(parent);
 
-            return Utill.GetOrAddComponent<T>(go);
+            return _instantiate.GetOrAddComponent<T>(go);
         }
 
         public void ShowPopupUI(UIPopup popup)
@@ -259,8 +241,8 @@ namespace GameManagers
                 return;
             else if (handler == null && popup.gameObject.activeSelf == true)
                 return;
-
-            Canvas canvas = Utill.GetOrAddComponent<Canvas>(popup.gameObject);
+            
+            Canvas canvas = _instantiate.GetOrAddComponent<Canvas>(popup.gameObject);
             SetCanvas(canvas, true);
             _uiPopups.Push(popup);
 

@@ -71,7 +71,7 @@ namespace GameManagers
                 Debug.LogWarning("This Prefab is a NetworkObject so it won't be spawned locally");
                 return null;
             }
-            GameObject particleObject = _instantiate.Instantiate(path);
+            GameObject particleObject = _instantiate.InstantiateByPath(path);
 
             return particleObject;
         }

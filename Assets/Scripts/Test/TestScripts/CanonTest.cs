@@ -33,7 +33,7 @@ namespace Test.TestScripts
             targetTransform = Managers.GameManagerEx.Player.transform;
 
             // 발사체 생성
-            GameObject projectile = _instantiate.Instantiate("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
+            GameObject projectile = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
 
             projectile.transform.SetParent(Managers.VFXManager.VFXRootNgo);
             projectile.transform.position += Vector3.up * GetComponent<Collider>().bounds.max.y;

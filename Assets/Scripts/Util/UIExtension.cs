@@ -15,18 +15,14 @@ namespace Util
 {
     public static class UIExtension
     {
-        public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
-        {
-            return Utill.GetOrAddComponent<T>(go);
-        }
-        public static void AddUIEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
-        {
-            UIBase.BindEvent(go, action, mouseEvent);
-        }
-        public static void UnUIEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
-        {
-            UIBase.UnBindEvent(go, action, mouseEvent);
-        }
+        // public static void AddUIEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        // {
+        //     UIBase.BindEvent(go, action, mouseEvent);
+        // }
+        // public static void UnUIEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent mouseEvent = Define.UIEvent.LeftClick)
+        // {
+        //     UIBase.UnBindEvent(go, action, mouseEvent);
+        // }
         public static bool TryGetTask<T>(this BehaviorTree tree, out T task) where T : BehaviorDesigner.Runtime.Tasks.Task
         {
             task = tree.FindTask<T>();

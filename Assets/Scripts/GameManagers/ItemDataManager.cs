@@ -122,13 +122,13 @@ namespace GameManagers
             {
                 case EquipmentSlotType.Helmet:
                 case EquipmentSlotType.Armor:
-                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Shield");
+                    lootItem = _instantiate.InstantiateByPath("NGO/LootingItem/Shield");
                     break;
                 case EquipmentSlotType.Weapon:
-                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Sword");
+                    lootItem = _instantiate.InstantiateByPath("NGO/LootingItem/Sword");
                     break;
                 default:
-                    lootItem = _instantiate.Instantiate("NGO/LootingItem/Bag");
+                    lootItem = _instantiate.InstantiateByPath("NGO/LootingItem/Bag");
                     break;
             }
             lootItem.GetComponent<LootItem>().SetIteminfo(iteminfo);
@@ -137,7 +137,7 @@ namespace GameManagers
 
         public GameObject GetConsumableLootItem(IItem iteminfo)
         {
-            GameObject lootitem = _instantiate.Instantiate("NGO/LootingItem/Potion");
+            GameObject lootitem = _instantiate.InstantiateByPath("NGO/LootingItem/Potion");
             lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
             return lootitem;
         }

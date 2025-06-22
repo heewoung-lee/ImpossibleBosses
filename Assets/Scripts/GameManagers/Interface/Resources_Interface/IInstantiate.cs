@@ -6,7 +6,8 @@ namespace GameManagers.Interface.Resources_Interface
     public interface IInstantiate
     {
         Dictionary<string, GameObject> CachingPoolableObject { get; }
-        public GameObject Instantiate(string path, Transform parent = null);
-
+        public GameObject InstantiateByPath(string path, Transform parent = null);
+        public GameObject InstantiateByObject(GameObject gameobject, Transform parent = null);
+        public T GetOrAddComponent<T>(GameObject go) where T : Component;
     }
 }
