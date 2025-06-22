@@ -21,6 +21,8 @@ namespace UI.Popup.PopupUI
 {
     public class UIShop : UIPopup
     {
+        [Inject] GameManagerEx _gameManagerEx;
+        
         private readonly string _focusTabColorHexcode = "#F6E19C";
         private readonly string _nonfocusTabColorHexcode = "#BEB5B6";
         enum ItemShopText
@@ -106,13 +108,13 @@ namespace UI.Popup.PopupUI
             _eventSystem = FindAnyObjectByType<EventSystem>();
 
 
-            if (Managers.GameManagerEx.Player == null || Managers.GameManagerEx.Player.GetComponent<PlayerStats>() == null)
+            if (_gameManagerEx.Player == null || _gameManagerEx.Player.GetComponent<PlayerStats>() == null)
             {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += InitializePlayerStatEvent;
+                _gameManagerEx.OnPlayerSpawnEvent += InitializePlayerStatEvent;
             }
             else
             {
-              _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+              _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
             }
         }
 
@@ -211,17 +213,17 @@ namespace UI.Popup.PopupUI
 
         protected override void StartInit()
         {
-            if (Managers.GameManagerEx.Player == null)
+            if (_gameManagerEx.Player == null)
             {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += (playerStats) =>
+                _gameManagerEx.OnPlayerSpawnEvent += (playerStats) =>
                 {
-                    Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+                    _gameManagerEx.Player.GetComponent<PlayerStats>();
                     UpdateHasGoldChanged(_playerStats.Gold);
                 };
             }
             else
             {
-                _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+                _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
                 UpdateHasGoldChanged(_playerStats.Gold);
             }
             RandomItemRespawn();

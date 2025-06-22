@@ -8,6 +8,7 @@ using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.UI_Interface;
 using NetWork.LootItem;
 using TMPro;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Util;
@@ -24,7 +25,7 @@ namespace UI.SubItem
 
         private TMP_Text _itemCountText;
         private string _itemGuid;
-        private UI_ConsumableBar _consumableBar;
+        private UIConsumableBar _consumableBar;
         private int _itemCount;
         private float _duringbuff;
         [Inject] private IUISceneManager _uiManager;
@@ -55,7 +56,7 @@ namespace UI.SubItem
         protected override void StartInit()
         {
             base.StartInit();
-            _consumableBar = _uiManager.Get_Scene_UI<UI_ConsumableBar>();
+            _consumableBar = _uiManager.Get_Scene_UI<UIConsumableBar>();
             _itemCountText.text = $"{_itemCount}";
             CombineConsumableItems();
         }

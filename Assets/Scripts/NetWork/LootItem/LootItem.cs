@@ -23,6 +23,7 @@ namespace NetWork.LootItem
         private UIPlayerInventory _uiPlayerInventory;
         private NetworkObject _networkObject;
         [Inject] private UIManager _uiManager;
+        [Inject] GameManagerEx _gameManagerEx;
         
         
         private Vector3 _dropPosition;
@@ -165,7 +166,7 @@ namespace NetWork.LootItem
         [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]
         public void DisEnble_Icon_UI_Rpc()
         {
-            ModulePlayerInteraction interaction = Managers.GameManagerEx.Player.GetComponentInChildren<ModulePlayerInteraction>();
+            ModulePlayerInteraction interaction = _gameManagerEx.Player.GetComponentInChildren<ModulePlayerInteraction>();
             if (interaction.enabled == false)
                 return;
 

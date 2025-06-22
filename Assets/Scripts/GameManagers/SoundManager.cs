@@ -7,7 +7,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class SoundManager : IManagerInitializable,IManagerIResettable
+    internal class SoundManager : IInitializable,IManagerIResettable
     {
         AudioSource[] _audioSources = new AudioSource[System.Enum.GetValues(typeof(Define.Sound)).Length];
 
@@ -29,7 +29,7 @@ namespace GameManagers
         //BGM용 사운드는 반복재생으로 설정
 
 
-        public void Init()
+        public void Initialize()
         {
 
             GameObject go = GameObject.Find("@Sound");
@@ -38,10 +38,10 @@ namespace GameManagers
                 go = new GameObject() { name = "@Sound" };
             }
             UnityEngine.Object.DontDestroyOnLoad(go);
-            string[] _soundsType = Enum.GetNames(typeof(Define.Sound));
-            for (int i = 0; i< _soundsType.Length; i++)
+            string[] soundsType = Enum.GetNames(typeof(Define.Sound));
+            for (int i = 0; i< soundsType.Length; i++)
             {
-                GameObject sound = new GameObject() { name = _soundsType[i]};
+                GameObject sound = new GameObject() { name = soundsType[i]};
                 _audioSources[i] = _instantiate.GetOrAddComponent<AudioSource>(sound);
                 sound.transform.parent = go.transform;
             }
@@ -120,7 +120,6 @@ namespace GameManagers
 
             return clip;
         }
-
 
     }
 }

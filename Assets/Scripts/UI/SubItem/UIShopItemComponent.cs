@@ -19,6 +19,8 @@ namespace UI.SubItem
     {
         [Inject] IDestroyObject _destroyer;
         [Inject] private ItemDataManager _itemDataManager;
+        [Inject] GameManagerEx _gameManagerEx;
+        
         
         enum ItemICons
         {
@@ -90,7 +92,7 @@ namespace UI.SubItem
         {
             base.StartInit();
             _itemNameText.text = _itemName;
-            _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+            _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
             _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _uiShop = _uiManager.GetImportant_Popup_UI<UIShop>();
             _itemGradeBorderImage.sprite = _itemDataManager.ItemGradeBorder[ItemGradeType];

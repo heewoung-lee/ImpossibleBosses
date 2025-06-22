@@ -1,4 +1,5 @@
 using GameManagers;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ namespace Module.UI_Module
         [Inject] private UIManager _uimanager;
         void Start()
         {
-            UI_Player_Info playerInfoUI = _uimanager.GetSceneUIFromResource<UI_Player_Info>();
+            UIPlayerInfo playerInfoUI = _uimanager.GetSceneUIFromResource<UIPlayerInfo>();
         }
     }
 }

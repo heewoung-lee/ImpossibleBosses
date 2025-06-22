@@ -1451,7 +1451,7 @@ GameObject:
   - component: {fileID: 6620606433753735713}
   - component: {fileID: 9149421432870127823}
   m_Layer: 5
-  m_Name: UI_ConsumableBar
+  m_Name: UIConsumableBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

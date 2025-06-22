@@ -9,7 +9,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class InputManager : IManagerInitializable,IInputAsset
+    internal class InputManager : IInitializable,IInputAsset
     {
         [Inject] IResourcesLoader _resourcesLoader;
         private InputActionAsset _inputActionAsset;
@@ -33,7 +33,7 @@ namespace GameManagers
 
         //public Action<Vector3> playerMouseClickPositionEvent;
         //6.11일 플레이어의포지션에 클릭포지션에 따라 수행되는 이벤트 제거, 클래스가 수행하지 않아도될 책임을 지게 되는 터라 삭제함,
-        public void Init()
+        public void Initialize()
         {
             _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
             _inputActionMapDict = InitActionMapDict(_inputActionAsset);

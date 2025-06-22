@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ namespace UI.Popup.PopupUI
         TMP_InputField _pwInputField;
         private UIAlertPopupBase _alertPopup;
         private UIAlertPopupBase _confirmPopup;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiPopupManager;
 
         
         
@@ -74,23 +75,23 @@ namespace UI.Popup.PopupUI
 
         public void ShowLoginAfterSignUp()
         {
-            _uiManager.CloseAllPopupUI();
-            UILoginPopup uiLoginPopup = _uiManager.GetImportant_Popup_UI<UILoginPopup>();
-            _uiManager.ShowPopupUI(uiLoginPopup);
+            _uiPopupManager.CloseAllPopupUI();
+            UILoginPopup uiLoginPopup = _uiPopupManager.GetImportant_Popup_UI<UILoginPopup>();
+            _uiPopupManager.ShowPopupUI(uiLoginPopup);
         }
 
         private UIAlertPopupBase ShowAlertDialogUI<T>(UIAlertPopupBase alertBasePopup,string titleMessage,string bodyText,UnityAction closeButtonAction = null) where T: UIAlertPopupBase
         {
             if(alertBasePopup == null)
             {
-                alertBasePopup = _uiManager.GetPopupInDict<T>();
+                alertBasePopup = _uiPopupManager.GetPopupInDict<T>();
             }
             alertBasePopup.SetText(titleMessage, bodyText);
             if (closeButtonAction != null)
             {
                 alertBasePopup.SetCloseButtonOverride(closeButtonAction);
             }
-            _uiManager.ShowPopupUI(alertBasePopup);
+            _uiPopupManager.ShowPopupUI(alertBasePopup);
 
             return alertBasePopup;
         }
@@ -101,7 +102,7 @@ namespace UI.Popup.PopupUI
 
         public void OnClickCloseButton()
         {
-            _uiManager.ClosePopupUI(this);
+            _uiPopupManager.ClosePopupUI(this);
         }
     }
 }

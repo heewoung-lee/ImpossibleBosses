@@ -9,7 +9,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class SkillManager : IManagerInitializable,IManagerIResettable
+    public class SkillManager : IInitializable
     {
         
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
@@ -49,7 +49,7 @@ namespace GameManagers
                 return _uiSkillBar;
             }
         }
-        public void Init()
+        public void Initialize()
         {
             //Skill/AllofSkill에 있는 타입들을 가져온다.
             _skillType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);

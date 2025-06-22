@@ -19,6 +19,7 @@ namespace Controller
         private InputAction _mouseDelta;
         private InputAction _mouseScroll;
         [Inject] private IInputAsset _inputManager;
+        [Inject] GameManagerEx _gameManagerEx;
 
         private bool _mouseMiddleButtonPressed = false;
         private void Awake()
@@ -26,13 +27,13 @@ namespace Controller
             _camera = GetComponent<CinemachineCamera>();
             _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
 
-            if(Managers.GameManagerEx.Player == null)
+            if(_gameManagerEx.Player == null)
             {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += InitializeFollowingCamera;
+                _gameManagerEx.OnPlayerSpawnEvent += InitializeFollowingCamera;
             }
             else
             {
-                InitializeFollowingCamera(Managers.GameManagerEx.Player.GetComponent<PlayerStats>());
+                InitializeFollowingCamera(_gameManagerEx.Player.GetComponent<PlayerStats>());
             }
         }
 

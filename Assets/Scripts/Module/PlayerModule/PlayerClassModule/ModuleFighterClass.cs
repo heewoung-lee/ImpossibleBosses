@@ -4,11 +4,14 @@ using Player;
 using Stats;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Module.PlayerModule.PlayerClassModule
 {
     public class ModuleFighterClass : ModulePlayerClass
     {
+        [Inject] GameManagerEx _gameManagerEx;
+        
         private const float DefalutTransitionRoar = 0.1f;
         private const float DefalutTransitionTaunt = 0.1f;
         private const float DefalutTransitionSlash = 0.3f;
@@ -54,7 +57,7 @@ namespace Module.PlayerModule.PlayerClassModule
             }
             else
             {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += Initialize_Player_DoneEvent;
+                _gameManagerEx.OnPlayerSpawnEvent += Initialize_Player_DoneEvent;
             }
 
         }

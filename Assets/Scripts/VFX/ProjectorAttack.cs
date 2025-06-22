@@ -1,28 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameManagers;
 using Stats.BaseStats;
 using UnityEngine;
 using Util;
+using Zenject;
 
-public class ProjectorAttack : MonoBehaviour, IAttackRange
+namespace VFX
 {
-    IIndicatorBahaviour projector;
-    private void Start()
+    public class ProjectorAttack : MonoBehaviour, IAttackRange
     {
-        projector = GetComponent<IIndicatorBahaviour>();
+        [Inject] GameManagerEx _gameManagerEx;
+        IIndicatorBahaviour _projector;
+        private void Start()
+        {
+            _projector = GetComponent<IIndicatorBahaviour>();
+        }
+
+        public float ViewAngle => _projector.Angle;
+
+        public float ViewDistance => _projector.Arc;
+        public Transform OwnerTransform => _gameManagerEx.BossMonster.transform;
+        public Vector3 AttackPosition => transform.position;
+
+        public LayerMask TarGetLayer { get => LayerMask.GetMask(
+            Utill.GetLayerID(Define.ControllerLayer.Player),
+            Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)); }
+
     }
-
-    public float ViewAngle => projector.Angle;
-
-    public float ViewDistance => projector.Arc;
-
-    public Transform OwnerTransform => Managers.GameManagerEx.BossMonster.transform;
-    //여기에서 Owner_Transform을 보스로 바꿔야하는데 어떻게 바꿔야하나..
-    public Vector3 AttackPosition => transform.position;
-
-    public LayerMask TarGetLayer { get => LayerMask.GetMask(
-        Utill.GetLayerID(Define.ControllerLayer.Player),
-        Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer)); }
-
 }

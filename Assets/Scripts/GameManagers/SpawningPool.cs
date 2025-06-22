@@ -10,6 +10,7 @@ namespace GameManagers
     public class SpawningPool : MonoBehaviour
     {
         [Inject] IInstantiate _instantiate;
+        [Inject] GameManagerEx _gameManagerEx;
         
         private int _monsterCount = 0;
         private int _reserveMonsterCount = 0;
@@ -26,8 +27,8 @@ namespace GameManagers
 
         private void Start()
         {
-            Managers.GameManagerEx.SpawnEvent -= AddCount;
-            Managers.GameManagerEx.SpawnEvent += AddCount;
+            _gameManagerEx.SpawnEvent -= AddCount;
+            _gameManagerEx.SpawnEvent += AddCount;
         }
 
         public void SetKeepMonsterCount(int keepMonsterCount)
@@ -47,7 +48,7 @@ namespace GameManagers
         {
             _reserveMonsterCount++;
             yield return new WaitForSeconds(Random.Range(0,_spawnTime));
-            GameObject enemy = Managers.GameManagerEx.Spawn("Prefabs/Enemy/EnemyCube", transform);
+            GameObject enemy = _gameManagerEx.Spawn("Prefabs/Enemy/EnemyCube", transform);
             NavMeshAgent nma = _instantiate.GetOrAddComponent<NavMeshAgent>(enemy);
             Vector3 ranpos = Vector3.zero;
             while (true)

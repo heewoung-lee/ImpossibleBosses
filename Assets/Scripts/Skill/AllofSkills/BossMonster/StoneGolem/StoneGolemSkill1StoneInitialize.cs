@@ -13,13 +13,14 @@ namespace Skill.AllofSkills.BossMonster.StoneGolem
         
         [Inject] private IInstantiate _instantiate;
         [Inject] IDestroyObject _destroyer;
+        [Inject] GameManagerEx _gameManagerEx;
         
         private const float MaxHeight = 3f;
         private const int FlightdurationTime = 1;
     
         public void SpawnObjectToLocal(in SpawnParamBase stoneParams, string runtimePath = null)
         {
-            Collider bossTr = Managers.GameManagerEx.BossMonster.transform.GetComponent<Collider>();
+            Collider bossTr = _gameManagerEx.BossMonster.transform.GetComponent<Collider>();
             StoneGolemSkill1StoneInitialize stone = _instantiate.InstantiateByPath(runtimePath).GetComponent<StoneGolemSkill1StoneInitialize>();
             stone.transform.SetParent(Managers.VFXManager.VFXRoot, false);
             stone.transform.position = bossTr.transform.position + Vector3.up * bossTr.GetComponent<Collider>().bounds.max.y;

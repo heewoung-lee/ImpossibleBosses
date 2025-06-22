@@ -38,6 +38,7 @@ namespace UI.Popup.PopupUI
         private EventSystem _eventSystem;
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] GameManagerEx _gameManagerEx;
 
         public Transform ItemInventoryTr => _itemInventoryTr;
         public GraphicRaycaster UIInventoryRayCaster=> _uiInventoryRaycaster;
@@ -48,7 +49,7 @@ namespace UI.Popup.PopupUI
             {
                 if(_ownerPlayerStats == null )
                 {
-                    if (Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out PlayerStats stats) == true)
+                    if (_gameManagerEx.Player != null && _gameManagerEx.Player.TryGetComponent(out PlayerStats stats) == true)
                     {
                         _ownerPlayerStats = stats;
                     }

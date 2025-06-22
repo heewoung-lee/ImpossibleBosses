@@ -1,4 +1,5 @@
 using GameManagers;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using Zenject;
 
@@ -10,7 +11,7 @@ namespace Module.EnemyModule
 
         private void Start()
         {
-            UI_Boss_HP bossHpUI = _uiManager.GetSceneUIFromResource<UI_Boss_HP>();
+            UIBossHp bossHpUI = _uiManager.GetSceneUIFromResource<UIBossHp>();
         }
 
     }

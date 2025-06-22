@@ -11,7 +11,7 @@ using Zenject;
 using Random = UnityEngine.Random;
 namespace GameManagers
 {
-    public class ItemDataManager : IManagerInitializable
+    public class ItemDataManager:IInitializable
     {
         [Inject] private IResourcesLoader _loader;
         [Inject] private IInstantiate _instantiate;
@@ -23,7 +23,7 @@ namespace GameManagers
         private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
         private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
         private List<Type> _itemDataType;
-        public void Init()
+        public void Initialize()
         {
 
             //폴더내에 있는 타입들을 긁어와서 데이터를 읽는다.

@@ -13,7 +13,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class BufferManager:IManagerInitializable
+    public class BufferManager: IInitializable
     {
         
         
@@ -67,7 +67,7 @@ namespace GameManagers
             _destroyer.DestroyObject(buffer.gameObject);
         }
 
-        public void Init()
+        public void Initialize()
         {
             _requestType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
             foreach(Type type in _requestType)

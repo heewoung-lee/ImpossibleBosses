@@ -1,5 +1,6 @@
 using System;
 using GameManagers;
+using GameManagers.Interface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ namespace UI.Popup.PopupUI
         private TMP_InputField _pwInputField;
         private UICreateNickName _uiCreateNickName;
         private UIAlertPopupBase _uiAlertPopupBase;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiPopupManager;
 
         public UICreateNickName UICreateNickName
         {
@@ -38,7 +39,7 @@ namespace UI.Popup.PopupUI
             {
                 if (_uiCreateNickName == null)
                 {
-                    _uiCreateNickName = _uiManager.GetPopupInDict<UICreateNickName>();
+                    _uiCreateNickName = _uiPopupManager.GetPopupInDict<UICreateNickName>();
                 }
 
                 return _uiCreateNickName;
@@ -64,7 +65,7 @@ namespace UI.Popup.PopupUI
             _closeButton.onClick.AddListener(OnClickCloseButton);
             _signupButton.onClick.AddListener(ShowSignUpUI);
             _confirmButton.onClick.AddListener(() => AuthenticateUser(_idInputField.text, _pwInputField.text));
-            _uiManager.AddImportant_Popup_UI(this);
+            _uiPopupManager.AddImportant_Popup_UI(this);
         }
 
         protected override void StartInit()
@@ -73,7 +74,7 @@ namespace UI.Popup.PopupUI
 
         public void ShowSignUpUI()
         {
-            if (_uiManager.TryGetPopupDictAndShowPopup(out UISignUpPopup popup) == true)
+            if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UISignUpPopup popup) == true)
             {
             }
         }
@@ -93,7 +94,7 @@ namespace UI.Popup.PopupUI
 
             if (Utill.IsAlphanumeric(userID) == false) //영문+숫자외 다른 문자가 섞인경우.
             {
-                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
+                if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
                 {
                     uiAlertDialog.AlertSetText("난 한글을 사랑하지만..", "아이디는 영문+숫자 조합으로만 쓸 수 있습니다.")
                         .AfterAlertEvent(() => { _confirmButton.interactable = true; });
@@ -108,7 +109,7 @@ namespace UI.Popup.PopupUI
 
                 if (playerinfo.Equals(default))
                 {
-                    if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
+                    if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog uiAlertDialog) == true)
                     {
                         uiAlertDialog.AlertSetText("오류", "아이디와 비밀번호가 틀립니다")
                             .AfterAlertEvent(() => { _confirmButton.interactable = true; });
@@ -119,7 +120,7 @@ namespace UI.Popup.PopupUI
 
                 if (string.IsNullOrEmpty(playerinfo.NickName))
                 {
-                    _uiManager.ShowPopupUI(UICreateNickName);
+                    _uiPopupManager.ShowPopupUI(UICreateNickName);
                     UICreateNickName.PlayerLoginInfo = playerinfo;
                     _confirmButton.interactable = true;
                     return;
@@ -128,7 +129,7 @@ namespace UI.Popup.PopupUI
             catch (Exception ex)
             {
                 Debug.Log($"Error: {ex}\nNot Connetced Internet");
-                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                 {
                     dialog.AlertSetText("오류", "인터넷 연결이 안됐습니다.")
                         .AfterAlertEvent(() => { _confirmButton.interactable = true; });
@@ -143,7 +144,7 @@ namespace UI.Popup.PopupUI
                 bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene(); //로그인을 시도;
                 if (checkPlayerNickNameAlreadyConnected is true)
                 {
-                    if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                    if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                     {
                         dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
                             .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
@@ -156,7 +157,7 @@ namespace UI.Popup.PopupUI
             catch (Exception ex)
             {
                 Debug.Log($"오류{ex}");
-                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
+                if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                 {
                     dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
                         .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
@@ -169,7 +170,7 @@ namespace UI.Popup.PopupUI
 
         public void OnClickCloseButton()
         {
-            _uiManager.ClosePopupUI(this);
+            _uiPopupManager.ClosePopupUI(this);
         }
     }
 }

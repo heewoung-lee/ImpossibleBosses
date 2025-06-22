@@ -1,11 +1,13 @@
 using GameManagers;
 using Player;
 using UnityEngine;
+using Zenject;
 
 namespace Controller
 {
     public class MoveMarkerController : MonoBehaviour
     {
+        [Inject] GameManagerEx _gameManagerEx;
         private void RegiterPlayerMoveMarker(PlayerController controller)
         {
             controller.OnPlayerMouseClickPosition += InstantiateMoveMarker;
@@ -19,21 +21,21 @@ namespace Controller
         
         private void OnEnable()
         {
-            if (Managers.GameManagerEx.Player == null || Managers.GameManagerEx.Player.GetComponent<PlayerController>() == null)
+            if (_gameManagerEx.Player == null || _gameManagerEx.Player.GetComponent<PlayerController>() == null)
             {
-                Managers.GameManagerEx.OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
+                _gameManagerEx.OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
             }
             else
             {
-                RegiterPlayerMoveMarker(Managers.GameManagerEx.Player.GetComponent<PlayerController>());
+                RegiterPlayerMoveMarker(_gameManagerEx.Player.GetComponent<PlayerController>());
             }
         }
 
         private void OnDisable()
         {
-            Managers.GameManagerEx.OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
+            _gameManagerEx.OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
             //구독되어있는 마커이벤트를 빼주고,
-            GameObject player = Managers.GameManagerEx.Player;
+            GameObject player = _gameManagerEx.Player;
             if (player != null && player.TryGetComponent(out PlayerController controller) == true)
             {
                 UnRegiterPlayerMoveMarker(controller);

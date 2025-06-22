@@ -35,6 +35,7 @@ namespace UI.SubItem
         protected EventSystem _eventSystem;
         [Inject] private IUIPopupManager _popupUIManager;
         [Inject] private ItemDataManager _itemDataManager;
+        [Inject] GameManagerEx _gameManagerEx;
 
         public event Action OnAfterStart
         {
@@ -121,7 +122,7 @@ namespace UI.SubItem
         {
             RemoveItemFromInventory();
             IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
-            Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,Managers.GameManagerEx.Player.transform.position);
+            Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,_gameManagerEx.Player.transform.position);
         }
 
         protected void AttachItemToSlot(GameObject go, Transform slot)

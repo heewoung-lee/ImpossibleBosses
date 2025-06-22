@@ -24,13 +24,15 @@ namespace UI.Scene.SceneUI
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IInstantiate _instantiate;
         [Inject] private ItemDataManager _itemDataManager;
+        [Inject] GameManagerEx _gameManagerEx;
+        
         public PlayerStats PlayerStats
         {
             get
             {
                 if(_playerStats == null)
                 {
-                    _playerStats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+                    _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
                 }
                 return _playerStats;
             }
@@ -90,8 +92,8 @@ namespace UI.Scene.SceneUI
                 TestGetDamaged();
                 //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
                 //_ = FindMyJoinCodeAsync();
-                Debug.Log(Managers.GameManagerEx.Player.transform.position+"플레이어 좌표");
-                //Managers.GameManagerEx.Player.transform.position = Vector3.zero;
+                Debug.Log(_gameManagerEx.Player.transform.position+"플레이어 좌표");
+                //_gameManagerEx.Player.transform.position = Vector3.zero;
             }
             void MoveScene()
             {
@@ -101,7 +103,7 @@ namespace UI.Scene.SceneUI
             //void AllLevelup()
             //{
             //    int layerMask = LayerMask.GetMask("Player", "AnotherPlayer");
-            //    Collider[] hitColliders = Physics.OverlapSphere(Managers.GameManagerEx.Player.transform.position, 10f, layerMask);
+            //    Collider[] hitColliders = Physics.OverlapSphere(_gameManagerEx.Player.transform.position, 10f, layerMask);
             //    foreach (var collider in hitColliders)
             //    {
             //      Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Level_up", collider.transform);
@@ -117,7 +119,7 @@ namespace UI.Scene.SceneUI
         {
             GameObject stone = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
             stone.transform.SetParent(Managers.VFXManager.VFXRootNgo, false);
-            stone.transform.position = Managers.GameManagerEx.Player.transform.position + Vector3.up * 5f;
+            stone.transform.position = _gameManagerEx.Player.transform.position + Vector3.up * 5f;
         }
 
         public void TestIteminInventort()

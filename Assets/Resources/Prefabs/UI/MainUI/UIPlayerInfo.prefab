@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6749616434683080863}
   - component: {fileID: 1673065412703891355}
   m_Layer: 5
-  m_Name: UI_Player_Info
+  m_Name: UIPlayerInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 6242461251325678044}
   - component: {fileID: 1577087594746972366}
   m_Layer: 5
-  m_Name: HP_Text
+  m_Name: HpText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -827,7 +827,7 @@ GameObject:
   - component: {fileID: 527802597119704820}
   - component: {fileID: 5215293826510580478}
   m_Layer: 5
-  m_Name: Level_Text
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1040,7 +1040,7 @@ GameObject:
   - component: {fileID: 1395674901728639695}
   - component: {fileID: 155006492528909198}
   m_Layer: 5
-  m_Name: PlayerName_Text
+  m_Name: PlayerNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1372,7 +1372,7 @@ GameObject:
   - component: {fileID: 3762580391088858489}
   - component: {fileID: 1648930878654019613}
   m_Layer: 5
-  m_Name: Player_HP_Slider
+  m_Name: PlayerHpSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

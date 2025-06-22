@@ -8,11 +8,13 @@ using NetWork.BaseNGO;
 using Unity.Netcode;
 using UnityEngine;
 using VFX;
+using Zenject;
 
 namespace NetWork.Boss_NGO
 {
     public struct CurrentAnimInfo : INetworkSerializable
     {
+        
         public float AnimLength;
         public float DecelerationRatio;
         public float AnimStopThreshold;
@@ -43,6 +45,8 @@ namespace NetWork.Boss_NGO
 
     public class BossGolemNetworkController : NetworkBehaviourBase
     {
+        [Inject] GameManagerEx _gameManagerEx;
+        
         private readonly float _normalAnimSpeed = 1f;
         private readonly float _maxAnimSpeed = 3f;
 
@@ -71,7 +75,7 @@ namespace NetWork.Boss_NGO
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            Managers.GameManagerEx.SetBossMonster(gameObject);
+            _gameManagerEx.SetBossMonster(gameObject);
             if (IsHost == false)
             {
                 InitBossOnClient();

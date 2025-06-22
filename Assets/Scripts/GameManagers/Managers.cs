@@ -23,8 +23,8 @@ namespace GameManagers
         // private DataManager _dataManager = new DataManager();
         // public static DataManager DataManager { get => Instance._dataManager; }
 
-        private GameManagerEx _gameManagerEx = new GameManagerEx();
-        public static GameManagerEx GameManagerEx { get => Instance._gameManagerEx; }
+        // private GameManagerEx _gameManagerEx = new GameManagerEx();
+        // public static GameManagerEx GameManagerEx { get => Instance._gameManagerEx; }
 
         // private InputManager _inputManager = new InputManager();
         // public static InputManager InputManager { get => Instance._inputManager; }
@@ -65,8 +65,8 @@ namespace GameManagers
         private SocketEventManager _socketEventManager = new SocketEventManager();
         public static SocketEventManager SocketEventManager { get => Instance._socketEventManager; }
 
-        private SoundManager _soundManager = new SoundManager();
-        public static SoundManager SoundManager { get => Instance._soundManager; }
+        // private SoundManager _soundManager = new SoundManager();
+        // public static SoundManager SoundManager { get => Instance._soundManager; }
 
         // private UIManager _uiManager = new UIManager();
         // public static UIManager UIManager { get => Instance._uiManager; }
@@ -118,7 +118,7 @@ namespace GameManagers
                 //_instance._dataManager.Init();
                 _instance._poolManager.Init();
                 // _instance._soundManager.Init();
-                _instance._gameManagerEx.Init();
+                //_instance._gameManagerEx.Init();
                 //_instance._itemDataManaer.Init();
                 //_instance._bufferManager.Init();
                 //_instance._skillManager.Init();

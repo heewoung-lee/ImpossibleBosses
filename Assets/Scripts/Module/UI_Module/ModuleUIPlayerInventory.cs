@@ -16,13 +16,14 @@ namespace Module.UI_Module
         private InputAction _switchInventoryUI;
         [Inject] private IUIPopupManager _uiManager;
         [Inject] private IInputAsset _inputManager;
+        [Inject] GameManagerEx _gameManagerEx;
         private void Awake()
         {
             _switchInventoryUI = _inputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
             _switchInventoryUI.Enable();
-            if (Managers.GameManagerEx.Player == null)
+            if (_gameManagerEx.Player == null)
             {
-                Managers.GameManagerEx.OnPlayerSpawnEvent += (playerStats) => InitalizeInventoryKey();
+                _gameManagerEx.OnPlayerSpawnEvent += (playerStats) => InitalizeInventoryKey();
             }
             else
             {

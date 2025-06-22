@@ -24,6 +24,8 @@ namespace NetWork.NGO
     public class PlayerInitializeNgo : NetworkBehaviourBase, ISceneChangeBehaviour
     {
         [Inject] IResourcesLoader _resourcesLoader;
+        [Inject] GameManagerEx _gameManagerEx;
+        
         enum Transforms
         {
             Interaction
@@ -42,7 +44,7 @@ namespace NetWork.NGO
             {
                 Bind<Transform>(typeof(Transforms));
                 _interactionTr = Get<Transform>((int)Transforms.Interaction);
-                Managers.GameManagerEx.SetPlayer(gameObject);
+                _gameManagerEx.SetPlayer(gameObject);
                 SetOwnerPlayerADD_Module();
             }
             Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
@@ -83,7 +85,7 @@ namespace NetWork.NGO
       
             RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
             gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
-            Managers.GameManagerEx.OnPlayerSpawnWithControllerModule(controller);
+            _gameManagerEx.OnPlayerSpawnWithControllerModule(controller);
         }
 
 

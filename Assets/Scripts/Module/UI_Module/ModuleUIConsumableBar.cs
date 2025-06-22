@@ -1,4 +1,5 @@
 using GameManagers;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ namespace Module.UI_Module
         [Inject]private UIManager _uiManager; 
         void Start()
         {
-            UI_ConsumableBar uiConsumableBar = _uiManager.GetSceneUIFromResource<UI_ConsumableBar>();
+            UIConsumableBar uiConsumableBar = _uiManager.GetSceneUIFromResource<UIConsumableBar>();
         }
 
     }

@@ -12,7 +12,7 @@ using Environment = Util.Environment;
 
 namespace GameManagers
 {
-    public class GameManagerEx : IManagerInitializable
+    public class GameManagerEx: IInitializable
     {
         
         [Inject] IDestroyObject _destroyer;
@@ -151,7 +151,7 @@ namespace GameManagers
             _destroyer.DestroyObject(go);
         }
 
-        public void Init()
+        public void Initialize()
         {
             _spawnPoint = new GameObject() { name = "@SpawnPoint" };
             _environment = GameObject.FindAnyObjectByType<Environment>();

@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace UI.Popup.PopupUI
         protected TMP_Text _titleText;
         protected TMP_Text _bodyText;
         protected Button _confirm_Button;
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiPopupManager;
 
         public void SetText(string titleText,string bodyText)
         {
@@ -39,14 +40,14 @@ namespace UI.Popup.PopupUI
             _titleText = Get<TMP_Text>((int)Texts.TitleText);
             _bodyText = Get<TMP_Text>((int)(Texts.BodyText));
             _confirm_Button = Get<Button>((int)Buttons.ConfirmButton);
-            _uiManager.AddImportant_Popup_UI(this);
+            _uiPopupManager.AddImportant_Popup_UI(this);
         }
 
 
         protected override void OnEnableInit()
         {
             base.OnEnableInit();
-            _confirm_Button.onClick.AddListener(() => { _uiManager.ClosePopupUI(this); });
+            _confirm_Button.onClick.AddListener(() => { _uiPopupManager.ClosePopupUI(this); });
         }
 
         protected override void OnDisableInit()

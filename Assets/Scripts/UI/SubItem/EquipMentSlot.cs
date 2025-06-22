@@ -23,13 +23,14 @@ namespace UI.SubItem
         private UIItemComponentInventory _equipedItem;
         [Inject] private IUIPopupManager _popupUIManager;
         [Inject] private ItemDataManager _itemDataManager;
+        [Inject] GameManagerEx _gameManagerEx;
         public BaseStats PlayerStats
         {
             get
             {
                 if(_playerStats == null)
                 {
-                    if(Managers.GameManagerEx.Player != null && Managers.GameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
+                    if(_gameManagerEx.Player != null && _gameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
                     {
                         _playerStats = stats;
                     }

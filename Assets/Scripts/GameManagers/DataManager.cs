@@ -25,7 +25,7 @@ namespace GameManagers
         Dictionary<TKey, TValue> MakeDict();
     }
 
-    public class DataManager : IManagerInitializable,IManagerIResettable
+    public class DataManager : IInitializable,IManagerIResettable
     {
         [Inject] IResourcesLoader _resourcesLoader;
         
@@ -51,7 +51,7 @@ namespace GameManagers
             }
         }
 
-        public void Init()
+        public void Initialize()
         {
             _requestDataTypes = LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType", AddSerializableAttributeType);
 
@@ -60,8 +60,6 @@ namespace GameManagers
             {
                 _loadDataTypetoDict.Add(typeData.Name, typeData);
             }
-            
-            
             //데이터 로드
             LoadDataFromGoogleSheets(_requestDataTypes);
         }
@@ -408,6 +406,5 @@ namespace GameManagers
         {
             AllDataDict.Clear();
         }
-
     }
 }

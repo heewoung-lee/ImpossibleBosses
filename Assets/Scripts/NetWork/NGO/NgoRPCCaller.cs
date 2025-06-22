@@ -29,6 +29,7 @@ namespace NetWork.NGO
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private ItemDataManager _itemDataManager; 
         [Inject]private BufferManager _bufferManager;
+        [Inject] GameManagerEx _gameManagerEx;
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
@@ -269,7 +270,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         private void Call_InitBuffer_ClicentRpc(StatEffect effect, string buffIconImagePath = null, float duration = -1)
         {
-            PlayerStats playerstats = Managers.GameManagerEx.Player.GetComponent<PlayerStats>();
+            PlayerStats playerstats = _gameManagerEx.Player.GetComponent<PlayerStats>();
 
             if (_bufferManager.GetModifier(effect) is DurationBuff durationbuff)
             {

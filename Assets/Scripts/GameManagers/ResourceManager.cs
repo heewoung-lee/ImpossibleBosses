@@ -96,17 +96,17 @@ namespace GameManagers
         {
             return _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
-        
+
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
-            go.SetActive(false);
             T component = null;
             component = go.GetComponent<T>();
             if (component == null)
             {
+                go.SetActive(false);
                 component = _container.InstantiateComponent<T>(go);
+                go.SetActive(true);
             }
-            go.SetActive(true);
             return component;
         }
 
