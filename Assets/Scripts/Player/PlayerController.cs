@@ -19,7 +19,7 @@ namespace Player
     public class PlayerController : MoveableController
     {
         private const float DefaultTransitionPickup = 0.3f;
-        private InputManager _inputmanager;
+        [Inject]private IInputAsset _inputmanager;
         private NavMeshAgent _agent;
         private PlayerStats _stats;
 
@@ -58,7 +58,6 @@ namespace Player
         private MoveState _baseMoveState;
         private PickUpState _pickupState;
 
-        [Inject]private IInputAsset _inputManager;
 
         protected override void AwakeInit()
         {

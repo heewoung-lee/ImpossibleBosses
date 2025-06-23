@@ -11,6 +11,8 @@ namespace UI.Popup.PopupUI
 {
     public class UILoginPopup : IDPwPopup, IUIHasCloseButton
     {
+        [Inject] private LogInManager _logInManager;
+        
         enum Buttons
         {
             CloseButton,
@@ -105,7 +107,7 @@ namespace UI.Popup.PopupUI
 
             try
             {
-                PlayerLoginInfo playerinfo = Managers.LogInManager.AuthenticateUser(userID, userPw);
+                PlayerLoginInfo playerinfo = _logInManager.AuthenticateUser(userID, userPw);
 
                 if (playerinfo.Equals(default))
                 {

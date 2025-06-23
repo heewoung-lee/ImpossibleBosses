@@ -8,15 +8,15 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class ResourceManager : IManagerIResettable,IResourcesLoader,IInstantiate,IDestroyObject
+    internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject
     {
         [Inject] private DiContainer  _container;
-            
-        Dictionary<string, GameObject> _cachingPoolableObject = new Dictionary<string, GameObject>();
-        public Dictionary<string, GameObject> CachingPoolableObject => _cachingPoolableObject;
-        
-        
-        
+        private CachingObjectDictManager _cachingObjectDictManager;
+        public void ResisterCacheManager(CachingObjectDictManager cachingDictManager)
+        {
+            _cachingObjectDictManager = cachingDictManager;
+        }
+
         public T Load<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -45,7 +45,7 @@ namespace GameManagers
             if (string.IsNullOrEmpty(path))
                 return null;
 
-            if (_cachingPoolableObject.TryGetValue(path, out GameObject cachedPrefab))
+            if (_cachingObjectDictManager.CachingObjectDict.TryGetValue(path, out GameObject cachedPrefab))
             {
                 if (IsCheckNetworkPrefab(cachedPrefab))
                 {
@@ -72,7 +72,7 @@ namespace GameManagers
 
             if (prefab.GetComponent<Poolable>() != null)
             {
-                _cachingPoolableObject[path] = prefab;//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
+                _cachingObjectDictManager.CachingObjectDict[path] = prefab;//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
                 if (IsCheckNetworkPrefab(prefab))
                 {
                     return Managers.NgoPoolManager.Pop(path, parent);
@@ -91,12 +91,6 @@ namespace GameManagers
         {
            return _container.InstantiatePrefab(gameobject, parent).RemoveCloneText();;
         }
-
-        private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
-        {
-            return _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
-        }
-
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
             T component = null;
@@ -108,6 +102,10 @@ namespace GameManagers
                 go.SetActive(true);
             }
             return component;
+        }
+        private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
+        {
+            return _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
@@ -159,10 +157,6 @@ namespace GameManagers
                 yield return new WaitForSeconds(duration);
                 prefabPushEvent.Invoke();
             }
-        }
-        public void Clear()
-        {
-            _cachingPoolableObject.Clear();
         }
     }
 }

@@ -9,14 +9,17 @@ namespace UI.Popup.PopupUI
 {
     public class UISignUpPopup : IDPwPopup, IUIHasCloseButton
     {
+        
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private LogInManager _logInManager;
+        
         Button _buttonClose;
         Button _buttonSignup;
         TMP_InputField _idInputField;
         TMP_InputField _pwInputField;
         private UIAlertPopupBase _alertPopup;
         private UIAlertPopupBase _confirmPopup;
-        [Inject] private IUIPopupManager _uiPopupManager;
-
+        
         
         
         public override TMP_InputField IdInputField => _idInputField;
@@ -54,10 +57,9 @@ namespace UI.Popup.PopupUI
                 return;
 
 
-            (bool isCheckResult, string message) =  await Managers.LogInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
+            (bool isCheckResult, string message) =  await _logInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
 
-            if(isCheckResult == false)
-            {
+            if(isCheckResult == false)            {
                 _alertPopup = ShowAlertDialogUI<UIAlertDialog>(_alertPopup, "오류", message);
             }
             else

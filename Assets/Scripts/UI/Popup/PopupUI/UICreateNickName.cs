@@ -9,6 +9,9 @@ namespace UI.Popup.PopupUI
 {
     public class UICreateNickName : UIPopup
     {
+        [Inject] private UIManager _uiManager;
+        [Inject] private LogInManager _logInManager;
+        
         enum InputFields
         {
             NickNameInputField
@@ -26,7 +29,6 @@ namespace UI.Popup.PopupUI
         private GameObject _messageError;
         private TMP_Text _errorMessageText;
         private ModuleUIFadeOut _errorMessageTextFadeOutMoudule;
-        [Inject] private UIManager _uiManager;
 
         public PlayerLoginInfo PlayerLoginInfo { get; set; }
 
@@ -64,7 +66,7 @@ namespace UI.Popup.PopupUI
 
         public async void CreateUserNickName(PlayerLoginInfo playerinfo, string nickname)
         {
-            (bool isCheckResult, string message) = await Managers.LogInManager.WriteNickNameToGoogleSheet(playerinfo, nickname);
+            (bool isCheckResult, string message) = await _logInManager.WriteNickNameToGoogleSheet(playerinfo, nickname);
 
             if (isCheckResult == false)
             {

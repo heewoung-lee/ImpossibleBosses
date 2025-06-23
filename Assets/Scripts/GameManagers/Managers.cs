@@ -35,8 +35,8 @@ namespace GameManagers
         private LobbyManager _lobbyManager = new LobbyManager();
         public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
 
-        private LogInManager _logInManager = new LogInManager();
-        public static LogInManager LogInManager { get => Instance._logInManager; }
+        // private LogInManager _logInManager = new LogInManager();
+        // public static LogInManager LogInManager { get => Instance._logInManager; }
 
         private LootItemManager _lootItemManaer = new LootItemManager();
         public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }

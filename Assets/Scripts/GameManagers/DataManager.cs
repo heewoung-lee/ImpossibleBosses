@@ -28,7 +28,7 @@ namespace GameManagers
     public class DataManager : IInitializable,IManagerIResettable
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        
+        [Inject] GoogleAuthLogin _googleAuthLogin;
         private const string Spreedsheetid = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
 
         private List<Type> _requestDataTypes;
@@ -42,9 +42,8 @@ namespace GameManagers
             {
                 if (_databaseStruct.Equals(default(GoogleDataBaseStruct)))
                 {
-                    GoogleAuthLogin authlogin = new GoogleAuthLogin();
-                    TextAsset[] jsonTexts = authlogin.LoadJson();
-                    GoogleLoginWrapper googleLoginData = authlogin.ParseJsontoGoogleAuth(jsonTexts);
+                    TextAsset[] jsonTexts = _googleAuthLogin.LoadJson();
+                    GoogleLoginWrapper googleLoginData = _googleAuthLogin.ParseJsontoGoogleAuth(jsonTexts);
                     _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, Spreedsheetid);
                 }
                 return _databaseStruct;
@@ -244,7 +243,9 @@ namespace GameManagers
                     for (int i = 0; i < spreadsheet.Sheets.Count; i++)
                     {
                         if (GetTypeNameFromFileName(spreadsheet.Sheets[i].Properties.Title) != requestType.Name)
+                        {
                             continue;
+                        }
                         else
                         {
                             sheet = spreadsheet.Sheets[i];
@@ -314,14 +315,14 @@ namespace GameManagers
 
         public Type FindGenericKeyType(Type typeinfo)
         {
-            Type[] TypeInterfaces = typeinfo.GetInterfaces();
+            Type[] typeinterfaces = typeinfo.GetInterfaces();
 
-            foreach (Type TypeInterface in TypeInterfaces)
+            foreach (Type typeInterface in typeinterfaces)
             {
-                if (TypeInterface.IsGenericType && TypeInterface.GetGenericTypeDefinition() == typeof(IKey<>))
+                if (typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition() == typeof(IKey<>))
                 {
                     //제네릭타입의 첫번째 매개변수를 던진다. = 키가 되는 매개변수 
-                    return TypeInterface.GetGenericArguments()[0];
+                    return typeInterface.GetGenericArguments()[0];
                 }
             }
             return null;

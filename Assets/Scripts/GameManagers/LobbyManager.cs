@@ -37,6 +37,7 @@ namespace GameManagers
     public class LobbyManager : IManagerEventInitialize
     {
         [Inject] IDestroyObject _destroyer;
+        [Inject] private LogInManager _logInManager;
 
         enum LoadingProcess
         {
@@ -783,7 +784,7 @@ namespace GameManagers
 
                 string playerID = AuthenticationService.Instance.PlayerId;
                 Debug.Log($"플레이어 ID 만들어짐{playerID}");
-                _currentPlayerInfo = new PlayerIngameLoginInfo(Managers.LogInManager.CurrentPlayerInfo.NickName, playerID);
+                _currentPlayerInfo = new PlayerIngameLoginInfo(_logInManager.CurrentPlayerInfo.NickName, playerID);
 
                 // Shows how to get the playerID
                 return playerID;

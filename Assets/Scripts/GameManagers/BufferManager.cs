@@ -22,9 +22,9 @@ namespace GameManagers
         private List<Type> _requestType = new List<Type>();
         private UIBufferBar _uiBufferBar;
         [Inject] private IUISceneManager _sceneManager;
-        [Inject] IDestroyObject _destroyer;
+        [Inject] private IDestroyObject _destroyer;
         [Inject] private IInstantiate _instantiate;
-        [Inject] DataManager _dataManager;
+        [Inject] private DataManager _dataManager;
         public UIBufferBar UIBufferBar
         {
             get

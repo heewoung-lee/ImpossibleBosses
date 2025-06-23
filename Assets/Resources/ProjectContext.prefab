@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9206651044103205033}
   - component: {fileID: 6755640762401565299}
+  - component: {fileID: -9079788077640838058}
+  - component: {fileID: 1693725907827677980}
   m_Layer: 0
   m_Name: ProjectContext
   m_TagString: Untagged
@@ -45,7 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: -9079788077640838058}
+  - {fileID: 1693725907827677980}
   _installerPrefabs: []
   _parentNewObjectsUnderContext: 1
   _editorReflectionBakingCoverageMode: 0
