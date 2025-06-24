@@ -17,9 +17,6 @@ namespace GameManagers
     {
         
         [Inject] private IInstantiate _instantiate;
-        [Inject] private DiContainer _container;
-        
-        
         private const int SceneUISortingDefaultValue = 0;
         private const int PopupUISortingDefaultValue = 20;
 

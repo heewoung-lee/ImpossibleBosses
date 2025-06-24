@@ -8,7 +8,7 @@ namespace ProjectContextInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<GoogleAuthLogin>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<GoogleAuthLogin>().AsSingle().NonLazy();
         }
     }
 }

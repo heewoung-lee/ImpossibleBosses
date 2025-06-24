@@ -7,6 +7,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using Data;
+using GameManagers.Interface.DataManager;
+using GameManagers.Interface.GoogleAuthLogin;
 using GameManagers.Interface.Resources_Interface;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
@@ -25,11 +27,11 @@ namespace GameManagers
         Dictionary<TKey, TValue> MakeDict();
     }
 
-    public class DataManager : IInitializable,IManagerIResettable
+    public class DataManager : IInitializable
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] GoogleAuthLogin _googleAuthLogin;
-        private const string Spreedsheetid = "1DV5kuhzjcNs3id8deI8Q3xFgbOWTa_pr76uSD0gNpGg";
+        [Inject] IGoogleAuthLoginLoader _googleAuthLogin;
+        [Inject] ISpreedSheetID _spreedSheetID;
 
         private List<Type> _requestDataTypes;
         private Dictionary<string, Type> _loadDataTypetoDict;
@@ -42,9 +44,9 @@ namespace GameManagers
             {
                 if (_databaseStruct.Equals(default(GoogleDataBaseStruct)))
                 {
-                    TextAsset[] jsonTexts = _googleAuthLogin.LoadJson();
+                    TextAsset[] jsonTexts = _googleAuthLogin.LoadGoogleAuthJsonFiles();
                     GoogleLoginWrapper googleLoginData = _googleAuthLogin.ParseJsontoGoogleAuth(jsonTexts);
-                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, Spreedsheetid);
+                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, _spreedSheetID.Spreedsheetid);
                 }
                 return _databaseStruct;
             }

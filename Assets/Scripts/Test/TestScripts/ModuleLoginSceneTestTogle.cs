@@ -11,7 +11,7 @@ namespace Test.TestScripts
     {
         [Inject] private IUISceneManager _sceneUIManager;
 
-        void Awake()
+        void Start()
         {
             LogInTestToggle testTogle = _sceneUIManager.GetSceneUIFromResource<LogInTestToggle>(path: "Prefabs/UI/TestUI/LogInTestToggle");
         }

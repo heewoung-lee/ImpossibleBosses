@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameManagers.Interface.Resources_Interface;
 using Scene.ZenjectInstaller;
 using Unity.Netcode;
@@ -11,7 +12,20 @@ namespace GameManagers
 {
     internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject,IRegistrar<ICachingObjectDict>
     {
-        [Inject] IInstantiator _inst;
+        DiContainer CurrentContainer
+        {
+            get
+            {
+                //씬 컨텍스트가 있으면 그 컨테이너
+                SceneContextRegistry registry = ProjectContext.Instance.Container.Resolve<SceneContextRegistry>();
+                SceneContext sceneCtx = registry.SceneContexts.FirstOrDefault(); // 한 씬만 가정
+                if (sceneCtx != null)
+                    return sceneCtx.Container;
+
+                //없으면 전역 컨테이너
+                return ProjectContext.Instance.Container;
+            }
+        }
         private ICachingObjectDict _cachingObjectDict;
         
         public void Register(ICachingObjectDict sceneContext)
@@ -100,7 +114,7 @@ namespace GameManagers
 
         public GameObject InstantiateByObject(GameObject gameobject, Transform parent = null)
         {
-            return _inst.InstantiatePrefab(gameobject, parent).RemoveCloneText();
+            return CurrentContainer.InstantiatePrefab(gameobject, parent).RemoveCloneText();
         }
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
@@ -109,14 +123,14 @@ namespace GameManagers
             if (component == null)
             {
                 go.SetActive(false);
-                component = _inst.InstantiateComponent<T>(go);
+                component = CurrentContainer.InstantiateComponent<T>(go);
                 go.SetActive(true);
             }
             return component;
         }
         private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
         {
-            return _inst.InstantiatePrefab(prefab, parent).RemoveCloneText();
+            return CurrentContainer.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
