@@ -8,7 +8,7 @@ namespace ProjectContextInstaller
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<ResourceManager>().AsSingle();
+            Container.BindInterfacesTo<ResourceManager>().AsSingle().NonLazy();
         }
     }
 }

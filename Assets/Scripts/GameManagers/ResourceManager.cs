@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameManagers.Interface.Resources_Interface;
+using Scene.ZenjectInstaller;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
@@ -8,15 +9,24 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject
+    internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject,IRegistrar<ICachingObjectDict>
     {
-        [Inject] private DiContainer  _container;
-        private CachingObjectDictManager _cachingObjectDictManager;
-        public void ResisterCacheManager(CachingObjectDictManager cachingDictManager)
+        [Inject] IInstantiator _inst;
+        private ICachingObjectDict _cachingObjectDict;
+        
+        public void Register(ICachingObjectDict sceneContext)
         {
-            _cachingObjectDictManager = cachingDictManager;
+            _cachingObjectDict = sceneContext;
         }
 
+        public void Unregister(ICachingObjectDict sceneContext)
+        {
+            if (_cachingObjectDict == sceneContext)
+            {
+                _cachingObjectDict = null;
+            }
+        }
+        
         public T Load<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -44,8 +54,9 @@ namespace GameManagers
 
             if (string.IsNullOrEmpty(path))
                 return null;
-
-            if (_cachingObjectDictManager.CachingObjectDict.TryGetValue(path, out GameObject cachedPrefab))
+            
+            
+            if ( _cachingObjectDict?.TryGet(path, out GameObject cachedPrefab) == true)
             {
                 if (IsCheckNetworkPrefab(cachedPrefab))
                 {
@@ -72,7 +83,7 @@ namespace GameManagers
 
             if (prefab.GetComponent<Poolable>() != null)
             {
-                _cachingObjectDictManager.CachingObjectDict[path] = prefab;//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
+                _cachingObjectDict?.OverwriteData(path, prefab);//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
                 if (IsCheckNetworkPrefab(prefab))
                 {
                     return Managers.NgoPoolManager.Pop(path, parent);
@@ -89,7 +100,7 @@ namespace GameManagers
 
         public GameObject InstantiateByObject(GameObject gameobject, Transform parent = null)
         {
-           return _container.InstantiatePrefab(gameobject, parent).RemoveCloneText();;
+            return _inst.InstantiatePrefab(gameobject, parent).RemoveCloneText();
         }
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
@@ -98,14 +109,14 @@ namespace GameManagers
             if (component == null)
             {
                 go.SetActive(false);
-                component = _container.InstantiateComponent<T>(go);
+                component = _inst.InstantiateComponent<T>(go);
                 go.SetActive(true);
             }
             return component;
         }
         private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
         {
-            return _container.InstantiatePrefab(prefab, parent).RemoveCloneText();
+            return _inst.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
@@ -158,5 +169,6 @@ namespace GameManagers
                 prefabPushEvent.Invoke();
             }
         }
+
     }
 }
