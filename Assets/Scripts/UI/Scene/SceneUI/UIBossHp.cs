@@ -1,5 +1,6 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using Stats.BossStats;
 using TMPro;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace UI.Scene.SceneUI
 {
     public class UIBossHp : UIScene
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IBossSpawnManager _bossSpawnManager;
         enum HpSlider
         {
             BossHpSlider
@@ -37,18 +38,18 @@ namespace UI.Scene.SceneUI
         protected override void StartInit()
         {
 
-            if(_gameManagerEx.BossMonster != null)
+            if(_bossSpawnManager.GetBossMonster() != null)
             {
                 SetBossStatUI();
             }
             else
             {
-                _gameManagerEx.OnBossSpawnEvent += SetBossStatUI;
+                _bossSpawnManager.OnBossSpawnEvent += SetBossStatUI;
             }
 
             void SetBossStatUI()
             {
-                _stats = _gameManagerEx.BossMonster.GetComponent<BossStats>();
+                _stats = _bossSpawnManager.GetBossMonster().GetComponent<BossStats>();
                 _stats.CurrentHpValueChangedEvent += Stats_CurrentHPValueChangedEvent;
                 _stats.MaxHpValueChangedEvent += Stats_CurrentMAXHPValueChangedEvent;
 

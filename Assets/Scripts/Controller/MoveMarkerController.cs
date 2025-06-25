@@ -1,4 +1,6 @@
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
+using NetWork.NGO;
 using Player;
 using UnityEngine;
 using Zenject;
@@ -7,7 +9,8 @@ namespace Controller
 {
     public class MoveMarkerController : MonoBehaviour
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        //TODO: 무브 마커 플레이 씬 이상에다가 바인드할것
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         private void RegiterPlayerMoveMarker(PlayerController controller)
         {
             controller.OnPlayerMouseClickPosition += InstantiateMoveMarker;
@@ -21,21 +24,21 @@ namespace Controller
         
         private void OnEnable()
         {
-            if (_gameManagerEx.Player == null || _gameManagerEx.Player.GetComponent<PlayerController>() == null)
+            if (_gameManagerEx.GetPlayer() == null || _gameManagerEx.GetPlayer().GetComponent<PlayerController>() == null)
             {
-                _gameManagerEx.OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
+                _gameManagerEx.GetPlayer().GetComponent<PlayerInitializeNgo>().OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
             }
             else
             {
-                RegiterPlayerMoveMarker(_gameManagerEx.Player.GetComponent<PlayerController>());
+                RegiterPlayerMoveMarker(_gameManagerEx.GetPlayer().GetComponent<PlayerController>());
             }
         }
 
         private void OnDisable()
         {
-            _gameManagerEx.OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
+            _gameManagerEx.GetPlayer().GetComponent<PlayerInitializeNgo>().OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
             //구독되어있는 마커이벤트를 빼주고,
-            GameObject player = _gameManagerEx.Player;
+            GameObject player = _gameManagerEx.GetPlayer();
             if (player != null && player.TryGetComponent(out PlayerController controller) == true)
             {
                 UnRegiterPlayerMoveMarker(controller);

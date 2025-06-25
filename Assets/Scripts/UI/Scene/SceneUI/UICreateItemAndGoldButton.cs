@@ -3,6 +3,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.UIManager;
 using Stats;
@@ -25,7 +26,7 @@ namespace UI.Scene.SceneUI
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IInstantiate _instantiate;
         [Inject] private ItemDataManager _itemDataManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         
         public PlayerStats PlayerStats
         {
@@ -33,7 +34,7 @@ namespace UI.Scene.SceneUI
             {
                 if(_playerStats == null)
                 {
-                    _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
+                    _playerStats = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
                 }
                 return _playerStats;
             }
@@ -93,8 +94,8 @@ namespace UI.Scene.SceneUI
                 TestGetDamaged();
                 //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
                 //_ = FindMyJoinCodeAsync();
-                Debug.Log(_gameManagerEx.Player.transform.position+"플레이어 좌표");
-                //_gameManagerEx.Player.transform.position = Vector3.zero;
+                Debug.Log(_gameManagerEx.GetPlayer().transform.position+"플레이어 좌표");
+                //_gameManagerEx.GetPlayer().transform.position = Vector3.zero;
             }
             void MoveScene()
             {
@@ -104,7 +105,7 @@ namespace UI.Scene.SceneUI
             //void AllLevelup()
             //{
             //    int layerMask = LayerMask.GetMask("Player", "AnotherPlayer");
-            //    Collider[] hitColliders = Physics.OverlapSphere(_gameManagerEx.Player.transform.position, 10f, layerMask);
+            //    Collider[] hitColliders = Physics.OverlapSphere(_gameManagerEx.GetPlayer().transform.position, 10f, layerMask);
             //    foreach (var collider in hitColliders)
             //    {
             //      Managers.VFX_Manager.GenerateParticle("Prefabs/Player/SkillVFX/Level_up", collider.transform);
@@ -120,7 +121,7 @@ namespace UI.Scene.SceneUI
         {
             GameObject stone = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");
             stone.transform.SetParent(Managers.VFXManager.VFXRootNgo, false);
-            stone.transform.position = _gameManagerEx.Player.transform.position + Vector3.up * 5f;
+            stone.transform.position = _gameManagerEx.GetPlayer().transform.position + Vector3.up * 5f;
         }
 
         public void TestIteminInventort()

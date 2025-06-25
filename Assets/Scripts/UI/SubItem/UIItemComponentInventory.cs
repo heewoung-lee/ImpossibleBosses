@@ -5,6 +5,7 @@ using Data.Item;
 using Data.Item.EquipSlot;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace UI.SubItem
         protected EventSystem _eventSystem;
         [Inject] private IUIPopupManager _popupUIManager;
         [Inject] private ItemDataManager _itemDataManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
 
         public event Action OnAfterStart
         {
@@ -123,7 +124,7 @@ namespace UI.SubItem
         {
             RemoveItemFromInventory();
             IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
-            Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,_gameManagerEx.Player.transform.position);
+            Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,_gameManagerEx.GetPlayer().transform.position);
         }
 
         protected void AttachItemToSlot(GameObject go, Transform slot)

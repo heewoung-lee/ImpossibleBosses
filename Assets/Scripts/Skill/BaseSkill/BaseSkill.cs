@@ -1,6 +1,7 @@
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using Module.PlayerModule.PlayerClassModule;
 using UnityEngine;
 using Util;
@@ -10,7 +11,7 @@ namespace Skill.BaseSkill
 {
     public abstract class BaseSkill
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         public abstract Define.PlayerClass PlayerClass { get; }
         public abstract string SkillName { get; }
         public abstract float CoolTime {  get; }
@@ -32,7 +33,7 @@ namespace Skill.BaseSkill
         {
             if (PlayerController == null || ModulePlayerClass == null)
             {
-                PlayerController = _gameManagerEx.Player.GetComponent<BaseController>();
+                PlayerController = _gameManagerEx.GetPlayer().GetComponent<BaseController>();
                 ModulePlayerClass = PlayerController.GetComponent<ModulePlayerClass>();
                 PlayerController.StateAnimDict.RegisterState(State, SkillAction);
                 AddInitailzeState();
@@ -46,7 +47,7 @@ namespace Skill.BaseSkill
         {
             if(_baseController == null)
             {
-                _baseController =  _gameManagerEx.Player.GetComponent<BaseController>();
+                _baseController =  _gameManagerEx.GetPlayer().GetComponent<BaseController>();
             }
             IState currentIState = _baseController.CurrentStateType;
             InvokeSkill();

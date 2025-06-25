@@ -41,7 +41,7 @@ namespace Test.TestScripts.UnitTest
             base.StartInit();
             _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
             await JoinChannel();
-            //_gameManagerEx.Player.GetComponent<Module_Player_Class>().InitializeSkillsFromManager();
+            //_gameManagerEx.GetPlayer().GetComponent<Module_Player_Class>().InitializeSkillsFromManager();
         }
         private async Task JoinChannel()
         {

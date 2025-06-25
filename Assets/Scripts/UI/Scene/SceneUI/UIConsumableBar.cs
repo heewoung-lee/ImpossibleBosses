@@ -1,5 +1,6 @@
 using System;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.InputManager_Interface;
 using GameManagers.Interface.Resources_Interface;
 using Stats;
@@ -16,7 +17,7 @@ namespace UI.Scene.SceneUI
     {
         [Inject] IDestroyObject _destroyer;
         [Inject] private IInputAsset _inputManager;
-        [Inject] private GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         [Inject] private UIManager _uiManager; 
         [Inject] private BufferManager _bufferManager;
         
@@ -147,13 +148,13 @@ namespace UI.Scene.SceneUI
 
         private void OnEnable()
         {
-            if (_gameManagerEx.Player == null)
+            if (_gameManagerEx.GetPlayer() == null)
             {
                 _gameManagerEx.OnPlayerSpawnEvent += SetPlayerComsumableBarUI;
             }
             else
             {
-                SetPlayerComsumableBarUI(_gameManagerEx.Player.GetComponent<PlayerStats>());
+                SetPlayerComsumableBarUI(_gameManagerEx.GetPlayer().GetComponent<PlayerStats>());
             }
         }
 

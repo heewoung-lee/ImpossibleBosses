@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.InputManager_Interface;
 using Stats;
 using Unity.Cinemachine;
@@ -19,7 +20,7 @@ namespace Controller
         private InputAction _mouseDelta;
         private InputAction _mouseScroll;
         [Inject] private IInputAsset _inputManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
 
         private bool _mouseMiddleButtonPressed = false;
         private void Awake()
@@ -27,13 +28,13 @@ namespace Controller
             _camera = GetComponent<CinemachineCamera>();
             _cinemachineOrbitalFollow = GetComponent<CinemachineOrbitalFollow>();
 
-            if(_gameManagerEx.Player == null)
+            if(_gameManagerEx.GetPlayer() == null)
             {
                 _gameManagerEx.OnPlayerSpawnEvent += InitializeFollowingCamera;
             }
             else
             {
-                InitializeFollowingCamera(_gameManagerEx.Player.GetComponent<PlayerStats>());
+                InitializeFollowingCamera(_gameManagerEx.GetPlayer().GetComponent<PlayerStats>());
             }
         }
 

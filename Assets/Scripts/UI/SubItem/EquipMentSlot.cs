@@ -5,6 +5,7 @@ using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.UIManager;
 using Stats.BaseStats;
 using UI.Popup.PopupUI;
@@ -24,14 +25,14 @@ namespace UI.SubItem
         private UIItemComponentInventory _equipedItem;
         [Inject] private IUIPopupManager _popupUIManager;
         [Inject] private ItemDataManager _itemDataManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         public BaseStats PlayerStats
         {
             get
             {
                 if(_playerStats == null)
                 {
-                    if(_gameManagerEx.Player != null && _gameManagerEx.Player.TryGetComponent(out BaseStats stats) == true)
+                    if(_gameManagerEx.GetPlayer() != null && _gameManagerEx.GetPlayer().TryGetComponent(out BaseStats stats) == true)
                     {
                         _playerStats = stats;
                     }

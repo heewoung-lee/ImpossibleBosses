@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.InputManager_Interface;
 using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
@@ -17,12 +18,12 @@ namespace Module.UI_Module
         private InputAction _switchInventoryUI;
         [Inject] private IUIPopupManager _uiManager;
         [Inject] private IInputAsset _inputManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         private void Awake()
         {
             _switchInventoryUI = _inputManager.GetInputAction(Define.ControllerType.UI, "Show_UI_Inventory");
             _switchInventoryUI.Enable();
-            if (_gameManagerEx.Player == null)
+            if (_gameManagerEx.GetPlayer() == null)
             {
                 _gameManagerEx.OnPlayerSpawnEvent += (playerStats) => InitalizeInventoryKey();
             }

@@ -5,6 +5,7 @@ using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using Stats;
@@ -22,7 +23,7 @@ namespace UI.Popup.PopupUI
 {
     public class UIShop : UIPopup
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         
         private readonly string _focusTabColorHexcode = "#F6E19C";
         private readonly string _nonfocusTabColorHexcode = "#BEB5B6";
@@ -109,13 +110,13 @@ namespace UI.Popup.PopupUI
             _eventSystem = FindAnyObjectByType<EventSystem>();
 
 
-            if (_gameManagerEx.Player == null || _gameManagerEx.Player.GetComponent<PlayerStats>() == null)
+            if (_gameManagerEx.GetPlayer() == null || _gameManagerEx.GetPlayer().GetComponent<PlayerStats>() == null)
             {
                 _gameManagerEx.OnPlayerSpawnEvent += InitializePlayerStatEvent;
             }
             else
             {
-              _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
+              _playerStats = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
             }
         }
 
@@ -214,17 +215,17 @@ namespace UI.Popup.PopupUI
 
         protected override void StartInit()
         {
-            if (_gameManagerEx.Player == null)
+            if (_gameManagerEx.GetPlayer() == null)
             {
                 _gameManagerEx.OnPlayerSpawnEvent += (playerStats) =>
                 {
-                    _gameManagerEx.Player.GetComponent<PlayerStats>();
+                    _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
                     UpdateHasGoldChanged(_playerStats.Gold);
                 };
             }
             else
             {
-                _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
+                _playerStats = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
                 UpdateHasGoldChanged(_playerStats.Gold);
             }
             RandomItemRespawn();

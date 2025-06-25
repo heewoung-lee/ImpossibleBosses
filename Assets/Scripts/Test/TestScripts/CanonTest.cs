@@ -1,5 +1,6 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using Zenject;
@@ -10,7 +11,7 @@ namespace Test.TestScripts
     {
         [Inject] private IInstantiate _instantiate;
         [Inject] IDestroyObject _destroyer;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         public Transform startTransform;  // 시작 위치
         public Transform targetTransform; // 목표 위치
         public GameObject projectilePrefab; // 발사체 프리팹
@@ -31,7 +32,7 @@ namespace Test.TestScripts
         }
         public void Launch()
         {
-            targetTransform = _gameManagerEx.Player.transform;
+            targetTransform = _gameManagerEx.GetPlayer().transform;
 
             // 발사체 생성
             GameObject projectile = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/AttackPattren/BossSkill1");

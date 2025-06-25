@@ -1,6 +1,7 @@
 using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using Stats;
@@ -39,7 +40,7 @@ namespace UI.Popup.PopupUI
         private EventSystem _eventSystem;
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IUISceneManager _uiSceneManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
 
         public Transform ItemInventoryTr => _itemInventoryTr;
         public GraphicRaycaster UIInventoryRayCaster=> _uiInventoryRaycaster;
@@ -50,7 +51,7 @@ namespace UI.Popup.PopupUI
             {
                 if(_ownerPlayerStats == null )
                 {
-                    if (_gameManagerEx.Player != null && _gameManagerEx.Player.TryGetComponent(out PlayerStats stats) == true)
+                    if (_gameManagerEx.GetPlayer() != null && _gameManagerEx.GetPlayer().TryGetComponent(out PlayerStats stats) == true)
                     {
                         _ownerPlayerStats = stats;
                     }

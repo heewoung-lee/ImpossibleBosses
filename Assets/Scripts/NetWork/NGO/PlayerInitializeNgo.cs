@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
 using Module.CameraModule;
 using Module.PlayerModule;
@@ -24,7 +25,16 @@ namespace NetWork.NGO
     public class PlayerInitializeNgo : NetworkBehaviourBase, ISceneChangeBehaviour
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
+        
+             
+        private Action<PlayerController> _onPlayerSpawnwithController;
+        public event Action<PlayerController> OnPlayerSpawnwithController
+        {
+            add { UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnwithController, value); }
+            remove { UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnwithController, value); }
+        }
+
         
         enum Transforms
         {
@@ -85,7 +95,7 @@ namespace NetWork.NGO
       
             RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
             gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
-            _gameManagerEx.OnPlayerSpawnWithControllerModule(controller);
+            _onPlayerSpawnwithController?.Invoke(controller);
         }
 
 

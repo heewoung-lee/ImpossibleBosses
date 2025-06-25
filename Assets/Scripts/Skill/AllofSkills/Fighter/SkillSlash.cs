@@ -2,6 +2,7 @@ using System.Collections;
 using Controller;
 using Controller.ControllerStats;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
 using Module.PlayerModule;
 using Module.PlayerModule.PlayerClassModule;
@@ -16,7 +17,7 @@ namespace Skill.AllofSkills.Fighter
     public class SkillSlash : SkillImmedialty
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         private BaseController _playerController;
         private PlayerStats _playerStat;
         private ModuleFighterClass _fighterClass;
@@ -38,7 +39,7 @@ namespace Skill.AllofSkills.Fighter
             {
                 if (_playerStat == null)
                 {
-                    _playerStat = _gameManagerEx.Player.GetComponent<PlayerStats>();
+                    _playerStat = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
                 }
                 return _playerStat.Attack * Value;
             }
@@ -50,7 +51,7 @@ namespace Skill.AllofSkills.Fighter
             {
                 if(_playerStat == null)
                 {
-                    _playerStat = _gameManagerEx.Player.GetComponent<PlayerStats>();
+                    _playerStat = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
                 }
                 return _playerStat;
             }

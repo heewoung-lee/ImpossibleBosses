@@ -4,6 +4,7 @@ using BehaviorDesigner.Runtime;
 using Controller;
 using Controller.BossState;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using NetWork.BaseNGO;
 using Unity.Netcode;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace NetWork.Boss_NGO
 
     public class BossGolemNetworkController : NetworkBehaviourBase
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IBossSpawnManager _bossSpawnManager;
         
         private readonly float _normalAnimSpeed = 1f;
         private readonly float _maxAnimSpeed = 3f;
@@ -75,7 +76,7 @@ namespace NetWork.Boss_NGO
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            _gameManagerEx.SetBossMonster(gameObject);
+            _bossSpawnManager.SetBossMonster(gameObject);
             if (IsHost == false)
             {
                 InitBossOnClient();

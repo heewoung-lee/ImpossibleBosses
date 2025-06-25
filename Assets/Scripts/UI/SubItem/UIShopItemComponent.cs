@@ -3,6 +3,7 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
 using Stats;
 using TMPro;
@@ -19,7 +20,7 @@ namespace UI.SubItem
     {
         [Inject] IDestroyObject _destroyer;
         [Inject] private ItemDataManager _itemDataManager;
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         
         
         enum ItemICons
@@ -92,7 +93,7 @@ namespace UI.SubItem
         {
             base.StartInit();
             _itemNameText.text = _itemName;
-            _playerStats = _gameManagerEx.Player.GetComponent<PlayerStats>();
+            _playerStats = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
             _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _uiShop = _uiManager.GetImportant_Popup_UI<UIShop>();
             _itemGradeBorderImage.sprite = _itemDataManager.ItemGradeBorder[ItemGradeType];

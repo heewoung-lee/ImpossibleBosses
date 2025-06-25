@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using Stats;
 using Stats.BaseStats;
 using TMPro;
@@ -9,7 +10,7 @@ namespace UI.Scene.SceneUI
 {
     public class UIPlayerInfo : UIScene
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         private Slider _hpSlider;
         private TMP_Text _hpText;
         private TMP_Text _levelText;
@@ -42,7 +43,7 @@ namespace UI.Scene.SceneUI
         protected override void StartInit()
         {
 
-            if(_gameManagerEx.Player == null)
+            if(_gameManagerEx.GetPlayer() == null)
             {
 
                 _gameManagerEx.OnPlayerSpawnEvent += InitalizePlayerInfo;
@@ -50,7 +51,7 @@ namespace UI.Scene.SceneUI
             }
             else
             {
-                _playerStats = _gameManagerEx.Player.gameObject.GetComponent<PlayerStats>();
+                _playerStats = _gameManagerEx.GetPlayer().gameObject.GetComponent<PlayerStats>();
                 InitalizePlayerInfo(_playerStats);
                 UpdateUI(_playerStats);
             }

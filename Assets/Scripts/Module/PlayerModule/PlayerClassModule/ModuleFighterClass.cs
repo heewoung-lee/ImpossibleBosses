@@ -1,5 +1,6 @@
 using Controller.PlayerState.FighterState;
 using GameManagers;
+using GameManagers.Interface.GameManagerEx;
 using Player;
 using Stats;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Module.PlayerModule.PlayerClassModule
 {
     public class ModuleFighterClass : ModulePlayerClass
     {
-        [Inject] GameManagerEx _gameManagerEx;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
         
         private const float DefalutTransitionRoar = 0.1f;
         private const float DefalutTransitionTaunt = 0.1f;
