@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
 using UnityEngine.UI;
 using Zenject;

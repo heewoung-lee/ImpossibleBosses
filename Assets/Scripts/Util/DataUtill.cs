@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using GameManagers;
@@ -44,6 +45,15 @@ namespace Util
         {
             string value = JsonConvert.SerializeObject(data);
             File.WriteAllText(Application.dataPath + "/Resources/Data/" + key + ".json", value);
+        }
+        
+        public static void AddSerializableAttributeType(Type monoScriptType,List<Type> typeList)
+        {
+            if (Attribute.IsDefined(monoScriptType, typeof(SerializableAttribute)))
+            {
+                typeList.Add(monoScriptType);
+                //Debug.Log($"Find RequestType: {type.FullName}");
+            }
         }
     }
 }

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
+using GameManagers.Interface.DataManager;
 using GameManagers.Interface.Resources_Interface;
 using NetWork.LootItem;
 using UnityEngine;
+using Util;
 using Zenject;
 using Random = UnityEngine.Random;
 namespace GameManagers
@@ -15,24 +17,27 @@ namespace GameManagers
     {
         [Inject] private IResourcesLoader _loader;
         [Inject] private IInstantiate _instantiate;
-        [Inject] DataManager _dataManager;
+        [Inject] private IRequestDataType _requestDataType;
+        [Inject] private IAllData _allData;
+        
+        
         private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
         private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
         public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
 
         private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
         private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
-        private List<Type> _itemDataType;
+        private IList<Type> _itemDataType;
         public void Initialize()
         {
 
             //폴더내에 있는 타입들을 긁어와서 데이터를 읽는다.
-            _itemDataType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
-                , _dataManager.AddSerializableAttributeType);
+            _itemDataType = _requestDataType.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
+                , DataUtil.AddSerializableAttributeType);
 
             foreach (Type itemtype in _itemDataType)
             {
-                IDictionary itemTypeIDict = _dataManager.AllDataDict[itemtype] as IDictionary;
+                IDictionary itemTypeIDict = _allData.GetData(itemtype) as IDictionary;
                 //IDictionary 인터페이스로 변환한 후 모든 Dictionary데이터를 받아올 수 있도록한다.
                 if (itemTypeIDict == null)
                 {

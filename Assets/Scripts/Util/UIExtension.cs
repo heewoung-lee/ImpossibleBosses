@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI;
 using UI.Popup.PopupUI;
 using UI.SubItem;

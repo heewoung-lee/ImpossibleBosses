@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace UI.Popup.PopupUI
 {
     public class UICreateNickName : UIPopup
     {
-        [Inject] private UIManager _uiManager;
+        [Inject] private IUIPopupManager _uiManager;
         [Inject] private LogInManager _logInManager;
         
         enum InputFields

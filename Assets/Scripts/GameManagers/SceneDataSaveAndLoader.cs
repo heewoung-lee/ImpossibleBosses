@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI.SubItem;
 using Util;
 using Zenject;

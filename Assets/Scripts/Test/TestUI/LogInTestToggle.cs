@@ -1,6 +1,7 @@
 using System;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
 using UI.Scene;
 using Unity.Multiplayer.Playmode;

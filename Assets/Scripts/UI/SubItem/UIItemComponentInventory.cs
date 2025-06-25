@@ -5,6 +5,7 @@ using Data.Item;
 using Data.Item.EquipSlot;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
 using UnityEngine;
 using UnityEngine.EventSystems;

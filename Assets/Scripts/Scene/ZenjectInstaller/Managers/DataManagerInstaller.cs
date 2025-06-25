@@ -7,7 +7,7 @@ namespace Scene.ZenjectInstaller.Managers
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<DataManager>().AsSingle();
+            Container.BindInterfacesTo<DataManager>().AsSingle();
         }
     }
 }

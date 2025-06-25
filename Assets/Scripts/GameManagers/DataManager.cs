@@ -27,18 +27,21 @@ namespace GameManagers
         Dictionary<TKey, TValue> MakeDict();
     }
 
-    public class DataManager : IInitializable
+    public class DataManager : IInitializable,IRequestDataType,IGoogleDataBaseStruct
     {
-        [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] IGoogleAuthLoginLoader _googleAuthLogin;
-        [Inject] ISpreedSheetID _spreedSheetID;
+        [Inject] private IResourcesLoader _resourcesLoader;
+        [Inject] private IGoogleAuthLoginLoader _googleAuthLogin;
+        [Inject] private IGameDataSpreadSheet _gameDataSpreadSheet;
+        [Inject] private IAllData _allData;
+        
 
-        private List<Type> _requestDataTypes;
-        private Dictionary<string, Type> _loadDataTypetoDict;
-
+        private IList<Type> _requestDataTypes;
+        private Dictionary<string, Type> _loadDataTypetoDict;//필수조건은 아니기 때문에 인터페이스를 안만듦
         private GoogleDataBaseStruct _databaseStruct;
-        public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
-        public GoogleDataBaseStruct DatabaseStruct
+        
+        //public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
+        
+        public GoogleDataBaseStruct DataBaseStruct
         {
             get
             {
@@ -46,7 +49,7 @@ namespace GameManagers
                 {
                     TextAsset[] jsonTexts = _googleAuthLogin.LoadGoogleAuthJsonFiles();
                     GoogleLoginWrapper googleLoginData = _googleAuthLogin.ParseJsontoGoogleAuth(jsonTexts);
-                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, _spreedSheetID.Spreedsheetid);
+                    _databaseStruct = new GoogleDataBaseStruct(googleLoginData.installed.client_id, googleLoginData.installed.client_secret, Define.Applicationname, _gameDataSpreadSheet.GameDataSpreadsheetID);
                 }
                 return _databaseStruct;
             }
@@ -54,7 +57,7 @@ namespace GameManagers
 
         public void Initialize()
         {
-            _requestDataTypes = LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType", AddSerializableAttributeType);
+            _requestDataTypes = LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType", DataUtil.AddSerializableAttributeType);
 
             _loadDataTypetoDict = new Dictionary<string, Type>();
             foreach (Type typeData in _requestDataTypes)
@@ -64,8 +67,8 @@ namespace GameManagers
             //데이터 로드
             LoadDataFromGoogleSheets(_requestDataTypes);
         }
-
-        public List<Type> LoadSerializableTypesFromFolder(string folderPath,Action<Type,List<Type>> wantTypeFilter)
+        
+        public IList<Type> LoadSerializableTypesFromFolder(string folderPath,Action<Type,List<Type>> wantTypeFilter)
         {
             List<Type> pathClasses = new List<Type>();
 
@@ -89,15 +92,53 @@ namespace GameManagers
             }
             return pathClasses;
         }
-        public void AddSerializableAttributeType(Type monoScriptType,List<Type> typeList)
+        public Spreadsheet GetGoogleSpreadsheet(GoogleDataBaseStruct databaseStruct,out SheetsService service,out string spreadsheetId,bool isWrite = false)
         {
-            if (Attribute.IsDefined(monoScriptType, typeof(SerializableAttribute)))
+            // 구글 스프레드시트에서 데이터 로드하는 로직
+            // 반환값: Dictionary<string, string> (sheetName, jsonString)
+
+            // 구글 인증 및 서비스 생성
+            try
             {
-                typeList.Add(monoScriptType);
-                //Debug.Log($"Find RequestType: {type.FullName}");
+                string[] readAndWriteOption;
+                string tokenID;
+                if (isWrite == true)
+                {
+                    readAndWriteOption = new[] { SheetsService.Scope.Spreadsheets };
+                    tokenID = "WriteUser";
+                }
+                else
+                {
+                    readAndWriteOption = new[] { SheetsService.Scope.SpreadsheetsReadonly };
+                    tokenID = "ReadUser";
+                }
+                UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    new ClientSecrets
+                    {
+                        ClientId = databaseStruct.GoogleClientID,
+                        ClientSecret = databaseStruct.GoogleSecret
+                    },
+                    readAndWriteOption,
+                    tokenID,
+                    CancellationToken.None).Result;
+
+                service = new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = databaseStruct.ApplicationName
+                });
+
+                spreadsheetId = databaseStruct.SpreedSheetID;
+
+                // 스프레드시트 요청
+                Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
+                return spreadsheet;
+            }
+            catch
+            {
+                throw;
             }
         }
-
 
         private bool LoadAllDataFromLocal(string typeName)
         {
@@ -117,7 +158,6 @@ namespace GameManagers
             }
             return false;
         }
-
 
         private void AddAllDataDictFromJsonData(string jsonFileName, string jsonString)
         {
@@ -151,12 +191,8 @@ namespace GameManagers
             MethodInfo makeDicMethod = loaderType.GetMethod("MakeDict");
             object dict = makeDicMethod.Invoke(statData, null);
 
-            AllDataDict[statType] = dict;
+            _allData.OverWriteData(statType, dict);
         }
-
-
-
-
 
         private void SaveDataToFile(string fileName, string jsonString)
         {
@@ -180,56 +216,8 @@ namespace GameManagers
             File.WriteAllText(filePath, jsonString);
             Debug.Log($"{fileName} 데이터를 로컬에 저장했습니다.");
         }
-
-        public Spreadsheet GetGoogleSheetData(GoogleDataBaseStruct databaseStruct,out SheetsService service,out string spreadsheetId,bool isWrite = false)
-        {
-            // 구글 스프레드시트에서 데이터 로드하는 로직
-            // 반환값: Dictionary<string, string> (sheetName, jsonString)
-
-            // 구글 인증 및 서비스 생성
-            try
-            {
-                string[] readAndWriteOption;
-                string tokenID;
-                if (isWrite == true)
-                {
-                    readAndWriteOption = new[] { SheetsService.Scope.Spreadsheets };
-                    tokenID = "WriteUser";
-                }
-                else
-                {
-                    readAndWriteOption = new[] { SheetsService.Scope.SpreadsheetsReadonly };
-                    tokenID = "ReadUser";
-                }
-                UserCredential _credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    new ClientSecrets
-                    {
-                        ClientId = databaseStruct.GoogleClientID,
-                        ClientSecret = databaseStruct.GoogleSecret
-                    },
-                    readAndWriteOption,
-                    tokenID,
-                    CancellationToken.None).Result;
-
-                service = new SheetsService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = _credential,
-                    ApplicationName = databaseStruct.ApplicationName
-                });
-
-                spreadsheetId = databaseStruct.SpreedSheetID;
-
-                // 스프레드시트 요청
-                Spreadsheet spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
-                return spreadsheet;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        private void LoadDataFromGoogleSheets(List<Type> requestDataTypes)
+        
+        private void LoadDataFromGoogleSheets(IList<Type> requestDataTypes)
         {
             // 구글 스프레드시트에서 데이터 로드하는 로직
             // 반환값: Dictionary<string, string> (sheetName, jsonString)
@@ -238,7 +226,7 @@ namespace GameManagers
             try
             {
                 // 스프레드시트 요청
-                Spreadsheet spreadsheet = GetGoogleSheetData(DatabaseStruct, out SheetsService service,out string spreadsheetId);
+                Spreadsheet spreadsheet = GetGoogleSpreadsheet(DataBaseStruct, out SheetsService service,out string spreadsheetId);
                 foreach (Type requestType in requestDataTypes)
                 {
                     Sheet sheet = null;
@@ -315,7 +303,7 @@ namespace GameManagers
             return typeName;
         }
 
-        public Type FindGenericKeyType(Type typeinfo)
+        private Type FindGenericKeyType(Type typeinfo)
         {
             Type[] typeinterfaces = typeinfo.GetInterfaces();
 
@@ -405,9 +393,6 @@ namespace GameManagers
             return true;
         }
 
-        public void Clear()
-        {
-            AllDataDict.Clear();
-        }
+
     }
 }

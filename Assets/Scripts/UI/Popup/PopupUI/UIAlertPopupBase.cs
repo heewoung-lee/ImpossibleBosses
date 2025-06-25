@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;

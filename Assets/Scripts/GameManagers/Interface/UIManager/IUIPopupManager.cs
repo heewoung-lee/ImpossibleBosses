@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UI;
 using UI.Popup;
-using UI.Scene;
 
-namespace GameManagers.Interface
+namespace GameManagers.Interface.UIManager
 {
     public interface IUIPopupManager
     {

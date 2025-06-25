@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface.UI_Interface;
+using GameManagers.Interface.UIManager;
 using NetWork.NGO.UI;
 using Scene.BattleScene;
 using Zenject;

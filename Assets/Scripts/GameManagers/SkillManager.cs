@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using GameManagers.Interface;
+using GameManagers.Interface.DataManager;
 using GameManagers.Interface.UI_Interface;
+using GameManagers.Interface.UIManager;
 using Skill.BaseSkill;
 using UI.Scene.SceneUI;
+using UnityEngine.SceneManagement;
 using Util;
 using Zenject;
 
@@ -11,12 +14,13 @@ namespace GameManagers
 {
     public class SkillManager : IInitializable
     {
-        
+
+        [Inject] private readonly IUISceneManager _sceneManager;
+        [Inject] private IRequestDataType _requestDataType;
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
         public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
-        [Inject] public IUISceneManager SceneManager { get; }
-        [Inject] DataManager _dataManager;
         private Action _doneUISkillBarInitEvent;
+        private IList<Type> _skillType = new List<Type>();
 
         public event Action DoneUISkilBarInitEvent
         {
@@ -32,7 +36,6 @@ namespace GameManagers
 
 
 
-        List<Type> _skillType = new List<Type>();
 
         private UISkillBar _uiSkillBar;
         public UISkillBar UISkillBar
@@ -41,7 +44,7 @@ namespace GameManagers
             {
                 if (_uiSkillBar == null)
                 {
-                    if(SceneManager.Try_Get_Scene_UI(out UISkillBar skillbar))
+                    if(_sceneManager.Try_Get_Scene_UI(out UISkillBar skillbar))
                     {
                         _uiSkillBar = skillbar;
                     }
@@ -52,7 +55,7 @@ namespace GameManagers
         public void Initialize()
         {
             //Skill/AllofSkill에 있는 타입들을 가져온다.
-            _skillType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
+            _skillType = _requestDataType.LoadSerializableTypesFromFolder("Assets/Scripts/Skill/AllofSkills", GetAllofSkill);
             foreach (Type type in _skillType)
             {
            

@@ -5,6 +5,7 @@ using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using Stats.BaseStats;
 using UI.Popup.PopupUI;
 using UnityEngine;

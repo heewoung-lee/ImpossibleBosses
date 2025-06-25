@@ -880,7 +880,7 @@ GameObject:
   - component: {fileID: 7629679113657042210}
   - component: {fileID: 8828845287026276691}
   m_Layer: 5
-  m_Name: UI_CreateNickName
+  m_Name: UICreateNickName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

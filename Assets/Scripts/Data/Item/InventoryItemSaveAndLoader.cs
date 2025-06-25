@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using UI.SubItem;
 using UnityEngine;
 using Zenject;

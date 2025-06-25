@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameManagers.Interface.DataManager;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using UnityEngine;
@@ -33,8 +34,12 @@ namespace GameManagers
 
     public class LogInManager
     {
-        private const string Spreedsheetid = "1SKhi41z1KRfHI6KwhQ2iM3mSjgLZKXw7_VopoIEZYNQ";
-        [Inject] DataManager _dataManager;
+        [Inject] IGoogleDataBaseStruct _dataManager;
+        [Inject] ILoginDataSpreadSheet _loginDataSpreadSheet;
+        private string LoginDataSpreadsheetID => _loginDataSpreadSheet.LoginDataSpreadsheetID;
+        private string UserAuthenticateDatasheetName => _loginDataSpreadSheet.UserAuthenticateDatasheetName;
+        
+        
         private static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         enum SheetIndex
         {
@@ -43,7 +48,6 @@ namespace GameManagers
             NickName,
             RowNumber
         }
-        private const string UserAuthenticateDatasheetName = "UserAuthenticateData";
 
         private GoogleDataBaseStruct _googleDataBaseStruct;
         private PlayerLoginInfo _currentPlayerInfo;
@@ -55,8 +59,8 @@ namespace GameManagers
             {
                 if(_googleDataBaseStruct.Equals(default(GoogleDataBaseStruct)))
                 {
-                    _googleDataBaseStruct = _dataManager.DatabaseStruct;
-                    _googleDataBaseStruct.SpreedSheetID = Spreedsheetid;
+                    _googleDataBaseStruct = _dataManager.DataBaseStruct;
+                    _googleDataBaseStruct.SpreedSheetID = LoginDataSpreadsheetID;
                 }
                 return _googleDataBaseStruct;
             }
@@ -67,7 +71,7 @@ namespace GameManagers
             //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
             //있으면 로비창으로 씬전환
             //없으면 오류메세지 출력
-            Spreadsheet spreadsheet = _dataManager.GetGoogleSheetData(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId);
+            Spreadsheet spreadsheet = _dataManager.GetGoogleSpreadsheet(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId);
             Sheet userAthenticateData = null;
             bool ischeckSamePlayerLoginfo = false;
             foreach (Sheet sheet in spreadsheet.Sheets)
@@ -168,7 +172,7 @@ namespace GameManagers
         public async Task<(bool,string)> WriteToGoogleSheet(string id, string password)
         {
 
-            Spreadsheet sheet = _dataManager.GetGoogleSheetData(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId,true);
+            Spreadsheet sheet = _dataManager.GetGoogleSpreadsheet(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId,true);
 
             PlayerLoginInfo isIDInDatabase = AuthenticateUser(id);
 
@@ -211,7 +215,7 @@ namespace GameManagers
 
         public async Task<(bool,string)> WriteNickNameToGoogleSheet(PlayerLoginInfo playerInfo,string nickName)
         {
-            Spreadsheet sheet = _dataManager.GetGoogleSheetData(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId, true);
+            Spreadsheet sheet = _dataManager.GetGoogleSpreadsheet(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId, true);
 
             PlayerLoginInfo isNickNameDatabase = AuthenticateUserNickname(nickName);
 

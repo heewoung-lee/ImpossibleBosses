@@ -1,6 +1,7 @@
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.UIManager;
 using UnityEngine.InputSystem;
 using Util;
 using Zenject;

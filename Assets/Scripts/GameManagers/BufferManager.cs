@@ -4,6 +4,7 @@ using Buffer;
 using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.UI_Interface;
+using GameManagers.Interface.UIManager;
 using Stats.BaseStats;
 using UI.Scene.SceneUI;
 using Unity.Netcode;
@@ -19,7 +20,7 @@ namespace GameManagers
         
         
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
-        private List<Type> _requestType = new List<Type>();
+        private IList<Type> _requestType = new List<Type>();
         private UIBufferBar _uiBufferBar;
         [Inject] private IUISceneManager _sceneManager;
         [Inject] private IDestroyObject _destroyer;

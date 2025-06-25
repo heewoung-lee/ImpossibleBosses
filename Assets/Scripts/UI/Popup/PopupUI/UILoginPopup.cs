@@ -1,6 +1,7 @@
 using System;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI.Popup.PopupUI
     public class UILoginPopup : IDPwPopup, IUIHasCloseButton
     {
         [Inject] private LogInManager _logInManager;
+        [Inject] private IUIPopupManager _uiPopupManager;
         
         enum Buttons
         {
@@ -33,7 +35,6 @@ namespace UI.Popup.PopupUI
         private TMP_InputField _pwInputField;
         private UICreateNickName _uiCreateNickName;
         private UIAlertPopupBase _uiAlertPopupBase;
-        [Inject] private IUIPopupManager _uiPopupManager;
 
         public UICreateNickName UICreateNickName
         {

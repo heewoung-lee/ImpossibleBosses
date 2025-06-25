@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Data.DataType.StatType;
 using GameManagers;
+using GameManagers.Interface.DataManager;
 using Stats.BaseStats;
 using UnityEngine;
 using Util;
@@ -14,7 +15,9 @@ namespace Stats.BossStats
         protected float _viewDistance;
         protected Dictionary<int, BossStat> _statDict;
         private LayerMask _targetLayer;
-        [Inject] DataManager _dataManager;
+        
+        [Inject] IAllData _allData;
+        
         public float ViewAngle { get => _viewAngle; }
         public float ViewDistance { get => _viewDistance; }
 
@@ -30,7 +33,7 @@ namespace Stats.BossStats
         protected override void StartInit()
         {
             _targetLayer = LayerMask.GetMask(Utill.GetLayerID(Define.ControllerLayer.Player), Utill.GetLayerID(Define.ControllerLayer.AnotherPlayer));
-            _statDict = _dataManager.AllDataDict[typeof(BossStat)] as Dictionary<int, BossStat>;
+            _statDict = _allData.GetData(typeof(BossStat)) as Dictionary<int, BossStat>;
         }
 
     }

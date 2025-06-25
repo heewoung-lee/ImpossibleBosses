@@ -4,6 +4,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.UIManager;
 using Stats;
 using TMPro;
 using UI.Popup.PopupUI;
