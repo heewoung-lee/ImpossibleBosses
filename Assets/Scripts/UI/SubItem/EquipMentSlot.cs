@@ -6,6 +6,7 @@ using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.UIManager;
 using Stats.BaseStats;
 using UI.Popup.PopupUI;
@@ -24,7 +25,7 @@ namespace UI.SubItem
         private BaseStats _playerStats;
         private UIItemComponentInventory _equipedItem;
         [Inject] private IUIPopupManager _popupUIManager;
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGetter _itemGetter;
         [Inject] IPlayerSpawnManager _gameManagerEx;
         public BaseStats PlayerStats
         {
@@ -124,7 +125,7 @@ namespace UI.SubItem
 
             if(Managers.SceneDataSaveAndLoader.TryGetLoadEquipMentData(slotType,out IteminfoStruct iteminfo) == true)
             {
-                IItem item = _itemDataManager.GetItem(iteminfo.ItemNumber);
+                IItem item = _itemGetter.GetItemByItemNumber(iteminfo.ItemNumber);
                 UIItemComponentEquipment equipItem = item.MakeInventoryItemComponent(_popupUIManager) as UIItemComponentEquipment;
                 equipItem.SetINewteminfo(iteminfo);
                 equipItem.OnAfterStart += () => { equipItem.EquipItem(); };

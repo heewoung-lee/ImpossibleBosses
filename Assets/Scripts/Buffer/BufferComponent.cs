@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using Stats.BaseStats;
 using UnityEngine;
 using UnityEngine.UI;

@@ -26,16 +26,6 @@ namespace NetWork.NGO
     {
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] IPlayerSpawnManager _gameManagerEx;
-        
-             
-        private Action<PlayerController> _onPlayerSpawnwithController;
-        public event Action<PlayerController> OnPlayerSpawnwithController
-        {
-            add { UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnwithController, value); }
-            remove { UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnwithController, value); }
-        }
-
-        
         enum Transforms
         {
             Interaction
@@ -95,7 +85,7 @@ namespace NetWork.NGO
       
             RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
             gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
-            _onPlayerSpawnwithController?.Invoke(controller);
+            _gameManagerEx.InvokePlayerSpawnWithController(controller);
         }
 
 

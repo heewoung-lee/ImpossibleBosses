@@ -26,7 +26,7 @@ namespace Controller
         {
             if (_gameManagerEx.GetPlayer() == null || _gameManagerEx.GetPlayer().GetComponent<PlayerController>() == null)
             {
-                _gameManagerEx.GetPlayer().GetComponent<PlayerInitializeNgo>().OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
+                _gameManagerEx.OnPlayerSpawnwithController += RegiterPlayerMoveMarker;
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Controller
 
         private void OnDisable()
         {
-            _gameManagerEx.GetPlayer().GetComponent<PlayerInitializeNgo>().OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
+            _gameManagerEx.OnPlayerSpawnwithController -= RegiterPlayerMoveMarker;
             //구독되어있는 마커이벤트를 빼주고,
             GameObject player = _gameManagerEx.GetPlayer();
             if (player != null && player.TryGetComponent(out PlayerController controller) == true)

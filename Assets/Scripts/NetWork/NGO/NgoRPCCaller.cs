@@ -6,6 +6,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
@@ -29,7 +30,8 @@ namespace NetWork.NGO
         [Inject] private IUISceneManager _uiSceneManager;
         [Inject] private IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] private ItemDataManager _itemDataManager; 
+        [Inject] private IItemGetter _itemGetter;
+        [Inject] private ILootItemGetter _lootItemGetter;
         [Inject]private BufferManager _bufferManager;
         [Inject] IPlayerSpawnManager _gameManagerEx;
         
@@ -133,14 +135,14 @@ namespace NetWork.NGO
         {
             //여기에서 itemStruct를 IItem으로 변환
             GameObject networkLootItem = null;
-            IItem iteminfo = _itemDataManager.GetItem(itemStruct.ItemNumber);
+            IItem iteminfo = _itemGetter.GetItemByItemNumber(itemStruct.ItemNumber);
             switch (itemStruct.ItemType)
             {
                 case ItemType.Equipment:
-                    networkLootItem = _itemDataManager.GetEquipLootItem(iteminfo);
+                    networkLootItem = _lootItemGetter.GetEquipLootItem(iteminfo);
                     break;
                 case ItemType.Consumable:
-                    networkLootItem = _itemDataManager.GetConsumableLootItem(iteminfo);
+                    networkLootItem = _lootItemGetter.GetConsumableLootItem(iteminfo);
                     break;
                 case ItemType.ETC:
                     break;
@@ -177,7 +179,7 @@ namespace NetWork.NGO
                     }
                 }
             }
-            IItem iteminfo = _itemDataManager.GetItem(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
+            IItem iteminfo = _itemGetter.GetItemByItemNumber(itemStruct.ItemNumber).SetIItemEffect(itemStruct);
             rootItemngo.GetComponent<LootItem.LootItem>().SetIteminfo(iteminfo);
             rootItemngo.GetComponent<LootItem.LootItem>().SpawnBehaviour();
         }

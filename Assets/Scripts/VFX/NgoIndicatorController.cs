@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork.BaseNGO;
 using Unity.Netcode;
 using UnityEngine;

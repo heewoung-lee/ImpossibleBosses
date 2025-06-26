@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using UI.SubItem;
 using Unity.Netcode;
@@ -14,7 +15,7 @@ namespace BehaviourTreeNode.BossGolem.Task
     public class DropItems : Action
     {
         [Inject] private IInstantiate _instantiate;
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGetter _itemGetter;
         
         private readonly int _minimumTimeCount = 1;
         private readonly int _maximumTimeCount = 3;
@@ -66,7 +67,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
                         return;
 
-                    IItem spawnItem = _itemDataManager.GetRandomItemFromAll();
+                    IItem spawnItem = _itemGetter.GetRandomItemFromAll();
                     IteminfoStruct itemStruct = new IteminfoStruct(spawnItem);
                     NetworkObjectReference dropItemBahaviour = Managers.RelayManager.GetNetworkObject(_ngoDropItemBehaviour);
                     Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);

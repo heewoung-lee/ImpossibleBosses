@@ -6,6 +6,7 @@ using Data.Item.EquipSlot;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.UIManager;
 using UI.Popup.PopupUI;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace UI.SubItem
         protected GraphicRaycaster _uiRaycaster;
         protected EventSystem _eventSystem;
         [Inject] private IUIPopupManager _popupUIManager;
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGradeBorder _itemGradeBorderManager;
         [Inject] IPlayerSpawnManager _gameManagerEx;
 
         public event Action OnAfterStart
@@ -75,7 +76,7 @@ namespace UI.SubItem
             _uiRaycaster = _inventoryUI.UIInventoryRayCaster;
             _eventSystem = _inventoryUI.EventSystem;
 
-            _itemGradeBorder.sprite = _itemDataManager.ItemGradeBorder[_itemGrade];
+            _itemGradeBorder.sprite = _itemGradeBorderManager.GetGradeBorder(_itemGrade);
 
 
             _onAfterStart?.Invoke();

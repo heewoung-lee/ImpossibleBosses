@@ -4,6 +4,7 @@ using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork.LootItem;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers.Interface;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.UIManager;
 using UI.SubItem;
 using Util;
@@ -13,7 +14,7 @@ namespace GameManagers
     {
         private Dictionary<EquipmentSlotType, IteminfoStruct> _equipmentSlotData = new Dictionary<EquipmentSlotType, IteminfoStruct>();
         private List<IteminfoStruct> _inventoryItemList = new List<IteminfoStruct>();
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGetter _itemGetter;
 
         public void SaveInventoryItem(List<IteminfoStruct> saveItemlist)
         {
@@ -28,7 +29,7 @@ namespace GameManagers
 
             foreach (IteminfoStruct iteminfo in _inventoryItemList)
             {
-                IItem item = _itemDataManager.GetItem(iteminfo.ItemNumber);
+                IItem item = _itemGetter.GetItemByItemNumber(iteminfo.ItemNumber);
                 UIItemComponentInventory inventoryitem = item.MakeInventoryItemComponent(popupManager);
                 inventoryitem.SetINewteminfo(iteminfo);
                 loadInventory.Add(inventoryitem);

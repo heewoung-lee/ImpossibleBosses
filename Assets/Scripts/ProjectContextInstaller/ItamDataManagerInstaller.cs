@@ -1,13 +1,13 @@
 using GameManagers;
 using Zenject;
 
-namespace Scene.ZenjectInstaller.Managers
+namespace ProjectContextInstaller
 {
    public class ItamDataManagerInstaller : MonoInstaller
    {
       public override void InstallBindings()
       {
-         Container.Bind<ItemDataManager>().AsSingle();
+         Container.BindInterfacesTo<ItemDataManager>().AsSingle().NonLazy();
       }
    }
 }

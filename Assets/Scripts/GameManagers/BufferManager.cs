@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Buffer;
 using GameManagers.Interface;
+using GameManagers.Interface.DataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using Stats.BaseStats;
@@ -16,16 +18,13 @@ namespace GameManagers
 {
     public class BufferManager: IInitializable
     {
-        
-        
-        
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
         private IList<Type> _requestType = new List<Type>();
         private UIBufferBar _uiBufferBar;
-        [Inject] private IUISceneManager _sceneManager;
-        [Inject] private IDestroyObject _destroyer;
-        [Inject] private IInstantiate _instantiate;
-        [Inject] private DataManager _dataManager;
+        [Inject] private IUISceneManager _sceneManager;//전역
+        [Inject] private IDestroyObject _destroyer;//전역
+        [Inject] private IInstantiate _instantiate;//전역
+        [Inject] private IRequestDataType _requestDataType;//씬
         public UIBufferBar UIBufferBar
         {
             get
@@ -70,7 +69,7 @@ namespace GameManagers
 
         public void Initialize()
         {
-            _requestType = _dataManager.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
+            _requestType = _requestDataType.LoadSerializableTypesFromFolder("Assets/Scripts/Buffer/Buffer_Type", GetBuffModifierType);
             foreach(Type type in _requestType)
             {
                 // Activator.CreateInstance로 인스턴스 생성 _requestType은 메타데이터 이므로 인스턴스가 아님

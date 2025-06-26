@@ -19,26 +19,21 @@ namespace GameManagers
         private GameObject _bossMonster;
         private Action _onBossSpawnEvent;
         private Action<PlayerStats> _onPlayerSpawnEvent;
-        
+        private Action<PlayerController> _onPlayerSpawnwithController;
+        public event Action<PlayerController> OnPlayerSpawnwithController
+        {
+            add { UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnwithController, value); }
+            remove { UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnwithController, value); }
+        }
         public event Action OnBossSpawnEvent
         {
             add
             {
-                if (_onBossSpawnEvent != null && _onBossSpawnEvent.GetInvocationList().Contains(value) == true)
-                    return;
-
-                _onBossSpawnEvent += value;
+              UniqueEventRegister.AddSingleEvent(ref _onBossSpawnEvent, value);
             }
             remove
             {
-                if (_onBossSpawnEvent == null || _onBossSpawnEvent.GetInvocationList().Contains(value) == false)
-                {
-                    Debug.LogWarning(
-                        $"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
-                    return;
-                }
-
-                _onBossSpawnEvent -= value;
+                UniqueEventRegister.RemovedEvent(ref _onBossSpawnEvent, value);
             }
         }
 
@@ -54,6 +49,13 @@ namespace GameManagers
         {
             add { UniqueEventRegister.AddSingleEvent(ref _onPlayerSpawnEvent, value); }
             remove { UniqueEventRegister.RemovedEvent(ref _onPlayerSpawnEvent, value); }
+        }
+
+
+        public void InvokePlayerSpawnWithController(PlayerController controller)
+        {
+            _onPlayerSpawnwithController?.Invoke(controller);
+            _onPlayerSpawnwithController = null; // 중복호출을 막기 위해 이벤트를 비움
         }
 
         public void SetPlayer(GameObject playerObject)

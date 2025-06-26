@@ -3,8 +3,12 @@ using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using Data.Item;
 using GameManagers;
+using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
+using GameManagers.Interface.UIManager;
 using Stats;
 using TMPro;
 using UI.Popup.PopupUI;
@@ -19,8 +23,9 @@ namespace UI.SubItem
     public class UIShopItemComponent : UIItemComponent
     {
         [Inject] IDestroyObject _destroyer;
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGradeBorder _itemGradeBorder;
         [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private IUIPopupManager _uiPopupManager;
         
         
         enum ItemICons
@@ -44,7 +49,6 @@ namespace UI.SubItem
         private int _itemPrice;
         private int _itemCount;
         private UIPlayerInventory _uiPlayerInventory;
-        [Inject] private UIManager _uiManager;
 
         
         
@@ -94,9 +98,9 @@ namespace UI.SubItem
             base.StartInit();
             _itemNameText.text = _itemName;
             _playerStats = _gameManagerEx.GetPlayer().GetComponent<PlayerStats>();
-            _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
-            _uiShop = _uiManager.GetImportant_Popup_UI<UIShop>();
-            _itemGradeBorderImage.sprite = _itemDataManager.ItemGradeBorder[ItemGradeType];
+            _uiPlayerInventory = _uiPopupManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _uiShop = _uiPopupManager.GetImportant_Popup_UI<UIShop>();
+            _itemGradeBorderImage.sprite = _itemGradeBorder.GetGradeBorder(ItemGradeType);
 
 
             _uiRaycaster = _uiShop.UIShopRayCaster;
@@ -117,7 +121,7 @@ namespace UI.SubItem
                 return;
 
             _playerStats.Gold -= _itemPrice;//플레이어의 현재 돈을 깎는다.
-            _iteminfo.MakeInventoryItemComponent(_uiManager);
+            _iteminfo.MakeInventoryItemComponent(_uiPopupManager);
 
             ItemCount--;
             if (_itemCount <= 0)

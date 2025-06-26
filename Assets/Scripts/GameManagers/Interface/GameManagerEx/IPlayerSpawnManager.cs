@@ -10,5 +10,8 @@ namespace GameManagers.Interface.GameManagerEx
         public void SetPlayer(GameObject player);
         public GameObject GetPlayer();
         public event Action<PlayerStats> OnPlayerSpawnEvent;
+
+        public event Action<PlayerController> OnPlayerSpawnwithController;
+        public void InvokePlayerSpawnWithController(PlayerController controller);
     }
 }

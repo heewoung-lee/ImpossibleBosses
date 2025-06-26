@@ -3,6 +3,7 @@ using GameManagers;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.InputManager_Interface;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using Stats;
 using UI.SubItem;
 using UnityEngine;

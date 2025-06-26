@@ -5,29 +5,41 @@ using System.Linq;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers.Interface.DataManager;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using NetWork.LootItem;
+using Scene.ZenjectInstaller;
 using UnityEngine;
 using Util;
 using Zenject;
 using Random = UnityEngine.Random;
 namespace GameManagers
-{
-    public class ItemDataManager:IInitializable
+{//전역으로 옮겨야함.
+    public class ItemDataManager:IRegistrar<IRequestDataType>,IItemGradeBorder,IItemGetter,ILootItemGetter
     {
         [Inject] private IResourcesLoader _loader;
         [Inject] private IInstantiate _instantiate;
-        [Inject] private IRequestDataType _requestDataType;
         [Inject] private IAllData _allData;
+        
+        private IRequestDataType _requestDataType;
         
         
         private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
         private Dictionary<ItemGradeType, Sprite> _itemGradeBorder;
-        public Dictionary<ItemGradeType, Sprite> ItemGradeBorder => _itemGradeBorder;
-
         private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
         private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
         private IList<Type> _itemDataType;
+
+        public void Register(IRequestDataType sceneContext)
+        {
+            _requestDataType = sceneContext;
+            Initialize();
+        }
+        public void Unregister(IRequestDataType sceneContext)
+        {
+            if(_requestDataType == sceneContext)
+                _requestDataType = null;
+        }
         public void Initialize()
         {
 
@@ -70,8 +82,16 @@ namespace GameManagers
                 { ItemGradeType.Epic, _loader.Load<Sprite>(ItemFrameBorderPath + "/ItemFrame_01_Border_Yellow") }
             };
         }
+        public Sprite GetGradeBorder(ItemGradeType gradeType)
+        {
+            if (_itemGradeBorder != null && _itemGradeBorder.TryGetValue(gradeType, out var sprite))
+                return sprite;
 
-        public IItem GetItem(int itemNumber)
+            Debug.LogWarning($"[GetGradeBorder] 해당 gradeType({gradeType})이 존재하지 않습니다.");
+            return null;
+        }
+        
+        public IItem GetItemByItemNumber(int itemNumber)
         {
             if(_itemDataKeyDict.TryGetValue(itemNumber,out IItem iteminfo))
             {
@@ -79,7 +99,6 @@ namespace GameManagers
             }
             return null;
         }
-
         public IItem GetRandomItem(Type itemtype)
         {
             IItem item = null;
@@ -93,33 +112,12 @@ namespace GameManagers
 
             return item;
         }
-
         public IItem GetRandomItemFromAll()
         {
             Type randomType = _itemDataType[Random.Range(0, _itemDataType.Count)];
             return GetRandomItem(randomType);
         }
-        private IDictionary BindImageSources(IDictionary missingImageItemsDict)
-        {
-            IDictionary itemDict;
-            itemDict = missingImageItemsDict;
-
-            foreach (System.Object key in itemDict.Keys)
-            {
-                IItem itemType = itemDict[key] as IItem;
-                FindImageByKey(itemType);
-            }
-            return itemDict;
-        }//딕셔너리로 던져줘야함.
-
-        public void FindImageByKey(IItem items)
-        {
-            items.ImageSource[items.ItemIconSourceText] = _loader.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
-            //TODO: 나중에 사용하는 모든 이미지파일을 모아서 경로지정을 다시 해야함.
-        }
-
-
-
+       
         public GameObject GetEquipLootItem(IItem iteminfo)
         {
             GameObject lootItem;
@@ -145,6 +143,26 @@ namespace GameManagers
             GameObject lootitem = _instantiate.InstantiateByPath("NGO/LootingItem/Potion");
             lootitem.GetComponent<LootItem>().SetIteminfo(iteminfo);
             return lootitem;
+        }
+        
+        
+        
+        private IDictionary BindImageSources(IDictionary missingImageItemsDict)
+        {
+            IDictionary itemDict;
+            itemDict = missingImageItemsDict;
+
+            foreach (System.Object key in itemDict.Keys)
+            {
+                IItem itemType = itemDict[key] as IItem;
+                FindImageByKey(itemType);
+            }
+            return itemDict;
+        }//딕셔너리로 던져줘야함.
+
+        private void FindImageByKey(IItem items)
+        {
+            items.ImageSource[items.ItemIconSourceText] = _loader.Load<Sprite>($"Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons/Shadow/256/{items.ItemIconSourceText}");
         }
     }
 }

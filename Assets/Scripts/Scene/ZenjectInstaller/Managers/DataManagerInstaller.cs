@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.DataManager;
 using Zenject;
 
 namespace Scene.ZenjectInstaller.Managers

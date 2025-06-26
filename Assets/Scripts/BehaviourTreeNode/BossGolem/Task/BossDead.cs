@@ -3,6 +3,7 @@ using Controller.BossState;
 using Controller.ControllerStats;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork.Boss_NGO;
 using Unity.Netcode;
 using UnityEngine;

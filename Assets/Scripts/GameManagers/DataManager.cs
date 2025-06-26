@@ -15,6 +15,7 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Newtonsoft.Json;
+using Scene.ZenjectInstaller;
 using UnityEditor;
 using UnityEngine;
 using Util;
@@ -27,19 +28,18 @@ namespace GameManagers
         Dictionary<TKey, TValue> MakeDict();
     }
 
-    public class DataManager : IInitializable,IRequestDataType,IGoogleDataBaseStruct
+    public class DataManager : IInitializable,IRequestDataType,IGoogleDataBaseStruct,IDisposable
     {
         [Inject] private IResourcesLoader _resourcesLoader;
         [Inject] private IGoogleAuthLoginLoader _googleAuthLogin;
         [Inject] private IGameDataSpreadSheet _gameDataSpreadSheet;
         [Inject] private IAllData _allData;
+        [Inject] private IRegistrar<IRequestDataType> _registrar;
         
-
         private IList<Type> _requestDataTypes;
         private Dictionary<string, Type> _loadDataTypetoDict;//필수조건은 아니기 때문에 인터페이스를 안만듦
         private GoogleDataBaseStruct _databaseStruct;
         
-        //public Dictionary<Type,object> AllDataDict { get; } = new Dictionary<Type,object>();
         
         public GoogleDataBaseStruct DataBaseStruct
         {
@@ -58,7 +58,6 @@ namespace GameManagers
         public void Initialize()
         {
             _requestDataTypes = LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType", DataUtil.AddSerializableAttributeType);
-
             _loadDataTypetoDict = new Dictionary<string, Type>();
             foreach (Type typeData in _requestDataTypes)
             {
@@ -66,6 +65,13 @@ namespace GameManagers
             }
             //데이터 로드
             LoadDataFromGoogleSheets(_requestDataTypes);
+            _registrar.Register(this);
+        }
+        
+
+        public void Dispose()
+        {
+         _registrar.Unregister(this);    
         }
         
         public IList<Type> LoadSerializableTypesFromFolder(string folderPath,Action<Type,List<Type>> wantTypeFilter)
@@ -392,7 +398,6 @@ namespace GameManagers
             }
             return true;
         }
-
 
     }
 }

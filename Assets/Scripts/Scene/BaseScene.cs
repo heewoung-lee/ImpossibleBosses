@@ -41,7 +41,6 @@ namespace Scene
             {
                 _instantiate.InstantiateByPath("Prefabs/UI/EventSystem").name = "@EventSystem";
             }
-            _moveMarker = _instantiate.GetOrAddComponent<MoveMarkerController>(gameObject);
         }
 
         protected abstract void AwakeInit();

@@ -1,6 +1,7 @@
 using System.Collections;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using TMPro;
 using UnityEngine;
 using Zenject;

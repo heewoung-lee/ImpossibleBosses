@@ -2,6 +2,7 @@ using System.Collections;
 using GameManagers;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using UnityEngine;
 using Zenject;
 

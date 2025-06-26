@@ -1,6 +1,7 @@
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using UI.Scene.SceneUI;

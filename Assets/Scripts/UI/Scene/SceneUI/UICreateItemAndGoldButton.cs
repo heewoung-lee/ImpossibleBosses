@@ -4,6 +4,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.UIManager;
 using Stats;
@@ -25,7 +26,7 @@ namespace UI.Scene.SceneUI
         private PlayerStats _playerStats;
         [Inject] private IUIPopupManager _uiPopupManager;
         [Inject] private IInstantiate _instantiate;
-        [Inject] private ItemDataManager _itemDataManager;
+        [Inject] private IItemGetter _itemGetter;
         [Inject] IPlayerSpawnManager _gameManagerEx;
         
         public PlayerStats PlayerStats
@@ -132,13 +133,13 @@ namespace UI.Scene.SceneUI
             switch (itemGeneratingType)
             {
                 case ItemGeneratingType.EquipMent:
-                    IItem equipmentitem = _itemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiPopupManager);
+                    IItem equipmentitem = _itemGetter.GetRandomItem(typeof(ItemEquipment)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.Consumable:
-                    IItem consumableitem = _itemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiPopupManager);
+                    IItem consumableitem = _itemGetter.GetRandomItem(typeof(ItemConsumable)).MakeInventoryItemComponent(_uiPopupManager);
                     break;
                 case ItemGeneratingType.All:
-                    IItem item = _itemDataManager.GetRandomItemFromAll().MakeInventoryItemComponent(_uiPopupManager);
+                    IItem item = _itemGetter.GetRandomItemFromAll().MakeInventoryItemComponent(_uiPopupManager);
                     break;
             }
         }

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GameManagers.Interface.Resources_Interface
+namespace GameManagers.Interface.ResourcesManager
 {
     public interface IDestroyObject
     {

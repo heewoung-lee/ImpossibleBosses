@@ -6,6 +6,7 @@ using Data.Item;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using Stats;
@@ -24,7 +25,10 @@ namespace UI.Popup.PopupUI
     public class UIShop : UIPopup
     {
         [Inject] IPlayerSpawnManager _gameManagerEx;
-        
+        [Inject] private IUIPopupManager _popupUIManager;
+        [Inject] private IUISceneManager _sceneUIManager;
+        [Inject] private IItemGetter _itemGetter;
+
         private readonly string _focusTabColorHexcode = "#F6E19C";
         private readonly string _nonfocusTabColorHexcode = "#BEB5B6";
         enum ItemShopText
@@ -66,11 +70,6 @@ namespace UI.Popup.PopupUI
 
         private GraphicRaycaster _uiShopRaycaster;
         private EventSystem _eventSystem;
-
-        [Inject] private IUIPopupManager _popupUIManager;
-        [Inject] private IUISceneManager _sceneUIManager;
-        [Inject] private ItemDataManager _itemDataManager;
-        
 
         public GraphicRaycaster UIShopRayCaster => _uiShopRaycaster;
         public EventSystem EventSystem => _eventSystem;
@@ -237,8 +236,8 @@ namespace UI.Popup.PopupUI
         {
             for (int i = 0; i < 10; i++)
             {
-                _itemDataManager.GetRandomItem(typeof(ItemConsumable)).MakeShopItemComponent(_popupUIManager,Random.Range(10, 20), null, Random.Range(1, 5));
-                _itemDataManager.GetRandomItem(typeof(ItemEquipment)).MakeShopItemComponent(_popupUIManager,Random.Range(10, 20));
+                _itemGetter.GetRandomItem(typeof(ItemConsumable)).MakeShopItemComponent(_popupUIManager,Random.Range(10, 20), null, Random.Range(1, 5));
+                _itemGetter.GetRandomItem(typeof(ItemEquipment)).MakeShopItemComponent(_popupUIManager,Random.Range(10, 20));
             }
         }
     }
