@@ -1,9 +1,11 @@
 using System;
 using GameManagers;
+using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.GameManagerEx;
-using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.InputManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
+using GameManagers.Interface.UIManager;
 using Stats;
 using UI.SubItem;
 using UnityEngine;
@@ -19,8 +21,8 @@ namespace UI.Scene.SceneUI
         [Inject] IDestroyObject _destroyer;
         [Inject] private IInputAsset _inputManager;
         [Inject] IPlayerSpawnManager _gameManagerEx;
-        [Inject] private UIManager _uiManager; 
-        [Inject] private BufferManager _bufferManager;
+        [Inject] private IUISceneManager _uiSceneManager; 
+        [Inject] private IBufferManager _bufferManager;
         
         
         private Image[] _consumableIcons;
@@ -42,7 +44,7 @@ namespace UI.Scene.SceneUI
             {
                 if(_itemDragImage == null)
                 {
-                    _itemDragImage = _uiManager.Get_Scene_UI<UI_ItemDragImage>();
+                    _itemDragImage = _uiSceneManager.Get_Scene_UI<UI_ItemDragImage>();
                 }
                 return _itemDragImage;
             }
@@ -56,7 +58,7 @@ namespace UI.Scene.SceneUI
             {
                 if(_uiDescription == null)
                 {
-                    _uiDescription = _uiManager.Get_Scene_UI<UIDescription>();
+                    _uiDescription = _uiSceneManager.Get_Scene_UI<UIDescription>();
                 }
                 return _uiDescription;
             }

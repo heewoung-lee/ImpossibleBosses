@@ -1,6 +1,7 @@
 using System;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.LoginManager;
 using GameManagers.Interface.UIManager;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace UI.Popup.PopupUI
 {
     public class UILoginPopup : IDPwPopup, IUIHasCloseButton
     {
-        [Inject] private LogInManager _logInManager;
+        [Inject] private IPlayerLogininfo _playerLogininfo;
         [Inject] private IUIPopupManager _uiPopupManager;
         
         enum Buttons
@@ -108,7 +109,7 @@ namespace UI.Popup.PopupUI
 
             try
             {
-                PlayerLoginInfo playerinfo = _logInManager.AuthenticateUser(userID, userPw);
+                PlayerLoginInfo playerinfo = _playerLogininfo.FindAuthenticateUser(userID, userPw);
 
                 if (playerinfo.Equals(default))
                 {

@@ -5,6 +5,7 @@ using Buffer;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
@@ -32,7 +33,7 @@ namespace NetWork.NGO
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private IItemGetter _itemGetter;
         [Inject] private ILootItemGetter _lootItemGetter;
-        [Inject]private BufferManager _bufferManager;
+        [Inject]private IBufferManager _bufferManager;
         [Inject] IPlayerSpawnManager _gameManagerEx;
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수

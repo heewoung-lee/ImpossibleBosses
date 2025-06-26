@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameManagers.Interface;
+using GameManagers.Interface.LoginManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UI_Interface;
@@ -39,8 +40,10 @@ namespace GameManagers
     public class LobbyManager : IManagerEventInitialize
     {
         [Inject] IDestroyObject _destroyer;
-        [Inject] private LogInManager _logInManager;
-
+        [Inject] private IPlayerLogininfo _playerLogininfo;
+        [Inject]private IUISceneManager _sceneUIManager;
+        [Inject]private IUISubItem _subItemManager;
+        
         enum LoadingProcess
         {
             VivoxInitalize,
@@ -60,9 +63,6 @@ namespace GameManagers
         private Action<bool> _lobbyLoading;
         private Action _initDoneEvent;
         private Action _hostChangeEvent;
-        
-        [Inject]private IUISceneManager _sceneUIManager;
-        [Inject]private IUISubItem _subItemManager;
             
         public bool[] TaskChecker => _taskChecker;
         public PlayerIngameLoginInfo CurrentPlayerInfo => _currentPlayerInfo;
@@ -786,7 +786,7 @@ namespace GameManagers
 
                 string playerID = AuthenticationService.Instance.PlayerId;
                 Debug.Log($"플레이어 ID 만들어짐{playerID}");
-                _currentPlayerInfo = new PlayerIngameLoginInfo(_logInManager.CurrentPlayerInfo.NickName, playerID);
+                _currentPlayerInfo = new PlayerIngameLoginInfo(_playerLogininfo.CurrentPlayerInfo.NickName, playerID);
 
                 // Shows how to get the playerID
                 return playerID;

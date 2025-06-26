@@ -1,6 +1,6 @@
 using GameManagers;
 using GameManagers.Interface.GameManagerEx;
-using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.InputManager;
 using Stats;
 using Unity.Cinemachine;
 using UnityEngine;

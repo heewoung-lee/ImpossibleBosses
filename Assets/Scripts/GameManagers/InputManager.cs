@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.InputManager;
 using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,29 +15,21 @@ namespace GameManagers
         private InputActionAsset _inputActionAsset;
         private Dictionary<string, Dictionary<string, InputAction>> _inputActionMapDict = new Dictionary<string, Dictionary<string, InputAction>>();
 
-      
-
-        public Dictionary<string, Dictionary<string, InputAction>> InputActionMapDict => _inputActionMapDict;
-        public InputActionAsset InputActionAsset
-        {                                   
-            get
+        public InputActionAsset GetInputActionAsset()
+        {
+            if (_inputActionAsset == null)
             {
-                if(_inputActionAsset == null)
-                {
-                    _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
-                }
-                return _inputActionAsset;
+               _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
             }
+            return _inputActionAsset;
         }
-
 
         //public Action<Vector3> playerMouseClickPositionEvent;
         //6.11일 플레이어의포지션에 클릭포지션에 따라 수행되는 이벤트 제거, 클래스가 수행하지 않아도될 책임을 지게 되는 터라 삭제함,
         public void Initialize()
         {
-            _inputActionAsset = _resourcesLoader.Load<InputActionAsset>("InputData/GameInputActions");
+            _inputActionAsset = GetInputActionAsset();
             _inputActionMapDict = InitActionMapDict(_inputActionAsset);
-            
             
             Dictionary<string, Dictionary<string, InputAction>> InitActionMapDict(InputActionAsset inputAssets)
             {

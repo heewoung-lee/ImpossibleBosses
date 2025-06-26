@@ -4,7 +4,7 @@ using Controller.ControllerStats.BaseStates;
 using Controller.PlayerState;
 using Data;
 using GameManagers;
-using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.InputManager;
 using Stats;
 using Unity.Netcode;
 using UnityEngine;
@@ -65,7 +65,7 @@ namespace Player
             _agent = gameObject.GetComponent<NavMeshAgent>();
             _playerInput = gameObject.GetComponent<PlayerInput>();
 
-            _playerInput.actions = _inputmanager.InputActionAsset;
+            _playerInput.actions = _inputmanager.GetInputActionAsset();
             _moveAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Move");
             _pointerAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Pointer");
             _attackAction = _inputmanager.GetInputAction(Define.ControllerType.Player, "Attack");

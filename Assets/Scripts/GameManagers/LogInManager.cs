@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers.Interface.DataManager;
+using GameManagers.Interface.LoginManager;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using UnityEngine;
@@ -32,27 +33,21 @@ namespace GameManagers
         }
     }
 
-    public class LogInManager
+    public class LogInManager:IPlayerLogininfo,IWriteGoogleSheet
     {
         [Inject] IGoogleDataBaseStruct _dataManager;
         [Inject] ILoginDataSpreadSheet _loginDataSpreadSheet;
         private string LoginDataSpreadsheetID => _loginDataSpreadSheet.LoginDataSpreadsheetID;
         private string UserAuthenticateDatasheetName => _loginDataSpreadSheet.UserAuthenticateDatasheetName;
-        
-        
-        private static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         enum SheetIndex
         {
             ID,
             PW,
             NickName,
-            RowNumber
         }
 
         private GoogleDataBaseStruct _googleDataBaseStruct;
         private PlayerLoginInfo _currentPlayerInfo;
-
-
         GoogleDataBaseStruct GoogleUserDataSheet
         {
             get
@@ -66,7 +61,7 @@ namespace GameManagers
             }
         }
         public PlayerLoginInfo CurrentPlayerInfo { get { return _currentPlayerInfo; } }
-        public PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
+        private PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
         {
             //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
             //있으면 로비창으로 씬전환
@@ -128,11 +123,7 @@ namespace GameManagers
             }
             return default;
         }
-
-
-
-
-        public PlayerLoginInfo AuthenticateUser(string userID, string userPW)
+        public PlayerLoginInfo FindAuthenticateUser(string userID, string userPW)
         {
             return AuthenticateUserCommon((currentPlayerInfo) =>
             {
@@ -144,7 +135,7 @@ namespace GameManagers
                 return false;
             });
         }
-        public PlayerLoginInfo AuthenticateUser(string userID)
+        private PlayerLoginInfo FindUserById(string userID)
         {
             return AuthenticateUserCommon((currentPlayerInfo) =>
             {
@@ -156,7 +147,7 @@ namespace GameManagers
                 return false;
             });
         }
-        public PlayerLoginInfo AuthenticateUserNickname(string userNickName)
+        private PlayerLoginInfo FindUserByNickName(string userNickName)
         {
             return AuthenticateUserCommon((currentPlayerInfo) =>
             {
@@ -168,13 +159,12 @@ namespace GameManagers
                 return false;
             });
         }
-
         public async Task<(bool,string)> WriteToGoogleSheet(string id, string password)
         {
 
             Spreadsheet sheet = _dataManager.GetGoogleSpreadsheet(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId,true);
 
-            PlayerLoginInfo isIDInDatabase = AuthenticateUser(id);
+            PlayerLoginInfo isIDInDatabase = FindUserById(id);
 
             if(isIDInDatabase.Equals(default(PlayerLoginInfo)) == false)
             {
@@ -211,13 +201,11 @@ namespace GameManagers
             }
             return (true, "회원가입을 축하드립니다.");
         }
-
-
         public async Task<(bool,string)> WriteNickNameToGoogleSheet(PlayerLoginInfo playerInfo,string nickName)
         {
             Spreadsheet sheet = _dataManager.GetGoogleSpreadsheet(GoogleUserDataSheet, out SheetsService service, out string spreadsheetId, true);
 
-            PlayerLoginInfo isNickNameDatabase = AuthenticateUserNickname(nickName);
+            PlayerLoginInfo isNickNameDatabase = FindUserByNickName(nickName);
 
             if (isNickNameDatabase.Equals(default(PlayerLoginInfo)) == false)
             {

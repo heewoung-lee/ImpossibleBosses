@@ -1,9 +1,10 @@
 using GameManagers;
-using GameManagers.Interface.DataManager;
+using UnityEngine;
 using Zenject;
 
-namespace Scene.ZenjectInstaller.Managers
+namespace ProjectContextInstaller
 {
+    [DisallowMultipleComponent]
     public class DataManagerInstaller : MonoInstaller
     {
         public override void InstallBindings()

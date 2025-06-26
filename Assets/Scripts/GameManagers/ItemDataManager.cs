@@ -15,13 +15,12 @@ using Zenject;
 using Random = UnityEngine.Random;
 namespace GameManagers
 {//전역으로 옮겨야함.
-    public class ItemDataManager:IRegistrar<IRequestDataType>,IItemGradeBorder,IItemGetter,ILootItemGetter
+    public class ItemDataManager:IInitializable,IItemGradeBorder,IItemGetter,ILootItemGetter
     {
         [Inject] private IResourcesLoader _loader;
         [Inject] private IInstantiate _instantiate;
         [Inject] private IAllData _allData;
-        
-        private IRequestDataType _requestDataType;
+        [Inject] private IRequestDataType _requestDataType;
         
         
         private const string ItemFrameBorderPath = "Art/UI/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame";
@@ -29,20 +28,8 @@ namespace GameManagers
         private Dictionary<Type, Dictionary<int, IItem>> _allItemDataDict = new Dictionary<Type, Dictionary<int, IItem>>();
         private Dictionary<int, IItem> _itemDataKeyDict = new Dictionary<int, IItem>();
         private IList<Type> _itemDataType;
-
-        public void Register(IRequestDataType sceneContext)
-        {
-            _requestDataType = sceneContext;
-            Initialize();
-        }
-        public void Unregister(IRequestDataType sceneContext)
-        {
-            if(_requestDataType == sceneContext)
-                _requestDataType = null;
-        }
         public void Initialize()
         {
-
             //폴더내에 있는 타입들을 긁어와서 데이터를 읽는다.
             _itemDataType = _requestDataType.LoadSerializableTypesFromFolder("Assets/Scripts/Data/DataType/ItemType"
                 , DataUtil.AddSerializableAttributeType);

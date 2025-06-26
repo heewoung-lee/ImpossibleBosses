@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameManagers;
+using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
 using Stats.BaseStats;
@@ -14,7 +15,7 @@ namespace Buffer
     {
 
         [Inject]private IDestroyObject _destroyer;
-        [Inject]private BufferManager _bufferManager;
+        [Inject]private IBufferManager _bufferManager;
             
         private BaseStats _targetStat;
         public BaseStats TarGetStat { get => _targetStat; }

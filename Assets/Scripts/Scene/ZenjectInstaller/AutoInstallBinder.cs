@@ -4,6 +4,7 @@ using Zenject;
 
 namespace Scene.ZenjectInstaller
 {
+   [DisallowMultipleComponent]
     public class AutoInstallBinder : MonoInstaller
     {
         public override void InstallBindings()

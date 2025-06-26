@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Buffer;
 using GameManagers.Interface;
+using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.DataManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
@@ -16,7 +17,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class BufferManager: IInitializable
+    public class BufferManager: IInitializable,IBufferManager,IDetectObject
     {
         private Dictionary<string, BuffModifier> _allBuffModifierDict = new Dictionary<string, BuffModifier>();
         private IList<Type> _requestType = new List<Type>();
@@ -25,7 +26,7 @@ namespace GameManagers
         [Inject] private IDestroyObject _destroyer;//전역
         [Inject] private IInstantiate _instantiate;//전역
         [Inject] private IRequestDataType _requestDataType;//씬
-        public UIBufferBar UIBufferBar
+        private UIBufferBar UIBufferBar
         {
             get
             {
@@ -56,8 +57,8 @@ namespace GameManagers
         }
         public void RemoveBuffer(BufferComponent buffer)
         {
-            DurationBuff durationbuff = buffer.Modifier as DurationBuff;
-            durationbuff.RemoveStats(buffer.TarGetStat, buffer.Value);
+            DurationBuff durationBuff = buffer.Modifier as DurationBuff;
+            durationBuff.RemoveStats(buffer.TarGetStat, buffer.Value);
             _destroyer.DestroyObject(buffer.gameObject);
         }
 
@@ -86,20 +87,6 @@ namespace GameManagers
                 typeList.Add(type);
             }
         }
-
-        public Collider[] DetectedPlayers()
-        {
-            LayerMask playerLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("AnotherPlayer");
-            float skillRadius = float.MaxValue;
-            return  Physics.OverlapSphere(Vector3.zero,skillRadius,playerLayerMask);
-        }
-        public Collider[] DetectedOther(params string[] layerName)
-        {
-            LayerMask detectTargetMask = LayerMask.GetMask(layerName);
-            float skillRadius = float.MaxValue;
-            return  Physics.OverlapSphere(Vector3.zero,skillRadius,detectTargetMask);
-        }
-
         public void ALL_Character_ApplyBuffAndCreateParticle(Collider[] targets,Action<NetworkObject> createPaticle,Action invokeBuff)
         {
             foreach (Collider playersCollider in targets)
@@ -115,5 +102,20 @@ namespace GameManagers
                 }
             }
         }
+        
+        public Collider[] DetectedPlayers()
+        {
+            LayerMask playerLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("AnotherPlayer");
+            float skillRadius = float.MaxValue;
+            return  Physics.OverlapSphere(Vector3.zero,skillRadius,playerLayerMask);
+        }
+        public Collider[] DetectedOther(params string[] layerName)
+        {
+            LayerMask detectTargetMask = LayerMask.GetMask(layerName);
+            float skillRadius = float.MaxValue;
+            return  Physics.OverlapSphere(Vector3.zero,skillRadius,detectTargetMask);
+        }
+
+        
     }
 }

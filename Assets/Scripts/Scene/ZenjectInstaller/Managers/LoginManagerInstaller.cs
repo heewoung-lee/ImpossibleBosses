@@ -9,7 +9,7 @@ namespace Scene.ZenjectInstaller.Managers
     {
         public override void InstallBindings()
         {
-            Container.Bind<LogInManager>().AsSingle();
+            Container.BindInterfacesTo<LogInManager>().AsSingle();
         }
     }
 }

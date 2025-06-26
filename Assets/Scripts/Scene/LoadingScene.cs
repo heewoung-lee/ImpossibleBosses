@@ -1,6 +1,8 @@
 using System.Collections;
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
@@ -10,16 +12,19 @@ namespace Scene
 {
     public class LoadingScene : BaseScene
     {
+        [Inject]private IUISceneManager _uiManager; 
+        
+        
+        
         UI_Loading _uiLoading;
-
         public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
         private bool[] _isCheckTaskChecker;
-        [Inject]private UIManager _uiManager; 
         protected override void StartInit()
         {
             base.StartInit();
+            _uiLoading = _uiManager.GetSceneUIFromResource<UI_Loading>();
             _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
             StartCoroutine(LoadingSceneProcess());
         }
@@ -30,8 +35,9 @@ namespace Scene
 
         protected override void AwakeInit()
         {
-            _uiLoading = _uiManager.GetSceneUIFromResource<UI_Loading>();
+          
         }
+
 
         private IEnumerator LoadingSceneProcess()
         {

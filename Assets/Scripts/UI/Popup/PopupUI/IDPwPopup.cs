@@ -1,5 +1,5 @@
 using GameManagers;
-using GameManagers.Interface.InputManager_Interface;
+using GameManagers.Interface.InputManager;
 using TMPro;
 using UnityEngine.InputSystem;
 using Util;

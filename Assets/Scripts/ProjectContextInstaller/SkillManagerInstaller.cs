@@ -1,8 +1,10 @@
 using GameManagers;
+using UnityEngine;
 using Zenject;
 
-namespace Scene.ZenjectInstaller.Managers
+namespace ProjectContextInstaller
 {
+    [DisallowMultipleComponent]
     public class SkillManagerInstaller : MonoInstaller
     {
         public override void InstallBindings()

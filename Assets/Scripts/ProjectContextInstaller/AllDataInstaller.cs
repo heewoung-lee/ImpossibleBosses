@@ -5,11 +5,12 @@ using Zenject;
 
 namespace ProjectContextInstaller
 {
+    [DisallowMultipleComponent]
     public class AllDataInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<IAllData>().To<AllData>().AsSingle();
+            Container.Bind<IAllData>().To<AllData>().AsSingle().NonLazy();
         }
     }
 }

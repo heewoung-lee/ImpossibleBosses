@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GameManagers.Interface;
 using GameManagers.Interface.DataManager;
+using GameManagers.Interface.SkillManager;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using Skill.BaseSkill;
@@ -12,15 +13,19 @@ using Zenject;
 
 namespace GameManagers
 {
-    public class SkillManager : IInitializable
+    public class SkillManager : IInitializable,ISkillManager
     {
-
         [Inject] private readonly IUISceneManager _sceneManager;
         [Inject] private IRequestDataType _requestDataType;
         Dictionary<string, BaseSkill> _allSKillDict = new Dictionary<string, BaseSkill>();
-        public Dictionary<string, BaseSkill> AllSKillDict { get => _allSKillDict; }
         private Action _doneUISkillBarInitEvent;
         private IList<Type> _skillType = new List<Type>();
+        private UISkillBar _uiSkillBar;
+        
+        public IDictionary<string, BaseSkill> GetSkills()
+        {
+            return _allSKillDict;
+        }
 
         public event Action DoneUISkilBarInitEvent
         {
@@ -34,23 +39,21 @@ namespace GameManagers
             }
         }
 
-
-
-
-        private UISkillBar _uiSkillBar;
-        public UISkillBar UISkillBar
+        public UISkillBar GetUISkillBar()
         {
-            get
+            if (_uiSkillBar == null)
             {
-                if (_uiSkillBar == null)
+                if(_sceneManager.Try_Get_Scene_UI(out UISkillBar skillbar))
                 {
-                    if(_sceneManager.Try_Get_Scene_UI(out UISkillBar skillbar))
-                    {
-                        _uiSkillBar = skillbar;
-                    }
+                    _uiSkillBar = skillbar;
                 }
-                return _uiSkillBar;
             }
+            return _uiSkillBar;
+        }
+
+        public void Invoke_Done_UI_SKilBar_Init_Event()
+        {
+            _doneUISkillBarInitEvent?.Invoke();
         }
         public void Initialize()
         {
@@ -61,28 +64,16 @@ namespace GameManagers
            
                 BaseSkill skill = Activator.CreateInstance(type) as BaseSkill;
 
-                AllSKillDict.Add(skill.SkillName, skill);
+                _allSKillDict.Add(skill.SkillName, skill);
             }
 
         }
-
-
         private void GetAllofSkill(Type type, List<Type> typeList)
         {
             if (typeof(BaseSkill).IsAssignableFrom(type))
             {
                 typeList.Add(type);
             }
-        }
-
-        public void Invoke_Done_UI_SKilBar_Init_Event()
-        {
-            _doneUISkillBarInitEvent?.Invoke();
-        }
-
-        public void Clear()
-        {
-            _doneUISkillBarInitEvent = null;
         }
     }
 }

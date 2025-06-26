@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.LoginManager;
 using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using TMPro;
@@ -11,7 +12,7 @@ namespace UI.Popup.PopupUI
     public class UICreateNickName : UIPopup
     {
         [Inject] private IUIPopupManager _uiManager;
-        [Inject] private LogInManager _logInManager;
+        [Inject] private IWriteGoogleSheet _writeGoogleSheet;
         
         enum InputFields
         {
@@ -67,7 +68,7 @@ namespace UI.Popup.PopupUI
 
         public async void CreateUserNickName(PlayerLoginInfo playerinfo, string nickname)
         {
-            (bool isCheckResult, string message) = await _logInManager.WriteNickNameToGoogleSheet(playerinfo, nickname);
+            (bool isCheckResult, string message) = await _writeGoogleSheet.WriteNickNameToGoogleSheet(playerinfo, nickname);
 
             if (isCheckResult == false)
             {

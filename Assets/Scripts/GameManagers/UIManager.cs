@@ -14,25 +14,19 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class UIManager : IManagerIResettable,IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
+    internal class UIManager : IUIManager,IUIPopupManager,IUISceneManager,IUISubItem
     {
         
         [Inject] private IInstantiate _instantiate;
         private const int SceneUISortingDefaultValue = 0;
         private const int PopupUISortingDefaultValue = 20;
-
-
+        
         int _sorting = SceneUISortingDefaultValue;
         int _popupSorting = PopupUISortingDefaultValue;
-
-
+        
         private Stack<UIPopup> _uiPopups = new Stack<UIPopup>();
         private Dictionary<Type, UIScene> _uiSceneDict = new Dictionary<Type, UIScene>();
         private Dictionary<Type, UIPopup> _importantPopupUI = new Dictionary<Type, UIPopup>();
-        public Dictionary<Type, UIPopup> ImportantPopupUI => _importantPopupUI;
-        public Stack<UIPopup> UIPopupStack => _uiPopups;
-        public Dictionary<Type, UIScene> UISceneDict => _uiSceneDict;
-        
         
         public GameObject Root
         {

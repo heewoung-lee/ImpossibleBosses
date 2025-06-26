@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface;
+using GameManagers.Interface.LoginManager;
 using GameManagers.Interface.UIManager;
 using TMPro;
 using UnityEngine.Events;
@@ -12,7 +13,7 @@ namespace UI.Popup.PopupUI
     {
         
         [Inject] private IUIPopupManager _uiPopupManager;
-        [Inject] private LogInManager _logInManager;
+        [Inject] private IWriteGoogleSheet _writeGoogleSheet;
         
         Button _buttonClose;
         Button _buttonSignup;
@@ -58,7 +59,7 @@ namespace UI.Popup.PopupUI
                 return;
 
 
-            (bool isCheckResult, string message) =  await _logInManager.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
+            (bool isCheckResult, string message) =  await _writeGoogleSheet.WriteToGoogleSheet(_idInputField.text,_pwInputField.text);
 
             if(isCheckResult == false)            {
                 _alertPopup = ShowAlertDialogUI<UIAlertDialog>(_alertPopup, "오류", message);

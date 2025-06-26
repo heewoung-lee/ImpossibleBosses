@@ -1,5 +1,6 @@
 using Buffer;
 using GameManagers;
+using GameManagers.Interface.BufferManager;
 using UI.Scene.Interface;
 using UnityEngine;
 using Zenject;
@@ -9,7 +10,7 @@ namespace UI.Scene.SceneUI
     public class UIBufferBar : UIScene,ISceneChangeBehaviour
     {
     
-        [Inject]private BufferManager _bufferManager;
+        [Inject]private IBufferManager _bufferManager;
         enum BufferContextTr
         {
             BufferContext

@@ -6,8 +6,6 @@ namespace GameManagers.Interface.UIManager
 {
     public interface IUIPopupManager
     {
-        public Dictionary<Type, UIPopup> ImportantPopupUI { get; }
-        public Stack<UIPopup> UIPopupStack { get; }
 
 
         public T GetPopupInDict<T>() where T : UIPopup;
