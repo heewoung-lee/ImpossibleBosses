@@ -10,6 +10,8 @@ namespace Data
     public class GoogleAuthLogin: IGoogleAuthLoginLoader
     {
         [Inject] private IResourcesLoader _loader;
+        private PlayerIngameLoginInfo _currentPlayerIngameLoginInfo;
+        
         public TextAsset[] LoadGoogleAuthJsonFiles()
         {
             TextAsset[] jsonFiles = _loader.LoadAll<TextAsset>("GoogleLoginData");

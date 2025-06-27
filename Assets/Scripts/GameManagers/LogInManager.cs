@@ -60,7 +60,6 @@ namespace GameManagers
                 return _googleDataBaseStruct;
             }
         }
-        public PlayerLoginInfo CurrentPlayerInfo { get { return _currentPlayerInfo; } }
         private PlayerLoginInfo AuthenticateUserCommon(Func<PlayerLoginInfo, bool> action)
         {
             //구글 스프레드 시트에 접근해서 맞는 아이디와 패스워드를 확인한후
@@ -123,6 +122,17 @@ namespace GameManagers
             }
             return default;
         }
+
+        public PlayerLoginInfo GetCurrentPlayerInfo()
+        {
+            return _currentPlayerInfo;
+        }
+
+        public void SetPlayerInfo(PlayerLoginInfo playerInfo)
+        {
+            _currentPlayerInfo = playerInfo;
+        }
+
         public PlayerLoginInfo FindAuthenticateUser(string userID, string userPW)
         {
             return AuthenticateUserCommon((currentPlayerInfo) =>

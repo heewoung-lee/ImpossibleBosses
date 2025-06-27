@@ -786,7 +786,7 @@ namespace GameManagers
 
                 string playerID = AuthenticationService.Instance.PlayerId;
                 Debug.Log($"플레이어 ID 만들어짐{playerID}");
-                _currentPlayerInfo = new PlayerIngameLoginInfo(_playerLogininfo.CurrentPlayerInfo.NickName, playerID);
+                _currentPlayerInfo = new PlayerIngameLoginInfo(CurrentPlayerInfo.PlayerNickName, playerID);
 
                 // Shows how to get the playerID
                 return playerID;
