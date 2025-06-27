@@ -2,6 +2,7 @@ using System;
 using Controller;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using Scene.GamePlayScene;
 using UnityEngine;
 using UnityEngine.EventSystems;

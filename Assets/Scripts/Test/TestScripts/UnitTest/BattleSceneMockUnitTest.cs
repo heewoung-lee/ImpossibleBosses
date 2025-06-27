@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface.LoginManager;
 using NetWork.NGO.UI;
 using Scene;
 using Scene.GamePlayScene;
@@ -16,6 +17,7 @@ namespace Test.TestScripts.UnitTest
 {
     public class BattleSceneMockUnitTest : BaseScene
     {
+        [Inject] private LobbyManager _lobbyManager;
         public enum PlayersTag
         {
             Player1,
@@ -58,7 +60,7 @@ namespace Test.TestScripts.UnitTest
                     }
                     else
                     {
-                        await Managers.LobbyManager.CreateLobby("TestLobby", 8, null);
+                        await _lobbyManager.CreateLobby("TestLobby", 8, null);
                     }
                     if (Managers.RelayManager.NetworkManagerEx == true)
                     {
@@ -69,7 +71,7 @@ namespace Test.TestScripts.UnitTest
                 {
 
                     await Task.Delay(1000);
-                    Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
+                    Lobby lobby = await _lobbyManager.AvailableLobby(LobbyName);
                     if (lobby.Data == null)
                     {
                         await Utill.RateLimited(async () => await JoinChannel(), 1000);
@@ -118,7 +120,7 @@ namespace Test.TestScripts.UnitTest
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
             string playerID = AuthenticationService.Instance.PlayerId;
-            Managers.LobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
+            _lobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
         }
 
         private void Init_NGO_PlayScene_OnHost()

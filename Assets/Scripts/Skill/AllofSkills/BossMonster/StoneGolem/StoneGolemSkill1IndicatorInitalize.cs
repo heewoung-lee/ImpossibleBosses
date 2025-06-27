@@ -1,5 +1,6 @@
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork;
 using NetWork.NGO.Interface;
 using Stats.BaseStats;

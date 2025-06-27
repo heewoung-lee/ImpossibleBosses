@@ -32,8 +32,8 @@ namespace GameManagers
         // private ItemDataManager _itemDataManaer = new ItemDataManager();
         // public static ItemDataManager ItemDataManager { get => Instance._itemDataManaer; }
 
-        private LobbyManager _lobbyManager = new LobbyManager();
-        public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
+        // private LobbyManager _lobbyManager = new LobbyManager();
+        // public static LobbyManager LobbyManager { get => Instance._lobbyManager; }
 
         // private LogInManager _logInManager = new LogInManager();
         // public static LogInManager LogInManager { get => Instance._logInManager; }
@@ -56,8 +56,8 @@ namespace GameManagers
         private SceneDataSaveAndLoader _sceneDataSaveAndLoader = new SceneDataSaveAndLoader();
         public static SceneDataSaveAndLoader SceneDataSaveAndLoader { get => Instance._sceneDataSaveAndLoader; }
 
-        private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
-        public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
+        // private SceneManagerEx _sceneManagerEx = new SceneManagerEx();
+        // public static SceneManagerEx SceneManagerEx { get => Instance._sceneManagerEx; }
 
         // private SkillManager _skillManager = new SkillManager();
         // public static SkillManager SkillManager { get => Instance._skillManager; }
@@ -74,8 +74,8 @@ namespace GameManagers
         private VFXManager _vfxManager = new VFXManager();
         public static VFXManager VFXManager { get => Instance._vfxManager; }
 
-        private VivoxManager _vivoxManager = new VivoxManager();
-        public static VivoxManager VivoxManager { get => Instance._vivoxManager; }
+        // private VivoxManager _vivoxManager = new VivoxManager();
+        // public static VivoxManager VivoxManager { get => Instance._vivoxManager; }
 
         public static Coroutine ManagersStartCoroutine(IEnumerator couroutine)
         {
@@ -152,8 +152,7 @@ namespace GameManagers
         {
             // _instance._soundManager.Clear();
             //_instance._uiManager.Clear();
-            _instance._sceneManagerEx.Clear();
-            _instance._poolManager.Clear();
+            //_instance._poolManager.Clear();
             //_instance._resourceManager.Clear();
             _instance._ngoPoolManager.Clear();
             //_instance._skillManager.Clear();

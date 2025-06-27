@@ -2,11 +2,13 @@ using GameManagers;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.Scene.SceneUI
 {
     public class UILoadingPanel : UIScene
     {
+        [Inject] private LobbyManager _lobbyManager;
         enum LoadingPanel
         {
             LoadingPanel
@@ -19,7 +21,7 @@ namespace UI.Scene.SceneUI
             Bind<GameObject>(typeof(LoadingPanel));
             _loadingPanel = Get<GameObject>(((int)LoadingPanel.LoadingPanel));
             _loadingPanelImage = _loadingPanel.GetComponentInChildren<Image>();
-            Managers.LobbyManager.LobbyLoadingEvent += LobbyLoading;
+            _lobbyManager.LobbyLoadingEvent += LobbyLoading;
         }
 
 

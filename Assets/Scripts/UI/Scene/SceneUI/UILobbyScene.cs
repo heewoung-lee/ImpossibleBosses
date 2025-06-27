@@ -1,11 +1,12 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Zenject;
 
 namespace UI.Scene.SceneUI
 {
     public class UILobbyScene : UIScene
     {
-        [Inject]private UIManager _uiManager; 
+        [Inject]private IUISceneManager _uiSceneManager; 
         UIUserInfoPanel _uiUserPanel;
         UILobbyChat _uiLobbyChat;
         UIRoomInventory _uiRoomInventory;
@@ -13,10 +14,10 @@ namespace UI.Scene.SceneUI
         protected override void AwakeInit()
         {
             base.AwakeInit();
-            _uiUserPanel = _uiManager.GetSceneUIFromResource<UIUserInfoPanel>();
-            _uiLobbyChat = _uiManager.GetSceneUIFromResource<UILobbyChat>();
-            _uiRoomInventory = _uiManager.GetSceneUIFromResource<UIRoomInventory>();
-            _uiLoadingPanel = _uiManager.GetSceneUIFromResource<UILoadingPanel>();
+            _uiUserPanel = _uiSceneManager.GetSceneUIFromResource<UIUserInfoPanel>();
+            _uiLobbyChat = _uiSceneManager.GetSceneUIFromResource<UILobbyChat>();
+            _uiRoomInventory = _uiSceneManager.GetSceneUIFromResource<UIRoomInventory>();
+            _uiLoadingPanel = _uiSceneManager.GetSceneUIFromResource<UILoadingPanel>();
         }
 
 

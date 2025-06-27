@@ -1,4 +1,4 @@
-namespace GameManagers
+namespace GameManagers.Interface
 {
     public interface IManagerEventInitialize
     {

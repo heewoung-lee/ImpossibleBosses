@@ -5,6 +5,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using UI.SubItem;
 using Unity.Netcode;
 using UnityEngine;

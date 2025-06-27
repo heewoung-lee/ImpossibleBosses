@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface;
 using GameManagers.Interface.LoginManager;
@@ -15,7 +16,8 @@ namespace UI.Popup.PopupUI
     {
         [Inject] private IPlayerLogininfo _playerLogininfo;
         [Inject] private IUIPopupManager _uiPopupManager;
-        
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         enum Buttons
         {
             CloseButton,
@@ -68,7 +70,7 @@ namespace UI.Popup.PopupUI
             _pwInputField = Get<TMP_InputField>((int)InputFields.PwInputField);
             _closeButton.onClick.AddListener(OnClickCloseButton);
             _signupButton.onClick.AddListener(ShowSignUpUI);
-            _confirmButton.onClick.AddListener(() => AuthenticateUser(_idInputField.text, _pwInputField.text));
+            _confirmButton.onClick.AddListener(async () => await AuthenticateUser(_idInputField.text, _pwInputField.text));
             _uiPopupManager.AddImportant_Popup_UI(this);
         }
 
@@ -89,7 +91,7 @@ namespace UI.Popup.PopupUI
             _pwInputField.text = "";
         }
 
-        public async void AuthenticateUser(string userID, string userPw)
+        public async Task AuthenticateUser(string userID, string userPw)
         {
             if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(userPw))
                 return;
@@ -142,17 +144,17 @@ namespace UI.Popup.PopupUI
                 return;
             }
 
-            Managers.SceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
+            _sceneManagerEx.LoadSceneWithLoadingScreen(Define.Scene.LobbyScene);
             try
             {
-                bool checkPlayerNickNameAlreadyConnected = await Managers.LobbyManager.InitLobbyScene(); //로그인을 시도;
+                bool checkPlayerNickNameAlreadyConnected = await _lobbyManager.InitLobbyScene(); //로그인을 시도;
                 if (checkPlayerNickNameAlreadyConnected is true)
                 {
                     if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog dialog) == true)
                     {
                         dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
                             .AlertSetText("오류", "아이디가 이미 접속되어 있습니다.")
-                            .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                            .AfterAlertEvent(() => _sceneManagerEx.LoadScene(Define.Scene.LoginScene));
                     }
 
                     return;
@@ -165,11 +167,12 @@ namespace UI.Popup.PopupUI
                 {
                     dialog.AfterAlertEvent(() => { _confirmButton.interactable = true; })
                         .AlertSetText("오류", "로그인중 문제가 생겼습니다.")
-                        .AfterAlertEvent(() => Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene));
+                        .AfterAlertEvent(() => _sceneManagerEx.LoadScene(Define.Scene.LoginScene));
                 }
 
                 return;
             }
+            
         }
 
         public void OnClickCloseButton()

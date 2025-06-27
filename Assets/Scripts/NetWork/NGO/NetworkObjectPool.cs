@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork.BaseNGO;
 using NetWork.NGO.InitializeNGO;
 using Unity.Netcode;

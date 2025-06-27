@@ -7,6 +7,7 @@ using Data.DataType.ItemType.Interface;
 using GameManagers.Interface.DataManager;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using NetWork.LootItem;
 using Scene.ZenjectInstaller;
 using UnityEngine;

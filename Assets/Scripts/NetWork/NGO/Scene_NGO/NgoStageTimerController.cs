@@ -9,6 +9,7 @@ namespace NetWork.NGO.Scene_NGO
 {
     public class NgoStageTimerController : NetworkBehaviour
     {
+        [Inject] SceneManagerEx _sceneManagerEx;
         private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
         private Color _allPlayerInPortalColor = "0084FF".HexCodetoConvertColor();
 
@@ -41,7 +42,7 @@ namespace NetWork.NGO.Scene_NGO
             {
                 if (Mathf.Approximately(_totalTime, default))
                 {
-                    Define.Scene currentScene = Managers.SceneManagerEx.CurrentScene;
+                    Define.Scene currentScene = _sceneManagerEx.CurrentScene;
                     _totalTime = currentScene == Define.Scene.GamePlayScene ? VillageStayTime : BossRoomStayTime;
                 }
                 return _totalTime;  

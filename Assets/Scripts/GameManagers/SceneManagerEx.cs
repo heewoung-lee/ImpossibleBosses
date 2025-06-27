@@ -6,7 +6,7 @@ using Util;
 
 namespace GameManagers
 {
-    public class SceneManagerEx:IManagerIResettable,IManagerInitializable
+    public class SceneManagerEx
     { 
         private Define.Scene _currentScene;
         private Define.Scene _nextScene;
@@ -72,7 +72,7 @@ namespace GameManagers
         
         public void LoadScene(Define.Scene nextscene)
         {
-            Managers.Clear();
+            //Managers.Clear();
             SceneManager.LoadScene(GetEnumName(nextscene));
         }
         public void SetCheckTaskChecker(bool[] CheckTaskChecker)
@@ -119,15 +119,6 @@ namespace GameManagers
         {
             string name = System.Enum.GetName(typeof(Define.Scene), type);
             return name;
-        }
-
-        public void Clear()
-        {
-            GetCurrentScene.Clear();
-        }
-
-        public void Init()
-        {
         }
     }
 }

@@ -6,6 +6,7 @@ using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UIManager;
 using Stats;
 using TMPro;
@@ -19,16 +20,19 @@ namespace UI.Scene.SceneUI
 {
     public class UICreateItemAndGoldButton : UIScene
     {
+        
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private IInstantiate _instantiate;
+        [Inject] private IItemGetter _itemGetter;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
+        
         private Button _scoreButton;
         private Button _moveSceneButton;
         private TMP_Text _scoreText;
 
         private PlayerStats _playerStats;
-        [Inject] private IUIPopupManager _uiPopupManager;
-        [Inject] private IInstantiate _instantiate;
-        [Inject] private IItemGetter _itemGetter;
-        [Inject] IPlayerSpawnManager _gameManagerEx;
-        
         public PlayerStats PlayerStats
         {
             get
@@ -93,14 +97,14 @@ namespace UI.Scene.SceneUI
                 TestGetGold();
                 TestGetExp();
                 TestGetDamaged();
-                //await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
+                //await _lobbyManager.ShowUpdatedLobbyPlayers();
                 //_ = FindMyJoinCodeAsync();
                 Debug.Log(_gameManagerEx.GetPlayer().transform.position+"플레이어 좌표");
                 //_gameManagerEx.GetPlayer().transform.position = Vector3.zero;
             }
             void MoveScene()
             {
-                Managers.SceneManagerEx.GetCurrentScene.SceneSpawnBehaviour.Nextscene.MoveScene();
+                _sceneManagerEx.GetCurrentScene.SceneSpawnBehaviour.Nextscene.MoveScene();
             }
 
             //void AllLevelup()
@@ -147,7 +151,7 @@ namespace UI.Scene.SceneUI
         private async Task FindMyJoinCodeAsync()
         {
             Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
-            Debug.Log($"로비의 조인코드는{(await Managers.LobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
+            Debug.Log($"로비의 조인코드는{(await _lobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
         }
     }
 }

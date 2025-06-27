@@ -11,6 +11,7 @@ namespace UI.Scene.SceneUI
     {
     
         [Inject]private IBufferManager _bufferManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         enum BufferContextTr
         {
             BufferContext
@@ -31,13 +32,13 @@ namespace UI.Scene.SceneUI
         protected override void OnEnableInit()
         {
             base.OnEnableInit();
-            Managers.SceneManagerEx.OnBeforeSceneUnloadLocalEvent += OnBeforeSceneUnload;
+            _sceneManagerEx.OnBeforeSceneUnloadLocalEvent += OnBeforeSceneUnload;
         }
 
         protected override void OnDisableInit()
         {
             base.OnDisableInit();
-            Managers.SceneManagerEx.OnBeforeSceneUnloadLocalEvent -= OnBeforeSceneUnload;
+            _sceneManagerEx.OnBeforeSceneUnloadLocalEvent -= OnBeforeSceneUnload;
 
         }
         protected override void StartInit()

@@ -50,7 +50,7 @@ namespace Test.TestUI
             _testButton.onClick.AddListener(ClickLogin);
         }
 
-        private void ClickLogin()
+        private async void ClickLogin()
         {
 
             if (_uiPopupManagerManager.TryGetPopupDictAndShowPopup(out UILoginPopup loginPopup) == true)
@@ -66,16 +66,16 @@ namespace Test.TestUI
                 switch (currentPlayer)
                 {
                     case Players.Player1:
-                        loginPopup.AuthenticateUser("hiwoong123", "123123");
+                       await  loginPopup.AuthenticateUser("hiwoong123", "123123");
                         break;
                     case Players.Player2:
-                        loginPopup.AuthenticateUser("hiwoong12", "123123");
+                       await loginPopup.AuthenticateUser("hiwoong12", "123123");
                         break;
                     case Players.Player3:
-                        loginPopup.AuthenticateUser("hiwoo12", "123123");
+                        await loginPopup.AuthenticateUser("hiwoo12", "123123");
                         break;
                     case Players.Player4:
-                        loginPopup.AuthenticateUser("hiwoong1234", "123123");
+                        await loginPopup.AuthenticateUser("hiwoong1234", "123123");
                         break;
                     case Players.None:
                         break;

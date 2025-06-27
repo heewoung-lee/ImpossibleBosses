@@ -15,6 +15,8 @@ namespace UI.Popup.PopupUI
 {
     public class UIInputRoomPassWord : UIPopup
     {
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         enum InputFields
         {
             RoomPassWordInputField
@@ -83,9 +85,9 @@ namespace UI.Popup.PopupUI
             Lobby lobby = _roomInfoPanel.LobbyRegisteredPanel;
             try
             {
-                await Managers.LobbyManager.LoadingPanel(async () =>
+                await _lobbyManager.LoadingPanel(async () =>
                 {
-                    await Managers.LobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
+                    await _lobbyManager.JoinLobbyByID(lobby.Id, _roomPwInputField.text);
                 });
             }
             catch (Unity.Services.Lobbies.LobbyServiceException wrongPw) when
@@ -108,7 +110,7 @@ namespace UI.Popup.PopupUI
                         {
                             _uiManager.ClosePopupUI(this);
                             _confirmButton.interactable = true;
-                            await Managers.LobbyManager.ReFreshRoomList();
+                            await _lobbyManager.ReFreshRoomList();
                         });
                 }
                 return;
@@ -120,11 +122,11 @@ namespace UI.Popup.PopupUI
             }
             finally
             {
-                Managers.LobbyManager.TriggerLobbyLoadingEvent(false);
+                _lobbyManager.TriggerLobbyLoadingEvent(false);
             }
 
 
-            Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+            _sceneManagerEx.LoadScene(Define.Scene.RoomScene);
         }
     }
 }

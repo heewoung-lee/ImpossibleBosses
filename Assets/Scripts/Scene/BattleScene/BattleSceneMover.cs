@@ -4,11 +4,13 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using Util;
+using Zenject;
 
 namespace Scene.BattleScene
 {
     public class BattleSceneMover : ISceneMover
     {
+        [Inject] SceneManagerEx _sceneManagerEx;
         public void MoveScene()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
@@ -16,8 +18,8 @@ namespace Scene.BattleScene
 
 
             Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-            Managers.SceneManagerEx.OnAllPlayerLoadedEvent += SetPostion;
-            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene);
+            _sceneManagerEx.OnAllPlayerLoadedEvent += SetPostion;
+            _sceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene);
             Managers.RelayManager.NgoRPCCaller.ResetManagersRpc();
 
 

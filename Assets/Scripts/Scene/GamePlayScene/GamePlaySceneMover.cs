@@ -4,19 +4,21 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using Util;
+using Zenject;
 
 namespace Scene.GamePlayScene
 {
     public class GamePlaySceneMover : ISceneMover
     {
+        [Inject] SceneManagerEx _sceneManagerEx;
         public void MoveScene()
         {
             if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
                 return;
 
             Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
-            Managers.SceneManagerEx.OnAllPlayerLoadedEvent += SetPlayerPostion;
-            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
+            _sceneManagerEx.OnAllPlayerLoadedEvent += SetPlayerPostion;
+            _sceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
             Managers.RelayManager.NgoRPCCaller.ResetManagersRpc();
 
             void SetPlayerPostion()

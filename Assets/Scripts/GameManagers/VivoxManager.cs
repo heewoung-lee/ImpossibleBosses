@@ -1,19 +1,23 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using GameManagers.Interface;
+using GameManagers.Interface.LoginManager;
+using GameManagers.Interface.VivoxManager;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Vivox;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
-    public class VivoxManager : IManagerEventInitialize
+    public class VivoxManager : IManagerEventInitialize,ISendMessage,IVivoxSession
     {
-
+        [Inject] IPlayerIngameLogininfo _playerIngameLogininfo;
+       
         private Action _vivoxDoneLoginEvent;
-
         public event Action VivoxDoneLoginEvent
         {
             add
@@ -35,56 +39,10 @@ namespace GameManagers
         }
         private bool _checkDoneLoginProcess = false;
         public bool CheckDoneLoginProcess => _checkDoneLoginProcess;
-        LoginOptions _loginOptions;
-        string _currentChanel = null;
-
-        public async Task InitializeAsync()
-        {
-            try
-            {
-                InitializeVivoxEvent();
-                if (UnityServices.State != ServicesInitializationState.Initialized)
-                {
-                    await UnityServices.InitializeAsync();
-                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                }
-                await VivoxService.Instance.InitializeAsync();
-                await LoginToVivoxAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"InitializeAsync 에러 발생{ex}");
-                throw;
-            }
-        }
-
-
-        public async Task LoginToVivoxAsync()
-        {
-            if (VivoxService.Instance.IsLoggedIn)
-            {
-                Debug.Log("로그인이 되어있음 리턴하겠음");
-                return;
-
-            }
-
-            try
-            {
-                _loginOptions = new LoginOptions();
-                _loginOptions.DisplayName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
-                _loginOptions.EnableTTS = true;
-                await VivoxService.Instance.LoginAsync(_loginOptions);
-                _checkDoneLoginProcess = true;
-                _vivoxDoneLoginEvent?.Invoke();
-                Debug.Log("ViVox 로그인완료");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"LoginToVivoxAsync 에러 발생{ex}");
-                throw;
-            }
-        }
-        public async Task JoinChannel(string chanelID)
+        private LoginOptions _loginOptions;
+        private string _currentChanel = null;
+        public PlayerIngameLoginInfo CurrentPlayerInfo => _playerIngameLogininfo.GetPlayerIngameLoginInfo();
+        public async Task JoinChannelAsync(string chanelID)
         {
             try
             {
@@ -103,7 +61,7 @@ namespace GameManagers
             catch (RequestFailedException requestFailExceoption)
             {
                 Debug.Log($"오류발생{requestFailExceoption}");
-                await Utill.RateLimited(()=>JoinChannel(chanelID));
+                await Utill.RateLimited(()=>JoinChannelAsync(chanelID));
             }
             catch(ArgumentException alreadyAddKey) when (alreadyAddKey.Message.Contains("An item with the same key has already been added"))
             {
@@ -116,55 +74,6 @@ namespace GameManagers
             }
 
         }
-
-        public async Task JoinGroupChannelAsyncCustom(string currentChanel,ChatCapability chatCapbillty)
-        {
-            try
-            {
-                //await VivoxService.Instance.LeaveAllChannelsAsync();
-                await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty);
-            }
-            catch (MintException e) when (e.Message.Contains("Request timeout"))
-            {
-                Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
-                await Utill.RateLimited(async () => await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty));
-                throw;
-            }
-            catch(Exception authorizedException) when (authorizedException.Message.Contains("not authorized"))
-            {
-                await VivoxService.Instance.LoginAsync(_loginOptions);
-            }
-            catch (Exception error)
-            {
-                Debug.LogError($"에러발생{error}");
-                throw;
-            }
-        }
-
-
-
-        public async Task LeaveEchoChannelAsyncCustom(string chanelID)
-        {
-            try
-            {
-                //await VivoxService.Instance.LeaveAllChannelsAsync();
-                if(VivoxService.Instance.ActiveChannels.ContainsKey(chanelID) != default)
-                    await VivoxService.Instance.LeaveChannelAsync(chanelID);
-            }
-            catch (MintException e) when (e.Message.Contains("Request timeout"))
-            {
-                Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
-                await Utill.RateLimited(async () => await LeaveEchoChannelAsyncCustom(chanelID));
-                throw;
-            }
-            catch(Exception error)
-            {
-                Debug.LogError($"에러발생{error}");
-                throw;
-            }
-        }
-
-
         public async Task LogoutOfVivoxAsync()
         {
             try
@@ -196,7 +105,6 @@ namespace GameManagers
                 throw;
             }
         }
-
         public async Task SendMessageAsync(string message)
         {
             try
@@ -213,7 +121,93 @@ namespace GameManagers
                 throw;
             }
         }
+        private async Task InitializeAsync()
+        {
+            try
+            {
+                InitializeVivoxEvent();
+                if (UnityServices.State != ServicesInitializationState.Initialized)
+                {
+                    await UnityServices.InitializeAsync();
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                }
+                await VivoxService.Instance.InitializeAsync();
+                await LoginToVivoxAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"InitializeAsync 에러 발생{ex}");
+                throw;
+            }
+        }
+        private async Task LoginToVivoxAsync()
+        {
+            if (VivoxService.Instance.IsLoggedIn)
+            {
+                Debug.Log("로그인이 되어있음 리턴하겠음");
+                return;
 
+            }
+
+            try
+            {
+                _loginOptions = new LoginOptions();
+                _loginOptions.DisplayName = CurrentPlayerInfo.PlayerNickName;
+                _loginOptions.EnableTTS = true;
+                await VivoxService.Instance.LoginAsync(_loginOptions);
+                _checkDoneLoginProcess = true;
+                _vivoxDoneLoginEvent?.Invoke();
+                Debug.Log("ViVox 로그인완료");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"LoginToVivoxAsync 에러 발생{ex}");
+                throw;
+            }
+        }
+        private async Task JoinGroupChannelAsyncCustom(string currentChanel,ChatCapability chatCapbillty)
+        {
+            try
+            {
+                //await VivoxService.Instance.LeaveAllChannelsAsync();
+                await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty);
+            }
+            catch (MintException e) when (e.Message.Contains("Request timeout"))
+            {
+                Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
+                await Utill.RateLimited(async () => await VivoxService.Instance.JoinGroupChannelAsync(currentChanel, chatCapbillty));
+                throw;
+            }
+            catch(Exception authorizedException) when (authorizedException.Message.Contains("not authorized"))
+            {
+                await VivoxService.Instance.LoginAsync(_loginOptions);
+            }
+            catch (Exception error)
+            {
+                Debug.LogError($"에러발생{error}");
+                throw;
+            }
+        }
+        private async Task LeaveEchoChannelAsyncCustom(string chanelID)
+        {
+            try
+            {
+                //await VivoxService.Instance.LeaveAllChannelsAsync();
+                if(VivoxService.Instance.ActiveChannels.ContainsKey(chanelID) != default)
+                    await VivoxService.Instance.LeaveChannelAsync(chanelID);
+            }
+            catch (MintException e) when (e.Message.Contains("Request timeout"))
+            {
+                Debug.LogError($"LeaveEchoChannelAsync 에러 발생{e}");
+                await Utill.RateLimited(async () => await LeaveEchoChannelAsyncCustom(chanelID));
+                throw;
+            }
+            catch(Exception error)
+            {
+                Debug.LogError($"에러발생{error}");
+                throw;
+            }
+        }
         public void InitializeVivoxEvent()
         {
             Managers.SocketEventManager.LogoutVivoxEvent += LogoutOfVivoxAsync;

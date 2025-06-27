@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface.LoginManager;
 using Scene;
 using Scene.GamePlayScene;
 using UI.Scene.SceneUI;
@@ -16,6 +17,7 @@ namespace Test.TestScripts.UnitTest
 {
     public class RoomSceneMockUnitTest : BaseScene
     {
+        [Inject] private LobbyManager _lobbyManager;
         public enum PlayersTag
         {
             Player1,
@@ -58,13 +60,13 @@ namespace Test.TestScripts.UnitTest
                     }
                     else
                     {
-                        await Managers.LobbyManager.CreateLobby(LobbyName, 8,null);
+                        await _lobbyManager.CreateLobby(LobbyName, 8,null);
                     }
                 }
                 else
                 {
                     await Task.Delay(1000);
-                    Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
+                    Lobby lobby = await _lobbyManager.AvailableLobby(LobbyName);
                     if (lobby == null || lobby.Data == null )
                     {
                         await Utill.RateLimited(async () => await JoinChannel(), 1000);
@@ -74,7 +76,7 @@ namespace Test.TestScripts.UnitTest
                     await Managers.RelayManager.JoinGuestRelay(joinCode);
                 }
             }
-            Managers.LobbyManager.InitalizeLobbyEvent();
+            _lobbyManager.InitializeLobbyEvent();
         }
 
         private async Task SetAuthenticationService()
@@ -87,7 +89,7 @@ namespace Test.TestScripts.UnitTest
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
             string playerID = AuthenticationService.Instance.PlayerId;
-            Managers.LobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
+            _lobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
         }
 
 

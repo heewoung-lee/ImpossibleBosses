@@ -33,21 +33,22 @@ namespace GameManagers
         }
     }
 
-    public class LogInManager:IPlayerLogininfo,IWriteGoogleSheet
+    public class LogInManager:IPlayerLogininfo,IWriteGoogleSheet,IPlayerIngameLogininfo
     {
         [Inject] IGoogleDataBaseStruct _dataManager;
         [Inject] ILoginDataSpreadSheet _loginDataSpreadSheet;
-        private string LoginDataSpreadsheetID => _loginDataSpreadSheet.LoginDataSpreadsheetID;
-        private string UserAuthenticateDatasheetName => _loginDataSpreadSheet.UserAuthenticateDatasheetName;
         enum SheetIndex
         {
             ID,
             PW,
             NickName,
         }
-
-        private GoogleDataBaseStruct _googleDataBaseStruct;
+        
+        private string LoginDataSpreadsheetID => _loginDataSpreadSheet.LoginDataSpreadsheetID;
+        private string UserAuthenticateDatasheetName => _loginDataSpreadSheet.UserAuthenticateDatasheetName;
+        private PlayerIngameLoginInfo _playerIngameLoginInfo;
         private PlayerLoginInfo _currentPlayerInfo;
+        private GoogleDataBaseStruct _googleDataBaseStruct;
         GoogleDataBaseStruct GoogleUserDataSheet
         {
             get
@@ -123,15 +124,7 @@ namespace GameManagers
             return default;
         }
 
-        public PlayerLoginInfo GetCurrentPlayerInfo()
-        {
-            return _currentPlayerInfo;
-        }
-
-        public void SetPlayerInfo(PlayerLoginInfo playerInfo)
-        {
-            _currentPlayerInfo = playerInfo;
-        }
+        public string PlayerNickName => _currentPlayerInfo.NickName;
 
         public PlayerLoginInfo FindAuthenticateUser(string userID, string userPW)
         {
@@ -246,6 +239,13 @@ namespace GameManagers
 
             return (true, "닉네임을 짓기성공.");
         }
-
+        public PlayerIngameLoginInfo GetPlayerIngameLoginInfo()
+        {
+            return _playerIngameLoginInfo;
+        }
+        public void SetPlayerIngameLoginInfo(PlayerIngameLoginInfo playerIngameLoginInfo)
+        {
+            _playerIngameLoginInfo = playerIngameLoginInfo;
+        }
     }
 }

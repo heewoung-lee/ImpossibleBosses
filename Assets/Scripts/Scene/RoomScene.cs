@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
 using UI.Scene.SceneUI;
 using Util;
@@ -8,7 +9,7 @@ namespace Scene
 {
     public class RoomScene : BaseScene
     {
-        [Inject]private UIManager _uiManager;
+        [Inject]private IUISceneManager _uiSceneManager;
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
@@ -24,8 +25,8 @@ namespace Scene
         {
             base.StartInit();
       
-            UIRoomCharacterSelect uICharacterSelect = _uiManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
-            UIRoomChat uiChatting = _uiManager.GetSceneUIFromResource<UIRoomChat>();
+            UIRoomCharacterSelect uICharacterSelect = _uiSceneManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
+            UIRoomChat uiChatting = _uiSceneManager.GetSceneUIFromResource<UIRoomChat>();
         }
     }
 }

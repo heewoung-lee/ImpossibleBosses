@@ -16,7 +16,8 @@ namespace UI.SubItem
     public class UIRoomInfoPanel : UIBase
     {
         [Inject]public IUIPopupManager PopupManager { get; }
-
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         enum Texts
         {
             RoomNameText,
@@ -75,10 +76,10 @@ namespace UI.SubItem
             {
                 try
                 {
-                    await Managers.LobbyManager.LoadingPanel(async () =>
+                    await _lobbyManager.LoadingPanel(async () =>
                     {
-                        await Managers.LobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
-                        Managers.SceneManagerEx.LoadScene(Define.Scene.RoomScene);
+                        await _lobbyManager.JoinLobbyByID(_lobbyRegisteredPanel.Id);
+                        _sceneManagerEx.LoadScene(Define.Scene.RoomScene);
                     });
 
                 }
@@ -92,11 +93,11 @@ namespace UI.SubItem
                         dialog.AlertSetText("오류",$"{errorMsg}")
                             .AfterAlertEvent(async() =>
                             {
-                                await Managers.LobbyManager.ReFreshRoomList();
+                                await _lobbyManager.ReFreshRoomList();
                             });
                     }
                     _joinButton.interactable = true;
-                    Managers.LobbyManager.TriggerLobbyLoadingEvent(false);
+                    _lobbyManager.TriggerLobbyLoadingEvent(false);
                     return;
                 }
             }

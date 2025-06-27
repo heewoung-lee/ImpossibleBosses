@@ -13,7 +13,7 @@ namespace Scene
     public class LoadingScene : BaseScene
     {
         [Inject]private IUISceneManager _uiManager; 
-        
+        [Inject] SceneManagerEx _sceneManagerEx;
         
         
         UI_Loading _uiLoading;
@@ -25,7 +25,7 @@ namespace Scene
         {
             base.StartInit();
             _uiLoading = _uiManager.GetSceneUIFromResource<UI_Loading>();
-            _isCheckTaskChecker = Managers.SceneManagerEx.LoadingSceneTaskChecker;
+            _isCheckTaskChecker = _sceneManagerEx.LoadingSceneTaskChecker;
             StartCoroutine(LoadingSceneProcess());
         }
 
@@ -41,7 +41,7 @@ namespace Scene
 
         private IEnumerator LoadingSceneProcess()
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(Managers.SceneManagerEx.NextScene.ToString());
+            AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneManagerEx.NextScene.ToString());
             operation.allowSceneActivation = false;
             while(_isCheckTaskChecker == null)
             {

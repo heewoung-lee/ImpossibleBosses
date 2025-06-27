@@ -1,5 +1,7 @@
 using System;
 using GameManagers;
+using GameManagers.Interface.LoginManager;
+using GameManagers.Interface.UIManager;
 using TMPro;
 using UI.Popup.PopupUI;
 using Unity.Services.Vivox;
@@ -12,8 +14,11 @@ namespace UI.Scene.SceneUI
 {
     public class UIUserInfoPanel : UIScene
     {
-        [Inject] private UIManager _uiManager;
-
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private IPlayerIngameLogininfo _playerIngameLogininfo;
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         enum Buttons
         {
             CreateRoomButton,
@@ -33,6 +38,9 @@ namespace UI.Scene.SceneUI
         UICreateRoom _createRoomUI;
 
         TMP_Text _userNickNamaText;
+        
+        private PlayerIngameLoginInfo PlayerIngameLoginInfo => _playerIngameLogininfo.GetPlayerIngameLoginInfo();
+        
         protected override void AwakeInit()
         {
             base.AwakeInit();
@@ -58,17 +66,17 @@ namespace UI.Scene.SceneUI
         public async void RefreshButton()
         {
             _refreshLobbyButton.interactable = false;
-            UIRoomInventory inventory = _uiManager.Get_Scene_UI<UIRoomInventory>();
+            UIRoomInventory inventory = _uiSceneManager.Get_Scene_UI<UIRoomInventory>();
             try
             {
-                await Managers.LobbyManager.ReFreshRoomList();
-                await Managers.LobbyManager.ShowUpdatedLobbyPlayers();
-                Managers.LobbyManager.ShowLobbyData();
+                await _lobbyManager.ReFreshRoomList();
+                await _lobbyManager.ShowUpdatedLobbyPlayers();
+                _lobbyManager.ShowLobbyData();
                 //Managers.RelayManager.ShowRelayPlayer();
             }
             catch (Exception ex)
             {
-                if (_uiManager.TryGetPopupDictAndShowPopup(out UIAlertDialog alertPopup) == true)
+                if (_uiPopupManager.TryGetPopupDictAndShowPopup(out UIAlertDialog alertPopup) == true)
                 {
                     alertPopup.SetText("오류", $"{ex}");
                     _refreshLobbyButton.interactable = true;
@@ -102,9 +110,9 @@ namespace UI.Scene.SceneUI
         }
         private void InitButtonInteractable()
         {
-            if (Managers.LobbyManager.IsDoneInitEvent == false)
+            if (_lobbyManager.IsDoneLobbyInitEvent == false)
             {
-                Managers.LobbyManager.InitDoneEvent += ButtonInteractable;
+                _lobbyManager.InitDoneEvent += ButtonInteractable;
             }
             else
             {
@@ -115,16 +123,16 @@ namespace UI.Scene.SceneUI
         {
             if (_createRoomUI == null)
             {
-                _createRoomUI = _uiManager.GetPopupUIFromResource<UICreateRoom>();
+                _createRoomUI = _uiPopupManager.GetPopupUIFromResource<UICreateRoom>();
             }
-            _uiManager.ShowPopupUI(_createRoomUI);
+            _uiPopupManager.ShowPopupUI(_createRoomUI);
         }
 
         private void ShowUserNickName()
         {
-            if (Managers.LobbyManager.CurrentPlayerInfo.Equals(default(PlayerIngameLoginInfo)))
+            if (PlayerIngameLoginInfo.Equals(default(PlayerIngameLoginInfo)))
             {
-                Managers.LobbyManager.InitDoneEvent += ShowNickname;
+                _lobbyManager.InitDoneEvent += ShowNickname;
             }
             else
             {
@@ -134,7 +142,7 @@ namespace UI.Scene.SceneUI
 
         private void ShowNickname() 
         {
-            _userNickNamaText.text += Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
+            _userNickNamaText.text += PlayerIngameLoginInfo.PlayerNickName;
         }
 
         public async void MoveLoginScene()
@@ -150,7 +158,7 @@ namespace UI.Scene.SceneUI
                 Debug.Log($"에러가 발생했습니다.{e}");
                 return;
             }
-            Managers.SceneManagerEx.LoadScene(Define.Scene.LoginScene);
+            _sceneManagerEx.LoadScene(Define.Scene.LoginScene);
         }
 
         private void ButtonInteractable()

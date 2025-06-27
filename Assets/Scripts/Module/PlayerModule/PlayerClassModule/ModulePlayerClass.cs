@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.SkillManager;
 using Scene;
 using Skill;
@@ -16,6 +17,7 @@ namespace Module.PlayerModule.PlayerClassModule
 {
     public abstract class ModulePlayerClass : MonoBehaviour
     {
+        [Inject] SceneManagerEx _sceneManagerEx;
         public abstract Define.PlayerClass PlayerClass { get; }
 
 
@@ -42,7 +44,7 @@ namespace Module.PlayerModule.PlayerClassModule
         private void ChangeLoadScene(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
 
-            if (Managers.SceneManagerEx.GetCurrentScene is not ISkillInit)
+            if (_sceneManagerEx.GetCurrentScene is not ISkillInit)
                 return;
 
             if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)

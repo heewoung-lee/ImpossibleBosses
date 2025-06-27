@@ -12,6 +12,7 @@ namespace Scene
     public class LoginScene : BaseScene
     {
         [Inject]private IUISceneManager _sceneuiManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         private UILoginTitle _uiLoginTitle;
 
         
@@ -22,7 +23,7 @@ namespace Scene
         {
             base.StartInit();
             _uiLoginTitle = _sceneuiManager.GetSceneUIFromResource<UILoginTitle>();
-            Managers.SceneManagerEx.SetBootMode(true);
+            _sceneManagerEx.SetBootMode(true);
             //로그인 상태부터 돌리는 씬은 노멀 루트이므로 테스트모드가 아니다.
         }
 

@@ -9,8 +9,10 @@ using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
+using GameManagers.Interface.VivoxManager;
 using NetWork.BaseNGO;
 using NetWork.NGO.Interface;
 using Scene.GamePlayScene;
@@ -35,6 +37,9 @@ namespace NetWork.NGO
         [Inject] private ILootItemGetter _lootItemGetter;
         [Inject]private IBufferManager _bufferManager;
         [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] private IVivoxSession _vivoxSession;
+        [Inject] SceneManagerEx _sceneManagerEx;
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
@@ -292,14 +297,14 @@ namespace NetWork.NGO
         {
             try
             {
-                Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
+                Lobby currentLobby = await _lobbyManager.GetCurrentLobby();
 
                 if (currentLobby == null)
                 {
                     return;
                 }
-                await Managers.LobbyManager.RemoveLobbyAsync(currentLobby);
-                await Managers.VivoxManager.LogoutOfVivoxAsync();
+                await _lobbyManager.RemoveLobbyAsync(currentLobby);
+                await _vivoxSession.LogoutOfVivoxAsync();
             }
             catch (Exception e)
             {
@@ -463,7 +468,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void OnBeforeSceneUnloadLocalRpc()
         {
-            Managers.SceneManagerEx.InvokeOnBeforeSceneUnloadLocalEvent();
+            _sceneManagerEx.InvokeOnBeforeSceneUnloadLocalEvent();
 
             _ = DisconnectFromVivoxAndLobby();//비복스 및 로비 연결해제
         }

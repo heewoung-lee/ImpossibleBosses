@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using Module.UI_Module;
 using NetWork.NGO;
 using Scene;
@@ -29,7 +30,8 @@ namespace UI.Scene.SceneUI
     {
         [Inject] private IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
-        
+        [Inject] private LobbyManager _lobbyManager;
+        [Inject] SceneManagerEx _sceneManagerEx;
         private const int MaxPlayerCount = 8;
 
         enum ReadyButtonStateEnum
@@ -191,10 +193,10 @@ namespace UI.Scene.SceneUI
             {
                 _loadingPanel.SetActive(true);
                 UnscribeRelayCallback();
-                Lobby currentLobby = await Managers.LobbyManager.GetCurrentLobby();
-                Managers.LobbyManager.HostChageEvent -= OnHostMigrationEvent;
-                await Managers.LobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
-                Managers.SceneManagerEx.LoadScene(Define.Scene.LobbyScene);
+                Lobby currentLobby = await _lobbyManager.GetCurrentLobby();
+                _lobbyManager.HostChageEvent -= OnHostMigrationEvent;
+                await _lobbyManager.TryJoinLobbyByNameOrCreateWaitLobby();
+                _sceneManagerEx.LoadScene(Define.Scene.LobbyScene);
             }
             catch (Exception error)
             {
@@ -217,7 +219,7 @@ namespace UI.Scene.SceneUI
             base.StartInit();
             _uiLoadingPanel = _uiManager.GetSceneUIFromResource<UILoadingPanel>();
             InitializeCharacterSelectionAsHost();
-            Managers.LobbyManager.HostChageEvent += OnHostMigrationEvent;
+            _lobbyManager.HostChageEvent += OnHostMigrationEvent;
         }
 
         private void OnHostMigrationEvent()
@@ -295,20 +297,20 @@ namespace UI.Scene.SceneUI
         {
             _netWorkManager.NetworkConfig.EnableSceneManagement = true;
             Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_characterSelectorNgo.ModuleChooseCharacterMove.PlayerChooseIndex);
-            Managers.SceneManagerEx.OnClientLoadedEvent += ClientLoadedEvent;
-            Managers.SceneManagerEx.OnAllPlayerLoadedEvent += AllPlayerLoadedEvent;
-            Managers.SceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
+            _sceneManagerEx.OnClientLoadedEvent += ClientLoadedEvent;
+            _sceneManagerEx.OnAllPlayerLoadedEvent += AllPlayerLoadedEvent;
+            _sceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
 
             void ClientLoadedEvent(ulong clientId)
             {
                 Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientId);
-                Debug.Log(Managers.SceneManagerEx.GetCurrentScene.CurrentScene + "씬네임" + "플레이어 ID" + clientId);
+                Debug.Log(_sceneManagerEx.GetCurrentScene.CurrentScene + "씬네임" + "플레이어 ID" + clientId);
             }
 
             void AllPlayerLoadedEvent()
             {
                 PlayScene playScene = null;
-                foreach (BaseScene scene in Managers.SceneManagerEx.GetCurrentScenes)
+                foreach (BaseScene scene in _sceneManagerEx.GetCurrentScenes)
                 {
                     if (scene is PlayScene outPlayScene)
                     {

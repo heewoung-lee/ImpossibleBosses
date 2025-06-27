@@ -1,43 +1,46 @@
 using GameManagers;
 using Scene.GamePlayScene;
 using Unity.VisualScripting;
-using UnityEngine;
 using Zenject;
 
-public class PlaySceneInstaller : MonoInstaller
+namespace Scene.ZenjectInstaller
 {
-   private PlayScene _scene;
-   public override void InstallBindings()
+   public class PlaySceneInstaller : MonoInstaller
    {
-      _scene = GetComponent<PlayScene>();
-
-      Container.Bind<ISceneSpawnBehaviour>()
-         .FromInstance(SelectBehaviour())
-         .AsSingle();
-
-   }
-
-   private ISceneSpawnBehaviour SelectBehaviour()
-   {
-      _scene.AddComponent<UIGamePlaySceneModule>();
-      
-      if (Managers.SceneManagerEx.IsNormalBoot)
+      [Inject] SceneManagerEx _sceneManagerEx;
+      private PlayScene _scene;
+      public override void InstallBindings()
       {
-         return new UnitNetGamePlayScene();
+         _scene = GetComponent<PlayScene>();
+
+         Container.Bind<ISceneSpawnBehaviour>()
+            .FromInstance(SelectBehaviour())
+            .AsSingle();
+
       }
 
-      
-      if (_scene.testMode == PlayScene.TestMode.Local)
-         return new UnitLocalGamePlayScene();
-
-
-      if (_scene.testMode == PlayScene.TestMode.Multi)
+      private ISceneSpawnBehaviour SelectBehaviour()
       {
-         if (_scene.multiMode == PlayScene.MultiMode.Solo)
+         _scene.AddComponent<UIGamePlaySceneModule>();
+      
+         if (_sceneManagerEx.IsNormalBoot)
          {
-            return new MockUnitGamePlayScene(_scene.playerableCharacter,true);
+            return new UnitNetGamePlayScene();
          }
+
+      
+         if (_scene.testMode == PlayScene.TestMode.Local)
+            return new UnitLocalGamePlayScene();
+
+
+         if (_scene.testMode == PlayScene.TestMode.Multi)
+         {
+            if (_scene.multiMode == PlayScene.MultiMode.Solo)
+            {
+               return new MockUnitGamePlayScene(_scene.playerableCharacter,true);
+            }
+         }
+         return new MockUnitGamePlayScene(_scene.playerableCharacter,false);
       }
-      return new MockUnitGamePlayScene(_scene.playerableCharacter,false);
    }
 }

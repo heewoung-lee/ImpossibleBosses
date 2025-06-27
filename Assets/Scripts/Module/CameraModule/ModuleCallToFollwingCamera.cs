@@ -1,6 +1,7 @@
 using Controller;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using UnityEngine;
 using Util;
 using Zenject;

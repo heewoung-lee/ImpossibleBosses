@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GameManagers.Interface.Resources_Interface;
+using GameManagers.Interface.ResourcesManager;
 using UnityEngine;
 using Util;
 using Zenject;
@@ -14,6 +15,7 @@ namespace GameManagers
         public class Pool
         {
             [Inject] IInstantiate _instantiate;
+            [Inject] SceneManagerEx _sceneManagerEx;
             public GameObject Original { get; private set; }
             Stack<Poolable> _poolStack = new Stack<Poolable>();
             public Transform Root { get; private set; }
@@ -60,7 +62,7 @@ namespace GameManagers
                     popitem = Create();
 
                 if(parent == null)
-                    popitem.transform.SetParent(Managers.SceneManagerEx.GetCurrentScene.transform);
+                    popitem.transform.SetParent(_sceneManagerEx.GetCurrentScene.transform);
 
 
                 popitem.transform.SetParent(parent);//parent가 Null이라면 BaseScene에 하위에 있는 자식들이 전부 다시 부모가 없게 되어버림

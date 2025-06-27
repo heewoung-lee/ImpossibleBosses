@@ -1,4 +1,3 @@
-using GameManagers;
 using GameManagers.Interface.GoogleAuthLogin;
 using GameManagers.Interface.Resources_Interface;
 using UnityEngine;
@@ -10,8 +9,6 @@ namespace Data
     public class GoogleAuthLogin: IGoogleAuthLoginLoader
     {
         [Inject] private IResourcesLoader _loader;
-        private PlayerIngameLoginInfo _currentPlayerIngameLoginInfo;
-        
         public TextAsset[] LoadGoogleAuthJsonFiles()
         {
             TextAsset[] jsonFiles = _loader.LoadAll<TextAsset>("GoogleLoginData");

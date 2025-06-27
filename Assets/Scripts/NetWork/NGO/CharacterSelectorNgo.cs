@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using GameManagers;
+using GameManagers.Interface.LoginManager;
+using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using NetWork.BaseNGO;
 using TMPro;
@@ -17,7 +19,8 @@ namespace NetWork.NGO
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
     private readonly Color _playerFrameColor = "#143658".HexCodetoConvertColor();
-    [Inject] private UIManager _uiManager;
+    [Inject] private IUISceneManager _uiSceneManager;
+    [Inject] private IPlayerIngameLogininfo _playerIngameLogininfo;
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
         new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone,
@@ -79,6 +82,9 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     private bool _isInitCameraPosition = false;
     private ModuleChooseCharacterMove _moduleChooseCharacterMove;
 
+
+    private PlayerIngameLoginInfo PlayerIngameLoginInfo => _playerIngameLogininfo.GetPlayerIngameLoginInfo();
+    
     public Button PreViousButton
     {
         get => _previousButton;
@@ -141,7 +147,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
         _readyPanel.gameObject.SetActive(false);
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
-        _uiRoomCharacterSelect = _uiManager.Get_Scene_UI<UIRoomCharacterSelect>();
+        _uiRoomCharacterSelect = _uiSceneManager.Get_Scene_UI<UIRoomCharacterSelect>();
     }
 
     public override void OnNetworkSpawn()
@@ -153,7 +159,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
             _previousButton.gameObject.SetActive(true);
             _nextButton.gameObject.SetActive(true);
             _uiRoomCharacterSelect.ButtonState(false);
-            SetNicknameServerRpc(Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName);
+            SetNicknameServerRpc(PlayerIngameLoginInfo.PlayerNickName);
             _uiRoomCharacterSelect.SetButtonEvent(() => PlayerReadyServerRpc());
             SetPositionCharacterChooseCamera();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Data.DataType.StatType;
 using GameManagers;
 using GameManagers.Interface.DataManager;
+using GameManagers.Interface.LoginManager;
 using Stats.BaseStats;
 using UnityEngine;
 using Zenject;
@@ -11,6 +12,10 @@ namespace Stats
 {
     public class PlayerStats : BaseStats.BaseStats, IAttackRange
     {
+        [Inject] IAllData _allData;
+        [Inject] IPlayerIngameLogininfo _playerIngameLogininfo;
+        
+        
         private Dictionary<int, PlayerStat> _statDict;
         private int _level;
         private int _currentexp;
@@ -24,14 +29,13 @@ namespace Stats
         public Action<int> PlayerHasGoldChangeEvent;
         private LayerMask _targetLayer;
         
-        [Inject] IAllData _allData;
         public string Name
         {
             get
             {
                 if (_playerName == null)
                 {
-                    _playerName = Managers.LobbyManager.CurrentPlayerInfo.PlayerNickName;
+                    _playerName = _playerIngameLogininfo.GetPlayerIngameLoginInfo().PlayerNickName;
                 }
                 return _playerName;
             }

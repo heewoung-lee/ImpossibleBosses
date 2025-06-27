@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface.LoginManager;
 using NetWork.NGO.UI;
 using Scene.GamePlayScene;
 using Unity.Multiplayer.Playmode;
@@ -9,11 +10,13 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace Scene.BattleScene
 {
     public class MockUnitBattleScene : ISceneSpawnBehaviour
     {
+        [Inject] private LobbyManager _lobbyManager;
         public MockUnitBattleScene(Define.PlayerClass playerClass, UI_Loading uiLoading, bool isSoloTest)
         {
             _playerClass = playerClass;
@@ -72,14 +75,14 @@ namespace Scene.BattleScene
                     }
                     else
                     {
-                        await Managers.LobbyManager.CreateLobby("TestLobby", 8, null);
+                        await _lobbyManager.CreateLobby("TestLobby", 8, null);
                     }
                 }
                 else
                 {
 
                     await Task.Delay(1000);
-                    Lobby lobby = await Managers.LobbyManager.AvailableLobby(LobbyName);
+                    Lobby lobby = await _lobbyManager.AvailableLobby(LobbyName);
                     if (lobby == null || lobby.Data == null)
                     {
                         await Utill.RateLimited(async () => await JoinChannel(), 1000);
@@ -127,7 +130,7 @@ namespace Scene.BattleScene
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
             string playerID = AuthenticationService.Instance.PlayerId;
-            Managers.LobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
+            _lobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
         }
         public string GetPlayerTag()
         {
