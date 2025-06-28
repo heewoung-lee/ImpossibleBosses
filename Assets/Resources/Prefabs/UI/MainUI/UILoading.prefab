@@ -5084,7 +5084,7 @@ GameObject:
   - component: {fileID: 6964756793939890391}
   - component: {fileID: 6913664352520649957}
   m_Layer: 5
-  m_Name: Text_LoadingValue
+  m_Name: TextLoadingValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10538,7 +10538,7 @@ GameObject:
   - component: {fileID: 7225923124060207731}
   - component: {fileID: 8151418527552739251}
   m_Layer: 5
-  m_Name: UI_Loading
+  m_Name: UILoading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15927,7 +15927,7 @@ GameObject:
   - component: {fileID: 6794844407155097260}
   - component: {fileID: 3524989972153847377}
   m_Layer: 5
-  m_Name: Slider_LoadingBar
+  m_Name: SliderLoadingBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

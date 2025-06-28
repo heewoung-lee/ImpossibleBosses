@@ -4,6 +4,7 @@ using GameManagers;
 using GameManagers.Interface.LoginManager;
 using NetWork.NGO.UI;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -21,7 +22,7 @@ namespace Scene.BattleScene
         [Inject] private RelayManager _relayManager;
 
         
-        public MockUnitBattleScene(Define.PlayerClass playerClass, UI_Loading uiLoading, bool isSoloTest)
+        public MockUnitBattleScene(Define.PlayerClass playerClass, UILoading uiLoading, bool isSoloTest)
         {
             _playerClass = playerClass;
             _uiLoadingScene = uiLoading;
@@ -38,7 +39,7 @@ namespace Scene.BattleScene
         string _playerType = null;
         GameObject _ngoRoot;
         private const string LobbyName = "TestLobby";
-        private UI_Loading _uiLoadingScene;
+        private UILoading _uiLoadingScene;
         private Define.PlayerClass _playerClass;
         private bool _isSoloTest;
 

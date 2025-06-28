@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using GameManagers;
 using UI;
+using UI.Scene.SceneUI;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -14,7 +15,7 @@ namespace Scene.GamePlayScene
         [Inject] private RelayManager _relayManager;
 
         
-        private UI_Loading _uiLoading;
+        private UILoading _uiLoading;
         private int _loadedPlayerCount = 0;
         private int _totalPlayerCount = 0;
         private bool _isAllPlayerLoaded = false;
@@ -66,7 +67,7 @@ namespace Scene.GamePlayScene
 
         protected override void AwakeInit()
         {
-            _uiLoading = GetComponent<UI_Loading>();
+            _uiLoading = GetComponent<UILoading>();
         }
 
         protected override void StartInit()

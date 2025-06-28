@@ -5,6 +5,7 @@ using GameManagers.Interface.LoginManager;
 using NetWork.NGO.UI;
 using Scene;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -31,7 +32,7 @@ namespace Test.TestScripts.UnitTest
         string _playerType = null;
         GameObject _ngoRoot;
         private const string LobbyName = "TestLobby";
-        private UI_Loading _uiLoadingScene;
+        private UILoading _uiLoadingScene;
         public Define.PlayerClass PlayerClass;
         public bool isSoloTest;
 
@@ -43,7 +44,7 @@ namespace Test.TestScripts.UnitTest
         protected override async void StartInit()
         {
             base.StartInit();
-            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();
             await JoinChannel();
             //_gameManagerEx.GetPlayer().GetComponent<Module_Player_Class>().InitializeSkillsFromManager();
         }

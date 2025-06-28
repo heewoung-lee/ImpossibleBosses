@@ -9,7 +9,7 @@ namespace ProjectContextInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<BufferManager>().AsSingle();            
+            Container.BindInterfacesTo<BufferManager>().AsSingle();            
         }
     }
 }

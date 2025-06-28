@@ -4,6 +4,7 @@ using GameManagers;
 using GameManagers.Interface.LoginManager;
 using NetWork.NGO.UI;
 using Scene.BattleScene;
+using UI.Scene.SceneUI;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -101,7 +102,7 @@ namespace Scene.GamePlayScene
 
         private void LoadGamePlayScene()
         {
-            _uiManager.GetOrCreateSceneUI<UI_Loading>().gameObject.SetActive(false);
+            _uiManager.GetOrCreateSceneUI<UILoading>().gameObject.SetActive(false);
         }
         private async Task SetAuthenticationService()
         {

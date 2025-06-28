@@ -18,6 +18,7 @@ using NetWork.NGO.Interface;
 using Scene.GamePlayScene;
 using Stats;
 using UI.Scene.Interface;
+using UI.Scene.SceneUI;
 using UI.SubItem;
 using Unity.Collections;
 using Unity.Netcode;
@@ -318,7 +319,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void LoadedPlayerCountRpc()
         {
-            if (_uiSceneManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiSceneManager.Try_Get_Scene_UI(out UILoading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {
@@ -330,7 +331,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void SetisAllPlayerLoadedRpc(bool isAllplayerLoaded)
         {
-            if (_uiSceneManager.Try_Get_Scene_UI(out UI_Loading loading))
+            if (_uiSceneManager.Try_Get_Scene_UI(out UILoading loading))
             {
                 if (loading.TryGetComponent(out GamePlaySceneLoadingProgress loadingProgress))
                 {

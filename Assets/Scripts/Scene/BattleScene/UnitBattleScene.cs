@@ -3,6 +3,7 @@ using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using NetWork.NGO.UI;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using UnityEditor.SceneManagement;
 using Zenject;
 
@@ -14,7 +15,7 @@ namespace Scene.BattleScene
         [Inject] private RelayManager _relayManager;
         
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-        private UI_Loading _uiLoadingScene;
+        private UILoading _uiLoadingScene;
         private InGameUIModule _inGameUIModule;
         
 
@@ -24,7 +25,7 @@ namespace Scene.BattleScene
 
         public void Init()
         {
-            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UILoading>();
         }
 
         public void SpawnObj()

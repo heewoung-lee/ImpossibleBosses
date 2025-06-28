@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameManagers;
 using Module.UI_Module;
+using UI.Scene.SceneUI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,8 +39,8 @@ namespace Scene.GamePlayScene
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
 
-        private UI_Loading _uiLoadingScene;
-        public UI_Loading UILoadingScene => _uiLoadingScene;
+        private UILoading _uiLoadingScene;
+        public UILoading UILoadingScene => _uiLoadingScene;
         
         
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
@@ -57,7 +58,7 @@ namespace Scene.GamePlayScene
             _sceneSpawnBehaviour.SpawnObj();
             
             
-            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();
             _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
         }
 

@@ -23,8 +23,6 @@ namespace GameManagers
         private bool _isNormalBoot = false;
         
         public bool IsNormalBoot => _isNormalBoot;
-        
-        
         public event Action OnBeforeSceneUnloadLocalEvent
         {
             add
@@ -73,15 +71,14 @@ namespace GameManagers
         {
             _isNormalBoot = bootMode;
         }
-        
         public void LoadScene(Define.Scene nextscene)
         {
             //Managers.Clear();
-            SceneManager.LoadScene(GetEnumName(nextscene));
+            SceneManager.LoadScene(GetSceneNameByEnumName(nextscene));
         }
-        public void SetCheckTaskChecker(bool[] CheckTaskChecker)
+        public void SetCheckTaskChecker(bool[] checkTaskChecker)
         {
-            _loadingSceneTaskChecker = CheckTaskChecker;
+            _loadingSceneTaskChecker = checkTaskChecker;
         }
         public void LoadSceneWithLoadingScreen(Define.Scene nextscene)
         {
@@ -99,7 +96,7 @@ namespace GameManagers
             _relayManager.NgoRPCCaller.OnBeforeSceneUnloadLocalRpc();//모든 플레이어가 씬 호출전 실행해야할 이벤트(로컬 각자가 맡음)
             _relayManager.NgoRPCCaller.OnBeforeSceneUnloadRpc();//모든 플레이어가 씬 호출전 실행해야할 넷워크 오브젝트 초기화(호스트가 맡음)
             _relayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManagerOnLoadCompleteAsync;
-            _relayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+            _relayManager.NetworkManagerEx.SceneManager.LoadScene(GetSceneNameByEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
             
             void SceneManagerOnLoadCompleteAsync(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
             {
@@ -119,7 +116,7 @@ namespace GameManagers
                 }
             }
         } 
-        public string GetEnumName(Define.Scene type)
+        private string GetSceneNameByEnumName(Define.Scene type)
         {
             string name = System.Enum.GetName(typeof(Define.Scene), type);
             return name;

@@ -3,6 +3,7 @@ using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using NetWork.NGO.UI;
 using Scene.BattleScene;
+using UI.Scene.SceneUI;
 using Zenject;
 
 namespace Scene.GamePlayScene
@@ -13,14 +14,14 @@ namespace Scene.GamePlayScene
         [Inject] private RelayManager _relayManager;
 
         private UIStageTimer _uiStageTimer;
-        private UI_Loading _uiLoadingScene;
+        private UILoading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
 
         public ISceneMover Nextscene => new BattleSceneMover();
 
         public void Init()
         {
-            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UILoading>();
             _uiStageTimer = _uiSceneManager.GetOrCreateSceneUI<UIStageTimer>();
             _uiStageTimer.OnTimerCompleted += Nextscene.MoveScene;
         }

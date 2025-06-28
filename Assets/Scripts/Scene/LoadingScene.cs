@@ -2,6 +2,7 @@ using System.Collections;
 using GameManagers;
 using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,7 @@ namespace Scene
         [Inject] SceneManagerEx _sceneManagerEx;
         
         
-        UI_Loading _uiLoading;
+        UILoading _uiLoading;
         public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
@@ -24,7 +25,7 @@ namespace Scene
         protected override void StartInit()
         {
             base.StartInit();
-            _uiLoading = _uiManager.GetSceneUIFromResource<UI_Loading>();
+            _uiLoading = _uiManager.GetSceneUIFromResource<UILoading>();
             _isCheckTaskChecker = _sceneManagerEx.LoadingSceneTaskChecker;
             StartCoroutine(LoadingSceneProcess());
         }

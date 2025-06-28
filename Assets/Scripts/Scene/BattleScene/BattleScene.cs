@@ -1,5 +1,6 @@
 using GameManagers;
 using Scene.GamePlayScene;
+using UI.Scene.SceneUI;
 using Unity.VisualScripting;
 using Util;
 using Zenject;
@@ -8,7 +9,7 @@ namespace Scene.BattleScene
 {
     public class BattleScene : BaseScene, ISkillInit
     {
-        private UI_Loading _uiLoadingScene;
+        private UILoading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
         private ISceneSpawnBehaviour _sceneSpawnBehaviour;
         [Inject] private UIManager _uiManager;
@@ -25,7 +26,7 @@ namespace Scene.BattleScene
         protected override void StartInit()
         {
             base.StartInit();
-            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();
             _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
             // if (isTest == true)
             // {

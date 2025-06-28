@@ -15,7 +15,7 @@ namespace GameManagers
     {      
         [Inject] private RelayManager _relayManager;
 
-        DiContainer CurrentContainer
+        public DiContainer CurrentContainer
         {
             get
             {
@@ -117,7 +117,11 @@ namespace GameManagers
 
         public GameObject InstantiateByObject(GameObject gameobject, Transform parent = null)
         {
-            return CurrentContainer.InstantiatePrefab(gameobject, parent).RemoveCloneText();
+            return InstantiatePrefab(gameobject, parent);
+        }
+        private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
+        {
+            return CurrentContainer.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
@@ -131,10 +135,7 @@ namespace GameManagers
             }
             return component;
         }
-        private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
-        {
-            return CurrentContainer.InstantiatePrefab(prefab, parent).RemoveCloneText();
-        }
+
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
         {

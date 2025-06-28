@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UI.Scene.SceneUI;
 using UnityEngine;
 
 namespace Test.TestUI
@@ -8,7 +9,7 @@ namespace Test.TestUI
     {
 
         public bool IsCheckTest;
-        private UI_Loading _uiLoading;
+        private UILoading _uiLoading;
         Action _isdoneLoadLoadingUI;
 
         WaitUntil _waitUntil;
@@ -25,7 +26,7 @@ namespace Test.TestUI
 
             bool IscheckUILoadingActive()
             {
-                if (TryGetComponent(out UI_Loading uiloing) == true)
+                if (TryGetComponent(out UILoading uiloing) == true)
                 {
                     _uiLoading  = uiloing;
                     return true;
