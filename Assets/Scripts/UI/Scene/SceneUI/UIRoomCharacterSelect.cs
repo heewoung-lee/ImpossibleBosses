@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
+using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using NetWork.NGO;
 using Scene;
@@ -32,6 +34,11 @@ namespace UI.Scene.SceneUI
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private LobbyManager _lobbyManager;
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+        [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private IUISubItem _uiSubitem;
+        
+        
         private const int MaxPlayerCount = 8;
 
         enum ReadyButtonStateEnum
@@ -70,7 +77,6 @@ namespace UI.Scene.SceneUI
         private string _joincodeCache;
         private Action _spawnCharacterSelectEvent;
         private ReadyButtonImages[] _readyButtonStateValue;
-        [Inject] private UIManager _uiManager;
 
         
         
@@ -111,9 +117,9 @@ namespace UI.Scene.SceneUI
             _uiRoomPlayerFrames = new UIRoomPlayerFrame[MaxPlayerCount];
             for (int index = 0; index < _uiRoomPlayerFrames.Length; index++)
             {
-                _uiRoomPlayerFrames[index] = _uiManager.MakeSubItem<UIRoomPlayerFrame>(_charactorSelect);
+                _uiRoomPlayerFrames[index] = _uiSubitem.MakeSubItem<UIRoomPlayerFrame>(_charactorSelect);
             }
-            _netWorkManager = Managers.RelayManager.NetworkManagerEx;
+            _netWorkManager = _relayManager.NetworkManagerEx;
             _buttonReady = Get<Button>((int)Buttons.ButtonReady);
             _buttonText = _buttonReady.GetComponentInChildren<TMP_Text>();
             ReadyButtonInitialize();
@@ -164,7 +170,7 @@ namespace UI.Scene.SceneUI
         }
         public void IsCheckAllReadyToPlayers(ulong playerIndex = ulong.MaxValue)
         {
-            foreach (CharacterSelectorNgo playerNgo in Managers.RelayManager.NgoRootUI.GetComponentsInChildren<CharacterSelectorNgo>())
+            foreach (CharacterSelectorNgo playerNgo in _relayManager.NgoRootUI.GetComponentsInChildren<CharacterSelectorNgo>())
             {
                 if (playerNgo.GetComponent<NetworkObject>().OwnerClientId == playerIndex)
                     continue;
@@ -217,7 +223,7 @@ namespace UI.Scene.SceneUI
         protected override void StartInit()
         {
             base.StartInit();
-            _uiLoadingPanel = _uiManager.GetSceneUIFromResource<UILoadingPanel>();
+            _uiLoadingPanel = _uiSceneManager.GetSceneUIFromResource<UILoadingPanel>();
             InitializeCharacterSelectionAsHost();
             _lobbyManager.HostChageEvent += OnHostMigrationEvent;
         }
@@ -229,10 +235,10 @@ namespace UI.Scene.SceneUI
 
         private void InitializeCharacterSelectionAsHost()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
-            Managers.RelayManager.SpawnToRPC_Caller();
-            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: Managers.RelayManager.NgoRootUI.transform);
+            _relayManager.SpawnToRPC_Caller();
+            _relayManager.SpawnNetworkObj("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: _relayManager.NgoRootUI.transform);
             SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
             SubScribeRelayCallback();
         }
@@ -271,7 +277,7 @@ namespace UI.Scene.SceneUI
             Vector2 frameScreenPos = GetUIScreenPosition(targetFrameRect);
 
             GameObject characterRect =
-                Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(playerIndex, characterSelector, frameScreenPos, destroyOption: true);
+                _relayManager.SpawnNetworkOBJInjectionOnwer(playerIndex, characterSelector, frameScreenPos, destroyOption: true);
 
             if (_ngoUIRootCharacterSelect == null)
             {
@@ -296,14 +302,14 @@ namespace UI.Scene.SceneUI
         public void LoadScenePlayGames()//호스트가 Start버튼을 클릭했을때
         {
             _netWorkManager.NetworkConfig.EnableSceneManagement = true;
-            Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_characterSelectorNgo.ModuleChooseCharacterMove.PlayerChooseIndex);
+            _relayManager.RegisterSelectedCharacter(_relayManager.NetworkManagerEx.LocalClientId, (Define.PlayerClass)_characterSelectorNgo.ModuleChooseCharacterMove.PlayerChooseIndex);
             _sceneManagerEx.OnClientLoadedEvent += ClientLoadedEvent;
             _sceneManagerEx.OnAllPlayerLoadedEvent += AllPlayerLoadedEvent;
             _sceneManagerEx.NetworkLoadScene(Define.Scene.GamePlayScene);
 
             void ClientLoadedEvent(ulong clientId)
             {
-                Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientId);
+                _relayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientId);
                 Debug.Log(_sceneManagerEx.GetCurrentScene.CurrentScene + "씬네임" + "플레이어 ID" + clientId);
             }
 

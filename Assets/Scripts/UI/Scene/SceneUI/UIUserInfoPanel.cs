@@ -72,7 +72,7 @@ namespace UI.Scene.SceneUI
                 await _lobbyManager.ReFreshRoomList();
                 await _lobbyManager.ShowUpdatedLobbyPlayers();
                 _lobbyManager.ShowLobbyData();
-                //Managers.RelayManager.ShowRelayPlayer();
+                //_relayManager.ShowRelayPlayer();
             }
             catch (Exception ex)
             {

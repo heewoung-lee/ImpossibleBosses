@@ -5,11 +5,15 @@ using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace Scene.GamePlayScene
 {
     public class GamePlaySceneLoadingProgress : UIBase
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         private UI_Loading _uiLoading;
         private int _loadedPlayerCount = 0;
         private int _totalPlayerCount = 0;
@@ -67,12 +71,12 @@ namespace Scene.GamePlayScene
 
         protected override void StartInit()
         {
-            _totalPlayerCount = Managers.RelayManager.CurrentUserCount;
+            _totalPlayerCount = _relayManager.CurrentUserCount;
 
 
-            if(Managers.RelayManager.NgoRPCCaller == null)
+            if(_relayManager.NgoRPCCaller == null)
             {
-                Managers.RelayManager.SpawnRpcCallerEvent += LoadPlayerInit;
+                _relayManager.SpawnRpcCallerEvent += LoadPlayerInit;
             }
             else
             {
@@ -80,8 +84,8 @@ namespace Scene.GamePlayScene
             }
             void LoadPlayerInit()
             {
-                LoadedPlayerCount = Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount;
-                SetisAllPlayerLoaded(Managers.RelayManager.NgoRPCCaller.IsAllPlayerLoaded);
+                LoadedPlayerCount = _relayManager.NgoRPCCaller.LoadedPlayerCount;
+                SetisAllPlayerLoaded(_relayManager.NgoRPCCaller.IsAllPlayerLoaded);
             }
 
         }
@@ -140,7 +144,7 @@ namespace Scene.GamePlayScene
                 loadsceneImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
             }
 
-            Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount = 0;
+            _relayManager.NgoRPCCaller.LoadedPlayerCount = 0;
             _loadedPlayerCount = 0;
         }
     }

@@ -3,11 +3,14 @@ using GameManagers;
 using Stats.BaseStats;
 using Unity.Netcode;
 using Util;
+using Zenject;
 
 namespace Stats.MonsterStats.SlimeStats
 {
     public class SlimeStats : global::Stats.MonsterStats.MonsterStats
     {
+        [Inject] private RelayManager _relayManager;
+
         private Define.MonsterID _slimeID;
         private int _exp;
 
@@ -35,7 +38,7 @@ namespace Stats.MonsterStats.SlimeStats
             if (gameObject.TryGetComponent(out NetworkObject ngo))
             {
                 ulong networkObjectID = ngo.NetworkObjectId;
-                Managers.RelayManager.DeSpawn_NetWorkOBJ(networkObjectID);
+                _relayManager.DeSpawn_NetWorkOBJ(networkObjectID);
             }
         }
 

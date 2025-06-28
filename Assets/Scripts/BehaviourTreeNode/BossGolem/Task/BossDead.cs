@@ -16,6 +16,8 @@ namespace BehaviourTreeNode.BossGolem.Task
     {
         
         [Inject] IDestroyObject _destroyer;
+        [Inject] private RelayManager _relayManager;
+
         BossGolemController _controller;
         [SerializeField] private SharedProjector _projector;
         private BossGolemNetworkController _networkController;
@@ -41,7 +43,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         {
             base.OnStart();
             OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BaseDieState);
-            CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, 0f, 0f, 0f, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+            CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, 0f, 0f, 0f, _relayManager.NetworkManagerEx.ServerTime.Time);
             _networkController.StartAnimChagnedRpc(animInfo);
         }
 

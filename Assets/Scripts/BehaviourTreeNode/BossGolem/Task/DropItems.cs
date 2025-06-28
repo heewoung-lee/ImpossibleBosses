@@ -17,6 +17,8 @@ namespace BehaviourTreeNode.BossGolem.Task
     {
         [Inject] private IInstantiate _instantiate;
         [Inject] private IItemGetter _itemGetter;
+        [Inject] private RelayManager _relayManager;
+
         
         private readonly int _minimumTimeCount = 1;
         private readonly int _maximumTimeCount = 3;
@@ -35,7 +37,7 @@ namespace BehaviourTreeNode.BossGolem.Task
             base.OnStart();
             _tree = Owner.GetComponent<BehaviorTree>();
             _ngoDropItemBehaviour = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_BossDropItemBehaviour");
-            Managers.RelayManager.SpawnNetworkObj(_ngoDropItemBehaviour,Managers.RelayManager.NgoRoot.transform);
+            _relayManager.SpawnNetworkObj(_ngoDropItemBehaviour,_relayManager.NgoRoot.transform);
             _index = 0;
             _isCallIndex = false;
 
@@ -65,13 +67,13 @@ namespace BehaviourTreeNode.BossGolem.Task
 
                 void SpawnItem()
                 {
-                    if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+                    if (_relayManager.NetworkManagerEx.IsHost == false)
                         return;
 
                     IItem spawnItem = _itemGetter.GetRandomItemFromAll();
                     IteminfoStruct itemStruct = new IteminfoStruct(spawnItem);
-                    NetworkObjectReference dropItemBahaviour = Managers.RelayManager.GetNetworkObject(_ngoDropItemBehaviour);
-                    Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);
+                    NetworkObjectReference dropItemBahaviour = _relayManager.GetNetworkObject(_ngoDropItemBehaviour);
+                    _relayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct, Owner.transform.position, addLootItemBehaviour:dropItemBahaviour);
                 }
             }
             _isCallIndex = false;
@@ -88,7 +90,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                 _timeRandom.Clear();
                 _timeRandom = null;
             }
-            Managers.RelayManager.DeSpawn_NetWorkOBJ(_ngoDropItemBehaviour);
+            _relayManager.DeSpawn_NetWorkOBJ(_ngoDropItemBehaviour);
         }
     }
 }

@@ -3,11 +3,15 @@ using Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
+using Zenject;
 
 namespace GameManagers
 {
     public class SceneManagerEx
     { 
+        [Inject] private RelayManager _relayManager;
+
+        
         private Define.Scene _currentScene;
         private Define.Scene _nextScene;
         private bool[] _loadingSceneTaskChecker;
@@ -92,22 +96,22 @@ namespace GameManagers
 
         public void NetworkLoadScene(Define.Scene nextscene)
         {
-            Managers.RelayManager.NgoRPCCaller.OnBeforeSceneUnloadLocalRpc();//모든 플레이어가 씬 호출전 실행해야할 이벤트(로컬 각자가 맡음)
-            Managers.RelayManager.NgoRPCCaller.OnBeforeSceneUnloadRpc();//모든 플레이어가 씬 호출전 실행해야할 넷워크 오브젝트 초기화(호스트가 맡음)
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManagerOnLoadCompleteAsync;
-            Managers.RelayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
+            _relayManager.NgoRPCCaller.OnBeforeSceneUnloadLocalRpc();//모든 플레이어가 씬 호출전 실행해야할 이벤트(로컬 각자가 맡음)
+            _relayManager.NgoRPCCaller.OnBeforeSceneUnloadRpc();//모든 플레이어가 씬 호출전 실행해야할 넷워크 오브젝트 초기화(호스트가 맡음)
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadComplete += SceneManagerOnLoadCompleteAsync;
+            _relayManager.NetworkManagerEx.SceneManager.LoadScene(GetEnumName(nextscene), UnityEngine.SceneManagement.LoadSceneMode.Single);
             
             void SceneManagerOnLoadCompleteAsync(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
             {
                 if (sceneName == nextscene.ToString() && loadSceneMode == LoadSceneMode.Single)
                 {
                     _onClientLoadedEvent?.Invoke(clientId);
-                    Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount++;
+                    _relayManager.NgoRPCCaller.LoadedPlayerCount++;
                 }
 
-                if (Managers.RelayManager.NgoRPCCaller.LoadedPlayerCount == Managers.RelayManager.CurrentUserCount)
+                if (_relayManager.NgoRPCCaller.LoadedPlayerCount == _relayManager.CurrentUserCount)
                 {
-                    Managers.RelayManager.NgoRPCCaller.IsAllPlayerLoaded = true;//로딩창 90% 이후로 넘어가게끔
+                    _relayManager.NgoRPCCaller.IsAllPlayerLoaded = true;//로딩창 90% 이후로 넘어가게끔
                     _onAllPlayerLoadedEvent?.Invoke();
                 
                     _onClientLoadedEvent = null; // 호출이 끝난뒤 모든 이벤트 구독 전부 삭제

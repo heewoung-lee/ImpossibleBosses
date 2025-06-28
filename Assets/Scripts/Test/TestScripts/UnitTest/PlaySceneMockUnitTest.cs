@@ -17,6 +17,8 @@ namespace Test.TestScripts.UnitTest
     public class PlaySceneMockUnitTest : BaseScene
     {
         [Inject] private LobbyManager _lobbyManager;
+        [Inject] private RelayManager _relayManager;
+
         public enum PlayersTag
         {
             Player1,
@@ -46,16 +48,16 @@ namespace Test.TestScripts.UnitTest
         }
         private async Task JoinChannel()
         {
-            Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClient;
-            Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClient;
-            if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClient;
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClient;
+            if (_relayManager.NetworkManagerEx.IsListening == false)
             {
                 await SetAuthenticationService();
                 if (_playerType == "Player1")
                 {
                     if (isSoloTest == true)//나혼자 테스트 할때
                     {
-                        await Managers.RelayManager.StartHostWithRelay(8);
+                        await _relayManager.StartHostWithRelay(8);
                     }
                     else
                     {
@@ -73,16 +75,16 @@ namespace Test.TestScripts.UnitTest
                         return;
                     }
                     string joinCode = lobby.Data["RelayCode"].Value;
-                    await Managers.RelayManager.JoinGuestRelay(joinCode);
+                    await _relayManager.JoinGuestRelay(joinCode);
                 }
             }
         }
 
         private void ConnectClient(ulong clientID)
         {
-            if (Managers.RelayManager.NgoRPCCaller == null)
+            if (_relayManager.NgoRPCCaller == null)
             {
-                Managers.RelayManager.SpawnRpcCallerEvent += SpawnPlayer;
+                _relayManager.SpawnRpcCallerEvent += SpawnPlayer;
             }
             else
             {
@@ -90,11 +92,11 @@ namespace Test.TestScripts.UnitTest
             }
             void SpawnPlayer()
             {
-                if (Managers.RelayManager.NetworkManagerEx.LocalClientId != clientID)
+                if (_relayManager.NetworkManagerEx.LocalClientId != clientID)
                     return;
 
-                Managers.RelayManager.RegisterSelectedCharacter(clientID, PlayerClass);
-                Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
+                _relayManager.RegisterSelectedCharacter(clientID, PlayerClass);
+                _relayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
                 LoadGamePlayScene();
             }
         }

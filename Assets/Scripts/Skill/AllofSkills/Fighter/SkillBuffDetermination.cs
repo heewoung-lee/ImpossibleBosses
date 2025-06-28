@@ -18,7 +18,9 @@ namespace Skill.AllofSkills.Fighter
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private IBufferManager _bufferManager;
         [Inject] private IDetectObject _detectObject;
+        [Inject] private RelayManager _relayManager;
 
+        
         public SkillBuffDetermination()
         {
             _buffIconImage = _resourcesLoader.Load<Sprite>(BuffIconImagePath);
@@ -88,7 +90,7 @@ namespace Skill.AllofSkills.Fighter
                 () =>
                 {
                     StatEffect effect = new StatEffect(_determination.StatType, Value, _determination.Buffname);
-                    Managers.RelayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath,
+                    _relayManager.NgoRPCCaller.Call_InitBuffer_ServerRpc(effect, BuffIconImagePath,
                         SkillDurationTime);
                 });
         }

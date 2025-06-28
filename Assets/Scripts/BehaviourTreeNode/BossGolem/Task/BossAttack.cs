@@ -19,6 +19,9 @@ namespace BehaviourTreeNode.BossGolem.Task
 {
     public class BossAttack : Action, IBossAnimationChanged
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         private readonly float _addIndicatorAddDurationTime = 0f;
         private readonly float _attackAnimStopThreshold = 0.06f;
 
@@ -70,7 +73,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     InstantiateByPath("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator")
                     .GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
-                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject)
+                _indicatorController = _relayManager.SpawnNetworkObj(_indicatorController.gameObject)
                     .GetComponent<NgoIndicatorController>();
                 float totalIndicatorDurationTime = _addIndicatorAddDurationTime + _animLength;
                 _indicatorController.SetValue(_stats.ViewDistance, _stats.ViewAngle, _controller.transform,
@@ -81,7 +84,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (_hasSpawnedParticles) return;
                     string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle";
                     SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
-                    Managers.RelayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath,
+                    _relayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeParticlePos, dustPath,
                         param);
 
                     #region 5.6일 파티클 스폰방식 수정
@@ -117,9 +120,9 @@ namespace BehaviourTreeNode.BossGolem.Task
 
 
                 CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold,
-                    _addIndicatorAddDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
+                    _addIndicatorAddDurationTime, _relayManager.NetworkManagerEx.ServerTime.Time);
                 _networkController.StartAnimChagnedRpc(animInfo,
-                    Managers.RelayManager.GetNetworkObject(_indicatorController.gameObject));
+                    _relayManager.GetNetworkObject(_indicatorController.gameObject));
                 //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
             }
         }

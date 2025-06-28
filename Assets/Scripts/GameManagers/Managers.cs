@@ -44,8 +44,8 @@ namespace GameManagers
         private NgoPoolManager _ngoPoolManager = new NgoPoolManager();
         public static NgoPoolManager NgoPoolManager { get => Instance._ngoPoolManager; }
 
-        private RelayManager _relayManager = new RelayManager();
-        public static RelayManager RelayManager { get => Instance._relayManager; }
+        // private RelayManager _relayManager = new RelayManager();
+        // public static RelayManager RelayManager { get => Instance._relayManager; }
     
         private PoolManager _poolManager = new PoolManager();
         public static PoolManager PoolManager { get => Instance._poolManager; }

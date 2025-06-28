@@ -5,11 +5,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Util;
+using Zenject;
 
 namespace UI.WorldSpace
 {
     public class UIPortalIndicator : UIBase
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         enum Images
         {
             PortalIndicatorImg
@@ -33,7 +37,7 @@ namespace UI.WorldSpace
             Bind <Image>(typeof(Images));
             _indicatorImg = Get<Image>((int)Images.PortalIndicatorImg);
 
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += OnChangeSceneEvent;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += OnChangeSceneEvent;
         }
 
         private void OnChangeSceneEvent(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -42,7 +46,7 @@ namespace UI.WorldSpace
             if (sceneName != Define.Scene.GamePlayScene.ToString() && sceneName != Define.Scene.BattleScene.ToString())
                 return;
 
-            if (!clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId))
+            if (!clientsCompleted.Contains(_relayManager.NetworkManagerEx.LocalClientId))
                 return;
 
             SetIndicatorOff();
@@ -50,7 +54,7 @@ namespace UI.WorldSpace
 
         public void OnDisable()
         {
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= OnChangeSceneEvent;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= OnChangeSceneEvent;
         }
         private Vector3 SetPosition()
         {

@@ -20,6 +20,8 @@ namespace BehaviourTreeNode.BossGolem.Task
     public class BossSkill2 : Action, IBossAnimationChanged
     {
         [Inject] private IInstantiate _instantiate;
+        [Inject] private RelayManager _relayManager;
+
         private readonly float _addAttackDurationTime = 0f;
         private readonly float _attackAnimStopThreshold = 0.05f;
 
@@ -74,7 +76,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                 _indicatorController = _instantiate.InstantiateByPath("Prefabs/Enemy/Boss/Indicator/Boss_Attack_Indicator").GetComponent<NgoIndicatorController>();
                 _attackIndicator.Value = _indicatorController;
                 _attackIndicator.Value.GetComponent<Poolable>().WorldPositionStays = false;
-                _indicatorController = Managers.RelayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NgoIndicatorController>();
+                _indicatorController = _relayManager.SpawnNetworkObj(_indicatorController.gameObject).GetComponent<NgoIndicatorController>();
                 float totalIndicatorDurationTime = _addAttackDurationTime + _animLength;
                 _indicatorController.SetValue(_attackRange, 360, _controller.transform, totalIndicatorDurationTime, IndicatorDoneEvent);
                 OnBossGolemAnimationChanged(_bossGolemAnimationNetworkController, _controller.BossSkill2State);
@@ -83,7 +85,7 @@ namespace BehaviourTreeNode.BossGolem.Task
                     if (_hasSpawnedParticles == true) return;
                     string dustPath = "Prefabs/Paticle/AttackEffect/Dust_Paticle_Big";
                     SpawnParamBase param = SpawnParamBase.Create(argFloat: 1f);
-                    Managers.RelayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
+                    _relayManager.NgoRPCCaller.SpawnNonNetworkObject(_attackRangeCirclePos, dustPath, param);
                     TargetInSight.AttackTargetInCircle(_stats, _attackRange, _damage.Value);
                     _hasSpawnedParticles = true;
                 }
@@ -98,8 +100,8 @@ namespace BehaviourTreeNode.BossGolem.Task
                     return;
 
 
-                CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addAttackDurationTime, Managers.RelayManager.NetworkManagerEx.ServerTime.Time);
-                _networkController.StartAnimChagnedRpc(animInfo, Managers.RelayManager.GetNetworkObject(_indicatorController.gameObject));
+                CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, decelerationRatio, _attackAnimStopThreshold, _addAttackDurationTime, _relayManager.NetworkManagerEx.ServerTime.Time);
+                _networkController.StartAnimChagnedRpc(animInfo, _relayManager.GetNetworkObject(_indicatorController.gameObject));
                 //호스트가 pretime 뽑아서 모든 클라이언트 들에게 던져야함.
 
             }

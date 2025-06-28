@@ -19,6 +19,11 @@ namespace UI.SubItem
 {
     public abstract class UIItemComponentInventory : UIItemComponent
     {
+        [Inject] private IUIPopupManager _popupUIManager;
+        [Inject] private IItemGradeBorder _itemGradeBorderManager;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private RelayManager _relayManager;
+        
         public enum Images
         {
             BackGroundImage,
@@ -36,9 +41,7 @@ namespace UI.SubItem
         protected Image _itemGradeBorder;
         protected GraphicRaycaster _uiRaycaster;
         protected EventSystem _eventSystem;
-        [Inject] private IUIPopupManager _popupUIManager;
-        [Inject] private IItemGradeBorder _itemGradeBorderManager;
-        [Inject] IPlayerSpawnManager _gameManagerEx;
+        
 
         public event Action OnAfterStart
         {
@@ -125,7 +128,7 @@ namespace UI.SubItem
         {
             RemoveItemFromInventory();
             IteminfoStruct itemStruct = new IteminfoStruct(_iteminfo);
-            Managers.RelayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,_gameManagerEx.GetPlayer().transform.position);
+            _relayManager.NgoRPCCaller.Spawn_Loot_ItemRpc(itemStruct,_gameManagerEx.GetPlayer().transform.position);
         }
 
         protected void AttachItemToSlot(GameObject go, Transform slot)

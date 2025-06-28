@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using NetWork.NGO.UI;
 using Scene.GamePlayScene;
@@ -9,10 +10,13 @@ namespace Scene.BattleScene
 {
     public class UnitBattleScene : ISceneSpawnBehaviour
     {
+        [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private RelayManager _relayManager;
+        
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
         private UI_Loading _uiLoadingScene;
         private InGameUIModule _inGameUIModule;
-        [Inject] private UIManager _uiManager;
+        
 
 
         public ISceneMover Nextscene => new GamePlaySceneMover();
@@ -20,14 +24,14 @@ namespace Scene.BattleScene
 
         public void Init()
         {
-            _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UI_Loading>();
+            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UI_Loading>();
         }
 
         public void SpawnObj()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsHost)
             {
-                Managers.RelayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
+                _relayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
             }
         }
     }

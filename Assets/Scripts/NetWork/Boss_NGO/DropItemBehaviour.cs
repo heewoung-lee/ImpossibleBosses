@@ -3,18 +3,22 @@ using Data.DataType.ItemType.Interface;
 using GameManagers;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 namespace NetWork.Boss_NGO
 {
     public class DropItemBehaviour : NetworkBehaviour,ILootItemBehaviour
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         private readonly float _maxHeight = 3f;
         private readonly float _circleRange = 30f;
         private readonly float _itemFlightDuration = 1.5f;
         public void SpawnBahaviour(Rigidbody rigid)
         {
             rigid.isKinematic = true;
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsHost)
             {
                 StartCoroutine(ThrowStoneParabola(rigid, _itemFlightDuration));
             }

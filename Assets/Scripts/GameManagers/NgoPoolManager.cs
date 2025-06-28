@@ -12,7 +12,8 @@ namespace GameManagers
     public class NgoPoolManager : IManagerIResettable
     {
         [Inject] IResourcesLoader _resourcesLoader;
-        
+        [Inject] private RelayManager _relayManager;
+
         private NetworkObjectPool _ngoPool;
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => _ngoPool.PooledObjects;
 
@@ -27,12 +28,12 @@ namespace GameManagers
         }
         public void Create_NGO_Pooling_Object()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false || _ngoPool != null)
+            if (_relayManager.NetworkManagerEx.IsHost == false || _ngoPool != null)
                 return;
 
-            if (Managers.RelayManager.NgoRPCCaller == null)
+            if (_relayManager.NgoRPCCaller == null)
             {
-                Managers.RelayManager.SpawnRpcCallerEvent += SpawnNgoPolling;
+                _relayManager.SpawnRpcCallerEvent += SpawnNgoPolling;
             }
             else
             {
@@ -41,7 +42,7 @@ namespace GameManagers
 
             void SpawnNgoPolling()
             {
-                Managers.RelayManager.NgoRPCCaller.SpawnPrefabNeedToInitializeRpc("Prefabs/NGO/NGO_Polling");
+                _relayManager.NgoRPCCaller.SpawnPrefabNeedToInitializeRpc("Prefabs/NGO/NGO_Polling");
             }
         }
         public void SetPool_NGO_ROOT_Dict(string poolNgoPath,Transform rootTr)
@@ -57,7 +58,7 @@ namespace GameManagers
             if (ngo == null)
                 return;
 
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsHost)
             {
                 ngo.Despawn();
             }

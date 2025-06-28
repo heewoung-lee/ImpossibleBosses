@@ -10,6 +10,8 @@ namespace Scene.GamePlayScene
     public class UnitNetGamePlayScene : ISceneSpawnBehaviour
     {
         [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private RelayManager _relayManager;
+
         private UIStageTimer _uiStageTimer;
         private UI_Loading _uiLoadingScene;
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
@@ -28,9 +30,9 @@ namespace Scene.GamePlayScene
     
         public void SpawnObj()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsHost)
             {
-                Managers.RelayManager.Load_NGO_Prefab<NgoGamePlaySceneSpawn>();
+                _relayManager.Load_NGO_Prefab<NgoGamePlaySceneSpawn>();
             }
         }
    

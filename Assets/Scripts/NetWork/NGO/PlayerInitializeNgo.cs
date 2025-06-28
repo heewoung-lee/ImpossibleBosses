@@ -26,6 +26,8 @@ namespace NetWork.NGO
     {
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private RelayManager _relayManager;
+
         enum Transforms
         {
             Interaction
@@ -47,23 +49,23 @@ namespace NetWork.NGO
                 _gameManagerEx.SetPlayer(gameObject);
                 SetOwnerPlayerADD_Module();
             }
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += SetParentPosition;
         }
         private void SetParentPosition(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
 
             if (loadSceneMode != LoadSceneMode.Single)
                 return;
 
-            transform.SetParent(Managers.RelayManager.NgoRoot.transform);
+            transform.SetParent(_relayManager.NgoRoot.transform);
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= SetParentPosition;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= SetParentPosition;
         }
         protected override void StartInit()
         {
@@ -79,11 +81,11 @@ namespace NetWork.NGO
             gameObject.AddComponent<ModuleMainCameraCinemachineBrain>();
             gameObject.AddComponent<ModulePlayerAnimInfo>();
             gameObject.AddComponent<ModulePlayerTextureCamera>();
-            gameObject.AddComponent(GetPlayerModuleClass(Managers.RelayManager.ChoicePlayerCharacter));
+            gameObject.AddComponent(GetPlayerModuleClass(_relayManager.ChoicePlayerCharacter));
             _interactionTr.AddComponent<ModulePlayerInteraction>();
             SetPlayerLayerMask();
       
-            RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{Managers.RelayManager.ChoicePlayerCharacter}Controller");
+            RuntimeAnimatorController ownerPlayerAnimController = _resourcesLoader.Load<RuntimeAnimatorController>($"Art/Player/AnimData/Animation/{_relayManager.ChoicePlayerCharacter}Controller");
             gameObject.GetComponent<Animator>().runtimeAnimatorController = ownerPlayerAnimController;
             _gameManagerEx.InvokePlayerSpawnWithController(controller);
         }

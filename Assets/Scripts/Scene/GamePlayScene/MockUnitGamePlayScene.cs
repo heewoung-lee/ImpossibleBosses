@@ -17,6 +17,8 @@ namespace Scene.GamePlayScene
     public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     {
         [Inject] private LobbyManager _lobbyManager;
+        [Inject] private RelayManager _relayManager;
+
         public MockUnitGamePlayScene(Define.PlayerClass playerClass,bool isSoloTest)
         {
             _playerClass = playerClass;
@@ -44,16 +46,16 @@ namespace Scene.GamePlayScene
 
         private async Task JoinChannel()
         {
-            Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClicent;
-            Managers.RelayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClicent;
-            if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClicent;
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClicent;
+            if (_relayManager.NetworkManagerEx.IsListening == false)
             {
                 await SetAuthenticationService();
                 if (_playerType == "Player1")
                 {
                     if (_isSoloTest == true)//나혼자 테스트 할때
                     {
-                        await Managers.RelayManager.StartHostWithRelay(8);
+                        await _relayManager.StartHostWithRelay(8);
                     }
                     else
                     {
@@ -71,16 +73,16 @@ namespace Scene.GamePlayScene
                         return;
                     }
                     string joinCode = lobby.Data["RelayCode"].Value;
-                    await Managers.RelayManager.JoinGuestRelay(joinCode);
+                    await _relayManager.JoinGuestRelay(joinCode);
                 }
             }
         }
 
         private void ConnectClicent(ulong clientID)
         {
-            if (Managers.RelayManager.NgoRPCCaller == null)
+            if (_relayManager.NgoRPCCaller == null)
             {
-                Managers.RelayManager.SpawnRpcCallerEvent += SpawnPlayer;
+                _relayManager.SpawnRpcCallerEvent += SpawnPlayer;
             }
             else
             {
@@ -88,11 +90,11 @@ namespace Scene.GamePlayScene
             }
             void SpawnPlayer()
             {
-                if (Managers.RelayManager.NetworkManagerEx.LocalClientId != clientID)
+                if (_relayManager.NetworkManagerEx.LocalClientId != clientID)
                     return;
 
-                Managers.RelayManager.RegisterSelectedCharacter(clientID, _playerClass);
-                Managers.RelayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
+                _relayManager.RegisterSelectedCharacter(clientID, _playerClass);
+                _relayManager.NgoRPCCaller.GetPlayerChoiceCharacterRpc(clientID);
                 LoadGamePlayScene();
             }
         }
@@ -134,16 +136,16 @@ namespace Scene.GamePlayScene
         }
         public void SpawnObj()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening)
+            if (_relayManager.NetworkManagerEx.IsListening)
             {
                 InitNgoPlaySceneOnHost();
             }
-            Managers.RelayManager.NetworkManagerEx.OnServerStarted += InitNgoPlaySceneOnHost;
+            _relayManager.NetworkManagerEx.OnServerStarted += InitNgoPlaySceneOnHost;
             void InitNgoPlaySceneOnHost()
             {
-                if (Managers.RelayManager.NetworkManagerEx.IsHost)
+                if (_relayManager.NetworkManagerEx.IsHost)
                 {
-                    Managers.RelayManager.Load_NGO_Prefab<NgoGamePlaySceneSpawn>();
+                    _relayManager.Load_NGO_Prefab<NgoGamePlaySceneSpawn>();
                 }
             }
         }

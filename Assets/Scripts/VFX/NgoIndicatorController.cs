@@ -15,6 +15,8 @@ namespace VFX
     public class NgoIndicatorController : NetworkBehaviourBase, IIndicatorBahaviour
     {
         [Inject] IDestroyObject _destroyer;
+        [Inject] private RelayManager _relayManager;
+
         private const float Depth = 10f;
 
         enum DecalProjectors
@@ -217,10 +219,10 @@ namespace VFX
         {
 
             float elapsed = 0f;
-            double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+            double nowTime = _relayManager.NetworkManagerEx.ServerTime.Time;
             while (elapsed < duration)
             {
-                double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+                double currentNetTime = _relayManager.NetworkManagerEx.ServerTime.Time;
                 double deltaTime = currentNetTime - nowTime;
                 nowTime = currentNetTime;
 

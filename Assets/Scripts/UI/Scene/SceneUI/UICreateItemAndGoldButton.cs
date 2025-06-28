@@ -27,6 +27,8 @@ namespace UI.Scene.SceneUI
         [Inject] IPlayerSpawnManager _gameManagerEx;
         [Inject] private LobbyManager _lobbyManager;
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+
         
         private Button _scoreButton;
         private Button _moveSceneButton;
@@ -150,7 +152,7 @@ namespace UI.Scene.SceneUI
 
         private async Task FindMyJoinCodeAsync()
         {
-            Debug.Log($"내 조인코드는 {Managers.RelayManager.JoinCode}");
+            Debug.Log($"내 조인코드는 {_relayManager.JoinCode}");
             Debug.Log($"로비의 조인코드는{(await _lobbyManager.GetCurrentLobby()).Data["RelayCode"].Value}");
         }
     }

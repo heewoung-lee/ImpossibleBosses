@@ -15,7 +15,7 @@ namespace NetWork.Boss_NGO
 {
     public struct CurrentAnimInfo : INetworkSerializable
     {
-        
+
         public float AnimLength;
         public float DecelerationRatio;
         public float AnimStopThreshold;
@@ -47,6 +47,7 @@ namespace NetWork.Boss_NGO
     public class BossGolemNetworkController : NetworkBehaviourBase
     {
         [Inject] IBossSpawnManager _bossSpawnManager;
+        [Inject] private RelayManager _relayManager;
         
         private readonly float _normalAnimSpeed = 1f;
         private readonly float _maxAnimSpeed = 3f;
@@ -121,7 +122,7 @@ namespace NetWork.Boss_NGO
             double elaspedTime = 0f;
             FinishAttack = false;
             _finishedIndicatorDuration = false;
-            double nowTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+            double nowTime = _relayManager.NetworkManagerEx.ServerTime.Time;
 
         
             //현재 서버가 간 시간
@@ -146,7 +147,7 @@ namespace NetWork.Boss_NGO
             }
             while (elaspedTime <=animinfo.AnimLength)
             {
-                double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+                double currentNetTime = _relayManager.NetworkManagerEx.ServerTime.Time;
                 double deltaTime = (currentNetTime - nowTime);
                 nowTime = currentNetTime;
 
@@ -172,7 +173,7 @@ namespace NetWork.Boss_NGO
             float elapsedTime = 0f;
             while (elapsedTime <= indicatorAddduration + animLength)
             {
-                double currentNetTime = Managers.RelayManager.NetworkManagerEx.ServerTime.Time;
+                double currentNetTime = _relayManager.NetworkManagerEx.ServerTime.Time;
                 float deltaTime = (float)(currentNetTime - prevNetTime);
                 elapsedTime += deltaTime;
                 yield return null;

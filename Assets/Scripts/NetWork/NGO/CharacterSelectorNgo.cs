@@ -18,9 +18,13 @@ namespace NetWork.NGO
 {
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
-    private readonly Color _playerFrameColor = "#143658".HexCodetoConvertColor();
+    
     [Inject] private IUISceneManager _uiSceneManager;
     [Inject] private IPlayerIngameLogininfo _playerIngameLogininfo;
+    [Inject] private RelayManager _relayManager;
+    
+    
+    private readonly Color _playerFrameColor = "#143658".HexCodetoConvertColor();
 
     private NetworkVariable<FixedString64Bytes> _playerNickname = new NetworkVariable<FixedString64Bytes>(
         new FixedString64Bytes(""), NetworkVariableReadPermission.Everyone,
@@ -168,8 +172,8 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
         {
             _uiRoomCharacterSelect.SetHostButton();
 
-            Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
-            Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback += CheckHostIsAlone;
+            _relayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
+            _relayManager.NetworkManagerEx.OnClientDisconnectCallback += CheckHostIsAlone;
             _uiRoomCharacterSelect.SetHostStartButton(true);
         }
 
@@ -184,7 +188,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
             {
                 SetActiveCharacterSelectionArrow(!newValue);
                 Define.PlayerClass selectCharacter = (Define.PlayerClass)ModuleChooseCharacterMove.PlayerChooseIndex;
-                Managers.RelayManager.RegisterSelectedCharacter(Managers.RelayManager.NetworkManagerEx.LocalClientId,
+                _relayManager.RegisterSelectedCharacter(_relayManager.NetworkManagerEx.LocalClientId,
                     selectCharacter);
             }
         };
@@ -198,7 +202,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
         if (IsHost == false)
             return;
 
-        if (Managers.RelayManager.NetworkManagerEx.ConnectedClientsIds.Count == 1)
+        if (_relayManager.NetworkManagerEx.ConnectedClientsIds.Count == 1)
         {
             _uiRoomCharacterSelect.SetHostStartButton(true);
         }
@@ -280,7 +284,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     [Rpc(SendTo.NotMe)]
     private void NotifyButtonStateClientRpc(bool state, ulong targetClientId)
     {
-        if (Managers.RelayManager.NetworkManagerEx.LocalClientId == targetClientId)
+        if (_relayManager.NetworkManagerEx.LocalClientId == targetClientId)
         {
             _uiRoomCharacterSelect.ButtonState(state); // 본인의 클라이언트에서만 실행
         }
@@ -302,7 +306,7 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        Managers.RelayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
+        _relayManager.NetworkManagerEx.OnClientDisconnectCallback -= CheckHostIsAlone;
     }
 
     public void SetSelectPlayerRawImage(Texture texture)

@@ -11,21 +11,23 @@ namespace Scene.BattleScene
     public class BattleSceneMover : ISceneMover
     {
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+
         public void MoveScene()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
 
 
-            Managers.RelayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
+            _relayManager.NetworkManagerEx.NetworkConfig.EnableSceneManagement = true;
             _sceneManagerEx.OnAllPlayerLoadedEvent += SetPostion;
             _sceneManagerEx.NetworkLoadScene(Define.Scene.BattleScene);
-            Managers.RelayManager.NgoRPCCaller.ResetManagersRpc();
+            _relayManager.NgoRPCCaller.ResetManagersRpc();
 
 
             void SetPostion()
             {
-                foreach (NetworkObject player in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+                foreach (NetworkObject player in _relayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
                 {
                     Vector3 pos = new Vector3(player.OwnerClientId, 0, 0);
 

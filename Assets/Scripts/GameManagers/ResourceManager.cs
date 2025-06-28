@@ -12,7 +12,9 @@ using Zenject;
 namespace GameManagers
 {
     internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject,IRegistrar<ICachingObjectDict>
-    {
+    {      
+        [Inject] private RelayManager _relayManager;
+
         DiContainer CurrentContainer
         {
             get
@@ -136,7 +138,7 @@ namespace GameManagers
 
         private bool IsCheckNetworkPrefab(GameObject prefab)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
+            if (_relayManager.NetworkManagerEx.IsListening && prefab.TryGetComponent(out NetworkObject ngo))
             {
                 return true;
             }
@@ -151,7 +153,7 @@ namespace GameManagers
 
             if (poolable != null)
             {
-                if (Managers.RelayManager.NetworkManagerEx.IsListening && poolable.TryGetComponent(out NetworkObject ngo))
+                if (_relayManager.NetworkManagerEx.IsListening && poolable.TryGetComponent(out NetworkObject ngo))
                 {
                     Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
                     {

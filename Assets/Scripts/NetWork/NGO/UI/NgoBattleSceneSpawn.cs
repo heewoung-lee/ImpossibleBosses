@@ -2,16 +2,17 @@ using System.Collections.Generic;
 using GameManagers;
 using NetWork.BaseNGO;
 using UnityEngine;
+using Zenject;
 
 namespace NetWork.NGO.UI
 {
     public class NgoBattleSceneSpawn : NetworkBehaviourBase
     {
-        private RelayManager _relayManager;
+        [Inject] private RelayManager _relayManager;
+
         GameObject _player;
         protected override void AwakeInit()
         {
-            _relayManager = Managers.RelayManager;
         }
 
         public override void OnNetworkSpawn()
@@ -23,8 +24,8 @@ namespace NetWork.NGO.UI
         {
             if (IsHost == false)
                 return;
-            Managers.RelayManager.SpawnToRPC_Caller();
-            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
+            _relayManager.SpawnToRPC_Caller();
+            _relayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
             RequestSpawnToNpc(new List<(string, Vector3)>
             {
                 ("Prefabs/Enemy/Boss/Character/StoneGolem",new Vector3(10f,0f,10f))
@@ -35,7 +36,7 @@ namespace NetWork.NGO.UI
         {
             foreach ((string, Vector3) npcdata in npcPathAndTr)
             {
-                Managers.RelayManager.SpawnNetworkObj($"{npcdata.Item1}", Managers.RelayManager.NgoRoot.transform, position: npcdata.Item2);
+                _relayManager.SpawnNetworkObj($"{npcdata.Item1}", _relayManager.NgoRoot.transform, position: npcdata.Item2);
             }
         }
         protected override void StartInit()

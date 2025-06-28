@@ -5,11 +5,15 @@ using UI.WorldSpace;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace NetWork.NGO.Scene_NGO
 {
     public class NgoBossRoomEntrance : NetworkBehaviourBase
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         private Vector3 _townPortalPosition = new Vector3(15f, 0.15f, 32);
         private NgoStageTimerController _timerController;
         public NgoStageTimerController TimerController
@@ -19,7 +23,7 @@ namespace NetWork.NGO.Scene_NGO
                 if(_timerController == null)
                 {
                 
-                    foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+                    foreach(NetworkObject ngo in _relayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
                     {
                         if(ngo.TryGetComponent(out NgoStageTimerController stageTimerController))
                         {
@@ -57,7 +61,7 @@ namespace NetWork.NGO.Scene_NGO
         private void OnChangedCountPlayer(int previousValue, int newValue)
         {
 
-            if(newValue == Managers.RelayManager.NetworkManagerEx.ConnectedClientsList.Count)
+            if(newValue == _relayManager.NetworkManagerEx.ConnectedClientsList.Count)
             {
                 _isAllplayersinPortal.Value = true;
                 TimerController.SetPortalInAllPlayersCountRpc();
@@ -117,7 +121,7 @@ namespace NetWork.NGO.Scene_NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void EnteredPlayerInPortalRpc(ulong playerIndex)
         {
-            if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex,out NetworkObject player))
+            if (_relayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex,out NetworkObject player))
             {
                 player.gameObject.TryGetComponentInChildren(out UIPortalIndicator indicator);
                 indicator.SetIndicatorOn();
@@ -128,7 +132,7 @@ namespace NetWork.NGO.Scene_NGO
         [Rpc(SendTo.ClientsAndHost)]
         public void ExitedPlayerInPortalRpc(ulong playerIndex)
         {
-            if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex, out NetworkObject player))
+            if (_relayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(playerIndex, out NetworkObject player))
             {
                 player.gameObject.TryGetComponentInChildren(out UIPortalIndicator indicator);
                 indicator.SetIndicatorOff();

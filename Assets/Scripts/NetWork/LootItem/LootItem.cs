@@ -1,7 +1,9 @@
 using System.Collections;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface;
 using GameManagers.Interface.GameManagerEx;
+using GameManagers.Interface.UIManager;
 using Module.CommonModule;
 using Module.PlayerModule;
 using Player;
@@ -17,15 +19,19 @@ namespace NetWork.LootItem
 {
     public class LootItem : NetworkBehaviour,IInteraction
     {
+        
+        [Inject] private IUIPopupManager _uiPopupManager;
+        [Inject] private IUISubItem _uiSubItem;
+        [Inject] IPlayerSpawnManager _gameManagerEx;
+        [Inject] private RelayManager _relayManager;
+
+        
         private const float AddforceOffset = 5f;
         private const float TorqueForceOffset = 30f;
         private const float DropitemVerticalOffset = 0.2f;
         private const float DropitemRotationOffset = 40f;
         private UIPlayerInventory _uiPlayerInventory;
         private NetworkObject _networkObject;
-        [Inject] private UIManager _uiManager;
-        [Inject] IPlayerSpawnManager _gameManagerEx;
-        
         
         private Vector3 _dropPosition;
         private Rigidbody _rigidBody;
@@ -47,7 +53,7 @@ namespace NetWork.LootItem
 
         public void SpawnBehaviour()
         {
-            _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
+            _uiPlayerInventory = _uiPopupManager.GetImportant_Popup_UI<UIPlayerInventory>();
             _canInteraction = false;
 
             if (TryGetComponent(out ILootItemBehaviour behaviour) == true)
@@ -150,10 +156,10 @@ namespace NetWork.LootItem
             if (baseController.CurrentStateType != baseController.PickupState)
                 return;
 
-            UIItemComponentInventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory(_uiManager);
+            UIItemComponentInventory inventoryItem = ((IInventoryItemMaker)_iteminfo).MakeItemComponentInventory(_uiSubItem);
             inventoryItem.transform.SetParent(_uiPlayerInventory.ItemInventoryTr);
             player.DisEnable_Icon_UI();//상호작용 아이콘 제거
-            if (Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsHost)
             {
                 DisEnble_Icon_UI_Rpc();
             }
@@ -161,7 +167,7 @@ namespace NetWork.LootItem
             {
                 Call_DisEnable_Icon_UI_Rpc();
             }
-            Managers.RelayManager.DeSpawn_NetWorkOBJ(gameObject);
+            _relayManager.DeSpawn_NetWorkOBJ(gameObject);
         }
 
         [Rpc(SendTo.ClientsAndHost,RequireOwnership = false)]

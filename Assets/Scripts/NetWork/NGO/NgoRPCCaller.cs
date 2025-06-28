@@ -40,6 +40,8 @@ namespace NetWork.NGO
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private IVivoxSession _vivoxSession;
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
@@ -80,7 +82,7 @@ namespace NetWork.NGO
             {
                 if (_networkManager == null)
                 {
-                    _networkManager = Managers.RelayManager.NetworkManagerEx;
+                    _networkManager = _relayManager.NetworkManagerEx;
                 }
                 return _networkManager;
             }
@@ -88,16 +90,16 @@ namespace NetWork.NGO
         [Rpc(SendTo.Server)]
         public void GetPlayerChoiceCharacterRpc(ulong clientId)
         {
-            string choiceCharacterName = Managers.RelayManager.ChoicePlayerCharactersDict[clientId].ToString();
+            string choiceCharacterName = _relayManager.ChoicePlayerCharactersDict[clientId].ToString();
             Vector3 targetPosition = new Vector3(1 * clientId, 0, 1);
-            Managers.RelayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, Managers.RelayManager.NgoRoot.transform,false);
+            _relayManager.SpawnNetworkOBJInjectionOnwer(clientId, $"Prefabs/Player/{choiceCharacterName}Base", targetPosition, _relayManager.NgoRoot.transform,false);
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            Managers.RelayManager.SetRPCCaller(gameObject);
-            Managers.RelayManager.Invoke_Spawn_RPCCaller_Event();
+            _relayManager.SetRPCCaller(gameObject);
+            _relayManager.Invoke_Spawn_RPCCaller_Event();
             _loadedPlayerCount.OnValueChanged += LoadedPlayerCountValueChanged;
             _isAllPlayerLoaded.OnValueChanged += IsAllPlayerLoadedValueChanged;
         }
@@ -155,8 +157,8 @@ namespace NetWork.NGO
             }
             //여기에서는 어떤 아이템을 스폰할껀지 아이템의 형상만 가져올 것.
             networkLootItem.GetComponent<LootItem.LootItem>().SetPosition(dropPosition);
-            GameObject rootItem = Managers.RelayManager.SpawnNetworkObj(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
-            NetworkObjectReference rootItemRef = Managers.RelayManager.GetNetworkObject(rootItem);
+            GameObject rootItem = _relayManager.SpawnNetworkObj(networkLootItem, Managers.LootItemManager.ItemRoot,dropPosition);
+            NetworkObjectReference rootItemRef = _relayManager.GetNetworkObject(rootItem);
             SetDropItemInfoRpc(itemStruct, rootItemRef, addLootItemBehaviour);
         }
 
@@ -226,7 +228,7 @@ namespace NetWork.NGO
             GameObject obj = _instantiate.InstantiateByPath(path);
             obj.transform.position = position;
             NetworkObject networkObj;
-            networkObj = Managers.RelayManager.SpawnNetworkObj(obj, parentTr, position).GetComponent<NetworkObject>();
+            networkObj = _relayManager.SpawnNetworkObj(obj, parentTr, position).GetComponent<NetworkObject>();
             return networkObj;
         }
 
@@ -235,7 +237,7 @@ namespace NetWork.NGO
         public void SpawnVFXPrefabServerRpc(string path, float duration, ulong targerObjectID = Invalidobjectid)
         {
             Vector3 pariclePos = Vector3.zero;
-            if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targerObjectID, out NetworkObject targetNgo))
+            if (_relayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targerObjectID, out NetworkObject targetNgo))
             {
                 pariclePos = targetNgo.transform.position;
             }
@@ -255,12 +257,12 @@ namespace NetWork.NGO
         public void SpawnVFXPrefabClientRpc(ulong particleNgoid, Vector3 particleGeneratePos, string path, float duration, ulong targetNGOID = Invalidobjectid)
         {
             Action<GameObject> positionAndBehaviorSetterEvent = null;
-            if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNgoid, out NetworkObject paricleNgo))
+            if (_relayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(particleNgoid, out NetworkObject paricleNgo))
             {
                 if (paricleNgo.TryGetComponent(out NgoParticleInitailizeBase skillInitailze))
                 {
                     skillInitailze.SetInitalze(paricleNgo);
-                    if (Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
+                    if (_relayManager.NetworkManagerEx.SpawnManager.SpawnedObjects.TryGetValue(targetNGOID, out NetworkObject targetNgo))
                     {
                         skillInitailze.SetTargetInitalze(targetNgo);
                         positionAndBehaviorSetterEvent += (particleGameObject) => { Managers.ManagersStartCoroutine(Managers.VFXManager.FollowingGenerator(targetNgo.transform, particleGameObject)); };
@@ -341,7 +343,7 @@ namespace NetWork.NGO
         public void SubmitSelectedCharactertoServerRpc(ulong clientId, string selectCharacterName)
         {
             Define.PlayerClass selectCharacter = (Define.PlayerClass)Enum.Parse(typeof(Define.PlayerClass), selectCharacterName);
-            Managers.RelayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
+            _relayManager.RegisterSelectedCharacterinDict(clientId, selectCharacter);
 
         }
         public void SpawnLocalObject(Vector3 pos, string objectPath, SpawnParamBase spawnParamBase)
@@ -454,7 +456,7 @@ namespace NetWork.NGO
         [Rpc(SendTo.Server)]
         public void OnBeforeSceneUnloadRpc()
         {
-            foreach(NetworkObject ngo in Managers.RelayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
+            foreach(NetworkObject ngo in _relayManager.NetworkManagerEx.SpawnManager.SpawnedObjectsList)
             {
                 if(ngo.TryGetComponent(out ISceneChangeBehaviour behaviour))
                 {

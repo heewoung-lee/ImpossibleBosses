@@ -3,12 +3,15 @@ using Controller.BossState;
 using GameManagers;
 using Unity.Collections;
 using Unity.Netcode;
+using Zenject;
 using IState = Controller.ControllerStats.IState;
 
 namespace NetWork.Boss_NGO
 {
     public class BossGolemAnimationNetworkController : NetworkBehaviour
     {
+        [Inject] private RelayManager _relayManager;
+
         BossGolemController _bossGolemController;
         private Dictionary<string,IState> _bossAttackStateDict = new Dictionary<string, IState>();
         public Dictionary<string, IState> BossAttackStateDict => _bossAttackStateDict;
@@ -32,7 +35,7 @@ namespace NetWork.Boss_NGO
 
         public void SyncBossStateToClients<T>(T state) where T : IState
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
 
             string typename = state.GetType().Name;

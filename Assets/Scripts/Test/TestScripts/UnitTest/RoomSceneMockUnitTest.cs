@@ -18,6 +18,8 @@ namespace Test.TestScripts.UnitTest
     public class RoomSceneMockUnitTest : BaseScene
     {
         [Inject] private LobbyManager _lobbyManager;
+        [Inject] private RelayManager _relayManager;
+
         public enum PlayersTag
         {
             Player1,
@@ -42,21 +44,21 @@ namespace Test.TestScripts.UnitTest
         {
             base.StartInit();
             await JoinChannel();
-            Managers.RelayManager.SpawnToRPC_Caller();
+            _relayManager.SpawnToRPC_Caller();
             UIRoomCharacterSelect uICharacterSelect = _uiManager.GetSceneUIFromResource<UIRoomCharacterSelect>();
             UIRoomChat uiChatting = _uiManager.GetSceneUIFromResource<UIRoomChat>();
         }
 
         private async Task JoinChannel()
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening == false)
+            if (_relayManager.NetworkManagerEx.IsListening == false)
             {
                 await SetAuthenticationService();
                 if (_playerType == "Player1")
                 {
                     if (isSoloTest == true)//나혼자 테스트 할때
                     {
-                        await Managers.RelayManager.StartHostWithRelay(8);
+                        await _relayManager.StartHostWithRelay(8);
                     }
                     else
                     {
@@ -73,7 +75,7 @@ namespace Test.TestScripts.UnitTest
                         return;
                     }
                     string joinCode = lobby.Data["RelayCode"].Value;
-                    await Managers.RelayManager.JoinGuestRelay(joinCode);
+                    await _relayManager.JoinGuestRelay(joinCode);
                 }
             }
             _lobbyManager.InitializeLobbyEvent();

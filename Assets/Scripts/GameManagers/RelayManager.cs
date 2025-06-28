@@ -20,6 +20,9 @@ namespace GameManagers
     {
         
         [Inject] IInstantiate _instantiate;
+        [Inject] private RelayManager _relayManager;
+
+        
         private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
         private string _joinCode;
@@ -128,7 +131,7 @@ namespace GameManagers
 
         public void RegisterSelectedCharacter(ulong clientId, Define.PlayerClass playerClass)
         {
-            Managers.RelayManager.NgoRPCCaller.SubmitSelectedCharactertoServerRpc(Managers.RelayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
+            _relayManager.NgoRPCCaller.SubmitSelectedCharactertoServerRpc(_relayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
             _choicePlayerCharacter = playerClass;
         }
 
@@ -173,7 +176,7 @@ namespace GameManagers
             if (NgoRPCCaller != null)
                 return;
 
-            Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/NgoRPCCaller", destroyOption: false);
+            _relayManager.SpawnNetworkObj("Prefabs/NGO/NgoRPCCaller", destroyOption: false);
         }
         public async Task<string> StartHostWithRelay(int maxConnections)
         {
@@ -236,7 +239,7 @@ namespace GameManagers
 
         private GameObject SpawnAndInjectionNgo(GameObject instanceObj, ulong clientId, Vector3 position, Transform parent = null, bool destroyOption = true)
         {
-            if (Managers.RelayManager.NetworkManagerEx.IsListening == true && Managers.RelayManager.NetworkManagerEx.IsHost)
+            if (_relayManager.NetworkManagerEx.IsListening == true && _relayManager.NetworkManagerEx.IsHost)
             {
                 instanceObj.transform.position = position;
                 NetworkObject networkObj = _instantiate.GetOrAddComponent<NetworkObject>(instanceObj);

@@ -23,6 +23,8 @@ namespace GameManagers
         [Inject] private IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] IDestroyObject _destroyer;
+        [Inject] private RelayManager _relayManager;
+
         
         Dictionary<string, ParticleInfo> _isCheckNgoDict = new Dictionary<string, ParticleInfo>();
 
@@ -49,7 +51,7 @@ namespace GameManagers
             {
                 if(_vfxRootNgo == null)
                 {
-                    _vfxRootNgo = Managers.RelayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
+                    _vfxRootNgo = _relayManager.SpawnNetworkObj("Prefabs/NGO/VFX_Root_NGO");
                 }
                 return _vfxRootNgo.transform;
             }
@@ -99,7 +101,7 @@ namespace GameManagers
                     Debug.Log("targetNGOID isn't Found NGO");
                     return;
                 }
-                Managers.RelayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
+                _relayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, targetNGOID);
             }
             void SetPositionAndChasetoTagetParticle(GameObject particleObj)
             {
@@ -121,7 +123,7 @@ namespace GameManagers
 
             void FindNgo_Spawn()
             {
-                Managers.RelayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
+                _relayManager.NgoRPCCaller.SpawnVFXPrefabServerRpc(path, settingDuration, spawnPos);
             }
             void SetPositionParticle(GameObject particleOBJ)
             {

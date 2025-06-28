@@ -10,11 +10,15 @@ using Stats.BaseStats;
 using Stats.BossStats;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace BehaviourTreeNode.BossGolem.Task
 {
     public class BossSkill1 : Action, IBossAnimationChanged
     {
+        [Inject] private RelayManager _relayManager;
+
+        
         private readonly string _skill1IndicatorPath = "Prefabs/Enemy/Boss/Indicator/Boss_Skill1_Indicator";
         private readonly string _skill1StonePath = "Prefabs/Enemy/Boss/AttackPattren/BossSkill1";
         private readonly float _skill1DurationTime = 1f;
@@ -62,7 +66,7 @@ namespace BehaviourTreeNode.BossGolem.Task
 
                 _allTargets = Physics.OverlapSphere(Owner.transform.position, float.MaxValue, _stats.TarGetLayer);
                 OnBossGolemAnimationChanged(BossAnimNetworkController, _controller.BossSkill1State);
-                CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, decelerationRatio, _skill1AnimStopThreshold,_skill1DurationTime,Managers.RelayManager.NetworkManagerEx.ServerTime.Time, _skill1StartAnimSpeed);
+                CurrentAnimInfo animInfo = new CurrentAnimInfo(_animLength, decelerationRatio, _skill1AnimStopThreshold,_skill1DurationTime,_relayManager.NetworkManagerEx.ServerTime.Time, _skill1StartAnimSpeed);
                 _networkController.StartAnimChagnedRpc(animInfo);
             }
         }
@@ -87,10 +91,10 @@ namespace BehaviourTreeNode.BossGolem.Task
                         Vector3 targetPos = targetPlayer.transform.position;
 
                         SpawnParamBase skill1IndicatorParam = SpawnParamBase.Create(argPosVector3: targetPos, argInteger: _damage.Value, argFloat: _skill1DurationTime);
-                        Managers.RelayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1IndicatorPath, skill1IndicatorParam);
+                        _relayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1IndicatorPath, skill1IndicatorParam);
 
                         SpawnParamBase skill1StoneParam = SpawnParamBase.Create(argFloat: _skill1DurationTime);
-                        Managers.RelayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1StonePath, skill1StoneParam);
+                        _relayManager.NgoRPCCaller.SpawnLocalObject(targetPos, _skill1StonePath, skill1StoneParam);
                         //5.6 수정 SpawnProjector(targetPlayer);
                     }
                 }

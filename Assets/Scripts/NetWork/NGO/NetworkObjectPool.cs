@@ -16,7 +16,8 @@ namespace NetWork.NGO
     {
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private IInstantiate _instantiate;
-        
+        [Inject] private RelayManager _relayManager;
+
         Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
         public override void OnNetworkDespawn()
@@ -25,7 +26,7 @@ namespace NetWork.NGO
             {
                 m_PooledObjects[prefabPath].Clear();
                 GameObject prefab = _resourcesLoader.Load<GameObject>(prefabPath);
-                Managers.RelayManager.NetworkManagerEx.PrefabHandler.RemoveHandler(prefab);
+                _relayManager.NetworkManagerEx.PrefabHandler.RemoveHandler(prefab);
             }
             m_PooledObjects.Clear();
         }
@@ -35,7 +36,7 @@ namespace NetWork.NGO
             base.OnNetworkSpawn();
             Managers.NgoPoolManager.Set_NGO_Pool(this);
 
-            if (Managers.RelayManager.NetworkManagerEx.IsHost == false)
+            if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
 
 
@@ -45,7 +46,7 @@ namespace NetWork.NGO
                 GameObject pollingNgo_Root = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_Polling_ROOT");
                 if (pollingNgo_Root != null)
                 {
-                    Managers.RelayManager.SpawnNetworkObj(pollingNgo_Root);
+                    _relayManager.SpawnNetworkObj(pollingNgo_Root);
                 }
 
                 if (pollingNgo_Root.TryGetComponent(out NgoPoolRootInitailize initalilze))
@@ -94,7 +95,7 @@ namespace NetWork.NGO
         {
             GameObject prefab = _resourcesLoader.Load<GameObject>(prefabPath);
 
-            if (Managers.RelayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
+            if (_relayManager.NetworkManagerEx.GetNetworkPrefabOverride(prefab) == null)
             {
                 Debug.Log($"{prefab.name} is not registed the NetworkManager");
                 return;
@@ -115,7 +116,7 @@ namespace NetWork.NGO
 
             PooledPrefabInstanceHandler handler = new PooledPrefabInstanceHandler(this, prefabPath);
 
-            Managers.RelayManager.NetworkManagerEx.PrefabHandler.AddHandler(prefab, handler);
+            _relayManager.NetworkManagerEx.PrefabHandler.AddHandler(prefab, handler);
 
             NetworkObject CreateFunc()
             {

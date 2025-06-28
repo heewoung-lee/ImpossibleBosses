@@ -18,6 +18,8 @@ namespace Module.PlayerModule.PlayerClassModule
     public abstract class ModulePlayerClass : MonoBehaviour
     {
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+
         public abstract Define.PlayerClass PlayerClass { get; }
 
 
@@ -31,11 +33,11 @@ namespace Module.PlayerModule.PlayerClassModule
         }
         public void OnEnable()
         {
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted += ChangeLoadScene;
         }
         public void OnDisable()
         {
-            Managers.RelayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
+            _relayManager.NetworkManagerEx.SceneManager.OnLoadEventCompleted -= ChangeLoadScene;
         }
         public virtual void InitializeOnStart()
         {
@@ -47,7 +49,7 @@ namespace Module.PlayerModule.PlayerClassModule
             if (_sceneManagerEx.GetCurrentScene is not ISkillInit)
                 return;
 
-            if (clientsCompleted.Contains(Managers.RelayManager.NetworkManagerEx.LocalClientId) is false)
+            if (clientsCompleted.Contains(_relayManager.NetworkManagerEx.LocalClientId) is false)
                 return;
 
             InitializeSkillsFromManager();

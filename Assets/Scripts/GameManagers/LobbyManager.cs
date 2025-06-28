@@ -33,6 +33,9 @@ namespace GameManagers
         [Inject] private ISendMessage _sendMessage;
         [Inject] private IVivoxSession _vivoxSession;
         [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private RelayManager _relayManager;
+
+        
         enum LoadingProcess
         {
             VivoxInitalize,
@@ -132,7 +135,7 @@ namespace GameManagers
 
             void SubscribeSceneEvent()
             {
-                Managers.RelayManager.SceneLoadInitalizeRelayServer();
+                _relayManager.SceneLoadInitalizeRelayServer();
                 InitializeVivoxEvent();
                 InitializeLobbyEvent();
                 _taskChecker[(int)LoadingProcess.VivoxInitalize] = true;
@@ -307,7 +310,7 @@ namespace GameManagers
 
             try
             {
-                string joincode = await Managers.RelayManager.StartHostWithRelay(lobby.MaxPlayers);
+                string joincode = await _relayManager.StartHostWithRelay(lobby.MaxPlayers);
                 Debug.Log(lobby.Name + "로비의 이름");
                 await InjectionRelayJoinCodeintoLobby(lobby, joincode);
             }
@@ -326,7 +329,7 @@ namespace GameManagers
             try
             {
                 string joincode = lobby.Data["RelayCode"].Value;
-                await Managers.RelayManager.JoinGuestRelay(joincode);
+                await _relayManager.JoinGuestRelay(joincode);
             }
             catch (KeyNotFoundException exception)
             {
@@ -719,7 +722,7 @@ namespace GameManagers
                 bool ischeckUserAloneInLobby = currentLobby.Players.Count <= 1;
                 if (disconnectRelayOption == true)
                 {
-                    Managers.RelayManager.ShutDownRelay();
+                    _relayManager.ShutDownRelay();
                 }
 
                 if (ischeckUserAloneInLobby && ischeckUserIsHost)
