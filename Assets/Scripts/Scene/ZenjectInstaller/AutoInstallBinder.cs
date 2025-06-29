@@ -9,6 +9,8 @@ namespace Scene.ZenjectInstaller
     {
         public override void InstallBindings()
         {
+
+            
             MonoInstaller[] installers = 
                 this.GetComponents<MonoInstaller>()
                     .Where(installer => installer != this).ToArray();

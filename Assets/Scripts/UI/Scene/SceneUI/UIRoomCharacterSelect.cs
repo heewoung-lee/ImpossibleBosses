@@ -238,7 +238,7 @@ namespace UI.Scene.SceneUI
             if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
             _relayManager.SpawnToRPC_Caller();
-            _relayManager.SpawnNetworkObj("Prefabs/NGO/NGO_UI_Root_Chracter_Select", parent: _relayManager.NgoRootUI.transform);
+            _relayManager.SpawnNetworkObj("Prefabs/NGO/NGOUIRootChracterSelect", parent: _relayManager.NgoRootUI.transform);
             SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
             SubScribeRelayCallback();
         }
@@ -246,7 +246,14 @@ namespace UI.Scene.SceneUI
         {
             if (_netWorkManager.IsHost)
             {
-                GameObject characterSelector = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_UI_Character_Select_Rect");
+                //GameObject characterSelector = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_UI_Character_Select_Rect");
+                
+                GameObject loadSeletor = _resourcesLoader.Load<GameObject>("Prefabs/NGO/NGOUICharacterSelectRect");
+                loadSeletor.SetActive(false); 
+                GameObject characterSelector = _instantiate.InstantiateByObject(loadSeletor);
+                characterSelector.SetActive(true); 
+                
+                
                 characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
                 if (characterSelector.GetComponent<NetworkObject>().IsOwner)
                 {
@@ -287,7 +294,6 @@ namespace UI.Scene.SceneUI
             {
                 characterSelector.transform.SetParent(_ngoUIRootCharacterSelect, worldPositionStays: false);
             }
-
             //TODO: 크기 조절 되도록 수정
             return characterSelector;
 

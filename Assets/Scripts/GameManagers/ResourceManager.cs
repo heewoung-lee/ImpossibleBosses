@@ -11,14 +11,16 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class ResourceManager : IResourcesLoader,IInstantiate,IDestroyObject,IRegistrar<ICachingObjectDict>
-    {      
+    internal class ResourceManager : IResourcesLoader, IInstantiate, IDestroyObject, IRegistrar<ICachingObjectDict>
+    {
         [Inject] private RelayManager _relayManager;
+
 
         public DiContainer CurrentContainer
         {
             get
             {
+                ProjectContext.Instance.Container.DefaultParent = null;
                 //씬 컨텍스트가 있으면 그 컨테이너
                 SceneContextRegistry registry = ProjectContext.Instance.Container.Resolve<SceneContextRegistry>();
                 SceneContext sceneCtx = registry.SceneContexts.FirstOrDefault(); // 한 씬만 가정
@@ -29,8 +31,9 @@ namespace GameManagers
                 return ProjectContext.Instance.Container;
             }
         }
+
         private ICachingObjectDict _cachingObjectDict;
-        
+
         public void Register(ICachingObjectDict sceneContext)
         {
             _cachingObjectDict = sceneContext;
@@ -43,7 +46,7 @@ namespace GameManagers
                 _cachingObjectDict = null;
             }
         }
-        
+
         public T Load<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -68,12 +71,11 @@ namespace GameManagers
 
         public GameObject InstantiateByPath(string path, Transform parent = null)
         {
-
             if (string.IsNullOrEmpty(path))
                 return null;
-            
-            
-            if ( _cachingObjectDict?.TryGet(path, out GameObject cachedPrefab) == true)
+
+
+            if (_cachingObjectDict?.TryGet(path, out GameObject cachedPrefab) == true)
             {
                 if (IsCheckNetworkPrefab(cachedPrefab))
                 {
@@ -86,7 +88,7 @@ namespace GameManagers
             }
 
             GameObject prefab = Load<GameObject>(path); // 먼저 path를 시도 하고 없으면 prefab붙여서 시도
-            if(prefab == null)
+            if (prefab == null)
             {
                 string prefabPath = "Prefabs/" + path;
                 prefab = Load<GameObject>(prefabPath);
@@ -100,7 +102,7 @@ namespace GameManagers
 
             if (prefab.GetComponent<Poolable>() != null)
             {
-                _cachingObjectDict?.OverwriteData(path, prefab);//주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
+                _cachingObjectDict?.OverwriteData(path, prefab); //주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
                 if (IsCheckNetworkPrefab(prefab))
                 {
                     return Managers.NgoPoolManager.Pop(path, parent);
@@ -110,6 +112,7 @@ namespace GameManagers
                     return Managers.PoolManager.Pop(prefab, parent).gameObject;
                 }
             }
+
             //GameObject go = Object.Instantiate(prefab, parent).RemoveCloneText();
             GameObject go = InstantiatePrefab(prefab, parent);
             return go;
@@ -119,10 +122,12 @@ namespace GameManagers
         {
             return InstantiatePrefab(gameobject, parent);
         }
+
         private GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
         {
             return CurrentContainer.InstantiatePrefab(prefab, parent).RemoveCloneText();
         }
+
         public T GetOrAddComponent<T>(GameObject go) where T : Component
         {
             T component = null;
@@ -133,6 +138,7 @@ namespace GameManagers
                 component = CurrentContainer.InstantiateComponent<T>(go);
                 go.SetActive(true);
             }
+
             return component;
         }
 
@@ -143,8 +149,10 @@ namespace GameManagers
             {
                 return true;
             }
+
             return false;
         }
+
         public void DestroyObject(GameObject go, float duration = 0)
         {
             if (go == null)
@@ -156,30 +164,27 @@ namespace GameManagers
             {
                 if (_relayManager.NetworkManagerEx.IsListening && poolable.TryGetComponent(out NetworkObject ngo))
                 {
-                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
-                    {
-                        Managers.NgoPoolManager.Push(ngo);
-                    }, duration));
+                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() => { Managers.NgoPoolManager.Push(ngo); },
+                        duration));
                 }
                 else
                 {
-                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() =>
-                    {
-                        Managers.PoolManager.Push(poolable);
-                    }, duration));
+                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() => { Managers.PoolManager.Push(poolable); },
+                        duration));
                 }
+
                 return;
             }
+
             Object.Destroy(go, duration);
         }
 
 
-        IEnumerator PrefabPushCoroutine(System.Action prefabPushEvent,float duration)
+        IEnumerator PrefabPushCoroutine(System.Action prefabPushEvent, float duration)
         {
             if (duration <= 0)
             {
                 prefabPushEvent.Invoke();
-         
             }
             else
             {
@@ -187,6 +192,5 @@ namespace GameManagers
                 prefabPushEvent.Invoke();
             }
         }
-
     }
 }

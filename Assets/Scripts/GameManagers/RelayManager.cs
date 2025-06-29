@@ -78,10 +78,16 @@ namespace GameManagers
                     }
                     else
                     {
+                        GameObject network = _resourcesLoader.Load<GameObject>("Prefabs/NGO/NetworkManager");
+                        network.SetActive(false);
+                        GameObject networkObj = _instantiate.InstantiateByObject(network);
+                        networkObj.SetActive(true);
+                        
+                        
                         //_netWorkManager = _instantiate.InstantiateByPath("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
-                        NetworkManager network = _resourcesLoader.Load<NetworkManager>("Prefabs/NGO/NetworkManager");
-                        _netWorkManager = UnityEngine.Object.Instantiate(network);
-                        ProjectContext.Instance.Container.Inject(_netWorkManager);
+                        // NetworkManager network = _resourcesLoader.Load<NetworkManager>("Prefabs/NGO/NetworkManager");
+                        // _netWorkManager = UnityEngine.Object.Instantiate(network);
+                        // ProjectContext.Instance.Container.Inject(_netWorkManager);
                         //Managers.DontDestroyOnLoad(_netWorkManager.gameObject);
                         //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
                         _netWorkManager = NetworkManager.Singleton;
@@ -229,26 +235,17 @@ namespace GameManagers
             return SpawnAndInjectionNgo(ngo, NetworkManagerEx.LocalClientId, position, parent, destroyOption);
         }
 
-
-
-
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
-            GameObject instanceObj = _resourcesLoader.Load<GameObject>(ngoPath);
-            instanceObj = UnityEngine.Object.Instantiate(instanceObj);
-            ProjectContext.Instance.Container.Inject(_netWorkManager);
+            GameObject loadObj = _resourcesLoader.Load<GameObject>(ngoPath);
+            loadObj.SetActive(false);
+            GameObject instanceObj = _instantiate.InstantiateByObject(loadObj);
             
             return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
         }
-        
-        // public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
-        // {
-        //     GameObject instanceObj = _instantiate.InstantiateByPath(ngoPath, parent);
-        //     return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
-        // }
-        
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
+            ngo.SetActive(false);
             return SpawnAndInjectionNgo(ngo, clientId, position, parent, destroyOption);
         }
 
@@ -259,7 +256,7 @@ namespace GameManagers
             {
                 instanceObj.transform.position = position;
                 NetworkObject networkObj = _instantiate.GetOrAddComponent<NetworkObject>(instanceObj);
-               _instantiate.CurrentContainer.InjectGameObject(instanceObj);
+                instanceObj.SetActive(true);
                 if (networkObj.IsSpawned == false)
                 {
                     networkObj.SpawnWithOwnership(clientId, destroyOption);

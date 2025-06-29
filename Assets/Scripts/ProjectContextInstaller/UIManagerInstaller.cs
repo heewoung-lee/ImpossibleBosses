@@ -9,7 +9,7 @@ namespace ProjectContextInstaller
    {
       public override void InstallBindings()
       {
-         Container.BindInterfacesTo<UIManagerCaching>().AsSingle().NonLazy();
+         Container.BindInterfacesTo<UIManagerRequestCaching>().AsSingle().NonLazy();
       }
    }
 }

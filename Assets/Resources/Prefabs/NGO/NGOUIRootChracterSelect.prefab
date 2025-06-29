@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 4050976222742569991}
   - component: {fileID: -2955673569321710745}
   m_Layer: 0
-  m_Name: NGO_UI_Root_Chracter_Select
+  m_Name: NGOUIRootChracterSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4535378813109015039
 RectTransform:
   m_ObjectHideFlags: 0

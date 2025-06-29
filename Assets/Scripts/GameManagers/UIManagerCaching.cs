@@ -14,7 +14,7 @@ using Zenject;
 
 namespace GameManagers
 {
-    internal class UIManagerCaching: IUIManager,IUIPopupManager,IUISceneManager,IUISubItem,IRegistrar<ICachingForUI>
+    internal class UIManagerRequestCaching: IUIManager,IUIPopupManager,IUISceneManager,IUISubItem,IRegistrar<ICachingForUI>
     {
     
         [Inject] private IInstantiate _instantiate;
@@ -28,11 +28,6 @@ namespace GameManagers
         int _sorting = SceneUISortingDefaultValue;
         int _popupSorting = PopupUISortingDefaultValue;
         
-        
-        // private Stack<UIPopup> _uiPopups = new Stack<UIPopup>();
-        // private Dictionary<Type, UIPopup> _importantPopupUI = new Dictionary<Type, UIPopup>();
-        //private Dictionary<Type, UIScene> _uiSceneDict = new Dictionary<Type, UIScene>();
-        
         public void Register(ICachingForUI sceneContext)
         {
             _iCachingForUI = sceneContext;
@@ -43,6 +38,8 @@ namespace GameManagers
             if (_iCachingForUI == sceneContext)
             {
                 _iCachingForUI = null;
+                _sorting = SceneUISortingDefaultValue;
+                _popupSorting = PopupUISortingDefaultValue;
             }
         }
         
