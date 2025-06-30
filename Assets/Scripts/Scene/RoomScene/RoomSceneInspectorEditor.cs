@@ -1,20 +1,21 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using Util;
+
 #if UNITY_EDITOR
-namespace Scene.GamePlayScene
+namespace Scene.RoomScene
 {
-    [CustomEditor(typeof(PlayScene))]
-    public class PlaySceneInspectorEditor : Editor
+    [CustomEditor(typeof(RoomPlayScene))]
+    public class RoomSceneInspectorEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
+        
             // ── 상위 라디오 ─────────────────────────────────
             SerializedProperty modeProp =
                 serializedObject.FindProperty("testMode");
-
-            
+        
             if (modeProp.enumValueIndex < 0 ||
                 modeProp.enumValueIndex >= modeProp.enumDisplayNames.Length)
             {
@@ -30,13 +31,13 @@ namespace Scene.GamePlayScene
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-
+        
             // ── 하위 라디오: testMode == Multi 일 때만 ─────────
-            if (modeProp.enumValueIndex == (int)MultiMode.Multi)
+            if (modeProp.enumValueIndex == (int)TestMode.Multi)
             {
                 SerializedProperty subProp =
                     serializedObject.FindProperty("multiMode");
-
+        
                 EditorGUI.indentLevel++;
                 EditorGUILayout.LabelField("Multi Option", EditorStyles.boldLabel);
                 subProp.enumValueIndex =
@@ -47,27 +48,7 @@ namespace Scene.GamePlayScene
             }
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-            if (modeProp.enumValueIndex == (int)MultiMode.Multi)
-            {
-                SerializedProperty subProp =
-                    serializedObject.FindProperty(nameof(PlayScene.playerableCharacter));
-
-                EditorGUI.indentLevel++;
-                EditorGUILayout.LabelField("Choice Character", EditorStyles.boldLabel);
-                subProp.enumValueIndex =
-                    GUILayout.Toggle(subProp.enumValueIndex == 0, "Archer",  EditorStyles.radioButton) ? 0 : subProp.enumValueIndex;
-                subProp.enumValueIndex =
-                    GUILayout.Toggle(subProp.enumValueIndex == 1, "Fighter", EditorStyles.radioButton) ? 1 : subProp.enumValueIndex;
-                subProp.enumValueIndex =
-                    GUILayout.Toggle(subProp.enumValueIndex == 2, "Mage", EditorStyles.radioButton) ? 2 : subProp.enumValueIndex;
-                subProp.enumValueIndex =
-                    GUILayout.Toggle(subProp.enumValueIndex == 3, "Monk", EditorStyles.radioButton) ? 3 : subProp.enumValueIndex;
-                subProp.enumValueIndex =
-                    GUILayout.Toggle(subProp.enumValueIndex == 4, "Necromancer", EditorStyles.radioButton) ? 4 : subProp.enumValueIndex;
-                EditorGUI.indentLevel--;
-            }
-            
-
+        
             serializedObject.ApplyModifiedProperties();
         }
     }

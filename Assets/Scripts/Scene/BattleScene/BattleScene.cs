@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using GameManagers;
 using Scene.GamePlayScene;
 using UI.Scene.SceneUI;
@@ -23,7 +24,7 @@ namespace Scene.BattleScene
         public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
 
 
-        protected override void StartInit()
+        protected override Task StartInit()
         {
             base.StartInit();
             _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();

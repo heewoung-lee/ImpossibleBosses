@@ -2,7 +2,7 @@ using GameManagers;
 using UnityEngine;
 using Zenject;
 
-namespace Scene.ZenjectInstaller.Data
+namespace ProjectContextInstaller
 {
     [DisallowMultipleComponent]
     public class SpreadSheetIDInstaller : MonoInstaller

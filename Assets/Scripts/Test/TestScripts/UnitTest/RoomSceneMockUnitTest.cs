@@ -40,7 +40,7 @@ namespace Test.TestScripts.UnitTest
         [Inject] private UIManager _uiManager;
 
 
-        protected override async void StartInit()
+        protected override async Task StartInit()
         {
             base.StartInit();
             await JoinChannel();
@@ -93,7 +93,6 @@ namespace Test.TestScripts.UnitTest
             string playerID = AuthenticationService.Instance.PlayerId;
             _lobbyManager.SetPlayerLoginInfo(new PlayerIngameLoginInfo(_playerType, playerID));
         }
-
 
         public string GetPlayerTag()
         {

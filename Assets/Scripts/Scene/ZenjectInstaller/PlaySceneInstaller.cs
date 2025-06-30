@@ -11,7 +11,7 @@ namespace Scene.ZenjectInstaller
       private PlayScene _scene;
       public override void InstallBindings()
       {
-         _scene = GetComponent<PlayScene>();
+         _scene = _sceneManagerEx.GetCurrentScene as PlayScene;
 
          Container.Bind<ISceneSpawnBehaviour>()
             .FromInstance(SelectBehaviour())
@@ -29,13 +29,13 @@ namespace Scene.ZenjectInstaller
          }
 
       
-         if (_scene.testMode == PlayScene.TestMode.Local)
+         if (_scene.GetTestMode() == TestMode.Local)
             return new UnitLocalGamePlayScene();
 
 
-         if (_scene.testMode == PlayScene.TestMode.Multi)
+         if (_scene.GetTestMode() == TestMode.Multi)
          {
-            if (_scene.multiMode == PlayScene.MultiMode.Solo)
+            if (_scene.GetMultiTestMode() == MultiMode.Solo)
             {
                return new MockUnitGamePlayScene(_scene.playerableCharacter,true);
             }

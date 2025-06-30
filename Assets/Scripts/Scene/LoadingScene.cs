@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
@@ -22,7 +23,7 @@ namespace Scene
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
         private bool[] _isCheckTaskChecker;
-        protected override void StartInit()
+        protected override Task StartInit()
         {
             base.StartInit();
             _uiLoading = _uiManager.GetSceneUIFromResource<UILoading>();

@@ -422,8 +422,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testMode: 1
-  multiMode: 1
-  playerableCharacter: 4
+  multiMode: 0
+  playerableCharacter: 0
 --- !u!4 &1701164430
 Transform:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
@@ -22,7 +23,7 @@ namespace Scene
         {
         }
 
-        protected override void StartInit()
+        protected override Task StartInit()
         {
             base.StartInit();
             _uiLobbyScene = _sceneManager.GetSceneUIFromResource<UILobbyScene>();

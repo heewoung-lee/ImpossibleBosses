@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GameManagers;
 using Module.UI_Module;
 using UI.Scene.SceneUI;
@@ -13,24 +14,22 @@ using Zenject;
 
 namespace Scene.GamePlayScene
 {
-    public class PlayScene : BaseScene, ISkillInit
+    public class PlayScene : BaseScene, ISkillInit,ISceneTestMode,ISceneMultiMode
     {
 
-        public enum TestMode
-        {
-           Local,
-           Multi
-        }
-
-        public enum MultiMode
-        {
-            Solo,
-            Multi
-        }
-
         
-        [SerializeField] public TestMode testMode = TestMode.Local;
-        [SerializeField] public MultiMode multiMode = MultiMode.Solo;
+        public TestMode GetTestMode()
+        {
+            return testMode;
+        }
+        public MultiMode GetMultiTestMode()
+        {
+           return multiMode;
+        }
+        
+        [SerializeField] private TestMode testMode = TestMode.Local;
+        [SerializeField] private MultiMode multiMode = MultiMode.Solo;
+        
         [SerializeField] public Define.PlayerClass playerableCharacter = Define.PlayerClass.Archer;
         [Inject] private ISceneSpawnBehaviour _sceneSpawnBehaviour;
         [Inject] private UIManager _uiManager;
@@ -51,7 +50,7 @@ namespace Scene.GamePlayScene
           
         }
 
-        protected override void StartInit()
+        protected override Task StartInit()
         {
             base.StartInit();
             _sceneSpawnBehaviour.Init();
@@ -66,5 +65,6 @@ namespace Scene.GamePlayScene
         public override void Clear()
         {
         }
+
     }
 }
