@@ -243,6 +243,7 @@ namespace GameManagers
         }
         private void CheckHostAndSendHeartBeat(Lobby lobby, float interval = 15f)
         {
+            BaseScene scene = _sceneManagerEx.GetCurrentScene;
             try
             {
                 Debug.Log($"로비의 호스트 ID:{lobby.HostId} 나의 아이디{PlayerID}");
@@ -250,7 +251,7 @@ namespace GameManagers
                 if (lobby.HostId == PlayerID)
                 {
                     Debug.Log("하트비트 이식");
-                    _heartBeatCoroutine = Managers.ManagersStartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
+                    _heartBeatCoroutine = scene.StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, interval));
                 }
             }
             catch (Exception e)

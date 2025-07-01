@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using GameManagers.Interface.UIManager;
 using Scene.GamePlayScene;
@@ -42,8 +43,21 @@ namespace Scene.RoomScene
         }
         protected override void StartInit()
         {
-            _roomConnectOnline.RoomSceneConnectOnlineStart();
-            _roomSceneStarter.RoomSceneStart();
+            base.StartInit();
+            _ = StartInitAsync();
+        }
+        
+        private async Task StartInitAsync()
+        {
+            try
+            {
+                await _roomConnectOnline.RoomSceneConnectOnlineStart();
+                _roomSceneStarter.RoomSceneStart();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[RoomPlayScene] 초기화 중 예외: {e}");
+            }
         }
     }
 }

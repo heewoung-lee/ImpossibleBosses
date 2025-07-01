@@ -24,7 +24,7 @@ namespace Scene.RoomScene
         {
             PlayerIngameLoginInfo playerinfo = await TestMultiUtil.SetAuthenticationService(TestMultiUtil.GetPlayerTag());
             _lobbyManager.SetPlayerLoginInfo(playerinfo);
-            
+            _playerType = Util.TestMultiUtil.GetPlayerTag();
             if (_playerType == "Player1")
             {
                 await _lobbyManager.CreateLobby(LobbyName, 8,null);

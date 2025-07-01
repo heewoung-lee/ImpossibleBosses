@@ -20,7 +20,7 @@ namespace Scene
         public override Define.Scene CurrentScene => Define.Scene.LoginScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
-        protected override Task StartInit()
+        protected override void StartInit()
         {
             base.StartInit();
             _uiLoginTitle = _sceneuiManager.GetSceneUIFromResource<UILoginTitle>();

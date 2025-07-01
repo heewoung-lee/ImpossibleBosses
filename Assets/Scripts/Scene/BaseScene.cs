@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Controller;
 using GameManagers;
 using GameManagers.Interface.Resources_Interface;
@@ -15,6 +16,8 @@ namespace Scene
     public abstract class BaseScene : MonoBehaviour
     {
         [Inject] private IInstantiate _instantiate;
+        
+        [Inject] private LobbyManager _lobbyManager;
         public abstract Define.Scene CurrentScene { get; }
         public abstract ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         MoveMarkerController _moveMarker;
@@ -48,5 +51,19 @@ namespace Scene
 
         public abstract void Clear();
 
+
+        void OnGUI()
+        {
+            // 버튼 만들기
+            if (GUI.Button(new Rect(10, 10, 100, 30), "Click Me"))
+            {
+                _ = UpdateLobby();
+            }
+
+            async Task UpdateLobby()
+            {
+                await _lobbyManager.ShowUpdatedLobbyPlayers();
+            }
+        }
     }
 }

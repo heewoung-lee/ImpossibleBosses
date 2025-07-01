@@ -41,7 +41,7 @@ namespace Test.TestScripts.UnitTest
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
-        protected override async Task StartInit()
+        protected override async void StartInit()
         {
             base.StartInit();
             _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();

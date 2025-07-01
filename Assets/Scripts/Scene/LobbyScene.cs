@@ -23,7 +23,7 @@ namespace Scene
         {
         }
 
-        protected override Task StartInit()
+        protected override void StartInit()
         {
             base.StartInit();
             _uiLobbyScene = _sceneManager.GetSceneUIFromResource<UILobbyScene>();

@@ -100,7 +100,7 @@ namespace UI.Scene.SceneUI
                 TestGetExp();
                 TestGetDamaged();
                 //await _lobbyManager.ShowUpdatedLobbyPlayers();
-                //_ = FindMyJoinCodeAsync();
+               // _ = FindMyJoinCodeAsync();
                 Debug.Log(_gameManagerEx.GetPlayer().transform.position+"플레이어 좌표");
                 //_gameManagerEx.GetPlayer().transform.position = Vector3.zero;
             }

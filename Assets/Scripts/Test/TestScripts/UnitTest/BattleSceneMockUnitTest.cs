@@ -41,7 +41,7 @@ namespace Test.TestScripts.UnitTest
 
         [Inject] private UIManager _uiManager;
 
-        protected override async Task StartInit()
+        protected override async void StartInit()
         {
             base.StartInit();
             _uiLoadingScene = _uiManager.GetOrCreateSceneUI<UILoading>();

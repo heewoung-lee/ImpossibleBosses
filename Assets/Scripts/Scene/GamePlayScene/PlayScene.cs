@@ -50,7 +50,7 @@ namespace Scene.GamePlayScene
           
         }
 
-        protected override Task StartInit()
+        protected override void StartInit()
         {
             base.StartInit();
             _sceneSpawnBehaviour.Init();

@@ -23,7 +23,7 @@ namespace Scene
         public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
         private bool[] _isCheckTaskChecker;
-        protected override Task StartInit()
+        protected override void StartInit()
         {
             base.StartInit();
             _uiLoading = _uiManager.GetSceneUIFromResource<UILoading>();
