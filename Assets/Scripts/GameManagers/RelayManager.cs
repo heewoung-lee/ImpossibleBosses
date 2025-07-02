@@ -23,7 +23,7 @@ namespace GameManagers
         [Inject] IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private RelayManager _relayManager;
-        [Inject] private NgoRPCCaller.Factory _rpcCallerFactory;
+        [Inject] private IFactory<NgoRPCCaller> _rpcCallerFactory;
         
         private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
@@ -81,10 +81,10 @@ namespace GameManagers
                         GameObject networkPrefab = Resources.Load<GameObject>("Prefabs/NGO/NetworkManager");
                         if (networkPrefab == null)
                         {
-                            Debug.LogError("NetworkManager 프리팹을 Resources/Prefabs/NGO/ 경로에서 찾을 수 없습니다.");
+                            Debug.LogError("there is not Prefabs/NGO/NetworkManager");
                             return null;
                         }
-                        GameObject network = UnityEngine.Object.Instantiate(networkPrefab);
+                        UnityEngine.Object.Instantiate(networkPrefab);
                       
                         //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
                         //7.2일 수정: 어차피 NetworkManager는 inject이 필요없는 객체이므로 일반 스폰

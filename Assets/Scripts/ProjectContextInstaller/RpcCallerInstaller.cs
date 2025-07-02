@@ -7,9 +7,7 @@ namespace ProjectContextInstaller
     {
         public override void InstallBindings()
         {
-
-            Container.BindFactory<NgoRPCCaller, NgoRPCCaller.Factory>()
-                .FromComponentInNewPrefabResource("Prefabs/NGO/NgoRPCCaller");
+            Container.Bind<IFactory<NgoRPCCaller>>().To<NgoRPCCaller.NgoRPCCallerFactory>().AsSingle();
         }
     }
 }

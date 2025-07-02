@@ -18,9 +18,23 @@ namespace NetWork.NGO
 {
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
-    public class Factory : PlaceholderFactory<CharacterSelectorNgo>
+    public class CharacterSelectorNgoFactory : IFactory<CharacterSelectorNgo>
     {
-        
+        private readonly DiContainer _diContainer;
+
+        public CharacterSelectorNgoFactory(DiContainer diContainer)
+        {
+            _diContainer = diContainer;
+        }
+        public CharacterSelectorNgo Create()
+        {
+            GameObject prefab = Resources.Load<GameObject>("Prefabs/NGO/NGOUICharacterSelectRect");
+            GameObject gameObject = Instantiate(prefab);
+
+            _diContainer.InjectGameObject(gameObject);
+
+            return gameObject.GetComponent<CharacterSelectorNgo>();
+        }
     }
     private IUISceneManager _uiSceneManager;
     private IPlayerIngameLogininfo _playerIngameLogininfo;
@@ -160,13 +174,13 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
         _readyPanel.gameObject.SetActive(false);
 
         _playerNickNameText = _playerNickNameObject.GetComponentInChildren<TMP_Text>();
-        _uiRoomCharacterSelect = _uiSceneManager.Get_Scene_UI<UIRoomCharacterSelect>();
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         _bg.color = _playerFrameColor;
+        _uiRoomCharacterSelect = _uiSceneManager.Get_Scene_UI<UIRoomCharacterSelect>();
         if (IsOwner)
         {
             _previousButton.gameObject.SetActive(true);

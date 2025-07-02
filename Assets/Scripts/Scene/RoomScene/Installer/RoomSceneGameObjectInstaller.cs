@@ -1,5 +1,6 @@
 using GameManagers.Interface.Resources_Interface;
 using NetWork.NGO;
+using NetWork.NGO.UI;
 using UnityEngine;
 using Zenject;
 
@@ -7,16 +8,12 @@ namespace Scene.RoomScene.Installer
 {
     public class RoomSceneGameObjectInstaller : MonoInstaller
     {
-        [Inject] private IResourcesLoader _loder;
-        
-        private GameObject _nGouiCharacterSelectRect;
         public override void InstallBindings()
         {
-            _nGouiCharacterSelectRect = _loder.Load<GameObject>("Prefabs/NGO/NGOUICharacterSelectRect");
+            Container.Bind<IFactory<CharacterSelectorNgo>>().To<CharacterSelectorNgo.CharacterSelectorNgoFactory>().AsSingle();
             
+            Container.Bind<IFactory<NgoUIRootCharacterSelect>>().To<NgoUIRootCharacterSelect.NgoUIRootCharacterSelectFactory>().AsSingle();
             
-            
-            Container.BindFactory<CharacterSelectorNgo,CharacterSelectorNgo.Factory>().FromComponentInNewPrefab(_nGouiCharacterSelectRect);
         }
     }
 }

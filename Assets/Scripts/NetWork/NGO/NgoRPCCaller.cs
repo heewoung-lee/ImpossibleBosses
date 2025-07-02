@@ -4,13 +4,11 @@ using System.Threading.Tasks;
 using Buffer;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
-using GameManagers.Interface;
 using GameManagers.Interface.BufferManager;
 using GameManagers.Interface.GameManagerEx;
 using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
-using GameManagers.Interface.UI_Interface;
 using GameManagers.Interface.UIManager;
 using GameManagers.Interface.VivoxManager;
 using NetWork.BaseNGO;
@@ -31,9 +29,22 @@ namespace NetWork.NGO
 {
     public class NgoRPCCaller : NetworkBehaviour
     {
-        public class Factory : PlaceholderFactory<NgoRPCCaller>
+        public class NgoRPCCallerFactory : IFactory<NgoRPCCaller>
         {
-            
+            private readonly DiContainer _container;
+            public NgoRPCCallerFactory(DiContainer container)
+            {
+                _container = container;
+            }
+            public NgoRPCCaller Create()
+            {
+                GameObject prefab = Resources.Load<GameObject>("Prefabs/NGO/NgoRPCCaller");
+                GameObject gameObject = Instantiate(prefab);
+
+                _container.InjectGameObject(gameObject);
+
+                return gameObject.GetComponent<NgoRPCCaller>();
+            }
         }
         
         [Inject] private IUISceneManager _uiSceneManager;

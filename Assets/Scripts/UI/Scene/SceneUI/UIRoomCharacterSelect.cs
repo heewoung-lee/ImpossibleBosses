@@ -7,6 +7,7 @@ using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UIManager;
 using Module.UI_Module;
 using NetWork.NGO;
+using NetWork.NGO.UI;
 using Scene;
 using Scene.GamePlayScene;
 using TMPro;
@@ -37,7 +38,8 @@ namespace UI.Scene.SceneUI
         [Inject] private RelayManager _relayManager;
         [Inject] private IUISceneManager _uiSceneManager;
         [Inject] private IUISubItem _uiSubitem;
-        [Inject] private CharacterSelectorNgo _characterSelectorNgo;
+        [Inject] private IFactory<CharacterSelectorNgo> _characterSelectorNgoFactory;
+        [Inject] private IFactory<NgoUIRootCharacterSelect> _ngoUIRootCharacterSelectFactory;
         
         private const int MaxPlayerCount = 8;
 
@@ -77,7 +79,7 @@ namespace UI.Scene.SceneUI
         private string _joincodeCache;
         private Action _spawnCharacterSelectEvent;
         private ReadyButtonImages[] _readyButtonStateValue;
-
+        private CharacterSelectorNgo _characterSelectorNgo;
         
         
 
@@ -190,7 +192,7 @@ namespace UI.Scene.SceneUI
         {
             Debug.Log("EnteredPlayerinLobby 이벤트 발생");
             SetHostStartButton(false);
-            SpawnChractorSeletorAndSetPosition(playerIndex);
+            SpawnCharactorSeletorAndSetPosition(playerIndex);
         }
 
         public async Task BacktoLobby()
@@ -237,12 +239,15 @@ namespace UI.Scene.SceneUI
         {
             if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
+            
+            
             _relayManager.SpawnToRPC_Caller();
-            _relayManager.SpawnNetworkObj("Prefabs/NGO/NGOUIRootChracterSelect", parent: _relayManager.NgoRootUI.transform);
-            SpawnChractorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+            NgoUIRootCharacterSelect characterSelect = _ngoUIRootCharacterSelectFactory.Create();
+            _relayManager.SpawnNetworkObj(characterSelect.gameObject, parent: _relayManager.NgoRootUI.transform);
+            SpawnCharactorSeletorAndSetPosition(_netWorkManager.LocalClientId);
             SubScribeRelayCallback();
         }
-        private void SpawnChractorSeletorAndSetPosition(ulong playerIndex)
+        private void SpawnCharactorSeletorAndSetPosition(ulong playerIndex)
         {
             if (_netWorkManager.IsHost)
             {
