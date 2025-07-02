@@ -31,6 +31,11 @@ namespace NetWork.NGO
 {
     public class NgoRPCCaller : NetworkBehaviour
     {
+        public class Factory : PlaceholderFactory<NgoRPCCaller>
+        {
+            
+        }
+        
         [Inject] private IUISceneManager _uiSceneManager;
         [Inject] private IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;

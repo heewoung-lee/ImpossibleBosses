@@ -37,7 +37,7 @@ namespace UI.Scene.SceneUI
         [Inject] private RelayManager _relayManager;
         [Inject] private IUISceneManager _uiSceneManager;
         [Inject] private IUISubItem _uiSubitem;
-        
+        [Inject] private CharacterSelectorNgo _characterSelectorNgo;
         
         private const int MaxPlayerCount = 8;
 
@@ -71,7 +71,7 @@ namespace UI.Scene.SceneUI
         private Button _buttonReady;
         private Button _buttonStart;
         private TMP_Text _buttonText;
-        private CharacterSelectorNgo _characterSelectorNgo;
+        //private CharacterSelectorNgo _characterSelectorNgo;
         private bool _readyButtonState;
         private Transform _ngoUIRootCharacterSelect;
         private string _joincodeCache;
@@ -246,19 +246,8 @@ namespace UI.Scene.SceneUI
         {
             if (_netWorkManager.IsHost)
             {
-                //GameObject characterSelector = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_UI_Character_Select_Rect");
-                
-                GameObject loadSeletor = _resourcesLoader.Load<GameObject>("Prefabs/NGO/NGOUICharacterSelectRect");
-                loadSeletor.SetActive(false); 
-                GameObject characterSelector = _instantiate.InstantiateByObject(loadSeletor);
-                characterSelector.SetActive(true); 
-                
-                
-                characterSelector = SetPositionCharacterSelector(characterSelector, playerIndex);
-                if (characterSelector.GetComponent<NetworkObject>().IsOwner)
-                {
-                    _characterSelectorNgo = characterSelector.GetComponent<CharacterSelectorNgo>();
-                }
+                GameObject characterSelector = _characterSelectorNgo.gameObject;
+                SetPositionCharacterSelector(characterSelector, playerIndex);
             }
         }
 

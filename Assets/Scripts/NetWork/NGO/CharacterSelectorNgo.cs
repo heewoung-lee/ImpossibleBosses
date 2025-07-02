@@ -18,11 +18,20 @@ namespace NetWork.NGO
 {
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
-    
-    [Inject] private IUISceneManager _uiSceneManager;
-    [Inject] private IPlayerIngameLogininfo _playerIngameLogininfo;
-    [Inject] private RelayManager _relayManager;
-    
+    public class Factory : PlaceholderFactory<CharacterSelectorNgo>
+    {
+        
+    }
+    private IUISceneManager _uiSceneManager;
+    private IPlayerIngameLogininfo _playerIngameLogininfo;
+    private RelayManager _relayManager;
+    [Inject]
+    public void Construct(IUISceneManager uiSceneManager, IPlayerIngameLogininfo playerIngameLogininfo, RelayManager relayManager)
+    {
+        _uiSceneManager = uiSceneManager;
+        _playerIngameLogininfo = playerIngameLogininfo;
+        _relayManager = relayManager;
+    }
     
     private readonly Color _playerFrameColor = "#143658".HexCodetoConvertColor();
 

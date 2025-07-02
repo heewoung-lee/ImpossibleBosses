@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using Data.DataType.ItemType.Interface;
 using UI.SubItem;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Util
 {
@@ -93,6 +95,11 @@ namespace Util
             {
                 Debug.Log($"Exception in FireAndForgetSafeAsync:{exception}");
             }
+        }
+
+        public static GameObject InstantiateGameObject(this GameObject go)
+        {
+            return Object.Instantiate(go);
         }
     }
 }

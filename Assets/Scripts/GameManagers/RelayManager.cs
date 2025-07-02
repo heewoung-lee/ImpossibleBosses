@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
 using NetWork.NGO;
@@ -19,19 +20,18 @@ namespace GameManagers
 {
     public class RelayManager
     {
-        
         [Inject] IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private RelayManager _relayManager;
-
+        [Inject] private NgoRPCCaller.Factory _rpcCallerFactory;
         
         private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
         private string _joinCode;
+        private NgoRPCCaller _ngoRPCCaller;
         private Allocation _allocation;
         private GameObject _nGoRootUI;
         private GameObject _nGoRoot;
-        private NgoRPCCaller _ngoRPCCaller;
         private Define.PlayerClass _choicePlayerCharacter;
         private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
 
@@ -78,19 +78,18 @@ namespace GameManagers
                     }
                     else
                     {
-                        GameObject network = _resourcesLoader.Load<GameObject>("Prefabs/NGO/NetworkManager");
-                        network.SetActive(false);
-                        GameObject networkObj = _instantiate.InstantiateByObject(network);
-                        networkObj.SetActive(true);
-                        
-                        
-                        //_netWorkManager = _instantiate.InstantiateByPath("Prefabs/NGO/NetworkManager").GetComponent<NetworkManager>();
-                        // NetworkManager network = _resourcesLoader.Load<NetworkManager>("Prefabs/NGO/NetworkManager");
-                        // _netWorkManager = UnityEngine.Object.Instantiate(network);
-                        // ProjectContext.Instance.Container.Inject(_netWorkManager);
-                        //Managers.DontDestroyOnLoad(_netWorkManager.gameObject);
+                        GameObject networkPrefab = Resources.Load<GameObject>("Prefabs/NGO/NetworkManager");
+                        if (networkPrefab == null)
+                        {
+                            Debug.LogError("NetworkManager 프리팹을 Resources/Prefabs/NGO/ 경로에서 찾을 수 없습니다.");
+                            return null;
+                        }
+                        GameObject network = UnityEngine.Object.Instantiate(networkPrefab);
+                      
                         //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
+                        //7.2일 수정: 어차피 NetworkManager는 inject이 필요없는 객체이므로 일반 스폰
                         _netWorkManager = NetworkManager.Singleton;
+                        UnityEngine.Object.DontDestroyOnLoad(_netWorkManager.gameObject);
                     }
                 }  
                 return _netWorkManager;
@@ -120,24 +119,8 @@ namespace GameManagers
                 return _nGoRoot;
             }
         }
-        public NgoRPCCaller NgoRPCCaller
-        {
-            get
-            {
-                if (_ngoRPCCaller == null && NetworkManagerEx.SpawnManager != null)
-                {
-                    foreach (NetworkObject netWorkObj in NetworkManagerEx.SpawnManager.SpawnedObjects.Values)
-                    {
-                        if (netWorkObj.TryGetComponent(out NgoRPCCaller rpccaller))
-                        {
-                            _ngoRPCCaller = rpccaller;
-                            break;
-                        }
-                    }
-                }
-                return _ngoRPCCaller;
-            }
-        }
+
+        public NgoRPCCaller NgoRPCCaller => _ngoRPCCaller;
 
         public string JoinCode { get => _joinCode; }
 
@@ -188,7 +171,9 @@ namespace GameManagers
             if (NgoRPCCaller != null)
                 return;
 
-            _relayManager.SpawnNetworkObj("Prefabs/NGO/NgoRPCCaller", destroyOption: false);
+            
+            _ngoRPCCaller = _rpcCallerFactory.Create();
+             _relayManager.SpawnNetworkObj(_ngoRPCCaller.gameObject,destroyOption:false);
         }
         public async Task<string> StartHostWithRelay(int maxConnections)
         {
@@ -238,14 +223,11 @@ namespace GameManagers
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
             GameObject loadObj = _resourcesLoader.Load<GameObject>(ngoPath);
-            loadObj.SetActive(false);
-            GameObject instanceObj = _instantiate.InstantiateByObject(loadObj);
-            
-            return SpawnAndInjectionNgo(instanceObj, clientId, position, parent, destroyOption);
+            loadObj = UnityEngine.Object.Instantiate(loadObj);
+            return SpawnAndInjectionNgo(loadObj, clientId, position, parent, destroyOption);
         }
         public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
         {
-            ngo.SetActive(false);
             return SpawnAndInjectionNgo(ngo, clientId, position, parent, destroyOption);
         }
 
@@ -256,7 +238,6 @@ namespace GameManagers
             {
                 instanceObj.transform.position = position;
                 NetworkObject networkObj = _instantiate.GetOrAddComponent<NetworkObject>(instanceObj);
-                instanceObj.SetActive(true);
                 if (networkObj.IsSpawned == false)
                 {
                     networkObj.SpawnWithOwnership(clientId, destroyOption);
