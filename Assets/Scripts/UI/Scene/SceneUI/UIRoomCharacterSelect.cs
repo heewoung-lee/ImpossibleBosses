@@ -192,7 +192,7 @@ namespace UI.Scene.SceneUI
         {
             Debug.Log("EnteredPlayerinLobby 이벤트 발생");
             SetHostStartButton(false);
-            SpawnCharactorSeletorAndSetPosition(playerIndex);
+            SpawnCharacterSeletorAndSetPosition(playerIndex);
         }
 
         public async Task BacktoLobby()
@@ -244,15 +244,15 @@ namespace UI.Scene.SceneUI
             _relayManager.SpawnToRPC_Caller();
             NgoUIRootCharacterSelect characterSelect = _ngoUIRootCharacterSelectFactory.Create();
             _relayManager.SpawnNetworkObj(characterSelect.gameObject, parent: _relayManager.NgoRootUI.transform);
-            SpawnCharactorSeletorAndSetPosition(_netWorkManager.LocalClientId);
+            SpawnCharacterSeletorAndSetPosition(_netWorkManager.LocalClientId);
             SubScribeRelayCallback();
         }
-        private void SpawnCharactorSeletorAndSetPosition(ulong playerIndex)
+        private void SpawnCharacterSeletorAndSetPosition(ulong playerIndex)
         {
             if (_netWorkManager.IsHost)
             {
-                GameObject characterSelector = _characterSelectorNgo.gameObject;
-                SetPositionCharacterSelector(characterSelector, playerIndex);
+                _characterSelectorNgo = _characterSelectorNgoFactory.Create();
+                SetPositionCharacterSelector(_characterSelectorNgo.gameObject, playerIndex);
             }
         }
 
