@@ -84,11 +84,13 @@ namespace GameManagers
                             Debug.LogError("there is not Prefabs/NGO/NetworkManager");
                             return null;
                         }
-                        UnityEngine.Object.Instantiate(networkPrefab);
+                       UnityEngine.Object.Instantiate(networkPrefab);
                       
                         //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
                         //7.2일 수정: 어차피 NetworkManager는 inject이 필요없는 객체이므로 일반 스폰
+                        //7.3일 Debug.Log("it is NetworkManager" + Object.ReferenceEquals(instantiateOBj.GetComponent<NetworkManager>(),NetworkManager.Singleton)); == true로 확인
                         _netWorkManager = NetworkManager.Singleton;
+                        
                         UnityEngine.Object.DontDestroyOnLoad(_netWorkManager.gameObject);
                     }
                 }  

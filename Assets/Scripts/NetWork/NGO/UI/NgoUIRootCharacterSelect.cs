@@ -9,22 +9,14 @@ namespace NetWork.NGO.UI
 {
     public class NgoUIRootCharacterSelect : NetworkBehaviour
     {
-        public class NgoUIRootCharacterSelectFactory : IFactory<NgoUIRootCharacterSelect>
+        public class NgoUIRootCharacterSelectFactory : NgoZenjectFactory<NgoUIRootCharacterSelect>
         {
-            private readonly DiContainer _container;
             public NgoUIRootCharacterSelectFactory(DiContainer container)
             {
                 _container = container;
             }
-            public NgoUIRootCharacterSelect Create()
-            {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/NGO/NGOUIRootChracterSelect");
-                GameObject gameObject = Instantiate(prefab);
-                
-                _container.InjectGameObject(gameObject);
-                
-                return gameObject.GetComponent<NgoUIRootCharacterSelect>();
-            }
+
+            protected override string Path => "Prefabs/NGO/NGOUIRootChracterSelect";
         }
         
         [Inject]private IUISceneManager _uiSceneManager; 

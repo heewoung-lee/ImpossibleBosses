@@ -29,22 +29,13 @@ namespace NetWork.NGO
 {
     public class NgoRPCCaller : NetworkBehaviour
     {
-        public class NgoRPCCallerFactory : IFactory<NgoRPCCaller>
+        public class NgoRPCCallerFactory : NgoZenjectFactory<NgoRPCCaller>
         {
-            private readonly DiContainer _container;
             public NgoRPCCallerFactory(DiContainer container)
             {
                 _container = container;
             }
-            public NgoRPCCaller Create()
-            {
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/NGO/NgoRPCCaller");
-                GameObject gameObject = Instantiate(prefab);
-
-                _container.InjectGameObject(gameObject);
-
-                return gameObject.GetComponent<NgoRPCCaller>();
-            }
+            protected override string Path => "Prefabs/NGO/NgoRPCCaller";
         }
         
         [Inject] private IUISceneManager _uiSceneManager;

@@ -18,22 +18,12 @@ namespace NetWork.NGO
 {
 public class CharacterSelectorNgo : NetworkBehaviourBase
 {
-    public class CharacterSelectorNgoFactory : IFactory<CharacterSelectorNgo>
+    public class CharacterSelectorNgoFactory : NgoZenjectFactory<CharacterSelectorNgo>
     {
-        private readonly DiContainer _diContainer;
-
-        public CharacterSelectorNgoFactory(DiContainer diContainer)
+        protected override string Path => "Prefabs/NGO/NGOUICharacterSelectRect";
+        public CharacterSelectorNgoFactory(DiContainer container)
         {
-            _diContainer = diContainer;
-        }
-        public CharacterSelectorNgo Create()
-        {
-            GameObject prefab = Resources.Load<GameObject>("Prefabs/NGO/NGOUICharacterSelectRect");
-            GameObject gameObject = Instantiate(prefab);
-
-            _diContainer.InjectGameObject(gameObject);
-
-            return gameObject.GetComponent<CharacterSelectorNgo>();
+            _container = container;
         }
     }
     private IUISceneManager _uiSceneManager;
