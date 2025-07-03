@@ -9,7 +9,7 @@ namespace ProjectContextInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<RelayManager>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RelayManager>().AsSingle().NonLazy();
         }
     }
 }

@@ -7,8 +7,9 @@ namespace Util
         public static readonly Vector3 DefaultQuarterviewPosition = new Vector3(0, 7, -6);
         public static readonly Quaternion DefaultQuarterviewRotation = Quaternion.Euler(new Vector3(45, 0, 0));
         public static readonly int MaxPlayer = 8;
+        public const string ZenjectNgo = "ZenjectNetWorkObject";
         public const string Applicationname = "ItemDataSheet";
-
+        
 
         public enum SpecialSortingOrder
         {

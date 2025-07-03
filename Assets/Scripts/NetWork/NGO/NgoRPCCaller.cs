@@ -31,11 +31,11 @@ namespace NetWork.NGO
     {
         public class NgoRPCCallerFactory : NgoZenjectFactory<NgoRPCCaller>
         {
-            public NgoRPCCallerFactory(DiContainer container)
+            public NgoRPCCallerFactory(DiContainer container, GameObject ngo)
             {
                 _container = container;
+                _ngo = ngo;
             }
-            protected override string Path => "Prefabs/NGO/NgoRPCCaller";
         }
         
         [Inject] private IUISceneManager _uiSceneManager;

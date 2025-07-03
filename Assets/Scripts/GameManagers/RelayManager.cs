@@ -6,6 +6,7 @@ using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
 using NetWork.NGO;
+using Scene.ZenjectInstaller;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
@@ -14,17 +15,17 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using Util;
 using Zenject;
+using ZenjectTool;
 using Object = System.Object;
 
 namespace GameManagers
 {
-    public class RelayManager
+    public class RelayManager : IInitializable
     {
         [Inject] IInstantiate _instantiate;
         [Inject] IResourcesLoader _resourcesLoader;
-        [Inject] private RelayManager _relayManager;
         [Inject] private IFactory<NgoRPCCaller> _rpcCallerFactory;
-        
+
         private Action _spawnRpcCallerEvent;
         private NetworkManager _netWorkManager;
         private string _joinCode;
@@ -33,7 +34,9 @@ namespace GameManagers
         private GameObject _nGoRootUI;
         private GameObject _nGoRoot;
         private Define.PlayerClass _choicePlayerCharacter;
-        private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict = new Dictionary<ulong, Define.PlayerClass>();
+
+        private Dictionary<ulong, Define.PlayerClass> _choicePlayerCharactersDict =
+            new Dictionary<ulong, Define.PlayerClass>();
 
         public event Action SpawnRpcCallerEvent
         {
@@ -46,9 +49,10 @@ namespace GameManagers
             }
             remove
             {
-                if(_spawnRpcCallerEvent == null || _spawnRpcCallerEvent.GetInvocationList().Contains(value) == false)
+                if (_spawnRpcCallerEvent == null || _spawnRpcCallerEvent.GetInvocationList().Contains(value) == false)
                 {
-                    Debug.LogWarning($"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
+                    Debug.LogWarning(
+                        $"There is no such event to remove. Event Target:{value?.Target}, Method:{value?.Method.Name}");
                     return;
                 }
 
@@ -66,37 +70,12 @@ namespace GameManagers
         public Define.PlayerClass ChoicePlayerCharacter => _choicePlayerCharacter;
         public Dictionary<ulong, Define.PlayerClass> ChoicePlayerCharactersDict => _choicePlayerCharactersDict;
         public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
-        public NetworkManager NetworkManagerEx
+        public void Initialize()
         {
-            get
-            {
-                if (_netWorkManager == null)
-                {
-                    if (NetworkManager.Singleton != null)
-                    {
-                        _netWorkManager = NetworkManager.Singleton;
-                    }
-                    else
-                    {
-                        GameObject networkPrefab = Resources.Load<GameObject>("Prefabs/NGO/NetworkManager");
-                        if (networkPrefab == null)
-                        {
-                            Debug.LogError("there is not Prefabs/NGO/NetworkManager");
-                            return null;
-                        }
-                       UnityEngine.Object.Instantiate(networkPrefab);
-                      
-                        //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
-                        //7.2일 수정: 어차피 NetworkManager는 inject이 필요없는 객체이므로 일반 스폰
-                        //7.3일 Debug.Log("it is NetworkManager" + Object.ReferenceEquals(instantiateOBj.GetComponent<NetworkManager>(),NetworkManager.Singleton)); == true로 확인
-                        _netWorkManager = NetworkManager.Singleton;
-                        
-                        UnityEngine.Object.DontDestroyOnLoad(_netWorkManager.gameObject);
-                    }
-                }  
-                return _netWorkManager;
-            }
+            Debug.Log("Initializing RelayManager");
+            NetworkManagerInitialize();
         }
+        public NetworkManager NetworkManagerEx => _netWorkManager;
 
         public GameObject NgoRootUI
         {
@@ -106,6 +85,7 @@ namespace GameManagers
                 {
                     _nGoRootUI = SpawnNetworkObj("Prefabs/NGO/NGO_ROOT_UI");
                 }
+
                 return _nGoRootUI;
             }
         }
@@ -118,17 +98,49 @@ namespace GameManagers
                 {
                     _nGoRoot = SpawnNetworkObj("Prefabs/NGO/NGO_ROOT");
                 }
+
                 return _nGoRoot;
             }
         }
 
         public NgoRPCCaller NgoRPCCaller => _ngoRPCCaller;
 
-        public string JoinCode { get => _joinCode; }
+        public string JoinCode
+        {
+            get => _joinCode;
+        }
+
+        private void NetworkManagerInitialize()
+        {
+            if (_netWorkManager == null)
+            {
+                if (NetworkManager.Singleton != null)
+                {
+                    _netWorkManager = NetworkManager.Singleton;
+                }
+                else
+                {
+                    GameObject networkPrefab = Resources.Load<GameObject>("Prefabs/NGO/NetworkManager");
+                    if (networkPrefab == null)
+                    {
+                        Debug.LogError("there is not Prefabs/NGO/NetworkManager");
+                    }
+
+                    UnityEngine.Object.Instantiate(networkPrefab);
+
+                    //6.28일 수정: 오브젝트가 생성될떄 부모값이 Null인결우 컨테이너를 통해 인젝션을 하면 컨테이너가 부모를 멋대로 넣음. 그래도 순서를 일반 생성 -> 컨테이너 주입으로 변경 
+                    //7.2일 수정: 어차피 NetworkManager는 inject이 필요없는 객체이므로 일반 스폰
+                    //7.3일 Debug.Log("it is NetworkManager" + Object.ReferenceEquals(instantiateOBj.GetComponent<NetworkManager>(),NetworkManager.Singleton)); == true로 확인
+                    _netWorkManager = NetworkManager.Singleton;
+                    UnityEngine.Object.DontDestroyOnLoad(_netWorkManager.gameObject);
+                }
+            }
+        }
 
         public void RegisterSelectedCharacter(ulong clientId, Define.PlayerClass playerClass)
         {
-            _relayManager.NgoRPCCaller.SubmitSelectedCharactertoServerRpc(_relayManager.NetworkManagerEx.LocalClientId, playerClass.ToString());
+            NgoRPCCaller.SubmitSelectedCharactertoServerRpc(NetworkManagerEx.LocalClientId,
+                playerClass.ToString());
             _choicePlayerCharacter = playerClass;
         }
 
@@ -136,6 +148,7 @@ namespace GameManagers
         {
             _choicePlayerCharactersDict[clientId] = playerClass;
         }
+
         public GameObject Load_NGO_Prefab<T>(string name = null, string path = null)
         {
             if (name == null)
@@ -150,9 +163,11 @@ namespace GameManagers
             {
                 go = _instantiate.InstantiateByPath($"{path}");
             }
+
             go = SpawnNetworkObj(go, NgoRoot.transform);
             return go;
         }
+
         public GameObject Load_NGO_Prefab(string path)
         {
             GameObject networkObj = SpawnNetworkObj(path, NgoRoot.transform);
@@ -173,10 +188,11 @@ namespace GameManagers
             if (NgoRPCCaller != null)
                 return;
 
-            
+
             _ngoRPCCaller = _rpcCallerFactory.Create();
-             _relayManager.SpawnNetworkObj(_ngoRPCCaller.gameObject,destroyOption:false);
+            SpawnNetworkObj(_ngoRPCCaller.gameObject, destroyOption: false);
         }
+
         public async Task<string> StartHostWithRelay(int maxConnections)
         {
             try
@@ -193,8 +209,8 @@ namespace GameManagers
                 {
                     return _joinCode;
                 }
-                return null;
 
+                return null;
             }
             catch (Exception ex)
             {
@@ -209,34 +225,43 @@ namespace GameManagers
             {
                 return new NetworkObjectReference(ngo);
             }
+
             Debug.Log("GameObject hasn't a BaseStats");
             return default;
         }
 
-        public GameObject SpawnNetworkObj(string ngoPath, Transform parent = null, Vector3 position = default, bool destroyOption = true)
+        public GameObject SpawnNetworkObj(string ngoPath, Transform parent = null, Vector3 position = default,
+            bool destroyOption = true)
         {
-            return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, ngoPath, position, parent, destroyOption);
+            return SpawnNetworkOBJInjectionOnwer(NetworkManagerEx.LocalClientId, ngoPath, position, parent,
+                destroyOption);
         }
-        public GameObject SpawnNetworkObj(GameObject ngo, Transform parent = null, Vector3 position = default, bool destroyOption = true)
+
+        public GameObject SpawnNetworkObj(GameObject ngo, Transform parent = null, Vector3 position = default,
+            bool destroyOption = true)
         {
             return SpawnAndInjectionNgo(ngo, NetworkManagerEx.LocalClientId, position, parent, destroyOption);
         }
 
-        public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default, Transform parent = null, bool destroyOption = true)
+        public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, string ngoPath, Vector3 position = default,
+            Transform parent = null, bool destroyOption = true)
         {
             GameObject loadObj = _resourcesLoader.Load<GameObject>(ngoPath);
             loadObj = UnityEngine.Object.Instantiate(loadObj);
             return SpawnAndInjectionNgo(loadObj, clientId, position, parent, destroyOption);
         }
-        public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default, Transform parent = null, bool destroyOption = true)
+
+        public GameObject SpawnNetworkOBJInjectionOnwer(ulong clientId, GameObject ngo, Vector3 position = default,
+            Transform parent = null, bool destroyOption = true)
         {
             return SpawnAndInjectionNgo(ngo, clientId, position, parent, destroyOption);
         }
 
 
-        private GameObject SpawnAndInjectionNgo(GameObject instanceObj, ulong clientId, Vector3 position, Transform parent = null, bool destroyOption = true)
+        private GameObject SpawnAndInjectionNgo(GameObject instanceObj, ulong clientId, Vector3 position,
+            Transform parent = null, bool destroyOption = true)
         {
-            if (_relayManager.NetworkManagerEx.IsListening == true && _relayManager.NetworkManagerEx.IsHost)
+            if (NetworkManagerEx.IsListening == true && NetworkManagerEx.IsHost)
             {
                 instanceObj.transform.position = position;
                 NetworkObject networkObj = _instantiate.GetOrAddComponent<NetworkObject>(instanceObj);
@@ -244,11 +269,13 @@ namespace GameManagers
                 {
                     networkObj.SpawnWithOwnership(clientId, destroyOption);
                 }
+
                 if (parent != null)
                 {
                     networkObj.transform.SetParent(parent, false);
                 }
             }
+
             return instanceObj;
         }
 
@@ -297,6 +324,7 @@ namespace GameManagers
                     Debug.LogWarning("Client or Server is already running.");
                     return false;
                 }
+
                 JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
                 RelayServerData relaydata = AllocationUtils.ToRelayServerData(allocation, "dtls");
                 NetworkManagerEx.GetComponent<UnityTransport>().SetRelayServerData(relaydata);
@@ -341,10 +369,13 @@ namespace GameManagers
         }
 
         #region 테스트용 함수
+
         public void SetPlayerClassforMockUnitTest(Define.PlayerClass playerClass)
         {
             _choicePlayerCharacter = playerClass;
         }
-        #endregion 
+
+        #endregion
+
     }
 }

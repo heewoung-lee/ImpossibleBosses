@@ -20,10 +20,10 @@ public class CharacterSelectorNgo : NetworkBehaviourBase
 {
     public class CharacterSelectorNgoFactory : NgoZenjectFactory<CharacterSelectorNgo>
     {
-        protected override string Path => "Prefabs/NGO/NGOUICharacterSelectRect";
-        public CharacterSelectorNgoFactory(DiContainer container)
+        public CharacterSelectorNgoFactory(DiContainer container,GameObject ngo)
         {
             _container = container;
+            _ngo = ngo;
         }
     }
     private IUISceneManager _uiSceneManager;

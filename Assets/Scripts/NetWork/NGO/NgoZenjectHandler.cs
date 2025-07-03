@@ -8,12 +8,18 @@ namespace NetWork.NGO
     public class NgoZenjectHandler: INetworkPrefabInstanceHandler
     {
         private readonly DiContainer _diContainer;
-        private readonly NetworkObject _networkObj;
-        
+        private readonly GameObject _prefab;
+
+        public NgoZenjectHandler(DiContainer diContainer, GameObject prefab)
+        {
+            _diContainer = diContainer;
+            _prefab = prefab;
+        }
         public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
         {
-            _diContainer.InjectGameObject(_networkObj.gameObject);
-            return _networkObj;
+            GameObject networkObj = Object.Instantiate(_prefab, position, rotation);
+            _diContainer.InjectGameObject(networkObj);
+            return networkObj.GetComponent<NetworkObject>();
         }
 
         public void Destroy(NetworkObject networkObject)

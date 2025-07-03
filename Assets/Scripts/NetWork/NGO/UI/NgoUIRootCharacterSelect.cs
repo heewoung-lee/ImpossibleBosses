@@ -9,18 +9,18 @@ namespace NetWork.NGO.UI
 {
     public class NgoUIRootCharacterSelect : NetworkBehaviour
     {
-        public class NgoUIRootCharacterSelectFactory : NgoZenjectFactory<NgoUIRootCharacterSelect>
-        {
-            public NgoUIRootCharacterSelectFactory(DiContainer container)
-            {
-                _container = container;
-            }
-
-            protected override string Path => "Prefabs/NGO/NGOUIRootChracterSelect";
-        }
-        
         [Inject]private IUISceneManager _uiSceneManager; 
         [Inject] private RelayManager _relayManager;
+        
+        public class NgoUIRootCharacterSelectFactory : NgoZenjectFactory<NgoUIRootCharacterSelect>
+        {
+            public NgoUIRootCharacterSelectFactory(DiContainer container, GameObject ngo)
+            {
+                _container = container;
+                _ngo = ngo;
+            }
+        }
+
         
         
 
