@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.LoginManager;
+using Scene.CommonInstaller;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -12,7 +13,7 @@ using Zenject;
 
 namespace Scene.RoomScene
 {
-    public class RooMSceneConnectOnlineMulti : IRoomConnectOnline
+    public class RoomSceneConnectOnlineMulti : ISceneConnectOnline
     {
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private RelayManager _relayManager;
@@ -20,7 +21,7 @@ namespace Scene.RoomScene
 
         private string _playerType;
         private const string LobbyName = "TestLobby";
-        public async Task RoomSceneConnectOnlineStart()
+        public async Task SceneConnectOnlineStart()
         {
             PlayerIngameLoginInfo playerinfo = await TestMultiUtil.SetAuthenticationService(TestMultiUtil.GetPlayerTag());
             _lobbyManager.SetPlayerLoginInfo(playerinfo);
@@ -35,7 +36,7 @@ namespace Scene.RoomScene
                 Lobby lobby = await _lobbyManager.AvailableLobby(LobbyName);
                 if (lobby == null || lobby.Data == null )
                 {
-                    await Utill.RateLimited(async () => await RoomSceneConnectOnlineStart(), 1000);
+                    await Utill.RateLimited(async () => await SceneConnectOnlineStart(), 1000);
                     return;
                 }
                 string joinCode = lobby.Data["RelayCode"].Value;

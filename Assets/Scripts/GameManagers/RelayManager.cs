@@ -70,7 +70,6 @@ namespace GameManagers
         public int CurrentUserCount => _netWorkManager.ConnectedClientsList.Count;
         public void Initialize()
         {
-            Debug.Log("Initializing RelayManager");
             NetworkManagerInitialize();
         }
         public NetworkManager NetworkManagerEx => _netWorkManager;

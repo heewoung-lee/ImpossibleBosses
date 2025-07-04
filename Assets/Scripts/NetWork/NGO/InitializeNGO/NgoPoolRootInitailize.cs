@@ -12,7 +12,7 @@ namespace NetWork.NGO.InitializeNGO
     public class NgoPoolRootInitailize : NetworkBehaviour
     {
         [Inject] IResourcesLoader _resourcesLoader;
-
+        [Inject] private NgoPoolManager _poolManager;
         NetworkVariable<FixedString64Bytes> _rootName = new NetworkVariable<FixedString64Bytes>
             ("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -25,7 +25,7 @@ namespace NetWork.NGO.InitializeNGO
 
             if (IsHost)
             {
-                transform.SetParent(Managers.NgoPoolManager.NgoPool.transform);
+                transform.SetParent(_poolManager.NgoPool.transform);
             }
 
             _rootName.OnValueChanged -= OnChangedRootname;
@@ -65,8 +65,8 @@ namespace NetWork.NGO.InitializeNGO
             //_poolingNgoPath가 안뜸
             if (ngo.TryGetComponent(out NgoPoolingInitalizeBase poolingObj))
             {
-                Managers.NgoPoolManager.SetPool_NGO_ROOT_Dict(poolingObj.PoolingNgoPath, transform);
-                Managers.NgoPoolManager.NGO_Pool_RegisterPrefab(poolingObj.PoolingNgoPath, poolingObj.PoolingCapacity);
+                _poolManager.SetPool_NGO_ROOT_Dict(poolingObj.PoolingNgoPath, transform);
+                _poolManager.NGO_Pool_RegisterPrefab(poolingObj.PoolingNgoPath, poolingObj.PoolingCapacity);
                 //딕셔너리에 각 풀마다 반납장소 등록
             }
         }

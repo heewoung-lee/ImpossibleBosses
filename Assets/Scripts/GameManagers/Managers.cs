@@ -41,8 +41,8 @@ namespace GameManagers
         private LootItemManager _lootItemManaer = new LootItemManager();
         public static LootItemManager LootItemManager { get=>  Instance._lootItemManaer; }
    
-        private NgoPoolManager _ngoPoolManager = new NgoPoolManager();
-        public static NgoPoolManager NgoPoolManager { get => Instance._ngoPoolManager; }
+        // private NgoPoolManager _ngoPoolManager = new NgoPoolManager();
+        // public static NgoPoolManager NgoPoolManager { get => Instance._ngoPoolManager; }
 
         // private RelayManager _relayManager = new RelayManager();
         // public static RelayManager RelayManager { get => Instance._relayManager; }
@@ -154,7 +154,7 @@ namespace GameManagers
             //_instance._uiManager.Clear();
             //_instance._poolManager.Clear();
             //_instance._resourceManager.Clear();
-            _instance._ngoPoolManager.Clear();
+            //_instance._ngoPoolManager.Clear();
             //_instance._skillManager.Clear();
         }
     }

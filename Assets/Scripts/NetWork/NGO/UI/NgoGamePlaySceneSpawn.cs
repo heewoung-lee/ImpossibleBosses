@@ -9,6 +9,7 @@ namespace NetWork.NGO.UI
     public class NgoGamePlaySceneSpawn : NetworkBehaviourBase
     {
         [Inject] private RelayManager _relayManager;
+        [Inject] private NgoPoolManager _poolManager;
 
         GameObject _player;
         protected override void AwakeInit()
@@ -19,7 +20,7 @@ namespace NetWork.NGO.UI
         {
             base.OnNetworkSpawn();
             HostSpawnObject();
-            Managers.NgoPoolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
+            _poolManager.Create_NGO_Pooling_Object();//네트워크 오브젝트 풀링 생성
         }
         private void HostSpawnObject()
         {

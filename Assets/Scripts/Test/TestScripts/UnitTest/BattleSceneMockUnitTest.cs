@@ -20,7 +20,7 @@ namespace Test.TestScripts.UnitTest
     {
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private RelayManager _relayManager;
-
+        [Inject] private NgoPoolManager _poolManager;
         public enum PlayersTag
         {
             Player1,
@@ -131,7 +131,7 @@ namespace Test.TestScripts.UnitTest
             if (_relayManager.NetworkManagerEx.IsHost)
             {
                 _relayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
-                Managers.NgoPoolManager.Create_NGO_Pooling_Object();
+                _poolManager.Create_NGO_Pooling_Object();
             }
         }
         public string GetPlayerTag()

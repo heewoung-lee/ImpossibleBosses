@@ -14,7 +14,7 @@ namespace GameManagers
     internal class ResourceManager : IResourcesLoader, IInstantiate, IDestroyObject, IRegistrar<ICachingObjectDict>
     {
         [Inject] private RelayManager _relayManager;
-
+        [Inject] private NgoPoolManager _poolManager;
 
         public DiContainer CurrentContainer
         {
@@ -79,7 +79,7 @@ namespace GameManagers
             {
                 if (IsCheckNetworkPrefab(cachedPrefab))
                 {
-                    return Managers.NgoPoolManager.Pop(path);
+                    return _poolManager.Pop(path);
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace GameManagers
                 _cachingObjectDict?.OverwriteData(path, prefab); //주의점 대신에 경로에 대한 딕셔너리 키는 원본경로로 들어감
                 if (IsCheckNetworkPrefab(prefab))
                 {
-                    return Managers.NgoPoolManager.Pop(path, parent);
+                    return _poolManager.Pop(path, parent);
                 }
                 else
                 {
@@ -164,7 +164,7 @@ namespace GameManagers
             {
                 if (_relayManager.NetworkManagerEx.IsListening && poolable.TryGetComponent(out NetworkObject ngo))
                 {
-                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() => { Managers.NgoPoolManager.Push(ngo); },
+                    Managers.ManagersStartCoroutine(PrefabPushCoroutine(() => { _poolManager.Push(ngo); },
                         duration));
                 }
                 else

@@ -3,12 +3,14 @@ using GameManagers;
 using Unity.Netcode;
 using UnityEngine;
 using Util;
+using Zenject;
 
 namespace NetWork.BaseNGO
 {
     [RequireComponent(typeof(Poolable))]
     public abstract class NgoPoolingInitalizeBase : NgoParticleInitailizeBase
     {
+        [Inject] private NgoPoolManager _poolManager;
         private NetworkObject _particleNgo;
         private NetworkObject _targetNgo;
 
@@ -67,7 +69,7 @@ namespace NetWork.BaseNGO
         }
         private void PoolObjectSetParent()
         {
-            if(Managers.NgoPoolManager.PoolNgoRootDict.TryGetValue(PoolingNgoPath,out Transform parentTr))
+            if(_poolManager.PoolNgoRootDict.TryGetValue(PoolingNgoPath,out Transform parentTr))
             {
                 transform.SetParent(parentTr,false);
             }

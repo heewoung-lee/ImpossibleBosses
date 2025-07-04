@@ -51,19 +51,6 @@ namespace Scene
 
         public abstract void Clear();
 
-
-        void OnGUI()
-        {
-            // 버튼 만들기
-            if (GUI.Button(new Rect(10, 10, 100, 30), "Click Me"))
-            {
-                _ = UpdateLobby();
-            }
-
-            async Task UpdateLobby()
-            {
-                await _lobbyManager.ShowUpdatedLobbyPlayers();
-            }
-        }
+       
     }
 }

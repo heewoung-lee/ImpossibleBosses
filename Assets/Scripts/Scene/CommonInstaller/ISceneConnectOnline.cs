@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Scene.RoomScene
+namespace Scene.CommonInstaller
 {
     public enum PlayersTag
     {
@@ -11,8 +11,8 @@ namespace Scene.RoomScene
         None
     }
     
-    public interface IRoomConnectOnline
+    public interface ISceneConnectOnline
     { 
-        public Task RoomSceneConnectOnlineStart();
+        public Task SceneConnectOnlineStart();
     }
 }

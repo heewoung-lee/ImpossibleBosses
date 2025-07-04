@@ -18,7 +18,7 @@ namespace Scene.BattleScene
     public class MockUnitBattleScene : ISceneSpawnBehaviour
     {
         [Inject] private LobbyManager _lobbyManager;
-        
+        [Inject] private NgoPoolManager _poolManager;
         [Inject] private RelayManager _relayManager;
 
         
@@ -61,7 +61,7 @@ namespace Scene.BattleScene
                 if (_relayManager.NetworkManagerEx.IsHost)
                 {
                     _relayManager.Load_NGO_Prefab<NgoBattleSceneSpawn>();
-                    Managers.NgoPoolManager.Create_NGO_Pooling_Object();
+                    _poolManager.Create_NGO_Pooling_Object();
                 }
             }
         }

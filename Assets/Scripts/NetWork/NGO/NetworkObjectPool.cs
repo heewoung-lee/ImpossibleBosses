@@ -17,7 +17,7 @@ namespace NetWork.NGO
         [Inject] IResourcesLoader _resourcesLoader;
         [Inject] private IInstantiate _instantiate;
         [Inject] private RelayManager _relayManager;
-
+        [Inject] private NgoPoolManager _poolManager;
         Dictionary<string, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<string, ObjectPool<NetworkObject>>();
         public Dictionary<string, ObjectPool<NetworkObject>> PooledObjects => m_PooledObjects;
         public override void OnNetworkDespawn()
@@ -34,13 +34,13 @@ namespace NetWork.NGO
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            Managers.NgoPoolManager.Set_NGO_Pool(this);
+            _poolManager.Set_NGO_Pool(this);
 
             if (_relayManager.NetworkManagerEx.IsHost == false)
                 return;
 
 
-            foreach ((string, int) poolingPrefabInfo in Managers.NgoPoolManager.AutoRegisterFromFolder())
+            foreach ((string, int) poolingPrefabInfo in _poolManager.AutoRegisterFromFolder())
             {
                 //경로에 맞게 Root가져올 것
                 GameObject pollingNgo_Root = _instantiate.InstantiateByPath("Prefabs/NGO/NGO_Polling_ROOT");
@@ -120,7 +120,7 @@ namespace NetWork.NGO
 
             NetworkObject CreateFunc()
             {
-                NetworkObject ngo = Instantiate(prefab, Managers.NgoPoolManager.PoolNgoRootDict[prefabPath]).RemoveCloneText().GetComponent<NetworkObject>();
+                NetworkObject ngo = Instantiate(prefab, _poolManager.PoolNgoRootDict[prefabPath]).RemoveCloneText().GetComponent<NetworkObject>();
                 return ngo;
             }
 

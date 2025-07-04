@@ -422,7 +422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testMode: 1
-  multiMode: 1
+  multiMode: 0
 --- !u!1 &1923592074
 GameObject:
   m_ObjectHideFlags: 0

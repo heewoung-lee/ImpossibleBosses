@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using GameManagers.Interface.UIManager;
+using Scene.CommonInstaller;
 using Scene.GamePlayScene;
 using UI.Scene.SceneUI;
 using Unity.VisualScripting;
@@ -13,9 +14,8 @@ namespace Scene.RoomScene
     public class RoomPlayScene : BaseScene,ISceneMultiMode,ISceneTestMode
     {
         [Inject]private IUISceneManager _uiSceneManager;
-
-        [Inject]private IRoomConnectOnline _roomConnectOnline;
-        [Inject]private IRoomSceneStarter _roomSceneStarter;
+        [Inject]private ISceneConnectOnline _sceneConnectOnline;
+        [Inject]private ISceneStarter _roomSceneStarter;
 
         
         [SerializeField] private TestMode testMode;
@@ -51,8 +51,8 @@ namespace Scene.RoomScene
         {
             try
             {
-                await _roomConnectOnline.RoomSceneConnectOnlineStart();
-                _roomSceneStarter.RoomSceneStart();
+                await _sceneConnectOnline.SceneConnectOnlineStart();
+                _roomSceneStarter.SceneStart();
             }
             catch (System.Exception e)
             {

@@ -24,7 +24,14 @@ namespace NetWork.NGO
         }
         public void Destroy(NetworkObject networkObject)
         {
-            networkObject.Despawn(true);
+            if (networkObject != null && networkObject.IsSpawned)
+            {
+                networkObject.Despawn(true);  // ✅ 안전하게 despawn
+            }
+            else
+            {
+                Debug.LogWarning($"[NGO] Tried to despawn object that is not spawned: {networkObject?.name}");
+            }
                 //TODO: 꼭 바꿔야함 현재 오브젝트들의 인터페이스가 없기에 Object.Delete를 고정했지만.
                 //Delete 인터페이스를 만들어서 풀에 들어가야하는거, 없애하는거 등 인터페이스로 삭제를 유도해야함
         }

@@ -1,11 +1,12 @@
 using GameManagers;
 using UnityEngine;
+using Zenject;
 
 namespace Module.UI_Module
 {
     public class InGameUIModule : MonoBehaviour
     {
-
+        [Inject] private NgoPoolManager _poolManager;
         private void Start()
         {
             StartInit();
@@ -21,7 +22,7 @@ namespace Module.UI_Module
             gameObject.AddComponent<ModuleUISkillBar>();
             gameObject.AddComponent<ModuleUIDescription>();
 
-            Managers.NgoPoolManager.Create_NGO_Pooling_Object();
+            _poolManager.Create_NGO_Pooling_Object();
 
         }
     }

@@ -49,7 +49,7 @@ namespace NetWork.NGO
         [Inject] private IVivoxSession _vivoxSession;
         [Inject] SceneManagerEx _sceneManagerEx;
         [Inject] private RelayManager _relayManager;
-
+        [Inject] private NgoPoolManager _poolManager;
         
         public const ulong Invalidobjectid = ulong.MaxValue;//타겟 오브젝트가 있고 없고를 가려내기 위한 상수
 
@@ -221,7 +221,7 @@ namespace NetWork.NGO
         private NetworkObject SpawnVFXObjectToResources(string path, Vector3 position = default)
         {
 
-            if (Managers.NgoPoolManager.PooledObjects.ContainsKey(path))
+            if (_poolManager.PooledObjects.ContainsKey(path))
             {
                 //return SpawnObjectToResources(path, position, parentTr: Managers.NGO_PoolManager.Pool_NGO_Root_Dict[path]);
                 return SpawnObjectToResources(path, position);

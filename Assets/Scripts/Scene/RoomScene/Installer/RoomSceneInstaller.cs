@@ -1,9 +1,8 @@
-using System;
 using GameManagers;
-using Scene.RoomScene;
+using Scene.CommonInstaller;
 using Zenject;
 
-namespace Scene.ZenjectInstaller
+namespace Scene.RoomScene.Installer
 {
    public class RoomSceneInstaller : MonoInstaller
    {
@@ -12,20 +11,20 @@ namespace Scene.ZenjectInstaller
       {
          RoomPlayScene roomscene = FindAnyObjectByType<RoomPlayScene>();
          
-         Container.Bind<IRoomSceneStarter>().To<RoomSceneStarter>().AsSingle();
+         Container.Bind<ISceneStarter>().To<RoomSceneStarter>().AsSingle();
          if (_sceneManagerEx.IsNormalBoot == true || roomscene.GetTestMode() == TestMode.Local)
          {
-            Container.Bind<IRoomConnectOnline>().To<EmptyRoomSceneOnline>().AsSingle();
+            Container.Bind<ISceneConnectOnline>().To<EmptyRoomSceneOnline>().AsSingle();
          }
          else
          {
             if (roomscene.GetMultiTestMode() == MultiMode.Solo)
             {
-               Container.Bind<IRoomConnectOnline>().To<RoomSceneConnectOnlineSolo>().AsSingle();
+               Container.Bind<ISceneConnectOnline>().To<RoomSceneConnectOnlineSolo>().AsSingle();
             }
             else if (roomscene.GetMultiTestMode() == MultiMode.Multi)
             {
-               Container.Bind<IRoomConnectOnline>().To<RooMSceneConnectOnlineMulti>().AsSingle();
+               Container.Bind<ISceneConnectOnline>().To<RoomSceneConnectOnlineMulti>().AsSingle();
             }
          }
       }

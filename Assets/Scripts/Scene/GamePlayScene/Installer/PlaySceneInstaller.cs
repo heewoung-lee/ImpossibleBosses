@@ -1,9 +1,8 @@
 using GameManagers;
-using Scene.GamePlayScene;
 using Unity.VisualScripting;
 using Zenject;
 
-namespace Scene.ZenjectInstaller
+namespace Scene.GamePlayScene.Installer
 {
    public class PlaySceneInstaller : MonoInstaller
    {

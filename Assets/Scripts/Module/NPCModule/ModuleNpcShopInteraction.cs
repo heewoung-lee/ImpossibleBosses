@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using Module.CommonModule;
 using Module.PlayerModule;
 using UI.Popup.PopupUI;
@@ -9,10 +10,10 @@ namespace Module.NPCModule
 {
     public class ModuleNpcShopInteraction : MonoBehaviour, IInteraction
     {
+        [Inject] private IUIPopupManager _uiPopupManager;
+        
         private UIShop _uiShop;
         private CapsuleCollider _collider;
-        [Inject] private UIManager _uiManager;
-
 
         public bool CanInteraction => true;
 
@@ -26,16 +27,16 @@ namespace Module.NPCModule
         }
         private void Start()
         {
-            _uiShop = _uiManager.GetPopupUIFromResource<UIShop>();
-            _uiManager.ClosePopupUI(_uiShop);
+            _uiShop = _uiPopupManager.GetPopupUIFromResource<UIShop>();
+            _uiPopupManager.ClosePopupUI(_uiShop);
         }
         public void Interaction(ModulePlayerInteraction caller)
         {
-            _uiManager.SwitchPopUpUI(_uiShop);
+            _uiPopupManager.SwitchPopUpUI(_uiShop);
         }
         public void OutInteraction()
         {
-            _uiManager.ClosePopupUI(_uiShop);
+            _uiPopupManager.ClosePopupUI(_uiShop);
         }
 
     }

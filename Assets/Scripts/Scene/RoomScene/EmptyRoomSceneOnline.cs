@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
+using Scene.CommonInstaller;
 
 namespace Scene.RoomScene
 {
-    public class EmptyRoomSceneOnline : IRoomConnectOnline
+    public class EmptyRoomSceneOnline : ISceneConnectOnline
     {
-        public Task RoomSceneConnectOnlineStart()
+        public Task SceneConnectOnlineStart()
         {
             return Task.CompletedTask;
         }
