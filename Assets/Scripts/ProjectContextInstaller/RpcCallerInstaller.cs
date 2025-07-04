@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using NetWork.NGO;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
+using ZenjectTool;
 
 namespace ProjectContextInstaller
 {
-    public class RpcCallerInstaller : MonoInstaller
+    public class RpcCallerInstaller : BindNgoHandlerInstaller
     {
         private GameObject _ngo;
         public override void InstallBindings()
@@ -17,14 +19,7 @@ namespace ProjectContextInstaller
         public override void Start()
         {
             base.Start();
-            Debug.Log("Starting RPCCallerInstaller");
-
-            if (NetworkManager.Singleton == null)
-                return;
-            
-            NgoZenjectHandler handler = new NgoZenjectHandler(Container,_ngo);
-            NetworkManager.Singleton.PrefabHandler.AddHandler(_ngo, handler);
-            Debug.Log("등록");
+            InputBindNgoHandler(new List<GameObject>(){_ngo});
         }
     }
 }
