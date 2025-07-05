@@ -11,6 +11,9 @@ namespace Util
 {
     public static class TestMultiUtil
     {
+        public const string LobbyName = "TestLobby";
+        
+        
         public static async Task<PlayerIngameLoginInfo> SetAuthenticationService(string playerTag)
         {
             await UnityServices.InitializeAsync();

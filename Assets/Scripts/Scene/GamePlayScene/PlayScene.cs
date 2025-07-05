@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameManagers;
+using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UIManager;
 using Module.UI_Module;
+using Scene.CommonInstaller;
 using UI.Scene.SceneUI;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,10 +17,13 @@ using Zenject;
 
 namespace Scene.GamePlayScene
 {
-    public class PlayScene : BaseScene, ISkillInit,ISceneTestMode,ISceneMultiMode
+    public class PlayScene : BaseScene, ISkillInit,ISceneTestMode,ISceneMultiMode,ISceneSelectCharacter,IHasSceneMover
     {
-        [Inject] private ISceneSpawnBehaviour _sceneSpawnBehaviour;
-        [Inject] private IUISceneManager _uiSceneManager;
+        [Inject] private ISceneConnectOnline _sceneConnectOnline;
+        [Inject] private ISceneStarter _gameplaySceneStarter;
+        [Inject] private ISceneMover _sceneMover;
+
+        public ISceneMover SceneMover => _sceneMover;
         public TestMode GetTestMode()
         {
             return testMode;
@@ -27,42 +32,35 @@ namespace Scene.GamePlayScene
         {
            return multiMode;
         }
+        public Define.PlayerClass GetPlayerableCharacter()
+        {
+          return playerableCharacter;
+        }
         
         [SerializeField] private TestMode testMode = TestMode.Local;
         [SerializeField] private MultiMode multiMode = MultiMode.Solo;
-        
-        [SerializeField] public Define.PlayerClass playerableCharacter = Define.PlayerClass.Archer;
-
+        [SerializeField] private Define.PlayerClass playerableCharacter = Define.PlayerClass.Archer;
+        public const string PlayerableCharacterField = nameof(playerableCharacter);
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
-
         private UILoading _uiLoadingScene;
-        public UILoading UILoadingScene => _uiLoadingScene;
-        
-        
         private GamePlaySceneLoadingProgress _gamePlaySceneLoadingProgress;
-
-
-        protected override void AwakeInit()
-        {
-          
-        }
-
         protected override void StartInit()
         {
             base.StartInit();
-            _sceneSpawnBehaviour.Init();
-            _sceneSpawnBehaviour.SpawnObj();
-            
-            
-            _uiLoadingScene = _uiSceneManager.GetOrCreateSceneUI<UILoading>();
-            _gamePlaySceneLoadingProgress = _uiLoadingScene.AddComponent<GamePlaySceneLoadingProgress>();
+            _ = StartInitAsync();
         }
-
-
-        public override void Clear()
+        
+        private async Task StartInitAsync()
         {
+            try
+            {
+                await _sceneConnectOnline.SceneConnectOnlineStart();
+                _gameplaySceneStarter.SceneStart();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[RoomPlayScene] 초기화 중 예외: {e}");
+            }
         }
-
     }
 }

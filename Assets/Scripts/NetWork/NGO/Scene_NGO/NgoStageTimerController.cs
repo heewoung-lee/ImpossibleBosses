@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using NetWork.NGO.UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,7 +10,9 @@ namespace NetWork.NGO.Scene_NGO
 {
     public class NgoStageTimerController : NetworkBehaviour
     {
-        [Inject] SceneManagerEx _sceneManagerEx;
+        [Inject] private SceneManagerEx _sceneManagerEx;
+        [Inject] private IUISceneManager _uiSceneManager;
+        
         private Color _normalClockColor = "FF9300".HexCodetoConvertColor();
         private Color _allPlayerInPortalColor = "0084FF".HexCodetoConvertColor();
 
@@ -20,7 +23,6 @@ namespace NetWork.NGO.Scene_NGO
         private const float AllPlayerinPortalCount = 7f;
         private float _totalTime = 0;
         private float _currentTime = 0;
-        [Inject] private UIManager _uiManager;
 
         private UIStageTimer _uiStageTimer;
 
@@ -30,7 +32,7 @@ namespace NetWork.NGO.Scene_NGO
             {
                 if (_uiStageTimer == null)
                 {
-                    _uiStageTimer = _uiManager.GetOrCreateSceneUI<UIStageTimer>();
+                    _uiStageTimer = _uiSceneManager.GetOrCreateSceneUI<UIStageTimer>();
                 }
                 return _uiStageTimer;
             }
@@ -72,7 +74,7 @@ namespace NetWork.NGO.Scene_NGO
         [Rpc(SendTo.Server)]
         private void RequestTimeFromServerRpc(RpcParams rpcParams = default)
         {
-            float currentCount = _uiManager.Get_Scene_UI<UIStageTimer>().CurrentTime;
+            float currentCount = _uiSceneManager.Get_Scene_UI<UIStageTimer>().CurrentTime;
             ulong clientId = rpcParams.Receive.SenderClientId;
 
             SendTimeRpcToSpecificClientRpc(currentCount, RpcTarget.Single(clientId, RpcTargetUse.Temp));

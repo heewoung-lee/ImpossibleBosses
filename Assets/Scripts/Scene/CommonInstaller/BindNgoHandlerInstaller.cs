@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-namespace ZenjectTool
+namespace Scene.CommonInstaller
 {
     public class BindNgoHandlerInstaller : MonoInstaller
     {

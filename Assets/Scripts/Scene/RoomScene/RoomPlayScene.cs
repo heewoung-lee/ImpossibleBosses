@@ -17,12 +17,9 @@ namespace Scene.RoomScene
         [Inject]private ISceneConnectOnline _sceneConnectOnline;
         [Inject]private ISceneStarter _roomSceneStarter;
 
-        
         [SerializeField] private TestMode testMode;
         [SerializeField] private MultiMode multiMode;
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
-
         public TestMode GetTestMode()
         {
             return testMode;

@@ -18,8 +18,9 @@ GameObject:
   - component: {fileID: -8481351994986502186}
   - component: {fileID: -4709128819142315818}
   - component: {fileID: 772868667119868860}
+  - component: {fileID: 1858265784508290087}
   m_Layer: 7
-  m_Name: Damage_Test_Dummy
+  m_Name: DamageTestDummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,3 +218,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52395888f1aaaae4e85a081ff7821ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1858265784508290087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5292733350156250145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 636096fee21cf694ba4756ce6168d975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

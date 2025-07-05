@@ -20,7 +20,6 @@ namespace Scene
         
         UILoading _uiLoading;
         public override Define.Scene CurrentScene => Define.Scene.LoadingScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         public bool IsErrorOccurred { get; set; } = false;
         private bool[] _isCheckTaskChecker;
         protected override void StartInit()

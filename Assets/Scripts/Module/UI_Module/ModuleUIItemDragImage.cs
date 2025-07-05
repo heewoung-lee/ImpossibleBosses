@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using UnityEngine;
 using Zenject;
 
@@ -8,10 +9,10 @@ namespace Module.UI_Module
     {
         private UI_ItemDragImage _uiItemDragImage;
         
-        [Inject]private UIManager _uiManager; 
+        [Inject]private IUISceneManager _uisceneManager; 
         void Start()
         {
-            UI_ItemDragImage uIItemDragImage = _uiManager.GetSceneUIFromResource<UI_ItemDragImage>();
+            UI_ItemDragImage uIItemDragImage = _uisceneManager.GetSceneUIFromResource<UI_ItemDragImage>();
         }
     }
 }

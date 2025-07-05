@@ -1,20 +1,17 @@
 using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.LoginManager;
-using Scene.CommonInstaller;
 using Util;
 using Zenject;
 
-namespace Scene.RoomScene
+namespace Scene.CommonInstaller
 {
-    internal class RoomSceneConnectOnlineSolo: ISceneConnectOnline
+    internal class SceneConnectOnlineSolo: ISceneConnectOnline
     {
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private RelayManager _relayManager;
 
-
         private string _playerType;
-        private const string LobbyName = "TestLobby";
         public async Task SceneConnectOnlineStart()
         {
             PlayerIngameLoginInfo playerinfo = await TestMultiUtil.SetAuthenticationService(TestMultiUtil.GetPlayerTag());

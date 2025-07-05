@@ -2,8 +2,8 @@ using System;
 using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.LoginManager;
+using GameManagers.Interface.UIManager;
 using NetWork.NGO.UI;
-using Scene.BattleScene;
 using UI.Scene.SceneUI;
 using Unity.Multiplayer.Playmode;
 using Unity.Services.Authentication;
@@ -13,19 +13,15 @@ using UnityEngine;
 using Util;
 using Zenject;
 
-namespace Scene.GamePlayScene
+namespace Scene.GamePlayScene.Legacy
 {
     public class MockUnitGamePlayScene : ISceneSpawnBehaviour
     {
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private RelayManager _relayManager;
-
-        public MockUnitGamePlayScene(Define.PlayerClass playerClass,bool isSoloTest)
-        {
-            _playerClass = playerClass;
-            _isSoloTest = isSoloTest;
-        }
-     
+        [Inject] private IUISceneManager _uisceneManager;
+        
+        
         public enum PlayersTag
         {
             Player1,
@@ -40,10 +36,7 @@ namespace Scene.GamePlayScene
         private Define.PlayerClass _playerClass;
         private bool _isSoloTest;
         private UIStageTimer _uiStageTimer;
-        [Inject] private UIManager _uiManager;
 
-        
-        public ISceneMover Nextscene => new BattleSceneMover();
 
         private async Task JoinChannel()
         {
@@ -102,7 +95,7 @@ namespace Scene.GamePlayScene
 
         private void LoadGamePlayScene()
         {
-            _uiManager.GetOrCreateSceneUI<UILoading>().gameObject.SetActive(false);
+            _uisceneManager.GetOrCreateSceneUI<UILoading>().gameObject.SetActive(false);
         }
         private async Task SetAuthenticationService()
         {
@@ -129,11 +122,11 @@ namespace Scene.GamePlayScene
         }
 
 
-        public async void Init()
+        public void Init()
         {
-            await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
-            _uiStageTimer = _uiManager.GetOrCreateSceneUI<UIStageTimer>();
-            _uiStageTimer.OnTimerCompleted += Nextscene.MoveScene;
+            //await JoinChannel(); // 메인 스레드에서 안전하게 실행됨
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback -= ConnectClicent;
+            _relayManager.NetworkManagerEx.OnClientConnectedCallback += ConnectClicent;
         }
         public void SpawnObj()
         {

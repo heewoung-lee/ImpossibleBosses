@@ -1,4 +1,5 @@
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using UI.Scene.SceneUI;
 using UnityEngine;
 using Util;
@@ -9,14 +10,14 @@ namespace Module.UI_Module
     public class ModuleUIDescription : MonoBehaviour
     {
         UIDescription _description;
-        [Inject]private UIManager _uiManager; 
+        [Inject]private IUISceneManager _uisceneManager; 
         public UIDescription Description
         {
             get
             {
                 if(_description == null)
                 {
-                    _description = _uiManager.GetSceneUIFromResource<UIDescription>();
+                    _description = _uisceneManager.GetSceneUIFromResource<UIDescription>();
                 }
 
                 return _description;

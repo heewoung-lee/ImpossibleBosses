@@ -20,7 +20,6 @@ namespace Scene.BattleScene
         public bool isTest = false;
         public bool isSoloTest = false;
         public override Define.Scene CurrentScene => Define.Scene.BattleScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour => _sceneSpawnBehaviour;
 
 
         protected override void StartInit()

@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
-using Scene.CommonInstaller;
 
-namespace Scene.RoomScene
+namespace Scene.CommonInstaller
 {
-    public class EmptyRoomSceneOnline : ISceneConnectOnline
+    public class EmptySceneOnline : ISceneConnectOnline
     {
         public Task SceneConnectOnlineStart()
         {

@@ -1,12 +1,7 @@
-using System;
 using GameManagers;
-using GameManagers.Interface.Resources_Interface;
-using GameManagers.Interface.ResourcesManager;
-using GameManagers.Interface.UIManager;
-using Unity.VisualScripting;
 using Zenject;
 
-namespace Scene.ZenjectInstaller.Managers
+namespace Scene.CommonInstaller
 {
     public class CachingObjectInstaller : MonoInstaller
     {

@@ -11,7 +11,6 @@ namespace Scene
     public class LobbyScene : BaseScene
     {
         public override Define.Scene CurrentScene => Define.Scene.LobbyScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         
         [Inject]private IUISceneManager _sceneManager; 
         UILobbyScene _uiLobbyScene;

@@ -39,8 +39,6 @@ namespace Test.TestScripts.UnitTest
         public bool isSoloTest;
 
         public override Define.Scene CurrentScene => Define.Scene.GamePlayScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
-
         protected override async void StartInit()
         {
             base.StartInit();

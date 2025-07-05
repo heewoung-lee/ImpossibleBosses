@@ -10,6 +10,7 @@ namespace GameManagers
     public class SceneManagerEx
     { 
         [Inject] private RelayManager _relayManager;
+        private static bool _isNormalBoot = false;
 
         
         private Define.Scene _currentScene;
@@ -20,9 +21,8 @@ namespace GameManagers
         private Action<ulong> _onClientLoadedEvent;
         private Action _onAllPlayerLoadedEvent;
 
-        private bool _isNormalBoot = false;
         
-        public bool IsNormalBoot => _isNormalBoot;
+        public static bool IsNormalBoot => _isNormalBoot;
         public event Action OnBeforeSceneUnloadLocalEvent
         {
             add

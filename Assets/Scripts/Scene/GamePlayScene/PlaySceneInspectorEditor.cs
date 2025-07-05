@@ -50,7 +50,7 @@ namespace Scene.GamePlayScene
             if (modeProp.enumValueIndex == (int)MultiMode.Multi)
             {
                 SerializedProperty subProp =
-                    serializedObject.FindProperty(nameof(PlayScene.playerableCharacter));
+                    serializedObject.FindProperty(PlayScene.PlayerableCharacterField);
 
                 EditorGUI.indentLevel++;
                 EditorGUILayout.LabelField("Choice Character", EditorStyles.boldLabel);

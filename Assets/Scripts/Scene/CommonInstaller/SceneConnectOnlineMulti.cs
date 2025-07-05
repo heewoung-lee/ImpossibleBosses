@@ -1,26 +1,19 @@
-using System;
 using System.Threading.Tasks;
 using GameManagers;
 using GameManagers.Interface.LoginManager;
-using Scene.CommonInstaller;
-using Unity.Multiplayer.Playmode;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
-using UnityEngine;
 using Util;
 using Zenject;
 
-namespace Scene.RoomScene
+namespace Scene.CommonInstaller
 {
-    public class RoomSceneConnectOnlineMulti : ISceneConnectOnline
+    public class SceneConnectOnlineMulti : ISceneConnectOnline
     {
         [Inject] private LobbyManager _lobbyManager;
         [Inject] private RelayManager _relayManager;
 
 
         private string _playerType;
-        private const string LobbyName = "TestLobby";
         public async Task SceneConnectOnlineStart()
         {
             PlayerIngameLoginInfo playerinfo = await TestMultiUtil.SetAuthenticationService(TestMultiUtil.GetPlayerTag());
@@ -28,12 +21,12 @@ namespace Scene.RoomScene
             _playerType = Util.TestMultiUtil.GetPlayerTag();
             if (_playerType == "Player1")
             {
-                await _lobbyManager.CreateLobby(LobbyName, 8,null);
+                await _lobbyManager.CreateLobby(TestMultiUtil.LobbyName, 8,null);
             }
             else
             {
                 await Task.Delay(1000);
-                Lobby lobby = await _lobbyManager.AvailableLobby(LobbyName);
+                Lobby lobby = await _lobbyManager.AvailableLobby(TestMultiUtil.LobbyName);
                 if (lobby == null || lobby.Data == null )
                 {
                     await Utill.RateLimited(async () => await SceneConnectOnlineStart(), 1000);

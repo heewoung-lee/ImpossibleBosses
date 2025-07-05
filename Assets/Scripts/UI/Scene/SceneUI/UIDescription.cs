@@ -2,6 +2,7 @@ using System;
 using Data.DataType.ItemType;
 using Data.DataType.ItemType.Interface;
 using GameManagers;
+using GameManagers.Interface.UIManager;
 using TMPro;
 using UI.Popup.PopupUI;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace UI.Scene.SceneUI
 {
     public class UIDescription : UIScene
     {
+        [Inject] private IUIPopupManager _uipopupManager;
+        
         enum ImageType
         {
             ItemImage
@@ -50,7 +53,6 @@ namespace UI.Scene.SceneUI
         private Color _itemGradeColor;
         private Vector3 _originPos;
         private UIPlayerInventory _uiPlayerInventory;
-        [Inject] private UIManager _uiManager;
 
         public DescriptionWindow DescriptionWindow => _descriptionWindow;
 
@@ -61,7 +63,7 @@ namespace UI.Scene.SceneUI
             {
                 if(_uiPlayerInventory == null)
                 {
-                    _uiPlayerInventory = _uiManager.GetImportant_Popup_UI<UIPlayerInventory>();
+                    _uiPlayerInventory = _uipopupManager.GetImportant_Popup_UI<UIPlayerInventory>();
                 }
                 return _uiPlayerInventory;
             }

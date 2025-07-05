@@ -18,7 +18,6 @@ namespace Scene
 
         
         public override Define.Scene CurrentScene => Define.Scene.LoginScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
 
         protected override void StartInit()
         {

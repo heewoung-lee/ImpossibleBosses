@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using NetWork.NGO;
 using NetWork.NGO.UI;
+using Scene.CommonInstaller;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
-using ZenjectTool;
 
 namespace Scene.RoomScene.Installer
 {
-    public class RoomSceneGameObjectInstaller : BindNgoHandlerInstaller
+    public class RoomSceneUseObjectInstaller : BindNgoHandlerInstaller
     {
         List<GameObject> _needBindHandlerList;
         public override void InstallBindings()

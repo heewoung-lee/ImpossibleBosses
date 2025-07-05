@@ -36,7 +36,6 @@ namespace Test.TestScripts.UnitTest
         public bool isSoloTest;
 
         public override Define.Scene CurrentScene => Define.Scene.RoomScene;
-        public override ISceneSpawnBehaviour SceneSpawnBehaviour { get; }
         [Inject] private UIManager _uiManager;
 
 

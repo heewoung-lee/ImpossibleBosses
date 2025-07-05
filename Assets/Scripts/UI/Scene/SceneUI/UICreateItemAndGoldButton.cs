@@ -8,6 +8,7 @@ using GameManagers.Interface.ItemDataManager;
 using GameManagers.Interface.Resources_Interface;
 using GameManagers.Interface.ResourcesManager;
 using GameManagers.Interface.UIManager;
+using Scene;
 using Stats;
 using TMPro;
 using UI.Popup.PopupUI;
@@ -106,7 +107,7 @@ namespace UI.Scene.SceneUI
             }
             void MoveScene()
             {
-                _sceneManagerEx.GetCurrentScene.SceneSpawnBehaviour.Nextscene.MoveScene();
+                (_sceneManagerEx.GetCurrentScene as IHasSceneMover).SceneMover.MoveScene();
             }
 
             //void AllLevelup()

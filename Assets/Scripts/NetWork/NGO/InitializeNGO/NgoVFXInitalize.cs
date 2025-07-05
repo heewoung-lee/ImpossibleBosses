@@ -1,11 +1,21 @@
 using GameManagers;
 using NetWork.BaseNGO;
 using Unity.Netcode;
+using UnityEngine;
+using Zenject;
 
 namespace NetWork.NGO.InitializeNGO
 {
     public class NgoVFXInitalize : NgoInitailizeBase
     {
+        public class VFXRootNgoFactory : NgoZenjectFactory<NgoVFXInitalize>
+        {
+            public VFXRootNgoFactory(DiContainer container, GameObject ngo)
+            {
+                _container = container;
+                _ngo = ngo;
+            }
+        }
         private NetworkObject _vfxRootNgo;
 
         public override NetworkObject ParticleNgo => _vfxRootNgo;

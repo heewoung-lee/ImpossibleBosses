@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using NetWork.NGO;
+using Scene.CommonInstaller;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
-using ZenjectTool;
 
 namespace ProjectContextInstaller
 {

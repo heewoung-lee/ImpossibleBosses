@@ -20,7 +20,7 @@ namespace BehaviourTreeNode.BossGolem.Task
         {
             _ngoMoveDownTownBehaviour = _relayManager.SpawnNetworkObj("Prefabs/NGO/NGO_MoveDownTownBehaviour").GetComponent<NgoMoveDownTownBehaviour>();
             _ngoStageTimerController = _relayManager.SpawnNetworkObj("Prefabs/NGO/Scene_NGO/NGO_Stage_Timer_Controller").GetComponent<NgoStageTimerController>();
-            _sceneMover = _sceneManagerEx.GetCurrentScene.SceneSpawnBehaviour.Nextscene;//씬 무버가 없다면 오류뜨도록 설계
+            _sceneMover = (_sceneManagerEx.GetCurrentScene as IHasSceneMover).SceneMover;//Null 뜨면 에러나야함. Null체크 옵션 사용하면 안됨
             _ngoStageTimerController.UIStageTimer.OnTimerCompleted += _sceneMover.MoveScene;
             _tree = Owner.GetComponent<BehaviorTree>();
             base.OnStart();
